@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

@@ -14,12 +14,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CruciblePage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_crucible_page.png");
-    ItemStack result;
-    CrucibleStep[] steps;
+    final ItemStack result;
+    final CrucibleStep[] steps;
 
     public static class CrucibleStep {
-        ItemStack[] stacks;
-        int stirs;
+        final ItemStack[] stacks;
+        final int stirs;
 
         public CrucibleStep(int stirs) {
             this(stirs, ItemStack.EMPTY);

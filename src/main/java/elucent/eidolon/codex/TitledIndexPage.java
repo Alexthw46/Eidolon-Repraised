@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TitledIndexPage extends IndexPage {
-    String title;
+    final String title;
 
     public TitledIndexPage(String textKey, IndexEntry... pages) {
         super(pages);

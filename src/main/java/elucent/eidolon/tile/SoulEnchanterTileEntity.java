@@ -1,13 +1,13 @@
 package elucent.eidolon.tile;
 
-import java.util.Random;
-
 import elucent.eidolon.Registry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+
+import java.util.Random;
 
 public class SoulEnchanterTileEntity extends TileEntityBase {
     public float flip;
@@ -22,7 +22,7 @@ public class SoulEnchanterTileEntity extends TileEntityBase {
     private static final Random random = new Random();
 
     public SoulEnchanterTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.SOUL_ENCHANTER_TILE_ENTITY, pos, state);
+        this(Registry.SOUL_ENCHANTER_TILE_ENTITY.get(), pos, state);
     }
 
     public SoulEnchanterTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {

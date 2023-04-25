@@ -32,8 +32,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 public class RitualRegistry {
-    static Map<ResourceLocation, Ritual> rituals = new HashMap<>();
-    static BiMap<Object, Ritual> matches = HashBiMap.create();
+    static final Map<ResourceLocation, Ritual> rituals = new HashMap<>();
+    static final BiMap<Object, Ritual> matches = HashBiMap.create();
 
     public static void register(ItemStack sacrifice, Ritual ritual) {
         ResourceLocation name = ritual.getRegistryName();
@@ -100,7 +100,7 @@ public class RitualRegistry {
         }
         ItemStack center = RecipeUtil.stackFromObject(sacrifice instanceof MultiItemSacrifice ? ((MultiItemSacrifice)sacrifice).main : sacrifice);
 
-        return new RitualPage(ritual, center, inputs.toArray(new RitualPage.RitualIngredient[inputs.size()]));
+        return new RitualPage(ritual, center, inputs.toArray(new RitualPage.RitualIngredient[0]));
     }
 
     public static List<RecipeWrappers.RitualRecipe> getWrappedRecipes() {
@@ -138,8 +138,7 @@ public class RitualRegistry {
             // check main item first, avoid complicated work
             if (!matches(world, pos, ((MultiItemSacrifice)match).main, sacrifice)) return false;
 
-            List<Object> matches = new ArrayList<>();
-            matches.addAll(((MultiItemSacrifice)match).items);
+            List<Object> matches = new ArrayList<>(((MultiItemSacrifice) match).items);
             List<ItemStack> items = new ArrayList<>();
             List<IRitualItemFocus> foci = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, Ritual.getDefaultBounds(pos));
             for (IRitualItemFocus focus : foci) items.add(focus.provide());

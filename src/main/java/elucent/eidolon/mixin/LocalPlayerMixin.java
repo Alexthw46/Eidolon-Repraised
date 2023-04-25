@@ -3,17 +3,11 @@ package elucent.eidolon.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import elucent.eidolon.ClientEvents;
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 
 @Mixin(LocalPlayer.class)
 public class LocalPlayerMixin {

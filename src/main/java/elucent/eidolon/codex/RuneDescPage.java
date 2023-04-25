@@ -1,6 +1,5 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import elucent.eidolon.Eidolon;

@@ -1,23 +1,12 @@
 package elucent.eidolon.capability;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import elucent.eidolon.item.IWingsItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.WingsDashPacket;
 import elucent.eidolon.network.WingsFlapPacket;
-import elucent.eidolon.spell.Rune;
-import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Sign;
-import elucent.eidolon.spell.Signs;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;

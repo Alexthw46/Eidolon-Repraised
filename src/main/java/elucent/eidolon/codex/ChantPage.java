@@ -28,8 +28,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ChantPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_chant_page.png");
-    Sign[] chant;
-    String text, title;
+    final Sign[] chant;
+    final String text;
+    final String title;
 
     public ChantPage(String textKey, Sign... chant) {
         super(BACKGROUND);
@@ -52,9 +53,8 @@ public class ChantPage extends Page {
         bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)x, (float)y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
+        BufferUploader.draw(bufferbuilder.end());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ChantPage extends Page {
         Tesselator tess = Tesselator.getInstance();
         RenderSystem.enableBlend();
         for (int i = 0; i < chant.length; i ++) {
-        	RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
+            RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
 

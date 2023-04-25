@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 
 @Mixin(PlayerRenderer.class)
 public class PlayerRendererMixin {
-    @Inject(method = "<init>", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "<init>", at = @At("RETURN"))
     public void constructor(CallbackInfo ci) {
          ((PlayerRenderer)(Object)this).addLayer(new RavenVariantLayer<>(((PlayerRenderer)(Object)this)));
     }

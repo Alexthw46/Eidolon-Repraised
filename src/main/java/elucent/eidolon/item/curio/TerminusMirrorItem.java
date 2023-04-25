@@ -15,6 +15,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class TerminusMirrorItem extends ItemBase {
     public TerminusMirrorItem(Properties properties) {
         super(properties);
@@ -33,11 +35,11 @@ public class TerminusMirrorItem extends ItemBase {
 
     @SubscribeEvent
     public static void onDamage(LivingAttackEvent event) {
-        if (event.getEntityLiving() instanceof Player) {
-            CuriosApi.getCuriosHelper().getEquippedCurios(event.getEntityLiving()).resolve().ifPresent((slots) -> {
+        if (event.getEntity() instanceof Player) {
+            CuriosApi.getCuriosHelper().getEquippedCurios(event.getEntity()).resolve().ifPresent((slots) -> {
                 boolean hasVoid = false;
                 int i;
-                for (i = 0; i < slots.getSlots(); i ++) {
+                for (i = 0; i < slots.getSlots(); i++) {
                     if (slots.getStackInSlot(i).getItem() == Registry.TERMINUS_MIRROR.get()) {
                         hasVoid = true;
                         break;

@@ -35,6 +35,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class EnchantedAshBlock extends BlockBase {
     public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
     public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
@@ -219,21 +221,17 @@ public class EnchantedAshBlock extends BlockBase {
 
     boolean isBlocked(Entity entity) {
         if (entity == null) return false;
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity)entity;
+        if (entity instanceof LivingEntity living) {
             if (living.isInvertedHealAndHarm()) return true;
         }
-        if (entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity && ((LivingEntity)e).isInvertedHealAndHarm()))
-            return true;
-
-        return false;
+        return entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity && ((LivingEntity) e).isInvertedHealAndHarm());
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
-        return ctx instanceof EntityCollisionContext 
-        	&& ((EntityCollisionContext)ctx).getEntity() != null
-        	&& isBlocked(((EntityCollisionContext)ctx).getEntity()) ? BARRIER_SHAPE : super.getCollisionShape(state, world, pos, ctx);
+        return ctx instanceof EntityCollisionContext
+               && ((EntityCollisionContext)ctx).getEntity() != null
+               && isBlocked(((EntityCollisionContext)ctx).getEntity()) ? BARRIER_SHAPE : super.getCollisionShape(state, world, pos, ctx);
     }
 
     @Override
@@ -304,10 +302,7 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     protected static boolean canConnectTo(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
-        if (blockState.is(Registry.ENCHANTED_ASH.get())) {
-            return true;
-        }
-        return false;
+        return blockState.is(Registry.ENCHANTED_ASH.get());
     }
 
     @Override

@@ -4,8 +4,10 @@ import elucent.eidolon.util.ColorUtil;
 import net.minecraft.resources.ResourceLocation;
 
 public class Sign {
-    ResourceLocation key, sprite;
-    int color;
+    final ResourceLocation key;
+    final ResourceLocation sprite;
+    final int color;
+
     public Sign(ResourceLocation key, ResourceLocation sprite, int color) {
         this.key = key;
         this.sprite = sprite;

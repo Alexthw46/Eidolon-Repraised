@@ -2,7 +2,6 @@ package elucent.eidolon.entity;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

@@ -7,8 +7,8 @@ import elucent.eidolon.ritual.Ritual;
 
 public class RecipeWrappers {
     public static class Crucible {
-        CrucibleRecipe recipe;
-        Page page;
+        final CrucibleRecipe recipe;
+        final Page page;
 
         public Crucible(CrucibleRecipe recipe, Page page) {
             this.recipe = recipe;
@@ -17,8 +17,8 @@ public class RecipeWrappers {
     }
 
     public static class Worktable {
-        WorktableRecipe recipe;
-        Page page;
+        final WorktableRecipe recipe;
+        final Page page;
 
         public Worktable(WorktableRecipe recipe, Page page) {
             this.recipe = recipe;
@@ -27,9 +27,9 @@ public class RecipeWrappers {
     }
 
     public static class RitualRecipe {
-        Ritual ritual;
-        Page page;
-        Object sacrifice;
+        final Ritual ritual;
+        final Page page;
+        final Object sacrifice;
 
         public RitualRecipe(Ritual ritual, Page page, Object sacrifice) {
             this.ritual = ritual;

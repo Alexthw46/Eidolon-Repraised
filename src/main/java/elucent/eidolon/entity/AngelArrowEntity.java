@@ -1,26 +1,28 @@
 package elucent.eidolon.entity;
 
-import java.util.Comparator;
-import java.util.List;
-
 import elucent.eidolon.mixin.AbstractArrowMixin;
 import elucent.eidolon.registries.Entities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Comparator;
+import java.util.List;
+
+import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class AngelArrowEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
     AbstractArrow internal = null;
@@ -28,6 +30,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     public AngelArrowEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
     }
+
     public AngelArrowEntity(Level worldIn, LivingEntity shooter) {
         super(Entities.ANGEL_ARROW.get(), shooter, worldIn);
     }
@@ -84,19 +87,19 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     @Override
     protected ItemStack getPickupItem() {
         return internal == null ? ItemStack.EMPTY :
-            ((AbstractArrowMixin)(Object)internal).callGetPickupItem();
+                ((AbstractArrowMixin) internal).callGetPickupItem();
     }
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        ((AbstractArrowMixin)(Object)internal).callOnHitEntity(result);
+        ((AbstractArrowMixin) internal).callOnHitEntity(result);
         if (internal.isRemoved()) remove(RemovalReason.DISCARDED);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
-        nbt.putString("type", internal.getType().getRegistryName().toString());
+        nbt.putString("type", getRegistryName(internal.getType()).toString());
         nbt.put("data", internal.serializeNBT());
     }
 
@@ -104,7 +107,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         ResourceLocation rl = new ResourceLocation(nbt.getString("type"));
-        EntityType<?> type = ForgeRegistries.ENTITIES.getValue(rl);
+        EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
         if (type == null) removeAfterChangingDimensions();
 
         internal = (AbstractArrow)type.create(level);
@@ -119,7 +122,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer) {
         CompoundTag extra = new CompoundTag();
-        extra.putString("type", internal.getType().getRegistryName().toString());
+        extra.putString("type", getRegistryName(internal.getType()).toString());
         extra.put("data", internal.serializeNBT());
         buffer.writeNbt(extra);
     }
@@ -128,7 +131,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     public void readSpawnData(FriendlyByteBuf additionalData) {
         CompoundTag extra = additionalData.readNbt();
         ResourceLocation rl = new ResourceLocation(extra.getString("type"));
-        EntityType<?> type = ForgeRegistries.ENTITIES.getValue(rl);
+        EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
         if (type == null) removeAfterChangingDimensions();
 
         internal = (AbstractArrow)type.create(level);

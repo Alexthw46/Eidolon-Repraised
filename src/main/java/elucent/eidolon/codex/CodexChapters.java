@@ -1,8 +1,5 @@
 package elucent.eidolon.codex;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import elucent.eidolon.Registry;
 import elucent.eidolon.capability.Facts;
 import elucent.eidolon.codex.CruciblePage.CrucibleStep;
@@ -16,14 +13,17 @@ import elucent.eidolon.registries.Entities;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.ColorUtil;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.Blocks;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CodexChapters {
-    static List<Category> categories = new ArrayList<>();
+    static final List<Category> categories = new ArrayList<>();
     static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, RUNES;
 
     static Chapter NATURE_INDEX, MONSTERS, ORES, PEWTER, ENCHANTED_ASH,
@@ -853,11 +853,11 @@ public class CodexChapters {
                 new SignEntry(FLAME_SIGN, Signs.FLAME_SIGN)
             ),
             new SignIndexPage(
-	            new SignEntry(WINTER_SIGN, Signs.WINTER_SIGN),
-	            new SignEntry(HARMONY_SIGN, Signs.HARMONY_SIGN),
-	            new SignEntry(DEATH_SIGN, Signs.DEATH_SIGN),
-	            new SignEntry(WARDING_SIGN, Signs.WARDING_SIGN),
-	            new SignEntry(MAGIC_SIGN, Signs.MAGIC_SIGN)
+                    new SignEntry(WINTER_SIGN, Signs.WINTER_SIGN),
+                    new SignEntry(HARMONY_SIGN, Signs.HARMONY_SIGN),
+                    new SignEntry(DEATH_SIGN, Signs.DEATH_SIGN),
+                    new SignEntry(WARDING_SIGN, Signs.WARDING_SIGN),
+                    new SignEntry(MAGIC_SIGN, Signs.MAGIC_SIGN)
             )
         );
 

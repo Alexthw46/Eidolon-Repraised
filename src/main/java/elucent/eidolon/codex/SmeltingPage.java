@@ -10,8 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SmeltingPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_smelting_page.png");
-    ItemStack result;
-    ItemStack input;
+    final ItemStack result;
+    final ItemStack input;
 
     public SmeltingPage(ItemStack result, ItemStack input) {
         super(BACKGROUND);

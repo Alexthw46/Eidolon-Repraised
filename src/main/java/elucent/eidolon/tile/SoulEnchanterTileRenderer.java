@@ -23,7 +23,7 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
     private final BookModel model;
 
     public SoulEnchanterTileRenderer() {
-    	model = new BookModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.BOOK));
+        model = new BookModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.BOOK));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 0.75D, 0.5D);
         float f = ClientEvents.getClientTicks();
-        matrixStackIn.translate(0.0D, (double)(0.1F + Mth.sin(f * 0.1F) * 0.01F), 0.0D);
+        matrixStackIn.translate(0.0D, 0.1F + Mth.sin(f * 0.1F) * 0.01F, 0.0D);
 
         float f1;
         for(f1 = tileEntityIn.nextPageAngle - tileEntityIn.pageAngle; f1 >= (float)Math.PI; f1 -= ((float)Math.PI * 2F)) {

@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 
 public class WorktableRegistry {
-    static Map<ResourceLocation, WorktableRecipe> recipes = new HashMap<>();
+    static final Map<ResourceLocation, WorktableRecipe> recipes = new HashMap<>();
 
     public static WorktableRecipe register(WorktableRecipe recipe) {
         ResourceLocation loc = recipe.getRegistryName();
@@ -27,7 +27,7 @@ public class WorktableRegistry {
         List<ItemStack> stacks = new ArrayList<>();
         for (Object o : recipe.core) stacks.add(RecipeUtil.stackFromObject(o));
         for (Object o : recipe.extras) stacks.add(RecipeUtil.stackFromObject(o));
-        return new WorktablePage(recipe.result.copy(), stacks.toArray(new ItemStack[stacks.size()]));
+        return new WorktablePage(recipe.result.copy(), stacks.toArray(new ItemStack[0]));
     }
 
     public static List<RecipeWrappers.Worktable> getWrappedRecipes() {

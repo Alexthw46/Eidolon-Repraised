@@ -1,20 +1,6 @@
 package elucent.eidolon.gui.jei;
 
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
-import elucent.eidolon.recipe.CrucibleRegistry;
-import elucent.eidolon.recipe.WorktableRegistry;
-import elucent.eidolon.ritual.RitualRegistry;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
+/*
 @JeiPlugin
 public class JEIRegistry implements IModPlugin {
     public static IRecipeCategory CRUCIBLE_CATEGORY, WORKTABLE_CATEGORY, RITUAL_CATEGORY;
@@ -47,3 +33,6 @@ public class JEIRegistry implements IModPlugin {
         registry.addRecipes(RitualRegistry.getWrappedRecipes(), RITUAL_CATEGORY.getUid());
     }
 }
+
+
+ */

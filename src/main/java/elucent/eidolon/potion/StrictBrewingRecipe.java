@@ -7,7 +7,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
 
 public class StrictBrewingRecipe extends BrewingRecipe {
-    ItemStack inputStack;
+    final ItemStack inputStack;
     public StrictBrewingRecipe(ItemStack input, Ingredient ingredient, ItemStack output) {
         super(Ingredient.of(input), ingredient, output);
         this.inputStack = input;

@@ -25,7 +25,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class VillagerSacrificeSpell extends StaticSpell {
-    Deity deity;
+    final Deity deity;
 
     public VillagerSacrificeSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);
@@ -64,7 +64,7 @@ public class VillagerSacrificeSpell extends StaticSpell {
                 rep.pray(player, getRegistryName(), world.getGameTime());
                 double prev = rep.getReputation(player, deity.getId());
                 rep.unlock(player, deity.getId(), DeityLocks.SACRIFICE_VILLAGER);
-                rep.addReputation(player, deity.getId(), 6.0 + 1.0 * info.getPower());
+                rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
             });
         }
         else {

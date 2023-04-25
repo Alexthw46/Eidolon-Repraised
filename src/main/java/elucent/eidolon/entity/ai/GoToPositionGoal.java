@@ -8,10 +8,11 @@ import net.minecraft.core.BlockPos;
 
 public class GoToPositionGoal extends Goal {
     Random random = new Random();
-    BlockPos dest;
-    PathfinderMob creature;
-    double speed;
+    final BlockPos dest;
+    final PathfinderMob creature;
+    final double speed;
     boolean running;
+
     public GoToPositionGoal(PathfinderMob creature, BlockPos pos, double speedIn) {
         this.creature = creature;
         this.dest = pos;

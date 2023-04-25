@@ -1,56 +1,48 @@
 package elucent.eidolon.research;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
 import elucent.eidolon.Eidolon;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Function;
+
+import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class Researches {
-    static Map<ResourceLocation, Research> researches = new HashMap<>();
-    static Multimap<ResourceLocation, Research> blockResearches = HashMultimap.create();
-    static Multimap<ResourceLocation, Research> entityResearches = HashMultimap.create();
-    static List<Function<Random, ResearchTask>> taskPool = new ArrayList<>();
+    static final Map<ResourceLocation, Research> researches = new HashMap<>();
+    static final Multimap<ResourceLocation, Research> blockResearches = HashMultimap.create();
+    static final Multimap<ResourceLocation, Research> entityResearches = HashMultimap.create();
+    static final List<Function<Random, ResearchTask>> taskPool = new ArrayList<>();
 
     public static Research register(Research r, Object... sources) {
         researches.put(r.getRegistryName(), r);
         for (Object o : sources) {
-        	if (o instanceof Block b) {
-        		blockResearches.put(b.getRegistryName(), r);
-        	}
-        	else if (o instanceof EntityType<?> e) {
-        		entityResearches.put(e.getRegistryName(), r);
-        	}
+            if (o instanceof Block b) {
+                //blockResearches.put(b.getRegistryName(), r);
+            } else if (o instanceof EntityType<?> e) {
+                //entityResearches.put(e.getRegistryName(), r);
+            }
         }
         return r;
     }
-    
+
     public static void addTask(Function<Random, ResearchTask> task) {
-    	taskPool.add(task);
+        taskPool.add(task);
     }
-    
-    @Nullable
-    public static Collection<Research> getBlockResearches(Block b) {
-    	return blockResearches.get(b.getRegistryName());
+
+    public static @NotNull Collection<Research> getBlockResearches(Block b) {
+        return blockResearches.get(getRegistryName(b));
     }
-    
-    @Nullable
-    public static Collection<Research> getEntityResearches(Entity e) {
-    	return entityResearches.get(e.getType().getRegistryName());
+
+    public static @NotNull Collection<Research> getEntityResearches(Entity e) {
+        return entityResearches.get(getRegistryName(e.getType()));
     }
 
     public static Collection<Research> getResearches() {
@@ -63,16 +55,16 @@ public class Researches {
     }
     
     public static ResearchTask getRandomTask(Random random) {
-    	return taskPool.get(random.nextInt(taskPool.size())).apply(random);
+        return taskPool.get(random.nextInt(taskPool.size())).apply(random);
     }
     
     public static void init() {
-    	addTask(ResearchTask.ScrivenerItems::new);
-    	addTask(ResearchTask.ScrivenerItems::new);
-    	addTask(ResearchTask.ScrivenerItems::new);
-    	addTask(ResearchTask.ScrivenerItems::new);
-    	addTask(ResearchTask.XP::new);
-    	addTask(ResearchTask.XP::new);
-    	register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 5), EntityType.PIG);
+        addTask(ResearchTask.ScrivenerItems::new);
+        addTask(ResearchTask.ScrivenerItems::new);
+        addTask(ResearchTask.ScrivenerItems::new);
+        addTask(ResearchTask.ScrivenerItems::new);
+        addTask(ResearchTask.XP::new);
+        addTask(ResearchTask.XP::new);
+        register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 5), EntityType.PIG);
     }
 }

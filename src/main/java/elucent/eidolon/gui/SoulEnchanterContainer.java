@@ -1,43 +1,37 @@
 package elucent.eidolon.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-
 import elucent.eidolon.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.*;
 
 public class SoulEnchanterContainer extends AbstractContainerMenu {
     private final Container tableInventory = new SimpleContainer(2) {
@@ -61,9 +55,6 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         super(Registry.SOUL_ENCHANTER_CONTAINER.get(), id);
         this.worldPosCallable = worldPosCallable;
         this.addSlot(new Slot(this.tableInventory, 0, 15, 47) {
-            public boolean mayPlace(ItemStack stack) {
-                return true;
-            }
             public int getMaxStackSize() {
                 return 1;
             }
@@ -123,7 +114,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                         }
                     }
 
-                    this.rand.setSeed((long)xpSeed.get());
+                    this.rand.setSeed(xpSeed.get());
 
                     for(int i1 = 0; i1 < 3; ++i1) {
                         enchantClue[i1] = -1;
@@ -181,15 +172,12 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
                     Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(itemstack2);
                     if (enchants.size() > 0) {
-                        for (int j = 0; j < list.size(); ++ j) {
-                            EnchantmentInstance data = list.get(j);
+                        for (EnchantmentInstance data : list) {
                             if (enchants.containsKey(data.enchantment)) enchants.replace(data.enchantment, data.level);
                             else enchants.put(data.enchantment, data.level);
                         }
                         EnchantmentHelper.setEnchantments(enchants, itemstack2);
-                    }
-                    else for(int j = 0; j < list.size(); ++j) {
-                        EnchantmentInstance data = list.get(j);
+                    } else for (EnchantmentInstance data : list) {
                         if (flag) {
                             EnchantedBookItem.addEnchantment(itemstack2, data);
                         } else {
@@ -212,7 +200,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     this.tableInventory.setChanged();
                     this.xpSeed.set(playerIn.getEnchantmentSeed());
                     this.slotsChanged(this.tableInventory);
-                    p_217003_6_.playSound((Player)null, p_217003_7_, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, p_217003_6_.random.nextFloat() * 0.1F + 0.7F);
+                    p_217003_6_.playSound(null, p_217003_7_, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, p_217003_6_.random.nextFloat() * 0.1F + 0.7F);
                 }
             });
             return true;
@@ -239,7 +227,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     }
 
     private List<EnchantmentInstance> getEnchantmentList(ItemStack stack, int enchantSlot) {
-        this.rand.setSeed((long)(this.xpSeed.get() + enchantSlot));
+        this.rand.setSeed(this.xpSeed.get() + enchantSlot);
         ItemStack test = stack.copy();
         EnchantmentHelper.setEnchantments(new HashMap<>(), test);
         if (test.getItem() == Items.ENCHANTED_BOOK) test = new ItemStack(Items.BOOK);
@@ -257,14 +245,8 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         });
 
         for (Map.Entry<Enchantment, Integer> e : existing.entrySet()) {
-            Iterator<Enchantment> iterator = valid.iterator();
 
-            while(iterator.hasNext()) {
-                Enchantment next = iterator.next();
-                if (!e.getKey().isCompatibleWith(next) && e.getKey() != next) {
-                    iterator.remove();
-                }
-            }
+            valid.removeIf(next -> !e.getKey().isCompatibleWith(next) && e.getKey() != next);
         }
 
         List<EnchantmentInstance> enchants = new ArrayList<>();

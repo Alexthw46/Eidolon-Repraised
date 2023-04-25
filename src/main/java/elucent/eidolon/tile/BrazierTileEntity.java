@@ -35,7 +35,7 @@ public class BrazierTileEntity extends TileEntityBase {
     boolean ritualDone = false;
 
     public BrazierTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.BRAZIER_TILE_ENTITY, pos, state);
+        this(Registry.BRAZIER_TILE_ENTITY.get(), pos, state);
     }
 
     public BrazierTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {

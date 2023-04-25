@@ -10,7 +10,7 @@ import net.minecraft.core.Direction;
 public class PipeTileEntity extends ReagentTankTileEntity {
 
     public PipeTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.PIPE_TILE_ENTITY, pos, state);
+        this(Registry.PIPE_TILE_ENTITY.get(), pos, state);
     }
 
     public PipeTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {

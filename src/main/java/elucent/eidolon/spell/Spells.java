@@ -10,8 +10,8 @@ import elucent.eidolon.deity.Deities;
 import net.minecraft.resources.ResourceLocation;
 
 public class Spells {
-    static List<Spell> spells = new ArrayList<>();
-    static Map<ResourceLocation, Spell> spellMap = new HashMap<>();
+    static final List<Spell> spells = new ArrayList<>();
+    static final Map<ResourceLocation, Spell> spellMap = new HashMap<>();
 
     public static Spell find(ResourceLocation loc) {
         return spellMap.getOrDefault(loc, null);

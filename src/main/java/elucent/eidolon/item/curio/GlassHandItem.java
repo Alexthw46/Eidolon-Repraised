@@ -11,6 +11,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class GlassHandItem extends ItemBase {
     public GlassHandItem(Properties properties) {
         super(properties);
@@ -19,11 +21,11 @@ public class GlassHandItem extends ItemBase {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (CuriosApi.getCuriosHelper().findEquippedCurio(Registry.GLASS_HAND.get(), event.getEntityLiving()).isPresent()) {
+        if (CuriosApi.getCuriosHelper().findEquippedCurio(Registry.GLASS_HAND.get(), event.getEntity()).isPresent()) {
             event.setAmount(event.getAmount() * 5);
         }
         if (event.getSource().getEntity() instanceof LivingEntity &&
-            CuriosApi.getCuriosHelper().findEquippedCurio(Registry.GLASS_HAND.get(), (LivingEntity)event.getSource().getEntity()).isPresent()) {
+            CuriosApi.getCuriosHelper().findEquippedCurio(Registry.GLASS_HAND.get(), (LivingEntity) event.getSource().getEntity()).isPresent()) {
             event.setAmount(event.getAmount() * 2);
         }
     }

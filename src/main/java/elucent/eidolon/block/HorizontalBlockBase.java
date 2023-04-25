@@ -7,6 +7,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class HorizontalBlockBase extends BlockBase {
     public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 

@@ -10,5 +10,6 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 @Mixin(PotionBrewing.class)
 public interface PotionBrewingMixin {
     @Invoker
-    public static void callAddMix(Potion input, Item ingredient, Potion output) {}
+    static void callAddMix(Potion input, Item ingredient, Potion output) {
+    }
 }

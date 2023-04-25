@@ -10,7 +10,7 @@ import elucent.eidolon.Eidolon;
 import net.minecraft.resources.ResourceLocation;
 
 public class ReagentRegistry {
-    static Map<ResourceLocation, Reagent> reagents = new HashMap<>();
+    static final Map<ResourceLocation, Reagent> reagents = new HashMap<>();
 
     public static Reagent register(Reagent r) {
         reagents.put(r.getRegistryName(), r);
@@ -26,8 +26,8 @@ public class ReagentRegistry {
         return reagents.getOrDefault(location, null);
     }
 
-    public static Reagent
-        STEAM = register(new SteamReagent(new ResourceLocation(Eidolon.MODID, "steam"))),
-        ESPRIT = register(new EspritReagent(new ResourceLocation(Eidolon.MODID, "esprit"))),
-        CRIMSOL = register(new CrimsolReagent(new ResourceLocation(Eidolon.MODID, "crimsol")));
+    public static final Reagent
+            STEAM = register(new SteamReagent(new ResourceLocation(Eidolon.MODID, "steam")));
+    public static Reagent ESPRIT = register(new EspritReagent(new ResourceLocation(Eidolon.MODID, "esprit")));
+    public static Reagent CRIMSOL = register(new CrimsolReagent(new ResourceLocation(Eidolon.MODID, "crimsol")));
 }

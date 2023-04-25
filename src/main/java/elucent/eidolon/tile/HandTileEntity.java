@@ -16,7 +16,7 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
     ItemStack stack = ItemStack.EMPTY;
 
     public HandTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.HAND_TILE_ENTITY, pos, state);
+        this(Registry.HAND_TILE_ENTITY.get(), pos, state);
     }
 
     public HandTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {

@@ -1,22 +1,21 @@
 package elucent.eidolon.codex;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Page {
-    ResourceLocation bg;
+    final ResourceLocation bg;
 
     public Page(ResourceLocation background) {
         this.bg = background;
@@ -67,7 +66,7 @@ public abstract class Page {
 
     @OnlyIn(Dist.CLIENT)
     public void fullRender(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	RenderSystem.setShaderTexture(0, bg);
+        RenderSystem.setShaderTexture(0, bg);
         renderBackground(gui, mStack, x, y, mouseX, mouseY);
         render(gui, mStack, x, y, mouseX, mouseY);
         renderIngredients(gui, mStack, x, y, mouseX, mouseY);
@@ -75,7 +74,7 @@ public abstract class Page {
 
     @OnlyIn(Dist.CLIENT)
     public void renderBackground(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	RenderSystem.setShaderTexture(0, bg);
+        RenderSystem.setShaderTexture(0, bg);
         gui.blit(mStack, x, y, 0, 0, 128, 160);
     }
 

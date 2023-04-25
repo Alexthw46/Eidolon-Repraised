@@ -1,15 +1,12 @@
 package elucent.eidolon.spell;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public abstract class StaticSpell extends Spell {
-    SignSequence signs;
+    final SignSequence signs;
 
     public StaticSpell(ResourceLocation name, Sign... signs) {
         super(name);

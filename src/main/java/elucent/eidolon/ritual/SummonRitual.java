@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class SummonRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/summon_ritual");
 
-    EntityType entity;
+    final EntityType entity;
     public SummonRitual(EntityType entity) {
         super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
         this.entity = entity;

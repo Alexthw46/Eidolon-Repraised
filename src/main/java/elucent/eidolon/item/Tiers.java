@@ -37,7 +37,7 @@ public class Tiers {
             return Ingredient.of(new ItemStack(Registry.PEWTER_INGOT.get()));
         }
 
-        public static PewterTier INSTANCE = new PewterTier();
+        public static final PewterTier INSTANCE = new PewterTier();
     }
 
     public static class MagicToolTier implements Tier {
@@ -71,7 +71,7 @@ public class Tiers {
             return Ingredient.EMPTY;
         }
 
-        public static MagicToolTier INSTANCE = new MagicToolTier();
+        public static final MagicToolTier INSTANCE = new MagicToolTier();
     }
 
     public static class SilverTier implements Tier {
@@ -105,7 +105,7 @@ public class Tiers {
             return Ingredient.of(new ItemStack(Registry.SILVER_INGOT.get()));
         }
 
-        public static SilverTier INSTANCE = new SilverTier();
+        public static final SilverTier INSTANCE = new SilverTier();
     }
 
     public static class SanguineTier implements Tier {
@@ -139,7 +139,7 @@ public class Tiers {
             return Ingredient.EMPTY;
         }
 
-        public static SanguineTier INSTANCE = new SanguineTier();
+        public static final SanguineTier INSTANCE = new SanguineTier();
     }
 
     public static class NecroticTier implements Tier {
@@ -173,6 +173,6 @@ public class Tiers {
             return Ingredient.of(Registry.DEATH_ESSENCE.get());
         }
 
-        public static MagicToolTier INSTANCE = new MagicToolTier();
+        public static final MagicToolTier INSTANCE = new MagicToolTier();
     }
 }

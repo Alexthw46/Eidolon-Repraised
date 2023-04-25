@@ -10,8 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CraftingPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_crafting_page.png");
-    ItemStack result;
-    ItemStack[] inputs;
+    final ItemStack result;
+    final ItemStack[] inputs;
 
     public CraftingPage(ItemStack result, ItemStack... inputs) {
         super(BACKGROUND);

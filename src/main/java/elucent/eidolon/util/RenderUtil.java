@@ -11,10 +11,8 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
@@ -63,69 +61,74 @@ public class RenderUtil {
 //        }
 //    }
 
-    public static RenderType GLOWING_SPRITE = RenderType.create(
-        Eidolon.MODID + ":glowing_sprite",
-        DefaultVertexFormat.POSITION_TEX_COLOR,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-            .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-            .setTransparencyState(ADDITIVE_TRANSPARENCY)
-            .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
-            .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingSpriteShader))
-            .createCompositeState(false)
-    ), GLOWING = RenderType.create(
-        Eidolon.MODID + ":glowing",
-        DefaultVertexFormat.POSITION_COLOR,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-            .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-            .setTransparencyState(ADDITIVE_TRANSPARENCY)
-            .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingShader))
-            .createCompositeState(false)
-    ), DELAYED_PARTICLE = RenderType.create(
-        Eidolon.MODID + ":delayed_particle",
-        DefaultVertexFormat.PARTICLE,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-            .setTransparencyState(NORMAL_TRANSPARENCY)
-            .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_PARTICLES, false, false))
-            .setShaderState(new ShaderStateShard(ClientRegistry::getSpriteParticleShader))
-            .createCompositeState(false)
-    ), GLOWING_PARTICLE = RenderType.create(
-        Eidolon.MODID + ":glowing_particle",
-        DefaultVertexFormat.PARTICLE,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-            .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-            .setTransparencyState(ADDITIVE_TRANSPARENCY)
-            .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_PARTICLES, false, false))
-            .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingParticleShader))
-            .createCompositeState(false)
-    ), GLOWING_BLOCK_PARTICLE = RenderType.create(
-        Eidolon.MODID + ":glowing_particle",
-        DefaultVertexFormat.PARTICLE,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
-            .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-            .setTransparencyState(ADDITIVE_TRANSPARENCY)
-            .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
-            .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingParticleShader))
-            .createCompositeState(false)
-    ), VAPOR_TRANSLUCENT = RenderType.create(
-        Eidolon.MODID + ":vapor_translucent",
-        DefaultVertexFormat.BLOCK,
-        Mode.QUADS, 256, true, false,
-        RenderType.CompositeState.builder()
-            .setLightmapState(new RenderStateShard.LightmapStateShard(false))
-            .setTransparencyState(NORMAL_TRANSPARENCY)
-            .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
-            .setShaderState(new ShaderStateShard(ClientRegistry::getVaporShader))
-            .createCompositeState(false)
+    public static final RenderType GLOWING_SPRITE = RenderType.create(
+            Eidolon.MODID + ":glowing_sprite",
+            DefaultVertexFormat.POSITION_TEX_COLOR,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingSpriteShader))
+                    .createCompositeState(false)
+    );
+    public static final RenderType GLOWING = RenderType.create(
+            Eidolon.MODID + ":glowing",
+            DefaultVertexFormat.POSITION_COLOR,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingShader))
+                    .createCompositeState(false)
+    );
+    public static final RenderType DELAYED_PARTICLE = RenderType.create(
+            Eidolon.MODID + ":delayed_particle",
+            DefaultVertexFormat.PARTICLE,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setTransparencyState(NORMAL_TRANSPARENCY)
+                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_PARTICLES, false, false))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getSpriteParticleShader))
+                    .createCompositeState(false)
+    );
+    public static final RenderType GLOWING_PARTICLE = RenderType.create(
+            Eidolon.MODID + ":glowing_particle",
+            DefaultVertexFormat.PARTICLE,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_PARTICLES, false, false))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingParticleShader))
+                    .createCompositeState(false)
+    );
+    public static final RenderType GLOWING_BLOCK_PARTICLE = RenderType.create(
+            Eidolon.MODID + ":glowing_particle",
+            DefaultVertexFormat.PARTICLE,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setTransparencyState(ADDITIVE_TRANSPARENCY)
+                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingParticleShader))
+                    .createCompositeState(false)
+    );
+    public static final RenderType VAPOR_TRANSLUCENT = RenderType.create(
+            Eidolon.MODID + ":vapor_translucent",
+            DefaultVertexFormat.BLOCK,
+            Mode.QUADS, 256, true, false,
+            RenderType.CompositeState.builder()
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                    .setTransparencyState(NORMAL_TRANSPARENCY)
+                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getVaporShader))
+                    .createCompositeState(false)
     );
 
     static double ticks = 0;
@@ -197,7 +200,7 @@ public class RenderUtil {
         mStack.pushPose();
         mStack.translate(x, y, z);
 
-        float rotation = (float)(ClientEvents.getClientTicks() / 200);
+        float rotation = ClientEvents.getClientTicks() / 200;
 
         for(int i = 0; (float)i < (f5 + f5 * f5) / 2.0F * 60.0F; ++i) {
             mStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
@@ -220,10 +223,10 @@ public class RenderUtil {
             builder.vertex(mat, 0.0F, 0.0F, 0.0F).color(r, g, b, alpha).endVertex();
             builder.vertex(mat, 0.0F, 0.0F, 0.0F).color(r, g, b, alpha).endVertex();
             builder.vertex(mat, ROOT_3 * f4, f3, -0.5F * f4).color(r, g, b, 0).endVertex();
-            builder.vertex(mat, 0.0F, f3, 1.0F * f4).color(r, g, b, 0).endVertex();
+            builder.vertex(mat, 0.0F, f3, f4).color(r, g, b, 0).endVertex();
             builder.vertex(mat, 0.0F, 0.0F, 0.0F).color(r, g, b, alpha).endVertex();
             builder.vertex(mat, 0.0F, 0.0F, 0.0F).color(r, g, b, alpha).endVertex();
-            builder.vertex(mat, 0.0F, f3, 1.0F * f4).color(r, g, b, 0).endVertex();
+            builder.vertex(mat, 0.0F, f3, f4).color(r, g, b, 0).endVertex();
             builder.vertex(mat, -ROOT_3 * f4, f3, -0.5F * f4).color(r, g, b, 0).endVertex();
         }
 

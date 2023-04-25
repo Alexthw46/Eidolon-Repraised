@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.List;
 
-import javax.swing.plaf.basic.BasicBorders.MenuBarBorder;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import elucent.eidolon.Eidolon;

@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 
 public class NecromancerSpellEntity extends SpellProjectileEntity {
-    public static final EntityDataAccessor<Integer> DELAY = SynchedEntityData.<Integer>defineId(NecromancerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DELAY = SynchedEntityData.defineId(NecromancerSpellEntity.class, EntityDataSerializers.INT);
 
     public NecromancerSpellEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);

@@ -1,42 +1,23 @@
 package elucent.eidolon.gui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import elucent.eidolon.Registry;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
 import elucent.eidolon.research.Research;
-import elucent.eidolon.research.Researches;
 import elucent.eidolon.research.ResearchTask;
+import elucent.eidolon.research.Researches;
 import elucent.eidolon.tile.ResearchTableTileEntity;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.DistExecutor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResearchTableContainer extends AbstractContainerMenu implements ContainerListener {
     private final Container tile;
@@ -67,63 +48,63 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         }
         
         if (inventory instanceof ResearchTableTileEntity t) {
-        	t.addListener(this);
+            t.addListener(this);
         }
         
         if (tile instanceof ResearchTableTileEntity) updateSlots();
     }
 
     protected void popSlot() {
-    	slots.remove(slots.size() - 1);
-    	List<ItemStack> lastSlots = ((AbstractContainerMenuMixin)(Object)this).getLastSlots();
-    	List<ItemStack> remoteSlots = ((AbstractContainerMenuMixin)(Object)this).getRemoteSlots();
-    	lastSlots.remove(lastSlots.size() - 1);
-    	remoteSlots.remove(remoteSlots.size() - 1);
+        slots.remove(slots.size() - 1);
+        List<ItemStack> lastSlots = ((AbstractContainerMenuMixin) this).getLastSlots();
+        List<ItemStack> remoteSlots = ((AbstractContainerMenuMixin) this).getRemoteSlots();
+        lastSlots.remove(lastSlots.size() - 1);
+        remoteSlots.remove(remoteSlots.size() - 1);
     }
     
     @Override
     public void clicked(int p_150400_, int p_150401_, ClickType p_150402_, Player p_150403_) {
-    	if (p_150400_ >= slots.size()) return;
-    	super.clicked(p_150400_, p_150401_, p_150402_, p_150403_);
+        if (p_150400_ >= slots.size()) return;
+        super.clicked(p_150400_, p_150401_, p_150402_, p_150403_);
     }
     
     public void updateSlots() {
-    	if (tile instanceof ResearchTableTileEntity t) {
-        	for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
-    	        double d0 = t.getBlockPos().getY() + 1.3F;
-    	        ItemEntity itementity = new ItemEntity(t.getLevel(), t.getBlockPos().getX() + 0.5, d0, t.getBlockPos().getZ() + 0.5, slots.get(i).getItem());
-    	        itementity.setPickUpDelay(40);
-    	        t.getLevel().addFreshEntity(itementity);
-        	}
-    	}
-    	while (slots.size() > 38) popSlot(); // Pare down to just the base 2 slots + player inventory.
-    	while (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
-        	if (getProgress() > 0) break; // Slots don't appear when research is in progress.
-    		ItemStack stack = slots.get(0).getItem();
-    		if (!stack.hasTag() || !stack.getTag().contains("research")) break;
-    		Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
-    		if (r == null) break;
-    		if (stack.getTag().getInt("stepsDone") >= r.getStars()) break;
-    		List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
-    		for (int i = 0; i < tasks.size(); i ++) {
-    			int x = 189, y = 17 + 36 * i;
-    			tasks.get(i).modifyContainer(this, x, y);
-    		}
-    		break;
-    	}
-    	if (tile instanceof ResearchTableTileEntity) this.broadcastFullState();
+        if (tile instanceof ResearchTableTileEntity t) {
+            for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
+                double d0 = t.getBlockPos().getY() + 1.3F;
+                ItemEntity itementity = new ItemEntity(t.getLevel(), t.getBlockPos().getX() + 0.5, d0, t.getBlockPos().getZ() + 0.5, slots.get(i).getItem());
+                itementity.setPickUpDelay(40);
+                t.getLevel().addFreshEntity(itementity);
+            }
+        }
+        while (slots.size() > 38) popSlot(); // Pare down to just the base 2 slots + player inventory.
+        while (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
+            if (getProgress() > 0) break; // Slots don't appear when research is in progress.
+            ItemStack stack = slots.get(0).getItem();
+            if (!stack.hasTag() || !stack.getTag().contains("research")) break;
+            Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
+            if (r == null) break;
+            if (stack.getTag().getInt("stepsDone") >= r.getStars()) break;
+            List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
+            for (int i = 0; i < tasks.size(); i ++) {
+                int x = 189, y = 17 + 36 * i;
+                tasks.get(i).modifyContainer(this, x, y);
+            }
+            break;
+        }
+        if (tile instanceof ResearchTableTileEntity) this.broadcastFullState();
     }
     
     @Override
     public void removed(Player player) {
-    	super.removed(player);
+        super.removed(player);
         if (player instanceof ServerPlayer) {
-        	for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
-        		player.drop(slots.get(i).getItem(), false);
-        	}
+            for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
+                player.drop(slots.get(i).getItem(), false);
+            }
         }
         if (this.tile instanceof ResearchTableTileEntity t) {
-        	t.removeListener(this);
+            t.removeListener(this);
         }
     }
 
@@ -194,7 +175,7 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         updateSlots();
 
         try {
-        	super.initializeContents(id, items, carried);
+            super.initializeContents(id, items, carried);
         } catch (IndexOutOfBoundsException e) {}
     }
 
@@ -210,8 +191,8 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         
         @Override
         public void setChanged() {
-        	super.setChanged();
-        	if (tile instanceof ResearchTableTileEntity) updateSlots();
+            super.setChanged();
+            if (tile instanceof ResearchTableTileEntity) updateSlots();
         }
 
         @Override
@@ -220,7 +201,7 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         }
     }
 
-    class SealSlot extends Slot {
+    static class SealSlot extends Slot {
         public SealSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
             super(iInventoryIn, index, xPosition, yPosition);
         }
@@ -234,48 +215,48 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         }
     }
 
-	public void trySubmitGoal(Player player, int index) {
-    	if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
-    		ItemStack stack = slots.get(0).getItem();
-    		if (!stack.hasTag() || !stack.getTag().contains("research")) return;
-    		Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
-    		if (r == null) return;
-    		List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
-    		if (tasks.size() < index) return;
-    		ResearchTask toComplete = tasks.get(index);
-    		int startingSlot = 38;
-    		for (int i = 0; i < index; i ++) startingSlot += tasks.get(i).getSlotCount();
-    		if (!toComplete.isComplete(this, player, startingSlot).complete()) return;
-    		toComplete.onComplete(this, player, startingSlot);
-    		this.setData(0, 200); // start progress countdown.
-    		this.broadcastChanges();
-    		this.updateSlots();
-    	}
-	}
+    public void trySubmitGoal(Player player, int index) {
+        if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
+            ItemStack stack = slots.get(0).getItem();
+            if (!stack.hasTag() || !stack.getTag().contains("research")) return;
+            Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
+            if (r == null) return;
+            List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
+            if (tasks.size() < index) return;
+            ResearchTask toComplete = tasks.get(index);
+            int startingSlot = 38;
+            for (int i = 0; i < index; i ++) startingSlot += tasks.get(i).getSlotCount();
+            if (!toComplete.isComplete(this, player, startingSlot).complete()) return;
+            toComplete.onComplete(this, player, startingSlot);
+            this.setData(0, 200); // start progress countdown.
+            this.broadcastChanges();
+            this.updateSlots();
+        }
+    }
 
-	public void tryStamp(Player player) {
-    	if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get()) && slots.get(1).getItem().is(Registry.ARCANE_SEAL.get())) {
-    		ItemStack notes = slots.get(0).getItem();
-    		if (!notes.hasTag() || !notes.getTag().contains("research")) return;
-    		Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
-    		if (r == null) return;
-    		if (notes.getTag().getInt("stepsDone") < r.getStars()) return;
-    		
-    		slots.get(1).remove(1);
-    		ItemStack completed = new ItemStack(Registry.COMPLETED_RESEARCH.get());
-    		completed.getOrCreateTag().putString("research", r.getRegistryName().toString());
-    		slots.get(0).set(completed);
-    		this.updateSlots();
-    	}
-	}
+    public void tryStamp(Player player) {
+        if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get()) && slots.get(1).getItem().is(Registry.ARCANE_SEAL.get())) {
+            ItemStack notes = slots.get(0).getItem();
+            if (!notes.hasTag() || !notes.getTag().contains("research")) return;
+            Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+            if (r == null) return;
+            if (notes.getTag().getInt("stepsDone") < r.getStars()) return;
 
-	@Override
-	public void slotChanged(AbstractContainerMenu menu, int slot, ItemStack stack) {
-		if (slot == 0) updateSlots();
-	}
+            slots.get(1).remove(1);
+            ItemStack completed = new ItemStack(Registry.COMPLETED_RESEARCH.get());
+            completed.getOrCreateTag().putString("research", r.getRegistryName().toString());
+            slots.get(0).set(completed);
+            this.updateSlots();
+        }
+    }
 
-	@Override
-	public void dataChanged(AbstractContainerMenu menu, int slot, int value) {
-		if (slot == 0 && (value == 0 || value == 200)) updateSlots();
-	}
+    @Override
+    public void slotChanged(AbstractContainerMenu menu, int slot, ItemStack stack) {
+        if (slot == 0) updateSlots();
+    }
+
+    @Override
+    public void dataChanged(AbstractContainerMenu menu, int slot, int value) {
+        if (slot == 0 && (value == 0 || value == 200)) updateSlots();
+    }
 }

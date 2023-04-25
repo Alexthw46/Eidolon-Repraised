@@ -10,28 +10,25 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class NecroticFocusBlock extends HorizontalWaterloggableBlock implements EntityBlock {
-    VoxelShape SOUTH = Shapes.box(0, 0, 0, 1, 1, 0.5),
-               NORTH = Shapes.box(0, 0, 0.5, 1, 1, 1),
-               WEST = Shapes.box(0.5, 0, 0, 1, 1, 1),
-               EAST = Shapes.box(0, 0, 0, 0.5, 1, 1);
+    final VoxelShape SOUTH = Shapes.box(0, 0, 0, 1, 1, 0.5);
+    final VoxelShape NORTH = Shapes.box(0, 0, 0.5, 1, 1, 1);
+    final VoxelShape WEST = Shapes.box(0.5, 0, 0, 1, 1, 1);
+    final VoxelShape EAST = Shapes.box(0, 0, 0, 0.5, 1, 1);
 
     public NecroticFocusBlock(Properties properties) {
         super(properties);
     }
 
     VoxelShape shapeForState(BlockState state) {
-        switch (state.getValue(HORIZONTAL_FACING)) {
-            case NORTH:
-                return NORTH;
-            case SOUTH:
-                return SOUTH;
-            case WEST:
-                return WEST;
-            case EAST:
-            default:
-                return EAST;
-        }
+        return switch (state.getValue(HORIZONTAL_FACING)) {
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            default -> EAST;
+        };
     }
 
     @Override
@@ -49,8 +46,8 @@ public class NecroticFocusBlock extends HorizontalWaterloggableBlock implements 
         return shapeForState(state);
     }
 
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new NecroticFocusTileEntity(pos, state);
-	}
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new NecroticFocusTileEntity(pos, state);
+    }
 }

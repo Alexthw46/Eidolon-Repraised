@@ -1,37 +1,34 @@
 package elucent.eidolon.gui;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-
-import elucent.eidolon.Eidolon;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.client.model.BookModel;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.MutableComponent;
+import elucent.eidolon.Eidolon;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
+import net.minecraft.client.model.BookModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+
+import java.util.List;
+import java.util.Random;
 
 public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterContainer> {
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation(Eidolon.MODID,"textures/gui/soul_enchanter.png");
@@ -74,63 +71,63 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
     }
 
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {Lighting.setupForFlatItems();
-	    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-	    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-	    RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
-	    int i = (this.width - this.imageWidth) / 2;
-	    int j = (this.height - this.imageHeight) / 2;
-	    this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
-	    int k = (int)this.minecraft.getWindow().getGuiScale();
-	    RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
-	    Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
-	    matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
-	    RenderSystem.backupProjectionMatrix();
-	    RenderSystem.setProjectionMatrix(matrix4f);
-	    matrixStack.pushPose();
-	    PoseStack.Pose posestack$pose = matrixStack.last();
-	    posestack$pose.pose().setIdentity();
-	    posestack$pose.normal().setIdentity();
-	    matrixStack.translate(0.0D, (double)3.3F, 1984.0D);
-	    float f = 5.0F;
-	    matrixStack.scale(5.0F, 5.0F, 5.0F);
-	    matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-	    matrixStack.mulPose(Vector3f.XP.rotationDegrees(20.0F));
-	    float f1 = Mth.lerp(partialTicks, this.oOpen, this.open);
-	    matrixStack.translate((double)((1.0F - f1) * 0.2F), (double)((1.0F - f1) * 0.1F), (double)((1.0F - f1) * 0.25F));
-	    float f2 = -(1.0F - f1) * 90.0F - 90.0F;
-	    matrixStack.mulPose(Vector3f.YP.rotationDegrees(f2));
-	    matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-	    float f3 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
-	    float f4 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
-	    f3 = (f3 - (float)Mth.fastFloor((double)f3)) * 1.6F - 0.3F;
-	    f4 = (f4 - (float)Mth.fastFloor((double)f4)) * 1.6F - 0.3F;
-	    if (f3 < 0.0F) {
-	       f3 = 0.0F;
-	    }
-	
-	    if (f4 < 0.0F) {
-	       f4 = 0.0F;
-	    }
-	
-	    if (f3 > 1.0F) {
-	       f3 = 1.0F;
-	    }
-	
-	    if (f4 > 1.0F) {
-	       f4 = 1.0F;
-	    }
-	
-	    MODEL_BOOK.setupAnim(0.0F, f3, f4, f1);
-	    MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-	    VertexConsumer vertexconsumer = multibuffersource$buffersource.getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
-	    MODEL_BOOK.renderToBuffer(matrixStack, vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-	    multibuffersource$buffersource.endBatch();
-	    matrixStack.popPose();
-	    RenderSystem.viewport(0, 0, this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
-	    RenderSystem.restoreProjectionMatrix();
-	    Lighting.setupFor3DItems();
-	    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        EnchantmentNames.getInstance().initSeed((long)this.menu.getXPSeed());
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        int k = (int)this.minecraft.getWindow().getGuiScale();
+        RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
+        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
+        matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
+        RenderSystem.backupProjectionMatrix();
+        RenderSystem.setProjectionMatrix(matrix4f);
+        matrixStack.pushPose();
+        PoseStack.Pose posestack$pose = matrixStack.last();
+        posestack$pose.pose().setIdentity();
+        posestack$pose.normal().setIdentity();
+        matrixStack.translate(0.0D, 3.3F, 1984.0D);
+        float f = 5.0F;
+        matrixStack.scale(5.0F, 5.0F, 5.0F);
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(20.0F));
+        float f1 = Mth.lerp(partialTicks, this.oOpen, this.open);
+        matrixStack.translate((1.0F - f1) * 0.2F, (1.0F - f1) * 0.1F, (1.0F - f1) * 0.25F);
+        float f2 = -(1.0F - f1) * 90.0F - 90.0F;
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(f2));
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        float f3 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
+        float f4 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
+        f3 = (f3 - (float) Mth.fastFloor(f3)) * 1.6F - 0.3F;
+        f4 = (f4 - (float) Mth.fastFloor(f4)) * 1.6F - 0.3F;
+        if (f3 < 0.0F) {
+            f3 = 0.0F;
+        }
+
+        if (f4 < 0.0F) {
+            f4 = 0.0F;
+        }
+
+        if (f3 > 1.0F) {
+            f3 = 1.0F;
+        }
+
+        if (f4 > 1.0F) {
+            f4 = 1.0F;
+        }
+
+        MODEL_BOOK.setupAnim(0.0F, f3, f4, f1);
+        MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+        VertexConsumer vertexconsumer = multibuffersource$buffersource.getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
+        MODEL_BOOK.renderToBuffer(matrixStack, vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        multibuffersource$buffersource.endBatch();
+        matrixStack.popPose();
+        RenderSystem.viewport(0, 0, this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
+        RenderSystem.restoreProjectionMatrix();
+        Lighting.setupFor3DItems();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        EnchantmentNames.getInstance().initSeed(this.menu.getXPSeed());
         int l = this.menu.getSoulShardAmount();
 
         for(int i1 = 0; i1 < 3; ++i1) {
@@ -181,25 +178,25 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             Enchantment enchantment = Enchantment.byId((this.menu).enchantClue[j]);
             int l = (this.menu).worldClue[j];
             int i1 = j + 1;
-            if (this.isHovering(60, 14 + 19 * j, 108, 17, (double)mouseX, (double)mouseY) && l > 0) {
+            if (this.isHovering(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && l > 0) {
                 List<Component> list = Lists.newArrayList();
-                list.add(enchantment == null ? new TextComponent("") : enchantment.getFullname(l));
-                if(enchantment == null) {
-                    list.add(new TextComponent(""));
-                    list.add(new TranslatableComponent("forge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
+                list.add(enchantment == null ? Component.literal("") : enchantment.getFullname(l));
+                if (enchantment == null) {
+                    list.add(Component.literal(""));
+                    list.add(Component.translatable("forge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
                 } else if (!flag) {
-                    list.add(TextComponent.EMPTY);
+                    list.add(Component.empty());
                     if (this.minecraft.player.experienceLevel < l) {
-                        list.add((new TranslatableComponent("container.enchant.level.requirement", l)).withStyle(ChatFormatting.RED));
+                        list.add((Component.translatable("container.enchant.level.requirement", l)).withStyle(ChatFormatting.RED));
                     } else {
-                        MutableComponent iformattabletextcomponent = new TranslatableComponent("container.eidolon.enchant.shard.one", 1);
+                        MutableComponent iformattabletextcomponent = Component.translatable("container.eidolon.enchant.shard.one", 1);
 
                         list.add(iformattabletextcomponent.withStyle(minecraft.player.experienceLevel >= l ? ChatFormatting.GRAY : ChatFormatting.RED));
                         MutableComponent iformattabletextcomponent1;
                         if (l == 1) {
-                            iformattabletextcomponent1 = new TranslatableComponent("container.enchant.level.one");
+                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.one");
                         } else {
-                            iformattabletextcomponent1 = new TranslatableComponent("container.enchant.level.many", menu.worldClue[i1 - 1]);
+                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.many", menu.worldClue[i1 - 1]);
                         }
 
                         list.add(iformattabletextcomponent1.withStyle(ChatFormatting.GRAY));
@@ -231,6 +228,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         for(int i = 0; i < 3; ++i) {
             if ((this.menu).worldClue[i] != 0) {
                 flag = true;
+                break;
             }
         }
 

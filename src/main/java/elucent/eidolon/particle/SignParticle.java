@@ -13,7 +13,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 
 public class SignParticle extends TextureSheetParticle {
-    Sign sign;
+    final Sign sign;
     public SignParticle(ClientLevel world, Sign sign, double x, double y, double z, double vx, double vy, double vz) {
         super(world, x, y, z, vx, vy, vz);
         this.setPos(x, y, z);

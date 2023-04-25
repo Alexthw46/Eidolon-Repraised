@@ -1,12 +1,11 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import java.util.Optional;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
@@ -18,31 +17,25 @@ import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Optional;
+
 public class RuneIndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_rune_index_page.png");
-    Rune[] runes;
+    final Rune[] runes;
     int scroll = 0;
 
     public static class SignEntry {
-        Chapter chapter;
-        Sign sign;
+        final Chapter chapter;
+        final Sign sign;
 
         public SignEntry(Chapter chapter, Sign sign) {
             this.chapter = chapter;
@@ -52,7 +45,7 @@ public class RuneIndexPage extends Page {
 
     public RuneIndexPage() {
         super(BACKGROUND);
-        this.runes = Runes.getRunes().<Rune>toArray(Rune[]::new);
+        this.runes = Runes.getRunes().toArray(Rune[]::new);
     }
 
     @Override
@@ -86,19 +79,18 @@ public class RuneIndexPage extends Page {
         bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)x, (float)y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
+        BufferUploader.draw(bufferbuilder.end());
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	gui.hoveredRune = null;
+        gui.hoveredRune = null;
         Player entity = Minecraft.getInstance().player;
         Optional<IKnowledge> knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve();
         for (int i = 0; i < runes.length; i ++) {
-        	RenderSystem.setShaderTexture(0, BACKGROUND);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
             boolean hover = knowledge.isPresent() && knowledge.get().knowsRune(runes[i]) && mouseX >= xx && mouseX <= xx + 16 && mouseY >= yy && mouseY <= yy + 16;
             if (hover) gui.hoveredRune = runes[i];
@@ -119,7 +111,7 @@ public class RuneIndexPage extends Page {
                 }
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
                 for (int j = 0; j < (hover ? 2 : 1); j++) {
-                	RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 6, yy + 6, 8, 8,
+                    RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 6, yy + 6, 8, 8,
                         1, 1, 1, 0.75f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(runes[i].getSprite()));
                     tess.end();
                 }

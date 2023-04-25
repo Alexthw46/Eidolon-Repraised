@@ -24,23 +24,25 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ResoluteBeltItem extends ItemBase {
-    UUID ATTR_ID = new UUID(3701779382882225399l, 5035874982077300549l);
+    final UUID ATTR_ID = new UUID(3701779382882225399L, 5035874982077300549L);
 
     public ResoluteBeltItem(Properties properties) {
         super(properties);
         MinecraftForge.EVENT_BUS.addListener(ResoluteBeltItem::onHurt);
     }
 
-    static Random random = new Random();
+    static final Random random = new Random();
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity && CuriosApi.getCuriosHelper().findEquippedCurio(Registry.RESOLUTE_BELT.get(), event.getEntityLiving()).isPresent()) {
-            LivingEntity entity = (LivingEntity)event.getSource().getEntity();
-            Vec3 diff = event.getEntityLiving().position().subtract(entity.position()).multiply(1, 0, 1).normalize();
+        if (event.getSource().getEntity() instanceof LivingEntity entity && CuriosApi.getCuriosHelper().findEquippedCurio(Registry.RESOLUTE_BELT.get(), event.getEntity()).isPresent()) {
+            Vec3 diff = event.getEntity().position().subtract(entity.position()).multiply(1, 0, 1).normalize();
             entity.knockback(0.8f, diff.x, diff.z);
-            if (!entity.level.isClientSide) entity.level.playSound(null, entity.blockPosition(), SoundEvents.IRON_GOLEM_HURT, SoundSource.PLAYERS, 1.0f, 1.9f + 0.2f * random.nextFloat());
+            if (!entity.level.isClientSide)
+                entity.level.playSound(null, entity.blockPosition(), SoundEvents.IRON_GOLEM_HURT, SoundSource.PLAYERS, 1.0f, 1.9f + 0.2f * random.nextFloat());
         }
     }
 

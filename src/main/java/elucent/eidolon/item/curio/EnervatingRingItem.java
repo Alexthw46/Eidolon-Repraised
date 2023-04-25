@@ -1,8 +1,8 @@
 package elucent.eidolon.item.curio;
 
 import elucent.eidolon.item.ItemBase;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class EnervatingRingItem extends ItemBase {

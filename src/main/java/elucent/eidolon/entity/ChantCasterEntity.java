@@ -1,26 +1,13 @@
 package elucent.eidolon.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.mojang.math.Vector3f;
-
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SpellCastPacket;
 import elucent.eidolon.particle.RuneParticleData;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Sounds;
-import elucent.eidolon.spell.Rune;
+import elucent.eidolon.spell.*;
 import elucent.eidolon.spell.Rune.RuneResult;
-import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.SignSequence;
-import elucent.eidolon.spell.Spell;
-import elucent.eidolon.spell.Spells;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -31,19 +18,27 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnData {
-    public static final EntityDataAccessor<CompoundTag> RUNES = SynchedEntityData.<CompoundTag>defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
-    public static final EntityDataAccessor<CompoundTag> SIGNS = SynchedEntityData.<CompoundTag>defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
-    public static final EntityDataAccessor<Integer> INDEX = SynchedEntityData.<Integer>defineId(ChantCasterEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Optional<UUID>> CASTER_ID = SynchedEntityData.<Optional<UUID>>defineId(ChantCasterEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-    public static final EntityDataAccessor<Boolean> SUCCEEDED = SynchedEntityData.<Boolean>defineId(ChantCasterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<CompoundTag> RUNES = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    public static final EntityDataAccessor<CompoundTag> SIGNS = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    public static final EntityDataAccessor<Integer> INDEX = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Optional<UUID>> CASTER_ID = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    public static final EntityDataAccessor<Boolean> SUCCEEDED = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.BOOLEAN);
     int timer = 0, deathTimer = 0;
     Vec3 look;
 
@@ -59,32 +54,32 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     }
     
     protected CompoundTag getNoRunesTag() {
-    	CompoundTag emptyRunes = new CompoundTag();
-    	emptyRunes.put("runes", new ListTag());
-    	return emptyRunes;
+        CompoundTag emptyRunes = new CompoundTag();
+        emptyRunes.put("runes", new ListTag());
+        return emptyRunes;
     }
     
     protected List<Rune> loadRunesTag() {
-    	List<Rune> runes = new ArrayList<>();
-    	ListTag runesTag = getEntityData().get(RUNES).getList("runes", Tag.TAG_STRING);
-    	for (int i = 0; i < runesTag.size(); i ++) {
-    		Rune r = Runes.find(new ResourceLocation(runesTag.getString(i)));
-    		if (r != null) runes.add(r);
-    	}
-    	return runes;
+        List<Rune> runes = new ArrayList<>();
+        ListTag runesTag = getEntityData().get(RUNES).getList("runes", Tag.TAG_STRING);
+        for (int i = 0; i < runesTag.size(); i ++) {
+            Rune r = Runes.find(new ResourceLocation(runesTag.getString(i)));
+            if (r != null) runes.add(r);
+        }
+        return runes;
     }
     
     protected void setRunesTag(List<Rune> runes) {
-    	ListTag runesList = new ListTag();
-    	CompoundTag runesTag = new CompoundTag();
-    	for (Rune r : runes) runesList.add(StringTag.valueOf(r.getRegistryName().toString()));
-    	runesTag.put("runes", runesList);
-    	getEntityData().set(RUNES, runesTag);
+        ListTag runesList = new ListTag();
+        CompoundTag runesTag = new CompoundTag();
+        for (Rune r : runes) runesList.add(StringTag.valueOf(r.getRegistryName().toString()));
+        runesTag.put("runes", runesList);
+        getEntityData().set(RUNES, runesTag);
     }
 
     @Override
     protected void defineSynchedData() {
-    	getEntityData().define(RUNES, getNoRunesTag());
+        getEntityData().define(RUNES, getNoRunesTag());
         getEntityData().define(SIGNS, new SignSequence().serializeNbt());
         getEntityData().define(INDEX, 0);
         getEntityData().define(CASTER_ID, Optional.empty());
@@ -95,9 +90,9 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     public void tick() {
         super.tick();
         if (deathTimer > 0) {
-        	deathTimer --;
-        	if (deathTimer <= 0) remove(RemovalReason.KILLED);
-        	return;
+            deathTimer --;
+            if (deathTimer <= 0) remove(RemovalReason.KILLED);
+            return;
         }
         if (timer > 0) {
             timer --;
@@ -105,17 +100,17 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                 CompoundTag signData = getEntityData().get(SIGNS);
                 Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
                 if (!level.isClientSide && optuuid.isPresent()) {
-                	SignSequence seq = SignSequence.deserializeNbt(signData);
+                    SignSequence seq = SignSequence.deserializeNbt(signData);
                     Spell spell = Spells.find(seq);
                     Player player = level.getPlayerByUUID(optuuid.get());
                     if (spell != null && player != null && spell.canCast(level, blockPosition(), player, seq)) {
                         spell.cast(level, blockPosition(), player, seq);
                         Networking.sendToTracking(level, blockPosition(), new SpellCastPacket(player, blockPosition(), spell, seq));
-                    	getEntityData().set(SUCCEEDED, true);
+                        getEntityData().set(SUCCEEDED, true);
                     }
                     else {
-                    	level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    	getEntityData().set(SUCCEEDED, false);
+                        level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                        getEntityData().set(SUCCEEDED, false);
                     }
                 }
                 deathTimer = 20;
@@ -124,42 +119,41 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         }
 
         if (tickCount % 5 == 0) {
-        	List<Rune> runes = loadRunesTag();
-        	SignSequence seq = SignSequence.deserializeNbt(getEntityData().get(SIGNS));
-        	Vector3f initColor = seq.getAverageColor();
-        	
+            List<Rune> runes = loadRunesTag();
+            SignSequence seq = SignSequence.deserializeNbt(getEntityData().get(SIGNS));
+            Vector3f initColor = seq.getAverageColor();
+
             int index = getEntityData().get(INDEX);
             if (index >= runes.size()) return;
             Rune rune = runes.get(index);
             RuneResult result = rune.doEffect(seq);
             if (result == RuneResult.FAIL) {
-            	if (!level.isClientSide) {
-            		level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                if (!level.isClientSide) {
+                    level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
                     getEntityData().set(INDEX, runes.size());
                     getEntityData().set(SUCCEEDED, false);
-            	}
+                }
                 deathTimer = 20;
-                return;
             }
             else {
-            	Vector3f afterColor = seq.getAverageColor();
+                Vector3f afterColor = seq.getAverageColor();
                 double x = getX() + 0.1 * random.nextGaussian(),
                         y = getY() + 0.1 * random.nextGaussian(),
                         z = getZ() + 0.1 * random.nextGaussian();
                 for (int i = 0; i < 2; i ++) {
                     level.addParticle(new RuneParticleData(
-                		rune, 
-                		initColor.x(), initColor.y(), initColor.z(), 
-                		afterColor.x(), afterColor.y(), afterColor.z()
-                	), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
+                            rune,
+                            initColor.x(), initColor.y(), initColor.z(),
+                            afterColor.x(), afterColor.y(), afterColor.z()
+                    ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
                 }
                 level.playSound(null, blockPosition(), Sounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
                 if (index + 1 >= runes.size()) {
                     timer = 20;
                 }
                 if (!level.isClientSide) {
-                	getEntityData().set(INDEX, index + 1);
-                	getEntityData().set(SIGNS, seq.serializeNbt());
+                    getEntityData().set(INDEX, index + 1);
+                    getEntityData().set(SIGNS, seq.serializeNbt());
                 }
             }
         }
@@ -196,15 +190,15 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer) {
-		buffer.writeDouble(look.x);
-		buffer.writeDouble(look.y);
-		buffer.writeDouble(look.z);
-	}
+    @Override
+    public void writeSpawnData(FriendlyByteBuf buffer) {
+        buffer.writeDouble(look.x);
+        buffer.writeDouble(look.y);
+        buffer.writeDouble(look.z);
+    }
 
-	@Override
-	public void readSpawnData(FriendlyByteBuf buf) {
-		look = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
-	}
+    @Override
+    public void readSpawnData(FriendlyByteBuf buf) {
+        look = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
+    }
 }

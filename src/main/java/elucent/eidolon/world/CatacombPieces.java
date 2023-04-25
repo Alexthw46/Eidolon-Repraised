@@ -1,6 +1,5 @@
 package elucent.eidolon.world;
 
-import java.util.Random;
 /*
 import elucent.eidolon.Eidolon;
 import net.minecraft.nbt.CompoundTag;

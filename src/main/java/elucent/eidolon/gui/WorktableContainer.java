@@ -23,10 +23,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class WorktableContainer extends AbstractContainerMenu {
-    CraftingContainer core = new CraftingContainer(this, 3, 3), extras = new CraftingContainer(this, 2, 2);
-    ResultContainer result = new ResultContainer();
-    Player player;
-    ContainerLevelAccess callable;
+    final CraftingContainer core = new CraftingContainer(this, 3, 3);
+    final CraftingContainer extras = new CraftingContainer(this, 2, 2);
+    final ResultContainer result = new ResultContainer();
+    final Player player;
+    final ContainerLevelAccess callable;
 
     public WorktableContainer(int id, Inventory inventory) {
         this(id, inventory, ContainerLevelAccess.NULL);

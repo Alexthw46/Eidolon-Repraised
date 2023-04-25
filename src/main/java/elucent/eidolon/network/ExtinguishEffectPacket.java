@@ -13,7 +13,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 public class ExtinguishEffectPacket {
-    BlockPos pos;
+    final BlockPos pos;
 
     public ExtinguishEffectPacket(BlockPos pos) {
         this.pos = pos;

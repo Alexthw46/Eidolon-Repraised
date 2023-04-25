@@ -20,7 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class PrayerSpell extends StaticSpell {
-    Deity deity;
+    final Deity deity;
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);

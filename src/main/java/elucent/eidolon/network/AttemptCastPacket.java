@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.entity.ChantCasterEntity;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Sign;
-import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,8 +18,8 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraft.world.level.Level;
 
 public class AttemptCastPacket {
-    List<Rune> runes = new ArrayList<>();
-    UUID uuid;
+    final List<Rune> runes = new ArrayList<>();
+    final UUID uuid;
 
     public AttemptCastPacket(Player player, List<Rune> runes) {
         this.runes.addAll(runes);

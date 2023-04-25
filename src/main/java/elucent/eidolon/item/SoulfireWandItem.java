@@ -13,9 +13,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class SoulfireWandItem extends WandItem {
-	static Random random = new Random();
-	
+    static final Random random = new Random();
+
     public SoulfireWandItem(Properties builderIn) {
         super(builderIn);
     }

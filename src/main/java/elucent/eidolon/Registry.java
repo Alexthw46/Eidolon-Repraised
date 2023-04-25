@@ -33,7 +33,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -43,18 +45,15 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -62,7 +61,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -70,20 +68,20 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class Registry {
     public static TagKey<Item>
-            INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead")),
-            INGOTS_PEWTER = ItemTags.create(new ResourceLocation("forge", "ingots/pewter")),
-            INGOTS_ARCANE_GOLD = ItemTags.create(new ResourceLocation("forge", "ingots/arcane_gold")),
-            INGOTS_SILVER = ItemTags.create(new ResourceLocation("forge", "ingots/silver")),
-            GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
+            INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead"));
+    public static TagKey<Item> INGOTS_PEWTER = ItemTags.create(new ResourceLocation("forge", "ingots/pewter"));
+    public static TagKey<Item> INGOTS_ARCANE_GOLD = ItemTags.create(new ResourceLocation("forge", "ingots/arcane_gold"));
+    public static final TagKey<Item> INGOTS_SILVER = ItemTags.create(new ResourceLocation("forge", "ingots/silver"));
+    public static TagKey<Item> GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
 
     static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Eidolon.MODID);
     static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Eidolon.MODID);
-    static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Eidolon.MODID);
-    static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Eidolon.MODID);
+    static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Eidolon.MODID);
+    static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Eidolon.MODID);
     static final DeferredRegister<RecipeSerializer<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Eidolon.MODID);
     static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
 
-    public static TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
+    public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
     static Item.Properties itemProps() {
         return new Item.Properties().tab(Eidolon.TAB);
@@ -119,9 +117,9 @@ public class Registry {
     }
 
     public static class DecoBlockPack {
-        DeferredRegister<Block> registry;
-        String basename;
-        BlockBehaviour.Properties props;
+        final DeferredRegister<Block> registry;
+        final String basename;
+        final BlockBehaviour.Properties props;
         RegistryObject<Block> full = null, slab = null, stair = null, wall = null, fence = null, fence_gate = null;
 
         public DecoBlockPack(DeferredRegister<Block> blocks, String basename, BlockBehaviour.Properties props) {
@@ -166,140 +164,132 @@ public class Registry {
     }
 
     static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
-        return CONTAINERS.register(name, () -> new MenuType<T>(factory));
+        return CONTAINERS.register(name, () -> new MenuType<>(factory));
     }
 
-    static <T extends BlockEntity> BlockEntityType<T> addTileEntity(IForgeRegistry<BlockEntityType<?>> registry, String name, BlockEntitySupplier<T> factory, Block... blocks) {
-        BlockEntityType<T> type = BlockEntityType.Builder.<T>of(factory, blocks).build(null);
-        type.setRegistryName(Eidolon.MODID, name);
-        registry.register(type);
-        return type;
-    }
-
-
-    public static RegistryObject<Item>
-            LEAD_INGOT = addItem("lead_ingot"),
-            RAW_LEAD = addItem("raw_lead"),
-            LEAD_NUGGET = addItem("lead_nugget"),
-            SILVER_INGOT = addItem("silver_ingot"),
-            RAW_SILVER = addItem("raw_silver"),
-            SILVER_NUGGET = addItem("silver_nugget"),
-            PEWTER_BLEND = addItem("pewter_blend"),
-            PEWTER_INGOT = addItem("pewter_ingot"),
-            PEWTER_NUGGET = addItem("pewter_nugget"),
-            PEWTER_INLAY = addItem("pewter_inlay"),
-            ARCANE_GOLD_INGOT = addItem("arcane_gold_ingot"),
-            ARCANE_GOLD_NUGGET = addItem("arcane_gold_nugget"),
-            ELDER_BRICK = addItem("elder_brick"),
-            SULFUR = addItem("sulfur"),
-            GOLD_INLAY = addItem("gold_inlay"),
-            ZOMBIE_HEART = addItem("zombie_heart", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON).food(
-                    new FoodProperties.Builder()
-                            .nutrition(2).saturationMod(1.5f)
-                            .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
-                            .effect(() -> new MobEffectInstance(MobEffects.POISON, 900, 1), 1.0f)
-                            .build())).setLore("lore.eidolon.zombie_heart")),
-            TATTERED_CLOTH = addItem("tattered_cloth"),
-            WRAITH_HEART = addItem("wraith_heart", () -> new ItemBase(itemProps()
-                    .rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.wraith_heart")),
-            TOP_HAT = addItem("top_hat", () -> new TopHatItem(itemProps().stacksTo(1).rarity(Rarity.EPIC)).setLore("lore.eidolon.top_hat")),
-            BASIC_RING = addItem("basic_ring", () -> new BasicRingItem(itemProps().stacksTo(1))),
-            BASIC_AMULET = addItem("basic_amulet", () -> new BasicAmuletItem(itemProps().stacksTo(1))),
-            BASIC_BELT = addItem("basic_belt", () -> new BasicBeltItem(itemProps().stacksTo(1))),
-            CODEX = addItem("codex", () -> new CodexItem(itemProps().stacksTo(1).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.codex")),
-            SOUL_SHARD = addItem("soul_shard"),
-            DEATH_ESSENCE = addItem("death_essence"),
-            CRIMSON_ESSENCE = addItem("crimson_essence"),
-            FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build())),
-            WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).effect(() -> new MobEffectInstance(Potions.ANCHORED_EFFECT.get(), 900), 1).build())),
-            ENDER_CALX = addItem("ender_calx"),
-            TALLOW = addItem("tallow"),
-            LESSER_SOUL_GEM = addItem("lesser_soul_gem"),
-            UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new UnholySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1))),
-            REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
-                    .setLore("lore.eidolon.reaper_scythe")),
-            CLEAVING_AXE = addItem("cleaving_axe", () -> new CleavingAxeItem(itemProps().rarity(Rarity.UNCOMMON))
-                    .setLore("lore.eidolon.cleaving_axe")),
-            SHADOW_GEM = addItem("shadow_gem"),
-            WICKED_WEAVE = addItem("wicked_weave"),
-            WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(EquipmentSlot.HEAD, itemProps())),
-            WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(EquipmentSlot.CHEST, itemProps())),
-            WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(EquipmentSlot.FEET, itemProps())),
-            SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(EquipmentSlot.HEAD, itemProps())),
-            SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(EquipmentSlot.CHEST, itemProps())),
-            SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(EquipmentSlot.LEGS, itemProps())),
-            SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(EquipmentSlot.FEET, itemProps())),
-            SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps())),
-            SILVER_PICKAXE = addItem("silver_pickaxe", () -> new PickaxeItem(Tiers.SilverTier.INSTANCE, 1, -2.4f, itemProps())),
-            SILVER_AXE = addItem("silver_axe", () -> new AxeItem(Tiers.SilverTier.INSTANCE, 6, -2.4f, itemProps())),
-            SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(Tiers.SilverTier.INSTANCE, 1.5f, -2.4f, itemProps())),
-            SILVER_HOE = addItem("silver_hoe", () -> new HoeItem(Tiers.SilverTier.INSTANCE, 0, -2.4f, itemProps())),
-            ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1))),
-            REVERSAL_PICK = addItem("reversal_pick", () -> new ReversalPickItem(itemProps()
-                    .rarity(Rarity.UNCOMMON))),
-            VOID_AMULET = addItem("void_amulet", () -> new VoidAmuletItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.void_amulet")),
-            WARDED_MAIL = addItem("warded_mail", () -> new WardedMailItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.warded_mail")),
-            SAPPING_SWORD = addItem("sapping_sword", () -> new SappingSwordItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sapping_sword")),
-            SANGUINE_AMULET = addItem("sanguine_amulet", () -> new SanguineAmuletItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sanguine_amulet")),
-            ENERVATING_RING = addItem("enervating_ring", () -> new EnervatingRingItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.enervating_ring")),
-            SOULFIRE_WAND = addItem("soulfire_wand", () -> new SoulfireWandItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
-                    .setLore("lore.eidolon.soulfire_wand")),
-            BONECHILL_WAND = addItem("bonechill_wand", () -> new BonechillWandItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
-                    .setLore("lore.eidolon.bonechill_wand")),
-            GRAVITY_BELT = addItem("gravity_belt", () -> new GravityBeltItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.gravity_belt")),
-            RESOLUTE_BELT = addItem("resolute_belt", () -> new ResoluteBeltItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.resolute_belt")),
-            PRESTIGIOUS_PALM = addItem("prestigious_palm", () -> new PrestigiousPalmItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.prestigious_palm")),
-            MIND_SHIELDING_PLATE = addItem("mind_shielding_plate", () -> new MindShieldingPlateItem(itemProps()
-                    .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.mind_shielding_plate")),
-            GLASS_HAND = addItem("glass_hand", () -> new GlassHandItem(itemProps()
-                    .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.glass_hand")),
-            TERMINUS_MIRROR = addItem("terminus_mirror", () -> new TerminusMirrorItem(itemProps()
-                    .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.terminus_mirror")),
-            ANGELS_SIGHT = addItem("angels_sight", () -> new AngelSightItem(itemProps()
-                    .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.angels_sight")),
-            WITHERED_HEART = addItem("withered_heart", () -> new ItemBase(itemProps().rarity(Rarity.RARE).food(
-                    new FoodProperties.Builder()
-                            .nutrition(2).saturationMod(1.5f)
-                            .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
-                            .effect(() -> new MobEffectInstance(MobEffects.WITHER, 900, 1), 1.0f)
-                            .build())).setLore("lore.eidolon.withered_heart")),
-            IMBUED_BONES = addItem("imbued_bones", itemProps().rarity(Rarity.UNCOMMON)),
-            SUMMONING_STAFF = addItem("summoning_staff", () -> new SummoningStaffItem(itemProps().rarity(Rarity.RARE))),
-            DEATHBRINGER_SCYTHE = addItem("deathbringer_scythe", () -> new DeathbringerScytheItem(itemProps().rarity(Rarity.RARE))
-                    .setLore("lore.eidolon.deathbringer_scythe")),
-            SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
-                    .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.soulbone_amulet")),
-            BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(EquipmentSlot.HEAD, itemProps().rarity(Rarity.RARE))),
-            BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(EquipmentSlot.CHEST, itemProps().rarity(Rarity.RARE))),
-            BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(EquipmentSlot.LEGS, itemProps().rarity(Rarity.RARE))),
-            PAROUSIA_DISC = addItem("music_disc_parousia", () -> new RecordItem(9, () -> Sounds.PAROUSIA.get(),
-                    itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE))),
-            RAVEN_FEATHER = addItem("raven_feather"),
-            RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE))),
-            ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1))),
-            MERAMMER_RESIN = addItem("merammer_resin"),
-            MAGIC_INK = addItem("magic_ink"),
-            MAGICIANS_WAX = addItem("magicians_wax"),
-            ARCANE_SEAL = addItem("arcane_seal"),
-            PARCHMENT = addItem("parchment"),
-            NOTETAKING_TOOLS = addItem("notetaking_tools", () -> new NotetakingToolsItem(itemProps().stacksTo(16))),
-            RESEARCH_NOTES = addItem("research_notes", () -> new ResearchNotesItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1))),
-            COMPLETED_RESEARCH = addItem("completed_research", () -> new CompletedResearchItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1))),
-            RED_CANDY = addItem("red_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
-                    new FoodProperties.Builder()
-                            .nutrition(2).saturationMod(2)
-                            .build())).setLore(ChatFormatting.RED, "lore.eidolon.red_candy")),
-            GRAPE_CANDY;
+    public static final RegistryObject<Item>
+            LEAD_INGOT = addItem("lead_ingot");
+    public static RegistryObject<Item> RAW_LEAD = addItem("raw_lead");
+    public static final RegistryObject<Item> LEAD_NUGGET = addItem("lead_nugget");
+    public static final RegistryObject<Item> SILVER_INGOT = addItem("silver_ingot");
+    public static RegistryObject<Item> RAW_SILVER = addItem("raw_silver");
+    public static RegistryObject<Item> SILVER_NUGGET = addItem("silver_nugget");
+    public static final RegistryObject<Item> PEWTER_BLEND = addItem("pewter_blend");
+    public static final RegistryObject<Item> PEWTER_INGOT = addItem("pewter_ingot");
+    public static final RegistryObject<Item> PEWTER_NUGGET = addItem("pewter_nugget");
+    public static final RegistryObject<Item> PEWTER_INLAY = addItem("pewter_inlay");
+    public static final RegistryObject<Item> ARCANE_GOLD_INGOT = addItem("arcane_gold_ingot");
+    public static final RegistryObject<Item> ARCANE_GOLD_NUGGET = addItem("arcane_gold_nugget");
+    public static RegistryObject<Item> ELDER_BRICK = addItem("elder_brick");
+    public static final RegistryObject<Item> SULFUR = addItem("sulfur");
+    public static final RegistryObject<Item> GOLD_INLAY = addItem("gold_inlay");
+    public static final RegistryObject<Item> ZOMBIE_HEART = addItem("zombie_heart", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON).food(
+            new FoodProperties.Builder()
+                    .nutrition(2).saturationMod(1.5f)
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
+                    .effect(() -> new MobEffectInstance(MobEffects.POISON, 900, 1), 1.0f)
+                    .build())).setLore("lore.eidolon.zombie_heart"));
+    public static final RegistryObject<Item> TATTERED_CLOTH = addItem("tattered_cloth");
+    public static final RegistryObject<Item> WRAITH_HEART = addItem("wraith_heart", () -> new ItemBase(itemProps()
+            .rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.wraith_heart"));
+    public static final RegistryObject<Item> TOP_HAT = addItem("top_hat", () -> new TopHatItem(itemProps().stacksTo(1).rarity(Rarity.EPIC)).setLore("lore.eidolon.top_hat"));
+    public static final RegistryObject<Item> BASIC_RING = addItem("basic_ring", () -> new BasicRingItem(itemProps().stacksTo(1)));
+    public static final RegistryObject<Item> BASIC_AMULET = addItem("basic_amulet", () -> new BasicAmuletItem(itemProps().stacksTo(1)));
+    public static final RegistryObject<Item> BASIC_BELT = addItem("basic_belt", () -> new BasicBeltItem(itemProps().stacksTo(1)));
+    public static final RegistryObject<Item> CODEX = addItem("codex", () -> new CodexItem(itemProps().stacksTo(1).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.codex"));
+    public static final RegistryObject<Item> SOUL_SHARD = addItem("soul_shard");
+    public static final RegistryObject<Item> DEATH_ESSENCE = addItem("death_essence");
+    public static final RegistryObject<Item> CRIMSON_ESSENCE = addItem("crimson_essence");
+    public static final RegistryObject<Item> FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build()));
+    public static final RegistryObject<Item> WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).effect(() -> new MobEffectInstance(Potions.ANCHORED_EFFECT.get(), 900), 1).build()));
+    public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
+    public static final RegistryObject<Item> TALLOW = addItem("tallow");
+    public static final RegistryObject<Item> LESSER_SOUL_GEM = addItem("lesser_soul_gem");
+    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new UnholySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final RegistryObject<Item> REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
+            .setLore("lore.eidolon.reaper_scythe"));
+    public static final RegistryObject<Item> CLEAVING_AXE = addItem("cleaving_axe", () -> new CleavingAxeItem(itemProps().rarity(Rarity.UNCOMMON))
+            .setLore("lore.eidolon.cleaving_axe"));
+    public static final RegistryObject<Item> SHADOW_GEM = addItem("shadow_gem");
+    public static final RegistryObject<Item> WICKED_WEAVE = addItem("wicked_weave");
+    public static final RegistryObject<Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(EquipmentSlot.HEAD, itemProps()));
+    public static final RegistryObject<Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(EquipmentSlot.CHEST, itemProps()));
+    public static final RegistryObject<Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(EquipmentSlot.FEET, itemProps()));
+    public static RegistryObject<Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(EquipmentSlot.HEAD, itemProps()));
+    public static RegistryObject<Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(EquipmentSlot.CHEST, itemProps()));
+    public static RegistryObject<Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(EquipmentSlot.LEGS, itemProps()));
+    public static RegistryObject<Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(EquipmentSlot.FEET, itemProps()));
+    public static RegistryObject<Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps()));
+    public static RegistryObject<Item> SILVER_PICKAXE = addItem("silver_pickaxe", () -> new PickaxeItem(Tiers.SilverTier.INSTANCE, 1, -2.4f, itemProps()));
+    public static RegistryObject<Item> SILVER_AXE = addItem("silver_axe", () -> new AxeItem(Tiers.SilverTier.INSTANCE, 6, -2.4f, itemProps()));
+    public static RegistryObject<Item> SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(Tiers.SilverTier.INSTANCE, 1.5f, -2.4f, itemProps()));
+    public static RegistryObject<Item> SILVER_HOE = addItem("silver_hoe", () -> new HoeItem(Tiers.SilverTier.INSTANCE, 0, -2.4f, itemProps()));
+    public static RegistryObject<Item> ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1)));
+    public static final RegistryObject<Item> REVERSAL_PICK = addItem("reversal_pick", () -> new ReversalPickItem(itemProps()
+            .rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> VOID_AMULET = addItem("void_amulet", () -> new VoidAmuletItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.void_amulet"));
+    public static final RegistryObject<Item> WARDED_MAIL = addItem("warded_mail", () -> new WardedMailItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.warded_mail"));
+    public static final RegistryObject<Item> SAPPING_SWORD = addItem("sapping_sword", () -> new SappingSwordItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sapping_sword"));
+    public static final RegistryObject<Item> SANGUINE_AMULET = addItem("sanguine_amulet", () -> new SanguineAmuletItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sanguine_amulet"));
+    public static RegistryObject<Item> ENERVATING_RING = addItem("enervating_ring", () -> new EnervatingRingItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.enervating_ring"));
+    public static final RegistryObject<Item> SOULFIRE_WAND = addItem("soulfire_wand", () -> new SoulfireWandItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
+            .setLore("lore.eidolon.soulfire_wand"));
+    public static final RegistryObject<Item> BONECHILL_WAND = addItem("bonechill_wand", () -> new BonechillWandItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
+            .setLore("lore.eidolon.bonechill_wand"));
+    public static final RegistryObject<Item> GRAVITY_BELT = addItem("gravity_belt", () -> new GravityBeltItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.gravity_belt"));
+    public static final RegistryObject<Item> RESOLUTE_BELT = addItem("resolute_belt", () -> new ResoluteBeltItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.resolute_belt"));
+    public static final RegistryObject<Item> PRESTIGIOUS_PALM = addItem("prestigious_palm", () -> new PrestigiousPalmItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.prestigious_palm"));
+    public static final RegistryObject<Item> MIND_SHIELDING_PLATE = addItem("mind_shielding_plate", () -> new MindShieldingPlateItem(itemProps()
+            .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.mind_shielding_plate"));
+    public static final RegistryObject<Item> GLASS_HAND = addItem("glass_hand", () -> new GlassHandItem(itemProps()
+            .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.glass_hand"));
+    public static final RegistryObject<Item> TERMINUS_MIRROR = addItem("terminus_mirror", () -> new TerminusMirrorItem(itemProps()
+            .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.terminus_mirror"));
+    public static final RegistryObject<Item> ANGELS_SIGHT = addItem("angels_sight", () -> new AngelSightItem(itemProps()
+            .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.angels_sight"));
+    public static final RegistryObject<Item> WITHERED_HEART = addItem("withered_heart", () -> new ItemBase(itemProps().rarity(Rarity.RARE).food(
+            new FoodProperties.Builder()
+                    .nutrition(2).saturationMod(1.5f)
+                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
+                    .effect(() -> new MobEffectInstance(MobEffects.WITHER, 900, 1), 1.0f)
+                    .build())).setLore("lore.eidolon.withered_heart"));
+    public static final RegistryObject<Item> IMBUED_BONES = addItem("imbued_bones", itemProps().rarity(Rarity.UNCOMMON));
+    public static RegistryObject<Item> SUMMONING_STAFF = addItem("summoning_staff", () -> new SummoningStaffItem(itemProps().rarity(Rarity.RARE)));
+    public static RegistryObject<Item> DEATHBRINGER_SCYTHE = addItem("deathbringer_scythe", () -> new DeathbringerScytheItem(itemProps().rarity(Rarity.RARE))
+            .setLore("lore.eidolon.deathbringer_scythe"));
+    public static final RegistryObject<Item> SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
+            .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.soulbone_amulet"));
+    public static RegistryObject<Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(EquipmentSlot.HEAD, itemProps().rarity(Rarity.RARE)));
+    public static RegistryObject<Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(EquipmentSlot.CHEST, itemProps().rarity(Rarity.RARE)));
+    public static RegistryObject<Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(EquipmentSlot.LEGS, itemProps().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new RecordItem(9, Sounds.PAROUSIA,
+            itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 20));
+    public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
+    public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
+    public static RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
+    public static RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
+    public static final RegistryObject<Item> MAGIC_INK = addItem("magic_ink");
+    public static RegistryObject<Item> MAGICIANS_WAX = addItem("magicians_wax");
+    public static final RegistryObject<Item> ARCANE_SEAL = addItem("arcane_seal");
+    public static final RegistryObject<Item> PARCHMENT = addItem("parchment");
+    public static RegistryObject<Item> NOTETAKING_TOOLS = addItem("notetaking_tools", () -> new NotetakingToolsItem(itemProps().stacksTo(16)));
+    public static final RegistryObject<Item> RESEARCH_NOTES = addItem("research_notes", () -> new ResearchNotesItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final RegistryObject<Item> COMPLETED_RESEARCH = addItem("completed_research", () -> new CompletedResearchItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static RegistryObject<Item> RED_CANDY = addItem("red_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
+            new FoodProperties.Builder()
+                    .nutrition(2).saturationMod(2)
+                    .build())).setLore(ChatFormatting.RED, "lore.eidolon.red_candy"));
+    public static final RegistryObject<Item> GRAPE_CANDY;
 
     static {
         GRAPE_CANDY = addItem("grape_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
@@ -308,152 +298,152 @@ public class Registry {
                         .build())).setLore(ChatFormatting.LIGHT_PURPLE, "lore.eidolon.grape_candy"));
     }
 
-    public static RegistryObject<Block>
+    public static final RegistryObject<Block>
             LEAD_ORE = addBlock("lead_ore", blockProps(Material.STONE, MaterialColor.STONE)
-            .sound(SoundType.STONE).strength(2.8f, 3.0f).requiresCorrectToolForDrops()),
-            DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
-                    .sound(SoundType.DEEPSLATE).strength(3.2f, 3.0f).requiresCorrectToolForDrops()),
-            LEAD_BLOCK = addBlock("lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
-                    .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops()),
-            RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
-                    .sound(SoundType.DEEPSLATE).strength(2.4f, 3.0f).requiresCorrectToolForDrops()),
-            SILVER_ORE = addBlock("silver_ore", blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(3.2f, 3.0f).requiresCorrectToolForDrops()),
-            DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
-                    .sound(SoundType.DEEPSLATE).strength(3.6f, 3.0f).requiresCorrectToolForDrops()),
-            SILVER_BLOCK = addBlock("silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
-                    .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops()),
-            RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
-                    .sound(SoundType.STONE).strength(2.4f, 3.0f).requiresCorrectToolForDrops()),
-            PEWTER_BLOCK = addBlock("pewter_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_GRAY)
-                    .sound(SoundType.METAL).strength(4.0f, 4.0f).requiresCorrectToolForDrops()),
-            ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Material.STONE, MaterialColor.GOLD)
-                    .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops()),
-            SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Material.STONE, MaterialColor.COLOR_PURPLE)
-                    .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops()),
-            WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))),
-            STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.8f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setMainShape(Shapes.or(
-                            Shapes.box(0, 0.375, 0, 1, 1, 1),
-                            Shapes.box(0.0625, 0.125, 0.0625, 0.9375, 0.375, 0.9375)
-                    ))),
-            CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
-                    .sound(SoundType.STONE).lightLevel((state) -> 15).strength(0.6f, 0.8f).noOcclusion())),
-            CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Material.METAL, MaterialColor.GOLD)
-                    .sound(SoundType.STONE).lightLevel((state) -> 15).strength(1.2f, 2.0f).noOcclusion())),
-            MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_RED)
-                    .sound(SoundType.STONE).lightLevel((state) -> 15).strength(0.6f, 0.8f).noOcclusion())),
-            MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Material.DECORATION, MaterialColor.GOLD)
-                    .sound(SoundType.STONE).lightLevel((state) -> 15).strength(1.2f, 2.0f).noOcclusion())),
-            STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Material.PLANT, MaterialColor.COLOR_YELLOW)
-                    .sound(SoundType.WOOD).strength(1.4f, 2.0f)
-                    .noOcclusion()).setShape(
-                    Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
-            )),
-            GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)
-                    .sound(SoundType.METAL).strength(1.4f, 2.0f).requiresCorrectToolForDrops()
-                    .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875))),
-            UNHOLY_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.8f, 3.0f)
-                    .requiresCorrectToolForDrops()
-                    .noOcclusion()).setShape(
-                    Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)
-            )),
-            WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f)
-                    .noOcclusion()).setShape(Shapes.or(
-                    Shapes.box(0, 0, 0, 1, 0.25, 1),
-                    Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
-                    Shapes.box(0, 0.625, 0, 1, 1, 1)
-            ))),
-            RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f)
-                    .noOcclusion()).setShape(Shapes.or(
-                    Shapes.box(0, 0, 0, 1, 0.25, 1),
-                    Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
-                    Shapes.box(0, 0.625, 0, 1, 1, 1)
-            ))),
-            PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.0f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75))),
-            OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.0f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875))),
-            BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Material.WOOD, MaterialColor.METAL)
-                    .sound(SoundType.METAL).strength(2.5f, 3.0f)
-                    .noOcclusion())
-                    .setShape(Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.75, 0.8125))),
-            CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Material.METAL, MaterialColor.METAL)
-                    .sound(SoundType.METAL).strength(4.0f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.or(
-                            Shapes.box(0.0625, 0.875, 0.0625, 0.1875, 1, 0.9375),
-                            Shapes.box(0.8125, 0.875, 0.0625, 0.9375, 1, 0.9375),
-                            Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1, 0.1875),
-                            Shapes.box(0.0625, 0.875, 0.8125, 0.9375, 1, 0.9375),
-                            Shapes.box(0, 0.125, 0, 0.125, 0.875, 1),
-                            Shapes.box(0.875, 0.125, 0, 1, 0.875, 1),
-                            Shapes.box(0, 0.125, 0, 1, 0.875, 0.125),
-                            Shapes.box(0, 0.125, 0.875, 1, 0.875, 1),
-                            Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.125, 0.9375)
-                    ))),
-            STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.0f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75))),
-            ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
-                    .sound(SoundType.STONE).strength(0.0f, 0.75f).noOcclusion())
-                    .setShape(Shapes.empty())),
-            NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Material.STONE, MaterialColor.STONE)
-                    .sound(SoundType.STONE).strength(2.8f, 3.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75))),
-            PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(2.0f, 3.0f)
-                    .noOcclusion())
-                    .setShape(Shapes.or(
-                            Shapes.box(0, 0.25, 0, 1, 1, 1),
-                            Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.75)))),
-            MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion())),
-            AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion())),
-            OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion())),
-            SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion())),
-            ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new BushBlock(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion().noCollission())),
-            ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new BlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
-                    .sound(SoundType.GRASS).noOcclusion())),
-            ILLWOOD_LOG = addBlock("illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))),
-            ILLWOOD_BARK = addBlock("illwood_bark", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))),
-            STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.4f, 3.0f))),
-            STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.4f, 3.0f))),
-            SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Material.STONE, MaterialColor.PODZOL)
-                    .sound(SoundType.STONE).strength(5.0f, 1200.0f)
-                    .requiresCorrectToolForDrops().noOcclusion())
-                    .setShape(Shapes.box(0, 0, 0, 1, 0.75, 1))),
-            WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Material.METAL, MaterialColor.WOOD)
-                    .sound(SoundType.STONE).strength(2.0f, 3.0f)
-                    .noOcclusion())),
-            INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
-                    .sound(SoundType.GLASS).strength(2.0f, 3.0f)
-                    .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375))),
-            GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
-                    .sound(SoundType.GLASS).strength(1.0f, 1.5f).noOcclusion())),
-            CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
-                    .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
-                    .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
+            .sound(SoundType.STONE).strength(2.8f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
+            .sound(SoundType.DEEPSLATE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
+    public static final RegistryObject<Block> LEAD_BLOCK = addBlock("lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+            .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+            .sound(SoundType.DEEPSLATE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> SILVER_ORE = addBlock("silver_ore", blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
+            .sound(SoundType.DEEPSLATE).strength(3.6f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> SILVER_BLOCK = addBlock("silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
+            .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
+            .sound(SoundType.STONE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
+    public static final RegistryObject<Block> PEWTER_BLOCK = addBlock("pewter_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_GRAY)
+            .sound(SoundType.METAL).strength(4.0f, 4.0f).requiresCorrectToolForDrops());
+    public static final RegistryObject<Block> ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Material.STONE, MaterialColor.GOLD)
+            .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
+    public static RegistryObject<Block> SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Material.STONE, MaterialColor.COLOR_PURPLE)
+            .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
+    public static final RegistryObject<Block> WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)));
+    public static final RegistryObject<Block> STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.8f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setMainShape(Shapes.or(
+                    Shapes.box(0, 0.375, 0, 1, 1, 1),
+                    Shapes.box(0.0625, 0.125, 0.0625, 0.9375, 0.375, 0.9375)
+            )));
+    public static final RegistryObject<Block> CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
+            .sound(SoundType.STONE).lightLevel((state) -> 15).strength(0.6f, 0.8f).noOcclusion()));
+    public static final RegistryObject<Block> CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+            .sound(SoundType.STONE).lightLevel((state) -> 15).strength(1.2f, 2.0f).noOcclusion()));
+    public static RegistryObject<Block> MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_RED)
+            .sound(SoundType.STONE).lightLevel((state) -> 15).strength(0.6f, 0.8f).noOcclusion()));
+    public static RegistryObject<Block> MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Material.DECORATION, MaterialColor.GOLD)
+            .sound(SoundType.STONE).lightLevel((state) -> 15).strength(1.2f, 2.0f).noOcclusion()));
+    public static final RegistryObject<Block> STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Material.PLANT, MaterialColor.COLOR_YELLOW)
+            .sound(SoundType.WOOD).strength(1.4f, 2.0f)
+            .noOcclusion()).setShape(
+            Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
+    ));
+    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+            .sound(SoundType.METAL).strength(1.4f, 2.0f).requiresCorrectToolForDrops()
+            .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
+    public static final RegistryObject<Block> UNHOLY_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.8f, 3.0f)
+            .requiresCorrectToolForDrops()
+            .noOcclusion()).setShape(
+            Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)
+    ));
+    public static final RegistryObject<Block> WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)
+            .noOcclusion()).setShape(Shapes.or(
+            Shapes.box(0, 0, 0, 1, 0.25, 1),
+            Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
+            Shapes.box(0, 0.625, 0, 1, 1, 1)
+    )));
+    public static RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)
+            .noOcclusion()).setShape(Shapes.or(
+            Shapes.box(0, 0, 0, 1, 0.25, 1),
+            Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
+            Shapes.box(0, 0.625, 0, 1, 1, 1)
+    )));
+    public static RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.0f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)));
+    public static RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.0f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875)));
+    public static final RegistryObject<Block> BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Material.WOOD, MaterialColor.METAL)
+            .sound(SoundType.METAL).strength(2.5f, 3.0f)
+            .noOcclusion())
+            .setShape(Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.75, 0.8125)));
+    public static final RegistryObject<Block> CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Material.METAL, MaterialColor.METAL)
+            .sound(SoundType.METAL).strength(4.0f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.or(
+                    Shapes.box(0.0625, 0.875, 0.0625, 0.1875, 1, 0.9375),
+                    Shapes.box(0.8125, 0.875, 0.0625, 0.9375, 1, 0.9375),
+                    Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1, 0.1875),
+                    Shapes.box(0.0625, 0.875, 0.8125, 0.9375, 1, 0.9375),
+                    Shapes.box(0, 0.125, 0, 0.125, 0.875, 1),
+                    Shapes.box(0.875, 0.125, 0, 1, 0.875, 1),
+                    Shapes.box(0, 0.125, 0, 1, 0.875, 0.125),
+                    Shapes.box(0, 0.125, 0.875, 1, 0.875, 1),
+                    Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.125, 0.9375)
+            )));
+    public static final RegistryObject<Block> STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.0f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
+    public static final RegistryObject<Block> ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
+            .sound(SoundType.STONE).strength(0.0f, 0.75f).noOcclusion())
+            .setShape(Shapes.empty()));
+    public static final RegistryObject<Block> NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Material.STONE, MaterialColor.STONE)
+            .sound(SoundType.STONE).strength(2.8f, 3.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
+    public static final RegistryObject<Block> PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(2.0f, 3.0f)
+            .noOcclusion())
+            .setShape(Shapes.or(
+                    Shapes.box(0, 0.25, 0, 1, 1, 1),
+                    Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.75))));
+    public static final RegistryObject<Block> MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion()));
+    public static final RegistryObject<Block> AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion()));
+    public static final RegistryObject<Block> OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion()));
+    public static final RegistryObject<Block> SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion()));
+    public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new BushBlock(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new BlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+            .sound(SoundType.GRASS).noOcclusion()));
+    public static RegistryObject<Block> ILLWOOD_LOG = addBlock("illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)));
+    public static RegistryObject<Block> ILLWOOD_BARK = addBlock("illwood_bark", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)));
+    public static RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
+    public static RegistryObject<Block> STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
+    public static final RegistryObject<Block> SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Material.STONE, MaterialColor.PODZOL)
+            .sound(SoundType.STONE).strength(5.0f, 1200.0f)
+            .requiresCorrectToolForDrops().noOcclusion())
+            .setShape(Shapes.box(0, 0, 0, 1, 0.75, 1)));
+    public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Material.METAL, MaterialColor.WOOD)
+            .sound(SoundType.STONE).strength(2.0f, 3.0f)
+            .noOcclusion()));
+    public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
+            .sound(SoundType.GLASS).strength(2.0f, 3.0f)
+            .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
+    public static final RegistryObject<Block> GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
+            .sound(SoundType.GLASS).strength(1.0f, 1.5f).noOcclusion()));
+    public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
+            .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
+            .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
     public static DecoBlockPack
             SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f))
@@ -488,23 +478,23 @@ public class Registry {
                     .sound(SoundType.STONE).strength(3.0f, 3.0f)
                     .requiresCorrectToolForDrops()));
 
-    public static RegistryObject<MenuType<WorktableContainer>>
+    public static final RegistryObject<MenuType<WorktableContainer>>
             WORKTABLE_CONTAINER = addContainer("worktable", WorktableContainer::new);
-    public static RegistryObject<MenuType<SoulEnchanterContainer>>
+    public static final RegistryObject<MenuType<SoulEnchanterContainer>>
             SOUL_ENCHANTER_CONTAINER = addContainer("soul_enchanter", SoulEnchanterContainer::new);
-    public static RegistryObject<MenuType<WoodenBrewingStandContainer>>
+    public static final RegistryObject<MenuType<WoodenBrewingStandContainer>>
             WOODEN_STAND_CONTAINER = addContainer("wooden_brewing_stand", WoodenBrewingStandContainer::new);
-    public static RegistryObject<MenuType<ResearchTableContainer>>
+    public static final RegistryObject<MenuType<ResearchTableContainer>>
             RESEARCH_TABLE_CONTAINER = addContainer("research_table", ResearchTableContainer::new);
 
-    public static RegistryObject<RecipeSerializer<WorktableRecipe>>
+    public static final RegistryObject<RecipeSerializer<WorktableRecipe>>
             WORKTABLE_RECIPE = RECIPE_TYPES.register("worktable", WorktableRecipe.Serializer::new);
-    public static RegistryObject<RecipeSerializer<CrucibleRecipe>>
+    public static final RegistryObject<RecipeSerializer<CrucibleRecipe>>
             CRUCIBLE_RECIPE = RECIPE_TYPES.register("crucible", CrucibleRecipe.Serializer::new);
 
-    public static RegistryObject<Attribute>
-            MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", Config.MAX_ETHEREAL_HEALTH.get(), 0, 2000).setSyncable(true)),
-            PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
+    public static final RegistryObject<Attribute>
+            MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
+    public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
 
 
     @SubscribeEvent
@@ -536,35 +526,34 @@ public class Registry {
     public static void clientInit() {
     }
 
-    public static BlockEntityType<HandTileEntity> HAND_TILE_ENTITY;
-    public static BlockEntityType<BrazierTileEntity> BRAZIER_TILE_ENTITY;
-    public static BlockEntityType<NecroticFocusTileEntity> NECROTIC_FOCUS_TILE_ENTITY;
-    public static BlockEntityType<CrucibleTileEntity> CRUCIBLE_TILE_ENTITY;
-    public static BlockEntityType<EffigyTileEntity> EFFIGY_TILE_ENTITY;
-    public static BlockEntityType<SoulEnchanterTileEntity> SOUL_ENCHANTER_TILE_ENTITY;
-    public static BlockEntityType<WoodenStandTileEntity> WOODEN_STAND_TILE_ENTITY;
-    public static BlockEntityType<GobletTileEntity> GOBLET_TILE_ENTITY;
-    public static BlockEntityType<CisternTileEntity> CISTERN_TILE_ENTITY;
-    public static BlockEntityType<PipeTileEntity> PIPE_TILE_ENTITY;
-    public static BlockEntityType<ResearchTableTileEntity> RESEARCH_TABLE_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<HandTileEntity>> HAND_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<BrazierTileEntity>> BRAZIER_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<NecroticFocusTileEntity>> NECROTIC_FOCUS_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<CrucibleTileEntity>> CRUCIBLE_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<EffigyTileEntity>> EFFIGY_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<SoulEnchanterTileEntity>> SOUL_ENCHANTER_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<WoodenStandTileEntity>> WOODEN_STAND_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<CisternTileEntity>> CISTERN_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<PipeTileEntity>> PIPE_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
 
-    @SubscribeEvent
-    public void registerTiles(RegistryEvent.Register<BlockEntityType<?>> evt) {
-        HAND_TILE_ENTITY = addTileEntity(evt.getRegistry(), "hand_tile", HandTileEntity::new, STONE_HAND.get());
-        BRAZIER_TILE_ENTITY = addTileEntity(evt.getRegistry(), "brazier_tile", BrazierTileEntity::new, BRAZIER.get());
-        NECROTIC_FOCUS_TILE_ENTITY = addTileEntity(evt.getRegistry(), "necrotic_focus", NecroticFocusTileEntity::new, NECROTIC_FOCUS.get());
-        CRUCIBLE_TILE_ENTITY = addTileEntity(evt.getRegistry(), "crucible", CrucibleTileEntity::new, CRUCIBLE.get());
-        EFFIGY_TILE_ENTITY = addTileEntity(evt.getRegistry(), "effigy", EffigyTileEntity::new, STRAW_EFFIGY.get(), UNHOLY_EFFIGY.get());
-        SOUL_ENCHANTER_TILE_ENTITY = addTileEntity(evt.getRegistry(), "soul_enchanter", SoulEnchanterTileEntity::new, SOUL_ENCHANTER.get());
-        WOODEN_STAND_TILE_ENTITY = addTileEntity(evt.getRegistry(), "wooden_brewing_stand", WoodenStandTileEntity::new, WOODEN_STAND.get());
-        GOBLET_TILE_ENTITY = addTileEntity(evt.getRegistry(), "goblet", GobletTileEntity::new, GOBLET.get());
-        CISTERN_TILE_ENTITY = addTileEntity(evt.getRegistry(), "cistern", CisternTileEntity::new, CISTERN.get());
-        PIPE_TILE_ENTITY = addTileEntity(evt.getRegistry(), "pipe", PipeTileEntity::new, GLASS_TUBE.get());
-        RESEARCH_TABLE_TILE_ENTITY = addTileEntity(evt.getRegistry(), "research_table", ResearchTableTileEntity::new, RESEARCH_TABLE.get());
+    static {
+        HAND_TILE_ENTITY = TILE_ENTITIES.register("hand_tile", () -> BlockEntityType.Builder.of(HandTileEntity::new, STONE_HAND.get()).build(null));
+        BRAZIER_TILE_ENTITY = TILE_ENTITIES.register("brazier_tile", () -> BlockEntityType.Builder.of(BrazierTileEntity::new, BRAZIER.get()).build(null));
+        NECROTIC_FOCUS_TILE_ENTITY = TILE_ENTITIES.register("necrotic_focus", () -> BlockEntityType.Builder.of(NecroticFocusTileEntity::new, NECROTIC_FOCUS.get()).build(null));
+        CRUCIBLE_TILE_ENTITY = TILE_ENTITIES.register("crucible", () -> BlockEntityType.Builder.of(CrucibleTileEntity::new, CRUCIBLE.get()).build(null));
+        EFFIGY_TILE_ENTITY = TILE_ENTITIES.register("effigy", () -> BlockEntityType.Builder.of(EffigyTileEntity::new, STRAW_EFFIGY.get(), UNHOLY_EFFIGY.get()).build(null));
+        SOUL_ENCHANTER_TILE_ENTITY = TILE_ENTITIES.register("soul_enchanter", () -> BlockEntityType.Builder.of(SoulEnchanterTileEntity::new, SOUL_ENCHANTER.get()).build(null));
+        WOODEN_STAND_TILE_ENTITY = TILE_ENTITIES.register("wooden_brewing_stand", () -> BlockEntityType.Builder.of(WoodenStandTileEntity::new, WOODEN_STAND.get()).build(null));
+        GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
+        CISTERN_TILE_ENTITY = TILE_ENTITIES.register("cistern", () -> BlockEntityType.Builder.of(CisternTileEntity::new, CISTERN.get()).build(null));
+        PIPE_TILE_ENTITY = TILE_ENTITIES.register("pipe", () -> BlockEntityType.Builder.of(PipeTileEntity::new, GLASS_TUBE.get()).build(null));
+        RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
     }
 
-    public static DamageSource RITUAL_DAMAGE = new DamageSource("ritual").bypassArmor().bypassMagic();
-    public static DamageSource FROST_DAMAGE = new DamageSource("frost");
+    public static final DamageSource RITUAL_DAMAGE = new DamageSource("ritual").bypassArmor().bypassMagic();
+    public static final DamageSource FROST_DAMAGE = new DamageSource("frost");
 
     public void registerCaps(RegisterCapabilitiesEvent event) {
         event.register(IReputation.class);
@@ -584,7 +573,7 @@ public class Registry {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void registerFactories(ParticleFactoryRegisterEvent evt) {
+    public void registerFactories(RegisterParticleProvidersEvent evt) {
         Minecraft.getInstance().particleEngine.register(Particles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(Particles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(Particles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);

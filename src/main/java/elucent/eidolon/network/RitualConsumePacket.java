@@ -15,8 +15,11 @@ import net.minecraftforge.network.NetworkEvent;
 
 
 public class RitualConsumePacket {
-    BlockPos src, dst;
-    float r, g, b;
+    final BlockPos src;
+    final BlockPos dst;
+    final float r;
+    final float g;
+    final float b;
 
     public RitualConsumePacket(BlockPos src, BlockPos dst, float r, float g, float b) {
         this.src = src;

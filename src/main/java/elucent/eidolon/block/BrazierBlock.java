@@ -11,10 +11,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BrazierBlock extends BlockBase implements EntityBlock {
-    public BrazierBlock(Properties properties) {
-        super(properties);
-    }
+	public BrazierBlock(Properties properties) {
+		super(properties);
+	}
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -24,11 +26,11 @@ public class BrazierBlock extends BlockBase implements EntityBlock {
 	@Override
     @Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-    	return new BlockEntityTicker<T>() {
+		return new BlockEntityTicker<T>() {
 			@Override
 			public void tick(Level level, BlockPos pos, BlockState state, T tile) {
 				((BrazierTileEntity)tile).tick();
 			}
-    	};
+		};
     }
 }

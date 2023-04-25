@@ -1,20 +1,15 @@
 package elucent.eidolon.spell;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
 import elucent.eidolon.block.TableBlockBase;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
+
+import java.util.*;
 
 public class AltarInfo {
     static class AltarAttributes {
@@ -25,11 +20,11 @@ public class AltarInfo {
 
     Block icon = null, altar = null;
 
-    Map<ResourceLocation, AltarAttributes> attributes = new HashMap<>();
+    final Map<ResourceLocation, AltarAttributes> attributes = new HashMap<>();
 
     public static Set<BlockPos> getAltarPositions(Level world, BlockPos pos) {
         Set<BlockPos> result = new HashSet<>();
-        Queue<BlockPos> visit = new ArrayDeque();
+        Queue<BlockPos> visit = new ArrayDeque<>();
         BlockState below = world.getBlockState(pos.below());
         Block b = below.getBlock();
         if (below.getBlock() instanceof TableBlockBase) visit.add(pos.below());

@@ -17,11 +17,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class IndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_index_page.png");
-    IndexEntry[] entries;
+    final IndexEntry[] entries;
 
     public static class IndexEntry {
-        Chapter chapter;
-        ItemStack icon;
+        final Chapter chapter;
+        final ItemStack icon;
 
         public IndexEntry(Chapter chapter, ItemStack icon) {
             this.chapter = chapter;
@@ -35,7 +35,7 @@ public class IndexPage extends Page {
     }
 
     public static class SignLockedEntry extends IndexEntry {
-        Sign[] signs;
+        final Sign[] signs;
         public SignLockedEntry(Chapter chapter, ItemStack icon, Sign... signs) {
             super(chapter, icon);
             this.signs = signs;
@@ -49,7 +49,7 @@ public class IndexPage extends Page {
     }
 
     public static class FactLockedEntry extends IndexEntry {
-        ResourceLocation[] facts;
+        final ResourceLocation[] facts;
         public FactLockedEntry(Chapter chapter, ItemStack icon, ResourceLocation... facts) {
             super(chapter, icon);
             this.facts = facts;
@@ -83,7 +83,7 @@ public class IndexPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	RenderSystem.setShaderTexture(0, BACKGROUND);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         for (int i = 0; i < entries.length; i ++) {
             gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries[i].isUnlocked() ? 0 : 96, 122, 18);
         }

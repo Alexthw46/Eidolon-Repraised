@@ -1,24 +1,23 @@
 package elucent.eidolon.util;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.tags.Tag;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecipeUtil {
     public static RecipeManager getRecipeManager() {
         return DistExecutor.unsafeRunForDist(
-            () -> () -> Minecraft.getInstance().getConnection().getRecipeManager(),
-            () -> () -> ServerLifecycleHooks.getCurrentServer().getRecipeManager()
+                () -> () -> Minecraft.getInstance().getConnection().getRecipeManager(),
+                () -> () -> ServerLifecycleHooks.getCurrentServer().getRecipeManager()
         );
     }
 
@@ -38,10 +37,7 @@ public class RecipeUtil {
         if (object instanceof Item) return new ItemStack((Item)object);
         else if (object instanceof Block) return new ItemStack((Block)object);
         else if (object instanceof ItemStack) return ((ItemStack)object).copy();
-        else if (object instanceof Tag) {
-            Object first = ((Tag)object).getValues().get(0);
-            return stackFromObject(first);
-        }
+            //TODO: tags
         else return ItemStack.EMPTY;
     }
 

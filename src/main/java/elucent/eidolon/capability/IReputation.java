@@ -18,27 +18,28 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
 public interface IReputation {
-	public static final Capability<IReputation> INSTANCE = CapabilityManager.get(new CapabilityToken<>(){});
-	
-	public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-		ReputationImpl impl = new ReputationImpl();
-		
-		@Override
-		public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-			if (cap == INSTANCE) return (LazyOptional<T>) LazyOptional.of(() -> impl);
-			else return LazyOptional.empty();
-		}
+    Capability<IReputation> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
-		@Override
-		public CompoundTag serializeNBT() {
-			return impl.serializeNBT();
-		}
+    class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+        final ReputationImpl impl = new ReputationImpl();
 
-		@Override
-		public void deserializeNBT(CompoundTag nbt) {
-			impl.deserializeNBT(nbt);
-		}
-	}
+        @Override
+        public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+            if (cap == INSTANCE) return (LazyOptional<T>) LazyOptional.of(() -> impl);
+            else return LazyOptional.empty();
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            return impl.serializeNBT();
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag nbt) {
+            impl.deserializeNBT(nbt);
+        }
+    }
 
     double getReputation(UUID player, ResourceLocation deity);
     void addReputation(UUID player, ResourceLocation deity, double amount);

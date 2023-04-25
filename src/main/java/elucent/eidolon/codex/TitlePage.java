@@ -11,7 +11,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TitlePage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_title_page.png");
-    String text, title;
+    final String text;
+    final String title;
 
     public TitlePage(String textKey) {
         super(BACKGROUND);

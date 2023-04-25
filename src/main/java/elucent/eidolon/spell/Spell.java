@@ -1,14 +1,12 @@
 package elucent.eidolon.spell;
 
-import java.util.List;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public abstract class Spell {
-    ResourceLocation registryName;
+    final ResourceLocation registryName;
     public Spell(ResourceLocation registryName) {
         this.registryName = registryName;
     }

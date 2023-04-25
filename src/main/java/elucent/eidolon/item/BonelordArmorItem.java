@@ -1,34 +1,32 @@
 package elucent.eidolon.item;
 
-import java.util.UUID;
-
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.item.model.BonelordArmorModel;
-import elucent.eidolon.item.model.WarlockArmorModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.extensions.IForgeItem;
+
+import java.util.UUID;
 
 public class BonelordArmorItem extends ArmorItem implements IForgeItem {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -41,16 +39,12 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
 
         @Override
         public int getDefenseForSlot(EquipmentSlot slot) {
-            switch (slot) {
-                case CHEST:
-                    return 9;
-                case HEAD:
-                    return 4;
-                case LEGS:
-                    return 7;
-                default:
-                    return 0;
-            }
+            return switch (slot) {
+                case CHEST -> 9;
+                case HEAD -> 4;
+                case LEGS -> 7;
+                default -> 0;
+            };
         }
 
         @Override
@@ -96,22 +90,22 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
     
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-    	if (modifiers == null) {
+        if (modifiers == null) {
             UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[this.slot.getIndex()];
             modifiers = ImmutableMultimap.<Attribute, AttributeModifier>builder()
-            		.putAll(getDefaultAttributeModifiers(this.slot))
-            		.put(Registry.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.slot == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
-            		.build();
-    	}
-    	return slot == this.slot ? modifiers : super.getAttributeModifiers(slot, stack);
+                    .putAll(getDefaultAttributeModifiers(this.slot))
+                    .put(Registry.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.slot == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
+                    .build();
+        }
+        return slot == this.slot ? modifiers : super.getAttributeModifiers(slot, stack);
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Override 
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    @Override
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             @Override
-            public BonelordArmorModel getArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
+            public BonelordArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
                 float pticks = Minecraft.getInstance().getFrameTime();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);

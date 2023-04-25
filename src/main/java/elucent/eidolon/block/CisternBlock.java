@@ -13,6 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class CisternBlock extends BlockBase implements EntityBlock {
     public static final BooleanProperty TOP = BooleanProperty.create("top");
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
@@ -23,8 +25,7 @@ public class CisternBlock extends BlockBase implements EntityBlock {
 
     protected boolean canConnectTo(LevelAccessor world, BlockPos pos, Direction dir) {
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof CisternBlock && dir.getAxis() == Direction.Axis.Y) return true;
-        return false;
+        return state.getBlock() instanceof CisternBlock && dir.getAxis() == Direction.Axis.Y;
     }
 
     protected BlockState getState(Level world, BlockPos pos) {
@@ -51,8 +52,8 @@ public class CisternBlock extends BlockBase implements EntityBlock {
         builder.add(TOP, BOTTOM);
     }
 
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new CisternTileEntity(pos, state);
-	}
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new CisternTileEntity(pos, state);
+    }
 }

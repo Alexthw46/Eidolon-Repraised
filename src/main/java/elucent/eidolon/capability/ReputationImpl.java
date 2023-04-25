@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag> {
-    Map<UUID, Map<ResourceLocation, ReputationEntry>> reputationMap = new HashMap<>();
-    Map<UUID, Map<ResourceLocation, Long>> prayerTimes = new HashMap<>();
+    final Map<UUID, Map<ResourceLocation, ReputationEntry>> reputationMap = new HashMap<>();
+    final Map<UUID, Map<ResourceLocation, Long>> prayerTimes = new HashMap<>();
 
     @Override
     public double getReputation(UUID player, ResourceLocation deity) {
@@ -46,9 +46,8 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
 
     @Override
     public boolean hasLock(UUID player, ResourceLocation deity, ResourceLocation lock) {
-    	ResourceLocation l = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).lock;
-    	if (l != null && l.equals(lock)) return true;
-    	return false;
+        ResourceLocation l = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).lock;
+        return l != null && l.equals(lock);
     }
 
     @Override
@@ -87,8 +86,8 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
         return reputationMap;
     }
 
-	@Override
-	public CompoundTag serializeNBT() {
+    @Override
+    public CompoundTag serializeNBT() {
         CompoundTag data = new CompoundTag();
         CompoundTag reps = new CompoundTag();
         for (Entry<UUID, Map<ResourceLocation, ReputationEntry>> e : getReputationMap().entrySet()) {
@@ -111,11 +110,11 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
         data.put("reps", reps);
         data.put("times", times);
         return data;
-	}
+    }
 
-	@Override
-	public void deserializeNBT(CompoundTag nbt) {
-        CompoundTag data = (CompoundTag)nbt;
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+        CompoundTag data = nbt;
         getReputationMap().clear();
         if (data.contains("reps")) {
             CompoundTag reps = data.getCompound("reps");
@@ -126,7 +125,7 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                     CompoundTag entry = tag.getCompound(deity);
                     setReputation(uuid, new ResourceLocation(deity), entry.getDouble("rep"));
                     if (entry.contains("lock"))
-                    	lock(uuid, new ResourceLocation(deity), new ResourceLocation(entry.getString("lock")));
+                        lock(uuid, new ResourceLocation(deity), new ResourceLocation(entry.getString("lock")));
                 }
             }
         }
@@ -139,5 +138,5 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                     pray(uuid, new ResourceLocation(rl), spelltimes.getLong(rl));
             }
         }
-	}
+    }
 }

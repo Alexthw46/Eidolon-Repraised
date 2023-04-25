@@ -15,8 +15,10 @@ import net.minecraftforge.network.NetworkEvent;
 
 
 public class CrucibleSuccessPacket {
-    BlockPos pos;
-    float r, g, b;
+    final BlockPos pos;
+    final float r;
+    final float g;
+    final float b;
 
     public CrucibleSuccessPacket(BlockPos pos, float r, float g, float b) {
         this.pos = pos;

@@ -11,6 +11,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class WardedMailItem extends ItemBase {
     public WardedMailItem(Properties properties) {
         super(properties);
@@ -30,12 +32,12 @@ public class WardedMailItem extends ItemBase {
     @SubscribeEvent
     public static void onDamage(LivingAttackEvent event) {
         if (event.getSource().isMagic()) {
-            CuriosApi.getCuriosHelper().getEquippedCurios(event.getEntityLiving()).resolve().ifPresent((slots) -> {
+            CuriosApi.getCuriosHelper().getEquippedCurios(event.getEntity()).resolve().ifPresent((slots) -> {
                 boolean hasMail = false;
-                for (int i = 0; i < slots.getSlots(); i ++) {
+                for (int i = 0; i < slots.getSlots(); i++) {
                     if (slots.getStackInSlot(i).getItem() == Registry.WARDED_MAIL.get()) {
                         event.setCanceled(true);
-                        event.getEntityLiving().hurt(new DamageSource(event.getSource().getMsgId()), event.getAmount());
+                        event.getEntity().hurt(new DamageSource(event.getSource().getMsgId()), event.getAmount());
                         return;
                     }
                 }

@@ -8,10 +8,10 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class Particles {
     public static class ParticleBuilder {
-        static Random random = new Random();
+        static final Random random = new Random();
 
-        ParticleType<?> type;
-        GenericParticleData data;
+        final ParticleType<?> type;
+        final GenericParticleData data;
         double vx = 0, vy = 0, vz = 0;
         double dx = 0, dy = 0, dz = 0;
         double maxXSpeed = 0, maxYSpeed = 0, maxZSpeed = 0;

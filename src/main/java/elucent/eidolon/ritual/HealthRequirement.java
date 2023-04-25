@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class HealthRequirement implements IRequirement {
-    float health;
+    final float health;
 
     public HealthRequirement(float health) {
         this.health = health;
@@ -27,8 +27,8 @@ public class HealthRequirement implements IRequirement {
         targets.addAll(entities);
         targets.addAll(players);
         float acc = 0;
-        for (int i = 0; i < targets.size(); i ++) {
-            acc += targets.get(i).getHealth();
+        for (LivingEntity target : targets) {
+            acc += target.getHealth();
             if (acc >= this.health) return RequirementInfo.TRUE;
         }
         return RequirementInfo.FALSE;
@@ -41,14 +41,13 @@ public class HealthRequirement implements IRequirement {
         targets.addAll(entities);
         targets.addAll(players);
         float acc = 0;
-        for (int i = 0; i < targets.size(); i ++) {
-            float targetHealth = targets.get(i).getHealth();
-            if (this.health - acc < targetHealth)
-                targets.get(i).hurt(Registry.RITUAL_DAMAGE, this.health - acc);
-            else targets.get(i).hurt(Registry.RITUAL_DAMAGE, targetHealth);
+        for (LivingEntity target : targets) {
+            float targetHealth = target.getHealth();
+            target.hurt(Registry.RITUAL_DAMAGE, Math.min(this.health - acc, targetHealth));
 
             acc += targetHealth;
-            if (!world.isClientSide) Networking.sendToTracking(world, pos, new RitualConsumePacket(targets.get(i).blockPosition(), pos, ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
+            if (!world.isClientSide)
+                Networking.sendToTracking(world, pos, new RitualConsumePacket(target.blockPosition(), pos, ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
             if (acc >= this.health) return;
         }
     }

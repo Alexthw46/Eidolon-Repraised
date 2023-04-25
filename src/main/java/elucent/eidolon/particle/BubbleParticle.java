@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.blockentity.BedRenderer;
 import net.minecraft.client.multiplayer.ClientLevel;
 
 public class BubbleParticle extends GenericParticle {
-    SpriteSet animation;
+    final SpriteSet animation;
 
     public BubbleParticle(ClientLevel world, GenericParticleData data, SpriteSet animation, double x, double y, double z, double vx, double vy, double vz) {
         super(world, data, x, y, z, vx, vy, vz);

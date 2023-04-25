@@ -7,7 +7,7 @@ import elucent.eidolon.Eidolon;
 import net.minecraft.resources.ResourceLocation;
 
 public class Deities {
-    static Map<ResourceLocation, Deity> deities = new HashMap<>();
+    static final Map<ResourceLocation, Deity> deities = new HashMap<>();
 
     public static Deity register(Deity deity) {
         deities.put(deity.getId(), deity);

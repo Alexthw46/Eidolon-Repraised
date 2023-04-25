@@ -25,9 +25,7 @@ public class AllureRitual extends Ritual {
         if (world.getGameTime() % 200 == 0) {
             List<Animal> animals = world.getEntitiesOfClass(Animal.class, new AABB(pos).inflate(96, 16, 96));
             for (Animal a : animals) {
-                boolean hasGoal = a.goalSelector.getRunningGoals()
-                    .filter((goal) -> goal.getGoal() instanceof GoToPositionGoal)
-                    .count() > 0;
+                boolean hasGoal = a.goalSelector.getRunningGoals().anyMatch((goal) -> goal.getGoal() instanceof GoToPositionGoal);
                 if (!hasGoal && a.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) >= 12 * 12 && world.random.nextInt(40) == 0) {
                     BlockPos target = pos.below().offset(world.random.nextInt(9) - 4, 0, world.random.nextInt(9) - 4);
                     a.goalSelector.addGoal(1, new GoToPositionGoal(a, target, 1.0));

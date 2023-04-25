@@ -13,19 +13,26 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraft.core.particles.ParticleOptions.Deserializer;
+
 public class RuneParticleData implements ParticleOptions {
-    Rune rune;
-    float r1, g1, b1, r2, g2, b2;
+    final Rune rune;
+    final float r1;
+    final float g1;
+    final float b1;
+    final float r2;
+    final float g2;
+    final float b2;
 
     public static Codec<RuneParticleData> codecFor(ParticleType<?> type) {
         return RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("rune").forGetter((d) -> d.rune.getRegistryName().toString()),
-            Codec.FLOAT.fieldOf("r1").forGetter((d) -> d.r1),
-            Codec.FLOAT.fieldOf("g1").forGetter((d) -> d.g1),
-            Codec.FLOAT.fieldOf("b1").forGetter((d) -> d.b1),
-            Codec.FLOAT.fieldOf("r2").forGetter((d) -> d.r2),
-            Codec.FLOAT.fieldOf("g2").forGetter((d) -> d.g2),
-            Codec.FLOAT.fieldOf("b2").forGetter((d) -> d.b2)
+                Codec.STRING.fieldOf("rune").forGetter((d) -> d.rune.getRegistryName().toString()),
+                Codec.FLOAT.fieldOf("r1").forGetter((d) -> d.r1),
+                Codec.FLOAT.fieldOf("g1").forGetter((d) -> d.g1),
+                Codec.FLOAT.fieldOf("b1").forGetter((d) -> d.b1),
+                Codec.FLOAT.fieldOf("r2").forGetter((d) -> d.r2),
+                Codec.FLOAT.fieldOf("g2").forGetter((d) -> d.g2),
+                Codec.FLOAT.fieldOf("b2").forGetter((d) -> d.b2)
         ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> {
             RuneParticleData data = new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2);
             return data;

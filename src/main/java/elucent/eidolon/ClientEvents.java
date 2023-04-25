@@ -14,8 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,8 +56,8 @@ public class ClientEvents {
     @SubscribeEvent
     public void onRenderLast(RenderLevelLastEvent event) {
         if (ClientConfig.BETTER_LAYERING.get()) {
-        	PoseStack mStack = RenderSystem.getModelViewStack();
-        	
+            PoseStack mStack = RenderSystem.getModelViewStack();
+
             RenderSystem.getModelViewStack().pushPose(); // this feels...cheaty
             RenderSystem.getModelViewStack().setIdentity();
             if (particleMVMatrix != null) RenderSystem.getModelViewStack().mulPoseMatrix(particleMVMatrix);
@@ -81,17 +80,18 @@ public class ClientEvents {
     public static float getClientTicks() {
         return clientTicks;
     }
-    
+
     public static boolean isInGui = false;
-    
+
+    //TODO: find a way to detect if the player is in a gui
     @SubscribeEvent
-    public void onRenderGuiStart(RenderGameOverlayEvent.Pre event) {
-    	if (event.getType() == ElementType.ALL) isInGui = true;
+    public void onRenderGuiStart(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay().id() == null) isInGui = true;
     }
-    
+
     @SubscribeEvent
-    public void onRenderGuiStart(RenderGameOverlayEvent.Post event) {
-    	if (event.getType() == ElementType.ALL) isInGui = false;
+    public void onRenderGuiStart(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay().id() == null) isInGui = false;
     }
     
     public static int jumpTicks = 0;
@@ -99,27 +99,25 @@ public class ClientEvents {
     
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
-    	if (event.side != LogicalSide.CLIENT) return;
-    	Player p = event.player;
-    	if (p instanceof LocalPlayer lp) {
-	    	p.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
-	    		ItemStack wings = d.getWingsItem(p);
-	    		if (!d.canFlap(p)) return;
-	    		if (!(wings.getItem() instanceof IWingsItem)) return;
-	    		if (lp.input.jumping && (!wasJumping || jumpTicks > 0)) {
-	    			jumpTicks ++;
-	    			if (jumpTicks > 20) jumpTicks = 20;
-	    		}
-	    		else if (wasJumping && jumpTicks > 0) {
-		        	if (jumpTicks >= 20 && !d.isDashing(p)) {
-		        		d.tryDash(p);
-		        	}
-		        	else d.tryFlapWings(p);
-	    			jumpTicks = 0;
-	        	}
-	    	});
-	    	if (p.isOnGround()) jumpTicks = 0;
-	    	wasJumping = p.isOnGround() || lp.input.jumping;
-    	}
+        if (event.side != LogicalSide.CLIENT) return;
+        Player p = event.player;
+        if (p instanceof LocalPlayer lp) {
+            p.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
+                ItemStack wings = d.getWingsItem(p);
+                if (!d.canFlap(p)) return;
+                if (!(wings.getItem() instanceof IWingsItem)) return;
+                if (lp.input.jumping && (!wasJumping || jumpTicks > 0)) {
+                    jumpTicks ++;
+                    if (jumpTicks > 20) jumpTicks = 20;
+                } else if (wasJumping && jumpTicks > 0) {
+                    if (jumpTicks >= 20 && !d.isDashing(p)) {
+                        d.tryDash(p);
+                    } else d.tryFlapWings(p);
+                    jumpTicks = 0;
+                }
+            });
+            if (p.isOnGround()) jumpTicks = 0;
+            wasJumping = p.isOnGround() || lp.input.jumping;
+        }
     }
 }

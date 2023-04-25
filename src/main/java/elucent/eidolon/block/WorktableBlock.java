@@ -10,8 +10,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class WorktableBlock extends BlockBase {
     public WorktableBlock(Properties properties) {
@@ -25,7 +27,7 @@ public class WorktableBlock extends BlockBase {
         } else {
             player.openMenu(new SimpleMenuProvider((id, inventory, p) -> {
                 return new WorktableContainer(id, inventory, ContainerLevelAccess.create(world, pos));
-            }, new TextComponent("")));
+            }, Component.literal("")));
             player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
             return InteractionResult.CONSUME;
         }

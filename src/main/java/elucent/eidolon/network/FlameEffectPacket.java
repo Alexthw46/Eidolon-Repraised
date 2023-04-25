@@ -13,8 +13,10 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 public class FlameEffectPacket {
-    BlockPos pos;
-    float r, g, b;
+    final BlockPos pos;
+    final float r;
+    final float g;
+    final float b;
 
     public FlameEffectPacket(BlockPos pos, float r, float g, float b) {
         this.pos = pos;

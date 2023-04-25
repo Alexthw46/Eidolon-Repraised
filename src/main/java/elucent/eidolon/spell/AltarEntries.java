@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class AltarEntries {
-    static Map<BlockState, AltarEntry> entries = new HashMap<>();
+    static final Map<BlockState, AltarEntry> entries = new HashMap<>();
 
     public static AltarEntry find(BlockState state) {
         return entries.getOrDefault(state, null);

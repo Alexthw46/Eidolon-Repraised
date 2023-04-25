@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -27,14 +26,14 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
     }
 
     public static class NecromancerEyesLayer extends RenderLayer<NecromancerEntity, NecromancerModel> {
-        NecromancerModel model;
+        final NecromancerModel model;
 
         private static final RenderType RENDER_TYPE = RenderType.create(
             Eidolon.MODID+":necromancer_eyes",
             DefaultVertexFormat.NEW_ENTITY,
             Mode.QUADS, 256, true, false,
             RenderType.CompositeState.builder()
-            	.setShaderState(new ShaderStateShard(ClientRegistry::getGlowingEntityShader))
+                    .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingEntityShader))
                 .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
                 .setLightmapState(new RenderStateShard.LightmapStateShard(false))
                 .setTransparencyState(RenderUtil.ADDITIVE_TRANSPARENCY)

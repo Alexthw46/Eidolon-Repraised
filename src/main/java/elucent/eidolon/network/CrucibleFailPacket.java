@@ -15,7 +15,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 
 public class CrucibleFailPacket {
-    BlockPos pos;
+    final BlockPos pos;
 
     public CrucibleFailPacket(BlockPos pos) {
         this.pos = pos;

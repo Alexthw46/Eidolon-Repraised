@@ -45,7 +45,7 @@ public class WraithEntity extends Monster {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {
             float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            ((LivingEntity)entityIn).addEffect(new MobEffectInstance(Potions.CHILLED_EFFECT.get(), 100 + (int)(100 * level.getDifficulty().getId())));
+            ((LivingEntity) entityIn).addEffect(new MobEffectInstance(Potions.CHILLED_EFFECT.get(), 100 + (100 * level.getDifficulty().getId())));
         }
         return flag;
     }
@@ -57,8 +57,8 @@ public class WraithEntity extends Monster {
 
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 20.0D)
-            .add(Attributes.MOVEMENT_SPEED, (double)0.2F)
+                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2F)
             .add(Attributes.ATTACK_DAMAGE, 4.0D)
             .add(Attributes.ARMOR, 0.0D)
             .build();
@@ -72,14 +72,14 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 5;
     }
 
     @Override
     public void aiStep() {
         if (this.level.isDay() && !this.level.isClientSide) {
-            float f = this.getBrightness();
+            float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
                 this.setSecondsOnFire(8);

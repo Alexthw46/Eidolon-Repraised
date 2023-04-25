@@ -10,8 +10,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class Reagent {
-    ResourceLocation name, texture;
-    boolean gas;
+    final ResourceLocation name;
+    final ResourceLocation texture;
+    final boolean gas;
 
     public Reagent(ResourceLocation name, ResourceLocation texture, boolean isGas) {
         this.name = name;

@@ -5,7 +5,6 @@ import elucent.eidolon.util.ColorUtil;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMobEffect;
 
 public class UndeathEffect extends MobEffect implements IForgeMobEffect {

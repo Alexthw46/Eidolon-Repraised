@@ -1,28 +1,6 @@
 package elucent.eidolon.gui.jei;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
-import elucent.eidolon.codex.CodexGui;
-import elucent.eidolon.recipe.WorktableRegistry;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
-
+/*
 public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktable> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "worktable");
     private final IDrawable background, icon;
@@ -44,7 +22,7 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(I18n.get("jei." + Eidolon.MODID + ".worktable"));
+        return Component.translatable(I18n.get("jei." + Eidolon.MODID + ".worktable"));
     }
 
     @Override
@@ -92,3 +70,4 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
         recipe.page.render(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
     }
 }
+*/

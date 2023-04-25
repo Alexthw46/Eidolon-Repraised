@@ -14,7 +14,7 @@ public class CisternTileEntity extends ReagentTankTileEntity {
     float upPressure = 0, downPressure = 0;
 
     public static class CisternTank extends ReagentTank {
-        public CisternTileEntity tile;
+        public final CisternTileEntity tile;
 
         public CisternTank(CisternTileEntity tile, int capacity) {
             super(capacity);
@@ -34,7 +34,7 @@ public class CisternTileEntity extends ReagentTankTileEntity {
     }
 
     public CisternTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.CISTERN_TILE_ENTITY, pos, state);
+        this(Registry.CISTERN_TILE_ENTITY.get(), pos, state);
     }
 
     public CisternTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -49,11 +49,10 @@ public class CisternTileEntity extends ReagentTankTileEntity {
         if (getBlockState().getValue(PillarBlockBase.BOTTOM)) {
             BlockEntity t = level.getBlockEntity(worldPosition.below());
             if (t instanceof CisternTileEntity)
-                downPressure = ((CisternTileEntity)t).tank.getPressure();
-            if (t instanceof CisternTileEntity
-                && ((CisternTileEntity)t).tank.getContents().amount < ((CisternTileEntity)t).tank.getCapacity()
+                downPressure = ((CisternTileEntity) t).tank.getPressure();
+            if (t instanceof CisternTileEntity c
+                && ((CisternTileEntity) t).tank.getContents().amount < ((CisternTileEntity) t).tank.getCapacity()
                 && tank.getContents().amount > 0) {
-                CisternTileEntity c = (CisternTileEntity)t;
                 int change = tank.getContents().amount;
                 if (c.tank.getContents().amount + change > c.tank.getCapacity())
                     change = c.tank.getCapacity() - c.tank.getContents().amount;

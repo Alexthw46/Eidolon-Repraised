@@ -12,17 +12,20 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 public class MagicBurstEffectPacket {
-    float x, y, z;
-    int c1, c2;
+    final float x;
+    final float y;
+    final float z;
+    final int c1;
+    final int c2;
 
     public MagicBurstEffectPacket(BlockPos pos, int color1, int color2) {
         this(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, color1, color2);
     }
 
     public MagicBurstEffectPacket(double x, double y, double z, int color1, int color2) {
-        this.x = (float)x;
-        this.y = (float)y;
-        this.z = (float)z;
+        this.x = (float) x;
+        this.y = (float) y;
+        this.z = (float) z;
         this.c1 = color1;
         this.c2 = color2;
     }

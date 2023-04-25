@@ -28,9 +28,7 @@ public class RepellingRitual extends Ritual {
         if (world.getGameTime() % 200 == 0) {
             List<Monster> monsters = world.getEntitiesOfClass(Monster.class, new AABB(pos).inflate(96, 16, 96));
             for (Monster a : monsters) {
-                boolean hasGoal = a.goalSelector.getRunningGoals()
-                    .filter((goal) -> goal.getGoal() instanceof GoToPositionGoal)
-                    .count() > 0;
+                boolean hasGoal = a.goalSelector.getRunningGoals().anyMatch((goal) -> goal.getGoal() instanceof GoToPositionGoal);
                 if (!hasGoal && a.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) <= 80 * 80) {
                     Vec3i diff = a.blockPosition().subtract(pos);
                     Vec3 diffv = new Vec3(diff.getX(), 0, diff.getZ());

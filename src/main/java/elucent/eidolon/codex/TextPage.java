@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TextPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_blank_page.png");
-    String text;
+    final String text;
 
     public TextPage(String textKey) {
         super(BACKGROUND);

@@ -9,7 +9,7 @@ public class EffigyTileEntity extends TileEntityBase {
     long previous = -1;
 
     public EffigyTileEntity(BlockPos pos, BlockState state) {
-        super(Registry.EFFIGY_TILE_ENTITY, pos, state);
+        super(Registry.EFFIGY_TILE_ENTITY.get(), pos, state);
     }
 
     public boolean ready() {

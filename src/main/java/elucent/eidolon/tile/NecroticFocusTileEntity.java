@@ -16,7 +16,7 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     ItemStack stack = ItemStack.EMPTY;
 
     public NecroticFocusTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.NECROTIC_FOCUS_TILE_ENTITY, pos, state);
+        this(Registry.NECROTIC_FOCUS_TILE_ENTITY.get(), pos, state);
     }
 
     public NecroticFocusTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
@@ -71,9 +71,9 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
         if (!level.isClientSide) sync();
     }
 
-	@Override
-	public void replace(ItemStack stack) {
-		this.stack = stack;
+    @Override
+    public void replace(ItemStack stack) {
+        this.stack = stack;
         if (!level.isClientSide) sync();
-	}
+    }
 }

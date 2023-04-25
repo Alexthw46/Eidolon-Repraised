@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -21,12 +20,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class RitualPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
-    Ritual ritual;
-    ItemStack center;
-    RitualIngredient[] inputs;
+    final Ritual ritual;
+    final ItemStack center;
+    final RitualIngredient[] inputs;
 
     public static class RitualIngredient {
-        public ItemStack stack;
+        public final ItemStack stack;
         public boolean isFocus;
 
         public RitualIngredient(ItemStack stack, boolean isFocus) {

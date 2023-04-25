@@ -17,12 +17,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.phys.AABB;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class GenericBarterGoal<E extends PathfinderMob> extends Goal {
-    static Random rand = new Random();
-    Predicate<ItemStack> valid;
-    Function<ItemStack, ItemStack> result;
+    static final Random rand = new Random();
+    final Predicate<ItemStack> valid;
+    final Function<ItemStack, ItemStack> result;
     int progress = 0, cooldown = 0, lastTick = 0;
-    E entity;
+    final E entity;
     ItemStack backupHack = ItemStack.EMPTY;
 
     public GenericBarterGoal(E entity, Predicate<ItemStack> valid, Function<ItemStack, ItemStack> result) {

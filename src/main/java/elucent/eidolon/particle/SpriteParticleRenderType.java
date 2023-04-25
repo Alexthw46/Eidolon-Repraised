@@ -12,7 +12,6 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
-import elucent.eidolon.Registry;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;

@@ -13,7 +13,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 
 public class CrystallizeEffectPacket {
-    BlockPos pos;
+    final BlockPos pos;
 
     public CrystallizeEffectPacket(BlockPos pos) {
         this.pos = pos;

@@ -1,31 +1,30 @@
 package elucent.eidolon.recipe;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorktableRecipe implements Recipe<Container> {
-    Ingredient[] core, extras;
-    ItemStack result;
+    final Ingredient[] core;
+    final Ingredient[] extras;
+    final ItemStack result;
     ResourceLocation registryName;
 
     public WorktableRecipe(Ingredient[] core, Ingredient[] extras, ItemStack result) {
@@ -73,8 +72,8 @@ public class WorktableRecipe implements Recipe<Container> {
         for(int i = 0; i < items.size(); ++i) {
             Container inv = i < 9 ? coreInv : extraInv;
             ItemStack item = inv.getItem(i < 9 ? i : i - 9);
-            if (item.hasContainerItem()) {
-                items.set(i, item.getContainerItem());
+            if (item.hasCraftingRemainingItem()) {
+                items.set(i, item.getCraftingRemainingItem());
             }
         }
 
@@ -119,13 +118,14 @@ public class WorktableRecipe implements Recipe<Container> {
         public static final Type INSTANCE = new Type();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<WorktableRecipe> {
+    public static class Serializer implements RecipeSerializer<WorktableRecipe> {
         @Override
         public WorktableRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             Map<String, Ingredient> ingredientMap = new HashMap<>();
             JsonObject keys = json.getAsJsonObject("key");
             for (Map.Entry<String, JsonElement> e : keys.entrySet()) {
-                if (e.getKey().length() != 1) throw new RuntimeException("Recipe ingredient key must be a single character");
+                if (e.getKey().length() != 1)
+                    throw new RuntimeException("Recipe ingredient key must be a single character");
                 ingredientMap.put(e.getKey(), Ingredient.fromJson(e.getValue().getAsJsonObject()));
             }
             Ingredient[] core = new Ingredient[9], extras = new Ingredient[4];

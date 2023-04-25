@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 
 public class SanguineRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/sanguine_ritual");
-    ItemStack result;
+    final ItemStack result;
 
     public SanguineRitual(ItemStack result) {
         super(SYMBOL, ColorUtil.packColor(255, 255, 51, 85));

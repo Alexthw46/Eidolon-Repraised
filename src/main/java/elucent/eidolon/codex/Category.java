@@ -1,27 +1,21 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.math.Matrix4f;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import com.mojang.math.Matrix4f;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
 public class Category {
-    ItemStack icon;
-    String key;
-    Chapter chapter;
-    int color;
+    final ItemStack icon;
+    final String key;
+    final Chapter chapter;
+    final int color;
     float hoveramount = 0;
 
     public Category(String name, ItemStack icon, int color, Chapter chapter) {
@@ -36,8 +30,8 @@ public class Category {
     }
 
     static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
-    	RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-    	Matrix4f matrix = mStack.last().pose();
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        Matrix4f matrix = mStack.last().pose();
         int maxX = x + width, maxY = y + height;
         float minU = (float)uOffset / textureWidth, minV = (float)vOffset / textureHeight;
         float maxU = minU + (float)width / textureWidth, maxV = minV + (float)height / textureHeight;
@@ -49,9 +43,8 @@ public class Category {
         bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)x, (float)y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
+        BufferUploader.draw(bufferbuilder.end());
     }
 
     public boolean click(CodexGui gui, int x, int y, boolean right, int mouseX, int mouseY) {
@@ -98,6 +91,6 @@ public class Category {
         if (!right) x -= hoveramount * 12;
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
-        if (hover) gui.renderTooltip(mStack, new TranslatableComponent("eidolon.codex.category." + key), mouseX, mouseY);
+        if (hover) gui.renderTooltip(mStack, Component.translatable("eidolon.codex.category." + key), mouseX, mouseY);
     }
 }

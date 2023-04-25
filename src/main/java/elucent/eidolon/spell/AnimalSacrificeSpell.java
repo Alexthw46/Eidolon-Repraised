@@ -24,7 +24,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class AnimalSacrificeSpell extends StaticSpell {
-    Deity deity;
+    final Deity deity;
 
     public AnimalSacrificeSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);

@@ -11,7 +11,13 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.util.Mth;
 
 public class LineWispParticle extends GenericParticle {
-    double ix, iy, iz, tx, ty, tz;
+    final double ix;
+    final double iy;
+    final double iz;
+    final double tx;
+    final double ty;
+    final double tz;
+
     public LineWispParticle(ClientLevel world, GenericParticleData data, double x, double y, double z, double vx, double vy, double vz) {
         super(world, data, x, y, z, vx, vy, vz);
         this.ix = x;

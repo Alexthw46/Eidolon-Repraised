@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class EntityPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_entity_page.png");
 
-    EntityType type;
+    final EntityType type;
 
     public <T extends Entity> EntityPage(EntityType<T> type) {
         super(BACKGROUND);

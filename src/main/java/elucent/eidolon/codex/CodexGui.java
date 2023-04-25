@@ -1,48 +1,46 @@
 package elucent.eidolon.codex;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.glfw.GLFW;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.math.Matrix4f;
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.AttemptCastPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.spell.Rune;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix4f;
-
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CodexGui extends Screen {
     public static final CodexGui DUMMY = new CodexGui();
     public static final ResourceLocation CODEX_BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_bg.png");
-    static int xSize = 312, ySize = 208;
-    List<Rune> chant = new ArrayList<>();
+    static final int xSize = 312;
+    static final int ySize = 208;
+    final List<Rune> chant = new ArrayList<>();
     Rune hoveredRune = null;
 
     Chapter currentChapter;
     int currentPage = 0;
 
     static CodexGui INSTANCE = null;
+
     public static CodexGui getInstance() {
         for (Category cat : CodexChapters.categories) cat.reset();
         if (INSTANCE != null) return INSTANCE;
@@ -50,7 +48,7 @@ public class CodexGui extends Screen {
     }
 
     protected CodexGui() {
-        super(new TranslatableComponent("gui.eidolon.codex.title"));
+        super(Component.translatable("gui.eidolon.codex.title"));
         currentChapter = CodexChapters.NATURE_INDEX;
     }
 
@@ -71,7 +69,7 @@ public class CodexGui extends Screen {
 
     protected void renderChant(PoseStack mStack, int x, int y, int mouseX, int mouseY, float pticks) {
         int chantWidth = 32 + 12 * chant.size();
-        int baseX = x + this.xSize / 2 - chantWidth / 2, baseY = y + 180;
+        int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
 
         RenderSystem.enableBlend();
         
@@ -90,18 +88,17 @@ public class CodexGui extends Screen {
         bgx += 36;
         boolean cancelHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
         blit(mStack, bgx, baseY - 4, 368, cancelHover ? 240 : 208, 32, 32, 512, 512);
-        if (chantHover) renderTooltip(mStack, new TranslatableComponent("eidolon.codex.chant_hover"), mouseX, mouseY);
-        if (cancelHover) renderTooltip(mStack, new TranslatableComponent("eidolon.codex.cancel_hover"), mouseX, mouseY);
+        if (chantHover) renderTooltip(mStack, Component.translatable("eidolon.codex.chant_hover"), mouseX, mouseY);
+        if (cancelHover) renderTooltip(mStack, Component.translatable("eidolon.codex.cancel_hover"), mouseX, mouseY);
 
         RenderSystem.enableBlend();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         bgx = baseX + 16;
         Tesselator tess = Tesselator.getInstance();
-        for (int i = 0; i < chant.size(); i ++) {
-            Rune rune = chant.get(i);
+        for (Rune rune : chant) {
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
-                1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
+                    1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
             tess.end();
             bgx += 12;
         }
@@ -136,7 +133,7 @@ public class CodexGui extends Screen {
 
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    	hasTooltip = false;
+        hasTooltip = false;
         renderBackground(matrixStack);
         Minecraft mc = Minecraft.getInstance();
         RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
@@ -180,17 +177,17 @@ public class CodexGui extends Screen {
         }
         
         if (hasTooltip) {
-        	matrixStack.pushPose();
-        	matrixStack.setIdentity();
-        	matrixStack.mulPoseMatrix(tooltipMatrix);
-        	super.renderTooltip(matrixStack, tooltipText, tooltipX, tooltipY);
-        	matrixStack.popPose();
+            matrixStack.pushPose();
+            matrixStack.setIdentity();
+            matrixStack.mulPoseMatrix(tooltipMatrix);
+            super.renderTooltip(matrixStack, tooltipText, tooltipX, tooltipY);
+            matrixStack.popPose();
         }
     }
 
     protected boolean interactChant(int x, int y, int mouseX, int mouseY) {
         int chantWidth = 32 + 12 * chant.size();
-        int baseX = x + this.xSize / 2 - chantWidth / 2, baseY = y + 180;
+        int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
         int bgx = baseX + chantWidth + 8;
         boolean chantHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
         bgx += 36;
@@ -253,7 +250,7 @@ public class CodexGui extends Screen {
             if (left != null) if (left.click(this,guiLeft + 14, guiTop + 24, (int)mouseX, (int)mouseY)) return true;
             if (right != null) if (right.click(this,guiLeft + 170, guiTop + 24, (int)mouseX, (int)mouseY)) return true;
 
-            if (chant.size() > 0 && interactChant(guiLeft, guiTop, (int)mouseX, (int)mouseY)) return true;
+            return chant.size() > 0 && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
         }
         return false;
     }

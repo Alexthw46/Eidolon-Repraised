@@ -6,13 +6,13 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.research.Researches;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Sign;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 public class KnowledgeUtil {
     public static void grantSign(Entity entity, Sign sign) {
@@ -21,8 +21,8 @@ public class KnowledgeUtil {
             if (k.knowsSign(sign)) return;
             k.addSign(sign);
 
-            ((ServerPlayer)entity).connection.send(new ClientboundSetActionBarTextPacket(new TranslatableComponent("eidolon.title.new_sign", new TranslatableComponent(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))));
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_sign", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))));
+            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
         });
     }
 
@@ -32,8 +32,8 @@ public class KnowledgeUtil {
             if (k.knowsFact(fact)) return;
             k.addFact(fact);
 
-            ((ServerPlayer)entity).connection.send(new ClientboundSetActionBarTextPacket(new TranslatableComponent("eidolon.title.new_fact")));
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_fact")));
+            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
         });
     }
 
@@ -43,8 +43,8 @@ public class KnowledgeUtil {
             if (k.knowsResearch(research)) return;
             k.addResearch(research);
 
-            ((ServerPlayer)entity).connection.send(new ClientboundSetActionBarTextPacket(new TranslatableComponent("eidolon.title.new_research", ChatFormatting.GOLD + Researches.find(research).getName())));
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + Researches.find(research).getName())));
+            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
         });
     }
     
@@ -54,8 +54,8 @@ public class KnowledgeUtil {
             if (k.knowsRune(rune)) return;
             k.addRune(rune);
 
-            ((ServerPlayer)entity).connection.send(new ClientboundSetActionBarTextPacket(new TranslatableComponent("eidolon.title.new_rune", new TranslatableComponent(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))));
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_rune", Component.translatable(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))));
+            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
         });
     }
 

@@ -14,8 +14,8 @@ import net.minecraft.world.level.Level;
 
 
 public class TESyncPacket {
-    BlockPos pos;
-    CompoundTag tag;
+    final BlockPos pos;
+    final CompoundTag tag;
 
     public TESyncPacket(BlockPos pos, CompoundTag tag) {
         this.pos = pos;

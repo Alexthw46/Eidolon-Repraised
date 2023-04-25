@@ -17,27 +17,29 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class TableBlockBase extends BlockBase implements SimpleWaterloggedBlock {
     VoxelShape NORMAL = Shapes.box(0, 0.75, 0, 1, 1, 1),
-        CORNER = Shapes.joinUnoptimized(
-            NORMAL,
-            Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.75, 0.9375),
-            BooleanOp.OR
-        );
+            CORNER = Shapes.joinUnoptimized(
+                    NORMAL,
+                    Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.75, 0.9375),
+                    BooleanOp.OR
+            );
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static BooleanProperty NX = BooleanProperty.create("nx"),
-        PX = BooleanProperty.create("px"),
-        NZ = BooleanProperty.create("nz"),
-        PZ = BooleanProperty.create("pz");
+    public static final BooleanProperty NX = BooleanProperty.create("nx");
+    public static final BooleanProperty PX = BooleanProperty.create("px");
+    public static final BooleanProperty NZ = BooleanProperty.create("nz");
+    public static final BooleanProperty PZ = BooleanProperty.create("pz");
 
     public TableBlockBase(Properties properties) {
         super(properties);
         registerDefaultState(super.defaultBlockState()
-            .setValue(NX, false)
-            .setValue(PX, false)
-            .setValue(NZ, false)
-            .setValue(PZ, false));
+                .setValue(NX, false)
+                .setValue(PX, false)
+                .setValue(NZ, false)
+                .setValue(PZ, false));
     }
 
     public TableBlockBase setMainShape(VoxelShape shape) {

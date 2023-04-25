@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TitledRitualPage extends RitualPage {
-    String title;
+    final String title;
 
     public TitledRitualPage(String textKey, Ritual ritual, ItemStack center, RitualIngredient... inputs) {
         super(ritual, center, inputs);
@@ -21,7 +21,7 @@ public class TitledRitualPage extends RitualPage {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	RenderSystem.setShaderTexture(0, BACKGROUND);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         gui.blit(mStack, x, y, 128, 64, 128, 24);
         String title = I18n.get(this.title);
         int titleWidth = Minecraft.getInstance().font.width(title);

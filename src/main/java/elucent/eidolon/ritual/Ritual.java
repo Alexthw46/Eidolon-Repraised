@@ -14,13 +14,14 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 
 public abstract class Ritual {
     ResourceLocation name = null;
-    int color;
-    ResourceLocation symbol;
-    List<IRequirement> stepRequirements = new ArrayList<>(), continuousRequirements = new ArrayList<>();
+    final int color;
+    final ResourceLocation symbol;
+    final List<IRequirement> stepRequirements = new ArrayList<>();
+    final List<IRequirement> continuousRequirements = new ArrayList<>();
 
     public Ritual(ResourceLocation symbol, float r, float g, float b) {
         this.symbol = symbol;
-        this.color = ColorUtil.packColor(255, (int)(r * 255), (int)(g * 255), (int)(b * 255));
+        this.color = ColorUtil.packColor(255, (int) (r * 255), (int) (g * 255), (int) (b * 255));
     }
 
     public Ritual(ResourceLocation symbol, int color) {

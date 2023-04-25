@@ -1,17 +1,15 @@
 package elucent.eidolon.particle;
 
-import java.util.Random;
-
 import com.mojang.serialization.Codec;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.util.RandomSource;
 
 public class RuneParticleType extends ParticleType<RuneParticleData> {
     public RuneParticleType() {
@@ -38,7 +36,7 @@ public class RuneParticleType extends ParticleType<RuneParticleData> {
                 }
 
                 @Override
-                public TextureAtlasSprite get(Random rand) {
+                public TextureAtlasSprite get(RandomSource rand) {
                     return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.rune.getSprite());
                 }
             });

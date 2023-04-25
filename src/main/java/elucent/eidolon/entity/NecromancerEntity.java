@@ -1,7 +1,5 @@
 package elucent.eidolon.entity;
 
-import java.util.UUID;
-
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
@@ -9,30 +7,31 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.SpellcasterIllager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.SpellcasterIllager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.UUID;
 
 public class NecromancerEntity extends SpellcasterIllager {
     public NecromancerEntity(EntityType<? extends SpellcasterIllager> type, Level worldIn) {
@@ -53,7 +52,7 @@ public class NecromancerEntity extends SpellcasterIllager {
 
     @Override
     public boolean isCastingSpell() {
-        return level.isClientSide && hack ? false : super.isCastingSpell();
+        return (!level.isClientSide || !hack) && super.isCastingSpell();
     }
 
     @Override
@@ -101,9 +100,7 @@ public class NecromancerEntity extends SpellcasterIllager {
                 if (NecromancerEntity.this.isCastingSpell()) {
                     return false;
                 } else {
-                    if (NecromancerEntity.this.tickCount >= this.nextAttackTickCount) {
-                        return true;
-                    }
+                    return NecromancerEntity.this.tickCount >= this.nextAttackTickCount;
                 }
             }
             return false;
@@ -174,12 +171,14 @@ public class NecromancerEntity extends SpellcasterIllager {
                 EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
                 ResourceLocation biomeKey = ForgeRegistries.BIOMES.getKey(level.getBiome(blockPosition()).value());
                 ResourceKey<Biome> biomeEntry = ResourceKey.create(ForgeRegistries.Keys.BIOMES, biomeKey);
+                /*TODO: fix this
                 if (type == EntityType.SKELETON && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SNOWY))
                     type = EntityType.STRAY;
                 if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SANDY))
                     type = EntityType.HUSK;
                 if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.OCEAN))
                     type = EntityType.DROWNED;
+                 */
                 Monster entity = (Monster)type.create(level);
                 entity.setPos(getX(), getY(), getZ());
                 level.addFreshEntity(entity);
@@ -227,7 +226,6 @@ public class NecromancerEntity extends SpellcasterIllager {
 
     @Override
     public void applyRaidBuffs(int wave, boolean p_213660_2_) {
-        return;
     }
 
     @Override

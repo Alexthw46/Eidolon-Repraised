@@ -14,6 +14,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class HorizontalWaterloggableBlock extends HorizontalBlockBase implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 

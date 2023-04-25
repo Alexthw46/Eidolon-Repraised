@@ -1,44 +1,37 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SignIndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
-    SignEntry[] entries;
+    final SignEntry[] entries;
 
     public static class SignEntry {
-        Chapter chapter;
-        Sign sign;
+        final Chapter chapter;
+        final Sign sign;
 
         public SignEntry(Chapter chapter, Sign sign) {
             this.chapter = chapter;
@@ -86,9 +79,8 @@ public class SignIndexPage extends Page {
         bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)x, (float)y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
+        BufferUploader.draw(bufferbuilder.end());
     }
 
     @Override
@@ -97,7 +89,7 @@ public class SignIndexPage extends Page {
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
         for (int i = 0; i < entries.length; i ++) {
-        	RenderSystem.setShaderTexture(0, BACKGROUND);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             Sign sign = entries[i].sign;
             boolean hover = knowledge.knowsSign(sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48;
@@ -118,7 +110,7 @@ public class SignIndexPage extends Page {
                 }
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
-                	float r = sign.getRed(), g = sign.getGreen(), b = sign.getBlue();
+                    float r = sign.getRed(), g = sign.getGreen(), b = sign.getBlue();
                     RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 12, yy + 12, 24, 24,
                         sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
                     tess.end();
@@ -131,7 +123,7 @@ public class SignIndexPage extends Page {
                 gui.blit(mStack, xx + 38, yy + 38, infoHover ? 188 : 176, 48, 12, 14);
                 
                 if (infoHover) {
-                    gui.renderTooltip(mStack, new TranslatableComponent("eidolon.codex.sign_suffix", new TranslatableComponent(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
+                    gui.renderTooltip(mStack, Component.translatable("eidolon.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
                 }
             }
         }

@@ -13,11 +13,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ListPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_index_page.png");
-    ListEntry[] entries;
+    final ListEntry[] entries;
 
     public static class ListEntry {
-        String key;
-        ItemStack icon;
+        final String key;
+        final ItemStack icon;
 
         public ListEntry(String key, ItemStack icon) {
             this.key = key;
@@ -25,7 +25,7 @@ public class ListPage extends Page {
         }
     }
 
-    String key;
+    final String key;
 
     public ListPage(String key, ListEntry... pages) {
         super(BACKGROUND);
@@ -36,7 +36,7 @@ public class ListPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-    	RenderSystem.setShaderTexture(0, BACKGROUND);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         for (int i = 0; i < entries.length; i ++) {
             gui.blit(mStack, x + 1, y + 7 + i * 20, 128, 0, 122, 18);
         }

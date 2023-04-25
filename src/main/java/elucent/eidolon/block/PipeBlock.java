@@ -1,23 +1,21 @@
 package elucent.eidolon.block;
 
-import com.google.common.base.Predicates;
-
 import elucent.eidolon.tile.reagent.PipeTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PipeBlock extends BlockBase implements EntityBlock {
     static final VoxelShape
@@ -30,8 +28,9 @@ public class PipeBlock extends BlockBase implements EntityBlock {
         CENTER = Shapes.box(0.375, 0.375, 0.375, 0.625, 0.625, 0.625);
 
     static final VoxelShape[] SHAPES = new VoxelShape[36];
+
     static {
-        VoxelShape[] FACES = new VoxelShape[]{ DOWN, UP, NORTH, SOUTH, WEST, EAST };
+        VoxelShape[] FACES = new VoxelShape[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
         for (Direction in : Direction.values()) {
             for (Direction out : Direction.values()) {
                 SHAPES[in.ordinal() * 6 + out.ordinal()] = Shapes.or(FACES[in.ordinal()], FACES[out.ordinal()], CENTER);
@@ -40,11 +39,11 @@ public class PipeBlock extends BlockBase implements EntityBlock {
     }
 
     public static final DirectionProperty
-        IN = DirectionProperty.create("in", Predicates.alwaysTrue()),
-        OUT = DirectionProperty.create("out", Predicates.alwaysTrue());
+            IN = DirectionProperty.create("in", direction -> true),
+            OUT = DirectionProperty.create("out", direction -> true);
     public static final BooleanProperty
-        IN_ATTACHED = BooleanProperty.create("attachin"),
-        OUT_ATTACHED = BooleanProperty.create("attachout");
+            IN_ATTACHED = BooleanProperty.create("attachin"),
+            OUT_ATTACHED = BooleanProperty.create("attachout");
 
     public PipeBlock(Properties properties) {
         super(properties);
@@ -100,8 +99,8 @@ public class PipeBlock extends BlockBase implements EntityBlock {
         builder.add(IN).add(OUT).add(IN_ATTACHED).add(OUT_ATTACHED);
     }
 
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new PipeTileEntity(pos, state);
-	}
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new PipeTileEntity(pos, state);
+    }
 }

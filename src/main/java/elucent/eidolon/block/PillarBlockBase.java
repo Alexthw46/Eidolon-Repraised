@@ -16,6 +16,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class PillarBlockBase extends BlockBase implements SimpleWaterloggedBlock {
     public static final BooleanProperty TOP = BooleanProperty.create("top");
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
@@ -28,15 +30,14 @@ public class PillarBlockBase extends BlockBase implements SimpleWaterloggedBlock
     protected boolean canConnectTo(LevelAccessor world, BlockPos pos, Direction dir) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof PillarBlockBase && dir.getAxis() == Direction.Axis.Y) return true;
-        if (dir == Direction.UP && state.getBlock() == Registry.STONE_HAND.get()) return true;
-        return false;
+        return dir == Direction.UP && state.getBlock() == Registry.STONE_HAND.get();
     }
 
     protected BlockState getState(Level world, BlockPos pos) {
         return this.defaultBlockState()
-            .setValue(TOP, canConnectTo(world, pos.above(), Direction.UP))
-            .setValue(BOTTOM, canConnectTo(world, pos.below(), Direction.DOWN))
-            .setValue(WATERLOGGED, Boolean.valueOf(world.getFluidState(pos).getType() == Fluids.WATER));
+                .setValue(TOP, canConnectTo(world, pos.above(), Direction.UP))
+                .setValue(BOTTOM, canConnectTo(world, pos.below(), Direction.DOWN))
+                .setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER);
     }
 
     @Override

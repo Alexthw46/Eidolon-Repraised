@@ -45,8 +45,8 @@ public class ZombieBruteEntity extends Monster {
 
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 40.0D)
-            .add(Attributes.MOVEMENT_SPEED, (double)0.28F)
+                .add(Attributes.MAX_HEALTH, 40.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.28F)
             .add(Attributes.ATTACK_DAMAGE, 5.0D)
             .add(Attributes.ARMOR, 6.0D)
             .build();
@@ -64,14 +64,14 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 8;
     }
 
     @Override
     public void aiStep() {
         if (this.level.isDay() && !this.level.isClientSide) {
-            float f = this.getBrightness();
+            float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
                 this.setSecondsOnFire(8);

@@ -1,10 +1,5 @@
 package elucent.eidolon.tile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Predicate;
-
 import elucent.eidolon.Config;
 import elucent.eidolon.Registry;
 import elucent.eidolon.network.CrucibleFailPacket;
@@ -13,24 +8,29 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Predicate;
 
 public class CrucibleTileEntity extends TileEntityBase {
     boolean boiling = false;
@@ -38,9 +38,9 @@ public class CrucibleTileEntity extends TileEntityBase {
     int stirTicks = 0;
     int stirs = 0;
     int stepCounter = 0;
-    List<CrucibleStep> steps = new ArrayList<>();
+    final List<CrucibleStep> steps = new ArrayList<>();
     long seed = 0;
-    Random random = new Random();
+    final Random random = new Random();
 
     public float getRed() {
         random.setSeed(seed);
@@ -58,8 +58,8 @@ public class CrucibleTileEntity extends TileEntityBase {
     }
 
     public static class CrucibleStep {
-        int stirs;
-        List<ItemStack> contents = new ArrayList<>();
+        final int stirs;
+        final List<ItemStack> contents = new ArrayList<>();
 
         public CrucibleStep(int stirs, List<ItemStack> contents) {
             this.stirs = stirs;
@@ -90,17 +90,17 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
     }
 
-    public static Predicate<?>[] HOT_BLOCKS = {
-        (BlockState b) -> b.getBlock() == Blocks.MAGMA_BLOCK,
-        (BlockState b) -> b.getBlock() == Blocks.FIRE,
-        (BlockState b) -> b.getBlock() == Blocks.SOUL_FIRE,
-        (BlockState b) -> b.getBlock() == Blocks.LAVA,
-        (BlockState b) -> b.getBlock() == Blocks.CAMPFIRE && b.getValue(CampfireBlock.LIT),
-        (BlockState b) -> b.getBlock() == Blocks.SOUL_CAMPFIRE && b.getValue(CampfireBlock.LIT)
+    public static final Predicate<?>[] HOT_BLOCKS = {
+            (BlockState b) -> b.getBlock() == Blocks.MAGMA_BLOCK,
+            (BlockState b) -> b.getBlock() == Blocks.FIRE,
+            (BlockState b) -> b.getBlock() == Blocks.SOUL_FIRE,
+            (BlockState b) -> b.getBlock() == Blocks.LAVA,
+            (BlockState b) -> b.getBlock() == Blocks.CAMPFIRE && b.getValue(CampfireBlock.LIT),
+            (BlockState b) -> b.getBlock() == Blocks.SOUL_CAMPFIRE && b.getValue(CampfireBlock.LIT)
     };
 
     public CrucibleTileEntity(BlockPos pos, BlockState state) {
-        this(Registry.CRUCIBLE_TILE_ENTITY, pos, state);
+        this(Registry.CRUCIBLE_TILE_ENTITY.get(), pos, state);
     }
 
     public CrucibleTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {

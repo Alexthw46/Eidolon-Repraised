@@ -1,32 +1,6 @@
 package elucent.eidolon.gui.jei;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
-import elucent.eidolon.codex.CodexGui;
-import elucent.eidolon.recipe.CrucibleRecipe;
-import elucent.eidolon.recipe.CrucibleRegistry;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
-
+/*
 public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "crucible");
     private final IDrawable background, icon;
@@ -48,7 +22,7 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(I18n.get("jei." + Eidolon.MODID + ".crucible"));
+        return Component.translatable(I18n.get("jei." + Eidolon.MODID + ".crucible"));
     }
 
     @Override
@@ -143,3 +117,6 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
         recipe.page.render(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
     }
 }
+
+
+ */

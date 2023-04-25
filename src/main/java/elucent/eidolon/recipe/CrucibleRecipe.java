@@ -1,46 +1,44 @@
 package elucent.eidolon.recipe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.tile.CrucibleTileEntity.CrucibleStep;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CrucibleRecipe implements Recipe<Container> {
     List<Step> steps = new ArrayList<>();
     ResourceLocation registryName;
-    ItemStack result;
+    final ItemStack result;
 
     public ItemStack getResult() {
         return result;
     }
 
     public static class Step {
-        public List<Ingredient> matches = new ArrayList<>();
-        public int stirs;
+        public final List<Ingredient> matches = new ArrayList<>();
+        public final int stirs;
 
         public Step(int stirs, List<Ingredient> matches) {
             this.stirs = stirs;
             this.matches.addAll(matches);
         }
-    };
+    }
 
     public CrucibleRecipe(List<Step> steps, ItemStack result) {
         this.steps = steps;
@@ -131,7 +129,7 @@ public class CrucibleRecipe implements Recipe<Container> {
         public static final CrucibleRecipe.Type INSTANCE = new CrucibleRecipe.Type();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrucibleRecipe> {
+    public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
         @Override
         public CrucibleRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             List<Step> steps = new ArrayList<>();

@@ -39,8 +39,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -56,7 +54,7 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 
 @Mod(Eidolon.MODID)
 public class Eidolon {
-    public static ISidedProxy proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    public static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     public static final String MODID = "eidolon";
 
@@ -70,10 +68,10 @@ public class Eidolon {
     public static boolean trueMobType = false;
     
     public static MobType getTrueMobType(LivingEntity e) {
-    	trueMobType = true;
-    	MobType type = e.getMobType();
-    	trueMobType = false;
-    	return type;
+        trueMobType = true;
+        MobType type = e.getMobType();
+        trueMobType = false;
+        return type;
     }
 
     public Eidolon() {
@@ -118,20 +116,21 @@ public class Eidolon {
         SpawnPlacements.register(Entities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             Animal::checkAnimalSpawnRules);
         SpawnPlacements.register(Entities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-        	(e, w, t, pos, rand) -> true);
+                (e, w, t, pos, rand) -> true);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void clientSetup(final FMLClientSetupEvent event){
-        BlockEntityRenderers.register(Registry.HAND_TILE_ENTITY, (trd) -> new HandTileRenderer());
-        BlockEntityRenderers.register(Registry.BRAZIER_TILE_ENTITY, (trd) -> new BrazierTileRenderer());
-        BlockEntityRenderers.register(Registry.NECROTIC_FOCUS_TILE_ENTITY, (trd) -> new NecroticFocusTileRenderer());
-        BlockEntityRenderers.register(Registry.CRUCIBLE_TILE_ENTITY, (trd) -> new CrucibleTileRenderer());
-        BlockEntityRenderers.register(Registry.SOUL_ENCHANTER_TILE_ENTITY, (trd) -> new SoulEnchanterTileRenderer());
-        BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY, (trd) -> new GobletTileRenderer());
-        BlockEntityRenderers.register(Registry.CISTERN_TILE_ENTITY, (trd) -> new CisternTileRenderer());
-        BlockEntityRenderers.register(Registry.PIPE_TILE_ENTITY, (trd) -> new PipeTileRenderer());
+    public static void clientSetup(final FMLClientSetupEvent event) {
+        BlockEntityRenderers.register(Registry.HAND_TILE_ENTITY.get(), (trd) -> new HandTileRenderer());
+        BlockEntityRenderers.register(Registry.BRAZIER_TILE_ENTITY.get(), (trd) -> new BrazierTileRenderer());
+        BlockEntityRenderers.register(Registry.NECROTIC_FOCUS_TILE_ENTITY.get(), (trd) -> new NecroticFocusTileRenderer());
+        BlockEntityRenderers.register(Registry.CRUCIBLE_TILE_ENTITY.get(), (trd) -> new CrucibleTileRenderer());
+        BlockEntityRenderers.register(Registry.SOUL_ENCHANTER_TILE_ENTITY.get(), (trd) -> new SoulEnchanterTileRenderer());
+        BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY.get(), (trd) -> new GobletTileRenderer());
+        BlockEntityRenderers.register(Registry.CISTERN_TILE_ENTITY.get(), (trd) -> new CisternTileRenderer());
+        BlockEntityRenderers.register(Registry.PIPE_TILE_ENTITY.get(), (trd) -> new PipeTileRenderer());
 
+        //TODO switch to new forge method
         ItemBlockRenderTypes.setRenderLayer(Registry.ENCHANTED_ASH.get(), RenderType.cutoutMipped());
         ItemBlockRenderTypes.setRenderLayer(Registry.WOODEN_STAND.get(), RenderType.cutoutMipped());
         ItemBlockRenderTypes.setRenderLayer(Registry.GOBLET.get(), RenderType.cutoutMipped());
@@ -151,12 +150,17 @@ public class Eidolon {
             MenuScreens.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);
             MenuScreens.register(Registry.WOODEN_STAND_CONTAINER.get(), WoodenBrewingStandScreen::new);
             MenuScreens.register(Registry.RESEARCH_TABLE_CONTAINER.get(), ResearchTableScreen::new);
-            
-            OverlayRegistry.registerOverlayAbove(ForgeIngameGui.PLAYER_HEALTH_ELEMENT, Eidolon.MODID + ":hearts", new ClientRegistry.EidolonHearts());
-            OverlayRegistry.registerOverlayBelow(ForgeIngameGui.CHAT_PANEL_ELEMENT, Eidolon.MODID + ":mana_bar", new ClientRegistry.EidolonManaBar());
+
             ClientRegistry.initCurios();
         });
     }
+
+    /*
+    public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
+        evt.registerAbove(ForgeGui.PLAYER_HEALTH_ELEMENT, Eidolon.MODID + ":hearts", new ClientRegistry.EidolonHearts());
+        evt.registerBelow(ForgeGui.CHAT_PANEL_ELEMENT, Eidolon.MODID + ":mana_bar", new ClientRegistry.EidolonManaBar());
+    }
+     */
 
     public void sendImc(InterModEnqueueEvent evt) {
         InterModComms.sendTo("consecration", "holy_material", () -> "silver");

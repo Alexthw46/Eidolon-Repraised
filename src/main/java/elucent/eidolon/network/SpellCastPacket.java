@@ -1,14 +1,10 @@
 package elucent.eidolon.network;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.SignSequence;
-import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spell;
 import elucent.eidolon.spell.Spells;
 import net.minecraft.world.entity.player.Player;
@@ -20,10 +16,10 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 public class SpellCastPacket {
-    SignSequence seq;
-    Spell spell;
-    BlockPos pos;
-    UUID uuid;
+    final SignSequence seq;
+    final Spell spell;
+    final BlockPos pos;
+    final UUID uuid;
 
     public SpellCastPacket(Player player, BlockPos pos, Spell spell, SignSequence seq) {
         this.seq = seq;

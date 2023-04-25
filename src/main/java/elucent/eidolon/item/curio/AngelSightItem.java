@@ -1,22 +1,20 @@
 package elucent.eidolon.item.curio;
 
-import java.util.Random;
-
 import elucent.eidolon.Registry;
 import elucent.eidolon.entity.AngelArrowEntity;
 import elucent.eidolon.item.ItemBase;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.stats.Stats;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -24,9 +22,11 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.Random;
+
 public class AngelSightItem extends ItemBase {
-	static Random random = new Random();
-	
+    static final Random random = new Random();
+
     public AngelSightItem(Properties properties) {
         super(properties);
         MinecraftForge.EVENT_BUS.addListener(AngelSightItem::onLoose);
@@ -34,9 +34,9 @@ public class AngelSightItem extends ItemBase {
 
     @SubscribeEvent
     public static void onLoose(ArrowLooseEvent event) {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack stack = event.getBow(), ammo = player.getProjectile(stack);
-        Level world = event.getWorld();
+        Level world = event.getLevel();
 
         if (!event.hasAmmo()) return;
 
@@ -44,7 +44,7 @@ public class AngelSightItem extends ItemBase {
             ammo = new ItemStack(Items.ARROW);
         }
 
-        if (!CuriosApi.getCuriosHelper().findEquippedCurio(Registry.ANGELS_SIGHT.get(), event.getEntityLiving()).isPresent())
+        if (CuriosApi.getCuriosHelper().findEquippedCurio(Registry.ANGELS_SIGHT.get(), event.getEntity()).isEmpty())
             return;
 
         float f = BowItem.getPowerForTime(event.getCharge());
@@ -86,7 +86,7 @@ public class AngelSightItem extends ItemBase {
                 world.addFreshEntity(abstractarrowentity);
             }
 
-            world.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
             if (!flag1 && !player.getAbilities().instabuild) {
                 ammo.shrink(1);
                 if (ammo.isEmpty()) {

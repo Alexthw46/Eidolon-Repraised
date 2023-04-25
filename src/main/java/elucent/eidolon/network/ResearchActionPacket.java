@@ -1,31 +1,22 @@
 package elucent.eidolon.network;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.function.Supplier;
 
-import elucent.eidolon.capability.IKnowledge;
-import elucent.eidolon.entity.ChantCasterEntity;
 import elucent.eidolon.gui.ResearchTableContainer;
-import elucent.eidolon.spell.Sign;
-import elucent.eidolon.spell.Signs;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraft.world.level.Level;
 
 public class ResearchActionPacket {
-	public static enum Action {
-		SUBMIT_GOAL, STAMP
-	}
-	Action action;
-	int index;
+    public enum Action {
+        SUBMIT_GOAL, STAMP
+    }
+
+    final Action action;
+    final int index;
 
     public ResearchActionPacket(Action action, int index) {
         this.action = action;
@@ -56,10 +47,10 @@ public class ResearchActionPacket {
             Level world = ctx.get().getSender().level;
             if (world != null && menu instanceof ResearchTableContainer rc) {
                 if (packet.action == Action.SUBMIT_GOAL) {
-                	rc.trySubmitGoal(player, packet.index);
+                    rc.trySubmitGoal(player, packet.index);
                 }
                 else if (packet.action == Action.STAMP) {
-                	rc.tryStamp(player);
+                    rc.tryStamp(player);
                 }
             }
         });

@@ -15,9 +15,9 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 public class KnowledgeUpdatePacket {
-    UUID uuid;
+    final UUID uuid;
     CompoundTag tag;
-    boolean playSound;
+    final boolean playSound;
 
     public KnowledgeUpdatePacket(UUID uuid, CompoundTag tag, boolean playSound) {
         this.uuid = uuid;
@@ -51,7 +51,7 @@ public class KnowledgeUpdatePacket {
             Player player = world.getPlayerByUUID(packet.uuid);
             if (player != null) {
                 player.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
-                	((INBTSerializable<CompoundTag>)k).deserializeNBT(packet.tag);
+                    ((INBTSerializable<CompoundTag>)k).deserializeNBT(packet.tag);
                     if (packet.playSound) player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.5f);
                 });
             }

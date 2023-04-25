@@ -4,17 +4,16 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import elucent.eidolon.registries.Particles;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.Signs;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class SignParticleData implements ParticleOptions {
-    Sign sign;
+    final Sign sign;
 
     public static Codec<SignParticleData> codecFor(ParticleType<?> type) {
         return RecordCodecBuilder.create(instance -> instance.group(

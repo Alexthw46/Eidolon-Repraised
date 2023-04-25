@@ -6,19 +6,19 @@ import elucent.eidolon.Registry;
 import elucent.eidolon.item.model.WarlockArmorModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.extensions.IForgeItem;
 
 public class WarlockRobesItem extends ArmorItem implements IForgeItem {
@@ -32,16 +32,12 @@ public class WarlockRobesItem extends ArmorItem implements IForgeItem {
 
         @Override
         public int getDefenseForSlot(EquipmentSlot slot) {
-            switch (slot) {
-                case CHEST:
-                    return 7;
-                case HEAD:
-                    return 3;
-                case FEET:
-                    return 2;
-                default:
-                    return 0;
-            }
+            return switch (slot) {
+                case CHEST -> 7;
+                case HEAD -> 3;
+                case FEET -> 2;
+                default -> 0;
+            };
         }
 
         @Override
@@ -79,14 +75,14 @@ public class WarlockRobesItem extends ArmorItem implements IForgeItem {
 
     public WarlockRobesItem(EquipmentSlot slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
-    }    
+    }
 
     @OnlyIn(Dist.CLIENT)
-    @Override 
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    @Override
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             @Override
-            public WarlockArmorModel getArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
+            public WarlockArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
                 float pticks = Minecraft.getInstance().getFrameTime();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);

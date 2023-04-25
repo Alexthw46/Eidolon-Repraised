@@ -1,12 +1,12 @@
 package elucent.eidolon.codex;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 
+import java.util.List;
+
 public class Chapter {
-    String titleKey;
-    List<Page> pages;
+    final String titleKey;
+    final List<Page> pages;
 
     public Chapter(String titleKey, Page... pages) {
         this.titleKey = titleKey;

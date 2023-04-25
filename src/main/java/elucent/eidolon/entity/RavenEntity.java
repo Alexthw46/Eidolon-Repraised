@@ -39,6 +39,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(Items.RABBIT, Items.BEETROOT_SEEDS);
     public int featherTime = this.random.nextInt(12000) + 12000;
@@ -78,9 +80,9 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
 
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 8.0D)
-            .add(Attributes.FLYING_SPEED, (double)0.4F)
-            .add(Attributes.MOVEMENT_SPEED, (double)0.2F)
+                .add(Attributes.MAX_HEALTH, 8.0D)
+                .add(Attributes.FLYING_SPEED, 0.4F)
+                .add(Attributes.MOVEMENT_SPEED, 0.2F)
             .add(Attributes.ARMOR, 0.0D)
             .build();
     }
@@ -162,7 +164,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     
     @Override
     public boolean isFlying() {
-    	return !onGround;
+        return !onGround;
     }
 
     @Override
