@@ -25,9 +25,9 @@ public class Researches {
         researches.put(r.getRegistryName(), r);
         for (Object o : sources) {
             if (o instanceof Block b) {
-                //blockResearches.put(b.getRegistryName(), r);
+                blockResearches.put(getRegistryName(b), r);
             } else if (o instanceof EntityType<?> e) {
-                //entityResearches.put(e.getRegistryName(), r);
+                entityResearches.put(getRegistryName(e), r);
             }
         }
         return r;

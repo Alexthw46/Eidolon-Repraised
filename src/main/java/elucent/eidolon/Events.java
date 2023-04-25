@@ -57,7 +57,7 @@ import java.util.List;
 public class Events {
     @SubscribeEvent
     public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
-        if (event.getObject() instanceof Level) event.addCapability(new ResourceLocation(Eidolon.MODID, "reputation"), new IReputation.Provider());
+        if (event.getObject() != null) event.addCapability(new ResourceLocation(Eidolon.MODID, "reputation"), new IReputation.Provider());
     }
 
     @SubscribeEvent
@@ -75,21 +75,9 @@ public class Events {
         Capability<ISoul> SOUL = ISoul.INSTANCE;
         Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
         event.getOriginal().reviveCaps();
-        event.getEntity().getCapability(KNOWLEDGE).ifPresent((k) -> {
-            event.getOriginal().getCapability(KNOWLEDGE).ifPresent((o) -> {
-                ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT());
-            });
-        });
-        event.getEntity().getCapability(SOUL).ifPresent((k) -> {
-            event.getOriginal().getCapability(SOUL).ifPresent((o) -> {
-                ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT());
-            });
-        });
-        event.getEntity().getCapability(PDATA).ifPresent((k) -> {
-            event.getOriginal().getCapability(PDATA).ifPresent((o) -> {
-                ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT());
-            });
-        });
+        event.getEntity().getCapability(KNOWLEDGE).ifPresent((k) -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+        event.getEntity().getCapability(SOUL).ifPresent((k) -> event.getOriginal().getCapability(SOUL).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+        event.getEntity().getCapability(PDATA).ifPresent((k) -> event.getOriginal().getCapability(PDATA).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
         event.getOriginal().invalidateCaps();
         if (!event.getEntity().level.isClientSide) {
             Networking.sendTo(event.getEntity(), new KnowledgeUpdatePacket(event.getEntity(), false));
@@ -99,7 +87,7 @@ public class Events {
     
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        //KnowledgeCommand.register(event.getDispatcher());
+        KnowledgeCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
@@ -113,7 +101,7 @@ public class Events {
         Level level = event.getEntity().getLevel();
         LivingEntity e = event.getEntity();
         if (e.hasEffect(Potions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
-            float f = 0;
+            float f = e.getLightLevelDependentMagicValue();
             BlockPos blockpos = e.getVehicle() instanceof Boat ? (new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ())).above() : new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ());
             if (f > 0.5F && e.getRandom().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && level.canSeeSky(blockpos)) {
                 e.setSecondsOnFire(8);
@@ -305,11 +293,11 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if ((event.getSource().getMsgId() == DamageSource.WITHER.getMsgId() || event.getSource().isMagic())) {
+        if ((event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId()) || event.getSource().isMagic())) {
             if (event.getSource().getEntity() instanceof LivingEntity
                 && ((LivingEntity) event.getSource().getEntity()).getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
-                if (event.getSource().getMsgId() == DamageSource.WITHER.getMsgId())
+                if (event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId()))
                     ((LivingEntity) event.getSource().getEntity()).heal(event.getAmount() / 2);
             }
             if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarlockRobesItem)

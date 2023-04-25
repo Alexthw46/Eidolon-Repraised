@@ -3,10 +3,7 @@ package elucent.eidolon;
 import elucent.eidolon.block.CandleBlock;
 import elucent.eidolon.block.PipeBlock;
 import elucent.eidolon.block.*;
-import elucent.eidolon.capability.IKnowledge;
-import elucent.eidolon.capability.IPlayerData;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.capability.*;
 import elucent.eidolon.entity.*;
 import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
@@ -27,6 +24,9 @@ import elucent.eidolon.tile.reagent.CisternTileEntity;
 import elucent.eidolon.tile.reagent.PipeTileEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -80,6 +80,7 @@ public class Registry {
     static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Eidolon.MODID);
     static final DeferredRegister<RecipeSerializer<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Eidolon.MODID);
     static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
+    static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Eidolon.MODID);
 
     public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
@@ -359,18 +360,18 @@ public class Registry {
             Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
-    public static RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)
             .noOcclusion()).setShape(Shapes.or(
             Shapes.box(0, 0, 0, 1, 0.25, 1),
             Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
-    public static RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)));
-    public static RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875)));
@@ -520,6 +521,7 @@ public class Registry {
         Sounds.SOUND_EVENTS.register(modEventBus);
         CONTAINERS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
+        ARG_TYPES.register(modEventBus);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -586,4 +588,8 @@ public class Registry {
         Minecraft.getInstance().particleEngine.register(Particles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(Particles.RUNE_PARTICLE.get(), (sprite) -> new RuneParticleType.Factory());
     }
+
+    public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));
+    public static final RegistryObject<ArgumentTypeInfo<?, ?>> RUNE_ARG = ARG_TYPES.register("rune", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.RuneArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.RuneArgument::runes)));
+    public static final RegistryObject<ArgumentTypeInfo<?, ?>> RESEARCH_ARG = ARG_TYPES.register("research", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.ResearchArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.ResearchArgument::researches)));
 }
