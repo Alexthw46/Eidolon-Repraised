@@ -1,5 +1,5 @@
 package elucent.eidolon.world;
-
+/*
 import java.util.Random;
 
 import net.minecraft.nbt.CompoundTag;
@@ -66,4 +66,6 @@ public class BasicPiece extends TemplateStructurePiece {
 
     @Override
     protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor worldIn, Random rand, BoundingBox sbb) {}
+
 }
+ */

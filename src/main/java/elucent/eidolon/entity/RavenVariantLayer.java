@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import elucent.eidolon.ClientRegistry;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Entities;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -32,7 +32,7 @@ public class RavenVariantLayer<T extends Player> extends RenderLayer<T, PlayerMo
             model = new RavenModel(Minecraft.getInstance().getEntityModels().bakeLayer(ClientRegistry.RAVEN_LAYER));
         }
     	CompoundTag compoundnbt = leftShoulderIn ? entitylivingbaseIn.getShoulderEntityLeft() : entitylivingbaseIn.getShoulderEntityRight();
-        EntityType.byString(compoundnbt.getString("id")).filter((p_215344_0_) -> p_215344_0_ == Registry.RAVEN.get()).ifPresent((p_229137_11_) -> {
+        EntityType.byString(compoundnbt.getString("id")).filter((p_215344_0_) -> p_215344_0_ == Entities.RAVEN.get()).ifPresent((p_229137_11_) -> {
             matrixStackIn.pushPose();
             matrixStackIn.translate(leftShoulderIn ? (double)0.4F : (double)-0.4F, entitylivingbaseIn.isCrouching() ? (double)-1.3F : -1.5D, 0.0D);
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(model.renderType(RavenRenderer.TEXTURE));

@@ -2,12 +2,9 @@ package elucent.eidolon.item;
 
 import java.util.Random;
 
-import elucent.eidolon.Registry;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.entity.SoulfireProjectileEntity;
-import elucent.eidolon.network.Networking;
-import elucent.eidolon.network.SoulUpdatePacket;
+import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.Sounds;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResultHolder;
@@ -30,10 +27,10 @@ public class SoulfireWandItem extends WandItem {
             if (!world.isClientSide) {
                 Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
                 Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
-                world.addFreshEntity(new SoulfireProjectileEntity(Registry.SOULFIRE_PROJECTILE.get(), world).shoot(
+                world.addFreshEntity(new SoulfireProjectileEntity(Entities.SOULFIRE_PROJECTILE.get(), world).shoot(
                     pos.x, pos.y, pos.z, vel.x, vel.y, vel.z, entity.getUUID()
                 ));
-                world.playSound(null, pos.x, pos.y, pos.z, Registry.CAST_SOULFIRE_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
+                world.playSound(null, pos.x, pos.y, pos.z, Sounds.CAST_SOULFIRE_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
                 stack.hurtAndBreak(1, entity, (player) -> {
                     player.broadcastBreakEvent(hand);
                 });

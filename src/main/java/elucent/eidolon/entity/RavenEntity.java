@@ -1,6 +1,7 @@
 package elucent.eidolon.entity;
 
 import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Entities;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -112,7 +112,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return Registry.RAVEN.get().create(world);
+        return Entities.RAVEN.get().create(world);
     }
 
     @Override

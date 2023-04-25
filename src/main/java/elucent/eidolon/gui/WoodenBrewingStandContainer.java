@@ -41,13 +41,13 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
         this.slot = this.addSlot(new IngredientSlot(inventory, 3, 79, 17));
         this.addDataSlots(p_i50096_4_);
 
-        for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for(int k = 0; k < 9; ++k) {
+        for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
@@ -123,8 +123,8 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
 
         public boolean mayPlace(ItemStack stack) {
             return BrewingRecipeRegistry.isValidIngredient(stack)
-                && !Tags.Items.DUSTS_REDSTONE.contains(stack.getItem())
-                && !Tags.Items.DUSTS_GLOWSTONE.contains(stack.getItem());
+                   && !stack.is(Tags.Items.DUSTS_REDSTONE)
+                   && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
         }
 
         public int getMaxStackSize() {
@@ -149,7 +149,7 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
             Potion potion = PotionUtils.getPotion(stack);
             if (thePlayer instanceof ServerPlayer) {
                 ForgeEventFactory.onPlayerBrewedPotion(thePlayer, stack);
-                CriteriaTriggers.BREWED_POTION.trigger((ServerPlayer)thePlayer, potion);
+                CriteriaTriggers.BREWED_POTION.trigger((ServerPlayer) thePlayer, potion);
             }
 
             super.onTake(thePlayer, stack);

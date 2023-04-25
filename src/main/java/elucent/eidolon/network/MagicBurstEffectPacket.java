@@ -3,7 +3,6 @@ package elucent.eidolon.network;
 import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,19 +46,19 @@ public class MagicBurstEffectPacket {
 
                 float r1 = ColorUtil.getRed(packet.c1) / 255.0f, g1 = ColorUtil.getGreen(packet.c1) / 255.0f, b1 = ColorUtil.getBlue(packet.c1) / 255.0f;
                 float r2 = ColorUtil.getRed(packet.c2) / 255.0f, g2 = ColorUtil.getGreen(packet.c2) / 255.0f, b2 = ColorUtil.getBlue(packet.c2) / 255.0f;
-                Particles.create(Registry.WISP_PARTICLE)
+                Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
                     .setAlpha(0.5f, 0).setScale(0.25f, 0).setLifetime(20)
                     .randomOffset(0.125, 0.125).randomVelocity(0.0625f, 0.0625f)
                     .setColor(r1, g1, b1, r2, g2, b2)
                     .repeat(world, x, y, z, 12);
-                Particles.create(Registry.SPARKLE_PARTICLE)
+                Particles.create(elucent.eidolon.registries.Particles.SPARKLE_PARTICLE)
                     .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(80)
                     .randomOffset(0.0625, 0).randomVelocity(0.125f, 0.125f)
                     .addVelocity(0, 0.25f, 0)
                     .setColor(r1, g1, b1, r2, g2, b2)
                     .enableGravity().setSpin(0.4f)
                     .repeat(world, x, y, z, world.random.nextInt(4) + 3);
-                Particles.create(Registry.SMOKE_PARTICLE)
+                Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
                     .setAlpha(0.25f, 0).setScale(0.375f, 0).setLifetime(20)
                     .randomOffset(0.25, 0.25).randomVelocity(0.015625f, 0.015625f)
                     .setColor(r2, g2, b2)

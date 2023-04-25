@@ -15,8 +15,9 @@ import elucent.eidolon.Registry;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.item.IRechargeableWand;
+import elucent.eidolon.registries.Entities;
 import elucent.eidolon.util.RecipeUtil;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.EntityType;
@@ -25,7 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.tags.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -58,7 +58,7 @@ public class RitualRegistry {
         return ritual;
     }
 
-    public static Ritual register(Tag<Item> sacrifice, Ritual ritual) {
+    public static Ritual register(TagKey<Item> sacrifice, Ritual ritual) {
         ResourceLocation name = ritual.getRegistryName();
         assert name != null;
         rituals.put(name, ritual);
@@ -123,16 +123,16 @@ public class RitualRegistry {
 
     static boolean matches(Level world, BlockPos pos, Object match, ItemStack sacrifice) {
         if (match instanceof ItemStack) {
-            if (ItemStack.matches((ItemStack)match, sacrifice)) return true;
+            return ItemStack.matches((ItemStack) match, sacrifice);
         }
         else if (match instanceof Block) {
-            if (Item.byBlock((Block)match) == sacrifice.getItem()) return true;
+            return Item.byBlock((Block) match) == sacrifice.getItem();
         }
         else if (match instanceof Item) {
-            if ((Item)match == sacrifice.getItem()) return true;
+            return match == sacrifice.getItem();
         }
-        else if (match instanceof Tag) {
-            if (((Tag<Item>)match).contains(sacrifice.getItem())) return true;
+        else if (match instanceof TagKey<?> tag) {
+            return sacrifice.is((TagKey<Item>) tag);
         }
         else if (match instanceof MultiItemSacrifice) {
             // check main item first, avoid complicated work
@@ -211,7 +211,7 @@ public class RitualRegistry {
             .addRequirement(new ItemRequirement(Items.BONE))
             .addRequirement(new ItemRequirement(Items.STRING))
             .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-        SUMMON_WRAITH = register(new MultiItemSacrifice(Items.CHARCOAL, Registry.TATTERED_CLOTH.get()), new SummonRitual(Registry.WRAITH.get()).setRegistryName(Eidolon.MODID, "summon_wraith")
+        SUMMON_WRAITH = register(new MultiItemSacrifice(Items.CHARCOAL, Registry.TATTERED_CLOTH.get()), new SummonRitual(Entities.WRAITH.get()).setRegistryName(Eidolon.MODID, "summon_wraith")
             .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
             .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
             .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get())));

@@ -30,6 +30,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 public class WoodenStandTileEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     private static final int[] SLOTS_FOR_UP = new int[]{3};
@@ -154,7 +155,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
 
     private boolean canBrew() {
         ItemStack itemstack = this.brewingItemStacks.get(3);
-        if (!itemstack.isEmpty()) return net.minecraftforge.common.brewing.BrewingRecipeRegistry.canBrew(brewingItemStacks, itemstack, OUTPUT_SLOTS); // divert to VanillaBrewingRegistry
+        if (!itemstack.isEmpty()) return BrewingRecipeRegistry.canBrew(brewingItemStacks, itemstack, OUTPUT_SLOTS); // divert to VanillaBrewingRegistry
         if (itemstack.isEmpty()) {
             return false;
         } else if (!PotionBrewing.isIngredient(itemstack)) {
@@ -175,7 +176,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         if (net.minecraftforge.event.ForgeEventFactory.onPotionAttemptBrew(brewingItemStacks)) return;
         ItemStack itemstack = this.brewingItemStacks.get(3);
 
-        net.minecraftforge.common.brewing.BrewingRecipeRegistry.brewPotions(brewingItemStacks, itemstack, OUTPUT_SLOTS);
+        BrewingRecipeRegistry.brewPotions(brewingItemStacks, itemstack, OUTPUT_SLOTS);
         net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(brewingItemStacks);
         BlockPos blockpos = this.getBlockPos();
         if (itemstack.hasContainerItem()) {
@@ -243,11 +244,11 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 3) {
-            return net.minecraftforge.common.brewing.BrewingRecipeRegistry.isValidIngredient(stack)
-                && !Tags.Items.DUSTS_REDSTONE.contains(stack.getItem())
-                && !Tags.Items.DUSTS_GLOWSTONE.contains(stack.getItem());
+            return BrewingRecipeRegistry.isValidIngredient(stack)
+                && !stack.is(Tags.Items.DUSTS_REDSTONE)
+                && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
         } else {
-            return net.minecraftforge.common.brewing.BrewingRecipeRegistry.isValidInput(stack) && this.getItem(index).isEmpty();
+            return BrewingRecipeRegistry.isValidInput(stack) && this.getItem(index).isEmpty();
         }
     }
 

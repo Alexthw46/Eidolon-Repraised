@@ -1,7 +1,7 @@
 package elucent.eidolon.world;
 
 import java.util.Random;
-
+/*
 import com.mojang.serialization.Codec;
 
 import elucent.eidolon.Config;
@@ -57,3 +57,6 @@ public class LabStructure extends StructureFeature<NoneFeatureConfiguration> {
 
     private static final ResourceLocation PART = new ResourceLocation(Eidolon.MODID,"lab");
 }
+
+
+ */

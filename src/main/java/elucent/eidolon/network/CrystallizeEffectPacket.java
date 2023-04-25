@@ -3,7 +3,6 @@ package elucent.eidolon.network;
 import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.particle.Particles;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
@@ -39,7 +38,7 @@ public class CrystallizeEffectPacket {
 
                 float r = 247 / 255.0f, g = 156 / 255.0f, b = 220 / 255.0f;
 
-                Particles.create(Registry.SPARKLE_PARTICLE)
+                Particles.create(elucent.eidolon.registries.Particles.SPARKLE_PARTICLE)
                     .setAlpha(1.0f, 0).setScale(0.25f, 0).setLifetime(20)
                     .randomOffset(0.5, 0).randomVelocity(0, 0.375f)
                     .addVelocity(0, 0.125f, 0)

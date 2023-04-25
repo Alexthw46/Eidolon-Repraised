@@ -30,6 +30,8 @@ import elucent.eidolon.item.model.TopHatModel;
 import elucent.eidolon.item.model.WarlockArmorModel;
 import elucent.eidolon.reagent.Reagent;
 import elucent.eidolon.reagent.ReagentRegistry;
+import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.Potions;
 import elucent.eidolon.ritual.AbsorptionRitual;
 import elucent.eidolon.ritual.AllureRitual;
 import elucent.eidolon.ritual.CrystalRitual;
@@ -64,12 +66,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.IIngameOverlay;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
@@ -154,16 +153,16 @@ public class ClientRegistry {
     
     @SubscribeEvent
     public void onRegisterEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
-    	EntityRenderers.register(Registry.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
-    	EntityRenderers.register(Registry.WRAITH.get(), WraithRenderer::new);
-    	EntityRenderers.register(Registry.NECROMANCER.get(), NecromancerRenderer::new);
-    	EntityRenderers.register(Registry.SOULFIRE_PROJECTILE.get(), NoopRenderer::new);
-    	EntityRenderers.register(Registry.BONECHILL_PROJECTILE.get(), NoopRenderer::new);
-    	EntityRenderers.register(Registry.NECROMANCER_SPELL.get(), NoopRenderer::new);
-    	EntityRenderers.register(Registry.CHANT_CASTER.get(), ChantCasterRenderer::new);
-    	EntityRenderers.register(Registry.RAVEN.get(), RavenRenderer::new);
-    	EntityRenderers.register(Registry.ANGEL_ARROW.get(), AngelArrowRenderer::new);
-    	EntityRenderers.register(Registry.SLIMY_SLUG.get(), SlimySlugRenderer::new);
+    	EntityRenderers.register(Entities.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
+    	EntityRenderers.register(Entities.WRAITH.get(), WraithRenderer::new);
+    	EntityRenderers.register(Entities.NECROMANCER.get(), NecromancerRenderer::new);
+    	EntityRenderers.register(Entities.SOULFIRE_PROJECTILE.get(), NoopRenderer::new);
+    	EntityRenderers.register(Entities.BONECHILL_PROJECTILE.get(), NoopRenderer::new);
+    	EntityRenderers.register(Entities.NECROMANCER_SPELL.get(), NoopRenderer::new);
+    	EntityRenderers.register(Entities.CHANT_CASTER.get(), ChantCasterRenderer::new);
+    	EntityRenderers.register(Entities.RAVEN.get(), RavenRenderer::new);
+    	EntityRenderers.register(Entities.ANGEL_ARROW.get(), AngelArrowRenderer::new);
+    	EntityRenderers.register(Entities.SLIMY_SLUG.get(), SlimySlugRenderer::new);
     }
     
     public static ShaderInstance GLOWING_SHADER, GLOWING_SPRITE_SHADER, GLOWING_PARTICLE_SHADER, VAPOR_SHADER, GLOWING_ENTITY_SHADER, SPRITE_PARTICLE_SHADER;
@@ -470,7 +469,7 @@ public class ClientRegistry {
                 if (i == regen) y -= 2;
 
                 RenderSystem.enableBlend();
-                if (player.hasEffect(Registry.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
+                if (player.hasEffect(Potions.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
 	                if (i * 2 + 1 < health)
 	                    mc.gui.blit(mStack, x, y, 0, 0, 9, 9);
 	                else if (i * 2 + 1 == health)

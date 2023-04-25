@@ -1,7 +1,7 @@
 package elucent.eidolon.world;
 
 import java.util.Random;
-
+/*
 import elucent.eidolon.Eidolon;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Mirror;
@@ -93,3 +93,4 @@ public class CatacombPieces {
         public Lab(StructureManager templateManager, BlockPos pos, Random random) { super(LAB, LAB_ID, templateManager, pos, random); }
     }
 }
+*/

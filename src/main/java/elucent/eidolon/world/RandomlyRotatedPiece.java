@@ -1,7 +1,7 @@
 package elucent.eidolon.world;
 
 import java.util.Random;
-
+/*
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.resources.ResourceLocation;
@@ -20,3 +20,4 @@ public class RandomlyRotatedPiece extends BasicPiece {
         super(type, key, templateManager, pos, Rotation.NONE, Mirror.NONE, random);
     }
 }
+*/

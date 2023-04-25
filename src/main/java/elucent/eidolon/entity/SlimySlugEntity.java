@@ -48,7 +48,7 @@ public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
 
     @Override
 	public void onAddedToWorld() {
-    	Biome b = level.getBiome(getOnPos());
+    	Biome b = level.getBiome(getOnPos()).value();
     	if (Biomes.LUSH_CAVES.getRegistryName().equals(b.getRegistryName())) {
             getEntityData().set(TYPE, 0);
     	}

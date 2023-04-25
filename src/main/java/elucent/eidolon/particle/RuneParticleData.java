@@ -5,11 +5,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Particles;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Sign;
-import elucent.eidolon.spell.Signs;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -46,7 +44,7 @@ public class RuneParticleData implements ParticleOptions {
 
     @Override
     public ParticleType<?> getType() {
-        return Registry.RUNE_PARTICLE.get();
+        return Particles.RUNE_PARTICLE.get();
     }
 
     @Override

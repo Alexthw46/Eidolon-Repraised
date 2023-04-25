@@ -1,5 +1,5 @@
 package elucent.eidolon.world;
-
+/*
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -299,3 +299,6 @@ public class CatacombStructure extends StructureFeature<NoneFeatureConfiguration
         }
     }
 }
+
+
+ */

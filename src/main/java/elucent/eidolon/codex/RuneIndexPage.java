@@ -10,8 +10,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import elucent.eidolon.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.capability.IKnowledge;
+import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Runes;
 import elucent.eidolon.spell.Sign;
@@ -30,10 +30,8 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -54,7 +52,7 @@ public class RuneIndexPage extends Page {
 
     public RuneIndexPage() {
         super(BACKGROUND);
-        this.runes = Runes.getRunes().<Rune>toArray((i) -> new Rune[i]);
+        this.runes = Runes.getRunes().<Rune>toArray(Rune[]::new);
     }
 
     @Override
@@ -67,7 +65,7 @@ public class RuneIndexPage extends Page {
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
             if (knowledge.knowsRune(runes[i]) && mouseX >= xx && mouseX <= xx + 16 && mouseY >= yy && mouseY <= yy + 16) {
                 gui.addToChant(runes[i]);
-                entity.playNotifySound(Registry.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
+                entity.playNotifySound(Sounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
         }

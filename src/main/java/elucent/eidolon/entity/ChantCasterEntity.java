@@ -7,17 +7,15 @@ import java.util.UUID;
 
 import com.mojang.math.Vector3f;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SpellCastPacket;
 import elucent.eidolon.particle.RuneParticleData;
-import elucent.eidolon.particle.SignParticleData;
+import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Rune.RuneResult;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.SignSequence;
-import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spell;
 import elucent.eidolon.spell.Spells;
 import net.minecraft.world.entity.Entity;
@@ -50,7 +48,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     Vec3 look;
 
     public ChantCasterEntity(Level world, Player caster, List<Rune> runes, Vec3 look) {
-        super(Registry.CHANT_CASTER.get(), world);
+        super(Entities.CHANT_CASTER.get(), world);
         this.look = look;
         setRunesTag(runes);
         getEntityData().set(CASTER_ID, Optional.of(caster.getUUID()));
@@ -155,7 +153,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                 		afterColor.x(), afterColor.y(), afterColor.z()
                 	), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
                 }
-                level.playSound(null, blockPosition(), Registry.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
+                level.playSound(null, blockPosition(), Sounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
                 if (index + 1 >= runes.size()) {
                     timer = 20;
                 }

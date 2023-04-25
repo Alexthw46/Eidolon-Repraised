@@ -3,13 +3,11 @@ package elucent.eidolon.network;
 import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.particle.SlashParticleData;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkDirection;
@@ -82,7 +80,7 @@ public class DeathbringerSlashEffectPacket {
             		float angle = -75 + c1 * 150;
             		float sa = Mth.sin(Mth.DEG_TO_RAD * angle), ca = Mth.cos(Mth.DEG_TO_RAD * angle);
             		float dx = sa * xax + ca * zax, dy = sa * xay + ca * zay, dz = sa * xaz + ca * zaz;
-            		Particles.create(Registry.SMOKE_PARTICLE)
+            		Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
             			.randomVelocity(0.025f)
             			.addVelocity(dx * 0.25f, dy * 0.25f, dz * 0.25f)
                 		.setColor(33.0f/255, 26.0f/255, 23.0f/255, 0.125f, 10.0f/255, 10.0f/255, 12.0f/255, 0)
@@ -91,7 +89,7 @@ public class DeathbringerSlashEffectPacket {
                 		.repeat(world, x - sy * cp + dx, y - sp + dy, z - cy * cp + dz, 4);
             	}
                 
-                SlashParticleData.create(Registry.GLOWING_SLASH_PARTICLE.get())
+                SlashParticleData.create(elucent.eidolon.registries.Particles.GLOWING_SLASH_PARTICLE.get())
                 	.lookat(packet.x1, packet.y1, packet.z1, x, y, z)
                 	.color(r1, g1, b1, r2, g2, b2)
                 	.radius(0.9f * scale)
@@ -101,7 +99,7 @@ public class DeathbringerSlashEffectPacket {
                 	.lifetime(11)
                 	.spawn(world, x, y, z, 0, 0, 0);
                 
-                SlashParticleData.create(Registry.GLOWING_SLASH_PARTICLE.get())
+                SlashParticleData.create(elucent.eidolon.registries.Particles.GLOWING_SLASH_PARTICLE.get())
                 	.lookat(packet.x1, packet.y1, packet.z1, x, y, z)
                 	.color(r1, g1, b1, r2, g2, b2)
                 	.radius(0.8f * scale)
@@ -111,7 +109,7 @@ public class DeathbringerSlashEffectPacket {
                 	.lifetime(11)
                 	.spawn(world, x, y, z, 0, 0, 0);
                 
-                SlashParticleData.create(Registry.GLOWING_SLASH_PARTICLE.get())
+                SlashParticleData.create(elucent.eidolon.registries.Particles.GLOWING_SLASH_PARTICLE.get())
                 	.lookat(packet.x1, packet.y1, packet.z1, x, y, z)
                 	.color(r1, g1, b1, r2, g2, b2)
                 	.radius(0.7f * scale)
@@ -124,7 +122,7 @@ public class DeathbringerSlashEffectPacket {
                 r1 = ColorUtil.getRed(packet.c3) / 255.0f; g1 = ColorUtil.getGreen(packet.c3) / 255.0f; b1 = ColorUtil.getBlue(packet.c3) / 255.0f;
                 r2 = ColorUtil.getRed(packet.c4) / 255.0f; g2 = ColorUtil.getGreen(packet.c4) / 255.0f; b2 = ColorUtil.getBlue(packet.c4) / 255.0f;
                 
-                SlashParticleData.create(Registry.GLOWING_SLASH_PARTICLE.get())
+                SlashParticleData.create(elucent.eidolon.registries.Particles.GLOWING_SLASH_PARTICLE.get())
                 	.lookat(packet.x1, packet.y1, packet.z1, x, y, z)
                 	.color(r1, g1, b1, r2, g2, b2)
                 	.radius(0.8f * scale)
@@ -136,7 +134,7 @@ public class DeathbringerSlashEffectPacket {
                 	.lifetime(8)
                 	.spawn(world, x, y, z, 0, 0, 0);
                 
-                SlashParticleData.create(Registry.GLOWING_SLASH_PARTICLE.get())
+                SlashParticleData.create(elucent.eidolon.registries.Particles.GLOWING_SLASH_PARTICLE.get())
                 	.lookat(packet.x1, packet.y1, packet.z1, x, y, z)
                 	.color(r1, g1, b1, r2, g2, b2)
                 	.radius(0.9f * scale)

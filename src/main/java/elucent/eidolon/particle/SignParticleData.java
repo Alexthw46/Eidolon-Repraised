@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Particles;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.Signs;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,7 +31,7 @@ public class SignParticleData implements ParticleOptions {
 
     @Override
     public ParticleType<?> getType() {
-        return Registry.SIGN_PARTICLE.get();
+        return Particles.SIGN_PARTICLE.get();
     }
 
     @Override

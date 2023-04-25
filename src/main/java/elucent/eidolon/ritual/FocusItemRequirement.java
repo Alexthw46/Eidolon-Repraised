@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.RitualConsumePacket;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,20 +42,17 @@ public class FocusItemRequirement implements IRequirement {
     public RequirementInfo isMet(Ritual ritual, Level world, BlockPos pos) {
         List<IRitualItemFocus> tiles = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, ritual.getSearchBounds(pos));
         if (tiles.isEmpty()) return RequirementInfo.FALSE;
-        for (int i = 0; i < tiles.size(); i ++) {
-            ItemStack stack = tiles.get(i).provide();
+        for (IRitualItemFocus tile : tiles) {
+            ItemStack stack = tile.provide();
 
-            if (match instanceof ItemStack && ItemStack.matches((ItemStack)match, stack)) {
-                return new RequirementInfo(true, ((BlockEntity)tiles.get(i)).getBlockPos());
-            }
-            else if (match instanceof Item && stack.getItem() == (Item)match) {
-                return new RequirementInfo(true, ((BlockEntity)tiles.get(i)).getBlockPos());
-            }
-            else if (match instanceof Tag && ((Tag<Item>)match).contains(stack.getItem())) {
-                return new RequirementInfo(true, ((BlockEntity)tiles.get(i)).getBlockPos());
-            }
-            else if (match instanceof Function && ((Function<ItemStack, Boolean>)match).apply(stack)) {
-            	return new RequirementInfo(true, ((BlockEntity)tiles.get(i)).getBlockPos());
+            if (match instanceof ItemStack && ItemStack.matches((ItemStack) match, stack)) {
+                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
+            } else if (match instanceof Item && stack.getItem() == match) {
+                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
+            } else if (match instanceof TagKey && stack.is((TagKey<Item>) match)) {
+                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
+            } else if (match instanceof Function && ((Function<ItemStack, Boolean>) match).apply(stack)) {
+                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
             }
         }
 

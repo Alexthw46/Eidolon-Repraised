@@ -4,13 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import elucent.eidolon.Registry;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.entity.SoulfireProjectileEntity;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
@@ -18,30 +13,22 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -81,7 +68,7 @@ public class SummoningStaffItem extends ItemBase {
 	    		if (time == 40) {
 	    			entity.playSound(SoundEvents.CROSSBOW_QUICK_CHARGE_3, 1, 1);
 	    		}
-	    		Particles.create(Registry.SMOKE_PARTICLE)
+	    		Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
 	    			.randomVelocity(0.025f * alpha, 0.0125f * alpha)
 	        		.setColor(33.0f/255, 26.0f/255, 23.0f/255, 0.125f, 10.0f/255, 10.0f/255, 12.0f/255, 0)
 	        		.setAlpha(0.25f * alpha, 0)

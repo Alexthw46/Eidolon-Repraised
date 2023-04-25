@@ -2,7 +2,6 @@ package elucent.eidolon;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
@@ -25,17 +24,14 @@ import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.network.WingsDataUpdatePacket;
-import elucent.eidolon.research.Research;
+import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.Potions;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.tile.GobletTileEntity;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -54,9 +50,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -67,7 +61,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
@@ -76,7 +69,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -151,7 +143,7 @@ public class Events {
     public void onTarget(LivingUpdateEvent event) {
     	Level level = event.getEntity().getLevel();
     	LivingEntity e = event.getEntityLiving();
-        if (e.hasEffect(Registry.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
+        if (e.hasEffect(Potions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
             float f = e.getBrightness();
             BlockPos blockpos = e.getVehicle() instanceof Boat ? (new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ())).above() : new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ());
             if (f > 0.5F && e.getRandom().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && level.canSeeSky(blockpos)) {
@@ -248,20 +240,20 @@ public class Events {
         ResourceKey<Biome> key = ResourceKey.<Biome>create(ForgeRegistries.Keys.BIOMES, ev.getName());
         if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && ev.getCategory() != Biome.BiomeCategory.MUSHROOM) {
             ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Registry.WRAITH.get(), Config.WRAITH_SPAWN_WEIGHT.get(), 1, 2));
+                new MobSpawnSettings.SpawnerData(Entities.WRAITH.get(), Config.WRAITH_SPAWN_WEIGHT.get(), 1, 2));
             ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Registry.ZOMBIE_BRUTE.get(), Config.ZOMBIE_BRUTE_SPAWN_WEIGHT.get(), 1, 2));
+                new MobSpawnSettings.SpawnerData(Entities.ZOMBIE_BRUTE.get(), Config.ZOMBIE_BRUTE_SPAWN_WEIGHT.get(), 1, 2));
         }
         if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && BiomeDictionary.hasType(key, BiomeDictionary.Type.FOREST)) {
             ev.getSpawns().addSpawn(MobCategory.CREATURE,
-                new MobSpawnSettings.SpawnerData(Registry.RAVEN.get(), Config.RAVEN_SPAWN_WEIGHT.get(), 2, 5));
+                new MobSpawnSettings.SpawnerData(Entities.RAVEN.get(), Config.RAVEN_SPAWN_WEIGHT.get(), 2, 5));
         }
         if (key.equals(Biomes.OLD_GROWTH_PINE_TAIGA) || key.equals(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || key.equals(Biomes.FLOWER_FOREST))
         	ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Registry.SLIMY_SLUG.get(), Config.ABOVEGROUND_SLUG_WEIGHT.get(), 2, 5));
+                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.ABOVEGROUND_SLUG_WEIGHT.get(), 2, 5));
         if (key.equals(Biomes.LUSH_CAVES))
         	ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Registry.SLIMY_SLUG.get(), Config.UNDERGROUND_SLUG_WEIGHT.get(), 2, 5));
+                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.UNDERGROUND_SLUG_WEIGHT.get(), 2, 5));
     }
 
     @SubscribeEvent
@@ -320,22 +312,22 @@ public class Events {
     
     @SubscribeEvent
     public void onLivingUse(LivingEntityUseItemEvent event) {
-    	if (event.getEntityLiving().hasEffect(Registry.UNDEATH_EFFECT.get())) {
-    		if (!Registry.ZOMBIE_FOOD_TAG.contains(event.getItem().getItem())) 
+    	if (event.getEntityLiving().hasEffect(Potions.UNDEATH_EFFECT.get())) {
+    		if (!event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
     			event.setCanceled(true);
     	}
     }
     
     @SubscribeEvent
     public void onPotionApplicable(PotionAddedEvent event) {
-    	if (event.getEntityLiving().hasEffect(MobEffects.HUNGER) && event.getPotionEffect().getEffect() == Registry.UNDEATH_EFFECT.get()) {
+    	if (event.getEntityLiving().hasEffect(MobEffects.HUNGER) && event.getPotionEffect().getEffect() == Potions.UNDEATH_EFFECT.get()) {
     		event.getEntityLiving().removeEffect(MobEffects.HUNGER);
     	}
     }
     
     @SubscribeEvent
     public void onPotionApplicable(PotionApplicableEvent event) {
-    	if (event.getEntityLiving().hasEffect(Registry.UNDEATH_EFFECT.get()) && event.getPotionEffect().getEffect() == MobEffects.HUNGER) {
+    	if (event.getEntityLiving().hasEffect(Potions.UNDEATH_EFFECT.get()) && event.getPotionEffect().getEffect() == MobEffects.HUNGER) {
     		event.setResult(Result.DENY);
     	}
     }

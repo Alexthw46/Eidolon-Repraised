@@ -3,7 +3,6 @@ package elucent.eidolon.network;
 import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.particle.Particles;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundSource;
@@ -40,7 +39,7 @@ public class CrucibleFailPacket {
                 double x = pos.getX() + 0.5, y = pos.getY() + 0.625, z = pos.getZ() + 0.5;
                 world.playSound(Eidolon.proxy.getPlayer(), x, y, z, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-                Particles.create(Registry.SMOKE_PARTICLE)
+                Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
                     .setAlpha(0.125f, 0).setScale(0.3125f, 0.125f).setLifetime(40)
                     .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.0125f)
                     .setColor(0.5f, 0.5f, 0.5f, 0.25f, 0.25f, 0.25f)

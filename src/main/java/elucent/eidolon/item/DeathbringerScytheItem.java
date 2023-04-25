@@ -2,14 +2,12 @@ package elucent.eidolon.item;
 
 import java.util.List;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.network.DeathbringerSlashEffectPacket;
-import elucent.eidolon.network.LifestealEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.Potions;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -22,7 +20,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
@@ -56,7 +53,7 @@ public class DeathbringerScytheItem extends SwordItem {
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
     	if (target.getMobType() != MobType.UNDEAD) {
-    		target.addEffect(new MobEffectInstance(Registry.UNDEATH_EFFECT.get(), 900));
+    		target.addEffect(new MobEffectInstance(Potions.UNDEATH_EFFECT.get(), 900));
     	}
         if (!attacker.level.isClientSide) 
         	Networking.sendToTracking(attacker.level, attacker.blockPosition(), new DeathbringerSlashEffectPacket(

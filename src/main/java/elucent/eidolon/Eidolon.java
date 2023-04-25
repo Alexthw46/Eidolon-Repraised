@@ -1,7 +1,6 @@
 package elucent.eidolon;
 
 import elucent.eidolon.codex.CodexChapters;
-import elucent.eidolon.deity.RegisterDeitiesEvent;
 import elucent.eidolon.gui.ResearchTableScreen;
 import elucent.eidolon.gui.SoulEnchanterScreen;
 import elucent.eidolon.gui.WoodenBrewingStandScreen;
@@ -11,9 +10,9 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
-import elucent.eidolon.reagent.RegisterReagentsEvent;
 import elucent.eidolon.recipe.CrucibleRegistry;
-import elucent.eidolon.research.Research;
+import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.Potions;
 import elucent.eidolon.research.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.AltarEntries;
@@ -29,9 +28,7 @@ import elucent.eidolon.tile.reagent.PipeTileRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -40,13 +37,11 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -90,8 +85,10 @@ public class Eidolon {
         Registry.init();
         proxy.init();
         MinecraftForge.EVENT_BUS.register(this);
+        /*
         MinecraftForge.EVENT_BUS.register(new WorldGen());
         WorldGen.preInit();
+         */
         MinecraftForge.EVENT_BUS.register(new Events());
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.register(new ClientEvents());
@@ -102,11 +99,11 @@ public class Eidolon {
 
     public void setup(final FMLCommonSetupEvent event) {
         Networking.init();
-        WorldGen.init();
+        //WorldGen.init();
         event.enqueueWork(() -> {
             CrucibleRegistry.init();
             RitualRegistry.init();
-            Registry.addBrewingRecipes();
+            Potions.addBrewingRecipes();
             AltarEntries.init();
             Researches.init();
             Runes.init();
@@ -114,13 +111,13 @@ public class Eidolon {
             CodexChapters.init();
         });
 
-        SpawnPlacements.register(Registry.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(Entities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             Monster::checkMonsterSpawnRules);
-        SpawnPlacements.register(Registry.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(Entities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             Monster::checkMonsterSpawnRules);
-        SpawnPlacements.register(Registry.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(Entities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             Animal::checkAnimalSpawnRules);
-        SpawnPlacements.register(Registry.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(Entities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
         	(e, w, t, pos, rand) -> true);
     }
 

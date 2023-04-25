@@ -12,6 +12,7 @@ import elucent.eidolon.codex.IndexPage.SignLockedEntry;
 import elucent.eidolon.codex.ListPage.ListEntry;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
+import elucent.eidolon.registries.Entities;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.ColorUtil;
@@ -36,9 +37,9 @@ public class CodexChapters {
         MONSTERS = new Chapter(
             "eidolon.codex.chapter.monsters",
             new TitlePage("eidolon.codex.page.monsters.zombie_brute"),
-            new EntityPage(Registry.ZOMBIE_BRUTE.get()),
+            new EntityPage(Entities.ZOMBIE_BRUTE.get()),
             new TitlePage("eidolon.codex.page.monsters.wraith"),
-            new EntityPage(Registry.WRAITH.get()),
+            new EntityPage(Entities.WRAITH.get()),
             new TitlePage("eidolon.codex.page.monsters.chilled")
         );
 

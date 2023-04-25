@@ -3,8 +3,8 @@ package elucent.eidolon.entity;
 import java.util.Comparator;
 import java.util.List;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.mixin.AbstractArrowMixin;
+import elucent.eidolon.registries.Entities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,7 +29,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         super(type, worldIn);
     }
     public AngelArrowEntity(Level worldIn, LivingEntity shooter) {
-        super(Registry.ANGEL_ARROW.get(), shooter, worldIn);
+        super(Entities.ANGEL_ARROW.get(), shooter, worldIn);
     }
 
     public void setArrow(AbstractArrow entity) {

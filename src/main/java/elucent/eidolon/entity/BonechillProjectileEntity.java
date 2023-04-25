@@ -4,6 +4,8 @@ import elucent.eidolon.Registry;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.Potions;
+import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,13 +34,13 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
             double lerpX = Mth.lerp(i / 8.0f, xOld, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yOld, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zOld, pos.z);
-            Particles.create(Registry.WISP_PARTICLE)
+            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.0625f, 0).setScale(0.625f, 0)
                 .setColor(0.875f, 1, 1, 0.375f, 0.5f, 0.75f)
                 .setLifetime(5)
                 .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(Registry.WISP_PARTICLE)
+            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
                 .setColor(1, 0.75f, 0.875f, 0.375f, 0.5f, 0.75f)
@@ -51,7 +53,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
     protected void onImpact(HitResult ray, Entity target) {
         target.hurt(new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, level.getPlayerByUUID(casterId)), 4.0f);
         if (target instanceof LivingEntity)
-            ((LivingEntity)target).addEffect(new MobEffectInstance(Registry.CHILLED_EFFECT.get(), 300, 0));
+            ((LivingEntity)target).addEffect(new MobEffectInstance(Potions.CHILLED_EFFECT.get(), 300, 0));
         onImpact(ray);
     }
 
@@ -60,7 +62,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
         kill();
         if (!level.isClientSide) {
             Vec3 pos = ray.getLocation();
-            level.playSound(null, pos.x, pos.y, pos.z, Registry.SPLASH_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.5f, random.nextFloat() * 0.2f + 0.9f);
+            level.playSound(null, pos.x, pos.y, pos.z, Sounds.SPLASH_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.5f, random.nextFloat() * 0.2f + 0.9f);
             Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 192, 224, 255), ColorUtil.packColor(255, 96, 128, 192)));
         }
     }

@@ -1,9 +1,9 @@
 package elucent.eidolon.entity;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.Entities;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,7 +28,7 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
     }
 
     public NecromancerSpellEntity(Level worldIn, double x, double y, double z, double vx, double vy, double vz, int delay) {
-        super(Registry.NECROMANCER_SPELL.get(), worldIn);
+        super(Entities.NECROMANCER_SPELL.get(), worldIn);
         setPos(x, y, z);
         setDeltaMovement(vx, vy, vz);
         getEntityData().define(DELAY, delay);
@@ -49,13 +49,13 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
             double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
-            Particles.create(Registry.WISP_PARTICLE)
+            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.375f, 0).setScale(0.25f, 0)
                 .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
                 .setLifetime(5)
                 .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(Registry.SMOKE_PARTICLE)
+            Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.0625f, 0).setScale(0.3125f, 0.125f)
                 .setColor(0.625f, 0.375f, 1, 0.25f, 0.25f, 0.75f)

@@ -3,6 +3,7 @@ package elucent.eidolon.util;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.Item;
@@ -25,7 +26,7 @@ public class RecipeUtil {
         if (object instanceof Item) return Ingredient.of((Item)object);
         else if (object instanceof Block) return Ingredient.of(new ItemStack((Block)object));
         else if (object instanceof ItemStack) return Ingredient.of((ItemStack)object);
-        else if (object instanceof Tag) return Ingredient.of((Tag)object);
+        else if (object instanceof TagKey) return Ingredient.of((TagKey<Item>)object);
         else return Ingredient.EMPTY;
     }
 

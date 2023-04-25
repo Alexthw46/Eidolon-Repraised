@@ -1,12 +1,11 @@
 package elucent.eidolon.world;
-
+/*
 import java.util.Random;
 
 import com.mojang.serialization.Codec;
 
 import elucent.eidolon.Config;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.WorldGen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.NoiseColumn;
@@ -60,3 +59,4 @@ public class StrayTowerStructure extends StructureFeature<NoneFeatureConfigurati
 
     private static final ResourceLocation PART = new ResourceLocation(Eidolon.MODID,"stray_tower");
 }
+*/

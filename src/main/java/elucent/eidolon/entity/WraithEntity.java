@@ -1,6 +1,6 @@
 package elucent.eidolon.entity;
 
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Potions;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -45,7 +45,7 @@ public class WraithEntity extends Monster {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {
             float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            ((LivingEntity)entityIn).addEffect(new MobEffectInstance(Registry.CHILLED_EFFECT.get(), 100 + (int)(100 * level.getDifficulty().getId())));
+            ((LivingEntity)entityIn).addEffect(new MobEffectInstance(Potions.CHILLED_EFFECT.get(), 100 + (int)(100 * level.getDifficulty().getId())));
         }
         return flag;
     }
