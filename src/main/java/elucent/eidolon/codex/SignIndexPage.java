@@ -80,7 +80,7 @@ public class SignIndexPage extends Page {
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.draw(bufferbuilder.end());
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override

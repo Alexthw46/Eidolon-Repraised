@@ -33,18 +33,18 @@ public class Category {
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         Matrix4f matrix = mStack.last().pose();
         int maxX = x + width, maxY = y + height;
-        float minU = (float)uOffset / textureWidth, minV = (float)vOffset / textureHeight;
-        float maxU = minU + (float)width / textureWidth, maxV = minV + (float)height / textureHeight;
+        float minU = (float) uOffset / textureWidth, minV = (float) vOffset / textureHeight;
+        float maxU = minU + (float) width / textureWidth, maxV = minV + (float) height / textureHeight;
         int r = ColorUtil.getRed(color),
-            g = ColorUtil.getGreen(color),
-            b = ColorUtil.getBlue(color);
+                g = ColorUtil.getGreen(color),
+                b = ColorUtil.getBlue(color);
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
         bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
+        bufferbuilder.vertex(matrix, (float) x, (float) maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
+        bufferbuilder.vertex(matrix, (float) maxX, (float) maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
+        bufferbuilder.vertex(matrix, (float) maxX, (float) y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.draw(bufferbuilder.end());
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     public boolean click(CodexGui gui, int x, int y, boolean right, int mouseX, int mouseY) {

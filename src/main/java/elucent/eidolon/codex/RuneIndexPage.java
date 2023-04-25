@@ -52,7 +52,7 @@ public class RuneIndexPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
-        if (entity.getCapability(IKnowledge.INSTANCE, null).resolve().isEmpty()) return false;
+        if (entity.getCapability(IKnowledge.INSTANCE).resolve().isEmpty()) return false;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
         for (int i = 0; i < runes.length; i ++) {
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
@@ -80,7 +80,7 @@ public class RuneIndexPage extends Page {
         bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
         bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.draw(bufferbuilder.end());
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override
