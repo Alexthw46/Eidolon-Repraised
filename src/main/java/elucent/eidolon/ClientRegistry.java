@@ -1,48 +1,19 @@
 package elucent.eidolon;
 
-import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Random;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.entity.AngelArrowRenderer;
-import elucent.eidolon.entity.ChantCasterRenderer;
-import elucent.eidolon.entity.NecromancerModel;
-import elucent.eidolon.entity.NecromancerRenderer;
-import elucent.eidolon.entity.RavenModel;
-import elucent.eidolon.entity.RavenRenderer;
-import elucent.eidolon.entity.SlimySlugModel;
-import elucent.eidolon.entity.SlimySlugRenderer;
-import elucent.eidolon.entity.WraithModel;
-import elucent.eidolon.entity.WraithRenderer;
-import elucent.eidolon.entity.ZombieBruteModel;
-import elucent.eidolon.entity.ZombieBruteRenderer;
+import elucent.eidolon.entity.*;
 import elucent.eidolon.item.IManaRelatedItem;
 import elucent.eidolon.item.curio.RavenCloakRenderer;
-import elucent.eidolon.item.model.BonelordArmorModel;
-import elucent.eidolon.item.model.RavenCloakModel;
-import elucent.eidolon.item.model.SilverArmorModel;
-import elucent.eidolon.item.model.TopHatModel;
-import elucent.eidolon.item.model.WarlockArmorModel;
+import elucent.eidolon.item.curio.SanguineAmuletItem;
+import elucent.eidolon.item.model.*;
 import elucent.eidolon.reagent.Reagent;
 import elucent.eidolon.reagent.ReagentRegistry;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Potions;
-import elucent.eidolon.ritual.AbsorptionRitual;
-import elucent.eidolon.ritual.AllureRitual;
-import elucent.eidolon.ritual.CrystalRitual;
-import elucent.eidolon.ritual.DaylightRitual;
-import elucent.eidolon.ritual.DeceitRitual;
-import elucent.eidolon.ritual.MoonlightRitual;
-import elucent.eidolon.ritual.PurifyRitual;
-import elucent.eidolon.ritual.RechargingRitual;
-import elucent.eidolon.ritual.RepellingRitual;
-import elucent.eidolon.ritual.SanguineRitual;
-import elucent.eidolon.ritual.SummonRitual;
+import elucent.eidolon.ritual.*;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Runes;
 import elucent.eidolon.spell.Sign;
@@ -65,17 +36,31 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
+import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Random;
+
+@Mod.EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientRegistry {
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onTextureStitch(TextureStitchEvent.Pre event) {
+    public static void registerTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(SanguineAmuletItem.SanguineAmuletTooltipInfo.class, SanguineAmuletItem.SanguineAmuletTooltipComponent::new);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
         event.addSprite(AbsorptionRitual.SYMBOL);
         event.addSprite(CrystalRitual.SYMBOL);
         event.addSprite(SummonRitual.SYMBOL);
@@ -121,7 +106,7 @@ public class ClientRegistry {
     public static SlimySlugModel SLUG_MODEL = null;
 
     @SubscribeEvent
-    public void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WARLOCK_ARMOR_LAYER, WarlockArmorModel::createBodyLayer);
         event.registerLayerDefinition(BONELORD_ARMOR_LAYER, BonelordArmorModel::createBodyLayer);
         event.registerLayerDefinition(TOP_HAT_LAYER, TopHatModel::createBodyLayer);
@@ -138,7 +123,7 @@ public class ClientRegistry {
     }
 
     @SubscribeEvent
-    public void onRegisterLayers(EntityRenderersEvent.AddLayers event) {
+    public static void onRegisterLayers(EntityRenderersEvent.AddLayers event) {
         WARLOCK_ARMOR_MODEL = new WarlockArmorModel(event.getEntityModels().bakeLayer(WARLOCK_ARMOR_LAYER));
         BONELORD_ARMOR_MODEL = new BonelordArmorModel(event.getEntityModels().bakeLayer(BONELORD_ARMOR_LAYER));
         TOP_HAT_MODEL = new TopHatModel(event.getEntityModels().bakeLayer(TOP_HAT_LAYER));
@@ -150,9 +135,9 @@ public class ClientRegistry {
         NECROMANCER_MODEL = new NecromancerModel(event.getEntityModels().bakeLayer(NECROMANCER_LAYER));
         SLUG_MODEL = new SlimySlugModel(event.getEntityModels().bakeLayer(SLUG_LAYER));
     }
-    
+
     @SubscribeEvent
-    public void onRegisterEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onRegisterEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
         EntityRenderers.register(Entities.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
         EntityRenderers.register(Entities.WRAITH.get(), WraithRenderer::new);
         EntityRenderers.register(Entities.NECROMANCER.get(), NecromancerRenderer::new);
@@ -164,32 +149,61 @@ public class ClientRegistry {
         EntityRenderers.register(Entities.ANGEL_ARROW.get(), AngelArrowRenderer::new);
         EntityRenderers.register(Entities.SLIMY_SLUG.get(), SlimySlugRenderer::new);
     }
-    
+
     public static ShaderInstance GLOWING_SHADER, GLOWING_SPRITE_SHADER, GLOWING_PARTICLE_SHADER, VAPOR_SHADER, GLOWING_ENTITY_SHADER, SPRITE_PARTICLE_SHADER;
 
-    public static ShaderInstance getGlowingShader() { return GLOWING_SHADER; }
-    public static ShaderInstance getGlowingSpriteShader() { return GLOWING_SPRITE_SHADER; }
-    public static ShaderInstance getGlowingParticleShader() { return GLOWING_PARTICLE_SHADER; }
-    public static ShaderInstance getGlowingEntityShader() { return GLOWING_ENTITY_SHADER; }
-    public static ShaderInstance getVaporShader() { return VAPOR_SHADER; }
-    public static ShaderInstance getSpriteParticleShader() { return SPRITE_PARTICLE_SHADER; }
+    public static ShaderInstance getGlowingShader() {
+        return GLOWING_SHADER;
+    }
+
+    public static ShaderInstance getGlowingSpriteShader() {
+        return GLOWING_SPRITE_SHADER;
+    }
+
+    public static ShaderInstance getGlowingParticleShader() {
+        return GLOWING_PARTICLE_SHADER;
+    }
+
+    public static ShaderInstance getGlowingEntityShader() {
+        return GLOWING_ENTITY_SHADER;
+    }
+
+    public static ShaderInstance getVaporShader() {
+        return VAPOR_SHADER;
+    }
+
+    public static ShaderInstance getSpriteParticleShader() {
+        return SPRITE_PARTICLE_SHADER;
+    }
 
     @SubscribeEvent
-    public void shaderRegistry(RegisterShadersEvent event) throws IOException {
+    public static void shaderRegistry(RegisterShadersEvent event) throws IOException {
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing"), DefaultVertexFormat.POSITION_COLOR),
-                shader -> { GLOWING_SHADER = shader; });
+                shader -> {
+                    GLOWING_SHADER = shader;
+                });
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_sprite"), DefaultVertexFormat.POSITION_TEX_COLOR),
-                shader -> { GLOWING_SPRITE_SHADER = shader; });
+                shader -> {
+                    GLOWING_SPRITE_SHADER = shader;
+                });
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_particle"), DefaultVertexFormat.PARTICLE),
-                shader -> { GLOWING_PARTICLE_SHADER = shader; });
+                shader -> {
+                    GLOWING_PARTICLE_SHADER = shader;
+                });
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_entity"), DefaultVertexFormat.NEW_ENTITY),
-                shader -> { GLOWING_ENTITY_SHADER = shader; });
+                shader -> {
+                    GLOWING_ENTITY_SHADER = shader;
+                });
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:vapor"), DefaultVertexFormat.BLOCK),
-                shader -> { VAPOR_SHADER = shader; });
+                shader -> {
+                    VAPOR_SHADER = shader;
+                });
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:sprite_particle"), DefaultVertexFormat.PARTICLE),
-                shader -> { SPRITE_PARTICLE_SHADER = shader; });
+                shader -> {
+                    SPRITE_PARTICLE_SHADER = shader;
+                });
     }
-    
+
     public static void initCurios() {
         CuriosRendererRegistry.register(Registry.RAVEN_CLOAK.get(), RavenCloakRenderer::new);
     }
@@ -213,8 +227,7 @@ public class ClientRegistry {
 
         int yPos() {
             String origin = ClientConfig.MANA_BAR_POSITION.get();
-            if (origin.equals(ClientConfig.Positions.TOP_LEFT)
-                || origin.equals(ClientConfig.Positions.TOP)
+            if (origin.equals(ClientConfig.Positions.TOP)
                 || origin.equals(ClientConfig.Positions.TOP_LEFT))
                 return -1;
             if (origin.equals(ClientConfig.Positions.BOTTOM_LEFT)
@@ -236,7 +249,7 @@ public class ClientRegistry {
         public void render(ForgeGui gui, PoseStack mStack, float partialTicks, int width, int height) {
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
-
+            if (player == null) return;
             int xp = xPos(), yp = yPos();
             boolean isHoriz = horiz();
 
@@ -249,14 +262,13 @@ public class ClientRegistry {
                 else if (yp == 1) oy = height + 4 - h;
                 if (xp == -1) ox = 8;
                 else if (xp == 1) ox = width - 4 - w;
-            }
-            else {
+            } else {
                 if (yp == -1) oy = -8;
                 else if (yp == 1) oy = height - 20 - h;
                 if (xp == -1) ox = 4;
                 else if (xp == 1) ox = width + 4 - w;
             }
-            
+
             final int barlength = 114;
             float magic = 0, maxMagic = 0;
             try {
@@ -270,9 +282,9 @@ public class ClientRegistry {
             if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof IManaRelatedItem)
                 && !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof IManaRelatedItem))
                 return;
-                        
+
             int length = Mth.ceil(barlength * magic / maxMagic);
-            
+
             int iconU = 48, iconV = 48;
 
             mStack.pushPose();
@@ -296,7 +308,7 @@ public class ClientRegistry {
                     ox += 8 - firstSegment;
                 }
 
-                for (int i = 0; i < 6; i ++) {
+                for (int i = 0; i < 6; i++) {
                     int segment = Math.min(16, length);
                     length -= segment;
                     gui.blit(mStack, ox, oy, 16, 38, segment, 20);
@@ -321,8 +333,7 @@ public class ClientRegistry {
                     gui.blit(mStack, ox + 5, oy - 2, 32, 64, 24, 24);
                     gui.blit(mStack, ox + 12, oy + 4, iconU, iconV, 12, 12);
                 }
-            }
-            else {
+            } else {
                 oy += 16;
                 oy += barlength;
                 gui.blit(mStack, ox, oy, length == 0 ? 54 : 86, 40, 20, 6);
@@ -340,7 +351,7 @@ public class ClientRegistry {
                     gui.blit(mStack, ox, oy, 54, 32 + firstSegment, 20, 8 - firstSegment);
                 }
 
-                for (int i = 0; i < 6; i ++) {
+                for (int i = 0; i < 6; i++) {
                     int segment = Math.min(16, length);
                     length -= segment;
                     oy -= segment;
@@ -367,7 +378,7 @@ public class ClientRegistry {
                     gui.blit(mStack, ox + 4, oy - 18, iconU, iconV, 12, 12);
                 }
             }
-            
+
             mStack.popPose();
         }
     }
@@ -379,9 +390,9 @@ public class ClientRegistry {
 
         @Override
         public void render(ForgeGui gui, PoseStack mStack, float partialTicks, int width, int height) {
-            if (!gui.shouldDrawSurvivalElements()) return;
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
+            if (!gui.shouldDrawSurvivalElements() || player == null) return;
             mStack.pushPose();
             mStack.translate(0, 0, 0.01);
 
@@ -389,7 +400,7 @@ public class ClientRegistry {
             float absorb = Mth.ceil(player.getAbsorptionAmount());
             AttributeInstance attrMaxHealth = player.getAttribute(Attributes.MAX_HEALTH);
             float healthMax = (float) attrMaxHealth.getValue();
-            
+
             float etherealHealth = 0, etherealMax = 0;
             try {
                 ISoul cap = player.getCapability(ISoul.INSTANCE).resolve().get();
@@ -400,13 +411,12 @@ public class ClientRegistry {
             }
 
             int ticks = gui.getGuiTicks();
-            boolean highlight = healthBlinkTime > (long)ticks && (healthBlinkTime - (long)ticks) / 3L % 2L == 1L;
+            boolean highlight = healthBlinkTime > (long) ticks && (healthBlinkTime - (long) ticks) / 3L % 2L == 1L;
 
             if (etherealHealth < this.lastEtherealHealth && player.invulnerableTime > 0) {
                 this.lastHealthTime = Util.getMillis();
                 this.healthBlinkTime = ticks + 20;
-            }
-            else if (etherealHealth > this.lastEtherealHealth) {
+            } else if (etherealHealth > this.lastEtherealHealth) {
                 this.lastHealthTime = Util.getMillis();
                 this.healthBlinkTime = ticks + 10;
             }
@@ -417,7 +427,7 @@ public class ClientRegistry {
 
             lastEtherealHealth = etherealHealth;
 
-            float f = Math.max((float)player.getAttributeValue(Attributes.MAX_HEALTH), (float)Math.max(health, health));
+            float f = Math.max((float) player.getAttributeValue(Attributes.MAX_HEALTH), (float) health);
             int regen = -1;
             if (player.hasEffect(MobEffects.REGENERATION)) regen = ticks % Mth.ceil(f + 5.0F);
 
@@ -440,14 +450,14 @@ public class ClientRegistry {
             gui.leftHeight += extraHealthRows * extraRowHeight;
 
             RenderSystem.setShaderTexture(0, ICONS_TEXTURE);
-            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; -- i) {
+            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
                 int row = (i + 1) / 10;
                 int heart = (i + 1) % 10;
                 int x = left + heart * 8;
                 int y = top - extraRowHeight * Math.max(0, row - healthRows + 1) - rowHeight * Math.min(row, healthRows - 1);
                 mc.gui.blit(mStack, x, y, highlight ? 9 : 0, 18, 9, 9);
             }
-            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; -- i) {
+            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
                 int row = (i + 1) / 10;
                 int heart = (i + 1) % 10;
                 int x = left + heart * 8;
@@ -458,7 +468,7 @@ public class ClientRegistry {
                 else if (i2 * 2 + 1 == etherealHealth)
                     mc.gui.blit(mStack, x, y, 9, 9, 9, 9);
             }
-            for (int i = Mth.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; -- i) {
+            for (int i = Mth.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; --i) {
                 int row = i / 10;
                 int heart = i % 10;
                 int x = left + heart * 8;

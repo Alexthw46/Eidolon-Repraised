@@ -4,16 +4,13 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import elucent.eidolon.registries.Particles;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Runes;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-
-import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
 public class RuneParticleData implements ParticleOptions {
     final Rune rune;
@@ -100,8 +97,7 @@ public class RuneParticleData implements ParticleOptions {
             float r2 = buf.readFloat();
             float g2 = buf.readFloat();
             float b2 = buf.readFloat();
-            RuneParticleData data = new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
-            return data;
+            return new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
         }
     };
 }

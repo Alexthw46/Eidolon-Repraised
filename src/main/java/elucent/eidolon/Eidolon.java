@@ -10,36 +10,30 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
-import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Potions;
 import elucent.eidolon.research.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.AltarEntries;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.tile.BrazierTileRenderer;
-import elucent.eidolon.tile.CrucibleTileRenderer;
-import elucent.eidolon.tile.GobletTileRenderer;
-import elucent.eidolon.tile.HandTileRenderer;
-import elucent.eidolon.tile.NecroticFocusTileRenderer;
-import elucent.eidolon.tile.SoulEnchanterTileRenderer;
-import elucent.eidolon.tile.reagent.CisternTileRenderer;
-import elucent.eidolon.tile.reagent.PipeTileRenderer;
+import elucent.eidolon.tile.*;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -49,6 +43,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
@@ -60,7 +55,7 @@ public class Eidolon {
 
     public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(Registry.SHADOW_GEM.get(), 1);
         }
     };
@@ -75,31 +70,23 @@ public class Eidolon {
     }
 
     public Eidolon() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::sendImc);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::sendImc);
+        modEventBus.addListener(this::spawnPlacements);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        FMLJavaModLoadingContext.get().getModEventBus().register(new Registry());
+        modEventBus.register(new Registry());
         Registry.init();
         proxy.init();
         MinecraftForge.EVENT_BUS.register(this);
-        /*
-        MinecraftForge.EVENT_BUS.register(new WorldGen());
-        WorldGen.preInit();
-         */
         MinecraftForge.EVENT_BUS.register(new Events());
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            MinecraftForge.EVENT_BUS.register(new ClientEvents());
-            FMLJavaModLoadingContext.get().getModEventBus().register(new ClientRegistry());
-            return new Object();
-        });
     }
 
     public void setup(final FMLCommonSetupEvent event) {
         Networking.init();
-        //WorldGen.init();
         event.enqueueWork(() -> {
-            CrucibleRegistry.init();
+            //CrucibleRegistry.init();
             RitualRegistry.init();
             Potions.addBrewingRecipes();
             AltarEntries.init();
@@ -108,15 +95,18 @@ public class Eidolon {
             AthameItem.initHarvestables();
             CodexChapters.init();
         });
+    }
 
-        SpawnPlacements.register(Entities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            Monster::checkMonsterSpawnRules);
-        SpawnPlacements.register(Entities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            Monster::checkMonsterSpawnRules);
-        SpawnPlacements.register(Entities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            Animal::checkAnimalSpawnRules);
-        SpawnPlacements.register(Entities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (e, w, t, pos, rand) -> true);
+
+    public void spawnPlacements(final SpawnPlacementRegisterEvent event) {
+        event.register(Entities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(Entities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(Entities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(Entities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (e, w, t, pos, rand) -> true, SpawnPlacementRegisterEvent.Operation.AND);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -127,23 +117,10 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.CRUCIBLE_TILE_ENTITY.get(), (trd) -> new CrucibleTileRenderer());
         BlockEntityRenderers.register(Registry.SOUL_ENCHANTER_TILE_ENTITY.get(), (trd) -> new SoulEnchanterTileRenderer());
         BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY.get(), (trd) -> new GobletTileRenderer());
+        /*
         BlockEntityRenderers.register(Registry.CISTERN_TILE_ENTITY.get(), (trd) -> new CisternTileRenderer());
         BlockEntityRenderers.register(Registry.PIPE_TILE_ENTITY.get(), (trd) -> new PipeTileRenderer());
-
-        //TODO switch to new forge method
-        ItemBlockRenderTypes.setRenderLayer(Registry.ENCHANTED_ASH.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.WOODEN_STAND.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.GOBLET.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.UNHOLY_EFFIGY.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.INCUBATOR.get(), (t) -> t == RenderType.solid() || t == RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(Registry.GLASS_TUBE.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(Registry.CISTERN.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(Registry.MERAMMER_ROOT.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.SILDRIAN_SEED.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.OANNA_BLOOM.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.AVENNIAN_SPRIG.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.ILLWOOD_LEAVES.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(Registry.ILLWOOD_SAPLING.get(), RenderType.cutoutMipped());
+        */
 
         event.enqueueWork(() -> {
             MenuScreens.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
@@ -155,12 +132,11 @@ public class Eidolon {
         });
     }
 
-    /*
+    @OnlyIn(Dist.CLIENT)
     public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
-        evt.registerAbove(ForgeGui.PLAYER_HEALTH_ELEMENT, Eidolon.MODID + ":hearts", new ClientRegistry.EidolonHearts());
-        evt.registerBelow(ForgeGui.CHAT_PANEL_ELEMENT, Eidolon.MODID + ":mana_bar", new ClientRegistry.EidolonManaBar());
+        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new ClientRegistry.EidolonHearts());
+        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new ClientRegistry.EidolonManaBar());
     }
-     */
 
     public void sendImc(InterModEnqueueEvent evt) {
         InterModComms.sendTo("consecration", "holy_material", () -> "silver");

@@ -13,12 +13,14 @@ import net.minecraft.client.player.LocalPlayer;
 public class LocalPlayerMixin {
     @Inject(method = "getJumpRidingScale", at = @At("HEAD"), cancellable = true)
     public void getJumpRidingScale(CallbackInfoReturnable<Float> ci) {
-    	if (ClientEvents.jumpTicks >= 5) 
-    		ci.setReturnValue((ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTime()) / 15.0f);
+        if (ClientEvents.jumpTicks >= 5)
+            ci.setReturnValue((ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTime()) / 15.0f);
     }
-    
+
+    /*
     @Inject(method = "isRidingJumpable", at = @At("HEAD"), cancellable = true)
     public void isRidingJumpable(CallbackInfoReturnable<Boolean> ci) {
     	if (ClientEvents.jumpTicks >= 5 && ClientEvents.isInGui) ci.setReturnValue(true);
     }
+     */
 }

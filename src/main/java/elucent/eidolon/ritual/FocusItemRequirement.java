@@ -6,34 +6,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class FocusItemRequirement implements IRequirement {
-    final Object match;
+    final Ingredient match;
 
     public FocusItemRequirement(ItemStack item) {
-        this.match = item;
+        this.match = Ingredient.of(item);
     }
 
-    public FocusItemRequirement(Item item) {
-        this.match = item;
-    }
-
-    public FocusItemRequirement(Block block) {
-        this.match = Item.byBlock(block);
+    public FocusItemRequirement(ItemLike item) {
+        this.match = Ingredient.of(item);
     }
 
     public FocusItemRequirement(TagKey<Item> item) {
-        this.match = item;
-    }
-
-    public FocusItemRequirement(Function<ItemStack, Boolean> item) {
-        this.match = item;
+        this.match = Ingredient.of(item);
     }
 
     @Override
@@ -42,14 +34,7 @@ public class FocusItemRequirement implements IRequirement {
         if (tiles.isEmpty()) return RequirementInfo.FALSE;
         for (IRitualItemFocus tile : tiles) {
             ItemStack stack = tile.provide();
-
-            if (match instanceof ItemStack && ItemStack.matches((ItemStack) match, stack)) {
-                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
-            } else if (match instanceof Item && stack.getItem() == match) {
-                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
-            } else if (match instanceof TagKey && stack.is((TagKey<Item>) match)) {
-                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
-            } else if (match instanceof Function && ((Function<ItemStack, Boolean>) match).apply(stack)) {
+            if (match.test(stack)) {
                 return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
             }
         }
@@ -58,7 +43,9 @@ public class FocusItemRequirement implements IRequirement {
     }
 
     public void whenMet(Ritual ritual, Level world, BlockPos pos, RequirementInfo info) {
-        ((IRitualItemProvider)world.getBlockEntity(info.getPos())).take();
+        if (world.getBlockEntity(info.getPos()) instanceof IRitualItemProvider provider) {
+            provider.take();
+        }
         if (!world.isClientSide) {
             Networking.sendToTracking(world, pos.above(2), new RitualConsumePacket(info.getPos(), pos.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
         }

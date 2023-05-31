@@ -3,7 +3,7 @@ package elucent.eidolon.util;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.research.Researches;
+import elucent.eidolon.research.Research;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Sign;
 import net.minecraft.ChatFormatting;
@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class KnowledgeUtil {
     public static void grantSign(Entity entity, Sign sign) {
         if (!(entity instanceof ServerPlayer)) return;
@@ -37,17 +38,17 @@ public class KnowledgeUtil {
         });
     }
 
-    public static void grantResearch(Entity entity, ResourceLocation research) {
-        if (!(entity instanceof ServerPlayer)) return;
+    public static void grantResearch(Entity entity, Research research) {
+        if (!(entity instanceof ServerPlayer serverPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsResearch(research)) return;
-            k.addResearch(research);
-
-            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + Researches.find(research).getName())));
-            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
+            k.addResearch(research.getRegistryName());
+            research.onLearned(serverPlayer);
+            serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + research.getName())));
+            Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
     }
-    
+
     public static void grantRune(Entity entity, Rune rune) {
         if (!(entity instanceof ServerPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
@@ -113,7 +114,7 @@ public class KnowledgeUtil {
             Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
         });
     }
-    
+
     public static void removeRune(Entity entity, Rune rune) {
         if (!(entity instanceof ServerPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
@@ -146,7 +147,7 @@ public class KnowledgeUtil {
             Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
         });
     }
-    
+
     public static void resetRunes(Entity entity) {
         if (!(entity instanceof ServerPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {

@@ -25,7 +25,7 @@ public class CompletedResearchItem extends ItemBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!stack.hasTag() || !stack.getOrCreateTag().contains("research")) return;
         Research r = Researches.find(new ResourceLocation(stack.getOrCreateTag().getString("research")));
         if (r == null) return;
@@ -38,7 +38,7 @@ public class CompletedResearchItem extends ItemBase {
         if (stack.hasTag() && stack.getOrCreateTag().contains("research")) {
             Research r = Researches.find(new ResourceLocation(stack.getOrCreateTag().getString("research")));
             if (r != null && !KnowledgeUtil.knowsResearch(player, r.getRegistryName())) {
-                KnowledgeUtil.grantResearch(player, r.getRegistryName());
+                KnowledgeUtil.grantResearch(player, r);
                 return InteractionResultHolder.consume(ItemStack.EMPTY);
             }
         }

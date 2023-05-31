@@ -1,11 +1,11 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.Eidolon;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import elucent.eidolon.Eidolon;
-import net.minecraft.resources.ResourceLocation;
 
 public class Runes {
     static final Map<ResourceLocation, Rune> runes = new HashMap<>();
@@ -38,6 +38,14 @@ public class Runes {
                     return RuneResult.PASS;
                 }
                 return RuneResult.FAIL;
+            }
+        });
+
+        register(new Rune(new ResourceLocation(Eidolon.MODID, "soul_mark")) {
+            @Override
+            public RuneResult doEffect(SignSequence seq) {
+                seq.addRight(Signs.SOUL_SIGN);
+                return RuneResult.PASS;
             }
         });
     }

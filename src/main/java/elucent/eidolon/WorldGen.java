@@ -2,29 +2,9 @@ package elucent.eidolon;
 
 /*
 public class WorldGen {
-    static List<PlacedFeature> ORES = new ArrayList<>();
-    static PlacedFeature LEAD_ORE_GEN, SILVER_ORE_GEN, DEEP_LEAD_ORE_GEN, DEEP_SILVER_ORE_GEN;
     static DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Eidolon.MODID);
     static List<StructureFeature<?>> STRUCTURE_LIST = new ArrayList<>();
     static Map<ResourceLocation, StructureFeatureConfiguration> STRUCTURE_SETTINGS = new HashMap<>();
-    static RuleTest IN_STONE = new TagMatchTest(Tags.Blocks.STONE);
-    static RuleTest IN_DEEPSLATE = new BlockMatchTest(Blocks.DEEPSLATE);
-
-
-    static StructurePieceType register(StructurePieceType type, String name) {
-        net.minecraft.core.Registry.register(net.minecraft.core.Registry.STRUCTURE_PIECE, new ResourceLocation(Eidolon.MODID, name), type);
-        return type;
-    }
-
-    static <C extends FeatureConfiguration, F extends Feature<C>> ConfiguredFeature<C, F> register(ConfiguredFeature<C, F> feature, String name) {
-        BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(Eidolon.MODID, name), feature);
-        return feature;
-    }
-
-    static <C extends FeatureConfiguration, S extends StructureFeature<C>> ConfiguredStructureFeature<C, S> register(ConfiguredStructureFeature<C, S> feature, String name) {
-        BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(Eidolon.MODID, name), feature);
-        return feature;
-    }
 
     static <C extends FeatureConfiguration> RegistryObject<StructureFeature<C>> addStructure(String name, StructureFeature<C> structure, GenerationStep.Decoration stage, StructureFeatureConfiguration settings) {
         StructureFeature.STRUCTURES_REGISTRY.put(Eidolon.MODID + ":" + name, structure);
@@ -62,39 +42,6 @@ public class WorldGen {
     }
 
     public static void init() {
-        ConfiguredFeature<?, ?> LEAD_ORE = register(Feature.ORE.configured(new OreConfiguration(IN_STONE,
-            Registry.LEAD_ORE.get().defaultBlockState(), Config.LEAD_VEIN_SIZE.get())), "lead_ore");
-        LEAD_ORE_GEN = PlacementUtils.register("lead_ore", LEAD_ORE.placed(
-    		InSquarePlacement.spread(), BiomeFilter.biome(), CountPlacement.of(Config.LEAD_VEIN_COUNT.get()), 
-    		HeightRangePlacement.uniform(VerticalAnchor.absolute(Math.max(0, Config.LEAD_MIN_Y.get())), VerticalAnchor.absolute(Config.LEAD_MAX_Y.get()))
-		));
-        ConfiguredFeature<?, ?> DEEP_LEAD_ORE = register(Feature.ORE.configured(new OreConfiguration(IN_DEEPSLATE,
-            Registry.DEEP_LEAD_ORE.get().defaultBlockState(), Config.LEAD_VEIN_SIZE.get())), "deep_lead_ore");
-        DEEP_LEAD_ORE_GEN = PlacementUtils.register("deep_lead_ore", DEEP_LEAD_ORE.placed(
-    		InSquarePlacement.spread(), BiomeFilter.biome(), CountPlacement.of(Config.LEAD_VEIN_COUNT.get()), 
-    		HeightRangePlacement.uniform(VerticalAnchor.absolute(Config.LEAD_MIN_Y.get()), VerticalAnchor.absolute(Math.min(0, Config.LEAD_MAX_Y.get())))
-		));
-        if (Config.LEAD_ENABLED.get()) {
-        	ORES.add(LEAD_ORE_GEN);
-        	ORES.add(DEEP_LEAD_ORE_GEN);
-        }
-        
-        ConfiguredFeature<?, ?> SILVER_ORE = register(Feature.ORE.configured(new OreConfiguration(IN_STONE,
-            Registry.SILVER_ORE.get().defaultBlockState(), Config.SILVER_VEIN_SIZE.get())), "silver_ore");
-        SILVER_ORE_GEN = PlacementUtils.register("silver_ore", SILVER_ORE.placed(
-    		InSquarePlacement.spread(), BiomeFilter.biome(), CountPlacement.of(Config.SILVER_VEIN_COUNT.get()), 
-    		HeightRangePlacement.uniform(VerticalAnchor.absolute(Math.max(0, Config.SILVER_MIN_Y.get())), VerticalAnchor.absolute(Config.SILVER_MAX_Y.get()))
-        ));
-        ConfiguredFeature<?, ?> DEEP_SILVER_ORE = register(Feature.ORE.configured(new OreConfiguration(IN_DEEPSLATE,
-            Registry.DEEP_SILVER_ORE.get().defaultBlockState(), Config.SILVER_VEIN_SIZE.get())), "deep_silver_ore");
-        DEEP_SILVER_ORE_GEN = PlacementUtils.register("deep_silver_ore", DEEP_SILVER_ORE.placed(
-    		InSquarePlacement.spread(), BiomeFilter.biome(), CountPlacement.of(Config.SILVER_VEIN_COUNT.get()), 
-    		HeightRangePlacement.uniform(VerticalAnchor.absolute(Config.SILVER_MIN_Y.get()), VerticalAnchor.absolute(Math.min(0, Config.SILVER_MAX_Y.get())))
-        ));
-        if (Config.SILVER_ENABLED.get()) {
-        	ORES.add(SILVER_ORE_GEN);
-        	ORES.add(DEEP_SILVER_ORE_GEN);
-        }
 
         LAB_PIECE = register((ctx, tag) -> new RandomlyRotatedPiece(LAB_PIECE, tag, ctx.structureManager()), "lab");
         LAB_FEATURE = register(LAB_STRUCTURE.get().configured(NoneFeatureConfiguration.INSTANCE), "lab");
@@ -128,8 +75,7 @@ public class WorldGen {
         }
     }
     
-    @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event) {
+    public void onWorldLoad() {
         if (event.getWorld() instanceof ServerLevel sl) {
             ChunkGenerator chunkGenerator = sl.getChunkSource().getGenerator();
 
@@ -163,18 +109,7 @@ public class WorldGen {
         }
     }
 
-    private static void associateBiomeToConfiguredStructure(Map<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> STStructureToMultiMap, ConfiguredStructureFeature<?, ?> configuredStructureFeature, ResourceKey<Biome> biomeRegistryKey) {
-        STStructureToMultiMap.putIfAbsent(configuredStructureFeature.feature, HashMultimap.create());
-        HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>> configuredStructureToBiomeMultiMap = STStructureToMultiMap.get(configuredStructureFeature.feature);
-        configuredStructureToBiomeMultiMap.put(configuredStructureFeature, biomeRegistryKey);
-    }
 
-    @SubscribeEvent
-    public void onBiomeLoad(BiomeLoadingEvent event) {
-        for (PlacedFeature feature : ORES) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature);
-        }
-    }
 }
 
  */

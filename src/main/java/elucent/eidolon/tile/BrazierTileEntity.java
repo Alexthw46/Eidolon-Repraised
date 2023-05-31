@@ -1,29 +1,26 @@
 package elucent.eidolon.tile;
 
 import elucent.eidolon.Registry;
-import elucent.eidolon.network.ExtinguishEffectPacket;
-import elucent.eidolon.network.FlameEffectPacket;
-import elucent.eidolon.network.IgniteEffectPacket;
-import elucent.eidolon.network.Networking;
-import elucent.eidolon.network.RitualCompletePacket;
+import elucent.eidolon.network.*;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.ritual.Ritual.RitualResult;
 import elucent.eidolon.ritual.Ritual.SetupResult;
 import elucent.eidolon.ritual.RitualRegistry;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Containers;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.FlintAndSteelItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 public class BrazierTileEntity extends TileEntityBase {
     ItemStack stack = ItemStack.EMPTY;
@@ -50,39 +47,43 @@ public class BrazierTileEntity extends TileEntityBase {
 
     @Override
     public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND) {
+        if (hand == InteractionHand.MAIN_HAND && level != null) {
             if (burning && player.isShiftKeyDown() && player.getItemInHand(hand).isEmpty()) {
                 extinguish();
                 return InteractionResult.SUCCESS;
-            }
-            else if (!burning && player.getItemInHand(hand).isEmpty() && !stack.isEmpty()) {
+            } else if (!burning && player.getItemInHand(hand).isEmpty() && !stack.isEmpty()) {
                 player.addItem(stack);
                 stack = ItemStack.EMPTY;
                 if (!level.isClientSide) sync();
                 return InteractionResult.SUCCESS;
-            }
-            else if (!burning && !stack.isEmpty()
-                && player.getItemInHand(hand).getItem() == Items.FLINT_AND_STEEL) {
-                player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {
-                    p.broadcastBreakEvent(hand);
-                });
-                startBurning();
-                return InteractionResult.SUCCESS;
-            }
-            else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
-                stack = player.getItemInHand(hand).copy();
-                stack.setCount(1);
-                player.getItemInHand(hand).shrink(1);
-                if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
-                if (!level.isClientSide) sync();
-                return InteractionResult.SUCCESS;
+            } else {
+                boolean canBurn = canStartBurning();
+                if (canBurn
+                    && player.getItemInHand(hand).getItem() instanceof FlintAndSteelItem) {
+                    player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {
+                        p.broadcastBreakEvent(hand);
+                    });
+                    startBurning();
+                    return InteractionResult.SUCCESS;
+                } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
+                    stack = player.getItemInHand(hand).copy();
+                    stack.setCount(1);
+                    player.getItemInHand(hand).shrink(1);
+                    if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
+                    if (!level.isClientSide) sync();
+                    return InteractionResult.SUCCESS;
+                }
             }
         }
         return InteractionResult.PASS;
     }
 
+    public boolean canStartBurning() {
+        return !burning && !stack.isEmpty();
+    }
+
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         stack = ItemStack.of(tag.getCompound("stack"));
         burning = tag.getBoolean("burning");
@@ -128,7 +129,7 @@ public class BrazierTileEntity extends TileEntityBase {
         ritual = null;
     }
 
-    protected void startBurning() {
+    public void startBurning() {
         burning = true;
         findingCounter = 0;
         if (!level.isClientSide) {
@@ -152,12 +153,13 @@ public class BrazierTileEntity extends TileEntityBase {
     }
 
     public void tick() {
+        if (level == null) return;
         if (burning && findingCounter < 80 && ritual == null) {
             float progress = (findingCounter - 40) / 40.0f;
-            if (progress >= 0) for (int i = 0; i < 8; i ++) {
-                float angle = progress * (float)Math.PI / 4 + i * (float)Math.PI / 4;
+            if (progress >= 0) for (int i = 0; i < 8; i++) {
+                float angle = progress * (float) Math.PI / 4 + i * (float) Math.PI / 4;
                 float radius = 0.625f * Mth.sin(4 * angle);
-                angle += (float)Math.PI / 4;
+                angle += (float) Math.PI / 4;
                 float x = getBlockPos().getX() + 0.5f + Mth.sin(angle) * radius;
                 float y = getBlockPos().getY() + 0.875f;
                 float z = getBlockPos().getZ() + 0.5f + Mth.cos(angle) * radius;

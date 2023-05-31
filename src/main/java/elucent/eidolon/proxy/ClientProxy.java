@@ -23,6 +23,7 @@ public class ClientProxy implements ISidedProxy {
     public void init() {
         Registry.clientInit();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Eidolon::clientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Eidolon::registerOverlays);
     }
 
     @Override

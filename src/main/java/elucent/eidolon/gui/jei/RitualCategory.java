@@ -1,77 +1,103 @@
 package elucent.eidolon.gui.jei;
 
-/*
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.Registry;
+import elucent.eidolon.codex.CodexGui;
+import elucent.eidolon.ritual.*;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class RitualCategory implements IRecipeCategory<RecipeWrappers.RitualRecipe> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "ritual");
     private final IDrawable background, icon;
 
     public RitualCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(new ResourceLocation(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(Registry.BRAZIER.get()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.BRAZIER.get()));
+    }
+
+    /**
+     * @return the type of recipe that this category handles.
+     * @since 9.5.0
+     */
+    @Override
+    public @NotNull RecipeType<RecipeWrappers.RitualRecipe> getRecipeType() {
+        return JEIRegistry.RITUAL_CATEGORY;
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    public Class<? extends RecipeWrappers.RitualRecipe> getRecipeClass() {
-        return RecipeWrappers.RitualRecipe.class;
-    }
-
-    @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return Component.translatable(I18n.get("jei." + Eidolon.MODID + ".ritual"));
     }
 
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return icon;
     }
 
     @Override
-    public void setIngredients(RecipeWrappers.RitualRecipe wrapper, IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, RecipeWrappers.@NotNull RitualRecipe recipe, @NotNull IFocusGroup ingredients) {
+
         List<Ingredient> inputs = new ArrayList<>();
-        Object sacrifice = wrapper.sacrifice;
-        if (wrapper.page == null) wrapper.page = RitualRegistry.getDefaultPage(wrapper.ritual, wrapper.sacrifice);
-        int slot = 0;
-        for (IRequirement r : wrapper.ritual.getRequirements()) {
-            if (r instanceof ItemRequirement)
-                inputs.add(RecipeUtil.ingredientFromObject(((ItemRequirement)r).getMatch()));
-            slot ++;
+        ItemSacrifice sacrifice = recipe.sacrifice;
+
+        for (IRequirement r : recipe.ritual.getRequirements()) {
+            if (r instanceof ItemRequirement requirement)
+                inputs.add(requirement.getMatch());
+            if (r instanceof FocusItemPresentRequirement requirement)
+                inputs.add(requirement.getMatch());
         }
-        inputs.add(RecipeUtil.ingredientFromObject(sacrifice instanceof MultiItemSacrifice ? ((MultiItemSacrifice)sacrifice).main : sacrifice));
-        ingredients.setInputIngredients(inputs);
-    }
+        for (IRequirement r : recipe.ritual.getInvariants()) {
+            if (r instanceof ItemRequirement requirement)
+                inputs.add(requirement.getMatch());
+            if (r instanceof FocusItemPresentRequirement requirement)
+                inputs.add(requirement.getMatch());
+        }
 
-    @Override
-    public void setRecipe(IRecipeLayout layout, RecipeWrappers.RitualRecipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup stacks = layout.getItemStacks();
-        List<List<ItemStack>> items = ingredients.getInputs(VanillaTypes.ITEM);
-
-        float angleStep = Math.min(30, 180 / (items.size() - 1));
-        double rootAngle = 90 - (items.size() - 2) * angleStep / 2;
-        for (int i = 0; i < items.size() - 1; i ++) {
+        float angleStep = Math.min(30, 180 / inputs.size());
+        double rootAngle = 90 - (inputs.size() - 1) * angleStep / 2;
+        for (int i = 0; i < inputs.size(); i++) {
             double a = Math.toRadians(rootAngle + angleStep * i);
-            int dx = (int)(68 + 48 * Math.cos(a));
-            int dy = (int)(91 + 48 * Math.sin(a));
-            stacks.init(i, true, dx - 8, dy - 8);
+            int dx = (int) (69 + 48 * Math.cos(a));
+            int dy = (int) (91 + 48 * Math.sin(a));
+            layout.addSlot(RecipeIngredientRole.INPUT, dx - 8, dy - 8).addIngredients(inputs.get(i));
         }
-        stacks.init(items.size() - 1, true, 60, 83);
 
-        stacks.set(ingredients);
+        layout.addSlot(RecipeIngredientRole.CATALYST, 60, 85).addIngredients(sacrifice.main);
+
+        if (recipe.ritual instanceof SanguineRitual resultRitual)
+            layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResult());
+
     }
 
     @Override
-    public void draw(RecipeWrappers.RitualRecipe recipe, PoseStack mStack, double mouseX, double mouseY) {
-        recipe.page.renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
-        recipe.page.render(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
+    public void draw(RecipeWrappers.RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
+        recipe.page.renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        recipe.page.render(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
     }
+
 }
-*/
+

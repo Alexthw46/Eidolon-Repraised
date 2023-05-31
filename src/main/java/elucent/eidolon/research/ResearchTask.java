@@ -18,8 +18,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public abstract class ResearchTask {
     public void modifyContainer(AbstractContainerMenu menu, int x, int y) {
     }
 
-    public static class Items extends ResearchTask {
+    public static class TaskItems extends ResearchTask {
         List<ItemStack> items;
         final InternalContainer container;
 
@@ -73,7 +75,7 @@ public abstract class ResearchTask {
             final List<ItemStack> items = new ArrayList<>();
 
             protected void updateItems() {
-                while (items.size() < Items.this.items.size()) items.add(ItemStack.EMPTY);
+                while (items.size() < TaskItems.this.items.size()) items.add(ItemStack.EMPTY);
             }
 
             @Override
@@ -83,7 +85,7 @@ public abstract class ResearchTask {
 
             @Override
             public int getContainerSize() {
-                return Items.this.items.size();
+                return TaskItems.this.items.size();
             }
 
             @Override
@@ -93,13 +95,13 @@ public abstract class ResearchTask {
             }
 
             @Override
-            public ItemStack getItem(int slot) {
+            public @NotNull ItemStack getItem(int slot) {
                 updateItems();
                 return items.get(slot);
             }
 
             @Override
-            public ItemStack removeItem(int slot, int amount) {
+            public @NotNull ItemStack removeItem(int slot, int amount) {
                 updateItems();
                 ItemStack stack = ContainerHelper.removeItem(this.items, slot, amount);
                 if (!stack.isEmpty()) {
@@ -109,7 +111,7 @@ public abstract class ResearchTask {
             }
 
             @Override
-            public ItemStack removeItemNoUpdate(int slot) {
+            public @NotNull ItemStack removeItemNoUpdate(int slot) {
                 updateItems();
                 ItemStack itemstack = this.items.get(slot);
                 if (itemstack.isEmpty()) {
@@ -121,7 +123,7 @@ public abstract class ResearchTask {
             }
 
             @Override
-            public void setItem(int slot, ItemStack stack) {
+            public void setItem(int slot, @NotNull ItemStack stack) {
                 updateItems();
                 items.set(slot, stack);
             }
@@ -132,17 +134,17 @@ public abstract class ResearchTask {
             }
 
             @Override
-            public boolean stillValid(Player p_18946_) {
+            public boolean stillValid(@NotNull Player p_18946_) {
                 return true;
             }
         }
 
-        public Items() {
+        public TaskItems() {
             this.items = new ArrayList<ItemStack>();
             this.container = new InternalContainer();
         }
 
-        public Items(ItemStack... stacks) {
+        public TaskItems(ItemStack... stacks) {
             this.items = List.of(stacks);
             this.container = new InternalContainer();
         }
@@ -244,14 +246,14 @@ public abstract class ResearchTask {
         }
     }
 
-    public static class ScrivenerItems extends Items {
+    public static class ScrivenerItems extends TaskItems {
         static final List<Function<Random, ItemStack>> ITEM_POOL = List.of(
                 (random) -> new ItemStack(Registry.MAGIC_INK.get(), random.nextInt(1, 3)),
-                (random) -> new ItemStack(net.minecraft.world.item.Items.FEATHER),
+                (random) -> new ItemStack(Items.FEATHER),
                 (random) -> new ItemStack(Registry.PARCHMENT.get(), random.nextInt(1, 3)),
                 (random) -> new ItemStack(Registry.CANDLE.get()),
-                (random) -> new ItemStack(net.minecraft.world.item.Items.CHARCOAL, random.nextInt(1, 3)),
-                (random) -> new ItemStack(net.minecraft.world.item.Items.BOOK)
+                (random) -> new ItemStack(Items.CHARCOAL, random.nextInt(1, 3)),
+                (random) -> new ItemStack(Items.BOOK)
         );
 
         public ScrivenerItems(Random random) {

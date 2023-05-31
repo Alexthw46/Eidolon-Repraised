@@ -73,7 +73,7 @@ public abstract class Deity {
         final ResourceLocation id;
         final int rep; // Required reputation to meet this stage.
         List<StageRequirement> reqs; // Requirements to meet this stage.
-        final boolean major; // Whether or not this is considered a major stage.
+        final boolean major; // Whether this is considered a major stage.
 
         public Stage(ResourceLocation id, int rep, boolean major) {
             this.id = id;
@@ -82,10 +82,11 @@ public abstract class Deity {
         }
 
         boolean satisfiedBy(Player player) {
+            boolean satisfied = true;
             for (StageRequirement req : reqs) {
-
+                satisfied = satisfied && req.isMet(player);
             }
-            return true;
+            return satisfied;
         }
     }
 

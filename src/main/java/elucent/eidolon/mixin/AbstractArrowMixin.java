@@ -14,4 +14,5 @@ public interface AbstractArrowMixin {
 
     @Invoker
     void callOnHitEntity(EntityHitResult result);
+
 }

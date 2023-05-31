@@ -1,37 +1,61 @@
 package elucent.eidolon.gui.jei;
 
-/*
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.Registry;
+import elucent.eidolon.codex.CodexGui;
+import elucent.eidolon.recipe.CrucibleRecipe;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "crucible");
     private final IDrawable background, icon;
 
     public CrucibleCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(new ResourceLocation(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(Registry.CRUCIBLE.get()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.CRUCIBLE.get()));
+    }
+
+    /**
+     * @return the type of recipe that this category handles.
+     * @since 9.5.0
+     */
+    @Override
+    public @NotNull RecipeType<RecipeWrappers.Crucible> getRecipeType() {
+        return JEIRegistry.CRUCIBLE_CATEGORY;
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    public Class<? extends RecipeWrappers.Crucible> getRecipeClass() {
-        return RecipeWrappers.Crucible.class;
-    }
-
-    @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return Component.translatable(I18n.get("jei." + Eidolon.MODID + ".crucible"));
     }
 
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return icon;
     }
 
@@ -61,62 +85,36 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
     }
 
     @Override
-    public void setIngredients(RecipeWrappers.Crucible wrapper, IIngredients ingredients) {
-        if (wrapper.page == null) wrapper.page = CrucibleRegistry.getDefaultPage(wrapper.recipe);
-
-        List<List<ItemStack>> inputs = new ArrayList<>();
-        for (CrucibleRecipe.Step step : wrapper.recipe.getSteps()) {
-            List<StackIngredient> stepInputs = new ArrayList<>();
-            for (Ingredient o : step.matches) {
-                ItemStack stack = o.getItems().length > 0 ? o.getItems()[0].copy() : ItemStack.EMPTY.copy();
-                if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, o));
-            }
-            condense(stepInputs);
-            for (StackIngredient i : stepInputs) {
-                List<ItemStack> valid = Arrays.stream(i.ingredient.getItems()).map((s) -> s.copy()).collect(Collectors.toList());
-                for (ItemStack stack : valid) stack.setCount(i.stack.getCount());
-                inputs.add(valid);
-            }
-        }
-        ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-        ingredients.setOutput(VanillaTypes.ITEM, wrapper.recipe.getResult());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout layout, RecipeWrappers.Crucible recipe, IIngredients ingredients) {
-        IGuiItemStackGroup stacks = layout.getItemStacks();
+    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, RecipeWrappers.Crucible recipe, @NotNull IFocusGroup focusGroup) {
 
         List<CrucibleRecipe.Step> steps = recipe.recipe.getSteps();
         int h = steps.size() * 20 + 32;
         int yoff = 80 - h / 2;
-        int slot = 0;
-        for (int i = 0; i < steps.size(); i ++) {
+        for (int i = 0; i < steps.size(); i++) {
             int tx = 4, ty = 3 + yoff + i * 20;
             tx += 24;
 
             List<StackIngredient> stepInputs = new ArrayList<>();
             for (Ingredient o : steps.get(i).matches) {
                 ItemStack stack = o.getItems().length > 0 ? o.getItems()[0].copy() : ItemStack.EMPTY.copy();
-                if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, Ingredient.EMPTY));
+                if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, o));
             }
             condense(stepInputs);
 
-            for (int j = 0; j < stepInputs.size(); j ++) {
-                stacks.init(slot ++, true, tx, ty);
+            for (StackIngredient stepInput : stepInputs) {
+                layout.addSlot(RecipeIngredientRole.INPUT, tx, ty).addIngredients(stepInput.ingredient);
                 tx += 17;
             }
         }
 
-        stacks.init(slot ++, false, 60, yoff + steps.size() * 20 + 14);
-        stacks.set(ingredients);
+        layout.addSlot(RecipeIngredientRole.OUTPUT, 60, yoff + steps.size() * 20 + 14).addItemStack(recipe.recipe.getResultItem());
     }
 
     @Override
-    public void draw(RecipeWrappers.Crucible recipe, PoseStack mStack, double mouseX, double mouseY) {
-        recipe.page.renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
-        recipe.page.render(CodexGui.DUMMY, mStack, 5, 4, (int)mouseX, (int)mouseY);
+    public void draw(RecipeWrappers.Crucible recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
+        recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        recipe.getPage().render(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
     }
 }
 
 
- */

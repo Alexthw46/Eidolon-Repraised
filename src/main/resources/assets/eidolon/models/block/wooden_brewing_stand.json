@@ -1,14 +1,24 @@
 {
-    "textures": {
-        "particle": "eidolon:block/wooden_brewing_stand",
-        "base": "eidolon:block/wooden_brewing_stand_base",
-        "side": "eidolon:block/wooden_brewing_stand_side",
-        "stand": "eidolon:block/wooden_brewing_stand"
-    },
-    "elements": [
-        {   "from": [ 7, 0, 7 ],
-            "to": [ 9, 14, 9 ],
-            "faces": {
+  "render_type": "cutout_mipped",
+  "textures": {
+    "particle": "eidolon:block/wooden_brewing_stand",
+    "base": "eidolon:block/wooden_brewing_stand_base",
+    "side": "eidolon:block/wooden_brewing_stand_side",
+    "stand": "eidolon:block/wooden_brewing_stand"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        14,
+        9
+      ],
+      "faces": {
                 "down":  { "uv": [ 7, 7, 9,  9 ], "texture": "#stand" },
                 "up":    { "uv": [ 7, 7, 9,  9 ], "texture": "#stand" },
                 "north": { "uv": [ 7, 2, 9, 16 ], "texture": "#stand" },

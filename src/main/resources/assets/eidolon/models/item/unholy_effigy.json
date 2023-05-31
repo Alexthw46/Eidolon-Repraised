@@ -1,16 +1,33 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "block/block",
-	"textures": {
-		"0": "eidolon:block/unholy_effigy_head",
-		"1": "eidolon:block/unholy_effigy_parts",
-		"particle": "eidolon:block/unholy_effigy_head"
-	},
-	"elements": [
-		{
-			"from": [5.5, 11, 5.5],
-			"to": [10.5, 16, 10.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [17.5, 19, 17.5]},
+  "credit": "Made with Blockbench",
+  "parent": "block/block",
+  "render_type": "cutout_mipped",
+  "textures": {
+    "0": "eidolon:block/unholy_effigy_head",
+    "1": "eidolon:block/unholy_effigy_parts",
+    "particle": "eidolon:block/unholy_effigy_head"
+  },
+  "elements": [
+    {
+      "from": [
+        5.5,
+        11,
+        5.5
+      ],
+      "to": [
+        10.5,
+        16,
+        10.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          17.5,
+          19,
+          17.5
+        ]
+      },
 			"faces": {
 				"north": {"uv": [0, 0, 5, 5], "texture": "#0"},
 				"east": {"uv": [5, 0, 10, 5], "texture": "#0"},

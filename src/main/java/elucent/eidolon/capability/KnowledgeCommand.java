@@ -113,127 +113,23 @@ public class KnowledgeCommand {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("knowledge").requires((player) -> {
-            return player.hasPermission(2);
-        }).then(Commands.argument("targets", EntityArgument.players())
-                        .then(Commands.literal("reset").then(Commands.literal("signs").executes((ctx) -> {
-                                            return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                                player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                                    KnowledgeUtil.resetSigns(player);
-                                                });
-                                            });
-                                        }))
-                                        .then(Commands.literal("facts").executes((ctx) -> {
-                                            return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                                player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                                    KnowledgeUtil.resetFacts(player);
-                                                });
-                                            });
-                                        }))
-                                        .then(Commands.literal("research").executes((ctx) -> {
-                                            return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                                player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                                    KnowledgeUtil.resetResearch(player);
-                                                });
-                                            });
-                                        }))
-                                        .then(Commands.literal("runes").executes((ctx) -> {
-                                            return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                                player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                                    KnowledgeUtil.resetRunes(player);
-                                                });
-                                            });
-                                        }))
-                        )
-                        .then(Commands.literal("grant")
-                                .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.grantSign(player, SignArgument.getSign(ctx, "sign"));
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.grantFact(player, ResourceLocationArgument.getId(ctx, "sign"));
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.grantResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName());
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.grantRune(player, RuneArgument.getRune(ctx, "rune"));
-                                        });
-                                    });
-                                })))
-                        )
-//			.then(Commands.literal("grant")
-//				.then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> {
-//					return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-//						player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-//							KnowledgeUtil.grantSign(player, SignArgument.getSign(ctx, "sign"));
-//						});
-//					});
-//				})))
-//				.then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> {
-//					return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-//						player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-//							KnowledgeUtil.grantFact(player, ResourceLocationArgument.getId(ctx, "sign"));
-//						});
-//					});
-//				})))
-//				.then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> {
-//					return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-//						player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-//							KnowledgeUtil.grantResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName());
-//						});
-//					});
-//				})))
-//				.then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> {
-//					return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-//						player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-//							KnowledgeUtil.grantRune(player, RuneArgument.getRune(ctx, "rune"));
-//						});
-//					});
-//				})))
-//			)
-                        .then(Commands.literal("remove")
-                                .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.removeSign(player, SignArgument.getSign(ctx, "sign"));
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.removeFact(player, ResourceLocationArgument.getId(ctx, "sign"));
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.removeResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName());
-                                        });
-                                    });
-                                })))
-                                .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> {
-                                    return apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
-                                        player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> {
-                                            KnowledgeUtil.removeRune(player, RuneArgument.getRune(ctx, "rune"));
-                                        });
-                                    });
-                                })))
+        dispatcher.register(Commands.literal("knowledge").requires((player) -> player.hasPermission(2)).then(Commands.argument("targets", EntityArgument.players())
+                .then(Commands.literal("reset").then(Commands.literal("signs").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.resetSigns(player)))))
+                        .then(Commands.literal("facts").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.resetFacts(player)))))
+                        .then(Commands.literal("research").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.resetResearch(player)))))
+                        .then(Commands.literal("runes").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.resetRunes(player)))))
+                )
+                .then(Commands.literal("grant")
+                        .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.grantSign(player, SignArgument.getSign(ctx, "sign")))))))
+                        .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.grantFact(player, ResourceLocationArgument.getId(ctx, "sign")))))))
+                        .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.grantResearch(player, ResearchArgument.getResearch(ctx, "research")))))))
+                        .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.grantRune(player, RuneArgument.getRune(ctx, "rune")))))))
+                )
+                .then(Commands.literal("remove")
+                                .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.removeSign(player, SignArgument.getSign(ctx, "sign")))))))
+                                .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.removeFact(player, ResourceLocationArgument.getId(ctx, "sign")))))))
+                                .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.removeResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName()))))))
+                                .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.removeRune(player, RuneArgument.getRune(ctx, "rune")))))))
                         )
         ));
     }

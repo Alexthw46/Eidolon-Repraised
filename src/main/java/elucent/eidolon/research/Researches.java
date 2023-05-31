@@ -3,7 +3,10 @@ package elucent.eidolon.research;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.spell.Signs;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -53,11 +56,11 @@ public class Researches {
     public static Research find(ResourceLocation location) {
         return researches.getOrDefault(location, null);
     }
-    
+
     public static ResearchTask getRandomTask(Random random) {
         return taskPool.get(random.nextInt(taskPool.size())).apply(random);
     }
-    
+
     public static void init() {
         addTask(ResearchTask.ScrivenerItems::new);
         addTask(ResearchTask.ScrivenerItems::new);
@@ -65,6 +68,28 @@ public class Researches {
         addTask(ResearchTask.ScrivenerItems::new);
         addTask(ResearchTask.XP::new);
         addTask(ResearchTask.XP::new);
-        register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 5), EntityType.PIG);
+
+        register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 3), EntityType.PIG);
+        register(new Research(new ResourceLocation(Eidolon.MODID, "flames"), 5) {
+            @Override
+            public void onLearned(ServerPlayer serverPlayer) {
+                KnowledgeUtil.grantSign(serverPlayer, Signs.FLAME_SIGN);
+            }
+        }, EntityType.BLAZE);
+
+        register(new Research(new ResourceLocation(Eidolon.MODID, "frost"), 5) {
+            @Override
+            public void onLearned(ServerPlayer serverPlayer) {
+                KnowledgeUtil.grantSign(serverPlayer, Signs.WINTER_SIGN);
+            }
+        }, EntityType.STRAY);
+
+        register(new Research(new ResourceLocation(Eidolon.MODID, "death"), 7) {
+            @Override
+            public void onLearned(ServerPlayer serverPlayer) {
+                KnowledgeUtil.grantSign(serverPlayer, Signs.DEATH_SIGN);
+            }
+        }, EntityType.WITHER_SKELETON);
     }
+
 }

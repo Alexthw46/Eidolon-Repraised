@@ -1,6 +1,7 @@
 package elucent.eidolon.entity;
 
 import elucent.eidolon.mixin.AbstractArrowMixin;
+import elucent.eidolon.mixin.ProjectileMixin;
 import elucent.eidolon.registries.Entities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
@@ -69,9 +71,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         internal.copyPosition(this);
         internal.setDeltaMovement(getDeltaMovement());
         if (!inGround) {
-            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12), (e) -> {
-                return e != getOwner() && e.isAlive() && (!level.isClientSide || e != Minecraft.getInstance().player);
-            });
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12), (e) -> e != getOwner() && e.isAlive() && !(getOwner() != null && e.isAlliedTo(getOwner())) && (!level.isClientSide || e != Minecraft.getInstance().player));
             if (!entities.isEmpty()) {
                 for (Entity e : entities) System.out.println(e);
                 LivingEntity nearest = entities.stream().min(Comparator.comparingDouble((e) -> e.distanceToSqr(this))).get();
@@ -85,37 +85,38 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return internal == null ? ItemStack.EMPTY :
                 ((AbstractArrowMixin) internal).callGetPickupItem();
     }
 
     @Override
-    public void onHitEntity(EntityHitResult result) {
-        ((AbstractArrowMixin) internal).callOnHitEntity(result);
+    public void onHitEntity(@NotNull EntityHitResult result) {
+        ((ProjectileMixin) internal).callOnHit(result);
         if (internal.isRemoved()) remove(RemovalReason.DISCARDED);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbt) {
+    public void addAdditionalSaveData(@NotNull CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putString("type", getRegistryName(internal.getType()).toString());
         nbt.put("data", internal.serializeNBT());
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Override
-    public void readAdditionalSaveData(CompoundTag nbt) {
+    public void readAdditionalSaveData(@NotNull CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         ResourceLocation rl = new ResourceLocation(nbt.getString("type"));
         EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
         if (type == null) removeAfterChangingDimensions();
 
-        internal = (AbstractArrow)type.create(level);
+        internal = (AbstractArrow) type.create(level);
         internal.deserializeNBT(nbt.getCompound("data"));
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -127,6 +128,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         buffer.writeNbt(extra);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Override
     public void readSpawnData(FriendlyByteBuf additionalData) {
         CompoundTag extra = additionalData.readNbt();
@@ -134,7 +136,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(rl);
         if (type == null) removeAfterChangingDimensions();
 
-        internal = (AbstractArrow)type.create(level);
+        internal = (AbstractArrow) type.create(level);
         internal.deserializeNBT(extra.getCompound("data"));
     }
 }

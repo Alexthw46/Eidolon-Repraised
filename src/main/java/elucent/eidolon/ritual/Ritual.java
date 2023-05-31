@@ -1,16 +1,16 @@
 package elucent.eidolon.ritual;
 
+import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.phys.AABB;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import elucent.eidolon.util.ColorUtil;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkAccess;
 
 public abstract class Ritual {
     ResourceLocation name = null;
@@ -75,6 +75,10 @@ public abstract class Ritual {
 
     public List<IRequirement> getRequirements() {
         return stepRequirements;
+    }
+
+    public List<IRequirement> getInvariants() {
+        return continuousRequirements;
     }
 
     public enum SetupResult {

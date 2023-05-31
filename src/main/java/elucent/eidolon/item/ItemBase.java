@@ -1,7 +1,6 @@
 package elucent.eidolon.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -9,11 +8,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class ItemBase extends Item {
-    String loreFormat = String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC;
+    ChatFormatting loreFormat = ChatFormatting.DARK_PURPLE;
     String loreTag = null;
 
     public ItemBase(Properties properties) {
@@ -26,12 +26,6 @@ public class ItemBase extends Item {
     }
 
     public ItemBase setLore(ChatFormatting format, String tag) {
-        this.loreFormat = String.valueOf(format);
-        this.loreTag = tag;
-        return this;
-    }
-
-    public ItemBase setLore(String format, String tag) {
         this.loreFormat = format;
         this.loreTag = tag;
         return this;
@@ -39,9 +33,9 @@ public class ItemBase extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this.loreTag != null) {
-            tooltip.add(Component.literal(loreFormat + I18n.get(this.loreTag)));
+            tooltip.add(Component.translatable(this.loreTag).withStyle(loreFormat, ChatFormatting.ITALIC));
         }
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -25,14 +26,14 @@ public class ResearchNotesItem extends ItemBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!stack.hasTag() || !stack.getTag().contains("research")) return;
         Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
         if (r == null) return;
         int done = stack.getTag().getInt("stepsDone");
         StringBuilder stars = new StringBuilder();
         stars.append(ChatFormatting.GOLD);
-        for (int i = 0; i < r.getStars(); i ++) {
+        for (int i = 0; i < r.getStars(); i++) {
             if (i == done) stars.append(ChatFormatting.GRAY);
             if (i < done) stars.append("\u2605");
             else stars.append("\u2606");

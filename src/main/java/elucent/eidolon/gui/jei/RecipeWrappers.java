@@ -2,36 +2,53 @@ package elucent.eidolon.gui.jei;
 
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.recipe.CrucibleRecipe;
+import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.recipe.WorktableRecipe;
+import elucent.eidolon.recipe.WorktableRegistry;
+import elucent.eidolon.ritual.ItemSacrifice;
 import elucent.eidolon.ritual.Ritual;
 
 public class RecipeWrappers {
     public static class Crucible {
         final CrucibleRecipe recipe;
-        final Page page;
+        Page page;
 
         public Crucible(CrucibleRecipe recipe, Page page) {
             this.recipe = recipe;
             this.page = page;
         }
+
+        public Page getPage() {
+            if (page == null) {
+                page = CrucibleRegistry.getDefaultPage(recipe);
+            }
+            return page;
+        }
     }
 
     public static class Worktable {
         final WorktableRecipe recipe;
-        final Page page;
+        Page page;
 
         public Worktable(WorktableRecipe recipe, Page page) {
             this.recipe = recipe;
             this.page = page;
         }
+
+        public Page getPage() {
+            if (this.page == null) {
+                this.page = WorktableRegistry.getDefaultPage(this.recipe);
+            }
+            return this.page;
+        }
     }
 
     public static class RitualRecipe {
         final Ritual ritual;
-        final Page page;
-        final Object sacrifice;
+        Page page;
+        final ItemSacrifice sacrifice;
 
-        public RitualRecipe(Ritual ritual, Page page, Object sacrifice) {
+        public RitualRecipe(Ritual ritual, Page page, ItemSacrifice sacrifice) {
             this.ritual = ritual;
             this.page = page;
             this.sacrifice = sacrifice;

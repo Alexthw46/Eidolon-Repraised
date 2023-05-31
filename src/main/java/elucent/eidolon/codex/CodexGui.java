@@ -11,6 +11,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.AttemptCastPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.spell.Rune;
+import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,7 +34,7 @@ public class CodexGui extends Screen {
     public static final ResourceLocation CODEX_BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_bg.png");
     static final int xSize = 312;
     static final int ySize = 208;
-    final List<Rune> chant = new ArrayList<>();
+    final List<Sign> chant = new ArrayList<>();
     Rune hoveredRune = null;
 
     Chapter currentChapter;
@@ -63,23 +64,23 @@ public class CodexGui extends Screen {
         currentPage = 0;
     }
 
-    public void addToChant(Rune rune) {
+    public void addToChant(Sign rune) {
         if (this.chant.size() < 18) this.chant.add(rune);
     }
 
     protected void renderChant(PoseStack mStack, int x, int y, int mouseX, int mouseY, float pticks) {
-        int chantWidth = 32 + 12 * chant.size();
+        int chantWidth = 32 + 24 * chant.size();
         int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
 
         RenderSystem.enableBlend();
-        
+
         int bgx = baseX;
         blit(mStack, bgx, baseY, 256, 208, 16, 32, 512, 512);
         bgx += 16;
-        for (int i = 0; i < chant.size(); i ++) {
-            blit(mStack, bgx, baseY, 272, 208, 12, 32, 512, 512);
-            blit(mStack, bgx, baseY + 6, 320, 240, 12, 12, 512, 512);
-            bgx += 12;
+        for (int i = 0; i < chant.size(); i++) {
+            blit(mStack, bgx, baseY, 272, 208, 24, 32, 512, 512);
+            blit(mStack, bgx, baseY, 312, 208, 24, 24, 512, 512);
+            bgx += 24;
         }
         blit(mStack, bgx, baseY, 296, 208, 16, 32, 512, 512);
         bgx += 24;
@@ -96,27 +97,40 @@ public class CodexGui extends Screen {
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         bgx = baseX + 16;
         Tesselator tess = Tesselator.getInstance();
-        for (Rune rune : chant) {
+        for (Sign sign : chant) {
+            /*
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
                     1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
             tess.end();
             bgx += 12;
+             */
+            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+            tess.end();
+            bgx += 24;
         }
         bgx = baseX + 16;
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        for (int i = 0; i < chant.size(); i ++) {
-            float flicker = 0.75f + 0.25f * (float)Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks() - 360.0f * i / chant.size()));
-            Rune rune = chant.get(i);
+        for (int i = 0; i < chant.size(); i++) {
+            float flicker = 0.75f + 0.25f * (float) Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks() - 360.0f * i / chant.size()));
+            /*
+            Sign rune = chant.get(i);
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
                 flicker, flicker, flicker, 0.5f * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
             tess.end();
             bgx += 12;
+             */
+            Sign sign = chant.get(i);
+            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+            tess.end();
+            bgx += 24;
         }
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         RenderSystem.setShaderTexture(0, BACKGROUND_LOCATION);
     }
-    
+
     boolean hasTooltip = false;
     Matrix4f tooltipMatrix = null;
     Component tooltipText = null;
@@ -124,11 +138,11 @@ public class CodexGui extends Screen {
 
     @Override
     public void renderTooltip(PoseStack poseStack, Component text, int x, int y) {
-       tooltipMatrix = poseStack.last().pose();
-       tooltipText = text;
-       tooltipX = x;
-       tooltipY = y;
-       hasTooltip = true;
+        tooltipMatrix = poseStack.last().pose();
+        tooltipText = text;
+        tooltipX = x;
+        tooltipY = y;
+        hasTooltip = true;
     }
 
     @Override
@@ -143,7 +157,7 @@ public class CodexGui extends Screen {
         int guiLeft = (width - xSize) / 2, guiTop = (height - ySize) / 2;
         blit(matrixStack, guiLeft, guiTop, 0, 256, xSize, ySize, 512, 512);
 
-        for (int i = 0; i < CodexChapters.categories.size(); i ++) {
+        for (int i = 0; i < CodexChapters.categories.size(); i++) {
             int y = guiTop + 28 + (i % 8) * 20;
             CodexChapters.categories.get(i).draw(this, matrixStack, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
         }
@@ -158,24 +172,26 @@ public class CodexGui extends Screen {
         if (currentPage > 0) { // left arrow
             int x = 10, y = 169;
             int v = 208;
-            if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16) v += 18;
+            if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16)
+                v += 18;
             blit(matrixStack, guiLeft + x, guiTop + y, 128, v, 32, 18, 512, 512);
         }
         if (currentPage + 2 < currentChapter.size()) { // right arrow
             int x = 270, y = 169;
             int v = 208;
-            if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16) v += 18;
+            if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16)
+                v += 18;
             blit(matrixStack, guiLeft + x, guiTop + y, 160, v, 32, 18, 512, 512);
         }
 
         if (chant.size() > 0) renderChant(matrixStack, guiLeft, guiTop, mouseX, mouseY, partialTicks);
 
 
-        for (int i = 0; i < CodexChapters.categories.size(); i ++) {
+        for (int i = 0; i < CodexChapters.categories.size(); i++) {
             int y = guiTop + 28 + (i % 8) * 20;
             CodexChapters.categories.get(i).drawTooltip(this, matrixStack, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
         }
-        
+
         if (hasTooltip) {
             matrixStack.pushPose();
             matrixStack.setIdentity();
@@ -186,7 +202,15 @@ public class CodexGui extends Screen {
     }
 
     protected boolean interactChant(int x, int y, int mouseX, int mouseY) {
+        /*
         int chantWidth = 32 + 12 * chant.size();
+        int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
+        int bgx = baseX + chantWidth + 8;
+        boolean chantHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
+        bgx += 36;
+        boolean cancelHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
+        */
+        int chantWidth = 32 + 24 * chant.size();
         int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
         int bgx = baseX + chantWidth + 8;
         boolean chantHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
@@ -195,6 +219,7 @@ public class CodexGui extends Screen {
         if (chantHover) {
             Player player = Minecraft.getInstance().player;
             Level world = Minecraft.getInstance().level;
+            if (player == null || world == null) return false;
             Networking.sendToServer(new AttemptCastPacket(player, chant));
             chant.clear();
             player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
@@ -241,14 +266,16 @@ public class CodexGui extends Screen {
                 }
             }
 
-            for (int i = 0; i < CodexChapters.categories.size(); i ++) {
+            for (int i = 0; i < CodexChapters.categories.size(); i++) {
                 int y = guiTop + 28 + (i % 8) * 20;
-                if (CodexChapters.categories.get(i).click(this, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, (int)mouseX, (int)mouseY)) return true;
+                if (CodexChapters.categories.get(i).click(this, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, (int) mouseX, (int) mouseY))
+                    return true;
             }
 
             Page left = currentChapter.get(currentPage), right = currentChapter.get(currentPage + 1);
-            if (left != null) if (left.click(this,guiLeft + 14, guiTop + 24, (int)mouseX, (int)mouseY)) return true;
-            if (right != null) if (right.click(this,guiLeft + 170, guiTop + 24, (int)mouseX, (int)mouseY)) return true;
+            if (left != null) if (left.click(this, guiLeft + 14, guiTop + 24, (int) mouseX, (int) mouseY)) return true;
+            if (right != null)
+                if (right.click(this, guiLeft + 170, guiTop + 24, (int) mouseX, (int) mouseY)) return true;
 
             return chant.size() > 0 && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
         }

@@ -15,6 +15,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
+
 public class IndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_index_page.png");
     final IndexEntry[] entries;
@@ -57,8 +59,7 @@ public class IndexPage extends Page {
 
         @Override
         public boolean isUnlocked() {
-            for (ResourceLocation fact : facts) if (!KnowledgeUtil.knowsFact(Eidolon.proxy.getPlayer(), fact)) return false;
-            return true;
+            return Arrays.stream(facts).allMatch((fact) -> KnowledgeUtil.knowsFact(Eidolon.proxy.getPlayer(), fact));
         }
     }
 
@@ -73,6 +74,7 @@ public class IndexPage extends Page {
         for (int i = 0; i < entries.length; i ++) if (entries[i].isUnlocked()) {
             if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
                 gui.changeChapter(entries[i].chapter);
+                assert Minecraft.getInstance().player != null;
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
             }

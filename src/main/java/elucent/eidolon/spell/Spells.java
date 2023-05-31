@@ -1,13 +1,13 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.deity.Deities;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.deity.Deities;
-import net.minecraft.resources.ResourceLocation;
 
 public class Spells {
     static final List<Spell> spells = new ArrayList<>();
@@ -47,14 +47,19 @@ public class Spells {
             new ResourceLocation(Eidolon.MODID, "dark_touch"),
             Signs.WICKED_SIGN, Signs.SOUL_SIGN, Signs.WICKED_SIGN, Signs.SOUL_SIGN
         )),
-        DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
-            new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
-            Deities.DARK_DEITY,
-            Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
-        )),
-        LIGHT_PRAYER = register(new PrayerSpell(
-            new ResourceLocation(Eidolon.MODID, "light_prayer"),
-            Deities.LIGHT_DEITY,
-            Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN
-        ));
+            DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
+                    new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
+                    Deities.DARK_DEITY,
+                    Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
+            )),
+            LIGHT_PRAYER = register(new PrayerSpell(
+                    new ResourceLocation(Eidolon.MODID, "light_prayer"),
+                    Deities.LIGHT_DEITY,
+                    Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN
+            )),
+            FIRE_CHANT = register(new FireTouchSpell(
+                    new ResourceLocation(Eidolon.MODID, "fire_chant"),
+                    Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
+            ));
+
 }

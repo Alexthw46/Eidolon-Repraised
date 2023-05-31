@@ -17,6 +17,10 @@ public class SanguineRitual extends Ritual {
         this.result = result;
     }
 
+    public ItemStack getResult() {
+        return result;
+    }
+
     @Override
     public RitualResult start(Level world, BlockPos pos) {
         if (!world.isClientSide) {

@@ -1,15 +1,7 @@
 package elucent.eidolon.ritual;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.codex.Page;
@@ -17,44 +9,40 @@ import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.gui.jei.RecipeWrappers;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.util.RecipeUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class RitualRegistry {
     static final Map<ResourceLocation, Ritual> rituals = new HashMap<>();
-    static final BiMap<Object, Ritual> matches = HashBiMap.create();
+    static final BiMap<ItemSacrifice, Ritual> matches = HashBiMap.create();
 
     public static void register(ItemStack sacrifice, Ritual ritual) {
         ResourceLocation name = ritual.getRegistryName();
         assert name != null;
         rituals.put(name, ritual);
-        matches.put(sacrifice, ritual);
+        matches.put(new ItemSacrifice(sacrifice), ritual);
     }
 
-    public static Ritual register(Item sacrifice, Ritual ritual) {
+    public static Ritual register(ItemLike sacrifice, Ritual ritual) {
         ResourceLocation name = ritual.getRegistryName();
         assert name != null;
         rituals.put(name, ritual);
-        matches.put(sacrifice, ritual);
-        return ritual;
-    }
-
-    public static Ritual register(Block sacrifice, Ritual ritual) {
-        ResourceLocation name = ritual.getRegistryName();
-        assert name != null;
-        rituals.put(name, ritual);
-        matches.put(Item.byBlock(sacrifice), ritual);
+        matches.put(new ItemSacrifice(sacrifice), ritual);
         return ritual;
     }
 
@@ -62,7 +50,7 @@ public class RitualRegistry {
         ResourceLocation name = ritual.getRegistryName();
         assert name != null;
         rituals.put(name, ritual);
-        matches.put(sacrifice, ritual);
+        matches.put(new ItemSacrifice(sacrifice), ritual);
         return ritual;
     }
 
@@ -74,17 +62,17 @@ public class RitualRegistry {
         return ritual;
     }
 
-    public static Page getDefaultPage(Ritual ritual, Object sacrifice) {
+    public static Page getDefaultPage(Ritual ritual, ItemSacrifice sacrifice) {
         List<RitualPage.RitualIngredient> inputs = new ArrayList<>();
         List<ItemStack> foci = new ArrayList<>();
-        if (sacrifice instanceof MultiItemSacrifice) for (Object o : ((MultiItemSacrifice)sacrifice).items) {
+        if (sacrifice instanceof MultiItemSacrifice) for (Ingredient o : ((MultiItemSacrifice) sacrifice).items) {
             foci.add(RecipeUtil.stackFromObject(o));
         }
         int slot = 0;
         for (IRequirement r : ritual.getRequirements()) {
             if (r instanceof ItemRequirement)
-                inputs.add(new RitualPage.RitualIngredient(RecipeUtil.stackFromObject(((ItemRequirement)r).getMatch()), false));
-            slot ++;
+                inputs.add(new RitualPage.RitualIngredient(RecipeUtil.stackFromObject(((ItemRequirement) r).getMatch()), false));
+            slot++;
         }
         Iterator<ItemStack> iter = foci.iterator();
         while (iter.hasNext()) {
@@ -98,71 +86,58 @@ public class RitualRegistry {
                 }
             }
         }
-        ItemStack center = RecipeUtil.stackFromObject(sacrifice instanceof MultiItemSacrifice ? ((MultiItemSacrifice)sacrifice).main : sacrifice);
+        ItemStack center = RecipeUtil.stackFromObject(sacrifice instanceof MultiItemSacrifice ? sacrifice.main : sacrifice);
 
         return new RitualPage(ritual, center, inputs.toArray(new RitualPage.RitualIngredient[0]));
     }
 
+
+    public static final List<RecipeWrappers.RitualRecipe> wrappedRituals = new ArrayList<>();
+
+    public static ItemSacrifice getMatch(Ritual ritual) {
+        return matches.inverse().getOrDefault(ritual, new ItemSacrifice(Ingredient.EMPTY));
+    }
+
     public static List<RecipeWrappers.RitualRecipe> getWrappedRecipes() {
-        List<RecipeWrappers.RitualRecipe> wrappers = new ArrayList<>();
-        for (Map.Entry<ResourceLocation, Ritual> entry : rituals.entrySet()) {
-            Object sacrifice = matches.inverse().getOrDefault(entry.getValue(), null);
-            Page page = null; // linkedPages.getOrDefault(entry.getKey(), null);
-            wrappers.add(new RecipeWrappers.RitualRecipe(
-                entry.getValue(),
-                page,
-                sacrifice
-            ));
-        }
-        return wrappers;
+        return wrappedRituals;
     }
 
     public static Ritual find(ResourceLocation name) {
         return rituals.get(name);
     }
 
-    static boolean matches(Level world, BlockPos pos, Object match, ItemStack sacrifice) {
-        if (match instanceof ItemStack) {
-            return ItemStack.matches((ItemStack) match, sacrifice);
-        }
-        else if (match instanceof Block) {
-            return Item.byBlock((Block) match) == sacrifice.getItem();
-        }
-        else if (match instanceof Item) {
-            return match == sacrifice.getItem();
-        }
-        else if (match instanceof TagKey<?> tag) {
-            return sacrifice.is((TagKey<Item>) tag);
-        }
-        else if (match instanceof MultiItemSacrifice) {
+    static boolean matches(Level world, BlockPos pos, ItemSacrifice match, ItemStack sacrifice) {
+        if (match instanceof MultiItemSacrifice mis) {
             // check main item first, avoid complicated work
-            if (!matches(world, pos, ((MultiItemSacrifice)match).main, sacrifice)) return false;
+            if (!match.main.test(sacrifice)) return false;
 
-            List<Object> matches = new ArrayList<>(((MultiItemSacrifice) match).items);
-            List<ItemStack> items = new ArrayList<>();
+            List<Ingredient> matches = new ArrayList<>(mis.items);
             List<IRitualItemFocus> foci = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, Ritual.getDefaultBounds(pos));
+            List<ItemStack> items = new ArrayList<>();
             for (IRitualItemFocus focus : foci) items.add(focus.provide());
             if (items.size() != matches.size()) return false;
-            for (int i = 0; i < matches.size(); i ++) {
+            for (int i = 0; i < matches.size(); i++) {
                 int before = matches.size();
                 for (int j = 0; j < items.size(); j ++) {
-                    Object m = matches.get(i);
+                    Ingredient m = matches.get(i);
                     ItemStack item = items.get(j);
-                    if (RitualRegistry.matches(world, pos, m, item)) {
-                        matches.remove(i --);
-                        items.remove(j --);
+                    if (m.test(item)) {
+                        matches.remove(i);
+                        i--; // we removed an item, so we need to go back one
+                        items.remove(j);
                         break;
                     }
                 }
                 if (matches.size() == before) return false; // failed to satisfy match with any item
             }
             return matches.size() == 0; // all matches satisfied
+        } else {
+            return match.main.test(sacrifice);
         }
-        return false;
     }
 
     public static Ritual find(Level world, BlockPos pos, ItemStack sacrifice) {
-        for (Entry<Object, Ritual> entry : matches.entrySet()) {
+        for (Entry<ItemSacrifice, Ritual> entry : matches.entrySet()) {
             if (matches(world, pos, entry.getKey(), sacrifice)) return entry.getValue();
         }
         return null;

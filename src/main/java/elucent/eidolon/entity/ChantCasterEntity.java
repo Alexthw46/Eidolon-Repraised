@@ -7,7 +7,6 @@ import elucent.eidolon.particle.RuneParticleData;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.spell.*;
-import elucent.eidolon.spell.Rune.RuneResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -27,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +42,11 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     int timer = 0, deathTimer = 0;
     Vec3 look;
 
-    public ChantCasterEntity(Level world, Player caster, List<Rune> runes, Vec3 look) {
+    public ChantCasterEntity(Level world, Player caster, List<Sign> runes, Vec3 look) {
         super(Entities.CHANT_CASTER.get(), world);
         this.look = look;
-        setRunesTag(runes);
+        //setRunesTag(runes);
+        setChantTag(runes);
         getEntityData().set(CASTER_ID, Optional.of(caster.getUUID()));
     }
 
@@ -68,7 +69,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         }
         return runes;
     }
-    
+
     protected void setRunesTag(List<Rune> runes) {
         ListTag runesList = new ListTag();
         CompoundTag runesTag = new CompoundTag();
@@ -77,8 +78,28 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         getEntityData().set(RUNES, runesTag);
     }
 
+    protected List<Sign> loadChantTag() {
+        List<Sign> runes = new ArrayList<>();
+        ListTag runesTag = getEntityData().get(RUNES).getList("runes", Tag.TAG_STRING);
+        for (int i = 0; i < runesTag.size(); i++) {
+            Sign r = Signs.find(new ResourceLocation(runesTag.getString(i)));
+            if (r != null) runes.add(r);
+        }
+        return runes;
+    }
+
+    protected void setChantTag(List<Sign> signs) {
+        ListTag signList = new ListTag();
+        CompoundTag signTag = new CompoundTag();
+        for (Sign r : signs) signList.add(StringTag.valueOf(r.getRegistryName().toString()));
+        signTag.put("runes", signList);
+        getEntityData().set(RUNES, signTag);
+    }
+
+
     @Override
     protected void defineSynchedData() {
+        //getEntityData().define(RUNES, getNoRunesTag());
         getEntityData().define(RUNES, getNoRunesTag());
         getEntityData().define(SIGNS, new SignSequence().serializeNbt());
         getEntityData().define(INDEX, 0);
@@ -119,13 +140,15 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         }
 
         if (tickCount % 5 == 0) {
-            List<Rune> runes = loadRunesTag();
+            List<Sign> runes = loadChantTag();
             SignSequence seq = SignSequence.deserializeNbt(getEntityData().get(SIGNS));
             Vector3f initColor = seq.getAverageColor();
 
             int index = getEntityData().get(INDEX);
             if (index >= runes.size()) return;
-            Rune rune = runes.get(index);
+            Sign sign = runes.get(index);
+            seq.addRight(sign);
+            /*
             RuneResult result = rune.doEffect(seq);
             if (result == RuneResult.FAIL) {
                 if (!level.isClientSide) {
@@ -134,15 +157,16 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                     getEntityData().set(SUCCEEDED, false);
                 }
                 deathTimer = 20;
-            }
-            else {
+            } else
+             */
+            {
                 Vector3f afterColor = seq.getAverageColor();
                 double x = getX() + 0.1 * random.nextGaussian(),
                         y = getY() + 0.1 * random.nextGaussian(),
                         z = getZ() + 0.1 * random.nextGaussian();
-                for (int i = 0; i < 2; i ++) {
+                for (int i = 0; i < 2; i++) {
                     level.addParticle(new RuneParticleData(
-                            rune,
+                            Runes.find(ResourceLocation.tryParse("eidolon:sin")),
                             initColor.x(), initColor.y(), initColor.z(),
                             afterColor.x(), afterColor.y(), afterColor.z()
                     ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
@@ -186,7 +210,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

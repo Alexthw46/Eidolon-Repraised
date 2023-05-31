@@ -1,7 +1,6 @@
 package elucent.eidolon;
 
 import elucent.eidolon.block.CandleBlock;
-import elucent.eidolon.block.PipeBlock;
 import elucent.eidolon.block.*;
 import elucent.eidolon.capability.*;
 import elucent.eidolon.entity.*;
@@ -15,10 +14,8 @@ import elucent.eidolon.item.curio.*;
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
-import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Particles;
-import elucent.eidolon.registries.Potions;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.*;
 import elucent.eidolon.tile.*;
 import elucent.eidolon.tile.reagent.CisternTileEntity;
 import elucent.eidolon.tile.reagent.PipeTileEntity;
@@ -81,6 +78,7 @@ public class Registry {
     static final DeferredRegister<RecipeSerializer<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Eidolon.MODID);
     static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
     static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Eidolon.MODID);
+
 
     public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
@@ -437,6 +435,7 @@ public class Registry {
     public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Material.METAL, MaterialColor.WOOD)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .noOcclusion()));
+    /*
     public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
             .sound(SoundType.GLASS).strength(2.0f, 3.0f)
             .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
@@ -445,6 +444,7 @@ public class Registry {
     public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
             .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
             .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
+     */
     public static DecoBlockPack
             SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f))
@@ -519,6 +519,9 @@ public class Registry {
         TILE_ENTITIES.register(modEventBus);
         Particles.PARTICLES.register(modEventBus);
         Sounds.SOUND_EVENTS.register(modEventBus);
+        Worldgen.FEATURES.register(modEventBus);
+        Worldgen.PLACED_FEATURES.register(modEventBus);
+        Worldgen.CONFG_FEATURES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         ARG_TYPES.register(modEventBus);
@@ -549,8 +552,10 @@ public class Registry {
         SOUL_ENCHANTER_TILE_ENTITY = TILE_ENTITIES.register("soul_enchanter", () -> BlockEntityType.Builder.of(SoulEnchanterTileEntity::new, SOUL_ENCHANTER.get()).build(null));
         WOODEN_STAND_TILE_ENTITY = TILE_ENTITIES.register("wooden_brewing_stand", () -> BlockEntityType.Builder.of(WoodenStandTileEntity::new, WOODEN_STAND.get()).build(null));
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
+        /*
         CISTERN_TILE_ENTITY = TILE_ENTITIES.register("cistern", () -> BlockEntityType.Builder.of(CisternTileEntity::new, CISTERN.get()).build(null));
         PIPE_TILE_ENTITY = TILE_ENTITIES.register("pipe", () -> BlockEntityType.Builder.of(PipeTileEntity::new, GLASS_TUBE.get()).build(null));
+         */
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
     }
 

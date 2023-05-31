@@ -1,13 +1,10 @@
 package elucent.eidolon.research;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.*;
 
 public class Research {
     final ResourceLocation rl;
@@ -41,10 +38,9 @@ public class Research {
     public List<ResearchTask> getTasks(int rootSeed, int done) {
         if (specialTasks.containsKey(done)) return specialTasks.get(done);
         List<ResearchTask> tasks = new ArrayList<>();
-        Random random = new Random();
         int seed = getSeed(rootSeed, done);
-        random.setSeed(seed);
-        for (int i = 0; i < 3; i ++) {
+        Random random = new Random(seed);
+        for (int i = 0; i < 3; i++) {
             tasks.add(Researches.getRandomTask(random));
         }
         return tasks;
@@ -52,5 +48,8 @@ public class Research {
 
     public int getSeed(int rootSeed, int done) {
         return rl.hashCode() * 384780223 ^ done * 844955129 ^ rootSeed * 112041199 + 6;
+    }
+
+    public void onLearned(ServerPlayer serverPlayer) {
     }
 }

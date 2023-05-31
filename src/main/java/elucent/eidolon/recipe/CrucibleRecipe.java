@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,12 +97,12 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(@NotNull Container inv, @NotNull Level worldIn) {
         return false; // we don't use a single inventory, so we ignore this one
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public @NotNull ItemStack assemble(@NotNull Container inv) {
         return getResultItem();
     }
 
@@ -111,12 +112,12 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem() {
         return result;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return registryName;
     }
 
@@ -131,7 +132,7 @@ public class CrucibleRecipe implements Recipe<Container> {
 
     public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
         @Override
-        public CrucibleRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public @NotNull CrucibleRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {
             List<Step> steps = new ArrayList<>();
             JsonArray stepArray = json.getAsJsonArray("steps");
             for (JsonElement elt : stepArray) {
@@ -150,14 +151,14 @@ public class CrucibleRecipe implements Recipe<Container> {
         }
 
         @Override
-        public CrucibleRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public CrucibleRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
             int count = buffer.readInt();
             List<Step> steps = new ArrayList<>();
-            for (int i = 0; i < count; i ++) {
+            for (int i = 0; i < count; i++) {
                 int stirs = buffer.readInt();
                 int ingredients = buffer.readInt();
                 List<Ingredient> matches = new ArrayList<>();
-                for (int j = 0; j < ingredients; j ++) matches.add(Ingredient.fromNetwork(buffer));
+                for (int j = 0; j < ingredients; j++) matches.add(Ingredient.fromNetwork(buffer));
                 steps.add(new Step(stirs, matches));
             }
             ItemStack result = buffer.readItem();
@@ -177,12 +178,12 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return Registry.CRUCIBLE_RECIPE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return CrucibleRecipe.Type.INSTANCE;
     }
 

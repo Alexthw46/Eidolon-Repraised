@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#forge:is_wet/overworld",
+  "spawners": {
+    "type": "eidolon:slimy_slug",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

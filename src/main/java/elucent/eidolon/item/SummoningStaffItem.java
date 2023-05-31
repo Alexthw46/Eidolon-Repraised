@@ -31,6 +31,7 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,15 +41,15 @@ public class SummoningStaffItem extends ItemBase {
     public SummoningStaffItem(Properties builderIn) {
         super(builderIn);
     }
-    
+
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.BOW;
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-       return 72000;
+    public int getUseDuration(@NotNull ItemStack stack) {
+        return 72000;
     }
     
     Random random = new Random();
@@ -80,7 +81,7 @@ public class SummoningStaffItem extends ItemBase {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int time) {
+    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity entity, int time) {
         if ((72000 - time) >= 20 && hasCharges(stack)) {
             ListTag charges = getCharges(stack);
             int selected = getSelected(stack);
@@ -164,7 +165,7 @@ public class SummoningStaffItem extends ItemBase {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (hasCharges(stack)) {
@@ -190,7 +191,7 @@ public class SummoningStaffItem extends ItemBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         boolean charge = hasCharges(stack);
         int selected = getSelected(stack);
         String summonKey = "eidolon.tooltip.no_selected_summon";

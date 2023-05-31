@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -13,22 +14,22 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.List;
 
 public class ItemRequirement implements IRequirement {
-    final Object match;
+    final Ingredient match;
 
     public ItemRequirement(ItemStack item) {
-        this.match = item;
+        this.match = Ingredient.of(item);
     }
 
     public ItemRequirement(Item item) {
-        this.match = item;
+        this.match = Ingredient.of(item);
     }
 
     public ItemRequirement(Block block) {
-        this.match = Item.byBlock(block);
+        this.match = Ingredient.of(block);
     }
 
     public ItemRequirement(TagKey<Item> item) {
-        this.match = item;
+        this.match = Ingredient.of(item);
     }
 
     @Override
@@ -37,12 +38,7 @@ public class ItemRequirement implements IRequirement {
         if (tiles.isEmpty()) return RequirementInfo.FALSE;
         for (IRitualItemProvider tile : tiles) {
             ItemStack stack = tile.provide();
-
-            if (match instanceof ItemStack && ItemStack.matches((ItemStack) match, stack)) {
-                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
-            } else if (match instanceof Item && stack.getItem() == match) {
-                return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
-            } else if (match instanceof TagKey && stack.is((TagKey<Item>) match)) {
+            if (match.test(stack)) {
                 return new RequirementInfo(true, ((BlockEntity) tile).getBlockPos());
             }
         }
@@ -57,7 +53,7 @@ public class ItemRequirement implements IRequirement {
         }
     }
 
-    public Object getMatch() {
+    public Ingredient getMatch() {
         return match;
     }
 }

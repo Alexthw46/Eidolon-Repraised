@@ -1,20 +1,21 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.gui.jei.RecipeWrappers;
 import elucent.eidolon.ritual.Ritual;
+import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,6 +40,7 @@ public class RitualPage extends Page {
         this.ritual = ritual;
         this.center = center;
         this.inputs = inputs;
+        RitualRegistry.wrappedRituals.add(new RecipeWrappers.RitualRecipe(ritual, this, RitualRegistry.getMatch(ritual)));
     }
 
     @Override

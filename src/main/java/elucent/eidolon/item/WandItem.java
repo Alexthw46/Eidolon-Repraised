@@ -1,10 +1,8 @@
 package elucent.eidolon.item;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.ItemStack;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class WandItem extends ItemBase implements IRechargeableWand {
     public WandItem(Properties properties) {
@@ -12,7 +10,7 @@ public class WandItem extends ItemBase implements IRechargeableWand {
     }
 
     @Override
-    public int getEnchantmentValue() {
+    public int getEnchantmentValue(ItemStack stack) {
         return 20;
     }
 

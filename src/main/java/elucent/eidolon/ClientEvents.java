@@ -14,17 +14,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Mod.EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEvents {
+
     @OnlyIn(Dist.CLIENT)
     static MultiBufferSource.BufferSource DELAYED_RENDER = null;
 
@@ -33,12 +35,12 @@ public class ClientEvents {
         if (DELAYED_RENDER == null) {
             Map<RenderType, BufferBuilder> buffers = new HashMap<>();
             for (RenderType type : new RenderType[]{
-                RenderUtil.VAPOR_TRANSLUCENT,
-                RenderUtil.DELAYED_PARTICLE,
-                RenderUtil.GLOWING_PARTICLE,
-                RenderUtil.GLOWING_BLOCK_PARTICLE,
-                RenderUtil.GLOWING,
-                RenderUtil.GLOWING_SPRITE}) {
+                    RenderUtil.VAPOR_TRANSLUCENT,
+                    RenderUtil.DELAYED_PARTICLE,
+                    RenderUtil.GLOWING_PARTICLE,
+                    RenderUtil.GLOWING_BLOCK_PARTICLE,
+                    RenderUtil.GLOWING,
+                    RenderUtil.GLOWING_SPRITE}) {
                 buffers.put(type, new BufferBuilder(type.bufferSize()));
             }
             DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new BufferBuilder(256));
@@ -48,13 +50,14 @@ public class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)
     static float clientTicks = 0;
-    
+
     @OnlyIn(Dist.CLIENT)
     public static Matrix4f particleMVMatrix = null;
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onRenderLast(RenderLevelLastEvent event) {
+    public static void onRenderLast(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
         if (ClientConfig.BETTER_LAYERING.get()) {
             PoseStack mStack = RenderSystem.getModelViewStack();
 
@@ -83,22 +86,23 @@ public class ClientEvents {
 
     public static boolean isInGui = false;
 
-    //TODO: find a way to detect if the player is in a gui
+    /*
     @SubscribeEvent
-    public void onRenderGuiStart(RenderGuiOverlayEvent.Pre event) {
+    public static void onRenderGuiStart(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay().id() == null) isInGui = true;
     }
 
     @SubscribeEvent
-    public void onRenderGuiStart(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderGuiStart(RenderGuiOverlayEvent.Post event) {
         if (event.getOverlay().id() == null) isInGui = false;
     }
-    
+    */
+
     public static int jumpTicks = 0;
     public static boolean wasJumping = false;
-    
+
     @SubscribeEvent
-    public void onPlayerTick(PlayerTickEvent event) {
+    public static void onPlayerTick(PlayerTickEvent event) {
         if (event.side != LogicalSide.CLIENT) return;
         Player p = event.player;
         if (p instanceof LocalPlayer lp) {
@@ -107,7 +111,7 @@ public class ClientEvents {
                 if (!d.canFlap(p)) return;
                 if (!(wings.getItem() instanceof IWingsItem)) return;
                 if (lp.input.jumping && (!wasJumping || jumpTicks > 0)) {
-                    jumpTicks ++;
+                    jumpTicks++;
                     if (jumpTicks > 20) jumpTicks = 20;
                 } else if (wasJumping && jumpTicks > 0) {
                     if (jumpTicks >= 20 && !d.isDashing(p)) {

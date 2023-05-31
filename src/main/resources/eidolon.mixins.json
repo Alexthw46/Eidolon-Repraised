@@ -1,17 +1,19 @@
 {
   "required": true,
   "package": "elucent.eidolon.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "eidolon.refmap.json",
   "mixins": [
-    "ZombieVillagerMixin",
-    "PotionBrewingMixin",
-    "LivingEntityMixin",
-    "PlayerRendererMixin",
-    "LevelRendererMixin",
     "AbstractArrowMixin",
     "AbstractContainerMenuMixin",
-    "LocalPlayerMixin"
+    "CandleMixin",
+    "LevelRendererMixin",
+    "LivingEntityMixin",
+    "LocalPlayerMixin",
+    "PlayerRendererMixin",
+    "PotionBrewingMixin",
+    "ProjectileMixin",
+    "ZombieVillagerMixin"
   ],
   "minVersion": "0.8"
 }

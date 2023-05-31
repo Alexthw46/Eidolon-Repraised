@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -29,7 +30,7 @@ public class BonechillWandItem extends WandItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this.loreTag != null) {
             tooltip.add(Component.literal(""));
             tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
@@ -37,20 +38,21 @@ public class BonechillWandItem extends WandItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player entity, @NotNull InteractionHand hand) {
         ItemStack stack = entity.getItemInHand(hand);
-        if (!entity.swinging) {
-            if (!world.isClientSide) {
-                Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
-                Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
-                world.addFreshEntity(new BonechillProjectileEntity(Entities.BONECHILL_PROJECTILE.get(), world).shoot(
+        if (!world.isClientSide) {
+            Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
+            Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
+            world.addFreshEntity(new BonechillProjectileEntity(Entities.BONECHILL_PROJECTILE.get(), world).shoot(
                     pos.x, pos.y, pos.z, vel.x, vel.y, vel.z, entity.getUUID()
-                ));
-                world.playSound(null, pos.x, pos.y, pos.z, Sounds.CAST_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
-                stack.hurtAndBreak(1, entity, (player) -> {
-                    player.broadcastBreakEvent(hand);
-                });
-            }
+            ));
+            world.playSound(null, pos.x, pos.y, pos.z, Sounds.CAST_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
+            stack.hurtAndBreak(1, entity, (player) -> {
+                player.broadcastBreakEvent(hand);
+            });
+            entity.getCooldowns().addCooldown(this, 15);
+        }
+        if (!entity.swinging) {
             entity.swing(hand);
             return InteractionResultHolder.success(stack);
         }

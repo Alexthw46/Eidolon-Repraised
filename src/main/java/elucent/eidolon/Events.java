@@ -19,10 +19,8 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -57,7 +55,8 @@ import java.util.List;
 public class Events {
     @SubscribeEvent
     public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
-        if (event.getObject() != null) event.addCapability(new ResourceLocation(Eidolon.MODID, "reputation"), new IReputation.Provider());
+        if (event.getObject() != null)
+            event.addCapability(new ResourceLocation(Eidolon.MODID, "reputation"), new IReputation.Provider());
     }
 
     @SubscribeEvent
@@ -66,7 +65,8 @@ public class Events {
             event.addCapability(new ResourceLocation(Eidolon.MODID, "knowledge"), new IKnowledge.Provider());
             event.addCapability(new ResourceLocation(Eidolon.MODID, "player_data"), new IPlayerData.Provider());
         }
-        if (event.getObject() instanceof LivingEntity) event.addCapability(new ResourceLocation(Eidolon.MODID, "soul"), new ISoul.Provider());
+        if (event.getObject() instanceof LivingEntity)
+            event.addCapability(new ResourceLocation(Eidolon.MODID, "soul"), new ISoul.Provider());
     }
 
     @SubscribeEvent
@@ -84,16 +84,16 @@ public class Events {
             Networking.sendTo(event.getEntity(), new SoulUpdatePacket(event.getEntity()));
         }
     }
-    
+
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         KnowledgeCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
-    public void onTarget(LivingSetAttackTargetEvent event) {
-        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getTarget()))
-            ((Mob) event.getEntity()).setTarget(null);
+    public void onTarget(LivingChangeTargetEvent event) {
+        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget()))
+            event.setNewTarget(null);
     }
 
     @SubscribeEvent
@@ -137,11 +137,12 @@ public class Events {
             event.getDrops().clear();
             return;
         }
-        
+
         if (entity instanceof ZombieBruteEntity z && entity.hasEffect(MobEffects.WITHER) && !entity.level.isClientSide) {
-            for (ItemEntity item : event.getDrops()) if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
-                item.setItem(new ItemStack(Registry.WITHERED_HEART.get(), item.getItem().getCount()));
-            }
+            for (ItemEntity item : event.getDrops())
+                if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
+                    item.setItem(new ItemStack(Registry.WITHERED_HEART.get(), item.getItem().getCount()));
+                }
         }
 
         if (event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity source) {
@@ -166,7 +167,7 @@ public class Events {
                 else if (entity instanceof EnderDragon) head = new ItemStack(Items.DRAGON_HEAD);
                 else if (entity instanceof Player) {
                     head = new ItemStack(Items.PLAYER_HEAD);
-                    GameProfile gameprofile = ((Player)entity).getGameProfile();
+                    GameProfile gameprofile = ((Player) entity).getGameProfile();
                     head.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), gameprofile));
                 }
                 if (!head.isEmpty()) {
@@ -191,20 +192,8 @@ public class Events {
         }
     }
 
-    /*
-    @SubscribeEvent
-    public void registerSpawns(BiomeLoadingEvent ev) {
-        ResourceKey<Biome> key = ResourceKey.<Biome>create(ForgeRegistries.Keys.BIOMES, ev.getName());
-        if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && ev.getCategory() != Biome.BiomeCategory.MUSHROOM) {
-            ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Entities.WRAITH.get(), Config.WRAITH_SPAWN_WEIGHT.get(), 1, 2));
-            ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Entities.ZOMBIE_BRUTE.get(), Config.ZOMBIE_BRUTE_SPAWN_WEIGHT.get(), 1, 2));
-        }
-        if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && BiomeDictionary.hasType(key, BiomeDictionary.Type.FOREST)) {
-            ev.getSpawns().addSpawn(MobCategory.CREATURE,
-                new MobSpawnSettings.SpawnerData(Entities.RAVEN.get(), Config.RAVEN_SPAWN_WEIGHT.get(), 2, 5));
-        }
+
+/*
         if (key.equals(Biomes.OLD_GROWTH_PINE_TAIGA) || key.equals(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || key.equals(Biomes.FLOWER_FOREST))
             ev.getSpawns().addSpawn(MobCategory.AMBIENT,
                 new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.ABOVEGROUND_SLUG_WEIGHT.get(), 2, 5));
@@ -218,27 +207,30 @@ public class Events {
     @SubscribeEvent
     public void registerCustomAI(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {
-            if (event.getEntity() instanceof Player) {
-                Networking.sendTo((Player) event.getEntity(), new KnowledgeUpdatePacket((Player) event.getEntity(), false));
-                Networking.sendTo((Player) event.getEntity(), new SoulUpdatePacket((Player) event.getEntity()));
+            if (event.getEntity() instanceof Player player) {
+                Networking.sendTo(player, new KnowledgeUpdatePacket(player, false));
+                Networking.sendTo(player, new SoulUpdatePacket(player));
             }
-            if (event.getEntity() instanceof Witch) {
-                ((Witch) event.getEntity()).goalSelector.addGoal(1, new WitchBarterGoal(
-                        (Witch) event.getEntity(),
+            if (event.getEntity() instanceof Witch witch) {
+                witch.goalSelector.addGoal(1, new WitchBarterGoal(
+                        witch,
                         (stack) -> stack.getItem() == Registry.CODEX.get(),
                         (stack) -> CodexItem.withSign(stack, Signs.WICKED_SIGN)
                 ));
             }
-            if (event.getEntity() instanceof Villager) {
-                ((Villager)event.getEntity()).goalSelector.addGoal(1, new PriestBarterGoal(
-                    (Villager)event.getEntity(),
-                    (stack) -> stack.getItem() == Registry.CODEX.get(),
-                    (stack) -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
+            if (event.getEntity() instanceof Villager villager) {
+                villager.goalSelector.addGoal(1, new PriestBarterGoal(
+                        villager,
+                        (stack) -> stack.getItem() == Registry.CODEX.get(),
+                        (stack) -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
+            }
+            if (event.getEntity() instanceof PathfinderMob mob && Eidolon.getTrueMobType(mob) == MobType.UNDEAD) {
+                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> living.hasEffect(Potions.LIGHT_BLESSED.get())));
             }
         }
     }
-    
+
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) event.player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
@@ -268,7 +260,7 @@ public class Events {
             event.setResult(Event.Result.DENY);
         }
     }
-    
+
     @SubscribeEvent
     public void onLivingUse(LivingEntityUseItemEvent event) {
         if (event.getEntity().hasEffect(Potions.UNDEATH_EFFECT.get())) {
@@ -293,12 +285,13 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if ((event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId()) || event.getSource().isMagic())) {
-            if (event.getSource().getEntity() instanceof LivingEntity
-                && ((LivingEntity) event.getSource().getEntity()).getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
+        boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
+        if ((isWither || event.getSource().isMagic())) {
+            if (event.getSource().getEntity() instanceof LivingEntity living
+                && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
-                if (event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId()))
-                    ((LivingEntity) event.getSource().getEntity()).heal(event.getAmount() / 2);
+                if (isWither)
+                    living.heal(event.getAmount() / 2);
             }
             if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarlockRobesItem)
                 event.setAmount(event.getAmount() / 2);
@@ -315,7 +308,7 @@ public class Events {
 
     @SubscribeEvent
     public void onGetSpeedFactor(StuckInBlockEvent event) {
-        if (event.getStuckMultiplier().length() < 1.0f && event.getEntity() instanceof LivingEntity && ((LivingEntity)event.getEntity()).getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
+        if (event.getStuckMultiplier().length() < 1.0f && event.getEntity() instanceof LivingEntity living && living.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
             Vec3 diff = new Vec3(1, 1, 1).subtract(event.getStuckMultiplier()).scale(0.5);
             event.setStuckMultiplier(new Vec3(1, 1, 1).subtract(diff));
         }

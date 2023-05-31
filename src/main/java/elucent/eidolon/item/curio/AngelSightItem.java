@@ -3,7 +3,6 @@ package elucent.eidolon.item.curio;
 import elucent.eidolon.Registry;
 import elucent.eidolon.entity.AngelArrowEntity;
 import elucent.eidolon.item.ItemBase;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -13,18 +12,18 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.Random;
 
-public class AngelSightItem extends ItemBase {
+public class AngelSightItem extends ItemBase implements ICurioItem {
     static final Random random = new Random();
 
     public AngelSightItem(Properties properties) {
@@ -44,16 +43,16 @@ public class AngelSightItem extends ItemBase {
             ammo = new ItemStack(Items.ARROW);
         }
 
-        if (CuriosApi.getCuriosHelper().findEquippedCurio(Registry.ANGELS_SIGHT.get(), event.getEntity()).isEmpty())
+        if (CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.ANGELS_SIGHT.get()).isEmpty())
             return;
 
-        float f = BowItem.getPowerForTime(event.getCharge());
+        float f = event.getBow().getItem() instanceof BowItem ? BowItem.getPowerForTime(event.getCharge()) : 1.0F;
         if (!((double)f < 0.1D)) {
             boolean flag1 = player.getAbilities().instabuild || (ammo.getItem() instanceof ArrowItem && ((ArrowItem) ammo.getItem()).isInfinite(ammo, stack, player));
             if (!world.isClientSide) {
                 ArrowItem arrowitem = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
                 AbstractArrow innerarrow = arrowitem.createArrow(world, ammo, player);
-                innerarrow = ((BowItem)stack.getItem()).customArrow(innerarrow);
+                if (stack.getItem() instanceof BowItem bow) innerarrow = bow.customArrow(innerarrow);
                 AngelArrowEntity abstractarrowentity = new AngelArrowEntity(world, player);
                 abstractarrowentity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                 if (f == 1.0F) {
@@ -61,17 +60,17 @@ public class AngelSightItem extends ItemBase {
                     abstractarrowentity.setCritArrow(true);
                 }
 
-                int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
+                int j = stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
                 if (j > 0) {
                     innerarrow.setBaseDamage(innerarrow.getBaseDamage() + (double) j * 0.5D + 0.5D);
                 }
 
-                int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
+                int k = stack.getEnchantmentLevel(Enchantments.PUNCH_ARROWS);
                 if (k > 0) {
                     innerarrow.setKnockback(k);
                 }
 
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
+                if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
                     innerarrow.setSecondsOnFire(100);
                 }
                 abstractarrowentity.setArrow(innerarrow);
@@ -100,12 +99,7 @@ public class AngelSightItem extends ItemBase {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag unused) {
-        return new EidolonCurio(stack) {
-            @Override
-            public boolean canRightClickEquip() {
-                return true;
-            }
-        };
+    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
+        return true;
     }
 }

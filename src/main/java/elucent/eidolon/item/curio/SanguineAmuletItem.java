@@ -15,32 +15,33 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import javax.annotation.Nonnull;
-
-public class SanguineAmuletItem extends ItemBase {
+public class SanguineAmuletItem extends ItemBase implements ICurioItem {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            //MinecraftForgeClient.registerTooltipComponentFactory(SanguineAmuletTooltipInfo.class, SanguineAmuletTooltipComponent::new);
             MinecraftForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
             return null;
         });
     }
 
     static int getCharge(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains("charge")) {
-            return stack.getTag().getInt("charge");
+        if (stack.hasTag()) {
+            var tag = stack.getTag();
+            if (tag != null && tag.contains("charge")) {
+                return tag.getInt("charge");
+            }
         }
         return 0;
     }
@@ -55,52 +56,52 @@ public class SanguineAmuletItem extends ItemBase {
         stack.getOrCreateTag().putInt("charge", newCharge);
     }
 
+
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag unused) {
-        return new EidolonCurio(stack) {
-            @Override
-            public void curioTick(String type, int index, LivingEntity entity) {
-                if (!entity.level.isClientSide) {
-                    if (entity.tickCount % 80 == 0 &&
-                        entity.getHealth() >= entity.getMaxHealth() - 0.0001 &&
-                        entity instanceof Player player && ((Player) entity).getFoodData().getFoodLevel() >= 18 &&
-                        getCharge(stack) < 40) {
-                        float f = player.getFoodData().getSaturationLevel() > 0 ?
-                            Math.min(4 * player.getFoodData().getSaturationLevel(), 16.0F) : 4.0f;
-                        player.causeFoodExhaustion(f);
-                        addCharge(stack, 1);
-                        ThrownEnderpearl e;
-                    }
-                    if (entity.tickCount % 10 == 0 &&
-                        getCharge(stack) > 0 && entity.getHealth() < entity.getMaxHealth()) {
-                        int taken = (int) Math.min(1, entity.getMaxHealth() - entity.getHealth());
-                        addCharge(stack, -taken);
-                        entity.heal(taken);
-                    }
-                }
+    public void curioTick(SlotContext slotContext, ItemStack stack) {
+        LivingEntity entity = slotContext.entity();
+        if (!entity.level.isClientSide) {
+            if (entity.tickCount % 80 == 0 &&
+                entity.getHealth() >= entity.getMaxHealth() - 0.0001 &&
+                entity instanceof Player player && ((Player) entity).getFoodData().getFoodLevel() >= 18 &&
+                getCharge(stack) < 40) {
+                float f = player.getFoodData().getSaturationLevel() > 0 ?
+                        Math.min(4 * player.getFoodData().getSaturationLevel(), 16.0F) : 4.0f;
+                player.causeFoodExhaustion(f);
+                addCharge(stack, 1);
             }
+            if (entity.tickCount % 10 == 0 &&
+                getCharge(stack) > 0 && entity.getHealth() < entity.getMaxHealth()) {
+                int taken = (int) Math.min(1, entity.getMaxHealth() - entity.getHealth());
+                addCharge(stack, -taken);
+                entity.heal(taken);
+            }
+        }
+    }
 
-            @Override
-            public boolean canSync(String identifier, int index, LivingEntity livingEntity) {
-                return true;
-            }
+    @Override
+    public boolean canSync(SlotContext slotContext, ItemStack stack) {
+        return true;
+    }
 
-            @Nonnull
-            public CompoundTag writeSyncData() {
-                CompoundTag nbt = new CompoundTag();
-                nbt.putInt("charge", getCharge(stack));
-                return nbt;
-            }
 
-            public void readSyncData(CompoundTag compound) {
-                setCharge(stack, compound.getInt("charge"));
-            }
+    @NotNull
+    @Override
+    public CompoundTag writeSyncData(SlotContext slotContext, ItemStack stack) {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putInt("charge", getCharge(stack));
+        return nbt;
+    }
 
-            @Override
-            public boolean canRightClickEquip() {
-                return true;
-            }
-        };
+    @Override
+    public void readSyncData(SlotContext slotContext, CompoundTag compound, ItemStack stack) {
+        setCharge(stack, compound.getInt("charge"));
+    }
+
+
+    @Override
+    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
+        return true;
     }
 
     public static class SanguineAmuletTooltipInfo implements TooltipComponent {
@@ -130,12 +131,12 @@ public class SanguineAmuletItem extends ItemBase {
         }
 
         @Override
-        public int getWidth(Font font) {
+        public int getWidth(@NotNull Font font) {
             return maxWidth;
         }
 
         @Override
-        public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRender, int p_194053_) {
+        public void renderImage(@NotNull Font font, int x, int y, @NotNull PoseStack poseStack, @NotNull ItemRenderer itemRender, int p_194053_) {
             Minecraft mc = Minecraft.getInstance();
             RenderSystem.setShaderTexture(0, new ResourceLocation("minecraft", "textures/gui/icons.png"));
             int charge = getCharge(stack);
