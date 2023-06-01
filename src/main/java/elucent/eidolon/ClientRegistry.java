@@ -288,7 +288,8 @@ public class ClientRegistry {
             int iconU = 48, iconV = 48;
 
             mStack.pushPose();
-            mStack.translate(0, 0, 0.01);
+            mStack.scale(0.75f, 0.75f, 0.75f);
+            mStack.translate(125, 0, 0.01);
             RenderSystem.setShaderTexture(0, MANA_BAR_TEXTURE);
             if (isHoriz) {
                 ox -= 4;

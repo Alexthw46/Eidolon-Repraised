@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class PipeBlock extends BlockBase implements EntityBlock {
     static final VoxelShape
@@ -50,17 +51,17 @@ public class PipeBlock extends BlockBase implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return getInteractionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return getInteractionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+    public @NotNull VoxelShape getInteractionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos) {
         return SHAPES[state.getValue(IN).ordinal() * 6 + state.getValue(OUT).ordinal()];
     }
 

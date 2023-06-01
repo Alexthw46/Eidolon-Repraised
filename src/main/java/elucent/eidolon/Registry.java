@@ -435,6 +435,8 @@ public class Registry {
     public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Material.METAL, MaterialColor.WOOD)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .noOcclusion()));
+    public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Material.AIR, MaterialColor.NONE)
+            .sound(SoundType.AMETHYST).lightLevel((p) -> 12)));
     /*
     public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
             .sound(SoundType.GLASS).strength(2.0f, 3.0f)

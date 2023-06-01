@@ -2,7 +2,6 @@ package elucent.eidolon.item.curio;
 
 import elucent.eidolon.Registry;
 import elucent.eidolon.entity.AngelArrowEntity;
-import elucent.eidolon.item.ItemBase;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -18,12 +17,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.Random;
 
-public class AngelSightItem extends ItemBase implements ICurioItem {
+public class AngelSightItem extends EidolonCurio {
     static final Random random = new Random();
 
     public AngelSightItem(Properties properties) {
@@ -98,8 +95,4 @@ public class AngelSightItem extends ItemBase implements ICurioItem {
         event.setCanceled(true);
     }
 
-    @Override
-    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
-    }
 }

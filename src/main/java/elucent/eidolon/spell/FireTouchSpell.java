@@ -31,7 +31,7 @@ public class FireTouchSpell extends StaticSpell {
         //List<BrazierTileEntity> braziers = getTilesWithinAABB(BrazierTileEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         //List<CampfireBlockEntity> campfires = getTilesWithinAABB(CampfireBlockEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
 
-        HitResult ray = rayTrace(player, 5, 0, true);
+        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         if (ray instanceof BlockHitResult rayTraceResult) {
             BlockState hitState = world.getBlockState(rayTraceResult.getBlockPos());
             if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
@@ -53,7 +53,7 @@ public class FireTouchSpell extends StaticSpell {
             //List<BrazierTileEntity> braziers = getTilesWithinAABB(BrazierTileEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
             //List<CampfireBlockEntity> campfires = getTilesWithinAABB(CampfireBlockEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
 
-            HitResult ray = rayTrace(player, 5, 0, true);
+            HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
             if (ray instanceof BlockHitResult blockHitResult) {
                 BlockState hitState = world.getBlockState(blockHitResult.getBlockPos());
                 if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {

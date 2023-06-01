@@ -38,7 +38,7 @@ public class DarkTouchSpell extends StaticSpell {
     public static final String NECROTIC_KEY = new ResourceLocation(Eidolon.MODID, "necrotic").toString();
 
     public DarkTouchSpell(ResourceLocation name, Sign... signs) {
-        super(name, signs);
+        super(name, 40, signs);
 
         MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
@@ -101,14 +101,8 @@ public class DarkTouchSpell extends StaticSpell {
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
         else {
-            player.getCapability(ISoul.INSTANCE).ifPresent(soul -> {
-
-                if (soul.getMagic() > 50) {
-                    soul.takeMagic(50);
-                    stack.getOrCreateTag().putBoolean(NECROTIC_KEY, true);
-                }
-
-            });
+            ISoul.expendMana(player, getCost());
+            stack.getOrCreateTag().putBoolean(NECROTIC_KEY, true);
             return stack;
         }
     }

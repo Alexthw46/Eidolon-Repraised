@@ -1,16 +1,15 @@
 package elucent.eidolon.block;
 
-import net.minecraft.world.level.block.state.BlockState;
 import elucent.eidolon.tile.NecroticFocusTileEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class NecroticFocusBlock extends HorizontalWaterloggableBlock implements EntityBlock {
     final VoxelShape SOUTH = Shapes.box(0, 0, 0, 1, 1, 0.5);
@@ -32,17 +31,17 @@ public class NecroticFocusBlock extends HorizontalWaterloggableBlock implements 
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return shapeForState(state);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return shapeForState(state);
     }
 
     @Override
-    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+    public @NotNull VoxelShape getInteractionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos) {
         return shapeForState(state);
     }
 

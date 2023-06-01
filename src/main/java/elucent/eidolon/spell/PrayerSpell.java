@@ -4,6 +4,8 @@ import elucent.eidolon.block.HorizontalBlockBase;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.deity.Deity;
+import elucent.eidolon.network.Networking;
+import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.tile.EffigyTileEntity;
@@ -19,6 +21,8 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static elucent.eidolon.registries.Particles.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;
@@ -43,8 +47,9 @@ public class PrayerSpell extends StaticSpell {
         player.getCapability(ISoul.INSTANCE).ifPresent((soul) -> {
             var capacity = altarInfo.getCapacity();
             var power = altarInfo.getPower();
-            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), capacity * 2));
-            soul.setMagic((float) Math.max(soul.getMaxMagic(), Math.max(soul.getMagic(), reputation + power * 2)));
+            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), reputation * (1 + capacity)));
+            soul.setMagic((float) Math.max(soul.getMagic(), soul.getMagic() + reputation + power * 2));
+            if (!world.isClientSide) Networking.sendToTracking(world, player.getOnPos(), new SoulUpdatePacket(player));
         });
     }
 
@@ -71,14 +76,14 @@ public class PrayerSpell extends StaticSpell {
             float x = effigy.getBlockPos().getX() + 0.5f + dir.getStepX() * 0.21875f;
             float y = effigy.getBlockPos().getY() + 0.8125f;
             float z = effigy.getBlockPos().getZ() + 0.5f + dir.getStepZ() * 0.21875f;
-            Particles.create(elucent.eidolon.registries.Particles.FLAME_PARTICLE)
+            Particles.create(FLAME_PARTICLE)
                     .setColor(deity.getRed(), deity.getGreen(), deity.getBlue())
                     .setAlpha(0.5f, 0)
                     .setScale(0.125f, 0.0625f)
                     .randomOffset(0.01f)
                     .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
                     .repeat(world, x + 0.09375f * tangent.getStepX(), y, z + 0.09375f * tangent.getStepZ(), 8);
-            Particles.create(elucent.eidolon.registries.Particles.FLAME_PARTICLE)
+            Particles.create(FLAME_PARTICLE)
                     .setColor(deity.getRed(), deity.getGreen(), deity.getBlue())
                     .setAlpha(0.5f, 0)
                     .setScale(0.1875f, 0.125f)

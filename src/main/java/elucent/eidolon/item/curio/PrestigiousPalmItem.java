@@ -1,22 +1,16 @@
 package elucent.eidolon.item.curio;
 
-import java.util.UUID;
-
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.item.ItemBase;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import top.theillusivec4.curios.api.SlotContext;
 
-import net.minecraft.world.item.Item.Properties;
+import java.util.UUID;
 
-public class PrestigiousPalmItem extends ItemBase {
+public class PrestigiousPalmItem extends EidolonCurio {
     final UUID ATTR_ID = new UUID(297661999713141389L, 6434109711109552363L);
 
     public PrestigiousPalmItem(Properties properties) {
@@ -24,19 +18,10 @@ public class PrestigiousPalmItem extends ItemBase {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag unused) {
-        return new EidolonCurio(stack) {
-            @Override
-            public Multimap<Attribute, AttributeModifier> getAttributeModifiers(String identifier) {
-                Multimap<Attribute, AttributeModifier> map = HashMultimap.create();
-                map.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":prestigious_palm", 4.0f, AttributeModifier.Operation.ADDITION));
-                return map;
-            }
-
-            @Override
-            public boolean canRightClickEquip() {
-                return true;
-            }
-        };
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
+        map.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":prestigious_palm", 4.0f, AttributeModifier.Operation.ADDITION));
+        return map;
     }
+
 }

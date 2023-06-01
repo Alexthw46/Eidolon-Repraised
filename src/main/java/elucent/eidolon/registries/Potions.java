@@ -42,7 +42,7 @@ public class Potions {
     public static final RegistryObject<Potion> STRONG_DECAY_POTION = POTION_TYPES.register("strong_decay", () -> new Potion(new MobEffectInstance(MobEffects.WITHER, 450, 1)));
     public static final RegistryObject<Potion> LONG_DECAY_POTION = POTION_TYPES.register("long_decay", () -> new Potion(new MobEffectInstance(MobEffects.WITHER, 1800)));
     public static final RegistryObject<Potion> DECAY_POTION = POTION_TYPES.register("decay", () -> new Potion(new MobEffectInstance(MobEffects.WITHER, 900)));
-    public static final RegistryObject<MobEffect> LIGHT_BLESSED = POTIONS.register("light_blassing", BlessedEffect::new);
+    public static final RegistryObject<MobEffect> LIGHT_BLESSED = POTIONS.register("light_blessing", BlessedEffect::new);
 
 
     public static void addBrewingRecipes() {

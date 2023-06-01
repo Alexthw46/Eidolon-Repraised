@@ -1,6 +1,7 @@
 package elucent.eidolon.gui.jei;
 
 import elucent.eidolon.codex.Page;
+import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.recipe.WorktableRecipe;
@@ -45,10 +46,10 @@ public class RecipeWrappers {
 
     public static class RitualRecipe {
         final Ritual ritual;
-        Page page;
+        RitualPage page;
         final ItemSacrifice sacrifice;
 
-        public RitualRecipe(Ritual ritual, Page page, ItemSacrifice sacrifice) {
+        public RitualRecipe(Ritual ritual, RitualPage page, ItemSacrifice sacrifice) {
             this.ritual = ritual;
             this.page = page;
             this.sacrifice = sacrifice;

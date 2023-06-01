@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import elucent.eidolon.Registry;
-import elucent.eidolon.item.ItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -25,9 +24,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-public class SanguineAmuletItem extends ItemBase implements ICurioItem {
+public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
@@ -98,11 +96,6 @@ public class SanguineAmuletItem extends ItemBase implements ICurioItem {
         setCharge(stack, compound.getInt("charge"));
     }
 
-
-    @Override
-    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
-    }
 
     public static class SanguineAmuletTooltipInfo implements TooltipComponent {
         final ItemStack stack;

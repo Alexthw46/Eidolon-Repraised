@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.codex.CodexGui;
-import elucent.eidolon.ritual.*;
+import elucent.eidolon.codex.RitualPage;
+import elucent.eidolon.ritual.ItemSacrifice;
+import elucent.eidolon.ritual.SanguineRitual;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RitualCategory implements IRecipeCategory<RecipeWrappers.RitualRecipe> {
-    static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "ritual");
+    static final ResourceLocation UUID = new ResourceLocation(Eidolon.MODID, "ritual");
     private final IDrawable background, icon;
 
     public RitualCategory(IGuiHelper guiHelper) {
@@ -64,17 +66,8 @@ public class RitualCategory implements IRecipeCategory<RecipeWrappers.RitualReci
         List<Ingredient> inputs = new ArrayList<>();
         ItemSacrifice sacrifice = recipe.sacrifice;
 
-        for (IRequirement r : recipe.ritual.getRequirements()) {
-            if (r instanceof ItemRequirement requirement)
-                inputs.add(requirement.getMatch());
-            if (r instanceof FocusItemPresentRequirement requirement)
-                inputs.add(requirement.getMatch());
-        }
-        for (IRequirement r : recipe.ritual.getInvariants()) {
-            if (r instanceof ItemRequirement requirement)
-                inputs.add(requirement.getMatch());
-            if (r instanceof FocusItemPresentRequirement requirement)
-                inputs.add(requirement.getMatch());
+        for (RitualPage.RitualIngredient item : recipe.page.getInputs()) {
+            inputs.add(Ingredient.of(item.stack));
         }
 
         float angleStep = Math.min(30, 180 / inputs.size());

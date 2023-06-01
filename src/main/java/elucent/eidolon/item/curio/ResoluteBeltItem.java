@@ -1,32 +1,26 @@
 package elucent.eidolon.item.curio;
 
-import java.util.Random;
-import java.util.UUID;
-
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
-import elucent.eidolon.item.ItemBase;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
 
-import net.minecraft.world.item.Item.Properties;
+import java.util.Random;
+import java.util.UUID;
 
-public class ResoluteBeltItem extends ItemBase {
+public class ResoluteBeltItem extends EidolonCurio {
     final UUID ATTR_ID = new UUID(3701779382882225399L, 5035874982077300549L);
 
     public ResoluteBeltItem(Properties properties) {
@@ -38,7 +32,7 @@ public class ResoluteBeltItem extends ItemBase {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity entity && CuriosApi.getCuriosHelper().findEquippedCurio(Registry.RESOLUTE_BELT.get(), event.getEntity()).isPresent()) {
+        if (event.getSource().getEntity() instanceof LivingEntity entity && CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.RESOLUTE_BELT.get()).isPresent()) {
             Vec3 diff = event.getEntity().position().subtract(entity.position()).multiply(1, 0, 1).normalize();
             entity.knockback(0.8f, diff.x, diff.z);
             if (!entity.level.isClientSide)
@@ -46,20 +40,12 @@ public class ResoluteBeltItem extends ItemBase {
         }
     }
 
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag unused) {
-        return new EidolonCurio(stack) {
-            @Override
-            public Multimap<Attribute, AttributeModifier> getAttributeModifiers(String identifier) {
-                Multimap<Attribute, AttributeModifier> map = HashMultimap.create();
-                map.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTR_ID, Eidolon.MODID + ":resolute_belt", 1.0f, AttributeModifier.Operation.ADDITION));
-                return map;
-            }
 
-            @Override
-            public boolean canRightClickEquip() {
-                return true;
-            }
-        };
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
+        map.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTR_ID, Eidolon.MODID + ":resolute_belt", 1.0f, AttributeModifier.Operation.ADDITION));
+        return map;
     }
+
 }

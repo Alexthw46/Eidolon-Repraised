@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -83,5 +84,13 @@ public interface ISoul {
         AttributeInstance attr = entity.getAttribute(Registry.PERSISTENT_SOUL_HEARTS.get());
         if (attr != null) return (float) attr.getValue();
         else return 0;
+    }
+
+    static void expendMana(Player player, int amount) {
+        player.getCapability(INSTANCE).ifPresent(soul -> {
+            if (soul.getMagic() >= amount) {
+                soul.takeMagic(amount);
+            }
+        });
     }
 }

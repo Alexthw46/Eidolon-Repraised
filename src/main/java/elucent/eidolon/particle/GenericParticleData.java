@@ -4,12 +4,9 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-
-import net.minecraft.core.particles.ParticleOptions.Deserializer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class GenericParticleData implements ParticleOptions {
     float r1 = 1, g1 = 1, b1 = 1, a1 = 1, r2 = 1, g2 = 1, b2 = 1, a2 = 0;
@@ -20,24 +17,30 @@ public class GenericParticleData implements ParticleOptions {
 
     public static Codec<GenericParticleData> codecFor(ParticleType<?> type) {
         return RecordCodecBuilder.create(instance -> instance.group(
-            Codec.FLOAT.fieldOf("r1").forGetter(d -> d.r1),
-            Codec.FLOAT.fieldOf("g1").forGetter(d -> d.g1),
-            Codec.FLOAT.fieldOf("b1").forGetter(d -> d.b1),
-            Codec.FLOAT.fieldOf("a1").forGetter(d -> d.a1),
-            Codec.FLOAT.fieldOf("r2").forGetter(d -> d.r2),
-            Codec.FLOAT.fieldOf("g2").forGetter(d -> d.g2),
-            Codec.FLOAT.fieldOf("b2").forGetter(d -> d.b2),
-            Codec.FLOAT.fieldOf("a2").forGetter(d -> d.a2),
-            Codec.FLOAT.fieldOf("scale1").forGetter(d -> d.scale1),
-            Codec.FLOAT.fieldOf("scale2").forGetter(d -> d.scale2),
-            Codec.INT.fieldOf("lifetime").forGetter(d -> d.lifetime),
-            Codec.FLOAT.fieldOf("spin").forGetter(d -> d.spin),
-            Codec.BOOL.fieldOf("gravity").forGetter(d -> d.gravity)
+                Codec.FLOAT.fieldOf("r1").forGetter(d -> d.r1),
+                Codec.FLOAT.fieldOf("g1").forGetter(d -> d.g1),
+                Codec.FLOAT.fieldOf("b1").forGetter(d -> d.b1),
+                Codec.FLOAT.fieldOf("a1").forGetter(d -> d.a1),
+                Codec.FLOAT.fieldOf("r2").forGetter(d -> d.r2),
+                Codec.FLOAT.fieldOf("g2").forGetter(d -> d.g2),
+                Codec.FLOAT.fieldOf("b2").forGetter(d -> d.b2),
+                Codec.FLOAT.fieldOf("a2").forGetter(d -> d.a2),
+                Codec.FLOAT.fieldOf("scale1").forGetter(d -> d.scale1),
+                Codec.FLOAT.fieldOf("scale2").forGetter(d -> d.scale2),
+                Codec.INT.fieldOf("lifetime").forGetter(d -> d.lifetime),
+                Codec.FLOAT.fieldOf("spin").forGetter(d -> d.spin),
+                Codec.BOOL.fieldOf("gravity").forGetter(d -> d.gravity)
         ).apply(instance, (r1, g1, b1, a1, r2, g2, b2, a2, scale1, scale2,
                            lifetime, spin, gravity) -> {
             GenericParticleData data = new GenericParticleData(type);
-            data.r1 = r1; data.g1 = g1; data.b1 = b1; data.a1 = a1;
-            data.r2 = r2; data.g2 = g2; data.b2 = b2; data.a2 = a2;
+            data.r1 = r1;
+            data.g1 = g1;
+            data.b1 = b1;
+            data.a1 = a1;
+            data.r2 = r2;
+            data.g2 = g2;
+            data.b2 = b2;
+            data.a2 = a2;
             data.scale1 = scale1;
             data.scale2 = scale2;
             data.lifetime = lifetime;

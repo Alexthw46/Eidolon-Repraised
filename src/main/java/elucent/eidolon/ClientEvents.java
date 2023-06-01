@@ -14,8 +14,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -56,27 +58,32 @@ public class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onRenderLast(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
+    public static void onRenderLast(@SuppressWarnings("removal") RenderLevelLastEvent event) {
         if (ClientConfig.BETTER_LAYERING.get()) {
-            PoseStack mStack = RenderSystem.getModelViewStack();
 
-            RenderSystem.getModelViewStack().pushPose(); // this feels...cheaty
-            RenderSystem.getModelViewStack().setIdentity();
-            if (particleMVMatrix != null) RenderSystem.getModelViewStack().mulPoseMatrix(particleMVMatrix);
+            PoseStack viewStack = RenderSystem.getModelViewStack();
+            viewStack.pushPose(); // this feels...cheaty
+            viewStack.setIdentity();
+            if (particleMVMatrix != null) viewStack.mulPoseMatrix(particleMVMatrix);
             RenderSystem.applyModelViewMatrix();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             getDelayedRender().endBatch(RenderUtil.DELAYED_PARTICLE);
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_PARTICLE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_BLOCK_PARTICLE);
-            RenderSystem.getModelViewStack().popPose();
+            viewStack.popPose();
             RenderSystem.applyModelViewMatrix();
 
             getDelayedRender().endBatch(RenderUtil.GLOWING_SPRITE);
             getDelayedRender().endBatch(RenderUtil.GLOWING);
         }
-        clientTicks += event.getPartialTick();
+
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void renderWorldLastEvent(final RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS)
+            clientTicks += event.getPartialTick();
     }
 
     @OnlyIn(Dist.CLIENT)

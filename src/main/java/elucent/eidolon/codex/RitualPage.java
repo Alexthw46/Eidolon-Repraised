@@ -23,6 +23,11 @@ public class RitualPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
     final Ritual ritual;
     final ItemStack center;
+
+    public RitualIngredient[] getInputs() {
+        return inputs;
+    }
+
     final RitualIngredient[] inputs;
 
     public static class RitualIngredient {

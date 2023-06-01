@@ -24,6 +24,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -137,7 +138,7 @@ public class CodexGui extends Screen {
     int tooltipX = 0, tooltipY = 0;
 
     @Override
-    public void renderTooltip(PoseStack poseStack, Component text, int x, int y) {
+    public void renderTooltip(PoseStack poseStack, @NotNull Component text, int x, int y) {
         tooltipMatrix = poseStack.last().pose();
         tooltipText = text;
         tooltipX = x;
@@ -146,7 +147,7 @@ public class CodexGui extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         hasTooltip = false;
         renderBackground(matrixStack);
         Minecraft mc = Minecraft.getInstance();
@@ -283,7 +284,7 @@ public class CodexGui extends Screen {
     }
 
     @Override
-    public void renderTooltip(PoseStack mStack, ItemStack stack, int x, int y) {
+    public void renderTooltip(@NotNull PoseStack mStack, ItemStack stack, int x, int y) {
         if (!stack.isEmpty()) super.renderTooltip(mStack, stack, x, y);
     }
 }

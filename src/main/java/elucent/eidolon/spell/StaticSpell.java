@@ -1,9 +1,10 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.capability.ISoul;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -13,10 +14,21 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class StaticSpell extends Spell {
     final SignSequence signs;
+    private int cost;
 
     public StaticSpell(ResourceLocation name, Sign... signs) {
         super(name);
         this.signs = new SignSequence(signs);
+    }
+
+    public StaticSpell(ResourceLocation name, int cost, Sign... signs) {
+        this(name, signs);
+        this.cost = cost;
+    }
+
+    @Override
+    public int getCost() {
+        return cost;
     }
 
     @NotNull
@@ -40,6 +52,14 @@ public abstract class StaticSpell extends Spell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player, SignSequence signs) {
+        if (getCost() > 0) {
+            if (player.getCapability(ISoul.INSTANCE).isPresent()) {
+                ISoul soul = player.getCapability(ISoul.INSTANCE).resolve().get();
+                if (soul.getMagic() < getCost()) {
+                    return false;
+                }
+            }
+        }
         return canCast(world, pos, player);
     }
 
@@ -49,4 +69,5 @@ public abstract class StaticSpell extends Spell {
     public void cast(Level world, BlockPos pos, Player player, SignSequence signs) {
         cast(world, pos, player);
     }
+
 }

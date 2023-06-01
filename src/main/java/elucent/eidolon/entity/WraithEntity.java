@@ -1,28 +1,29 @@
 package elucent.eidolon.entity;
 
 import elucent.eidolon.registries.Potions;
-import net.minecraft.world.entity.MobType;
+import elucent.eidolon.registries.Sounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class WraithEntity extends Monster {
     public WraithEntity(EntityType<WraithEntity> type, Level worldIn) {
@@ -31,7 +32,7 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 
@@ -41,7 +42,7 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {
             float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
@@ -111,16 +112,16 @@ public class WraithEntity extends Monster {
 
     @Override
     public SoundEvent getDeathSound() {
-        return SoundEvents.STRAY_DEATH;
+        return Sounds.WRAITH_DEATH.get();
     }
 
     @Override
     public SoundEvent getAmbientSound() {
-        return SoundEvents.STRAY_AMBIENT;
+        return Sounds.WRAITH_AMBIENT.get();
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.STRAY_HURT;
+    public SoundEvent getHurtSound(@NotNull DamageSource source) {
+        return Sounds.WRAITH_HURT.get();
     }
 }

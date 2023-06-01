@@ -1,24 +1,19 @@
 package elucent.eidolon.item.curio;
 
-import java.util.UUID;
-
 import elucent.eidolon.Registry;
 import elucent.eidolon.capability.IPlayerData;
 import elucent.eidolon.item.IWingsItem;
-import elucent.eidolon.item.ItemBase;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
-import net.minecraft.world.item.Item.Properties;
+import java.util.UUID;
 
-public class RavenCloakItem extends ItemBase implements IWingsItem {
+public class RavenCloakItem extends EidolonCurio implements IWingsItem {
     UUID ATTR_ID = new UUID(261693807752044433L, 1154961640602571210L);
 
     public RavenCloakItem(Properties properties) {
@@ -28,21 +23,11 @@ public class RavenCloakItem extends ItemBase implements IWingsItem {
 
     @SubscribeEvent
     public static void onFall(LivingFallEvent event) {
-        if (CuriosApi.getCuriosHelper().findEquippedCurio(Registry.GRAVITY_BELT.get(), event.getEntity()).isPresent()) {
+        if (CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.GRAVITY_BELT.get()).isPresent()) {
             event.setDistance(event.getDistance() / 4);
         }
     }
 
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag unused) {
-        return new EidolonCurio(stack) {
-            @Override
-            public boolean canRightClickEquip() {
-                return true;
-            }
-        };
-    }
-    
     public static final int MAX_CHARGES = 12;
 
     @Override

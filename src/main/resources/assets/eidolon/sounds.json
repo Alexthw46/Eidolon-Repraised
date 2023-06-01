@@ -26,11 +26,40 @@
   "chant_word": {
     "category": "neutral",
     "subtitle": "eidolon.subtitle.chant_word",
-    "sounds": [ "eidolon:chant_word" ]
+    "sounds": [
+      "eidolon:chant_word"
+    ]
   },
   "parousia": {
     "category": "record",
     "stream": true,
-    "sounds": [ "eidolon:parousia" ]
+    "sounds": [
+      "eidolon:parousia"
+    ]
+  },
+  "wraith_ambient": {
+    "sounds": [
+      "mob/stray/idle1",
+      "mob/stray/idle2",
+      "mob/stray/idle3",
+      "mob/stray/idle4"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.ambient"
+  },
+  "wraith_death": {
+    "sounds": [
+      "mob/stray/death1",
+      "mob/stray/death2"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.death"
+  },
+  "wraith_hurt": {
+    "sounds": [
+      "mob/stray/hurt1",
+      "mob/stray/hurt2",
+      "mob/stray/hurt3",
+      "mob/stray/hurt4"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.hurt"
   }
 }

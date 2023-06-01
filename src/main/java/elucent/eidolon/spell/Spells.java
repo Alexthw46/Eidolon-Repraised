@@ -33,33 +33,46 @@ public class Spells {
     }
 
     public static Spell
-        DARK_PRAYER = register(new PrayerSpell(
+            DARK_PRAYER = register(new PrayerSpell(
             new ResourceLocation(Eidolon.MODID, "dark_prayer"),
             Deities.DARK_DEITY,
             Signs.WICKED_SIGN, Signs.WICKED_SIGN, Signs.WICKED_SIGN
-        )),
-        DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
+    ));
+    public static Spell DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_animal_sacrifice"),
             Deities.DARK_DEITY,
             Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.WICKED_SIGN
-        )),
-        DARK_TOUCH = register(new DarkTouchSpell(
+    ));
+    public static Spell DARK_TOUCH = register(new DarkTouchSpell(
             new ResourceLocation(Eidolon.MODID, "dark_touch"),
             Signs.WICKED_SIGN, Signs.SOUL_SIGN, Signs.WICKED_SIGN, Signs.SOUL_SIGN
-        )),
-            DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
-                    new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
-                    Deities.DARK_DEITY,
-                    Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
-            )),
-            LIGHT_PRAYER = register(new PrayerSpell(
-                    new ResourceLocation(Eidolon.MODID, "light_prayer"),
-                    Deities.LIGHT_DEITY,
-                    Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN
-            )),
-            FIRE_CHANT = register(new FireTouchSpell(
-                    new ResourceLocation(Eidolon.MODID, "fire_chant"),
-                    Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
-            ));
+    ));
+    public static Spell DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
+            new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
+            Deities.DARK_DEITY,
+            Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
+    ));
+    public static Spell LIGHT_PRAYER = register(new PrayerSpell(
+            new ResourceLocation(Eidolon.MODID, "light_prayer"),
+            Deities.LIGHT_DEITY,
+            Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN
+    ));
+    public static Spell FIRE_CHANT = register(new FireTouchSpell(
+            new ResourceLocation(Eidolon.MODID, "fire_chant"),
+            Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
+    ));
+    public static Spell LIGHT_CHANT = register(new LightSpell(
+            new ResourceLocation(Eidolon.MODID, "light_chant"),
+            Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN
+    ));
+    public static Spell TURN_UNDEAD_CHANT = register(new TurnUndeadSpell(
+            new ResourceLocation(Eidolon.MODID, "turn_undead_chant"),
+            Signs.SACRED_SIGN, Signs.MIND_SIGN, Signs.SACRED_SIGN, Signs.MIND_SIGN
+    ));
+    public static Spell SMITE_CHANT = register(new SmiteSpell(
+            new ResourceLocation(Eidolon.MODID, "smite_chant"),
+            Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.HARMONY_SIGN, Signs.MIND_SIGN
+    ));
+
 
 }

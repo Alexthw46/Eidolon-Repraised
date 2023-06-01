@@ -18,6 +18,10 @@ public class Sounds {
     public static final RegistryObject<SoundEvent> CHANT_WORD = addSound("chant_word");
     public static final RegistryObject<SoundEvent> PAROUSIA = addSound("parousia");
 
+    public static final RegistryObject<SoundEvent> WRAITH_DEATH = addSound("wraith_death"),
+            WRAITH_AMBIENT = addSound("wraith_ambient"),
+            WRAITH_HURT = addSound("wraith_hurt");
+
     static RegistryObject<SoundEvent> addSound(String name) {
         SoundEvent event = new SoundEvent(new ResourceLocation(Eidolon.MODID, name));
         return SOUND_EVENTS.register(name, () -> event);

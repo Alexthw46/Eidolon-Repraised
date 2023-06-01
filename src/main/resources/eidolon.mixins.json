@@ -6,14 +6,12 @@
   "mixins": [
     "AbstractArrowMixin",
     "AbstractContainerMenuMixin",
-    "CandleMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
     "LocalPlayerMixin",
     "PlayerRendererMixin",
     "PotionBrewingMixin",
-    "ProjectileMixin",
-    "ZombieVillagerMixin"
+    "ProjectileMixin"
   ],
   "minVersion": "0.8"
 }

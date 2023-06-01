@@ -1,32 +1,18 @@
 package elucent.eidolon.item.curio;
 
+import elucent.eidolon.item.ItemBase;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-public class EidolonCurio implements ICurio, ICapabilityProvider {
-    private final ItemStack stack;
+public class EidolonCurio extends ItemBase implements ICurioItem {
 
-    public EidolonCurio(ItemStack stack) {
-        this.stack = stack;
+    public EidolonCurio(Properties properties) {
+        super(properties);
     }
 
     @Override
-    public <ICurio> LazyOptional<ICurio> getCapability(Capability<ICurio> cap) {
-        return cap == CuriosCapability.ITEM ? LazyOptional.of(() -> (ICurio)this) : LazyOptional.empty();
+    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
+        return true;
     }
-
-    @Override
-    public <ICurio> LazyOptional<ICurio> getCapability(Capability<ICurio> cap, Direction side) {
-        return getCapability(cap);
-    }
-
-	@Override
-	public ItemStack getStack() {
-		return stack;
-	}
 }
