@@ -20,6 +20,7 @@ import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 
@@ -43,9 +44,9 @@ public class ClientEvents {
                     RenderUtil.GLOWING_BLOCK_PARTICLE,
                     RenderUtil.GLOWING,
                     RenderUtil.GLOWING_SPRITE}) {
-                buffers.put(type, new BufferBuilder(type.bufferSize()));
+                buffers.put(type, new BufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : type.bufferSize()));
             }
-            DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new BufferBuilder(256));
+            DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new BufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : 256));
         }
         return DELAYED_RENDER;
     }

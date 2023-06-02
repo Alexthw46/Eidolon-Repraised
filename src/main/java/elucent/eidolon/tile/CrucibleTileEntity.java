@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 
 public class CrucibleTileEntity extends TileEntityBase {
     boolean boiling = false;
-    boolean hasWater = false;
+    public boolean hasWater = false;
     int stirTicks = 0;
     int stirs = 0;
     int stepCounter = 0;
@@ -134,8 +134,6 @@ public class CrucibleTileEntity extends TileEntityBase {
                 player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                 if (!level.isClientSide) {
                     hasWater = true;
-                    sync();
-                    level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
                 }
                 return InteractionResult.SUCCESS;
             }
