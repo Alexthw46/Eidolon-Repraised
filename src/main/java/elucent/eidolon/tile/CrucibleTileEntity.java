@@ -20,12 +20,12 @@ import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class CrucibleTileEntity extends TileEntityBase {
         public CrucibleStep(CompoundTag nbt) {
             stirs = nbt.getInt("stirs");
             ListTag list = nbt.getList("contents", Tag.TAG_COMPOUND);
-            for (Tag item : list) contents.add(ItemStack.of((CompoundTag)item));
+            for (Tag item : list) contents.add(ItemStack.of((CompoundTag) item));
         }
 
         public CompoundTag write() {
@@ -90,14 +90,14 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
     }
 
-    public static final Predicate<?>[] HOT_BLOCKS = {
+    public static final List<Predicate<BlockState>> HOT_BLOCKS = new ArrayList<>(List.of(
             (BlockState b) -> b.getBlock() == Blocks.MAGMA_BLOCK,
             (BlockState b) -> b.getBlock() == Blocks.FIRE,
             (BlockState b) -> b.getBlock() == Blocks.SOUL_FIRE,
             (BlockState b) -> b.getBlock() == Blocks.LAVA,
             (BlockState b) -> b.getBlock() == Blocks.CAMPFIRE && b.getValue(CampfireBlock.LIT),
             (BlockState b) -> b.getBlock() == Blocks.SOUL_CAMPFIRE && b.getValue(CampfireBlock.LIT)
-    };
+    ));
 
     public CrucibleTileEntity(BlockPos pos, BlockState state) {
         this(Registry.CRUCIBLE_TILE_ENTITY.get(), pos, state);
@@ -109,7 +109,7 @@ public class CrucibleTileEntity extends TileEntityBase {
 
     @Override
     public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND) {
+        if (hand == InteractionHand.MAIN_HAND && level != null) {
             if (player.isShiftKeyDown() && player.getItemInHand(hand).isEmpty() && hasWater) {
                 boiling = false;
                 hasWater = false;
@@ -120,9 +120,8 @@ public class CrucibleTileEntity extends TileEntityBase {
                     level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
                 }
                 return InteractionResult.SUCCESS;
-            }
-            else if (player.getItemInHand(hand).isEmpty() && stirTicks == 0 && this.steps.size() > 0) {
-                stirs ++;
+            } else if (player.getItemInHand(hand).isEmpty() && stirTicks == 0 && this.steps.size() > 0) {
+                stirs++;
                 stirTicks = 20;
                 if (!level.isClientSide) {
                     level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -130,32 +129,26 @@ public class CrucibleTileEntity extends TileEntityBase {
                 }
                 return InteractionResult.SUCCESS;
             }
-            if (player.getItemInHand(hand).getItem() == Items.WATER_BUCKET) {
-                player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-                if (!level.isClientSide) {
-                    hasWater = true;
-                }
-                return InteractionResult.SUCCESS;
-            }
+
         }
         return InteractionResult.PASS;
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.steps.clear();
         ListTag steps = tag.getList("steps", Tag.TAG_COMPOUND);
-        for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag)step));
+        for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step));
         boiling = tag.getBoolean("boiling");
         hasWater = tag.getBoolean("hasWater");
         stirs = tag.getInt("stirs");
         stirTicks = tag.getInt("stirTicks");
-        seed = steps.stream().map((step) -> step.hashCode()).reduce(0, (a, b) -> a ^ b);
+        seed = steps.stream().map(Object::hashCode).reduce(0, (a, b) -> a ^ b);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
         ListTag steps = new ListTag();
         for (CrucibleStep step : this.steps) steps.add(step.write());
         tag.put("steps", steps);
@@ -166,17 +159,16 @@ public class CrucibleTileEntity extends TileEntityBase {
     }
 
     public void tick() {
-        if (stirTicks > 0) stirTicks --;
-
+        if (stirTicks > 0) stirTicks--;
+        if (level == null) return;
         if (hasWater && level.getGameTime() % 200 == 0) {
             BlockState state = level.getBlockState(worldPosition.below());
             boolean isHeated = false;
-            for (Predicate pred : HOT_BLOCKS) if (pred.test(state)) isHeated = true;
+            for (Predicate<BlockState> pred : HOT_BLOCKS) if (pred.test(state)) isHeated = true;
             if (boiling && !isHeated) {
                 boiling = false;
                 if (!level.isClientSide) sync();
-            }
-            else if (!boiling && isHeated) {
+            } else if (!boiling && isHeated) {
                 boiling = true;
                 if (!level.isClientSide) sync();
             }
@@ -185,24 +177,24 @@ public class CrucibleTileEntity extends TileEntityBase {
         float bubbleR = steps.size() > 0 ? Math.min(1.0f, getRed() * 1.25f) : 0.25f;
         float bubbleG = steps.size() > 0 ? Math.min(1.0f, getGreen() * 1.25f) : 0.5f;
         float bubbleB = steps.size() > 0 ? Math.min(1.0f, getBlue() * 1.25f) : 1.0f;
-        float steamR = steps.size() > 0 ? Math.min(1.0f, 1 - (float)Math.pow(1 - getRed(), 2)) : 1.0f;
-        float steamG = steps.size() > 0 ? Math.min(1.0f, 1 - (float)Math.pow(1 - getGreen(), 2)) : 1.0f;
-        float steamB = steps.size() > 0 ? Math.min(1.0f, 1 - (float)Math.pow(1 - getBlue(), 2)) : 1.0f;
+        float steamR = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getRed(), 2)) : 1.0f;
+        float steamG = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getGreen(), 2)) : 1.0f;
+        float steamB = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getBlue(), 2)) : 1.0f;
 
-        if (level.isClientSide && hasWater && boiling) for (int i = 0; i < 2; i ++){
+        if (level.isClientSide && hasWater && boiling) for (int i = 0; i < 2; i++) {
             Particles.create(elucent.eidolon.registries.Particles.BUBBLE_PARTICLE)
-                .setScale(0.05f)
-                .setLifetime(10)
-                .addVelocity(0, 0.015625, 0)
-                .setColor(bubbleR, bubbleG, bubbleB)
-                .setAlpha(1.0f, 0.75f)
-                .spawn(level, worldPosition.getX() + 0.125 + 0.75 * level.random.nextFloat(), worldPosition.getY() + 0.6875, worldPosition.getZ() + 0.125 + 0.75 * level.random.nextFloat());
+                    .setScale(0.05f)
+                    .setLifetime(10)
+                    .addVelocity(0, 0.015625, 0)
+                    .setColor(bubbleR, bubbleG, bubbleB)
+                    .setAlpha(1.0f, 0.75f)
+                    .spawn(level, worldPosition.getX() + 0.125 + 0.75 * level.random.nextFloat(), worldPosition.getY() + 0.6875, worldPosition.getZ() + 0.125 + 0.75 * level.random.nextFloat());
             if (level.random.nextInt(8) == 0) Particles.create(elucent.eidolon.registries.Particles.STEAM_PARTICLE)
-                .setAlpha(0.0625f, 0).setScale(0.375f, 0.125f).setLifetime(80)
-                .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.025f)
-                .addVelocity(0, 0.05f, 0)
-                .setColor(steamR, steamG, steamB)
-                .spawn(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.625, worldPosition.getZ() + 0.5);
+                    .setAlpha(0.0625f, 0).setScale(0.375f, 0.125f).setLifetime(80)
+                    .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.025f)
+                    .addVelocity(0, 0.05f, 0)
+                    .setColor(steamR, steamG, steamB)
+                    .spawn(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.625, worldPosition.getZ() + 0.5);
         }
 
         if (!level.isClientSide && boiling && hasWater && level.getGameTime() % 8 == 0) {
@@ -211,12 +203,12 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
 
         if (!level.isClientSide && stepCounter > 0) {
-            -- stepCounter;
+            --stepCounter;
             if (stepCounter == 0) {
                 List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
                 List<ItemStack> contents = new ArrayList<>();
                 for (ItemEntity item : items) {
-                    for (int i = 0; i < item.getItem().getCount(); i ++) {
+                    for (int i = 0; i < item.getItem().getCount(); i++) {
                         ItemStack stack = item.getItem().copy();
                         stack.setCount(1);
                         contents.add(stack);
@@ -225,13 +217,11 @@ public class CrucibleTileEntity extends TileEntityBase {
                 }
                 if (stirs == 0 && contents.isEmpty()) { // no action done; end recipe
                     Networking.sendToTracking(level, worldPosition, new CrucibleFailPacket(worldPosition));
-                    contents.clear();
                     steps.clear();
                     stirs = 0;
                     hasWater = boiling = false;
                     sync();
-                }
-                else {
+                } else {
                     CrucibleStep step = new CrucibleStep(stirs, contents);
                     steps.add(step);
 
@@ -246,8 +236,7 @@ public class CrucibleTileEntity extends TileEntityBase {
                         contents.clear();
                         steps.clear();
                         hasWater = boiling = false;
-                    }
-                    else {
+                    } else {
                         level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
                         stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
                     }

@@ -46,7 +46,7 @@ public class CrucibleBlock extends BlockBase implements EntityBlock, LiquidBlock
 
     @Override
     public boolean placeLiquid(@NotNull LevelAccessor pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull FluidState pFluidState) {
-        if (pLevel.getBlockEntity(pPos) instanceof CrucibleTileEntity crucibleTileEntity) {
+        if (!pLevel.isClientSide() && pLevel.getBlockEntity(pPos) instanceof CrucibleTileEntity crucibleTileEntity && pFluidState.isSource() && pFluidState.is(Fluids.WATER)) {
             crucibleTileEntity.hasWater = true;
             crucibleTileEntity.sync();
             pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
