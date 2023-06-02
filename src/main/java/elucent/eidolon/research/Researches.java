@@ -3,6 +3,7 @@ package elucent.eidolon.research;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.capability.Facts;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
@@ -73,7 +74,7 @@ public class Researches {
         register(new Research(new ResourceLocation(Eidolon.MODID, "flames"), 5) {
             @Override
             public void onLearned(ServerPlayer serverPlayer) {
-                KnowledgeUtil.grantSign(serverPlayer, Signs.FLAME_SIGN);
+                KnowledgeUtil.grantFact(serverPlayer, Facts.FIRE_SPELL);
             }
         }, EntityType.BLAZE);
 

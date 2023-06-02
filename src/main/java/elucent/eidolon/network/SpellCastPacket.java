@@ -1,19 +1,19 @@
 package elucent.eidolon.network;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.spell.SignSequence;
 import elucent.eidolon.spell.Spell;
 import elucent.eidolon.spell.Spells;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 public class SpellCastPacket {
     final SignSequence seq;
@@ -56,8 +56,7 @@ public class SpellCastPacket {
             if (world != null) {
                 Player player = world.getPlayerByUUID(packet.uuid);
                 if (player != null) {
-                    SignSequence signs = packet.seq;
-                    packet.spell.cast(world, packet.pos, player, signs);
+                    packet.spell.cast(world, packet.pos, player, packet.seq);
                 }
             }
         });

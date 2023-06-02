@@ -41,11 +41,11 @@ public class ReversalPickItem extends PickaxeItem {
 
     @SubscribeEvent
     public static void onStartBreak(PlayerEvent.BreakSpeed event) {
-        if (event.getEntity().getMainHandItem().getItem() instanceof ReversalPickItem) {
-            float hardness = event.getState().getDestroySpeed(event.getEntity().level, event.getPos());
+        if (event.getEntity().getMainHandItem().getItem() instanceof ReversalPickItem && event.getPosition().isPresent()) {
+            float hardness = event.getState().getDestroySpeed(event.getEntity().level, event.getPosition().get());
             float adjHardness = 1 / (hardness / 2.0f);
             float newSpeed = Mth.sqrt(event.getOriginalSpeed() * 0.25f) * Mth.sqrt(hardness / adjHardness);
-            event.setNewSpeed(newSpeed * newSpeed);
+            event.setNewSpeed(newSpeed);
         }
     }
 }

@@ -86,7 +86,6 @@ public class Eidolon {
     public void setup(final FMLCommonSetupEvent event) {
         Networking.init();
         event.enqueueWork(() -> {
-            //CrucibleRegistry.init();
             RitualRegistry.init();
             Potions.addBrewingRecipes();
             AltarEntries.init();
@@ -136,6 +135,7 @@ public class Eidolon {
     public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
         evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new ClientRegistry.EidolonHearts());
         evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new ClientRegistry.EidolonManaBar());
+        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new ClientRegistry.EidolonRaven());
     }
 
     public void sendImc(InterModEnqueueEvent evt) {

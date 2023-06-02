@@ -91,20 +91,6 @@ public class ClientEvents {
         return clientTicks;
     }
 
-    public static boolean isInGui = false;
-
-    /*
-    @SubscribeEvent
-    public static void onRenderGuiStart(RenderGuiOverlayEvent.Pre event) {
-        if (event.getOverlay().id() == null) isInGui = true;
-    }
-
-    @SubscribeEvent
-    public static void onRenderGuiStart(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay().id() == null) isInGui = false;
-    }
-    */
-
     public static int jumpTicks = 0;
     public static boolean wasJumping = false;
 

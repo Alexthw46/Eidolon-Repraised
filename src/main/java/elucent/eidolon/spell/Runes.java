@@ -41,12 +41,5 @@ public class Runes {
             }
         });
 
-        register(new Rune(new ResourceLocation(Eidolon.MODID, "soul_mark")) {
-            @Override
-            public RuneResult doEffect(SignSequence seq) {
-                seq.addRight(Signs.SOUL_SIGN);
-                return RuneResult.PASS;
-            }
-        });
     }
 }

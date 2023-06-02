@@ -20,7 +20,6 @@ import elucent.eidolon.tile.*;
 import elucent.eidolon.tile.reagent.CisternTileEntity;
 import elucent.eidolon.tile.reagent.PipeTileEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
@@ -33,6 +32,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -59,10 +59,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
     public static TagKey<Item>
             INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead"));
@@ -119,7 +120,7 @@ public class Registry {
         final DeferredRegister<Block> registry;
         final String basename;
         final BlockBehaviour.Properties props;
-        RegistryObject<Block> full = null, slab = null, stair = null, wall = null, fence = null, fence_gate = null;
+        RegistryObject<Block> full, slab, stair, wall = null, fence = null, fence_gate = null;
 
         public DecoBlockPack(DeferredRegister<Block> blocks, String basename, BlockBehaviour.Properties props) {
             this.registry = blocks;
@@ -218,7 +219,17 @@ public class Registry {
     public static RegistryObject<Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(EquipmentSlot.CHEST, itemProps()));
     public static RegistryObject<Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(EquipmentSlot.LEGS, itemProps()));
     public static RegistryObject<Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(EquipmentSlot.FEET, itemProps()));
-    public static RegistryObject<Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps()));
+    public static RegistryObject<Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps()) {
+
+                @Override
+                public boolean hurtEnemy(@NotNull ItemStack pStack, @NotNull LivingEntity pTarget, @NotNull LivingEntity pAttacker) {
+                    if (pTarget.getMobType() == MobType.UNDEAD) {
+                        pTarget.setSecondsOnFire(5);
+                    }
+                    return super.hurtEnemy(pStack, pTarget, pAttacker);
+                }
+            }
+    );
     public static RegistryObject<Item> SILVER_PICKAXE = addItem("silver_pickaxe", () -> new PickaxeItem(Tiers.SilverTier.INSTANCE, 1, -2.4f, itemProps()));
     public static RegistryObject<Item> SILVER_AXE = addItem("silver_axe", () -> new AxeItem(Tiers.SilverTier.INSTANCE, 6, -2.4f, itemProps()));
     public static RegistryObject<Item> SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(Tiers.SilverTier.INSTANCE, 1.5f, -2.4f, itemProps()));
@@ -275,7 +286,7 @@ public class Registry {
             itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 20));
     public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
     public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
-    public static RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
+    //public static RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
     public static RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
     public static final RegistryObject<Item> MAGIC_INK = addItem("magic_ink");
     public static RegistryObject<Item> MAGICIANS_WAX = addItem("magicians_wax");
@@ -436,7 +447,7 @@ public class Registry {
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .noOcclusion()));
     public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Material.AIR, MaterialColor.NONE)
-            .sound(SoundType.AMETHYST).lightLevel((p) -> 12)));
+            .sound(SoundType.FROGLIGHT).lightLevel((p) -> p.getValue(GhostLight.DEITY) ? 12 : 8)));
     /*
     public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
             .sound(SoundType.GLASS).strength(2.0f, 3.0f)
@@ -583,17 +594,17 @@ public class Registry {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void registerFactories(RegisterParticleProvidersEvent evt) {
-        Minecraft.getInstance().particleEngine.register(Particles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.WISP_PARTICLE.get(), WispParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.SIGN_PARTICLE.get(), (sprite) -> new SignParticleType.Factory());
-        Minecraft.getInstance().particleEngine.register(Particles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
-        Minecraft.getInstance().particleEngine.register(Particles.RUNE_PARTICLE.get(), (sprite) -> new RuneParticleType.Factory());
+        evt.register(Particles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
+        evt.register(Particles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
+        evt.register(Particles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
+        evt.register(Particles.WISP_PARTICLE.get(), WispParticleType.Factory::new);
+        evt.register(Particles.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
+        evt.register(Particles.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
+        evt.register(Particles.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
+        evt.register(Particles.SIGN_PARTICLE.get(), (sprite) -> new SignParticleType.Factory());
+        evt.register(Particles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
+        evt.register(Particles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
+        evt.register(Particles.RUNE_PARTICLE.get(), (sprite) -> new RuneParticleType.Factory());
     }
 
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));

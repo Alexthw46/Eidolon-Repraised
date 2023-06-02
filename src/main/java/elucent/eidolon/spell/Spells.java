@@ -62,8 +62,12 @@ public class Spells {
             Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
     ));
     public static Spell LIGHT_CHANT = register(new LightSpell(
-            new ResourceLocation(Eidolon.MODID, "light_chant"),
-            Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN
+            new ResourceLocation(Eidolon.MODID, "light_chant"), Deities.LIGHT_DEITY,
+            Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN
+    ));
+    public static Spell ALT_LIGHT_CHANT = register(new LightSpell(
+            new ResourceLocation(Eidolon.MODID, "light_chant"), Deities.DARK_DEITY,
+            Signs.WICKED_SIGN, Signs.FLAME_SIGN, Signs.WICKED_SIGN, Signs.FLAME_SIGN
     ));
     public static Spell TURN_UNDEAD_CHANT = register(new TurnUndeadSpell(
             new ResourceLocation(Eidolon.MODID, "turn_undead_chant"),
@@ -71,7 +75,7 @@ public class Spells {
     ));
     public static Spell SMITE_CHANT = register(new SmiteSpell(
             new ResourceLocation(Eidolon.MODID, "smite_chant"),
-            Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.HARMONY_SIGN, Signs.MIND_SIGN
+            Signs.SACRED_SIGN, Signs.HARMONY_SIGN, Signs.DEATH_SIGN, Signs.MAGIC_SIGN, Signs.HARMONY_SIGN, Signs.SACRED_SIGN
     ));
 
 

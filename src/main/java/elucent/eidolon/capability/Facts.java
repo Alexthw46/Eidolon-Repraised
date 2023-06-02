@@ -5,5 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class Facts {
     public static final ResourceLocation
-        VILLAGER_SACRIFICE = new ResourceLocation(Eidolon.MODID, "villager_sacrifice");
+            VILLAGER_SACRIFICE = new ResourceLocation(Eidolon.MODID, "villager_sacrifice"),
+            FIRE_SPELL = new ResourceLocation(Eidolon.MODID, "fire_spell");
 }

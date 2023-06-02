@@ -3,18 +3,18 @@
   "pattern": [
     "bab",
     "bhb",
-    " c "
+    " g "
   ],
-  "reagents": "cege",
+  "reagents": "cece",
   "key": {
     "e": {
-    	"item": "eidolon:death_essence"
+      "item": "eidolon:death_essence"
     },
     "b": {
-    	"tag": "forge:bones"
+      "tag": "forge:bones"
     },
     "c": {
-    	"item": "eidolon:ender_calx"
+      "item": "eidolon:ender_calx"
     },
     "g": {
     	"item": "eidolon:shadow_gem"

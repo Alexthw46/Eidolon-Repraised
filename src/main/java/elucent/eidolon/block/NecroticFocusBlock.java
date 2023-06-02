@@ -46,7 +46,7 @@ public class NecroticFocusBlock extends HorizontalWaterloggableBlock implements 
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new NecroticFocusTileEntity(pos, state);
     }
 }

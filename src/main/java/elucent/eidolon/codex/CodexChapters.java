@@ -24,14 +24,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CodexChapters {
     static public final List<Category> categories = new CopyOnWriteArrayList<>();
-    static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, RUNES;
+    static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, RUNES, SPELLS;
 
-    static Chapter NATURE_INDEX, MONSTERS, ORES, PEWTER, ENCHANTED_ASH,
+    static Chapter NATURE_INDEX, MONSTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS,
             RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
-            ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND,
+            ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE,
             THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, VILLAGER_SACRIFICE,
             SIGNS_INDEX, WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
-            RUNES_INDEX;
+            RUNES_INDEX,
+            LIGHT, FIRE_TOUCH, SPELLS_INDEX;
 
     public static void init() {
         MONSTERS = new Chapter(
@@ -46,12 +47,20 @@ public class CodexChapters {
         ORES = new Chapter(
                 "eidolon.codex.chapter.ores",
                 new TitlePage("eidolon.codex.page.ores.lead_ore"),
+                new TitlePage("eidolon.codex.page.ores.silver_ore"),
                 new SmeltingPage(new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_ORE.get())),
+                new SmeltingPage(new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_ORE.get())),
+
                 new CraftingPage(new ItemStack(Registry.LEAD_BLOCK.get()),
                         new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
                         new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
                         new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get())),
-                new CraftingPage(new ItemStack(Registry.LEAD_NUGGET.get(), 9), new ItemStack(Registry.LEAD_INGOT.get()))
+                new CraftingPage(new ItemStack(Registry.SILVER_BLOCK.get()),
+                        new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()),
+                        new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()),
+                        new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get())),
+                new CraftingPage(new ItemStack(Registry.LEAD_NUGGET.get(), 9), new ItemStack(Registry.LEAD_INGOT.get())),
+                new CraftingPage(new ItemStack(Registry.SILVER_NUGGET.get(), 9), new ItemStack(Registry.SILVER_INGOT.get()))
         );
 
         PEWTER = new Chapter(
@@ -73,13 +82,37 @@ public class CodexChapters {
                 new SmeltingPage(new ItemStack(Registry.ENCHANTED_ASH.get(), 2), new ItemStack(Items.BONE))
         );
 
+        PLANTS = new Chapter(
+                "eidolon.codex.chapter.plants",
+                new TitlePage("eidolon.codex.page.plants"),
+                new TextPage("eidolon.codex.page.plants.1"),
+                new WorktablePage(Registry.ATHAME.get().getDefaultInstance(), ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()),
+                        ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INLAY.get()), ItemStack.EMPTY,
+                        Items.ENDER_PEARL.getDefaultInstance(), ItemStack.EMPTY, ItemStack.EMPTY,
+                        Items.GOLD_NUGGET.getDefaultInstance(), ItemStack.EMPTY, new ItemStack(Registry.SILVER_NUGGET.get()), ItemStack.EMPTY
+                ),
+                new WorktablePage(Registry.PLANTER.get().asItem().getDefaultInstance(), new ItemStack(Registry.PEWTER_INGOT.get()), Items.DIRT.getDefaultInstance(), new ItemStack(Registry.PEWTER_INGOT.get()),
+                        new ItemStack(Items.OAK_PLANKS), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Items.OAK_PLANKS),
+                        new ItemStack(Items.OAK_PLANKS), ItemStack.EMPTY, new ItemStack(Items.OAK_PLANKS),
+                        new ItemStack(Registry.ENCHANTED_ASH.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY
+                )
+
+        );
+
+        RESEARCHS = new Chapter(
+                "eidolon.codex.chapter.researchs",
+                new TitlePage("eidolon.codex.page.researchs")
+        );
+
         NATURE_INDEX = new Chapter(
                 "eidolon.codex.chapter.nature_index",
                 new TitledIndexPage("eidolon.codex.page.nature_index.0",
                         new IndexEntry(MONSTERS, new ItemStack(Registry.TATTERED_CLOTH.get())),
                         new IndexEntry(ORES, new ItemStack(Registry.LEAD_ORE.get())),
                         new IndexEntry(PEWTER, new ItemStack(Registry.PEWTER_INGOT.get())),
-                        new IndexEntry(ENCHANTED_ASH, new ItemStack(Registry.ENCHANTED_ASH.get()))
+                        new IndexEntry(ENCHANTED_ASH, new ItemStack(Registry.ENCHANTED_ASH.get())),
+                        new IndexEntry(PLANTS, new ItemStack(Registry.OANNA_BLOOM.get())),
+                        new IndexEntry(RESEARCHS, new ItemStack(Registry.RESEARCH_TABLE.get()))
                 )
         );
 
@@ -515,7 +548,14 @@ public class CodexChapters {
                         new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
                         ItemStack.EMPTY, new ItemStack(Items.STICK), new ItemStack(Registry.PEWTER_INGOT.get()),
                         new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY,
-                        new ItemStack(Registry.UNHOLY_SYMBOL.get()), new ItemStack(Registry.TATTERED_CLOTH.get()), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.TATTERED_CLOTH.get()))
+                        new ItemStack(Registry.UNHOLY_SYMBOL.get()), new ItemStack(Registry.TATTERED_CLOTH.get()), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.TATTERED_CLOTH.get())),
+                new TitlePage("eidolon.codex.page.death_scythe"),
+                new WorktablePage(new ItemStack(Registry.DEATHBRINGER_SCYTHE.get()),
+                        new ItemStack(Items.BONE), new ItemStack(Items.WITHER_SKELETON_SKULL), new ItemStack(Items.BONE),
+                        new ItemStack(Items.BONE), new ItemStack(Registry.REAPER_SCYTHE.get()), new ItemStack(Items.BONE),
+                        new ItemStack(Items.BONE), new ItemStack(Items.SKELETON_SKULL), new ItemStack(Items.BONE),
+                        new ItemStack(Registry.SHADOW_GEM.get()), new ItemStack(Registry.DEATH_ESSENCE.get()), new ItemStack(Registry.SHADOW_GEM.get()), new ItemStack(Registry.DEATH_ESSENCE.get()))
+
         );
 
         CLEAVING_AXE = new Chapter(
@@ -627,6 +667,17 @@ public class CodexChapters {
                         new ItemStack(Registry.ZOMBIE_HEART.get()), new ItemStack(Registry.LESSER_SOUL_GEM.get()), new ItemStack(Registry.WRAITH_HEART.get()), new ItemStack(Registry.LESSER_SOUL_GEM.get()))
         );
 
+        SOULBONE = new Chapter(
+                "eidolon.codex.chapter.soulbone_amulet",
+                new TitlePage("eidolon.codex.page.soulbone_amulet"),
+                new TitlePage("eidolon.codex.page.soulbone_amulet.1"),
+                new WorktablePage(new ItemStack(Registry.SOULBONE_AMULET.get()),
+                        Items.BONE.getDefaultInstance(), new ItemStack(Registry.BASIC_AMULET.get()), Items.BONE.getDefaultInstance(),
+                        Items.BONE.getDefaultInstance(), new ItemStack(Registry.WRAITH_HEART.get()), Items.BONE.getDefaultInstance(),
+                        ItemStack.EMPTY, new ItemStack(Registry.SHADOW_GEM.get()), ItemStack.EMPTY,
+                        new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()), new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()))
+        );
+
         ARTIFICE_INDEX = new Chapter(
                 "eidolon.codex.chapter.artifice",
                 new TitledIndexPage("eidolon.codex.page.artifice",
@@ -661,7 +712,8 @@ public class CodexChapters {
                         new IndexEntry(PRESTIGIOUS_PALM, new ItemStack(Registry.PRESTIGIOUS_PALM.get())),
                         new IndexEntry(MIND_SHIELDING_PLATE, new ItemStack(Registry.MIND_SHIELDING_PLATE.get())),
                         new IndexEntry(RESOLUTE_BELT, new ItemStack(Registry.RESOLUTE_BELT.get())),
-                        new IndexEntry(GLASS_HAND, new ItemStack(Registry.GLASS_HAND.get()))
+                        new IndexEntry(GLASS_HAND, new ItemStack(Registry.GLASS_HAND.get())),
+                        new IndexEntry(SOULBONE, new ItemStack(Registry.SOULBONE_AMULET.get()))
                 )
         );
 
@@ -911,5 +963,30 @@ public class CodexChapters {
             RUNES_INDEX
         ));
          */
+
+        LIGHT = new Chapter(
+                "eidolon.codex.chapter.light",
+                new ChantPage("eidolon.codex.page.light", Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN)
+        );
+        FIRE_TOUCH = new Chapter(
+                "eidolon.codex.chapter.fire_touch",
+                new ChantPage("eidolon.codex.page.fire_touch", Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN)
+        );
+
+        SPELLS_INDEX = new Chapter(
+                "eidolon.codex.chapter.spells",
+                new TitledIndexPage(
+                        "eidolon.codex.page.spells",
+                        new SignLockedEntry(LIGHT, new ItemStack(Items.LANTERN), Signs.FLAME_SIGN),
+                        new FactLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Facts.FIRE_SPELL)
+                )
+        );
+
+        categories.add(SPELLS = new Category(
+                "spells",
+                new ItemStack(Registry.PARCHMENT.get()),
+                ColorUtil.packColor(255, 70, 70, 194),
+                SPELLS_INDEX
+        ));
     }
 }

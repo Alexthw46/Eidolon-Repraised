@@ -17,24 +17,23 @@ import net.minecraft.world.entity.player.Player;
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class KnowledgeUtil {
     public static void grantSign(Entity entity, Sign sign) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsSign(sign)) return;
             k.addSign(sign);
 
-            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_sign", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))));
-            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
+            player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_sign", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void grantFact(Entity entity, ResourceLocation fact) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsFact(fact)) return;
             k.addFact(fact);
-
-            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_fact")));
-            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
+            player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_fact")));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
@@ -50,13 +49,13 @@ public class KnowledgeUtil {
     }
 
     public static void grantRune(Entity entity, Rune rune) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsRune(rune)) return;
             k.addRune(rune);
 
-            ((ServerPlayer) entity).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_rune", Component.translatable(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))));
-            Networking.sendTo((Player) entity, new KnowledgeUpdatePacket((Player) entity, true));
+            player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_rune", Component.translatable(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
@@ -89,70 +88,70 @@ public class KnowledgeUtil {
     }
 
     public static void removeSign(Entity entity, Sign sign) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (!k.knowsSign(sign)) return;
             k.removeSign(sign);
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void removeFact(Entity entity, ResourceLocation fact) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (!k.knowsFact(fact)) return;
             k.removeFact(fact);
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void removeResearch(Entity entity, ResourceLocation research) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (!k.knowsResearch(research)) return;
             k.removeResearch(research);
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void removeRune(Entity entity, Rune rune) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (!k.knowsRune(rune)) return;
             k.removeRune(rune);
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void resetSigns(Entity entity) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             k.resetSigns();
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void resetFacts(Entity entity) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             k.resetFacts();
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void resetResearch(Entity entity) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             k.resetResearch();
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 
     public static void resetRunes(Entity entity) {
-        if (!(entity instanceof ServerPlayer)) return;
+        if (!(entity instanceof ServerPlayer player)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             k.resetRunes();
-            Networking.sendTo((Player)entity, new KnowledgeUpdatePacket((Player)entity, true));
+            Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
 }

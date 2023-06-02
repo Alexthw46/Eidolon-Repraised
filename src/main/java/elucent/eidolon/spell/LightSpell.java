@@ -1,9 +1,11 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Registry;
+import elucent.eidolon.block.GhostLight;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.deity.Deities;
+import elucent.eidolon.deity.Deity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,14 +22,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class LightSpell extends StaticSpell {
-    public LightSpell(ResourceLocation name, Sign... signs) {
+
+    Deity deity;
+
+    public LightSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, 5, signs);
+        this.deity = deity;
     }
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         AtomicReference<Boolean> favor = new AtomicReference<>(Boolean.FALSE);
-        world.getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, Deities.LIGHT_DEITY.getId()) > 10));
+        world.getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, deity.getId()) >= 3));
         return favor.get();
     }
 
@@ -38,6 +44,9 @@ public class LightSpell extends StaticSpell {
             BlockPos blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
             if (world.getBlockState(blockPos).getMaterial().isReplaceable() && world.isUnobstructed(Registry.GHOST_LIGHT.get().defaultBlockState(), blockPos, CollisionContext.of(player))) {
                 BlockState lightBlockState = Registry.GHOST_LIGHT.get().defaultBlockState();
+                if (deity.getId().equals(Deities.DARK_DEITY_ID)) {
+                    lightBlockState = lightBlockState.setValue(GhostLight.DEITY, false);
+                }
                 world.setBlockAndUpdate(blockPos, lightBlockState);
                 world.sendBlockUpdated(blockPos, world.getBlockState(blockPos), world.getBlockState(blockPos), 2);
                 ISoul.expendMana(player, getCost());

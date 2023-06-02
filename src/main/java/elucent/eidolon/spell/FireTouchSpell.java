@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.tile.BrazierTileEntity;
@@ -22,7 +23,7 @@ import static net.minecraft.world.level.block.AbstractCandleBlock.LIT;
 public class FireTouchSpell extends StaticSpell {
 
     public FireTouchSpell(ResourceLocation name, Sign... signs) {
-        super(name, signs);
+        super(name, 10, signs);
     }
 
     @Override
@@ -40,7 +41,6 @@ public class FireTouchSpell extends StaticSpell {
             } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof BrazierTileEntity brazier) {
                 return brazier.canStartBurning();
             }
-
         }
         return ray instanceof EntityHitResult;
     }
@@ -64,8 +64,9 @@ public class FireTouchSpell extends StaticSpell {
                 }
                 world.playSound(player, blockPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
             } else if (ray instanceof EntityHitResult entityHitResult) {
-                entityHitResult.getEntity().setSecondsOnFire(5);
-            }
+                entityHitResult.getEntity().setSecondsOnFire(10);
+            } else return;
+            ISoul.expendMana(player, getCost());
         }
 
     }

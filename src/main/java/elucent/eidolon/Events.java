@@ -299,8 +299,8 @@ public class Events {
 
         event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
             if (s.hasEtherealHealth()) {
-                s.hurtEtherealHealth(event.getAmount(), ISoul.getPersistentHealth(event.getEntity()));
-                event.setAmount(0);
+                var reduced = s.hurtEtherealHealth(event.getAmount(), ISoul.getPersistentHealth(event.getEntity()));
+                event.setAmount(reduced);
                 Networking.sendToTracking(event.getEntity().level, event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
             }
         });

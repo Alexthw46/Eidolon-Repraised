@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +62,9 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         lastSlots.remove(lastSlots.size() - 1);
         remoteSlots.remove(remoteSlots.size() - 1);
     }
-    
+
     @Override
-    public void clicked(int p_150400_, int p_150401_, ClickType p_150402_, Player p_150403_) {
+    public void clicked(int p_150400_, int p_150401_, @NotNull ClickType p_150402_, @NotNull Player p_150403_) {
         if (p_150400_ >= slots.size()) return;
         super.clicked(p_150400_, p_150401_, p_150402_, p_150403_);
     }
@@ -94,28 +95,29 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         }
         if (tile instanceof ResearchTableTileEntity) this.broadcastFullState();
     }
-    
+
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
         if (player instanceof ServerPlayer) {
-            for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
-                player.drop(slots.get(i).getItem(), false);
-            }
+            for (int i = 38; i < slots.size(); i++)
+                if (!slots.get(i).getItem().isEmpty()) {
+                    player.drop(slots.get(i).getItem(), false);
+                }
         }
         if (this.tile instanceof ResearchTableTileEntity t) {
             t.removeListener(this);
         }
     }
 
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.tile.stillValid(playerIn);
     }
 
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack stack = slot.getItem().copy();
             if ((index < 0 || (index > 2 && index < 38))) {
                 if (this.slots.get(0).mayPlace(stack)) {
@@ -168,15 +170,17 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     public int getSeed() {
         return this.intArray.get(1);
     }
-    
+
     @Override
-    public void initializeContents(int id, List<ItemStack> items, ItemStack carried) {
+    public void initializeContents(int id, List<ItemStack> items, @NotNull ItemStack carried) {
         this.slots.get(0).set(items.get(0).copy());
         updateSlots();
 
         try {
             super.initializeContents(id, items, carried);
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     class NotesSlot extends Slot {
@@ -251,12 +255,12 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
 
     @Override
-    public void slotChanged(AbstractContainerMenu menu, int slot, ItemStack stack) {
+    public void slotChanged(@NotNull AbstractContainerMenu menu, int slot, @NotNull ItemStack stack) {
         if (slot == 0) updateSlots();
     }
 
     @Override
-    public void dataChanged(AbstractContainerMenu menu, int slot, int value) {
+    public void dataChanged(@NotNull AbstractContainerMenu menu, int slot, int value) {
         if (slot == 0 && (value == 0 || value == 200)) updateSlots();
     }
 }

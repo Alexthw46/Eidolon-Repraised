@@ -288,8 +288,7 @@ public class ClientRegistry {
             int iconU = 48, iconV = 48;
 
             mStack.pushPose();
-            mStack.scale(0.75f, 0.75f, 0.75f);
-            mStack.translate(125, 0, 0.01);
+            mStack.translate(0, 0, 0.01);
             RenderSystem.setShaderTexture(0, MANA_BAR_TEXTURE);
             if (isHoriz) {
                 ox -= 4;
@@ -488,6 +487,16 @@ public class ClientRegistry {
                 RenderSystem.disableBlend();
             }
             mStack.popPose();
+        }
+    }
+
+    public static class EidolonRaven implements IGuiOverlay {
+        @Override
+        public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+            if (ClientEvents.jumpTicks >= 5) {
+                gui.setupOverlayRenderState(true, false);
+                gui.renderJumpMeter(poseStack, screenWidth / 2 - 91);
+            }
         }
     }
 }

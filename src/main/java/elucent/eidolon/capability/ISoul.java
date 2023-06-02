@@ -48,11 +48,12 @@ public interface ISoul {
 
     void setMaxEtherealHealth(float max);
 
-    default void hurtEtherealHealth(float amount, float persistentHealth) {
+    default float hurtEtherealHealth(float amount, float persistentHealth) {
         amount = Math.max(0, amount);
         float oldHealth = getEtherealHealth();
         setMaxEtherealHealth(Math.max(getMaxEtherealHealth() - amount, Math.min(persistentHealth, getMaxEtherealHealth())));
         setEtherealHealth(oldHealth - amount);
+        return Math.max(0, amount - oldHealth);
     }
 
     default void healEtherealHealth(float amount, float persistentHealth) {
@@ -87,6 +88,7 @@ public interface ISoul {
     }
 
     static void expendMana(Player player, int amount) {
+        if (player.isCreative()) return;
         player.getCapability(INSTANCE).ifPresent(soul -> {
             if (soul.getMagic() >= amount) {
                 soul.takeMagic(amount);

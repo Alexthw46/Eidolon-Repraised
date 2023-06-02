@@ -39,12 +39,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class AthameItem extends SwordItem {
-    private final Random random = new Random();
 
     public AthameItem(Properties builderIn) {
         super(Tiers.PewterTier.INSTANCE, 1, -1.6f, builderIn);
@@ -59,8 +57,8 @@ public class AthameItem extends SwordItem {
 
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity
-            && ((LivingEntity)event.getSource().getEntity()).getMainHandItem().getItem() instanceof AthameItem
+        if (event.getSource().getEntity() instanceof LivingEntity living
+            && living.getMainHandItem().getItem() instanceof AthameItem
             && (event.getEntity() instanceof EnderMan || event.getEntity() instanceof Endermite || event.getEntity() instanceof EnderDragon)) {
             event.setAmount(event.getAmount() * 4);
         }
@@ -85,6 +83,7 @@ public class AthameItem extends SwordItem {
     @Override
     public @NotNull InteractionResult useOn(UseOnContext ctx) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        var random = ctx.getPlayer() != null ? ctx.getPlayer().getRandom() : ctx.getLevel().getRandom();
         float hardness = state.getDestroySpeed(ctx.getLevel(), ctx.getClickedPos());
         if ((state.getMaterial() == Material.PLANT || state.getMaterial() == Material.REPLACEABLE_PLANT || state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.WATER_PLANT || state.getMaterial() == Material.REPLACEABLE_FIREPROOF_PLANT)
             && hardness < 5.0f && hardness >= 0) {
