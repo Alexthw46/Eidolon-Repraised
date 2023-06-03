@@ -93,7 +93,7 @@ public class DarkTouchSpell extends StaticSpell {
                || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
     }
 
-    ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
+    protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         if (stack.getItem() == Registry.PEWTER_INLAY.get())
             return new ItemStack(Registry.UNHOLY_SYMBOL.get());
         else if (stack.getItem() == Items.BLACK_WOOL)

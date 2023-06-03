@@ -81,7 +81,7 @@ public class Spells {
             Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN
     ));
 
-    public static Spell HOLY_TOUCH = register(new DarkTouchSpell(
+    public static Spell HOLY_TOUCH = register(new LightTouchSpell(
             new ResourceLocation(Eidolon.MODID, "holy_touch"),
             Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.SACRED_SIGN, Signs.SOUL_SIGN
     ));
