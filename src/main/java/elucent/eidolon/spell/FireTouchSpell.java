@@ -3,7 +3,9 @@ package elucent.eidolon.spell;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.research.Researches;
 import elucent.eidolon.tile.BrazierTileEntity;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -31,12 +33,11 @@ public class FireTouchSpell extends StaticSpell {
         //Vec3 v = getVector(world, player);
         //List<BrazierTileEntity> braziers = getTilesWithinAABB(BrazierTileEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         //List<CampfireBlockEntity> campfires = getTilesWithinAABB(CampfireBlockEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
-
+        if (!KnowledgeUtil.knowsResearch(player, Researches.FIRE_SPELL.getRegistryName())) return false;
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         if (ray instanceof BlockHitResult rayTraceResult) {
             BlockState hitState = world.getBlockState(rayTraceResult.getBlockPos());
             if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
-                world.setBlock(rayTraceResult.getBlockPos(), hitState.setValue(LIT, Boolean.TRUE), 11);
                 return true;
             } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof BrazierTileEntity brazier) {
                 return brazier.canStartBurning();

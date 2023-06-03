@@ -24,8 +24,11 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -40,8 +43,8 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
     private int progress;
     private int worldSeed;
     private final List<ContainerListener> listeners = new ArrayList<>();
-    
-    static final int SEED = 1418644859;
+
+    public static final int SEED = 1418644859;
 
     public final ContainerData dataAccess = new ContainerData() {
         @Override
@@ -55,7 +58,7 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
 
         @Override
         public void set(int index, int value) {
-            switch(index) {
+            switch (index) {
                 case 0:
                     ResearchTableTileEntity.this.progress = value;
                     break;
@@ -74,21 +77,21 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
         super(Registry.RESEARCH_TABLE_TILE_ENTITY.get(), pos, state);
         progress = 0;
     }
-    
+
     @Override
     public void onLoad() {
         super.onLoad();
-        if (!level.isClientSide) worldSeed = SEED + 978060631 * (int)((ServerLevel)level).getSeed();
+        if (!level.isClientSide) worldSeed = SEED + 978060631 * (int) ((ServerLevel) level).getSeed();
     }
 
     protected Component getDefaultName() {
         return Component.translatable("container." + Eidolon.MODID + ".research_table");
     }
-    
+
     public void addListener(ContainerListener listener) {
         this.listeners.add(listener);
     }
-    
+
     public void removeListener(ContainerListener listener) {
         this.listeners.remove(listener);
     }
@@ -100,7 +103,7 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
 
     @Override
     public boolean isEmpty() {
-        for(ItemStack itemstack : this.stacks) {
+        for (ItemStack itemstack : this.stacks) {
             if (!itemstack.isEmpty()) {
                 return false;
             }
@@ -111,7 +114,8 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
     @Override
     public void onDestroyed(BlockState state, BlockPos pos) {
         for (ItemStack stack : stacks) {
-            if (!stack.isEmpty()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+            if (!stack.isEmpty())
+                Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
     }
 
@@ -125,23 +129,23 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
                 progress = 0;
                 sync();
                 for (ContainerListener listener : listeners)
-                    listener.dataChanged((AbstractContainerMenu)listener, 0, progress);
+                    listener.dataChanged((AbstractContainerMenu) listener, 0, progress);
                 return;
             }
-            progress --;
+            progress--;
             if (progress == 0) {
                 ItemStack notes = stacks.get(0);
                 CompoundTag notesTag = notes.getTag();
                 Research r = Researches.find(new ResourceLocation(notesTag.getString("research")));
                 int done = notesTag.getInt("stepsDone");
-                done ++;
+                done++;
                 notesTag.putInt("stepsDone", done);
                 for (ContainerListener listener : listeners)
-                    listener.slotChanged((AbstractContainerMenu)listener, 0, stacks.get(0));
+                    listener.slotChanged((AbstractContainerMenu) listener, 0, stacks.get(0));
             }
             sync();
             for (ContainerListener listener : listeners)
-                listener.dataChanged((AbstractContainerMenu)listener, 0, progress);
+                listener.dataChanged((AbstractContainerMenu) listener, 0, progress);
         }
     }
 
@@ -186,7 +190,7 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        if (this.level.getBlockEntity(this.worldPosition) != this) {
+        if (player.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
             return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
@@ -232,11 +236,11 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
         return new ResearchTableContainer(id, inv, this, this.dataAccess);
     }
 
-    final net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler> handler =
-            LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
+    final LazyOptional<? extends IItemHandler> handler =
+            LazyOptional.of(() -> new InvWrapper(this));
 
     @Override
-    public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
         if (!this.remove && capability == ForgeCapabilities.ITEM_HANDLER) {
             return handler.cast();
         }

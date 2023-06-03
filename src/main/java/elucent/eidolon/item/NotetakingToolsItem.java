@@ -4,6 +4,7 @@ import elucent.eidolon.Registry;
 import elucent.eidolon.research.Research;
 import elucent.eidolon.research.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
+import static elucent.eidolon.tile.ResearchTableTileEntity.SEED;
+
 public class NotetakingToolsItem extends ItemBase {
     public NotetakingToolsItem(Properties properties) {
         super(properties);
@@ -25,10 +28,12 @@ public class NotetakingToolsItem extends ItemBase {
         Collection<Research> researches = Researches.getEntityResearches(entity);
         if (!researches.isEmpty()) {
             Research r = researches.iterator().next();
-            if (!player.level.isClientSide && r != null) {
+            if (player.level instanceof ServerLevel serverLevel && r != null) {
                 ItemStack notes = new ItemStack(Registry.RESEARCH_NOTES.get(), 1);
-                notes.getOrCreateTag().putString("research", r.getRegistryName().toString());
-                notes.getTag().putInt("stepsDone", 0);
+                var tag = notes.getOrCreateTag();
+                tag.putString("research", r.getRegistryName().toString());
+                tag.putInt("stepsDone", 0);
+                tag.putLong("worldSeed", SEED + 978060631 * serverLevel.getSeed());
                 stack.shrink(1);
                 if (stack.getCount() == 0) player.setItemInHand(hand, notes);
                 else if (!player.getInventory().add(notes)) {

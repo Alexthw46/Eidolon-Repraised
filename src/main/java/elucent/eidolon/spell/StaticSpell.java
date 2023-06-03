@@ -2,7 +2,10 @@ package elucent.eidolon.spell;
 
 import elucent.eidolon.capability.ISoul;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -24,6 +27,11 @@ public abstract class StaticSpell extends Spell {
     public StaticSpell(ResourceLocation name, int cost, Sign... signs) {
         this(name, signs);
         this.cost = cost;
+    }
+
+    @Override
+    public Sign[] signs() {
+        return signs.toArray();
     }
 
     @Override
@@ -56,6 +64,8 @@ public abstract class StaticSpell extends Spell {
             if (player.getCapability(ISoul.INSTANCE).isPresent()) {
                 ISoul soul = player.getCapability(ISoul.INSTANCE).resolve().get();
                 if (soul.getMagic() < getCost()) {
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
                     return false;
                 }
             }

@@ -1,9 +1,10 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.util.ColorUtil;
+import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class Sign {
+public class Sign implements RGBProvider {
     final ResourceLocation key;
     final ResourceLocation sprite;
     final int color;

@@ -4,13 +4,14 @@ import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.research.Research;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.KnowledgeUtil;
+import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 import java.util.TreeMap;
 
-public abstract class Deity {
+public abstract class Deity implements RGBProvider {
     final ResourceLocation id;
     final int red;
     final int green;

@@ -5,13 +5,16 @@ import elucent.eidolon.capability.Facts;
 import elucent.eidolon.codex.CruciblePage.CrucibleStep;
 import elucent.eidolon.codex.IndexPage.FactLockedEntry;
 import elucent.eidolon.codex.IndexPage.IndexEntry;
+import elucent.eidolon.codex.IndexPage.ResearchLockedEntry;
 import elucent.eidolon.codex.IndexPage.SignLockedEntry;
 import elucent.eidolon.codex.ListPage.ListEntry;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
 import elucent.eidolon.registries.Entities;
+import elucent.eidolon.research.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
+import elucent.eidolon.spell.Spells;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,10 +32,10 @@ public class CodexChapters {
     static Chapter NATURE_INDEX, MONSTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS,
             RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
             ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE,
-            THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, VILLAGER_SACRIFICE,
+            THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, CURE_VILLAGER, HOLY_TOUCH,
             SIGNS_INDEX, WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
             RUNES_INDEX,
-            LIGHT, FIRE_TOUCH, SPELLS_INDEX;
+            SPELLS_INDEX, MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, ENTHRALL, SMITE;
 
     public static void init() {
         MONSTERS = new Chapter(
@@ -101,8 +104,42 @@ public class CodexChapters {
 
         RESEARCHS = new Chapter(
                 "eidolon.codex.chapter.researchs",
-                new TitlePage("eidolon.codex.page.researchs")
+                new TitlePage("eidolon.codex.page.researchs.0"),
+                new CraftingPage(Registry.RESEARCH_TABLE.get().asItem().getDefaultInstance(),
+                        ItemStack.EMPTY, new ItemStack(Registry.MAGIC_CANDLE.get()), ItemStack.EMPTY,
+                        new ItemStack(Items.RED_CARPET), new ItemStack(Items.RED_CARPET), new ItemStack(Items.RED_CARPET),
+                        new ItemStack(Items.OAK_PLANKS), new ItemStack(Items.OAK_PLANKS), new ItemStack(Items.OAK_PLANKS)
+                ),
+                new CruciblePage(new ItemStack(Registry.MAGICIANS_WAX.get(), 4),
+                        new CrucibleStep(new ItemStack(Registry.ENDER_CALX.get())),
+                        new CrucibleStep(new ItemStack(Items.REDSTONE), new ItemStack(Items.RED_DYE)),
+                        new CrucibleStep(2, new ItemStack(Registry.TALLOW.get()))
+                ),
+                new CraftingPage(new ItemStack(Registry.ARCANE_SEAL.get(), 2),
+                        ItemStack.EMPTY, new ItemStack(Registry.MAGICIANS_WAX.get()), ItemStack.EMPTY,
+                        new ItemStack(Registry.MAGICIANS_WAX.get()), new ItemStack(Registry.MAGICIANS_WAX.get()), new ItemStack(Registry.MAGICIANS_WAX.get()),
+                        ItemStack.EMPTY, new ItemStack(Registry.MAGICIANS_WAX.get()), ItemStack.EMPTY
+                ),
+                new CruciblePage(new ItemStack(Registry.MAGIC_INK.get(), 2),
+                        new CrucibleStep(new ItemStack(Items.GLOW_INK_SAC), new ItemStack(Items.BLACK_DYE)),
+                        new CrucibleStep(1, new ItemStack(Items.BLUE_DYE)),
+                        new CrucibleStep(1, new ItemStack(Registry.SILVER_NUGGET.get())),
+                        new CrucibleStep(new ItemStack(Items.GLASS_BOTTLE))
+                ),
+                new CruciblePage(new ItemStack(Registry.PARCHMENT.get(), 4),
+                        new CrucibleStep(new ItemStack(Items.LEATHER)),
+                        new CrucibleStep(1),
+                        new CrucibleStep(1),
+                        new CrucibleStep(new ItemStack(Items.PAPER), new ItemStack(Registry.ENCHANTED_ASH.get()))
+                ),
+                new CraftingPage(new ItemStack(Registry.NOTETAKING_TOOLS.get()),
+                        new ItemStack(Registry.PARCHMENT.get()), new ItemStack(Registry.MAGIC_INK.get()), ItemStack.EMPTY,
+                        new ItemStack(Items.FEATHER), new ItemStack(Registry.ARCANE_GOLD_NUGGET.get()), ItemStack.EMPTY,
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+                )
+
         );
+
 
         NATURE_INDEX = new Chapter(
                 "eidolon.codex.chapter.nature_index",
@@ -788,19 +825,36 @@ public class CodexChapters {
 
         DARK_PRAYER = new Chapter(
                 "eidolon.codex.chapter.dark_prayer",
-                new ChantPage("eidolon.codex.page.dark_prayer.0", Signs.WICKED_SIGN, Signs.WICKED_SIGN, Signs.WICKED_SIGN),
+                new ChantPage("eidolon.codex.page.dark_prayer.0", Spells.DARK_PRAYER.signs()),
                 new TextPage("eidolon.codex.page.dark_prayer.1")
         );
+        LIGHT_PRAYER = new Chapter(
+                "eidolon.codex.chapter.light_prayer",
+                new ChantPage("eidolon.codex.page.light_prayer.0", Spells.LIGHT_PRAYER.signs()),
+                new TextPage("eidolon.codex.page.light_prayer.1")
+        );
+
 
         ANIMAL_SACRIFICE = new Chapter(
                 "eidolon.codex.chapter.animal_sacrifice",
-                new ChantPage("eidolon.codex.page.animal_sacrifice", Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.WICKED_SIGN)
+                new ChantPage("eidolon.codex.page.animal_sacrifice", Spells.DARK_ANIMAL_SACRIFICE.signs())
+        );
+
+        INCENSE_BURN = new Chapter(
+                "eidolon.codex.chapter.incense_burner",
+                new TitlePage("eidolon.codex.page.incense_burner")
         );
 
         DARK_TOUCH = new Chapter(
                 "eidolon.codex.chapter.dark_touch",
-                new ChantPage("eidolon.codex.page.dark_touch.0", Signs.WICKED_SIGN, Signs.SOUL_SIGN, Signs.WICKED_SIGN, Signs.SOUL_SIGN),
+                new ChantPage("eidolon.codex.page.dark_touch.0", Spells.DARK_TOUCH.signs()),
                 new TextPage("eidolon.codex.page.dark_touch.1")
+        );
+
+        HOLY_TOUCH = new Chapter(
+                "eidolon.codex.chapter.holy_touch",
+                new ChantPage("eidolon.codex.page.holy_touch.0", Spells.HOLY_TOUCH.signs()),
+                new TextPage("eidolon.codex.page.holy_touch.1")
         );
 
         STONE_ALTAR = new Chapter(
@@ -823,9 +877,24 @@ public class CodexChapters {
                         new ItemStack(Registry.UNHOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY)
         );
 
+        HOLY_EFFIGY = new Chapter(
+                "eidolon.codex.chapter.holy_effigy",
+                new TitlePage("eidolon.codex.page.holy_effigy"),
+                new WorktablePage(new ItemStack(Registry.UNHOLY_EFFIGY.get()),
+                        ItemStack.EMPTY, new ItemStack(Blocks.SMOOTH_STONE), ItemStack.EMPTY,
+                        new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
+                        ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY,
+                        new ItemStack(Registry.HOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY)
+        );
+
         VILLAGER_SACRIFICE = new Chapter(
                 "eidolon.codex.chapter.villager_sacrifice",
-                new ChantPage("eidolon.codex.page.villager_sacrifice", Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN)
+                new ChantPage("eidolon.codex.page.villager_sacrifice", Spells.DARK_VILLAGER_SACRIFICE.signs())
+        );
+
+        CURE_VILLAGER = new Chapter(
+                "eidolon.codex.chapter.villager_cure",
+                new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_VILLAGER_CHANT.signs())
         );
 
         THEURGY_INDEX = new Chapter(
@@ -845,8 +914,18 @@ public class CodexChapters {
                         new SignLockedEntry(ANIMAL_SACRIFICE, new ItemStack(Items.PORKCHOP), Signs.BLOOD_SIGN),
                         new SignLockedEntry(DARK_TOUCH, new ItemStack(Registry.UNHOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.WICKED_SIGN),
                         new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
-                        new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.UNHOLY_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN, Signs.WICKED_SIGN),
+                        new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.UNHOLY_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN),
                         new FactLockedEntry(VILLAGER_SACRIFICE, new ItemStack(Items.IRON_SWORD), Facts.VILLAGER_SACRIFICE)
+                ),
+                //TODO light path - INCENSE & EFFIGY
+                new IndexPage(
+                        new IndexEntry(INCENSE_BURN, new ItemStack(Registry.INCENSE_BURNER.get().asItem())),
+                        new SignLockedEntry(LIGHT_PRAYER, new ItemStack(Registry.ENCHANTED_ASH.get()), Signs.SACRED_SIGN),
+                        new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.INCENSE_BURNER.get().asItem()), Signs.FLAME_SIGN),
+                        new SignLockedEntry(HOLY_TOUCH, new ItemStack(Registry.HOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.SACRED_SIGN),
+                        new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
+                        new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.UNHOLY_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),
+                        new FactLockedEntry(CURE_VILLAGER, new ItemStack(Items.GOLDEN_APPLE), Facts.VILLAGER_HEALING)
                 )
         );
 
@@ -935,10 +1014,10 @@ public class CodexChapters {
                 ),
                 new SignIndexPage(
                         new SignEntry(WINTER_SIGN, Signs.WINTER_SIGN),
+                        new SignEntry(MAGIC_SIGN, Signs.MAGIC_SIGN),
                         new SignEntry(HARMONY_SIGN, Signs.HARMONY_SIGN),
                         new SignEntry(DEATH_SIGN, Signs.DEATH_SIGN),
-                        new SignEntry(WARDING_SIGN, Signs.WARDING_SIGN),
-                        new SignEntry(MAGIC_SIGN, Signs.MAGIC_SIGN)
+                        new SignEntry(WARDING_SIGN, Signs.WARDING_SIGN)
                 )
         );
 
@@ -949,36 +1028,44 @@ public class CodexChapters {
                 SIGNS_INDEX
         ));
 
-        /*
-        RUNES_INDEX = new Chapter(
-            "eidolon.codex.chapter.runes_index",
-            new RuneDescPage(), new RuneIndexPage()
-        );
-
-
-        categories.add(RUNES = new Category(
-            "runes",
-            new ItemStack(Registry.PARCHMENT.get()),
-            ColorUtil.packColor(255, 70, 70, 194),
-            RUNES_INDEX
-        ));
-         */
+        MANA = new Chapter("eidolon.codex.chapter.mana",
+                new TitlePage("eidolon.codex.page.mana"));
 
         LIGHT = new Chapter(
                 "eidolon.codex.chapter.light",
-                new ChantPage("eidolon.codex.page.light", Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN)
+                new ChantPage("eidolon.codex.page.light", Spells.LIGHT_CHANT.signs())
         );
         FIRE_TOUCH = new Chapter(
                 "eidolon.codex.chapter.fire_touch",
-                new ChantPage("eidolon.codex.page.fire_touch", Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN)
+                new ChantPage("eidolon.codex.page.fire_touch", Spells.FIRE_CHANT.signs())
+        );
+
+        CHILL_TOUCH = new Chapter(
+                "eidolon.codex.chapter.chill_touch",
+                new ChantPage("eidolon.codex.page.chill_touch", Spells.FROST_CHANT.signs())
+        );
+
+        ENTHRALL = new Chapter(
+                "eidolon.codex.chapter.enthrall",
+                new ChantPage("eidolon.codex.page.enthrall", Spells.ENTHRALL_UNDEAD.signs()),
+                new TextPage("eidolon.codex.page.enthrall.1")
+        );
+
+        SMITE = new Chapter(
+                "eidolon.codex.chapter.smite",
+                new ChantPage("eidolon.codex.page.smite", Spells.SMITE_CHANT.signs())
         );
 
         SPELLS_INDEX = new Chapter(
                 "eidolon.codex.chapter.spells",
                 new TitledIndexPage(
                         "eidolon.codex.page.spells",
+                        //new IndexEntry(MANA, new ItemStack(Registry.PRESTIGIOUS_PALM.get())),
                         new SignLockedEntry(LIGHT, new ItemStack(Items.LANTERN), Signs.FLAME_SIGN),
-                        new FactLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Facts.FIRE_SPELL)
+                        new ResearchLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Researches.FIRE_SPELL),
+                        new ResearchLockedEntry(CHILL_TOUCH, new ItemStack(Items.ICE), Researches.FROST_SPELL),
+                        new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
+                        new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE)
                 )
         );
 

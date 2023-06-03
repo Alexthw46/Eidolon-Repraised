@@ -1,6 +1,8 @@
 package elucent.eidolon.capability;
 
 import elucent.eidolon.Registry;
+import elucent.eidolon.network.Networking;
+import elucent.eidolon.network.SoulUpdatePacket;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,6 +95,8 @@ public interface ISoul {
             if (soul.getMagic() >= amount) {
                 soul.takeMagic(amount);
             }
+            if (!player.level.isClientSide)
+                Networking.sendToTracking(player.level, player.getOnPos(), new SoulUpdatePacket(player));
         });
     }
 }

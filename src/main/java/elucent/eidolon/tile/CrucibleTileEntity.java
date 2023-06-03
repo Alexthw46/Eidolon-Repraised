@@ -8,6 +8,7 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
+import elucent.eidolon.registries.ParticleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -164,7 +165,11 @@ public class CrucibleTileEntity extends TileEntityBase {
         if (hasWater && level.getGameTime() % 200 == 0) {
             BlockState state = level.getBlockState(worldPosition.below());
             boolean isHeated = false;
-            for (Predicate<BlockState> pred : HOT_BLOCKS) if (pred.test(state)) isHeated = true;
+            for (Predicate<BlockState> pred : HOT_BLOCKS)
+                if (pred.test(state)) {
+                    isHeated = true;
+                    break;
+                }
             if (boiling && !isHeated) {
                 boiling = false;
                 if (!level.isClientSide) sync();
@@ -182,14 +187,14 @@ public class CrucibleTileEntity extends TileEntityBase {
         float steamB = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getBlue(), 2)) : 1.0f;
 
         if (level.isClientSide && hasWater && boiling) for (int i = 0; i < 2; i++) {
-            Particles.create(elucent.eidolon.registries.Particles.BUBBLE_PARTICLE)
+            Particles.create(ParticleRegistry.BUBBLE_PARTICLE)
                     .setScale(0.05f)
                     .setLifetime(10)
                     .addVelocity(0, 0.015625, 0)
                     .setColor(bubbleR, bubbleG, bubbleB)
                     .setAlpha(1.0f, 0.75f)
                     .spawn(level, worldPosition.getX() + 0.125 + 0.75 * level.random.nextFloat(), worldPosition.getY() + 0.6875, worldPosition.getZ() + 0.125 + 0.75 * level.random.nextFloat());
-            if (level.random.nextInt(8) == 0) Particles.create(elucent.eidolon.registries.Particles.STEAM_PARTICLE)
+            if (level.random.nextInt(8) == 0) Particles.create(ParticleRegistry.STEAM_PARTICLE)
                     .setAlpha(0.0625f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.025f)
                     .addVelocity(0, 0.05f, 0)

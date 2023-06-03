@@ -1,26 +1,24 @@
 package elucent.eidolon.spell;
 
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
 import com.mojang.math.Vector3f;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Function;
+
 public class SignSequence {
-    public final Deque<Sign> seq = new ArrayDeque<>();
+    public final ArrayDeque<Sign> seq = new ArrayDeque<>();
     public Sign last = null;
 
-    public SignSequence() {}
+    public SignSequence() {
+    }
 
     public SignSequence(Collection<Sign> signs) {
         seq.addAll(signs);
@@ -36,6 +34,10 @@ public class SignSequence {
 
     public void addRight(Sign s) {
         seq.addLast(s);
+    }
+
+    public Sign[] toArray() {
+        return seq.toArray(Sign[]::new);
     }
 
     public void removeLeft() {
@@ -64,7 +66,7 @@ public class SignSequence {
     }
 
     private boolean containsN(Sign s, int n) {
-        Iterator iterator = seq.iterator();
+        Iterator<Sign> iterator = seq.iterator();
         int count = 0;
         while (iterator.hasNext()) {
             if (s.equals(iterator.next())) count ++;

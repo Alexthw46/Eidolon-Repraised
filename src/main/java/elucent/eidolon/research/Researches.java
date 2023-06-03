@@ -3,13 +3,15 @@ package elucent.eidolon.research;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.capability.Facts;
+import elucent.eidolon.Registry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +19,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+import static elucent.eidolon.datagen.EidItemTagProvider.SCRIBE_ITEMS;
+import static elucent.eidolon.research.ResearchTask.TaskItems.fromTag;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class Researches {
@@ -62,35 +66,35 @@ public class Researches {
         return taskPool.get(random.nextInt(taskPool.size())).apply(random);
     }
 
+    public static Research FIRE_SPELL;
+    public static Research FROST_SPELL;
+
+
     public static void init() {
-        addTask(ResearchTask.ScrivenerItems::new);
-        addTask(ResearchTask.ScrivenerItems::new);
-        addTask(ResearchTask.ScrivenerItems::new);
-        addTask(ResearchTask.ScrivenerItems::new);
+        addTask(fromTag(SCRIBE_ITEMS, 3));
+        addTask(fromTag(SCRIBE_ITEMS, 3));
+        addTask(fromTag(SCRIBE_ITEMS, 3));
         addTask(ResearchTask.XP::new);
         addTask(ResearchTask.XP::new);
+
 
         register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 3), EntityType.PIG);
-        register(new Research(new ResourceLocation(Eidolon.MODID, "flames"), 5) {
-            @Override
-            public void onLearned(ServerPlayer serverPlayer) {
-                KnowledgeUtil.grantFact(serverPlayer, Facts.FIRE_SPELL);
-            }
-        }, EntityType.BLAZE);
+        FIRE_SPELL = register(new Research(new ResourceLocation(Eidolon.MODID, "flames"), 5)
+                .addSpecialTasks(5, new ResearchTask.TaskItems(new ItemStack(Items.BLAZE_ROD, 3)),
+                        new ResearchTask.TaskItems(new ItemStack(Items.FIRE_CHARGE, 3)),
+                        new ResearchTask.XP(6)
+                ), EntityType.BLAZE);
 
-        register(new Research(new ResourceLocation(Eidolon.MODID, "frost"), 5) {
+        FROST_SPELL = register(new Research(new ResourceLocation(Eidolon.MODID, "frost"), 5) {
             @Override
             public void onLearned(ServerPlayer serverPlayer) {
                 KnowledgeUtil.grantSign(serverPlayer, Signs.WINTER_SIGN);
             }
-        }, EntityType.STRAY);
-
-        register(new Research(new ResourceLocation(Eidolon.MODID, "death"), 7) {
-            @Override
-            public void onLearned(ServerPlayer serverPlayer) {
-                KnowledgeUtil.grantSign(serverPlayer, Signs.DEATH_SIGN);
-            }
-        }, EntityType.WITHER_SKELETON);
+        }.addSpecialTasks(4, new ResearchTask.TaskItems(new ItemStack(Items.ICE, 10)),
+                new ResearchTask.TaskItems(new ItemStack(Items.SNOW, 10)),
+                new ResearchTask.XP(6)
+        ).addSpecialTasks(5, new ResearchTask.TaskItems(new ItemStack(Registry.WRAITH_HEART.get(), 3))
+        ), EntityType.STRAY);
     }
 
 }

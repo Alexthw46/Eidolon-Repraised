@@ -2,16 +2,16 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.research.Research;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -63,6 +63,21 @@ public class IndexPage extends Page {
         }
     }
 
+    public static class ResearchLockedEntry extends IndexEntry {
+        final Research[] researchs;
+
+        public ResearchLockedEntry(Chapter chapter, ItemStack icon, Research... researchs) {
+            super(chapter, icon);
+            this.researchs = researchs;
+        }
+
+        @Override
+        public boolean isUnlocked() {
+            return Arrays.stream(researchs).allMatch((research) -> KnowledgeUtil.knowsResearch(Eidolon.proxy.getPlayer(), research.getRegistryName()));
+        }
+    }
+
+
     public IndexPage(IndexEntry... pages) {
         super(BACKGROUND);
         this.entries = pages;
@@ -71,7 +86,8 @@ public class IndexPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
-        for (int i = 0; i < entries.length; i ++) if (entries[i].isUnlocked()) {
+        for (int i = 0; i < entries.length; i++)
+            if (entries[i].isUnlocked()) {
             if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
                 gui.changeChapter(entries[i].chapter);
                 assert Minecraft.getInstance().player != null;

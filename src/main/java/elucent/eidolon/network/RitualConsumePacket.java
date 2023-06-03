@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
@@ -47,7 +48,7 @@ public class RitualConsumePacket {
                 BlockPos src = packet.src, dst = packet.dst;
                 world.playSound(Eidolon.proxy.getPlayer(), src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0f, 1.0f);
                 for (int i = 0; i < 10; i ++) {
-                    Particles.create(elucent.eidolon.registries.Particles.LINE_WISP_PARTICLE)
+                    Particles.create(ParticleRegistry.LINE_WISP_PARTICLE)
                         .setAlpha(0.75f, 0).setScale(0.25f + 0.125f * world.random.nextFloat(), 0).setLifetime(16 + world.random.nextInt(4))
                         .randomOffset(0.375, 0.375).randomVelocity(0.125, 0.125)
                         .addVelocity(dst.getX() + 0.5, dst.getY() + 1, dst.getZ() + 0.5)

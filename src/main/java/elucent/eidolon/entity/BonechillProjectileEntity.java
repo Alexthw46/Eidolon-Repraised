@@ -4,6 +4,7 @@ import elucent.eidolon.Registry;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.registries.Potions;
 import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.util.ColorUtil;
@@ -34,13 +35,13 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
             double lerpX = Mth.lerp(i / 8.0f, xOld, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yOld, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zOld, pos.z);
-            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
+            Particles.create(ParticleRegistry.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.0625f, 0).setScale(0.625f, 0)
                 .setColor(0.875f, 1, 1, 0.375f, 0.5f, 0.75f)
                 .setLifetime(5)
                 .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
+            Particles.create(ParticleRegistry.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
                 .setColor(1, 0.75f, 0.875f, 0.375f, 0.5f, 0.75f)

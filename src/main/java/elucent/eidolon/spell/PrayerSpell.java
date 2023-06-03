@@ -9,6 +9,7 @@ import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.tile.EffigyTileEntity;
+import elucent.eidolon.util.RGBProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -22,13 +23,18 @@ import net.minecraft.world.phys.AABB;
 import java.util.Comparator;
 import java.util.List;
 
-import static elucent.eidolon.registries.Particles.FLAME_PARTICLE;
+import static elucent.eidolon.registries.ParticleRegistry.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);
+        this.deity = deity;
+    }
+
+    public PrayerSpell(ResourceLocation name, Deity deity, int cost, Sign... signs) {
+        super(name, cost, signs);
         this.deity = deity;
     }
 
@@ -68,28 +74,32 @@ public class PrayerSpell extends StaticSpell {
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
         } else {
-            world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.NEUTRAL, 10000.0F, 0.6F + world.random.nextFloat() * 0.2F);
-            world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.NEUTRAL, 2.0F, 0.5F + world.random.nextFloat() * 0.2F);
-            BlockState state = world.getBlockState(effigy.getBlockPos());
-            Direction dir = state.getValue(HorizontalBlockBase.HORIZONTAL_FACING);
-            Direction tangent = dir.getClockWise();
-            float x = effigy.getBlockPos().getX() + 0.5f + dir.getStepX() * 0.21875f;
-            float y = effigy.getBlockPos().getY() + 0.8125f;
-            float z = effigy.getBlockPos().getZ() + 0.5f + dir.getStepZ() * 0.21875f;
-            Particles.create(FLAME_PARTICLE)
-                    .setColor(deity.getRed(), deity.getGreen(), deity.getBlue())
-                    .setAlpha(0.5f, 0)
-                    .setScale(0.125f, 0.0625f)
-                    .randomOffset(0.01f)
-                    .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
-                    .repeat(world, x + 0.09375f * tangent.getStepX(), y, z + 0.09375f * tangent.getStepZ(), 8);
-            Particles.create(FLAME_PARTICLE)
-                    .setColor(deity.getRed(), deity.getGreen(), deity.getBlue())
-                    .setAlpha(0.5f, 0)
-                    .setScale(0.1875f, 0.125f)
-                    .randomOffset(0.01f)
-                    .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
-                    .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
+            playSuccessSound(world, player, effigy, deity);
         }
+    }
+
+    protected void playSuccessSound(Level world, Player player, EffigyTileEntity effigy, RGBProvider color) {
+        world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.NEUTRAL, 10000.0F, 0.6F + world.random.nextFloat() * 0.2F);
+        world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.NEUTRAL, 2.0F, 0.5F + world.random.nextFloat() * 0.2F);
+        BlockState state = world.getBlockState(effigy.getBlockPos());
+        Direction dir = state.getValue(HorizontalBlockBase.HORIZONTAL_FACING);
+        Direction tangent = dir.getClockWise();
+        float x = effigy.getBlockPos().getX() + 0.5f + dir.getStepX() * 0.21875f;
+        float y = effigy.getBlockPos().getY() + 0.8125f;
+        float z = effigy.getBlockPos().getZ() + 0.5f + dir.getStepZ() * 0.21875f;
+        Particles.create(FLAME_PARTICLE)
+                .setColor(color.getRed(), color.getGreen(), color.getBlue())
+                .setAlpha(0.5f, 0)
+                .setScale(0.125f, 0.0625f)
+                .randomOffset(0.01f)
+                .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
+                .repeat(world, x + 0.09375f * tangent.getStepX(), y, z + 0.09375f * tangent.getStepZ(), 8);
+        Particles.create(FLAME_PARTICLE)
+                .setColor(color.getRed(), color.getGreen(), color.getBlue())
+                .setAlpha(0.5f, 0)
+                .setScale(0.1875f, 0.125f)
+                .randomOffset(0.01f)
+                .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
+                .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
     }
 }

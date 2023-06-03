@@ -3,6 +3,7 @@ package elucent.eidolon.entity;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.registries.Sounds;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.world.entity.Entity;
@@ -30,13 +31,13 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
             double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
-            Particles.create(elucent.eidolon.registries.Particles.SPARKLE_PARTICLE)
+            Particles.create(ParticleRegistry.SPARKLE_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.375f, 0).setScale(0.375f, 0)
                 .setColor(1, 0.875f, 0.5f, 0.5f, 0.25f, 1)
                 .setLifetime(5)
                 .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
+            Particles.create(ParticleRegistry.WISP_PARTICLE)
                 .addVelocity(-norm.x, -norm.y, -norm.z)
                 .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
                 .setColor(1, 0.5f, 0.625f, 0.5f, 0.25f, 1)

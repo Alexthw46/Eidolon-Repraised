@@ -26,15 +26,15 @@ public class ResearchTableBlock extends HorizontalBlockBase implements EntityBlo
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         if (worldIn.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             BlockEntity tileentity = worldIn.getBlockEntity(pos);
-            if (tileentity instanceof ResearchTableTileEntity) {
+            if (tileentity instanceof ResearchTableTileEntity researchTable) {
                 NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, p) -> {
-                    return new ResearchTableContainer(id, inventory, ((ResearchTableTileEntity) tileentity), ((ResearchTableTileEntity) tileentity).dataAccess);
-                }, ((ResearchTableTileEntity) tileentity).getDisplayName()), pos);
+                    return new ResearchTableContainer(id, inventory, researchTable, researchTable.dataAccess);
+                }, researchTable.getDisplayName()), pos);
             }
 
             return InteractionResult.CONSUME;
@@ -42,18 +42,13 @@ public class ResearchTableBlock extends HorizontalBlockBase implements EntityBlo
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new ResearchTableTileEntity(pos, state);
     }
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return new BlockEntityTicker<T>() {
-            @Override
-            public void tick(Level level, BlockPos pos, BlockState state, T tile) {
-                ((ResearchTableTileEntity)tile).tick();
-            }
-        };
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+        return (level1, pos, state1, tile) -> ((ResearchTableTileEntity) tile).tick();
     }
 }

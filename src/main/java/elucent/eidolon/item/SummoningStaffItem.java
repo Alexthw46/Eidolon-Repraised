@@ -1,8 +1,10 @@
 package elucent.eidolon.item;
 
+import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.ChatFormatting;
@@ -21,6 +23,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -51,9 +54,21 @@ public class SummoningStaffItem extends ItemBase {
     public int getUseDuration(@NotNull ItemStack stack) {
         return 72000;
     }
-    
+
     Random random = new Random();
-    
+
+    @Override
+    public boolean hurtEnemy(@NotNull ItemStack pStack, @NotNull LivingEntity pTarget, @NotNull LivingEntity pAttacker) {
+        if (EntityUtil.isEnthralledBy(pTarget, pAttacker) && Eidolon.getTrueMobType(pTarget) == MobType.UNDEAD) {
+            CompoundTag eTag = pTarget.serializeNBT();
+            pTarget.remove(Entity.RemovalReason.KILLED);
+            addCharge(pStack, eTag);
+
+            return false;
+        }
+        return super.hurtEnemy(pStack, pTarget, pAttacker);
+    }
+
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity entity, int time) {
         if (entity.level.isClientSide) {
@@ -68,9 +83,9 @@ public class SummoningStaffItem extends ItemBase {
                 if (time == 40) {
                     entity.playSound(SoundEvents.CROSSBOW_QUICK_CHARGE_3, 1, 1);
                 }
-                Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
+                Particles.create(ParticleRegistry.SMOKE_PARTICLE)
                         .randomVelocity(0.025f * alpha, 0.0125f * alpha)
-                        .setColor(33.0f/255, 26.0f/255, 23.0f/255, 0.125f, 10.0f/255, 10.0f/255, 12.0f/255, 0)
+                        .setColor(33.0f / 255, 26.0f / 255, 23.0f / 255, 0.125f, 10.0f / 255, 10.0f / 255, 12.0f / 255, 0)
                         .setAlpha(0.25f * alpha, 0)
                         .randomOffset(0.05f + 0.05f * alpha)
                         .setScale(0.25f + 0.25f * alpha, alpha * 0.125f)
@@ -95,7 +110,7 @@ public class SummoningStaffItem extends ItemBase {
                     Optional<Entity> e = etype.get().create(tag, level);
                     if (e.isPresent()) {
                         e.get().setPos(pos);
-                        EntityUtil.enthrall(entity, (LivingEntity)e.get());
+                        EntityUtil.enthrall(entity, (LivingEntity) e.get());
                         level.addFreshEntity(e.get());
                         Networking.sendToTracking(entity.level, e.get().blockPosition(), new MagicBurstEffectPacket(e.get().getX(), e.get().getY() + e.get().getBbHeight() / 2, e.get().getZ(),
                                 ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
@@ -103,20 +118,20 @@ public class SummoningStaffItem extends ItemBase {
                     }
                 }
 
-                entity.setItemInHand(entity.getUsedItemHand(), entity instanceof Player && ((Player)entity).getAbilities().instabuild ? stack : consumeCharge(stack, selected));
+                entity.setItemInHand(entity.getUsedItemHand(), entity instanceof Player && ((Player) entity).getAbilities().instabuild ? stack : consumeCharge(stack, selected));
                 entity.swing(entity.getUsedItemHand());
                 entity.stopUsingItem();
             }
         }
     }
-    
+
     public int getSelected(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         if (!tag.contains("selected")) tag.putInt("selected", 0);
         else if (tag.getInt("selected") >= getCharges(stack).size()) tag.putInt("selected", 0);
         return tag.getInt("selected");
     }
-    
+
     public int changeSelection(ItemStack stack, int diff) {
         if (!hasCharges(stack)) return 0;
         CompoundTag tag = stack.getOrCreateTag();
@@ -124,7 +139,7 @@ public class SummoningStaffItem extends ItemBase {
         tag.putInt("selected", selected);
         return selected;
     }
-    
+
     public ItemStack addCharges(ItemStack stack, ListTag charges) {
         CompoundTag tag = stack.getOrCreateTag();
         if (!tag.contains("charges")) {
@@ -138,25 +153,25 @@ public class SummoningStaffItem extends ItemBase {
         }
         return stack;
     }
-    
+
     public boolean hasCharges(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         ListTag list = tag.getList("charges", Tag.TAG_COMPOUND);
-        return tag.contains("charges") && tag.getList("charges", Tag.TAG_COMPOUND).size() > 0;
+        return tag.contains("charges") && list.size() > 0;
     }
-    
+
     public ListTag getCharges(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         return tag.contains("charges") ? tag.getList("charges", Tag.TAG_COMPOUND) : new ListTag();
     }
-    
+
     public ItemStack consumeCharge(ItemStack stack, int index) {
         ListTag list = getCharges(stack);
         if (list.size() > index) list.remove(index);
         stack.getOrCreateTag().put("charges", list);
         return stack;
     }
-    
+
     public ItemStack addCharge(ItemStack stack, CompoundTag tag) {
         ListTag list = getCharges(stack);
         if (list.size() < 100) list.add(tag);
@@ -185,8 +200,7 @@ public class SummoningStaffItem extends ItemBase {
             }
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
-        }
-        else return InteractionResultHolder.fail(stack);
+        } else return InteractionResultHolder.fail(stack);
     }
 
     @Override

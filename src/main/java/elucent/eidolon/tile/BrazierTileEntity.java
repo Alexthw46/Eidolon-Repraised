@@ -3,6 +3,7 @@ package elucent.eidolon.tile;
 import elucent.eidolon.Registry;
 import elucent.eidolon.network.*;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.ritual.Ritual;
 import elucent.eidolon.ritual.Ritual.RitualResult;
 import elucent.eidolon.ritual.Ritual.SetupResult;
@@ -163,7 +164,7 @@ public class BrazierTileEntity extends TileEntityBase {
                 float x = getBlockPos().getX() + 0.5f + Mth.sin(angle) * radius;
                 float y = getBlockPos().getY() + 0.875f;
                 float z = getBlockPos().getZ() + 0.5f + Mth.cos(angle) * radius;
-                Particles.create(elucent.eidolon.registries.Particles.WISP_PARTICLE)
+                Particles.create(ParticleRegistry.WISP_PARTICLE)
                     .setAlpha(0.25f * progress, 0).setScale(0.125f, 0.0625f).setLifetime(20)
                     .setColor(1.0f, 0.5f, 0.25f, 1.0f, 0.25f, 0.375f)
                     .spawn(level, x, y, z);
@@ -201,25 +202,25 @@ public class BrazierTileEntity extends TileEntityBase {
             float r = ritual == null ? 1.0f : ritual.getRed();
             float g = ritual == null ? 0.5f : ritual.getGreen();
             float b = ritual == null ? 0.25f : ritual.getBlue();
-            Particles.create(elucent.eidolon.registries.Particles.FLAME_PARTICLE)
+            Particles.create(ParticleRegistry.FLAME_PARTICLE)
                 .setAlpha(0.5f, 0).setScale(0.3125f, 0.125f).setLifetime(20)
                 .randomOffset(0.25, 0.125).randomVelocity(0.00625f, 0.01875f)
                 .addVelocity(0, 0.00625f, 0)
                 .setColor(r, g, b, r, g * 0.5f, b * 1.5f)
                 .spawn(level, x, y, z);
-            if (level.random.nextInt(5) == 0) Particles.create(elucent.eidolon.registries.Particles.SMOKE_PARTICLE)
-                .setAlpha(0.125f, 0).setScale(0.375f, 0.125f).setLifetime(80)
-                .randomOffset(0.25, 0.125).randomVelocity(0.025f, 0.025f)
-                .addVelocity(0, 0.1f, 0)
-                .setColor(0.5f, 0.5f, 0.5f, 0.25f, 0.25f, 0.25f)
-                .spawn(level, x, y + 0.125, z);
-            if (level.random.nextInt(40) == 0) Particles.create(elucent.eidolon.registries.Particles.SPARKLE_PARTICLE)
-                .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(40)
-                .randomOffset(0.0625, 0).randomVelocity(0.125f, 0)
-                .addVelocity(0, 0.125f, 0)
-                .setColor(r, g * 1.5f, b * 2, r, g, b)
-                .enableGravity().setSpin(0.4f)
-                .spawn(level, x, y, z);
+            if (level.random.nextInt(5) == 0) Particles.create(ParticleRegistry.SMOKE_PARTICLE)
+                    .setAlpha(0.125f, 0).setScale(0.375f, 0.125f).setLifetime(80)
+                    .randomOffset(0.25, 0.125).randomVelocity(0.025f, 0.025f)
+                    .addVelocity(0, 0.1f, 0)
+                    .setColor(0.5f, 0.5f, 0.5f, 0.25f, 0.25f, 0.25f)
+                    .spawn(level, x, y + 0.125, z);
+            if (level.random.nextInt(40) == 0) Particles.create(ParticleRegistry.SPARKLE_PARTICLE)
+                    .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(40)
+                    .randomOffset(0.0625, 0).randomVelocity(0.125f, 0)
+                    .addVelocity(0, 0.125f, 0)
+                    .setColor(r, g * 1.5f, b * 2, r, g, b)
+                    .enableGravity().setSpin(0.4f)
+                    .spawn(level, x, y, z);
         }
     }
 

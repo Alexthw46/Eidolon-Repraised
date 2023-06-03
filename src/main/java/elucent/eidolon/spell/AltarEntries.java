@@ -1,13 +1,13 @@
 package elucent.eidolon.spell;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import elucent.eidolon.Registry;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AltarEntries {
     static final Map<BlockState, AltarEntry> entries = new HashMap<>();
@@ -34,5 +34,7 @@ public class AltarEntries {
         entries.put(Blocks.POTTED_CRIMSON_FUNGUS.defaultBlockState(), new AltarEntry(AltarKeys.PLANT_KEY).setPower(2));
         entries.put(Blocks.POTTED_WITHER_ROSE.defaultBlockState(), new AltarEntry(AltarKeys.PLANT_KEY).setPower(3));
         entries.put(Registry.GOBLET.get().defaultBlockState(), new AltarEntry(AltarKeys.GOBLET_KEY).setCapacity(2));
+        entries.put(Registry.INCENSE_BURNER.get().defaultBlockState(), new AltarEntry(AltarKeys.GOBLET_KEY).setCapacity(2));
+
     }
 }

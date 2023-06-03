@@ -1,7 +1,6 @@
 package elucent.eidolon.research;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import elucent.eidolon.Registry;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -12,13 +11,15 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -139,14 +140,25 @@ public abstract class ResearchTask {
             }
         }
 
-        public TaskItems() {
-            this.items = new ArrayList<ItemStack>();
-            this.container = new InternalContainer();
-        }
-
         public TaskItems(ItemStack... stacks) {
             this.items = List.of(stacks);
             this.container = new InternalContainer();
+        }
+
+        public TaskItems(List<ItemStack> stacks) {
+            this.items = stacks;
+            this.container = new InternalContainer();
+        }
+
+        public static Function<Random, ResearchTask> fromTag(TagKey<Item> tagKey, int maxCount) {
+            return (random) -> {
+                var items = List.of(Ingredient.of(tagKey).getItems());
+                for (var item : items) {
+                    if (item.isStackable())
+                        item.setCount(random.nextInt(1, maxCount));
+                }
+                return new TaskItems(items);
+            };
         }
 
         @Override
@@ -246,26 +258,15 @@ public abstract class ResearchTask {
         }
     }
 
-    public static class ScrivenerItems extends TaskItems {
-        static final List<Function<Random, ItemStack>> ITEM_POOL = List.of(
-                (random) -> new ItemStack(Registry.MAGIC_INK.get(), random.nextInt(1, 3)),
-                (random) -> new ItemStack(Items.FEATHER),
-                (random) -> new ItemStack(Registry.PARCHMENT.get(), random.nextInt(1, 3)),
-                (random) -> new ItemStack(Registry.CANDLE.get()),
-                (random) -> new ItemStack(Items.CHARCOAL, random.nextInt(1, 3)),
-                (random) -> new ItemStack(Items.BOOK)
-        );
-
-        public ScrivenerItems(Random random) {
-            items = List.of(ITEM_POOL.get(random.nextInt(ITEM_POOL.size())).apply(random));
-        }
-    }
-
     public static class XP extends ResearchTask {
         int levels;
 
         public XP(Random random) {
             levels = random.nextInt(1, 6); // 1-5 XP levels as cost
+        }
+
+        public XP(int i) {
+            levels = i;
         }
 
         @Override

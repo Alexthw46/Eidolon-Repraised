@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.ForgeEventFactory;
+import org.jetbrains.annotations.NotNull;
 
 public class WoodenBrewingStandContainer extends AbstractContainerMenu {
     private final Container tileBrewingStand;
@@ -52,14 +53,14 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
         }
     }
 
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.tileBrewingStand.stillValid(playerIn);
     }
 
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if ((index < 0 || index > 2) && index != 3) {
@@ -121,7 +122,7 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
             super(iInventoryIn, index, xPosition, yPosition);
         }
 
-        public boolean mayPlace(ItemStack stack) {
+        public boolean mayPlace(@NotNull ItemStack stack) {
             return BrewingRecipeRegistry.isValidIngredient(stack)
                    && !stack.is(Tags.Items.DUSTS_REDSTONE)
                    && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
@@ -137,7 +138,7 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
             super(p_i47598_1_, p_i47598_2_, p_i47598_3_, p_i47598_4_);
         }
 
-        public boolean mayPlace(ItemStack stack) {
+        public boolean mayPlace(@NotNull ItemStack stack) {
             return canHoldPotion(stack);
         }
 
@@ -145,7 +146,7 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
             return 1;
         }
 
-        public void onTake(Player thePlayer, ItemStack stack) {
+        public void onTake(@NotNull Player thePlayer, @NotNull ItemStack stack) {
             Potion potion = PotionUtils.getPotion(stack);
             if (thePlayer instanceof ServerPlayer) {
                 ForgeEventFactory.onPlayerBrewedPotion(thePlayer, stack);

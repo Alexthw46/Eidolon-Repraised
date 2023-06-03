@@ -14,7 +14,7 @@ import elucent.eidolon.item.curio.*;
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
-import elucent.eidolon.registries.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.registries.*;
 import elucent.eidolon.tile.*;
 import elucent.eidolon.tile.reagent.CisternTileEntity;
@@ -205,7 +205,9 @@ public class Registry {
     public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
     public static final RegistryObject<Item> TALLOW = addItem("tallow");
     public static final RegistryObject<Item> LESSER_SOUL_GEM = addItem("lesser_soul_gem");
-    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new UnholySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final RegistryObject<Item> HOLY_SYMBOL = addItem("holy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+
     public static final RegistryObject<Item> REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
             .setLore("lore.eidolon.reaper_scythe"));
     public static final RegistryObject<Item> CLEAVING_AXE = addItem("cleaving_axe", () -> new CleavingAxeItem(itemProps().rarity(Rarity.UNCOMMON))
@@ -353,8 +355,12 @@ public class Registry {
             .noOcclusion()).setShape(
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
+
+    public static final RegistryObject<Block> INCENSE_BURNER = addBlock("incense_burner", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+            .sound(SoundType.METAL).strength(1.4f, 2.0f)
+            .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
     public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)
-            .sound(SoundType.METAL).strength(1.4f, 2.0f).requiresCorrectToolForDrops()
+            .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
     public static final RegistryObject<Block> UNHOLY_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
@@ -530,7 +536,7 @@ public class Registry {
         Potions.POTIONS.register(modEventBus);
         Potions.POTION_TYPES.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
-        Particles.PARTICLES.register(modEventBus);
+        ParticleRegistry.PARTICLES.register(modEventBus);
         Sounds.SOUND_EVENTS.register(modEventBus);
         Worldgen.FEATURES.register(modEventBus);
         Worldgen.PLACED_FEATURES.register(modEventBus);
@@ -594,17 +600,17 @@ public class Registry {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void registerFactories(RegisterParticleProvidersEvent evt) {
-        evt.register(Particles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
-        evt.register(Particles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
-        evt.register(Particles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
-        evt.register(Particles.WISP_PARTICLE.get(), WispParticleType.Factory::new);
-        evt.register(Particles.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
-        evt.register(Particles.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
-        evt.register(Particles.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
-        evt.register(Particles.SIGN_PARTICLE.get(), (sprite) -> new SignParticleType.Factory());
-        evt.register(Particles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
-        evt.register(Particles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
-        evt.register(Particles.RUNE_PARTICLE.get(), (sprite) -> new RuneParticleType.Factory());
+        evt.register(ParticleRegistry.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
+        evt.register(ParticleRegistry.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
+        evt.register(ParticleRegistry.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
+        evt.register(ParticleRegistry.WISP_PARTICLE.get(), WispParticleType.Factory::new);
+        evt.register(ParticleRegistry.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
+        evt.register(ParticleRegistry.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
+        evt.register(ParticleRegistry.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
+        evt.register(ParticleRegistry.SIGN_PARTICLE.get(), (sprite) -> new SignParticleType.Factory());
+        evt.register(ParticleRegistry.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
+        evt.register(ParticleRegistry.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
+        evt.register(ParticleRegistry.RUNE_PARTICLE.get(), (sprite) -> new RuneParticleType.Factory());
     }
 
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));

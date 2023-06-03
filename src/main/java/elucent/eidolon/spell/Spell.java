@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 
 public abstract class Spell {
     final ResourceLocation registryName;
+
     public Spell(ResourceLocation registryName) {
         this.registryName = registryName;
     }
@@ -16,6 +17,8 @@ public abstract class Spell {
     }
 
     public abstract boolean matches(SignSequence signs);
+
+    public abstract Sign[] signs();
 
     public abstract boolean canCast(Level world, BlockPos pos, Player player, SignSequence signs);
 

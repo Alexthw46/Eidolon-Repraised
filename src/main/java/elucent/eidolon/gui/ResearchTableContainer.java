@@ -64,9 +64,9 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
 
     @Override
-    public void clicked(int p_150400_, int p_150401_, @NotNull ClickType p_150402_, @NotNull Player p_150403_) {
-        if (p_150400_ >= slots.size()) return;
-        super.clicked(p_150400_, p_150401_, p_150402_, p_150403_);
+    public void clicked(int pSlotId, int pButton, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
+        if (pSlotId >= slots.size()) return;
+        super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
     
     public void updateSlots() {
@@ -86,7 +86,7 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
             Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
             if (r == null) break;
             if (stack.getTag().getInt("stepsDone") >= r.getStars()) break;
-            List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
+            List<ResearchTask> tasks = r.getTasks(getSeed(stack), stack.getTag().getInt("stepsDone"));
             for (int i = 0; i < tasks.size(); i ++) {
                 int x = 189, y = 17 + 36 * i;
                 tasks.get(i).modifyContainer(this, x, y);
@@ -118,46 +118,47 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot.hasItem()) {
-            ItemStack stack = slot.getItem().copy();
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
             if ((index < 0 || (index > 2 && index < 38))) {
-                if (this.slots.get(0).mayPlace(stack)) {
-                    if (!this.moveItemStackTo(stack, 0, 1, false)) {
+                if (this.slots.get(0).mayPlace(itemstack1)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.slots.get(1).mayPlace(stack)) {
-                    if (!this.moveItemStackTo(stack, 1, 2, false)) {
+                } else if (this.slots.get(1).mayPlace(itemstack1)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= 2 && index < 29) {
-                    if (!this.moveItemStackTo(stack, 29, 38, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 29, 38, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 29 && index < 38) {
-                    if (!this.moveItemStackTo(stack, 2, 29, false)) {
+                } else if (index >= 29) {
+                    if (!this.moveItemStackTo(itemstack1, 2, 29, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.moveItemStackTo(stack, 2, 38, false)) {
+                } else if (!this.moveItemStackTo(itemstack1, 2, 38, false)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!this.moveItemStackTo(stack, 2, 38, true)) {
+                if (!this.moveItemStackTo(itemstack1, 2, 38, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onQuickCraft(stack, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             }
 
-            if (stack.isEmpty()) {
+            if (itemstack1.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
 
-            if (stack.getCount() == itemstack.getCount()) {
+            if (itemstack1.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTake(playerIn, stack);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;
@@ -167,8 +168,9 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         return this.intArray.get(0);
     }
 
-    public int getSeed() {
-        return this.intArray.get(1);
+    public int getSeed(ItemStack stack) {
+        if (!stack.hasTag() || !stack.getTag().contains("seed")) return 0;
+        return stack.getTag().getInt("seed");
     }
 
     @Override
@@ -192,7 +194,13 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         public boolean mayPlace(ItemStack stack) {
             return stack.is(Registry.RESEARCH_NOTES.get());
         }
-        
+
+        @Override
+        public boolean mayPickup(@NotNull Player pPlayer) {
+            if (getProgress() > 0) return false;
+            return super.mayPickup(pPlayer);
+        }
+
         @Override
         public void setChanged() {
             super.setChanged();
@@ -225,7 +233,7 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
             if (!stack.hasTag() || !stack.getTag().contains("research")) return;
             Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
             if (r == null) return;
-            List<ResearchTask> tasks = r.getTasks(getSeed(), stack.getTag().getInt("stepsDone"));
+            List<ResearchTask> tasks = r.getTasks(getSeed(stack), stack.getTag().getInt("stepsDone"));
             if (tasks.size() < index) return;
             ResearchTask toComplete = tasks.get(index);
             int startingSlot = 38;

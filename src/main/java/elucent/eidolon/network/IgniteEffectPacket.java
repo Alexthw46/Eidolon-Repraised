@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.registries.ParticleRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
@@ -44,13 +45,13 @@ public class IgniteEffectPacket {
                 double x = pos.getX() + 0.5, y = pos.getY() + 1, z = pos.getZ() + 0.5;
                 world.playSound(Eidolon.proxy.getPlayer(), x, y, z, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-                Particles.create(elucent.eidolon.registries.Particles.FLAME_PARTICLE)
+                Particles.create(ParticleRegistry.FLAME_PARTICLE)
                     .setAlpha(0.75f, 0).setScale(0.5f, 0.25f).setLifetime(20)
                     .randomOffset(0.5, 0.125).randomVelocity(0.00625f, 0.01875f)
                     .addVelocity(0, 0.00625f, 0)
                     .setColor(packet.r, packet.g, packet.b, packet.r, packet.g * 0.5f, packet.b * 1.5f)
                     .repeat(world, x, y, z, 10);
-                Particles.create(elucent.eidolon.registries.Particles.SPARKLE_PARTICLE)
+                Particles.create(ParticleRegistry.SPARKLE_PARTICLE)
                     .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(40)
                     .randomOffset(0.0625, 0).randomVelocity(0.125f, 0)
                     .addVelocity(0, 0.125f, 0)

@@ -1,29 +1,27 @@
 package elucent.eidolon.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import java.util.List;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.ResearchActionPacket;
 import elucent.eidolon.research.Research;
-import elucent.eidolon.research.Researches;
 import elucent.eidolon.research.ResearchTask;
 import elucent.eidolon.research.ResearchTask.CompletenessResult;
+import elucent.eidolon.research.Researches;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableContainer> {
@@ -62,8 +60,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         	int done = notes.getTag().getInt("stepsDone");
         	
         	if (done < nstars) {
-	        	List<ResearchTask> tasks = r.getTasks(menu.getSeed(), notes.getTag().getInt("stepsDone"));
-	        	int slotStart = 38;
+                List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+                int slotStart = 38;
 	        	for (int k = 0; k < tasks.size(); k ++) {
 	        		ResearchTask task = tasks.get(k);
 	    			int xx = 164, yy = 16 + 36 * k;
@@ -83,9 +81,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         	if (!notes.hasTag() || !notes.getTag().contains("research")) return false;
         	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
         	if (r == null) return false;
-        	
-        	List<ResearchTask> tasks = r.getTasks(menu.getSeed(), notes.getTag().getInt("stepsDone"));
-        	int slotStart = 38;
+
+            List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+            int slotStart = 38;
         	for (int k = 0; k < tasks.size(); k ++) {
         		ResearchTask task = tasks.get(k);
     			int xx = 164, yy = 16 + 36 * k;
@@ -140,8 +138,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         	int done = notes.getTag().getInt("stepsDone");
         	
         	if (done < nstars && progress == 0) {
-	        	List<ResearchTask> tasks = r.getTasks(menu.getSeed(), notes.getTag().getInt("stepsDone"));
-	        	int slotStart = 38;
+                List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+                int slotStart = 38;
 	        	for (int k = 0; k < tasks.size(); k ++) {
 	        		ResearchTask task = tasks.get(k);
 	    			int xx = 164, yy = 16 + 36 * k;

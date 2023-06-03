@@ -92,12 +92,19 @@ public class Events {
 
     @SubscribeEvent
     public void onTarget(LivingChangeTargetEvent event) {
-        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget()))
-            event.setNewTarget(null);
+        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
+            var lastHurt = event.getOriginalTarget().getLastHurtMob();
+            var lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
+            if (lastHurtBy != null && lastHurtBy != event.getEntity()) {
+                event.setNewTarget(lastHurtBy);
+            } else if (lastHurt != null && lastHurt != event.getEntity()) {
+                event.setNewTarget(lastHurt);
+            } else event.setNewTarget(null);
+        }
     }
 
     @SubscribeEvent
-    public void onTarget(LivingTickEvent event) {
+    public void onTick(LivingTickEvent event) {
         Level level = event.getEntity().getLevel();
         LivingEntity e = event.getEntity();
         if (e.hasEffect(Potions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
