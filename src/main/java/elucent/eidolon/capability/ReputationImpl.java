@@ -1,13 +1,13 @@
 package elucent.eidolon.capability;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Map.Entry;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag> {
     final Map<UUID, Map<ResourceLocation, ReputationEntry>> reputationMap = new HashMap<>();
@@ -114,10 +114,9 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        CompoundTag data = nbt;
         getReputationMap().clear();
-        if (data.contains("reps")) {
-            CompoundTag reps = data.getCompound("reps");
+        if (nbt.contains("reps")) {
+            CompoundTag reps = nbt.getCompound("reps");
             for (String uuidString : reps.getAllKeys()) {
                 UUID uuid = UUID.fromString(uuidString);
                 CompoundTag tag = reps.getCompound(uuidString);
@@ -129,8 +128,8 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                 }
             }
         }
-        if (data.contains("times")) {
-            CompoundTag times = data.getCompound("times");
+        if (nbt.contains("times")) {
+            CompoundTag times = nbt.getCompound("times");
             for (String uuidString : times.getAllKeys()) {
                 UUID uuid = UUID.fromString(uuidString);
                 CompoundTag spelltimes = times.getCompound(uuidString);

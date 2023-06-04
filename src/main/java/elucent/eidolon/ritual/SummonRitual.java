@@ -4,17 +4,18 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.CrystallizeEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class SummonRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/summon_ritual");
 
-    final EntityType entity;
-    public SummonRitual(EntityType entity) {
+    final EntityType<?> entity;
+
+    public SummonRitual(EntityType<?> entity) {
         super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
         this.entity = entity;
     }

@@ -76,7 +76,7 @@ public class GenericParticleData implements ParticleOptions {
         return getClass().getSimpleName() + ":internal";
     }
 
-    public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<GenericParticleData>() {
+    public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
         public GenericParticleData fromCommand(ParticleType<GenericParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');

@@ -19,8 +19,7 @@ public class SignParticleData implements ParticleOptions {
         return RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("sign").forGetter((d) -> d.sign.getRegistryName().toString())
         ).apply(instance, (sign) -> {
-            SignParticleData data = new SignParticleData(Signs.find(new ResourceLocation(sign)));
-            return data;
+            return new SignParticleData(Signs.find(new ResourceLocation(sign)));
         }));
     }
 
@@ -43,20 +42,18 @@ public class SignParticleData implements ParticleOptions {
         return getClass().getSimpleName() + ":internal";
     }
 
-    public static final Deserializer<SignParticleData> DESERIALIZER = new Deserializer<SignParticleData>() {
+    public static final Deserializer<SignParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
         public SignParticleData fromCommand(ParticleType<SignParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             String loc = reader.readString();
-            SignParticleData data = new SignParticleData(Signs.find(new ResourceLocation(loc)));
-            return data;
+            return new SignParticleData(Signs.find(new ResourceLocation(loc)));
         }
 
         @Override
         public SignParticleData fromNetwork(ParticleType<SignParticleData> type, FriendlyByteBuf buf) {
             String loc = buf.readUtf();
-            SignParticleData data = new SignParticleData(Signs.find(new ResourceLocation(loc)));
-            return data;
+            return new SignParticleData(Signs.find(new ResourceLocation(loc)));
         }
     };
 }

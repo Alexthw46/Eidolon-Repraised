@@ -1,18 +1,18 @@
 package elucent.eidolon.ritual;
 
-import java.util.List;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
 import elucent.eidolon.network.CrystallizeEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+
+import java.util.List;
 
 public class CrystalRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/crystal_ritual");
@@ -23,7 +23,7 @@ public class CrystalRitual extends Ritual {
 
     @Override
     public RitualResult start(Level world, BlockPos pos) {
-        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), (e) -> e.isInvertedHealAndHarm());
+        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), LivingEntity::isInvertedHealAndHarm);
         for (LivingEntity e : entities) {
             e.hurt(Registry.RITUAL_DAMAGE, e.getMaxHealth() * 1000);
             if (!world.isClientSide) {

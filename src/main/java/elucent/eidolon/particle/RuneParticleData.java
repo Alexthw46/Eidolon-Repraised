@@ -31,8 +31,7 @@ public class RuneParticleData implements ParticleOptions {
                 Codec.FLOAT.fieldOf("g2").forGetter((d) -> d.g2),
                 Codec.FLOAT.fieldOf("b2").forGetter((d) -> d.b2)
         ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> {
-            RuneParticleData data = new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2);
-            return data;
+            return new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2);
         }));
     }
 
@@ -67,7 +66,7 @@ public class RuneParticleData implements ParticleOptions {
         return getClass().getSimpleName() + ":internal";
     }
 
-    public static final Deserializer<RuneParticleData> DESERIALIZER = new Deserializer<RuneParticleData>() {
+    public static final Deserializer<RuneParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
         public RuneParticleData fromCommand(ParticleType<RuneParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
@@ -84,8 +83,7 @@ public class RuneParticleData implements ParticleOptions {
             float g2 = reader.readFloat();
             reader.expect(' ');
             float b2 = reader.readFloat();
-            RuneParticleData data = new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
-            return data;
+            return new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
         }
 
         @Override

@@ -19,7 +19,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
         super(pGenerator, pBlockTagsProvider, Eidolon.MODID, existingFileHelper);
     }
 
-    public static TagKey<Item> SCRIBE_ITEMS = eidolonItemTag("scribe_items");
+    public static final TagKey<Item> SCRIBE_ITEMS = eidolonItemTag("scribe_items");
 
     @NotNull
     private static TagKey<Item> eidolonItemTag(String name) {

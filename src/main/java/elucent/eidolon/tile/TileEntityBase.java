@@ -47,7 +47,7 @@ public class TileEntityBase extends BlockEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this, (e) -> e.getUpdateTag()); // (this.worldPosition, 3, this.getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag); // (this.worldPosition, 3, this.getUpdateTag());
     }
 
     @Override

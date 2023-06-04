@@ -96,7 +96,7 @@ public abstract class Deity implements RGBProvider {
         final int max;
 
         public Progression(Stage... stages) {
-            this.steps = new TreeMap<Integer, Stage>();
+            this.steps = new TreeMap<>();
             for (Stage s : stages) this.steps.put(s.rep, s);
             max = this.steps.lastKey();
         }

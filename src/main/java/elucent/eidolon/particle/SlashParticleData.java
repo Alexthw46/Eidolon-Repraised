@@ -4,15 +4,12 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-
-import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
 public class SlashParticleData implements ParticleOptions {
     float r1 = 1, g1 = 1, b1 = 1, a1 = 1, r2 = 1, g2 = 1, b2 = 1, a2 = 0;
@@ -80,7 +77,7 @@ public class SlashParticleData implements ParticleOptions {
         return getClass().getSimpleName() + ":internal";
     }
 
-    public static final Deserializer<SlashParticleData> DESERIALIZER = new Deserializer<SlashParticleData>() {
+    public static final Deserializer<SlashParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
         public SlashParticleData fromCommand(ParticleType<SlashParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
@@ -175,8 +172,7 @@ public class SlashParticleData implements ParticleOptions {
     };
     
     public static SlashParticleData create(ParticleType<?> type) {
-        SlashParticleData data = new SlashParticleData(type);
-        return data;
+        return new SlashParticleData(type);
     }
     
     public SlashParticleData color(float r, float g, float b) {

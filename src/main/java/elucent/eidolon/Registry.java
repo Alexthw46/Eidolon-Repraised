@@ -14,7 +14,6 @@ import elucent.eidolon.item.curio.*;
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
-import elucent.eidolon.registries.ParticleRegistry;
 import elucent.eidolon.registries.*;
 import elucent.eidolon.tile.*;
 import elucent.eidolon.tile.reagent.CisternTileEntity;

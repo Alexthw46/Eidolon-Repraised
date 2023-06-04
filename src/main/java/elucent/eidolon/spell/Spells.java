@@ -32,7 +32,7 @@ public class Spells {
         return spells;
     }
 
-    public static Spell DARK_PRAYER = register(new PrayerSpell(
+    public static final Spell DARK_PRAYER = register(new PrayerSpell(
             new ResourceLocation(Eidolon.MODID, "dark_prayer"),
             Deities.DARK_DEITY,
             Signs.WICKED_SIGN, Signs.WICKED_SIGN, Signs.WICKED_SIGN
@@ -43,55 +43,55 @@ public class Spells {
             Signs.WICKED_SIGN, Signs.FLAME_SIGN, Signs.WICKED_SIGN, Signs.FLAME_SIGN
     ));
 
-    public static Spell DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
+    public static final Spell DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_animal_sacrifice"),
             Deities.DARK_DEITY,
             Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.BLOOD_SIGN
     ));
-    public static Spell DARK_TOUCH = register(new DarkTouchSpell(
+    public static final Spell DARK_TOUCH = register(new DarkTouchSpell(
             new ResourceLocation(Eidolon.MODID, "dark_touch"),
             Signs.WICKED_SIGN, Signs.SOUL_SIGN, Signs.WICKED_SIGN, Signs.SOUL_SIGN
     ));
 
-    public static Spell FROST_CHANT = register(new FrostSpell(new ResourceLocation(Eidolon.MODID, "frost_touch"),
+    public static final Spell FROST_CHANT = register(new FrostSpell(new ResourceLocation(Eidolon.MODID, "frost_touch"),
             Signs.WICKED_SIGN, Signs.WINTER_SIGN, Signs.BLOOD_SIGN, Signs.WINTER_SIGN, Signs.WICKED_SIGN)
     );
-    public static Spell DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
+    public static final Spell DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
             Deities.DARK_DEITY,
             Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
     ));
 
-    public static Spell ENTHRALL_UNDEAD = register(new ThrallSpell(
+    public static final Spell ENTHRALL_UNDEAD = register(new ThrallSpell(
             new ResourceLocation(Eidolon.MODID, "enthrall_spell"),
             Signs.WICKED_SIGN, Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.MAGIC_SIGN, Signs.MIND_SIGN
     ));
 
-    public static Spell LIGHT_PRAYER = register(new PrayerSpell(
+    public static final Spell LIGHT_PRAYER = register(new PrayerSpell(
             new ResourceLocation(Eidolon.MODID, "light_prayer"),
             Deities.LIGHT_DEITY,
             Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN
     ));
-    public static Spell FIRE_CHANT = register(new FireTouchSpell(
+    public static final Spell FIRE_CHANT = register(new FireTouchSpell(
             new ResourceLocation(Eidolon.MODID, "fire_chant"),
             Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
     ));
-    public static Spell LIGHT_CHANT = register(new LightSpell(
+    public static final Spell LIGHT_CHANT = register(new LightSpell(
             new ResourceLocation(Eidolon.MODID, "light_chant"), Deities.LIGHT_DEITY,
             Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN
     ));
 
-    public static Spell HOLY_TOUCH = register(new LightTouchSpell(
+    public static final Spell HOLY_TOUCH = register(new LightTouchSpell(
             new ResourceLocation(Eidolon.MODID, "holy_touch"),
             Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.SACRED_SIGN, Signs.SOUL_SIGN
     ));
 
-    public static Spell CURE_VILLAGER_CHANT = register(new ConvertZombieSpell(
+    public static final Spell CURE_VILLAGER_CHANT = register(new ConvertZombieSpell(
             new ResourceLocation(Eidolon.MODID, "cure_villager_chant"),
             Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.SOUL_SIGN
     ));
 
-    public static Spell SMITE_CHANT = register(new SmiteSpell(
+    public static final Spell SMITE_CHANT = register(new SmiteSpell(
             new ResourceLocation(Eidolon.MODID, "smite_chant"),
             Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN
     ));

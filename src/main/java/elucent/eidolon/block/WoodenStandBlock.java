@@ -96,11 +96,6 @@ public class WoodenStandBlock extends BrewingStandBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return new BlockEntityTicker<T>() {
-            @Override
-            public void tick(Level level, BlockPos pos, BlockState state, T tile) {
-                ((WoodenStandTileEntity)tile).tick();
-            }
-        };
+        return (level1, pos, state1, tile) -> ((WoodenStandTileEntity) tile).tick();
     }
 }

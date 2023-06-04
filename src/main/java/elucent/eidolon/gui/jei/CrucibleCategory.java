@@ -67,7 +67,7 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
             this.stack = stack;
             this.ingredient = ingredient;
         }
-    };
+    }
 
     public static void condense(List<StackIngredient> stacks) {
         Iterator<StackIngredient> iter = stacks.iterator();
