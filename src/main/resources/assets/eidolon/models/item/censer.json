@@ -1,3 +1,6 @@
 {
-  "parent": "eidolon:item/censer"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "eidolon:item/censer"
+  }
 }
