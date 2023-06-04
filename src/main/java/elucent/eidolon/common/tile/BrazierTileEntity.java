@@ -18,12 +18,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-public class BrazierTileEntity extends TileEntityBase {
+public class BrazierTileEntity extends TileEntityBase implements IBurner {
     ItemStack stack = ItemStack.EMPTY;
     boolean burning = false;
     int findingCounter = 0;
@@ -128,6 +129,11 @@ public class BrazierTileEntity extends TileEntityBase {
             sync();
         }
         ritual = null;
+    }
+
+    @Override
+    public void startBurning(Player player, Level world, BlockPos pos) {
+        startBurning();
     }
 
     public void startBurning() {

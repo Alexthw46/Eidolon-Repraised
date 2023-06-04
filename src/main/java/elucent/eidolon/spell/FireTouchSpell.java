@@ -1,7 +1,7 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.common.tile.BrazierTileEntity;
+import elucent.eidolon.common.tile.IBurner;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.Researches;
@@ -39,7 +39,7 @@ public class FireTouchSpell extends StaticSpell {
             BlockState hitState = world.getBlockState(rayTraceResult.getBlockPos());
             if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
                 return true;
-            } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof BrazierTileEntity brazier) {
+            } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof IBurner brazier) {
                 return brazier.canStartBurning();
             }
         }
@@ -60,8 +60,8 @@ public class FireTouchSpell extends StaticSpell {
                 if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
                     world.setBlock(blockHitResult.getBlockPos(), hitState.setValue(LIT, Boolean.TRUE), 11);
                     Networking.sendToTracking(world, blockHitResult.getBlockPos(), new IgniteEffectPacket(blockHitResult.getBlockPos(), 1.0F, 0.5F, 0.25F));
-                } else if (world.getBlockEntity(blockHitResult.getBlockPos()) instanceof BrazierTileEntity brazier) {
-                    brazier.startBurning();
+                } else if (world.getBlockEntity(blockHitResult.getBlockPos()) instanceof IBurner brazier) {
+                    brazier.startBurning(player, world, blockHitResult.getBlockPos());
                 }
                 world.playSound(player, blockPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
             } else if (ray instanceof EntityHitResult entityHitResult) {

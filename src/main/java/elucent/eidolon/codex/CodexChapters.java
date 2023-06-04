@@ -32,7 +32,7 @@ public class CodexChapters {
     static Chapter NATURE_INDEX, MONSTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS,
             RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
             ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE,
-            THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, CURE_VILLAGER, HOLY_TOUCH,
+            THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, CURE_VILLAGER, HOLY_TOUCH,
             SIGNS_INDEX, WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
             RUNES_INDEX,
             SPELLS_INDEX, MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, ENTHRALL, SMITE;
@@ -822,6 +822,14 @@ public class CodexChapters {
                         ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY,
                         ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY)
         );
+        CENSER = new Chapter(
+                "eidolon.codex.chapter.censer",
+                new TitlePage("eidolon.codex.page.censer"),
+                new CraftingPage(new ItemStack(Registry.CENSER.get()),
+                        ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY,
+                        new ItemStack(Registry.SILVER_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.SILVER_INGOT.get()),
+                        new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()))
+        );
 
         DARK_PRAYER = new Chapter(
                 "eidolon.codex.chapter.dark_prayer",
@@ -841,8 +849,13 @@ public class CodexChapters {
         );
 
         INCENSE_BURN = new Chapter(
-                "eidolon.codex.chapter.incense_burner",
-                new TitlePage("eidolon.codex.page.incense_burner")
+                "eidolon.codex.chapter.censer_offering",
+                new TitlePage("eidolon.codex.page.censer_offering"),
+                new CruciblePage(new ItemStack(Registry.OFFERING_INCENSE.get(), 2),
+                        new CrucibleStep(new ItemStack(Registry.MERAMMER_RESIN.get()), new ItemStack(Registry.ENCHANTED_ASH.get())),
+                        new CrucibleStep(new ItemStack(Registry.OANNA_BLOOM.get(), 2)),
+                        new CrucibleStep(2)
+                )
         );
 
         DARK_TOUCH = new Chapter(
@@ -917,11 +930,11 @@ public class CodexChapters {
                         new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN),
                         new FactLockedEntry(VILLAGER_SACRIFICE, new ItemStack(Items.IRON_SWORD), Facts.VILLAGER_SACRIFICE)
                 ),
-                //TODO light path - INCENSE & EFFIGY
+                //TODO light path - EFFIGY
                 new IndexPage(
-                        new IndexEntry(INCENSE_BURN, new ItemStack(Registry.CENSER.get().asItem())),
+                        new IndexEntry(CENSER, new ItemStack(Registry.CENSER.get().asItem())),
                         new SignLockedEntry(LIGHT_PRAYER, new ItemStack(Registry.ENCHANTED_ASH.get()), Signs.SACRED_SIGN),
-                        new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.CENSER.get().asItem()), Signs.FLAME_SIGN),
+                        new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.OFFERING_INCENSE.get()), Signs.FLAME_SIGN),
                         new SignLockedEntry(HOLY_TOUCH, new ItemStack(Registry.HOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.SACRED_SIGN),
                         new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
                         new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),

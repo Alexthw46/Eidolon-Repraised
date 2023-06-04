@@ -49,7 +49,7 @@ public class PrayerSpell extends StaticSpell {
         return effigy.ready();
     }
 
-    public void updateMagic(AltarInfo altarInfo, Player player, Level world, double reputation) {
+    public static void updateMagic(AltarInfo altarInfo, Player player, Level world, double reputation) {
         player.getCapability(ISoul.INSTANCE).ifPresent((soul) -> {
             var capacity = altarInfo.getCapacity();
             var power = altarInfo.getPower();

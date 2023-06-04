@@ -54,7 +54,7 @@ public class ConvertZombieSpell extends PrayerSpell {
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, getRegistryName(), world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);
-                rep.addReputation(player, deity.getId(), 1.0 + info.getPower());
+                rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             villager.finishConversion(level);

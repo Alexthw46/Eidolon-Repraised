@@ -39,6 +39,7 @@ public class CodexGui extends Screen {
     Rune hoveredRune = null;
 
     Chapter currentChapter;
+    Chapter lastChapter;
     int currentPage = 0;
 
     static CodexGui INSTANCE = null;
@@ -51,7 +52,7 @@ public class CodexGui extends Screen {
 
     protected CodexGui() {
         super(Component.translatable("gui.eidolon.codex.title"));
-        currentChapter = CodexChapters.NATURE_INDEX;
+        lastChapter = currentChapter = CodexChapters.NATURE_INDEX;
     }
 
     protected void resetPages() {
@@ -61,6 +62,7 @@ public class CodexGui extends Screen {
     }
 
     protected void changeChapter(Chapter next) {
+        lastChapter = currentChapter;
         currentChapter = next;
         currentPage = 0;
     }
@@ -279,6 +281,21 @@ public class CodexGui extends Screen {
                 if (right.click(this, guiLeft + 170, guiTop + 24, (int) mouseX, (int) mouseY)) return true;
 
             return chant.size() > 0 && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
+        } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            if (chant.size() > 0 && currentChapter.get(currentPage) instanceof SignIndexPage) {
+                chant.remove(chant.size() - 1);
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                return true;
+            }
+            //otherwise, if it's not an index page, go back to the index page
+            if (!(currentChapter.get(currentPage) instanceof SignIndexPage)) {
+                currentChapter = lastChapter;
+                currentPage = 0;
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                resetPages();
+                return true;
+            }
+
         }
         return false;
     }

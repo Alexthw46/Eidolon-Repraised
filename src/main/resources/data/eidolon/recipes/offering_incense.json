@@ -1,0 +1,30 @@
+{
+  "type": "eidolon:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "eidolon:merammer_resin"
+        },
+        {
+          "item": "eidolon:enchanted_ash"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon:oanna_bloom",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "stirs": 2
+    }
+  ],
+  "result": {
+    "item": "eidolon:offering_incense",
+    "count": 2
+  }
+}

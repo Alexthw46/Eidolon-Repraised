@@ -56,6 +56,7 @@ public class Category {
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
         if (hover) {
             gui.currentPage = 0;
+            gui.lastChapter = gui.currentChapter;
             gui.currentChapter = chapter;
             gui.resetPages();
             return true;

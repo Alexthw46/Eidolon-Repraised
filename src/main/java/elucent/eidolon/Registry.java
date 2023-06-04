@@ -180,6 +180,7 @@ public class Registry {
     public static final RegistryObject<Item> ARCANE_GOLD_INGOT = addItem("arcane_gold_ingot");
     public static final RegistryObject<Item> ARCANE_GOLD_NUGGET = addItem("arcane_gold_nugget");
     public static RegistryObject<Item> ELDER_BRICK = addItem("elder_brick");
+    public static final RegistryObject<Item> OFFERING_INCENSE = addItem("offering_incense");
     public static final RegistryObject<Item> SULFUR = addItem("sulfur");
     public static final RegistryObject<Item> GOLD_INLAY = addItem("gold_inlay");
     public static final RegistryObject<Item> ZOMBIE_HEART = addItem("zombie_heart", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON).food(
@@ -355,7 +356,7 @@ public class Registry {
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
 
-    public static final RegistryObject<Block> CENSER = addBlock("incense_burner", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
             .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
     public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)

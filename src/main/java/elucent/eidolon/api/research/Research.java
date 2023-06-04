@@ -1,7 +1,7 @@
 package elucent.eidolon.api.research;
 
 import elucent.eidolon.registries.Researches;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -33,7 +33,7 @@ public class Research {
     }
 
     public String getName() {
-        return I18n.get("research." + rl.getNamespace() + "." + rl.getPath());
+        return Component.translatable("research." + rl.getNamespace() + "." + rl.getPath()).getString();
     }
 
     public List<ResearchTask> getTasks(int rootSeed, int done) {
