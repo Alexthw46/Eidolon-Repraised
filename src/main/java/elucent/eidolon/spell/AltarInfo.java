@@ -1,6 +1,6 @@
 package elucent.eidolon.spell;
 
-import elucent.eidolon.block.TableBlockBase;
+import elucent.eidolon.common.block.TableBlockBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;

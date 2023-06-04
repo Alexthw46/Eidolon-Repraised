@@ -1,24 +1,26 @@
 package elucent.eidolon;
 
 import elucent.eidolon.codex.CodexChapters;
+import elucent.eidolon.common.item.AthameItem;
+import elucent.eidolon.common.tile.*;
+import elucent.eidolon.event.Events;
 import elucent.eidolon.gui.ResearchTableScreen;
 import elucent.eidolon.gui.SoulEnchanterScreen;
 import elucent.eidolon.gui.WoodenBrewingStandScreen;
 import elucent.eidolon.gui.WorktableScreen;
-import elucent.eidolon.item.AthameItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Potions;
-import elucent.eidolon.research.Researches;
+import elucent.eidolon.registries.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.AltarEntries;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.tile.*;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -53,15 +55,20 @@ public class Eidolon {
 
     public static final String MODID = "eidolon";
 
+    public static ResourceLocation prefix(String path) {
+        return new ResourceLocation("eidolon", path);
+    }
+
+
     public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
         @Override
         public @NotNull ItemStack makeIcon() {
             return new ItemStack(Registry.SHADOW_GEM.get(), 1);
         }
     };
-    
+
     public static boolean trueMobType = false;
-    
+
     public static MobType getTrueMobType(LivingEntity e) {
         trueMobType = true;
         MobType type = e.getMobType();

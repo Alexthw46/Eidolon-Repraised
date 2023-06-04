@@ -1,12 +1,13 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Registry;
+import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.deity.Deity;
 import elucent.eidolon.deity.DeityLocks;
-import elucent.eidolon.ritual.Ritual;
-import elucent.eidolon.tile.EffigyTileEntity;
-import elucent.eidolon.tile.GobletTileEntity;
+import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.common.tile.GobletTileEntity;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +38,8 @@ public class VillagerSacrificeSpell extends PrayerSpell {
         GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         if (goblet.getEntityType() == null) return false;
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-        if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.UNHOLY_EFFIGY.get()) return false;
+        if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.ELDER_EFFIGY.get())
+            return false;
         Entity test = goblet.getEntityType().create(world);
         return (test instanceof AbstractVillager || test instanceof Player) && effigy.ready();
     }
@@ -55,8 +57,7 @@ public class VillagerSacrificeSpell extends PrayerSpell {
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, getRegistryName(), world.getGameTime());
-                double prev = rep.getReputation(player, deity.getId());
-                rep.unlock(player, deity.getId(), DeityLocks.SACRIFICE_VILLAGER);
+                KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_VILLAGER);
                 rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });

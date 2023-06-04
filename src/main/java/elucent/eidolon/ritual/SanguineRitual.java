@@ -1,11 +1,12 @@
 package elucent.eidolon.ritual;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class SanguineRitual extends Ritual {

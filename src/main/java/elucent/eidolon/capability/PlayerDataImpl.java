@@ -1,8 +1,6 @@
 package elucent.eidolon.capability;
 
-import java.util.UUID;
-
-import elucent.eidolon.item.IWingsItem;
+import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.WingsDashPacket;
 import elucent.eidolon.network.WingsFlapPacket;
@@ -13,6 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.UUID;
 
 public class PlayerDataImpl implements IPlayerData, INBTSerializable<CompoundTag> {
     int wingCharges = 0, dashTicks = 0;

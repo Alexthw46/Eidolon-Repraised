@@ -1,17 +1,18 @@
 package elucent.eidolon.ritual;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.entity.ai.GoToPositionGoal;
+import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.common.entity.ai.GoToPositionGoal;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AllureRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/allure_ritual");

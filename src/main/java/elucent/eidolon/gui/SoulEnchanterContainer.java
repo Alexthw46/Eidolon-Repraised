@@ -30,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -60,7 +61,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
             }
         });
         this.addSlot(new Slot(this.tableInventory, 1, 35, 47) {
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() == Registry.SOUL_SHARD.get();
             }
         });
@@ -91,15 +92,15 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     /**
      * Callback for when the crafting matrix is changed.
      */
-    public void slotsChanged(Container inventoryIn) {
+    public void slotsChanged(@NotNull Container inventoryIn) {
         if (inventoryIn == this.tableInventory) {
             ItemStack itemstack = inventoryIn.getItem(0);
             if (!itemstack.isEmpty() && (itemstack.isEnchantable() || itemstack.isEnchanted() || itemstack.getItem() == Items.ENCHANTED_BOOK)) {
                 this.worldPosCallable.execute((world, pos) -> {
                     int power = 0;
 
-                    for(int k = -1; k <= 1; ++k) {
-                        for(int l = -1; l <= 1; ++l) {
+                    for (int k = -1; k <= 1; ++k) {
+                        for (int l = -1; l <= 1; ++l) {
                             if ((k != 0 || l != 0) && world.isEmptyBlock(pos.offset(l, 0, k)) && world.isEmptyBlock(pos.offset(l, 1, k))) {
                                 power += getPower(world, pos.offset(l * 2, 0, k * 2));
                                 power += getPower(world, pos.offset(l * 2, 1, k * 2));
@@ -145,7 +146,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     /**
      * Handles the given Button-click on the server, currently only used by enchanting. Name is for legacy.
      */
-    public boolean clickMenuButton(Player playerIn, int id) {
+    public boolean clickMenuButton(@NotNull Player playerIn, int id) {
         ItemStack itemstack = this.tableInventory.getItem(0);
         ItemStack itemstack1 = this.tableInventory.getItem(1);
         int i = id + 1;
@@ -275,7 +276,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     /**
      * Called when the container is closed.
      */
-    public void removed(Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
         this.worldPosCallable.execute((world, pos) -> {
             this.clearContainer(playerIn, this.tableInventory);
@@ -285,7 +286,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     /**
      * Determines whether supplied player can use this container
      */
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return stillValid(this.worldPosCallable, playerIn, Registry.SOUL_ENCHANTER.get());
     }
 
@@ -293,7 +294,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
      * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
      * inventory and the other inventory(s).
      */
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

@@ -1,9 +1,9 @@
 package elucent.eidolon.util;
 
+import elucent.eidolon.api.research.Research;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.research.Research;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Sign;
 import net.minecraft.ChatFormatting;
@@ -44,6 +44,15 @@ public class KnowledgeUtil {
             k.addResearch(research.getRegistryName());
             research.onLearned(serverPlayer);
             serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + research.getName())));
+            Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
+        });
+    }
+
+    public static void grantResearchNoToast(Entity entity, ResourceLocation research) {
+        if (!(entity instanceof ServerPlayer serverPlayer)) return;
+        entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
+            if (k.knowsResearch(research)) return;
+            k.addResearch(research);
             Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
     }

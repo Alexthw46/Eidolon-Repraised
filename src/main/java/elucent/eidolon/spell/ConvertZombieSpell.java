@@ -1,11 +1,13 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.Registry;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.deity.DeityLocks;
-import elucent.eidolon.ritual.Ritual;
-import elucent.eidolon.tile.EffigyTileEntity;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -28,6 +30,12 @@ public class ConvertZombieSpell extends PrayerSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
+        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        if (effigies.size() == 0) return false;
+        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+        AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
+        if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.ELDER_EFFIGY.get())
+            return false;
         return flag && super.canCast(world, pos, player);
     }
 
@@ -45,7 +53,7 @@ public class ConvertZombieSpell extends PrayerSpell {
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, getRegistryName(), world.getGameTime());
-                rep.unlock(player, deity.getId(), DeityLocks.HEAL_VILLAGER);
+                KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);
                 rep.addReputation(player, deity.getId(), 1.0 + info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });

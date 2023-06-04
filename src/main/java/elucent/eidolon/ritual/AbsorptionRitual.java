@@ -1,7 +1,9 @@
 package elucent.eidolon.ritual;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.item.SummoningStaffItem;
+import elucent.eidolon.api.ritual.IRitualItemFocus;
+import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.common.item.SummoningStaffItem;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.RitualConsumePacket;

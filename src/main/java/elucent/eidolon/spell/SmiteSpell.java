@@ -1,17 +1,16 @@
 package elucent.eidolon.spell;
 
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.deity.Deities;
+import elucent.eidolon.deity.DeityLocks;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SmiteSpell extends StaticSpell {
     public SmiteSpell(ResourceLocation name, Sign... signs) {
@@ -20,9 +19,13 @@ public class SmiteSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        AtomicReference<Boolean> favor = new AtomicReference<>(Boolean.FALSE);
-        world.getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, Deities.LIGHT_DEITY.getId()) > 40));
-        return favor.get();
+        var ray = rayTrace(player, player.getReachDistance(), 0, true);
+
+        if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
+            return livingEntity.getMobType() == MobType.UNDEAD;
+        }
+
+        return false;
     }
 
     @Override
@@ -32,7 +35,12 @@ public class SmiteSpell extends StaticSpell {
 
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
-                livingEntity.hurt(DamageSource.MAGIC, 10);
+                if (world instanceof ServerLevel) {
+                    if (livingEntity.hurt(DamageSource.MAGIC, 10))
+                        KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
+                } else {
+
+                }
             }
         }
 

@@ -1,20 +1,21 @@
 package elucent.eidolon.ritual;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.entity.ai.GoToPositionGoal;
+import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.common.entity.ai.GoToPositionGoal;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RepellingRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/repelling_ritual");

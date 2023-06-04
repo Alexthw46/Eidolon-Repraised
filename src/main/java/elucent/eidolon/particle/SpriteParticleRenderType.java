@@ -10,7 +10,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.ClientRegistry;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;

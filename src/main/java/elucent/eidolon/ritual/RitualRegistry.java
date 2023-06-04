@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
+import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.gui.jei.RecipeWrappers;

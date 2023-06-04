@@ -11,7 +11,7 @@ import elucent.eidolon.codex.ListPage.ListEntry;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
 import elucent.eidolon.registries.Entities;
-import elucent.eidolon.research.Researches;
+import elucent.eidolon.registries.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spells;
@@ -870,7 +870,7 @@ public class CodexChapters {
         UNHOLY_EFFIGY = new Chapter(
                 "eidolon.codex.chapter.unholy_effigy",
                 new TitlePage("eidolon.codex.page.unholy_effigy"),
-                new WorktablePage(new ItemStack(Registry.UNHOLY_EFFIGY.get()),
+                new WorktablePage(new ItemStack(Registry.ELDER_EFFIGY.get()),
                         ItemStack.EMPTY, new ItemStack(Blocks.SMOOTH_STONE), ItemStack.EMPTY,
                         new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
                         ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY,
@@ -880,7 +880,7 @@ public class CodexChapters {
         HOLY_EFFIGY = new Chapter(
                 "eidolon.codex.chapter.holy_effigy",
                 new TitlePage("eidolon.codex.page.holy_effigy"),
-                new WorktablePage(new ItemStack(Registry.UNHOLY_EFFIGY.get()),
+                new WorktablePage(new ItemStack(Registry.ELDER_EFFIGY.get()),
                         ItemStack.EMPTY, new ItemStack(Blocks.SMOOTH_STONE), ItemStack.EMPTY,
                         new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
                         ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY,
@@ -914,17 +914,17 @@ public class CodexChapters {
                         new SignLockedEntry(ANIMAL_SACRIFICE, new ItemStack(Items.PORKCHOP), Signs.BLOOD_SIGN),
                         new SignLockedEntry(DARK_TOUCH, new ItemStack(Registry.UNHOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.WICKED_SIGN),
                         new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
-                        new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.UNHOLY_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN),
+                        new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN),
                         new FactLockedEntry(VILLAGER_SACRIFICE, new ItemStack(Items.IRON_SWORD), Facts.VILLAGER_SACRIFICE)
                 ),
                 //TODO light path - INCENSE & EFFIGY
                 new IndexPage(
-                        new IndexEntry(INCENSE_BURN, new ItemStack(Registry.INCENSE_BURNER.get().asItem())),
+                        new IndexEntry(INCENSE_BURN, new ItemStack(Registry.CENSER.get().asItem())),
                         new SignLockedEntry(LIGHT_PRAYER, new ItemStack(Registry.ENCHANTED_ASH.get()), Signs.SACRED_SIGN),
-                        new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.INCENSE_BURNER.get().asItem()), Signs.FLAME_SIGN),
+                        new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.CENSER.get().asItem()), Signs.FLAME_SIGN),
                         new SignLockedEntry(HOLY_TOUCH, new ItemStack(Registry.HOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.SACRED_SIGN),
                         new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
-                        new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.UNHOLY_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),
+                        new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),
                         new FactLockedEntry(CURE_VILLAGER, new ItemStack(Items.GOLDEN_APPLE), Facts.VILLAGER_HEALING)
                 )
         );

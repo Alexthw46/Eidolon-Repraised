@@ -1,6 +1,7 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.deity.Deities;
 import net.minecraft.resources.ResourceLocation;
 
@@ -46,7 +47,7 @@ public class Spells {
     public static final Spell DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_animal_sacrifice"),
             Deities.DARK_DEITY,
-            Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.BLOOD_SIGN
+            Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.WICKED_SIGN
     ));
     public static final Spell DARK_TOUCH = register(new DarkTouchSpell(
             new ResourceLocation(Eidolon.MODID, "dark_touch"),

@@ -63,15 +63,15 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
             for (int j = 0; j < 3; j++) {
                 int index = i * 3 + j;
                 if (index >= inputs.length) break;
-                layout.addSlot(RecipeIngredientRole.INPUT, 45 + j * 17, 36 + i * 17).addIngredients(inputs[index]);
+                layout.addSlot(RecipeIngredientRole.INPUT, 44 + j * 17, 36 + i * 17).addIngredients(inputs[index]);
             }
         }
-        layout.addSlot(RecipeIngredientRole.INPUT, 60, 14).addIngredients(outers[0]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 99, 53).addIngredients(outers[1]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 60, 92).addIngredients(outers[2]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 21, 53).addIngredients(outers[3]);
+        layout.addSlot(RecipeIngredientRole.INPUT, 61, 15).addIngredients(outers[0]);
+        layout.addSlot(RecipeIngredientRole.INPUT, 100, 54).addIngredients(outers[1]);
+        layout.addSlot(RecipeIngredientRole.INPUT, 61, 93).addIngredients(outers[2]);
+        layout.addSlot(RecipeIngredientRole.INPUT, 22, 54).addIngredients(outers[3]);
 
-        layout.addSlot(RecipeIngredientRole.OUTPUT, 60, 133).addItemStack(recipe.recipe.getResultItem());
+        layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(recipe.recipe.getResultItem());
     }
 
     @Override

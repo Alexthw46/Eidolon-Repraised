@@ -1,27 +1,26 @@
 package elucent.eidolon.particle;
 
-import java.awt.Color;
-
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-
 import elucent.eidolon.ClientConfig;
-import elucent.eidolon.ClientEvents;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.util.RenderUtil;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+
+import java.awt.*;
 
 public class RuneParticle extends TextureSheetParticle {
     final Rune rune;

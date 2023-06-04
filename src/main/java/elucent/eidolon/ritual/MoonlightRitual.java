@@ -1,14 +1,15 @@
 package elucent.eidolon.ritual;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.util.ColorUtil;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 
 public class MoonlightRitual extends Ritual {

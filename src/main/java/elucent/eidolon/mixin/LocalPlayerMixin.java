@@ -1,6 +1,6 @@
 package elucent.eidolon.mixin;
 
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;

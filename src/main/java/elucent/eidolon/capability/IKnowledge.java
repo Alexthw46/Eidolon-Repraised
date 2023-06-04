@@ -1,6 +1,6 @@
 package elucent.eidolon.capability;
 
-import elucent.eidolon.research.Research;
+import elucent.eidolon.api.research.Research;
 import elucent.eidolon.spell.Rune;
 import elucent.eidolon.spell.Sign;
 import net.minecraft.core.Direction;

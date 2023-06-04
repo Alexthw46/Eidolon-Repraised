@@ -1,5 +1,6 @@
 package elucent.eidolon.ritual;
 
+import elucent.eidolon.api.ritual.ItemSacrifice;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -1,11 +1,10 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.deity.Deities;
 import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.util.EntityUtil;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -45,9 +44,7 @@ public class ThrallSpell extends StaticSpell {
                     if (soul.getMagic() >= actualCost) {
                         soul.takeMagic(actualCost);
                         EntityUtil.enthrall(player, living);
-                        world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                            rep.unlock(player, Deities.DARK_DEITY.getId(), DeityLocks.ENTHRALL_UNDEAD);
-                        });
+                        KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ENTHRALL_UNDEAD);
                     } else
                         sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
                 });

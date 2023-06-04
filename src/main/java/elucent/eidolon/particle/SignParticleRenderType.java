@@ -1,18 +1,15 @@
 package elucent.eidolon.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import org.lwjgl.opengl.GL11;
 
 public class SignParticleRenderType extends SpriteParticleRenderType {
     public static final SignParticleRenderType INSTANCE = new SignParticleRenderType();

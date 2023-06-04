@@ -2,8 +2,8 @@ package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
+import elucent.eidolon.common.potion.*;
 import elucent.eidolon.mixin.PotionBrewingMixin;
-import elucent.eidolon.potion.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

@@ -1,10 +1,10 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.common.tile.BrazierTileEntity;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.research.Researches;
-import elucent.eidolon.tile.BrazierTileEntity;
+import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

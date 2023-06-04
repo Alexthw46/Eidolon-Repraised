@@ -2,8 +2,8 @@ package elucent.eidolon.recipe;
 
 import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.codex.Page;
+import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.tile.CrucibleTileEntity.CrucibleStep;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 

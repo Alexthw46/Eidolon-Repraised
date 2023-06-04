@@ -1,23 +1,23 @@
 package elucent.eidolon;
 
-import elucent.eidolon.block.CandleBlock;
-import elucent.eidolon.block.*;
 import elucent.eidolon.capability.*;
-import elucent.eidolon.entity.*;
+import elucent.eidolon.common.block.CandleBlock;
+import elucent.eidolon.common.block.*;
+import elucent.eidolon.common.entity.*;
+import elucent.eidolon.common.item.Tiers;
+import elucent.eidolon.common.item.*;
+import elucent.eidolon.common.item.curio.*;
+import elucent.eidolon.common.tile.*;
+import elucent.eidolon.common.tile.reagent.CisternTileEntity;
+import elucent.eidolon.common.tile.reagent.PipeTileEntity;
 import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
 import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.gui.WorktableContainer;
-import elucent.eidolon.item.Tiers;
-import elucent.eidolon.item.*;
-import elucent.eidolon.item.curio.*;
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.registries.*;
-import elucent.eidolon.tile.*;
-import elucent.eidolon.tile.reagent.CisternTileEntity;
-import elucent.eidolon.tile.reagent.PipeTileEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -355,13 +355,13 @@ public class Registry {
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
 
-    public static final RegistryObject<Block> INCENSE_BURNER = addBlock("incense_burner", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+    public static final RegistryObject<Block> CENSER = addBlock("incense_burner", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
             .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
     public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)
             .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> UNHOLY_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops()
             .noOcclusion()).setShape(
@@ -557,6 +557,7 @@ public class Registry {
     public static RegistryObject<BlockEntityType<SoulEnchanterTileEntity>> SOUL_ENCHANTER_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<WoodenStandTileEntity>> WOODEN_STAND_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<CisternTileEntity>> CISTERN_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<PipeTileEntity>> PIPE_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
@@ -566,10 +567,11 @@ public class Registry {
         BRAZIER_TILE_ENTITY = TILE_ENTITIES.register("brazier_tile", () -> BlockEntityType.Builder.of(BrazierTileEntity::new, BRAZIER.get()).build(null));
         NECROTIC_FOCUS_TILE_ENTITY = TILE_ENTITIES.register("necrotic_focus", () -> BlockEntityType.Builder.of(NecroticFocusTileEntity::new, NECROTIC_FOCUS.get()).build(null));
         CRUCIBLE_TILE_ENTITY = TILE_ENTITIES.register("crucible", () -> BlockEntityType.Builder.of(CrucibleTileEntity::new, CRUCIBLE.get()).build(null));
-        EFFIGY_TILE_ENTITY = TILE_ENTITIES.register("effigy", () -> BlockEntityType.Builder.of(EffigyTileEntity::new, STRAW_EFFIGY.get(), UNHOLY_EFFIGY.get()).build(null));
+        EFFIGY_TILE_ENTITY = TILE_ENTITIES.register("effigy", () -> BlockEntityType.Builder.of(EffigyTileEntity::new, STRAW_EFFIGY.get(), ELDER_EFFIGY.get()).build(null));
         SOUL_ENCHANTER_TILE_ENTITY = TILE_ENTITIES.register("soul_enchanter", () -> BlockEntityType.Builder.of(SoulEnchanterTileEntity::new, SOUL_ENCHANTER.get()).build(null));
         WOODEN_STAND_TILE_ENTITY = TILE_ENTITIES.register("wooden_brewing_stand", () -> BlockEntityType.Builder.of(WoodenStandTileEntity::new, WOODEN_STAND.get()).build(null));
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
+        CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
         /*
         CISTERN_TILE_ENTITY = TILE_ENTITIES.register("cistern", () -> BlockEntityType.Builder.of(CisternTileEntity::new, CISTERN.get()).build(null));
         PIPE_TILE_ENTITY = TILE_ENTITIES.register("pipe", () -> BlockEntityType.Builder.of(PipeTileEntity::new, GLASS_TUBE.get()).build(null));

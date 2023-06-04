@@ -1,11 +1,10 @@
 package elucent.eidolon.capability;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
+import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.deity.Deities;
-import elucent.eidolon.deity.Deity;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -13,9 +12,10 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public interface IReputation {
     Capability<IReputation> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
@@ -78,23 +78,6 @@ public interface IReputation {
         double prev = getReputation(player.getUUID(), deity);
         setReputation(player.getUUID(), deity, amount);
         considerChange(player, deity, prev);
-    }
-
-    default void lock(Player player, ResourceLocation deity, ResourceLocation key) {
-        lock(player.getUUID(), deity, key);
-    }
-
-    default boolean unlock(Player player, ResourceLocation deity, ResourceLocation key) {
-        if (unlock(player.getUUID(), deity, key)) {
-            Deity d = Deities.find(deity);
-            if (d != null) d.onReputationUnlock(player, this, key);
-            return true;
-        }
-        return false;
-    }
-
-    default boolean hasLock(Player player, ResourceLocation deity, ResourceLocation key) {
-        return hasLock(player.getUUID(), deity, key);
     }
 
     default void pray(Player player, ResourceLocation spell, long time) {

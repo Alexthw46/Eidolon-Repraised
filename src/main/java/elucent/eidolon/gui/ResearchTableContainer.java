@@ -1,11 +1,11 @@
 package elucent.eidolon.gui;
 
 import elucent.eidolon.Registry;
+import elucent.eidolon.api.research.Research;
+import elucent.eidolon.api.research.ResearchTask;
+import elucent.eidolon.common.tile.ResearchTableTileEntity;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
-import elucent.eidolon.research.Research;
-import elucent.eidolon.research.ResearchTask;
-import elucent.eidolon.research.Researches;
-import elucent.eidolon.tile.ResearchTableTileEntity;
+import elucent.eidolon.registries.Researches;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -117,11 +117,21 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
+
         if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if ((index < 0 || (index > 2 && index < 38))) {
-                if (this.slots.get(0).mayPlace(itemstack1)) {
+
+                boolean placeInExtraSlots = false;
+                for (int extra = 38; extra < slots.size(); extra++) {
+                    placeInExtraSlots = placeInExtraSlots || this.slots.get(extra).mayPlace(itemstack1);
+                }
+                if (placeInExtraSlots) {
+                    if (!this.moveItemStackTo(itemstack1, 38, slots.size(), false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (this.slots.get(0).mayPlace(itemstack1)) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

@@ -1,6 +1,6 @@
 package elucent.eidolon.network;
 
-import elucent.eidolon.entity.ChantCasterEntity;
+import elucent.eidolon.common.entity.ChantCasterEntity;
 import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;

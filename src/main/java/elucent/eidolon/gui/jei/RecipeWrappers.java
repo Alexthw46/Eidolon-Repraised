@@ -1,13 +1,13 @@
 package elucent.eidolon.gui.jei;
 
+import elucent.eidolon.api.ritual.ItemSacrifice;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.recipe.WorktableRegistry;
-import elucent.eidolon.ritual.ItemSacrifice;
-import elucent.eidolon.ritual.Ritual;
 
 public class RecipeWrappers {
     public static class Crucible {

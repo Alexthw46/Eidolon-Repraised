@@ -1,14 +1,15 @@
 package elucent.eidolon.ritual;
 
-import java.util.List;
-
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.util.ColorUtil;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+
+import java.util.List;
 
 public class DeceitRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/deceit_ritual");

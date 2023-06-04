@@ -1,14 +1,14 @@
 package elucent.eidolon.spell;
 
-import elucent.eidolon.block.HorizontalBlockBase;
+import elucent.eidolon.api.deity.Deity;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.deity.Deity;
+import elucent.eidolon.common.block.HorizontalBlockBase;
+import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.particle.Particles;
-import elucent.eidolon.ritual.Ritual;
-import elucent.eidolon.tile.EffigyTileEntity;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,7 +53,7 @@ public class PrayerSpell extends StaticSpell {
         player.getCapability(ISoul.INSTANCE).ifPresent((soul) -> {
             var capacity = altarInfo.getCapacity();
             var power = altarInfo.getPower();
-            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), reputation * (1 + capacity)));
+            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), reputation * (1 + capacity / 2)));
             soul.setMagic((float) Math.max(soul.getMagic(), soul.getMagic() + reputation + power * 2));
             if (!world.isClientSide) Networking.sendToTracking(world, player.getOnPos(), new SoulUpdatePacket(player));
         });

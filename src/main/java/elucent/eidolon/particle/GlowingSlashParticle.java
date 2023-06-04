@@ -1,11 +1,8 @@
 package elucent.eidolon.particle;
 
-import java.awt.Color;
-
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import elucent.eidolon.ClientConfig;
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -14,6 +11,8 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+
+import java.awt.*;
 
 public class GlowingSlashParticle extends TextureSheetParticle {
     final SlashParticleData data;

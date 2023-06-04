@@ -1,14 +1,13 @@
 package elucent.eidolon.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import elucent.eidolon.ClientConfig;
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.SpawnEggItem;
 
 public class LineWispParticle extends GenericParticle {
     final double ix;

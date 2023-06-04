@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.capability.ISoul;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

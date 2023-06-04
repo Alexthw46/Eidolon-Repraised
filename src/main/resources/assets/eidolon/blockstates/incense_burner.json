@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "eidolon:block/incense_burner"
+      "model": "eidolon:block/censer"
     }
   }
 }

@@ -1,7 +1,7 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.entity.*;
+import elucent.eidolon.common.entity.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;

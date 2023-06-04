@@ -1,13 +1,12 @@
 package elucent.eidolon.mixin;
 
+import elucent.eidolon.event.ClientEvents;
+import elucent.eidolon.util.RenderUtil;
+import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import elucent.eidolon.ClientEvents;
-import elucent.eidolon.util.RenderUtil;
-import net.minecraft.client.renderer.LevelRenderer;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {

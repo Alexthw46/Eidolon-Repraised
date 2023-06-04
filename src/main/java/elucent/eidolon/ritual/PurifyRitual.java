@@ -1,6 +1,7 @@
 package elucent.eidolon.ritual;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

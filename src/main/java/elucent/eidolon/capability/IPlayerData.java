@@ -1,6 +1,6 @@
 package elucent.eidolon.capability;
 
-import elucent.eidolon.item.IWingsItem;
+import elucent.eidolon.common.item.IWingsItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

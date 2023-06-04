@@ -2,7 +2,7 @@ package elucent.eidolon.spell;
 
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.registries.Potions;
-import elucent.eidolon.research.Researches;
+import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

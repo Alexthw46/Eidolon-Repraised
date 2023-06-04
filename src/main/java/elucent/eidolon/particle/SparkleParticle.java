@@ -1,13 +1,12 @@
 package elucent.eidolon.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import elucent.eidolon.ClientConfig;
-import elucent.eidolon.ClientEvents;
+import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.blockentity.BedRenderer;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.blockentity.BedRenderer;
 
 public class SparkleParticle extends GenericParticle {
     public SparkleParticle(ClientLevel world, GenericParticleData data, double x, double y, double z, double vx, double vy, double vz) {

@@ -1,11 +1,12 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.deity.Deity;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.deity.Deity;
+import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.deity.DeityLocks;
-import elucent.eidolon.ritual.Ritual;
-import elucent.eidolon.tile.EffigyTileEntity;
-import elucent.eidolon.tile.GobletTileEntity;
+import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -53,7 +54,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, getRegistryName(), world.getGameTime());
-                rep.unlock(player, deity.getId(), DeityLocks.SACRIFICE_MOB);
+                KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_MOB);
                 rep.addReputation(player, deity.getId(), 3.0 + 0.5 * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
