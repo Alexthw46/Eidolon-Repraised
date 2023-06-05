@@ -2,8 +2,8 @@ package elucent.eidolon.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import elucent.eidolon.ClientConfig;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;

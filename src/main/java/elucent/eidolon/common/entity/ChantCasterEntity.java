@@ -1,13 +1,18 @@
 package elucent.eidolon.common.entity;
 
 import com.mojang.math.Vector3f;
+import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SpellCastPacket;
 import elucent.eidolon.particle.RuneParticleData;
 import elucent.eidolon.registries.Entities;
 import elucent.eidolon.registries.Sounds;
-import elucent.eidolon.spell.*;
+import elucent.eidolon.spell.Runes;
+import elucent.eidolon.spell.Signs;
+import elucent.eidolon.spell.Spells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

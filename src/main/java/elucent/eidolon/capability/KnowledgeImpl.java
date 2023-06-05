@@ -1,11 +1,8 @@
 package elucent.eidolon.capability;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import elucent.eidolon.spell.Rune;
+import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.Signs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,6 +10,9 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class KnowledgeImpl implements IKnowledge, INBTSerializable<CompoundTag> {
     final Set<Sign> signs = new HashSet<>();

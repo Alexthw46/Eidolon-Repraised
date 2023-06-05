@@ -1,4 +1,4 @@
-package elucent.eidolon.spell;
+package elucent.eidolon.util;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;

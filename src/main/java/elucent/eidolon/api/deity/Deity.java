@@ -1,8 +1,8 @@
 package elucent.eidolon.api.deity;
 
 import elucent.eidolon.api.research.Research;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;

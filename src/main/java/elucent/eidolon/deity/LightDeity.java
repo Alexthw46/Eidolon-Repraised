@@ -15,7 +15,9 @@ public class LightDeity extends Deity {
                 .requirement(new ResearchRequirement(DeityLocks.BASIC_INCENSE_PRAYER))
         ).add(new Stage(DeityLocks.HEAL_VILLAGER, 15, true)
                 .requirement(new ResearchRequirement(DeityLocks.HEAL_VILLAGER))
-        ).add(new Stage(DeityLocks.SMITE_UNDEAD, 30, true)
+        ).add(new Stage(DeityLocks.CURE_ZOMBIE, 25, true)
+                .requirement(new ResearchRequirement(DeityLocks.CURE_ZOMBIE))
+        ).add(new Stage(DeityLocks.SMITE_UNDEAD, 35, true)
                 .requirement(new ResearchRequirement(DeityLocks.SMITE_UNDEAD))
         ).setMax(50);
     }
@@ -26,8 +28,10 @@ public class LightDeity extends Deity {
             KnowledgeUtil.grantSign(player, Signs.SOUL_SIGN);
         } else if (lock.equals(DeityLocks.HEAL_VILLAGER)) {
             KnowledgeUtil.grantSign(player, Signs.MIND_SIGN);
+        } else if (lock.equals(DeityLocks.CURE_ZOMBIE)) {
+            KnowledgeUtil.grantSign(player, Signs.DEATH_SIGN);
         } else if (lock.equals(DeityLocks.SMITE_UNDEAD)) {
-            KnowledgeUtil.grantSign(player, Signs.HARMONY_SIGN);
+            KnowledgeUtil.grantSign(player, Signs.BLOOD_SIGN);
         }
     }
 
@@ -37,6 +41,9 @@ public class LightDeity extends Deity {
             KnowledgeUtil.grantSign(player, Signs.FLAME_SIGN);
         } else if (lock.equals(DeityLocks.HEAL_VILLAGER)) {
             KnowledgeUtil.grantFact(player, Facts.VILLAGER_HEALING);
+        } else if (lock.equals(DeityLocks.CURE_ZOMBIE)) {
+            KnowledgeUtil.grantSign(player, Signs.HARMONY_SIGN);
+            KnowledgeUtil.grantFact(player, Facts.ZOMBIE_CURE);
         } else if (lock.equals(DeityLocks.SMITE_UNDEAD)) {
             KnowledgeUtil.grantFact(player, Facts.SMITE);
             KnowledgeUtil.grantSign(player, Signs.MAGIC_SIGN);

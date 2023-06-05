@@ -1,8 +1,8 @@
 package elucent.eidolon.capability;
 
 import elucent.eidolon.api.research.Research;
-import elucent.eidolon.spell.Rune;
-import elucent.eidolon.spell.Sign;
+import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.api.spells.Sign;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

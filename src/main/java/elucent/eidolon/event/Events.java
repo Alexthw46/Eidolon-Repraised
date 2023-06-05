@@ -89,6 +89,7 @@ public class Events {
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         KnowledgeCommand.register(event.getDispatcher());
+        ReputationCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent

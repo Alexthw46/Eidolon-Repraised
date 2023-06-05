@@ -1,7 +1,7 @@
 package elucent.eidolon.network;
 
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.entity.ChantCasterEntity;
-import elucent.eidolon.spell.Sign;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.network.FriendlyByteBuf;

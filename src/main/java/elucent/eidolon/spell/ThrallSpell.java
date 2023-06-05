@@ -1,6 +1,7 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.util.EntityUtil;

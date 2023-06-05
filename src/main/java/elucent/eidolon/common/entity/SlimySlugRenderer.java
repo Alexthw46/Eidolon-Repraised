@@ -6,6 +6,7 @@ import elucent.eidolon.Eidolon;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class SlimySlugRenderer extends MobRenderer<SlimySlugEntity, SlimySlugModel> {
     protected static final ResourceLocation SLIMY_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/slimy_slug.png");
@@ -16,12 +17,11 @@ public class SlimySlugRenderer extends MobRenderer<SlimySlugEntity, SlimySlugMod
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SlimySlugEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(SlimySlugEntity entity) {
         return switch (entity.getEntityData().get(SlimySlugEntity.TYPE)) {
-        	case 0 -> SLIMY_TEXTURE;
-        	case 1 -> BANANA_TEXTURE;
-        	case 2 -> BROWN_TEXTURE;
-        	default -> SLIMY_TEXTURE;
+            case 1 -> BANANA_TEXTURE;
+            case 2 -> BROWN_TEXTURE;
+            default -> SLIMY_TEXTURE;
         };
     }
 

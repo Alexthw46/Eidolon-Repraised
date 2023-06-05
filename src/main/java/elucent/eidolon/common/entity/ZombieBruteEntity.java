@@ -1,26 +1,32 @@
 package elucent.eidolon.common.entity;
 
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class ZombieBruteEntity extends Monster {
     public ZombieBruteEntity(EntityType<ZombieBruteEntity> type, Level worldIn) {
@@ -29,7 +35,7 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 
@@ -81,6 +87,31 @@ public class ZombieBruteEntity extends Monster {
         super.aiStep();
     }
 
+    public boolean wasKilled(@NotNull ServerLevel serverLevel, @NotNull LivingEntity livingEntity) {
+        boolean flag = super.wasKilled(serverLevel, livingEntity);
+        if ((serverLevel.getDifficulty() == Difficulty.NORMAL || serverLevel.getDifficulty() == Difficulty.HARD) && livingEntity instanceof Villager villager && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(livingEntity, EntityType.ZOMBIE_VILLAGER, (timer) -> {
+        })) {
+            if (serverLevel.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
+                return flag;
+            }
+
+            ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
+            zombievillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+            zombievillager.setVillagerData(villager.getVillagerData());
+            zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
+            zombievillager.setTradeOffers(villager.getOffers().createTag());
+            zombievillager.setVillagerXp(villager.getVillagerXp());
+            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(livingEntity, zombievillager);
+            if (!this.isSilent()) {
+                serverLevel.levelEvent(null, 1026, this.blockPosition(), 0);
+            }
+
+            flag = false;
+        }
+
+        return flag;
+    }
+
     @Override
     public SoundEvent getDeathSound() {
         return SoundEvents.ZOMBIE_DEATH;
@@ -92,7 +123,7 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource source) {
+    public SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.ZOMBIE_HURT;
     }
 }

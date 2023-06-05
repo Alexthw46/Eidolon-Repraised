@@ -2,8 +2,8 @@ package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.deity.Deities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +39,13 @@ public class LightTouchSpell extends DarkTouchSpell {
         return stack.getCount() == 1 && canTouch(stack);
     }
 
+    boolean canTouch(ItemStack stack) {
+        return stack.getItem() == Registry.GOLD_INLAY.get()
+               || stack.getItem() == Items.BLACK_WOOL
+               || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get());
+        //|| (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+    }
+
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         if (stack.getItem() == Registry.GOLD_INLAY.get())
             return new ItemStack(Registry.HOLY_SYMBOL.get());
@@ -46,10 +53,14 @@ public class LightTouchSpell extends DarkTouchSpell {
             return new ItemStack(Registry.TOP_HAT.get());
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
+        /*
         else {
             ISoul.expendMana(player, getCost());
             stack.getOrCreateTag().putBoolean(SACRED_KEY, true);
             return stack;
         }
+
+         */
+        return stack;
     }
 }

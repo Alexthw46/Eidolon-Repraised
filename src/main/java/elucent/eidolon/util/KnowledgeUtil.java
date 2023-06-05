@@ -1,11 +1,11 @@
 package elucent.eidolon.util;
 
 import elucent.eidolon.api.research.Research;
+import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.spell.Rune;
-import elucent.eidolon.spell.Sign;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;

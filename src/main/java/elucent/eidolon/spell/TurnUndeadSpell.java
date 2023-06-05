@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.deity.Deities;
 import net.minecraft.core.BlockPos;

@@ -1,6 +1,8 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.api.spells.SignSequence;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;

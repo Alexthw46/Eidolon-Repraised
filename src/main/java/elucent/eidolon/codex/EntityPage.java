@@ -29,7 +29,7 @@ public class EntityPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         Entity e = type.create(Minecraft.getInstance().level);
-        EntityRenderer renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(e);
+        EntityRenderer<? super Entity> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(e);
         RenderSystem.disableCull();
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
@@ -39,6 +39,7 @@ public class EntityPage extends Page {
         mStack.mulPose(Vector3f.XP.rotationDegrees(-15));
         mStack.mulPose(Vector3f.YP.rotationDegrees(-30));
         float scale = 112 / e.getBbHeight();
+        scale = Math.min(scale, 100);
         mStack.scale(scale, -scale, scale);
         RenderSystem.setShader(GameRenderer::getRendertypeEntityAlphaShader);
         RenderSystem.setupShaderLights(RenderSystem.getShader());

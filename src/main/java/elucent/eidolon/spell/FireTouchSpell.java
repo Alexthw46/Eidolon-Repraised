@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.tile.IBurner;
 import elucent.eidolon.network.IgniteEffectPacket;

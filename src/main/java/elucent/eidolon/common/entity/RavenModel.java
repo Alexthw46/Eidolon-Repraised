@@ -62,17 +62,16 @@ public class RavenModel extends EntityModel<RavenEntity> {
 				wings = body.getChild("wings"), rightLeg = body.getChild("rightLeg"), leftLeg = body.getChild("leftLeg"),
 				head = body.getChild("head");
 		body.y = 24.0f;
-		if (entity.isOnGround()) {
-			leftWing.visible = false;
-			rightWing.visible = false;
-			wings.visible = true;
+		if (entity.isOnGround() || !entity.isAddedToWorld()) {
+            leftWing.visible = false;
+            rightWing.visible = false;
+            wings.visible = true;
 
-			if (entity.isTame() && entity.isInSittingPose()) {
-				rightLeg.xRot = -(float)Math.PI / 3;
-				leftLeg.xRot = -(float)Math.PI / 3;
-				body.y = 25.5f;
-			}
-			else {
+            if (entity.isTame() && entity.isInSittingPose()) {
+                rightLeg.xRot = -(float) Math.PI / 3;
+                leftLeg.xRot = -(float) Math.PI / 3;
+                body.y = 25.5f;
+            } else {
 				rightLeg.xRot = Mth.cos(limbSwing * 2F + (float)Math.PI) * 2F * limbSwingAmount;
 				leftLeg.xRot = Mth.cos(limbSwing * 2F) * 2F * limbSwingAmount;
 			}

@@ -2,6 +2,7 @@ package elucent.eidolon.spell;
 
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.common.tile.GobletTileEntity;

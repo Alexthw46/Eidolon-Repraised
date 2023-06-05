@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.research.Research;
-import elucent.eidolon.spell.Sign;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;

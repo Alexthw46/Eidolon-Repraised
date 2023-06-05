@@ -618,4 +618,6 @@ public class Registry {
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> RUNE_ARG = ARG_TYPES.register("rune", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.RuneArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.RuneArgument::runes)));
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> RESEARCH_ARG = ARG_TYPES.register("research", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.ResearchArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.ResearchArgument::researches)));
+    public static final RegistryObject<ArgumentTypeInfo<?, ?>> DEITY_ARG = ARG_TYPES.register("deity", () -> ArgumentTypeInfos.registerByClass(ReputationCommand.DeityArgument.class, SingletonArgumentInfo.contextFree(ReputationCommand.DeityArgument::deities)));
+
 }

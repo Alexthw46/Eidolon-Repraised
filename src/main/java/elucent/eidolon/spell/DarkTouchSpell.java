@@ -2,8 +2,8 @@ package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.Registry;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
@@ -38,7 +38,7 @@ public class DarkTouchSpell extends StaticSpell {
     public static final String NECROTIC_KEY = new ResourceLocation(Eidolon.MODID, "necrotic").toString();
 
     public DarkTouchSpell(ResourceLocation name, Sign... signs) {
-        super(name, 40, signs);
+        super(name, signs);
 
         MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
@@ -87,10 +87,10 @@ public class DarkTouchSpell extends StaticSpell {
     }
 
     boolean canTouch(ItemStack stack) {
-        return stack.getItem() == Registry.PEWTER_INLAY.get()             // is pewter
+        return stack.getItem() == Registry.PEWTER_INLAY.get()
                || stack.getItem() == Items.BLACK_WOOL
                || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-               || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+                ;//|| (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
@@ -100,11 +100,13 @@ public class DarkTouchSpell extends StaticSpell {
             return new ItemStack(Registry.TOP_HAT.get());
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
+        /*
         else {
             ISoul.expendMana(player, getCost());
             stack.getOrCreateTag().putBoolean(NECROTIC_KEY, true);
             return stack;
-        }
+        }*/
+        else return stack;
     }
 
     @Override

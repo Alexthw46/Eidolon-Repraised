@@ -1,11 +1,14 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
@@ -36,10 +39,12 @@ public class SmiteSpell extends StaticSpell {
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
                 if (world instanceof ServerLevel) {
-                    if (livingEntity.hurt(DamageSource.MAGIC, 10))
+                    if (livingEntity.hurt(DamageSource.MAGIC, 10)) {
+                        livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 2));
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
+                    }
                 } else {
-
+                    //TODO add cool client effects
                 }
             }
         }
