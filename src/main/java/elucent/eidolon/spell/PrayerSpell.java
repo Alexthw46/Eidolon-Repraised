@@ -24,7 +24,7 @@ import net.minecraft.world.phys.AABB;
 import java.util.Comparator;
 import java.util.List;
 
-import static elucent.eidolon.registries.ParticleRegistry.FLAME_PARTICLE;
+import static elucent.eidolon.registries.EidolonParticles.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;

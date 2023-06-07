@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
 import elucent.eidolon.common.entity.SoulfireProjectileEntity;
-import elucent.eidolon.registries.Entities;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.EidolonSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,10 +27,10 @@ public class SoulfireWandItem extends WandItem {
         if (!world.isClientSide) {
             Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
-            world.addFreshEntity(new SoulfireProjectileEntity(Entities.SOULFIRE_PROJECTILE.get(), world).shoot(
+            world.addFreshEntity(new SoulfireProjectileEntity(EidolonEntities.SOULFIRE_PROJECTILE.get(), world).shoot(
                     pos.x, pos.y, pos.z, vel.x, vel.y, vel.z, entity.getUUID()
             ));
-            world.playSound(null, pos.x, pos.y, pos.z, Sounds.CAST_SOULFIRE_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
+            world.playSound(null, pos.x, pos.y, pos.z, EidolonSounds.CAST_SOULFIRE_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
             stack.hurtAndBreak(1, entity, (player) -> {
                 player.broadcastBreakEvent(hand);
             });

@@ -1,12 +1,12 @@
 package elucent.eidolon.spell;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

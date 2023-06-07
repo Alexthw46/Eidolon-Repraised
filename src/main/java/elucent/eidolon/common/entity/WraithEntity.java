@@ -1,7 +1,7 @@
 package elucent.eidolon.common.entity;
 
-import elucent.eidolon.registries.Potions;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonPotions;
+import elucent.eidolon.registries.EidolonSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -46,7 +46,7 @@ public class WraithEntity extends Monster {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {
             float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            ((LivingEntity) entityIn).addEffect(new MobEffectInstance(Potions.CHILLED_EFFECT.get(), 100 + (100 * level.getDifficulty().getId())));
+            ((LivingEntity) entityIn).addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 100 + (100 * level.getDifficulty().getId())));
         }
         return flag;
     }
@@ -112,16 +112,16 @@ public class WraithEntity extends Monster {
 
     @Override
     public SoundEvent getDeathSound() {
-        return Sounds.WRAITH_DEATH.get();
+        return EidolonSounds.WRAITH_DEATH.get();
     }
 
     @Override
     public SoundEvent getAmbientSound() {
-        return Sounds.WRAITH_AMBIENT.get();
+        return EidolonSounds.WRAITH_AMBIENT.get();
     }
 
     @Override
     public SoundEvent getHurtSound(@NotNull DamageSource source) {
-        return Sounds.WRAITH_HURT.get();
+        return EidolonSounds.WRAITH_HURT.get();
     }
 }

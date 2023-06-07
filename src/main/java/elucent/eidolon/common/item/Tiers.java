@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
-import elucent.eidolon.Registry;
-import net.minecraft.world.item.Tier;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class Tiers {

@@ -14,8 +14,9 @@ import elucent.eidolon.common.item.model.*;
 import elucent.eidolon.common.tile.CrucibleTileRenderer;
 import elucent.eidolon.common.tile.SoulEnchanterTileRenderer;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.registries.Entities;
-import elucent.eidolon.registries.Potions;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.EidolonPotions;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.ritual.*;
 import elucent.eidolon.spell.Runes;
 import elucent.eidolon.spell.Signs;
@@ -139,16 +140,16 @@ public class ClientRegistry {
 
     @SubscribeEvent
     public static void onRegisterEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
-        EntityRenderers.register(Entities.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
-        EntityRenderers.register(Entities.WRAITH.get(), WraithRenderer::new);
-        EntityRenderers.register(Entities.NECROMANCER.get(), NecromancerRenderer::new);
-        EntityRenderers.register(Entities.SOULFIRE_PROJECTILE.get(), NoopRenderer::new);
-        EntityRenderers.register(Entities.BONECHILL_PROJECTILE.get(), NoopRenderer::new);
-        EntityRenderers.register(Entities.NECROMANCER_SPELL.get(), NoopRenderer::new);
-        EntityRenderers.register(Entities.CHANT_CASTER.get(), ChantCasterRenderer::new);
-        EntityRenderers.register(Entities.RAVEN.get(), RavenRenderer::new);
-        EntityRenderers.register(Entities.ANGEL_ARROW.get(), AngelArrowRenderer::new);
-        EntityRenderers.register(Entities.SLIMY_SLUG.get(), SlimySlugRenderer::new);
+        EntityRenderers.register(EidolonEntities.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
+        EntityRenderers.register(EidolonEntities.WRAITH.get(), WraithRenderer::new);
+        EntityRenderers.register(EidolonEntities.NECROMANCER.get(), NecromancerRenderer::new);
+        EntityRenderers.register(EidolonEntities.SOULFIRE_PROJECTILE.get(), NoopRenderer::new);
+        EntityRenderers.register(EidolonEntities.BONECHILL_PROJECTILE.get(), NoopRenderer::new);
+        EntityRenderers.register(EidolonEntities.NECROMANCER_SPELL.get(), NoopRenderer::new);
+        EntityRenderers.register(EidolonEntities.CHANT_CASTER.get(), ChantCasterRenderer::new);
+        EntityRenderers.register(EidolonEntities.RAVEN.get(), RavenRenderer::new);
+        EntityRenderers.register(EidolonEntities.ANGEL_ARROW.get(), AngelArrowRenderer::new);
+        EntityRenderers.register(EidolonEntities.SLIMY_SLUG.get(), SlimySlugRenderer::new);
     }
 
     public static ShaderInstance GLOWING_SHADER, GLOWING_SPRITE_SHADER, GLOWING_PARTICLE_SHADER, VAPOR_SHADER, GLOWING_ENTITY_SHADER, SPRITE_PARTICLE_SHADER;
@@ -479,7 +480,7 @@ public class ClientRegistry {
                 if (i == regen) y -= 2;
 
                 RenderSystem.enableBlend();
-                if (player.hasEffect(Potions.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
+                if (player.hasEffect(EidolonPotions.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
                     if (i * 2 + 1 < health)
                         mc.gui.blit(mStack, x, y, 0, 0, 9, 9);
                     else if (i * 2 + 1 == health)

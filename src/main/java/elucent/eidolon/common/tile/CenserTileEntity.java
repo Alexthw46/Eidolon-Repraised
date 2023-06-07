@@ -1,6 +1,5 @@
 package elucent.eidolon.common.tile;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
@@ -9,7 +8,8 @@ import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.network.ExtinguishEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
-import elucent.eidolon.registries.ParticleRegistry;
+import elucent.eidolon.registries.EidolonParticles;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.spell.AltarInfo;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
@@ -75,14 +75,14 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             float g = 0.5f;
             float b = 0.25f;
 
-            if (burnCounter < 160) Particles.create(ParticleRegistry.FLAME_PARTICLE)
+            if (burnCounter < 160) Particles.create(EidolonParticles.FLAME_PARTICLE)
                     .setAlpha(0.5f, 0).setScale(0.25f, 0.125f).setLifetime(20)
                     .randomOffset(0.125, 0.125).randomVelocity(0.00625f, 0.01875f)
                     .addVelocity(0, 0.00625f, 0)
                     .setColor(r, g, b, r, g * 0.5f, b * 1.5f)
                     .spawn(level, x, y, z);
 
-            if (level.random.nextInt(20) == 0) Particles.create(ParticleRegistry.SPARKLE_PARTICLE)
+            if (level.random.nextInt(20) == 0) Particles.create(EidolonParticles.SPARKLE_PARTICLE)
                     .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(40)
                     .randomOffset(0.0625, 0).randomVelocity(0.125f, 0)
                     .addVelocity(0, 0.125f, 0)
@@ -90,7 +90,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
                     .enableGravity().setSpin(0.4f)
                     .spawn(level, x, y, z);
 
-            if (level.random.nextInt(5) == 0) Particles.create(ParticleRegistry.SMOKE_PARTICLE)
+            if (level.random.nextInt(5) == 0) Particles.create(EidolonParticles.SMOKE_PARTICLE)
                     .setAlpha(0.25f, 0).setScale(0.375f, 0.125f).setLifetime(160)
                     .randomOffset(0.25, 0.125).randomVelocity(0.025f, 0.025f)
                     .addVelocity(0, 0.0125f, 0)

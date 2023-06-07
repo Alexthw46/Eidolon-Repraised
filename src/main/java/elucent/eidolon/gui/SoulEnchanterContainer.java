@@ -1,7 +1,7 @@
 package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

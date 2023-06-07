@@ -1,8 +1,8 @@
 package elucent.eidolon.api.ritual;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.RitualConsumePacket;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;

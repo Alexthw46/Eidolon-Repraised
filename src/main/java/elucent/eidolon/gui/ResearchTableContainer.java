@@ -1,10 +1,10 @@
 package elucent.eidolon.gui;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
 import elucent.eidolon.common.tile.ResearchTableTileEntity;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

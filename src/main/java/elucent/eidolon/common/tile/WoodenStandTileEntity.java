@@ -1,9 +1,9 @@
 package elucent.eidolon.common.tile;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.block.WoodenStandBlock;
 import elucent.eidolon.gui.WoodenBrewingStandContainer;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

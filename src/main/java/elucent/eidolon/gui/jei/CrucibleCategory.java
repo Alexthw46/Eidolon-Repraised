@@ -3,9 +3,9 @@ package elucent.eidolon.gui.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.codex.CodexGui;
 import elucent.eidolon.recipe.CrucibleRecipe;
+import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

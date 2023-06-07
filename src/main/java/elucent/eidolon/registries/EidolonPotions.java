@@ -1,7 +1,6 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.potion.*;
 import elucent.eidolon.mixin.PotionBrewingMixin;
 import net.minecraft.world.effect.MobEffect;
@@ -18,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 import static net.minecraft.world.item.alchemy.Potions.AWKWARD;
 import static net.minecraft.world.item.alchemy.Potions.WATER;
 
-public class Potions {
+public class EidolonPotions {
     public static final DeferredRegister<MobEffect> POTIONS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Eidolon.MODID);
     public static final DeferredRegister<Potion> POTION_TYPES = DeferredRegister.create(ForgeRegistries.POTIONS, Eidolon.MODID);
 

@@ -23,7 +23,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import static elucent.eidolon.registries.ParticleRegistry.FLAME_PARTICLE;
+import static elucent.eidolon.registries.EidolonParticles.FLAME_PARTICLE;
 
 public class GhostLight extends BlockBase {
 

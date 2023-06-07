@@ -1,8 +1,8 @@
 package elucent.eidolon.proxy;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.codex.CodexGui;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

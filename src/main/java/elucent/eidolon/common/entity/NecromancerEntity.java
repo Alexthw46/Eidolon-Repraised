@@ -5,7 +5,7 @@ import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
-import elucent.eidolon.registries.ParticleRegistry;
+import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.resources.ResourceKey;
@@ -67,7 +67,7 @@ public class NecromancerEntity extends SpellcasterIllager {
             float f1 = Mth.cos(f);
             float f2 = Mth.sin(f);
             if (spelltype == IllagerSpell.FANGS) {
-                Particles.create(ParticleRegistry.SPARKLE_PARTICLE)
+                Particles.create(EidolonParticles.SPARKLE_PARTICLE)
                     .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
                     .randomVelocity(0.05f).randomOffset(0.025f)
                     .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
@@ -76,7 +76,7 @@ public class NecromancerEntity extends SpellcasterIllager {
                     .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
             }
             else if (spelltype == IllagerSpell.SUMMON_VEX) {
-                Particles.create(ParticleRegistry.WISP_PARTICLE)
+                Particles.create(EidolonParticles.WISP_PARTICLE)
                     .setColor(0.75f, 1, 1, 0.125f, 0.125f, 0.875f)
                     .randomVelocity(0.05f).randomOffset(0.025f)
                     .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)

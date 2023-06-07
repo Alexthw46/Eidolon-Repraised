@@ -2,7 +2,7 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.network.DeathbringerSlashEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.Potions;
+import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -53,7 +53,7 @@ public class DeathbringerScytheItem extends SwordItem {
     @Override
     public boolean hurtEnemy(@NotNull ItemStack stack, LivingEntity target, @NotNull LivingEntity attacker) {
         if (target.getMobType() != MobType.UNDEAD) {
-            target.addEffect(new MobEffectInstance(Potions.UNDEATH_EFFECT.get(), 900));
+            target.addEffect(new MobEffectInstance(EidolonPotions.UNDEATH_EFFECT.get(), 900));
         }
         if (!attacker.level.isClientSide)
             Networking.sendToTracking(attacker.level, attacker.blockPosition(), new DeathbringerSlashEffectPacket(

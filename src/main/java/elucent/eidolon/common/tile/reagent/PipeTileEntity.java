@@ -1,7 +1,7 @@
 package elucent.eidolon.common.tile.reagent;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.block.PipeBlock;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;

@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.capability.IPlayerData;
 import elucent.eidolon.common.item.IWingsItem;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

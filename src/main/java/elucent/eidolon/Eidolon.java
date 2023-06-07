@@ -12,8 +12,9 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
-import elucent.eidolon.registries.Entities;
-import elucent.eidolon.registries.Potions;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.EidolonPotions;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.AltarEntries;
@@ -94,7 +95,7 @@ public class Eidolon {
         Networking.init();
         event.enqueueWork(() -> {
             RitualRegistry.init();
-            Potions.addBrewingRecipes();
+            EidolonPotions.addBrewingRecipes();
             AltarEntries.init();
             Researches.init();
             Runes.init();
@@ -105,13 +106,13 @@ public class Eidolon {
 
 
     public void spawnPlacements(final SpawnPlacementRegisterEvent event) {
-        event.register(Entities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        event.register(EidolonEntities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(Entities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        event.register(EidolonEntities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(Entities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        event.register(EidolonEntities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(Entities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        event.register(EidolonEntities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (e, w, t, pos, rand) -> true, SpawnPlacementRegisterEvent.Operation.AND);
     }
 

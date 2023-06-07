@@ -1,26 +1,25 @@
 package elucent.eidolon.mixin;
 
-import java.util.Optional;
-
-import elucent.eidolon.registries.Potions;
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.capability.IPlayerData;
+import elucent.eidolon.registries.EidolonPotions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.capability.IPlayerData;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.player.Player;
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
     @Inject(method = "getMobType", at = @At("HEAD"), cancellable = true)
     public void getMobType(CallbackInfoReturnable<MobType> ci) {
-    	if (((LivingEntity)(Object)this).hasEffect(Potions.UNDEATH_EFFECT.get()) && !Eidolon.trueMobType) {
-    		ci.setReturnValue(MobType.UNDEAD);
-    	}
+        if (((LivingEntity) (Object) this).hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && !Eidolon.trueMobType) {
+            ci.setReturnValue(MobType.UNDEAD);
+        }
     }
 
     @Inject(method = "isFallFlying", at = @At("HEAD"), cancellable = true)

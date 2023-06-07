@@ -3,10 +3,10 @@ package elucent.eidolon.gui.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.ritual.ItemSacrifice;
 import elucent.eidolon.codex.CodexGui;
 import elucent.eidolon.codex.RitualPage;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.ritual.SanguineRitual;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

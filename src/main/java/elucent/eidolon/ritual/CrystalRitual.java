@@ -1,10 +1,10 @@
 package elucent.eidolon.ritual;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.network.CrystallizeEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

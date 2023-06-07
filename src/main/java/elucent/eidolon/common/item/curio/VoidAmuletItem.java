@@ -1,7 +1,7 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.entity.SpellProjectileEntity;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;

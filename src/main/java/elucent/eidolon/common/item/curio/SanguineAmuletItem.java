@@ -3,7 +3,7 @@ package elucent.eidolon.common.item.curio;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;

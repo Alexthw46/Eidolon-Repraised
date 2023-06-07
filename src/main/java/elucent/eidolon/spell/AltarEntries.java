@@ -1,6 +1,6 @@
 package elucent.eidolon.spell;
 
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;

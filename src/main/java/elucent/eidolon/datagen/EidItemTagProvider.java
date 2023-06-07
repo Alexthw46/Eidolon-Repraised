@@ -1,11 +1,12 @@
 package elucent.eidolon.datagen;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -30,6 +31,8 @@ public class EidItemTagProvider extends ItemTagsProvider {
     protected void addTags() {
 
         tag(SCRIBE_ITEMS).add(Items.CHARCOAL, Items.FEATHER, Items.BOOK, Registry.CANDLE.get().asItem(), Registry.PARCHMENT.get(), Registry.MAGIC_INK.get());
+        this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
+        this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
 
     }
 }

@@ -2,7 +2,6 @@ package elucent.eidolon.event;
 
 import com.mojang.authlib.GameProfile;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.*;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
@@ -11,7 +10,8 @@ import elucent.eidolon.common.entity.ai.WitchBarterGoal;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.*;
-import elucent.eidolon.registries.Potions;
+import elucent.eidolon.registries.EidolonPotions;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.BlockPos;
@@ -109,7 +109,7 @@ public class Events {
     public void onTick(LivingTickEvent event) {
         Level level = event.getEntity().getLevel();
         LivingEntity e = event.getEntity();
-        if (e.hasEffect(Potions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
+        if (e.hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
             float f = e.getLightLevelDependentMagicValue();
             BlockPos blockpos = e.getVehicle() instanceof Boat ? (new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ())).above() : new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ());
             if (f > 0.5F && e.getRandom().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && level.canSeeSky(blockpos)) {
@@ -235,7 +235,7 @@ public class Events {
                 ));
             }
             if (event.getEntity() instanceof PathfinderMob mob && Eidolon.getTrueMobType(mob) == MobType.UNDEAD) {
-                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> living.hasEffect(Potions.LIGHT_BLESSED.get())));
+                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
             }
         }
     }
@@ -272,7 +272,7 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingUse(LivingEntityUseItemEvent event) {
-        if (event.getEntity().hasEffect(Potions.UNDEATH_EFFECT.get())) {
+        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get())) {
             if (!event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
                 event.setCanceled(true);
         }
@@ -280,14 +280,14 @@ public class Events {
 
     @SubscribeEvent
     public void onPotionApplicable(Added event) {
-        if (event.getEntity().hasEffect(MobEffects.HUNGER) && event.getEffectInstance().getEffect() == Potions.UNDEATH_EFFECT.get()) {
+        if (event.getEntity().hasEffect(MobEffects.HUNGER) && event.getEffectInstance().getEffect() == EidolonPotions.UNDEATH_EFFECT.get()) {
             event.getEntity().removeEffect(MobEffects.HUNGER);
         }
     }
 
     @SubscribeEvent
     public void onPotionApplicable(Applicable event) {
-        if (event.getEntity().hasEffect(Potions.UNDEATH_EFFECT.get()) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
+        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
             event.setResult(Result.DENY);
         }
     }

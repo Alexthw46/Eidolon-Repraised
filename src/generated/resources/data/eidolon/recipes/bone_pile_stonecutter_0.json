@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "eidolon:bone_pile"
+  },
+  "result": "eidolon:bone_pile_slab"
+}

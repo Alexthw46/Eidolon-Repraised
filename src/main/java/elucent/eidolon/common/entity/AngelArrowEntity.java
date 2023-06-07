@@ -2,7 +2,7 @@ package elucent.eidolon.common.entity;
 
 import elucent.eidolon.mixin.AbstractArrowMixin;
 import elucent.eidolon.mixin.ProjectileMixin;
-import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.EidolonEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +34,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
     }
 
     public AngelArrowEntity(Level worldIn, LivingEntity shooter) {
-        super(Entities.ANGEL_ARROW.get(), shooter, worldIn);
+        super(EidolonEntities.ANGEL_ARROW.get(), shooter, worldIn);
     }
 
     public void setArrow(AbstractArrow entity) {

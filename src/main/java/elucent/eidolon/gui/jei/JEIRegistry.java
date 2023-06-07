@@ -2,9 +2,9 @@ package elucent.eidolon.gui.jei;
 
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.recipe.WorktableRegistry;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.ritual.RitualRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;

@@ -1,7 +1,7 @@
 package elucent.eidolon.common.entity;
 
-import elucent.eidolon.Registry;
-import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -101,7 +101,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return Entities.RAVEN.get().create(world);
+        return EidolonEntities.RAVEN.get().create(world);
     }
 
     @Override

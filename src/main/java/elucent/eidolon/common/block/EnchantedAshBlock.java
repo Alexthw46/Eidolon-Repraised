@@ -2,7 +2,7 @@ package elucent.eidolon.common.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;

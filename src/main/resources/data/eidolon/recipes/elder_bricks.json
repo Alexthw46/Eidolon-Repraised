@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "eidolon:elder_brick"
+    }
+  },
+  "result": {
+    "item": "eidolon:elder_bricks",
+    "count": 4
+  }
+}

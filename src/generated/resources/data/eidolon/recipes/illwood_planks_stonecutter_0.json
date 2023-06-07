@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "eidolon:illwood_planks"
+  },
+  "result": "eidolon:illwood_planks_slab"
+}

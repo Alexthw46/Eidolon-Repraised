@@ -7,7 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ParticleRegistry {
+public class EidolonParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Eidolon.MODID);
     public static final RegistryObject<RuneParticleType>
             RUNE_PARTICLE = PARTICLES.register("rune_particle", RuneParticleType::new);

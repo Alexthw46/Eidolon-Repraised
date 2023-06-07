@@ -1,7 +1,7 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.item.ItemBase;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;

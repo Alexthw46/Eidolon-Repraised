@@ -1,17 +1,17 @@
 package elucent.eidolon.network;
 
-import java.util.function.Supplier;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.particle.Particles;
-import elucent.eidolon.registries.ParticleRegistry;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
+import elucent.eidolon.registries.EidolonParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class ExtinguishEffectPacket {
     final BlockPos pos;
@@ -38,7 +38,7 @@ public class ExtinguishEffectPacket {
                 double x = pos.getX() + 0.5, y = pos.getY() + 1, z = pos.getZ() + 0.5;
                 world.playSound(Eidolon.proxy.getPlayer(), x, y, z, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-                Particles.create(ParticleRegistry.SMOKE_PARTICLE)
+                Particles.create(EidolonParticles.SMOKE_PARTICLE)
                     .setAlpha(0.125f, 0).setScale(0.3125f, 0.125f).setLifetime(80)
                     .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.0125f)
                     .setColor(0.5f, 0.5f, 0.5f, 0.25f, 0.25f, 0.25f)

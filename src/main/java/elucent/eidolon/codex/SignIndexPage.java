@@ -11,7 +11,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -58,7 +58,7 @@ public class SignIndexPage extends Page {
                 return true;
             } else if (knowledge.knowsSign(entries[i].sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48) {
                 gui.addToChant(entries[i].sign);
-                entity.playNotifySound(Sounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
+                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
         }

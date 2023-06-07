@@ -1,0 +1,36 @@
+{
+  "type": "eidolon:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon:enchanted_ash"
+        },
+        {
+          "item": "eidolon:soul_shard"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon:elder_brick",
+    "count": 16
+  }
+}

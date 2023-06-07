@@ -12,7 +12,7 @@ import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.spell.Runes;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
@@ -59,7 +59,7 @@ public class RuneIndexPage extends Page {
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
             if (knowledge.knowsRune(runes[i]) && mouseX >= xx && mouseX <= xx + 16 && mouseY >= yy && mouseY <= yy + 16) {
                 //gui.addToChant(runes[i]);
-                entity.playNotifySound(Sounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
+                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
         }

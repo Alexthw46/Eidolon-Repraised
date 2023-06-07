@@ -1,7 +1,7 @@
 package elucent.eidolon.common.tile;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.ritual.IRitualItemProvider;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;

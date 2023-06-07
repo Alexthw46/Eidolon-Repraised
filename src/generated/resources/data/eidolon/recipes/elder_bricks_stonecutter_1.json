@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "eidolon:elder_bricks"
+  },
+  "result": "eidolon:elder_bricks_stairs"
+}

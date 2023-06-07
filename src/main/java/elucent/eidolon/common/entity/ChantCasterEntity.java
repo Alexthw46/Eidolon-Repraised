@@ -8,8 +8,8 @@ import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SpellCastPacket;
 import elucent.eidolon.particle.RuneParticleData;
-import elucent.eidolon.registries.Entities;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.spell.Runes;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spells;
@@ -49,7 +49,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     Vec3 look;
 
     public ChantCasterEntity(Level world, Player caster, List<Sign> runes, Vec3 look) {
-        super(Entities.CHANT_CASTER.get(), world);
+        super(EidolonEntities.CHANT_CASTER.get(), world);
         this.look = look;
         //setRunesTag(runes);
         setChantTag(runes);
@@ -177,7 +177,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                             afterColor.x(), afterColor.y(), afterColor.z()
                     ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
                 }
-                level.playSound(null, blockPosition(), Sounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
+                level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
                 if (index + 1 >= runes.size()) {
                     timer = 20;
                 }

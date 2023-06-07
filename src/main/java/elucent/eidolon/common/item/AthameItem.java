@@ -1,6 +1,6 @@
 package elucent.eidolon.common.item;
 
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.particles.BlockParticleOption;

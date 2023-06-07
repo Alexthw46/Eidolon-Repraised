@@ -4,7 +4,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
-import elucent.eidolon.registries.ParticleRegistry;
+import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.ChatFormatting;
@@ -83,7 +83,7 @@ public class SummoningStaffItem extends ItemBase {
                 if (time == 40) {
                     entity.playSound(SoundEvents.CROSSBOW_QUICK_CHARGE_3, 1, 1);
                 }
-                Particles.create(ParticleRegistry.SMOKE_PARTICLE)
+                Particles.create(EidolonParticles.SMOKE_PARTICLE)
                         .randomVelocity(0.025f * alpha, 0.0125f * alpha)
                         .setColor(33.0f / 255, 26.0f / 255, 23.0f / 255, 0.125f, 10.0f / 255, 10.0f / 255, 12.0f / 255, 0)
                         .setAlpha(0.25f * alpha, 0)

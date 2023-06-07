@@ -1,6 +1,5 @@
 package elucent.eidolon.codex;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.capability.Facts;
 import elucent.eidolon.codex.CruciblePage.CrucibleStep;
 import elucent.eidolon.codex.IndexPage.FactLockedEntry;
@@ -10,7 +9,8 @@ import elucent.eidolon.codex.IndexPage.SignLockedEntry;
 import elucent.eidolon.codex.ListPage.ListEntry;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
-import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
@@ -44,18 +44,18 @@ public class CodexChapters {
             MONSTERS = new Chapter(
                     "eidolon.codex.chapter.monsters",
                     new TitlePage("eidolon.codex.page.monsters.zombie_brute"),
-                    new EntityPage(Entities.ZOMBIE_BRUTE.get()),
+                    new EntityPage(EidolonEntities.ZOMBIE_BRUTE.get()),
                     new TitlePage("eidolon.codex.page.monsters.wraith"),
-                    new EntityPage(Entities.WRAITH.get()),
+                    new EntityPage(EidolonEntities.WRAITH.get()),
                     new TitlePage("eidolon.codex.page.monsters.chilled")
             );
 
             CRITTERS = new Chapter(
                     "eidolon.codex.chapter.critters",
                     new TitlePage("eidolon.codex.page.critters.raven"),
-                    new EntityPage(Entities.RAVEN.get()),
+                    new EntityPage(EidolonEntities.RAVEN.get()),
                     new TitlePage("eidolon.codex.page.critters.slimy_slug"),
-                    new EntityPage(Entities.SLIMY_SLUG.get())
+                    new EntityPage(EidolonEntities.SLIMY_SLUG.get())
             );
 
             ORES = new Chapter(

@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
 import elucent.eidolon.common.entity.BonechillProjectileEntity;
-import elucent.eidolon.registries.Entities;
-import elucent.eidolon.registries.Sounds;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.EidolonSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -43,10 +43,10 @@ public class BonechillWandItem extends WandItem {
         if (!world.isClientSide) {
             Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
-            world.addFreshEntity(new BonechillProjectileEntity(Entities.BONECHILL_PROJECTILE.get(), world).shoot(
+            world.addFreshEntity(new BonechillProjectileEntity(EidolonEntities.BONECHILL_PROJECTILE.get(), world).shoot(
                     pos.x, pos.y, pos.z, vel.x, vel.y, vel.z, entity.getUUID()
             ));
-            world.playSound(null, pos.x, pos.y, pos.z, Sounds.CAST_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
+            world.playSound(null, pos.x, pos.y, pos.z, EidolonSounds.CAST_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
             stack.hurtAndBreak(1, entity, (player) -> {
                 player.broadcastBreakEvent(hand);
             });

@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.common.tile.ResearchTableTileEntity;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.server.level.ServerLevel;

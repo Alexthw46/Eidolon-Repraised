@@ -1,7 +1,7 @@
 package elucent.eidolon.common.tile.reagent;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.block.PillarBlockBase;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.wip.reagent.ReagentStack;
 import elucent.eidolon.wip.reagent.ReagentTank;
 import net.minecraft.core.BlockPos;

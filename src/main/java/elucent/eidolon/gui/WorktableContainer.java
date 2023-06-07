@@ -1,26 +1,22 @@
 package elucent.eidolon.gui;
 
-import java.util.Optional;
-
-import elucent.eidolon.Registry;
 import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.recipe.WorktableRegistry;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import elucent.eidolon.registries.Registry;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Optional;
 
 public class WorktableContainer extends AbstractContainerMenu {
     final CraftingContainer core = new CraftingContainer(this, 3, 3);

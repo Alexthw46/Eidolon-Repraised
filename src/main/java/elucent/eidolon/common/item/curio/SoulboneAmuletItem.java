@@ -1,10 +1,10 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;

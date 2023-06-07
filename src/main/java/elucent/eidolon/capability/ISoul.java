@@ -1,8 +1,8 @@
 package elucent.eidolon.capability;
 
-import elucent.eidolon.Registry;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;

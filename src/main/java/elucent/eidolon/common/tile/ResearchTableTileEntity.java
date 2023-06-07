@@ -1,10 +1,10 @@
 package elucent.eidolon.common.tile;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
 import elucent.eidolon.gui.ResearchTableContainer;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

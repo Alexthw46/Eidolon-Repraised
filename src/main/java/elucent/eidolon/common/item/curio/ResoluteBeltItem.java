@@ -2,7 +2,7 @@ package elucent.eidolon.common.item.curio;
 
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;

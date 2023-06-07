@@ -2,8 +2,8 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.common.item.model.SilverArmorModel;
+import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;

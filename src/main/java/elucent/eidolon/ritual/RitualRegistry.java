@@ -3,12 +3,12 @@ package elucent.eidolon.ritual;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.registries.Entities;
+import elucent.eidolon.registries.EidolonEntities;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -186,10 +186,10 @@ public class RitualRegistry {
             .addRequirement(new ItemRequirement(Items.BONE))
             .addRequirement(new ItemRequirement(Items.STRING))
             .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-        SUMMON_WRAITH = register(new MultiItemSacrifice(Items.CHARCOAL, Registry.TATTERED_CLOTH.get()), new SummonRitual(Entities.WRAITH.get()).setRegistryName(Eidolon.MODID, "summon_wraith")
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
-            .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get())));
+        SUMMON_WRAITH = register(new MultiItemSacrifice(Items.CHARCOAL, Registry.TATTERED_CLOTH.get()), new SummonRitual(EidolonEntities.WRAITH.get()).setRegistryName(Eidolon.MODID, "summon_wraith")
+                .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
+                .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
+                .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get())));
 
         DECEIT_RITUAL = register(Tags.Items.GEMS_EMERALD, new DeceitRitual().setRegistryName(Eidolon.MODID, "deceit")
             .addRequirement(new ItemRequirement(Tags.Items.GEMS_EMERALD))

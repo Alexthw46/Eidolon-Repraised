@@ -3,7 +3,6 @@ package elucent.eidolon.registries;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.Registry;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
 import elucent.eidolon.spell.Signs;
