@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class NecromancerEntity extends SpellcasterIllager {
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 
@@ -123,7 +124,7 @@ public class NecromancerEntity extends SpellcasterIllager {
         }
 
         @Override
-        protected IllagerSpell getSpell() {
+        protected @NotNull IllagerSpell getSpell() {
             return IllagerSpell.FANGS;
         }
 
@@ -162,7 +163,7 @@ public class NecromancerEntity extends SpellcasterIllager {
         }
 
         @Override
-        protected IllagerSpell getSpell() {
+        protected @NotNull IllagerSpell getSpell() {
             return IllagerSpell.SUMMON_VEX;
         }
 
@@ -213,7 +214,7 @@ public class NecromancerEntity extends SpellcasterIllager {
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).isPresent() && e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).resolve().get().getReputation((Player)e, Deities.DARK_DEITY.getId()) >= 50)).setUnseenMemoryTicks(300));
     }
 
-    protected SoundEvent getCastingSoundEvent() {
+    protected @NotNull SoundEvent getCastingSoundEvent() {
         return SoundEvents.EVOKER_CAST_SPELL;
     }
 
@@ -230,7 +231,7 @@ public class NecromancerEntity extends SpellcasterIllager {
     }
 
     @Override
-    public SoundEvent getCelebrateSound() {
+    public @NotNull SoundEvent getCelebrateSound() {
         return SoundEvents.EVOKER_CELEBRATE;
     }
 }

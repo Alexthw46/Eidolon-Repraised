@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RuneParticleData implements ParticleOptions {
     final Rune rune;
@@ -46,7 +47,7 @@ public class RuneParticleData implements ParticleOptions {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public @NotNull ParticleType<?> getType() {
         return EidolonParticles.RUNE_PARTICLE.get();
     }
 
@@ -62,13 +63,13 @@ public class RuneParticleData implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public @NotNull String writeToString() {
         return getClass().getSimpleName() + ":internal";
     }
 
     public static final Deserializer<RuneParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
-        public RuneParticleData fromCommand(ParticleType<RuneParticleData> type, StringReader reader) throws CommandSyntaxException {
+        public @NotNull RuneParticleData fromCommand(@NotNull ParticleType<RuneParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             String loc = reader.readString();
             reader.expect(' ');
@@ -87,7 +88,7 @@ public class RuneParticleData implements ParticleOptions {
         }
 
         @Override
-        public RuneParticleData fromNetwork(ParticleType<RuneParticleData> type, FriendlyByteBuf buf) {
+        public @NotNull RuneParticleData fromNetwork(@NotNull ParticleType<RuneParticleData> type, FriendlyByteBuf buf) {
             String loc = buf.readUtf();
             float r1 = buf.readFloat();
             float g1 = buf.readFloat();

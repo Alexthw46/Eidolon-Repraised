@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,12 +86,12 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(@NotNull Container inv, @NotNull Level worldIn) {
         return false; // we don't use a single inventory, so we ignore this one
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public @NotNull ItemStack assemble(@NotNull Container inv) {
         return getResultItem();
     }
 
@@ -100,12 +101,12 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem() {
         return result;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return registryName;
     }
 
@@ -120,7 +121,7 @@ public class WorktableRecipe implements Recipe<Container> {
 
     public static class Serializer implements RecipeSerializer<WorktableRecipe> {
         @Override
-        public WorktableRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public @NotNull WorktableRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {
             Map<String, Ingredient> ingredientMap = new HashMap<>();
             JsonObject keys = json.getAsJsonObject("key");
             for (Map.Entry<String, JsonElement> e : keys.entrySet()) {
@@ -150,29 +151,29 @@ public class WorktableRecipe implements Recipe<Container> {
         }
 
         @Override
-        public WorktableRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public WorktableRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             Ingredient[] core = new Ingredient[9], extras = new Ingredient[4];
-            for (int i = 0; i < 9; i ++) core[i] = Ingredient.fromNetwork(buffer);
-            for (int i = 0; i < 4; i ++) extras[i] = Ingredient.fromNetwork(buffer);
+            for (int i = 0; i < 9; i++) core[i] = Ingredient.fromNetwork(buffer);
+            for (int i = 0; i < 4; i++) extras[i] = Ingredient.fromNetwork(buffer);
             ItemStack result = buffer.readItem();
             return WorktableRegistry.register(new WorktableRecipe(core, extras, result).setRegistryName(recipeId));
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, WorktableRecipe recipe) {
-            for (int i = 0; i < 9; i ++) recipe.core[i].toNetwork(buffer);
-            for (int i = 0; i < 4; i ++) recipe.extras[i].toNetwork(buffer);
+        public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull WorktableRecipe recipe) {
+            for (int i = 0; i < 9; i++) recipe.core[i].toNetwork(buffer);
+            for (int i = 0; i < 4; i++) recipe.extras[i].toNetwork(buffer);
             buffer.writeItem(recipe.result);
         }
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return Registry.WORKTABLE_RECIPE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return Type.INSTANCE;
     }
 

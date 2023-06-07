@@ -20,6 +20,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -33,24 +34,24 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         this.imageWidth = 192;
     }
 
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
-    }
+	public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
+	}
 
-    @Override
-    protected void renderLabels(PoseStack matrixStack, int x, int y) {
-    	RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
-        int i = this.leftPos;
-        int j = (this.height - this.imageHeight) / 2;
-        
-        double mouseX = Minecraft.getInstance().mouseHandler.xpos();
-        double mouseY = Minecraft.getInstance().mouseHandler.ypos();
-        mouseX = mouseX * (double)Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double)Minecraft.getInstance().getWindow().getScreenWidth();
-        mouseY = mouseY * (double)Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double)Minecraft.getInstance().getWindow().getScreenHeight();
-        
-        if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
+	@Override
+	protected void renderLabels(@NotNull PoseStack matrixStack, int x, int y) {
+		RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+
+		double mouseX = Minecraft.getInstance().mouseHandler.xpos();
+		double mouseY = Minecraft.getInstance().mouseHandler.ypos();
+		mouseX = mouseX * (double) Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double) Minecraft.getInstance().getWindow().getScreenWidth();
+		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
+
+		if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
         	ItemStack notes = menu.slots.get(0).getItem();
         	if (!notes.hasTag() || !notes.getTag().contains("research")) return;
         	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
@@ -105,24 +106,24 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         	}
         }
     	return super.mouseClicked(mouseX, mouseY, button);
-    }   
-    
-    protected void slotClicked(Slot p_97778_, int p_97779_, int p_97780_, ClickType p_97781_) {
-    	if (p_97779_ >= menu.slots.size()) return;
-		super.slotClicked(p_97778_, p_97779_, p_97780_, p_97781_);
     }
 
-    @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
-        int i = this.leftPos;
-        int j = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        
-        double mouseX = Minecraft.getInstance().mouseHandler.xpos();
-        double mouseY = Minecraft.getInstance().mouseHandler.ypos();
-        mouseX = mouseX * (double)Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double)Minecraft.getInstance().getWindow().getScreenWidth();
-        mouseY = mouseY * (double)Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double)Minecraft.getInstance().getWindow().getScreenHeight();
+	protected void slotClicked(@NotNull Slot p_97778_, int p_97779_, int p_97780_, @NotNull ClickType p_97781_) {
+		if (p_97779_ >= menu.slots.size()) return;
+		super.slotClicked(p_97778_, p_97779_, p_97780_, p_97781_);
+	}
+
+	@Override
+	protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
+		RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+
+		double mouseX = Minecraft.getInstance().mouseHandler.xpos();
+		double mouseY = Minecraft.getInstance().mouseHandler.ypos();
+		mouseX = mouseX * (double) Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double) Minecraft.getInstance().getWindow().getScreenWidth();
+		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
         
         if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
         	ItemStack notes = menu.slots.get(0).getItem();

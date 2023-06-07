@@ -4,6 +4,7 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class EffigyTileEntity extends TileEntityBase {
     long previous = -1;
@@ -24,7 +25,7 @@ public class EffigyTileEntity extends TileEntityBase {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         previous = tag.getLong("previous");
     }

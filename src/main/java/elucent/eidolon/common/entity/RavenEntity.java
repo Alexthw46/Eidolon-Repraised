@@ -27,6 +27,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(Items.RABBIT, Items.BEETROOT_SEEDS);
@@ -57,7 +58,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level worldIn) {
+    protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
         FlyingPathNavigation flyingpathnavigator = new FlyingPathNavigation(this, worldIn);
         flyingpathnavigator.setCanOpenDoors(false);
         flyingpathnavigator.setCanFloat(true);
@@ -100,7 +101,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel world, @NotNull AgeableMob entity) {
         return EidolonEntities.RAVEN.get().create(world);
     }
 
@@ -124,7 +125,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (!this.isTame() && itemstack.getItem() == Items.BEETROOT_SEEDS) {
             if (!player.getAbilities().instabuild) {
@@ -133,7 +134,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
             if (!this.level.isClientSide) {
                 if (this.random.nextInt(10) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
-                    this.level.broadcastEntityEvent(this, (byte)7);
+                    this.level.broadcastEntityEvent(this, (byte) 7);
                 } else {
                     this.level.broadcastEntityEvent(this, (byte)6);
                 }
@@ -155,7 +156,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     }
 
     @Override
-    protected void doPush(Entity entityIn) {
+    protected void doPush(@NotNull Entity entityIn) {
         if (!(entityIn instanceof Player)) {
             super.doPush(entityIn);
         }

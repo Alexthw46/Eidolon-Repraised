@@ -4,6 +4,7 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 public class Tiers {
     public static class PewterTier implements Tier {
@@ -33,7 +34,7 @@ public class Tiers {
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.of(new ItemStack(Registry.PEWTER_INGOT.get()));
         }
 
@@ -67,7 +68,7 @@ public class Tiers {
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.EMPTY;
         }
 
@@ -101,7 +102,7 @@ public class Tiers {
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.of(new ItemStack(Registry.SILVER_INGOT.get()));
         }
 
@@ -135,7 +136,7 @@ public class Tiers {
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.EMPTY;
         }
 
@@ -169,7 +170,7 @@ public class Tiers {
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.of(Registry.DEATH_ESSENCE.get());
         }
 

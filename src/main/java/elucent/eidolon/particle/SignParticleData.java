@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class SignParticleData implements ParticleOptions {
     final Sign sign;
@@ -28,7 +29,7 @@ public class SignParticleData implements ParticleOptions {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public @NotNull ParticleType<?> getType() {
         return EidolonParticles.SIGN_PARTICLE.get();
     }
 
@@ -38,20 +39,20 @@ public class SignParticleData implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public @NotNull String writeToString() {
         return getClass().getSimpleName() + ":internal";
     }
 
     public static final Deserializer<SignParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
-        public SignParticleData fromCommand(ParticleType<SignParticleData> type, StringReader reader) throws CommandSyntaxException {
+        public @NotNull SignParticleData fromCommand(@NotNull ParticleType<SignParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             String loc = reader.readString();
             return new SignParticleData(Signs.find(new ResourceLocation(loc)));
         }
 
         @Override
-        public SignParticleData fromNetwork(ParticleType<SignParticleData> type, FriendlyByteBuf buf) {
+        public @NotNull SignParticleData fromNetwork(@NotNull ParticleType<SignParticleData> type, FriendlyByteBuf buf) {
             String loc = buf.readUtf();
             return new SignParticleData(Signs.find(new ResourceLocation(loc)));
         }

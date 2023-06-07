@@ -1,7 +1,6 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.common.world.EidolonAbstractTreeFeature;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.data.worldgen.features.OreFeatures;
@@ -31,8 +30,6 @@ public class Worldgen {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFG_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.CONFIGURED_FEATURE_REGISTRY, Eidolon.MODID);
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.PLACED_FEATURE_REGISTRY, Eidolon.MODID);
 
-    public static final RegistryObject<Feature<TreeConfiguration>> ILLWOOD_TREE_TEMPLATE = FEATURES.register("illwood_tree",
-            () -> new EidolonAbstractTreeFeature(TreeConfiguration.CODEC));
     static RegistryObject<PlacedFeature> LEAD_ORE_GEN, SILVER_ORE_GEN, ILLWOOD_CHECKED, ILLWOOD_PLACED;
 
     public static RegistryObject<ConfiguredFeature<?, ?>> LEAD_ORE_CFG, SILVER_ORE_CFG, ILLWOOD_TREE_CFG, ILLWOOD_SPAWN;
