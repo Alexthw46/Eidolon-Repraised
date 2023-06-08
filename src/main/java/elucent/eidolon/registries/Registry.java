@@ -18,6 +18,7 @@ import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.gui.WorktableContainer;
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
+import elucent.eidolon.recipe.DyeRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -69,6 +70,7 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
+    public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(new ResourceLocation(Eidolon.MODID, "illwood_logs"));
     public static TagKey<Item>
             INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead"));
     public static TagKey<Item> INGOTS_PEWTER = ItemTags.create(new ResourceLocation("forge", "ingots/pewter"));
@@ -531,7 +533,8 @@ public class Registry {
             WORKTABLE_RECIPE = RECIPE_TYPES.register("worktable", WorktableRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<CrucibleRecipe>>
             CRUCIBLE_RECIPE = RECIPE_TYPES.register("crucible", CrucibleRecipe.Serializer::new);
-
+    public static final RegistryObject<RecipeSerializer<DyeRecipe>>
+            DYE_RECIPE = RECIPE_TYPES.register("dye", DyeRecipe.Serializer::new);
     public static final RegistryObject<Attribute>
             MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
     public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));

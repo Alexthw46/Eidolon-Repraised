@@ -3,6 +3,7 @@ package elucent.eidolon.gui.jei;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.recipe.CrucibleRegistry;
+import elucent.eidolon.recipe.DyeRecipe;
 import elucent.eidolon.recipe.WorktableRegistry;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.ritual.RitualRegistry;
@@ -12,6 +13,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,11 @@ public class JEIRegistry implements IModPlugin {
         registry.addRecipes(CRUCIBLE_CATEGORY, CrucibleRegistry.getWrappedRecipes());
         registry.addRecipes(WORKTABLE_CATEGORY, WorktableRegistry.getWrappedRecipes());
         registry.addRecipes(RITUAL_CATEGORY, RitualRegistry.getWrappedRecipes());
+    }
+
+    @Override
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        registration.getCraftingCategory().addCategoryExtension(DyeRecipe.class, DyeRecipeCategory::new);
     }
 
 }

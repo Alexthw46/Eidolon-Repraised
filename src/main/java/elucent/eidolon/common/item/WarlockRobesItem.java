@@ -2,27 +2,25 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.IDyeable;
 import elucent.eidolon.common.item.model.WarlockArmorModel;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.extensions.IForgeItem;
 import org.jetbrains.annotations.NotNull;
 
-public class WarlockRobesItem extends ArmorItem implements IForgeItem {
+public class WarlockRobesItem extends ArmorItem implements IDyeable {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
     public static class Material implements ArmorMaterial {
@@ -78,6 +76,13 @@ public class WarlockRobesItem extends ArmorItem implements IForgeItem {
         super(Material.INSTANCE, slot, builderIn);
     }
 
+    @Override
+    public @NotNull Component getName(@NotNull ItemStack pStack) {
+        var og = super.getName(pStack);
+        if (!(pStack.hasTag() && pStack.getTag().contains("color"))) return og;
+        return Component.literal(og.getString() + " (" + Component.translatable(getColor(pStack).getName()).getString() + ")");
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
@@ -95,11 +100,17 @@ public class WarlockRobesItem extends ArmorItem implements IForgeItem {
                 return ClientRegistry.WARLOCK_ARMOR_MODEL;
             }
         });
-    } 
+    }
+
+    private DyeColor getColor(ItemStack stack) {
+        var tag = stack.getOrCreateTag();
+        return tag.contains("color") ? DyeColor.byId(tag.getInt("color")) : DyeColor.BLUE;
+    }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return Eidolon.MODID + ":textures/entity/warlock_robes.png";
+        DyeColor dyeColor = getColor(stack);
+        return Eidolon.MODID + ":textures/entity/warlock_robes/" + dyeColor.getName() + ".png";
     }
 }

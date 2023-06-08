@@ -1,0 +1,14 @@
+{
+  "type": "eidolon:dye",
+  "ingredients": [
+    {
+      "tag": "forge:dyes"
+    },
+    {
+      "item": "eidolon:warlock_cloak"
+    }
+  ],
+  "result": {
+    "item": "eidolon:warlock_cloak"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "eidolon:illwood_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "eidolon:illwood_planks"
+  }
+}

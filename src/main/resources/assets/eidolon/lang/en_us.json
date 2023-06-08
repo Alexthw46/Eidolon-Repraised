@@ -676,5 +676,21 @@
   "argument.eidolon.sign.unknown": "Unknown Sign",
   "argument.eidolon.deity.unknown": "Unknown Deity",
   "commands.eidolon.reputation.success.single": "Updated %s's Reputation",
-  "commands.eidolon.reputation.success.multiple": "Updated Reputation of %s players"
+  "commands.eidolon.reputation.success.multiple": "Updated Reputation of %s players",
+  "blue": "Blue",
+  "red": "Red",
+  "green": "Green",
+  "yellow": "Yellow",
+  "purple": "Purple",
+  "orange": "Orange",
+  "black": "Black",
+  "white": "White",
+  "gray": "Gray",
+  "brown": "Brown",
+  "cyan": "Cyan",
+  "pink": "Pink",
+  "lime": "Lime",
+  "magenta": "Magenta",
+  "light_blue": "Light Blue",
+  "light_gray": "Light Gray"
 }
