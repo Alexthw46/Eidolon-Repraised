@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor.ARGB32;
+import org.jetbrains.annotations.NotNull;
 
 public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEntity> {
     private final ModelPart stirrer;
@@ -41,7 +42,7 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
     }
 
     @Override
-    public void render(CrucibleTileEntity tile, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(CrucibleTileEntity tile, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
         RenderSystem.setShaderTexture(0, STIRRER_TEXTURE);
         float coeff = tile.stirTicks == 0 ? 0 : (tile.stirTicks - partialTicks) / 20.0f;

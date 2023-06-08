@@ -8,6 +8,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.blockentity.BedRenderer;
+import org.jetbrains.annotations.NotNull;
 
 public class BubbleParticle extends GenericParticle {
     final SpriteSet animation;
@@ -26,7 +27,7 @@ public class BubbleParticle extends GenericParticle {
     }
 
     @Override
-    public void render(VertexConsumer b, Camera info, float pticks) {
+    public void render(@NotNull VertexConsumer b, @NotNull Camera info, float pticks) {
         super.render(ClientConfig.BETTER_LAYERING.get() ? ClientEvents.getDelayedRender().getBuffer(RenderUtil.GLOWING_PARTICLE) : b, info, pticks);
     }
 }

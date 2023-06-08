@@ -28,12 +28,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.Random;
 
 public class EnchantedAshBlock extends BlockBase {
     public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
@@ -100,10 +97,10 @@ public class EnchantedAshBlock extends BlockBase {
         return this.recalculateSide(worldIn, pos, face, !worldIn.getBlockState(pos.above()).isRedstoneConductor(worldIn, pos));
     }
 
-    public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor worldIn, BlockPos pos, int flags, int recursionLeft) {
+    public void updateIndirectNeighbourShapes(@NotNull BlockState state, @NotNull LevelAccessor worldIn, @NotNull BlockPos pos, int flags, int recursionLeft) {
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
 
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             RedstoneSide redstoneside = state.getValue(FACING_PROPERTY_MAP.get(direction));
             if (redstoneside != RedstoneSide.NONE && !worldIn.getBlockState(blockpos$mutable.setWithOffset(pos, direction)).is(this)) {
                 blockpos$mutable.move(Direction.DOWN);
@@ -127,7 +124,7 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(@NotNull BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor worldIn, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (facing == Direction.DOWN) {
             return stateIn;
         } else if (facing == Direction.UP) {
@@ -202,9 +199,9 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, BlockState oldState, boolean isMoving) {
         if (!oldState.is(state.getBlock()) && !worldIn.isClientSide) {
-            for(Direction direction : Direction.Plane.VERTICAL) {
+            for (Direction direction : Direction.Plane.VERTICAL) {
                 worldIn.updateNeighborsAt(pos.relative(direction), this);
             }
 
@@ -233,18 +230,18 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.below();
         BlockState blockstate = worldIn.getBlockState(blockpos);
         return this.canPlaceOnTopOf(worldIn, blockpos, blockstate);
     }
 
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         if (!isMoving && !state.is(newState.getBlock())) {
             super.onRemove(state, worldIn, pos, newState, isMoving);
             if (!worldIn.isClientSide) {
-                for(Direction direction : Direction.values()) {
+                for (Direction direction : Direction.values()) {
                     worldIn.updateNeighborsAt(pos.relative(direction), this);
                 }
 
@@ -290,7 +287,7 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos, boolean isMoving) {
         if (!worldIn.isClientSide) {
             if (!state.canSurvive(worldIn, pos)) {
                 dropResources(state, worldIn, pos);
@@ -304,17 +301,12 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         return InteractionResult.PASS;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
-        //
-    }
-
     @Override
-    public boolean isSignalSource(BlockState state) {
+    public boolean isSignalSource(@NotNull BlockState state) {
         return false;
     }
 

@@ -30,9 +30,15 @@ public class Worldgen {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFG_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.CONFIGURED_FEATURE_REGISTRY, Eidolon.MODID);
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.PLACED_FEATURE_REGISTRY, Eidolon.MODID);
 
-    static RegistryObject<PlacedFeature> LEAD_ORE_GEN, SILVER_ORE_GEN, ILLWOOD_CHECKED, ILLWOOD_PLACED;
+    static final RegistryObject<PlacedFeature> LEAD_ORE_GEN;
+    static final RegistryObject<PlacedFeature> SILVER_ORE_GEN;
+    static final RegistryObject<PlacedFeature> ILLWOOD_CHECKED;
+    static final RegistryObject<PlacedFeature> ILLWOOD_PLACED;
 
-    public static RegistryObject<ConfiguredFeature<?, ?>> LEAD_ORE_CFG, SILVER_ORE_CFG, ILLWOOD_TREE_CFG, ILLWOOD_SPAWN;
+    public static final RegistryObject<ConfiguredFeature<?, ?>> LEAD_ORE_CFG;
+    public static final RegistryObject<ConfiguredFeature<?, ?>> SILVER_ORE_CFG;
+    public static final RegistryObject<ConfiguredFeature<?, ?>> ILLWOOD_TREE_CFG;
+    public static final RegistryObject<ConfiguredFeature<?, ?>> ILLWOOD_SPAWN;
 
     static {
 
@@ -71,7 +77,7 @@ public class Worldgen {
                 () -> new ConfiguredFeature<>(Feature.SIMPLE_RANDOM_SELECTOR, new SimpleRandomFeatureConfiguration(HolderSet.direct(ILLWOOD_CHECKED.getHolder().get()))));
 
         ILLWOOD_PLACED = PLACED_FEATURES.register("illwood_placed",
-                () -> new PlacedFeature(Holder.direct(ILLWOOD_SPAWN.get()), VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1F, 1))));
+                () -> new PlacedFeature(Holder.direct(ILLWOOD_SPAWN.get()), VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.01F, 0))));
     }
 
 

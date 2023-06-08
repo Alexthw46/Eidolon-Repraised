@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class LightSpell extends StaticSpell {
 
-    Deity deity;
+    final Deity deity;
 
     public LightSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, 5, signs);

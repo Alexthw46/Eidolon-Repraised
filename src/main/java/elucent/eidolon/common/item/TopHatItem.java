@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class TopHatItem extends ArmorItem {
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slot) {
+        public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
             return 1;
         }
 
@@ -42,17 +43,17 @@ public class TopHatItem extends ArmorItem {
         }
 
         @Override
-        public SoundEvent getEquipSound() {
+        public @NotNull SoundEvent getEquipSound() {
             return ArmorMaterials.LEATHER.getEquipSound();
         }
 
         @Override
-        public Ingredient getRepairIngredient() {
+        public @NotNull Ingredient getRepairIngredient() {
             return Ingredient.of(new ItemStack(Items.BLACK_WOOL));
         }
 
         @Override
-        public String getName() {
+        public @NotNull String getName() {
             return Eidolon.MODID + ":top_hat";
         }
 
@@ -78,7 +79,7 @@ public class TopHatItem extends ArmorItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this.loreTag != null) {
             tooltip.add(Component.literal(""));
             tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
@@ -95,7 +96,7 @@ public class TopHatItem extends ArmorItem {
         consumer.accept(new IClientItemExtensions() {
 
             @Override
-            public TopHatModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
+            public @NotNull TopHatModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
                 float pticks = Minecraft.getInstance().getFrameTime();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);

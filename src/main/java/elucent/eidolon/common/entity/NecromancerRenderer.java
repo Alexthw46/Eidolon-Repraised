@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class NecromancerRenderer extends MobRenderer<NecromancerEntity, NecromancerModel> {
     public NecromancerRenderer(Context erm) {
@@ -50,7 +51,7 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
         }
 
         @Override
-        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, NecromancerEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        public void render(@NotNull PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, @NotNull NecromancerEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.getRenderType());
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             model.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -58,7 +59,7 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
     }
 
     @Override
-    public ResourceLocation getTextureLocation(NecromancerEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull NecromancerEntity entity) {
         return new ResourceLocation(Eidolon.MODID, "textures/entity/necromancer.png");
     }
 }

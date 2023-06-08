@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import org.jetbrains.annotations.NotNull;
 
 public class CisternBlock extends BlockBase implements EntityBlock {
     public static final BooleanProperty TOP = BooleanProperty.create("top");
@@ -38,7 +39,7 @@ public class CisternBlock extends BlockBase implements EntityBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor world, @NotNull BlockPos pos, @NotNull BlockPos facingPos) {
         if (facing == Direction.UP) state = state.setValue(TOP, canConnectTo(world, pos.above(), Direction.UP));
         if (facing == Direction.DOWN) state = state.setValue(BOTTOM, canConnectTo(world, pos.below(), Direction.DOWN));
 
@@ -51,7 +52,7 @@ public class CisternBlock extends BlockBase implements EntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new CisternTileEntity(pos, state);
     }
 }

@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public interface IKnowledge {
         final KnowledgeImpl impl = new KnowledgeImpl();
 
         @Override
-        public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
             if (cap == INSTANCE) return (LazyOptional<T>) LazyOptional.of(() -> impl);
             else return LazyOptional.empty();
         }

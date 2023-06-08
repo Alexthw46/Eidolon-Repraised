@@ -1,20 +1,18 @@
 package elucent.eidolon.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleRenderType;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-
-import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.ClientRegistry;
+import elucent.eidolon.event.ClientEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 public class SpriteParticleRenderType implements ParticleRenderType {
     public static final SpriteParticleRenderType INSTANCE = new SpriteParticleRenderType();
@@ -35,7 +33,7 @@ public class SpriteParticleRenderType implements ParticleRenderType {
     }
 
     @Override
-    public void begin(BufferBuilder b, TextureManager tex) {
+    public void begin(@NotNull BufferBuilder b, @NotNull TextureManager tex) {
         beginRenderCommon(b, tex);
     }
 

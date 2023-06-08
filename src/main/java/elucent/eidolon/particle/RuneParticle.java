@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -80,7 +81,7 @@ public class RuneParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer b, Camera info, float pticks) {
+    public void render(@NotNull VertexConsumer b, Camera info, float pticks) {
         b = ClientConfig.BETTER_LAYERING.get() ? ClientEvents.getDelayedRender().getBuffer(RenderUtil.GLOWING_BLOCK_PARTICLE) : b;
         Vec3 vec3 = info.getPosition();
         float f = (float) (Mth.lerp(pticks, this.xo, this.x) - vec3.x());
@@ -144,7 +145,7 @@ public class RuneParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return RuneParticleRenderType.INSTANCE;
     }
 }

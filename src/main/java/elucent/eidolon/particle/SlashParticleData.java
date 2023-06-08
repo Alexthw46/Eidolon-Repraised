@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class SlashParticleData implements ParticleOptions {
     float r1 = 1, g1 = 1, b1 = 1, a1 = 1, r2 = 1, g2 = 1, b2 = 1, a2 = 0;
@@ -59,7 +60,7 @@ public class SlashParticleData implements ParticleOptions {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public @NotNull ParticleType<?> getType() {
         return type;
     }
 
@@ -73,13 +74,13 @@ public class SlashParticleData implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public @NotNull String writeToString() {
         return getClass().getSimpleName() + ":internal";
     }
 
     public static final Deserializer<SlashParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
-        public SlashParticleData fromCommand(ParticleType<SlashParticleData> type, StringReader reader) throws CommandSyntaxException {
+        public @NotNull SlashParticleData fromCommand(@NotNull ParticleType<SlashParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float r1 = reader.readFloat();
             reader.expect(' ');
@@ -133,7 +134,7 @@ public class SlashParticleData implements ParticleOptions {
         }
 
         @Override
-        public SlashParticleData fromNetwork(ParticleType<SlashParticleData> type, FriendlyByteBuf buf) {
+        public @NotNull SlashParticleData fromNetwork(@NotNull ParticleType<SlashParticleData> type, FriendlyByteBuf buf) {
             float r1 = buf.readFloat();
             float g1 = buf.readFloat();
             float b1 = buf.readFloat();

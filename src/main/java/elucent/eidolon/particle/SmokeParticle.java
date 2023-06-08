@@ -7,6 +7,7 @@ import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class SmokeParticle extends GenericParticle {
     public SmokeParticle(ClientLevel world, GenericParticleData data, double x, double y, double z, double vx, double vy, double vz) {
@@ -25,7 +26,7 @@ public class SmokeParticle extends GenericParticle {
     }
 
     @Override
-    public void render(VertexConsumer b, Camera info, float pticks) {
+    public void render(@NotNull VertexConsumer b, @NotNull Camera info, float pticks) {
         super.render(ClientConfig.BETTER_LAYERING.get() ? ClientEvents.getDelayedRender().getBuffer(RenderUtil.DELAYED_PARTICLE) : b, info, pticks);
     }
 }

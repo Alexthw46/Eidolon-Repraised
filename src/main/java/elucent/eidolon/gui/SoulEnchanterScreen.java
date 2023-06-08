@@ -26,6 +26,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -70,14 +71,15 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {Lighting.setupForFlatItems();
+    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
+        Lighting.setupForFlatItems();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        int k = (int)this.minecraft.getWindow().getGuiScale();
+        int k = (int) this.minecraft.getWindow().getGuiScale();
         RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
         Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
         matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
@@ -166,7 +168,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         }
     }
 
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         partialTicks = this.minecraft.getFrameTime();
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -174,7 +176,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         boolean flag = this.minecraft.player.getAbilities().instabuild;
         int i = this.menu.getSoulShardAmount();
 
-        for(int j = 0; j < 3; ++j) {
+        for (int j = 0; j < 3; ++j) {
             Enchantment enchantment = Enchantment.byId((this.menu).enchantClue[j]);
             int l = (this.menu).worldClue[j];
             int i1 = j + 1;

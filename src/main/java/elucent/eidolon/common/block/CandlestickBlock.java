@@ -63,10 +63,12 @@ public class CandlestickBlock extends BlockBase {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor worldIn, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         Direction direction = state.getValue(FACING);
-        if (direction == Direction.UP) return facing == Direction.DOWN && !this.canSurvive(state, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, worldIn, currentPos, facingPos);
-        else return facing.getOpposite() == state.getValue(FACING) && !state.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : state;
+        if (direction == Direction.UP)
+            return facing == Direction.DOWN && !this.canSurvive(state, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, worldIn, currentPos, facingPos);
+        else
+            return facing.getOpposite() == state.getValue(FACING) && !state.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : state;
     }
 
     @Override
@@ -105,12 +107,12 @@ public class CandlestickBlock extends BlockBase {
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, @NotNull Rotation rot) {
         return state.getValue(FACING) != Direction.UP ? state.setValue(FACING, rot.rotate(state.getValue(FACING))) : state;
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public @NotNull BlockState mirror(BlockState state, @NotNull Mirror mirrorIn) {
         return state.getValue(FACING) != Direction.UP ? state.rotate(mirrorIn.getRotation(state.getValue(FACING))) : state;
     }
 

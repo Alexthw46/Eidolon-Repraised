@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.NotNull;
 
 public class GenericParticleData implements ParticleOptions {
     float r1 = 1, g1 = 1, b1 = 1, a1 = 1, r2 = 1, g2 = 1, b2 = 1, a2 = 0;
@@ -57,7 +58,7 @@ public class GenericParticleData implements ParticleOptions {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public @NotNull ParticleType<?> getType() {
         return type;
     }
 
@@ -72,13 +73,13 @@ public class GenericParticleData implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public @NotNull String writeToString() {
         return getClass().getSimpleName() + ":internal";
     }
 
     public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<>() {
         @Override
-        public GenericParticleData fromCommand(ParticleType<GenericParticleData> type, StringReader reader) throws CommandSyntaxException {
+        public @NotNull GenericParticleData fromCommand(@NotNull ParticleType<GenericParticleData> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float r1 = reader.readFloat();
             reader.expect(' ');
@@ -123,7 +124,7 @@ public class GenericParticleData implements ParticleOptions {
         }
 
         @Override
-        public GenericParticleData fromNetwork(ParticleType<GenericParticleData> type, FriendlyByteBuf buf) {
+        public @NotNull GenericParticleData fromNetwork(@NotNull ParticleType<GenericParticleData> type, FriendlyByteBuf buf) {
             float r1 = buf.readFloat();
             float g1 = buf.readFloat();
             float b1 = buf.readFloat();

@@ -13,8 +13,10 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class ArmorModel extends HumanoidModel {
+public abstract class ArmorModel extends HumanoidModel<LivingEntity> {
     public EquipmentSlot slot;
     final ModelPart root;
     final ModelPart head;
@@ -57,30 +59,27 @@ public abstract class ArmorModel extends HumanoidModel {
     }
 
     @Override
-    protected Iterable<ModelPart> headParts() {
+    protected @NotNull Iterable<ModelPart> headParts() {
         return slot == EquipmentSlot.HEAD ? ImmutableList.of(head) : ImmutableList.of();
     }
 
     @Override
-    protected Iterable<ModelPart> bodyParts() {
+    protected @NotNull Iterable<ModelPart> bodyParts() {
         if (slot == EquipmentSlot.CHEST) {
             return ImmutableList.of(body, leftArm, rightArm);
-        }
-        else if (slot == EquipmentSlot.LEGS) {
+        } else if (slot == EquipmentSlot.LEGS) {
             return ImmutableList.of(leftLegging, rightLegging, pelvis);
-        }
-        else if (slot == EquipmentSlot.FEET) {
+        } else if (slot == EquipmentSlot.FEET) {
             return ImmutableList.of(leftFoot, rightFoot);
-        }
-        else return ImmutableList.of();
+        } else return ImmutableList.of();
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+    public void renderToBuffer(@NotNull PoseStack matrixStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         super.renderToBuffer(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public void copyFromDefault(HumanoidModel model) {
+    public void copyFromDefault(HumanoidModel<LivingEntity> model) {
         body.copyFrom(model.body);
         pelvis.copyFrom(body);
         leftLegging.copyFrom(leftLeg);

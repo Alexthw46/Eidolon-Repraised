@@ -10,6 +10,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class SignParticle extends TextureSheetParticle {
     final Sign sign;
@@ -46,12 +47,12 @@ public class SignParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer b, Camera info, float pticks) {
+    public void render(@NotNull VertexConsumer b, @NotNull Camera info, float pticks) {
         super.render(ClientConfig.BETTER_LAYERING.get() ? ClientEvents.getDelayedRender().getBuffer(RenderUtil.GLOWING_BLOCK_PARTICLE) : b, info, pticks);
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return SignParticleRenderType.INSTANCE;
     }
 }

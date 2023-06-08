@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.NotNull;
 
 public class SignParticleType extends ParticleType<SignParticleData> {
     public SignParticleType() {
@@ -17,7 +18,7 @@ public class SignParticleType extends ParticleType<SignParticleData> {
     }
 
     @Override
-    public Codec<SignParticleData> codec() {
+    public @NotNull Codec<SignParticleData> codec() {
         return SignParticleData.codecFor(this);
     }
 
@@ -27,16 +28,16 @@ public class SignParticleType extends ParticleType<SignParticleData> {
         }
 
         @Override
-        public Particle createParticle(SignParticleData data, ClientLevel world, double x, double y, double z, double mx, double my, double mz) {
+        public Particle createParticle(SignParticleData data, @NotNull ClientLevel world, double x, double y, double z, double mx, double my, double mz) {
             SignParticle ret = new SignParticle(world, data.sign, x, y, z, mx, my, mz);
             ret.pickSprite(new SpriteSet() {
                 @Override
-                public TextureAtlasSprite get(int particleAge, int particleMaxAge) {
+                public @NotNull TextureAtlasSprite get(int particleAge, int particleMaxAge) {
                     return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.sign.getSprite());
                 }
 
                 @Override
-                public TextureAtlasSprite get(RandomSource rand) {
+                public @NotNull TextureAtlasSprite get(@NotNull RandomSource rand) {
                     return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.sign.getSprite());
                 }
             });

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class PipeTileRenderer implements BlockEntityRenderer<PipeTileEntity> {
 
@@ -24,10 +25,10 @@ public class PipeTileRenderer implements BlockEntityRenderer<PipeTileEntity> {
     static final float L = 0.40625f, U = 0.59375f, W = U - L;
 
     @Override
-    public void render(PipeTileEntity tile, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(PipeTileEntity tile, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
         if (tile.tank.getContents().amount == 0) return;
-        float fill = (float)tile.tank.getContents().amount / tile.tank.getCapacity();
+        float fill = (float) tile.tank.getContents().amount / tile.tank.getCapacity();
         if (fill > 1) fill = 1;
         BlockState state = tile.getBlockState();
         TextureAtlasSprite water = tile.tank.getContents().reagent.getSprite();

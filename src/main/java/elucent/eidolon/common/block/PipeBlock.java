@@ -83,7 +83,7 @@ public class PipeBlock extends BlockBase implements EntityBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor world, @NotNull BlockPos pos, @NotNull BlockPos facingPos) {
         if (facing == state.getValue(OUT))
             state = state.setValue(OUT_ATTACHED, facingState.getBlock() == this && facingState.getValue(IN) == facing.getOpposite());
         if (facing == state.getValue(IN))
@@ -101,7 +101,7 @@ public class PipeBlock extends BlockBase implements EntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new PipeTileEntity(pos, state);
     }
 }

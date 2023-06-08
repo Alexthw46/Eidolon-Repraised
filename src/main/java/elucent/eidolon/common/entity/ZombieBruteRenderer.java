@@ -5,6 +5,7 @@ import elucent.eidolon.Eidolon;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class ZombieBruteRenderer extends MobRenderer<ZombieBruteEntity, ZombieBruteModel> {
     public ZombieBruteRenderer(Context erm) {
@@ -12,7 +13,7 @@ public class ZombieBruteRenderer extends MobRenderer<ZombieBruteEntity, ZombieBr
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ZombieBruteEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ZombieBruteEntity entity) {
         return new ResourceLocation(Eidolon.MODID, "textures/entity/zombie_brute.png");
     }
 }

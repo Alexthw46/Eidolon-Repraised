@@ -27,7 +27,7 @@ public class SoulEnchanterBlock extends HorizontalBlockBase implements EntityBlo
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, BlockHitResult ray) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult ray) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -40,13 +40,13 @@ public class SoulEnchanterBlock extends HorizontalBlockBase implements EntityBlo
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new SoulEnchanterTileEntity(pos, state);
     }
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return (level1, pos, state1, tile) -> ((SoulEnchanterTileEntity) tile).tick();
     }
 }

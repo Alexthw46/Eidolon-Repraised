@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -80,14 +81,14 @@ public class WorktableContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public void slotsChanged(Container inventoryIn) {
+    public void slotsChanged(@NotNull Container inventoryIn) {
         callable.execute((p_217069_1_, p_217069_2_) -> {
             updateCraftingResult(this.containerId, p_217069_1_, player, core, result);
         });
     }
 
     @Override
-    public void removed(Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
         callable.execute((p_217068_2_, p_217068_3_) -> {
             this.clearContainer(playerIn, this.core);
@@ -96,12 +97,12 @@ public class WorktableContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return stillValid(this.callable, playerIn, Registry.WORKTABLE.get());
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -152,7 +153,7 @@ public class WorktableContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean canTakeItemForPickAll(ItemStack stack, Slot slotIn) {
+    public boolean canTakeItemForPickAll(@NotNull ItemStack stack, Slot slotIn) {
         return slotIn.container != result && super.canTakeItemForPickAll(stack, slotIn);
     }
 

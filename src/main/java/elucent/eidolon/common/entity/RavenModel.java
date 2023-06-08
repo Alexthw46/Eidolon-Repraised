@@ -11,6 +11,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class RavenModel extends EntityModel<RavenEntity> {
 	private final ModelPart body;
@@ -97,10 +98,10 @@ public class RavenModel extends EntityModel<RavenEntity> {
 		head.yRot = (float)Math.toRadians(netHeadYaw);
 	}
 
-	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		body.render(matrixStack, buffer, packedLight, packedOverlay);
-	}
+    @Override
+    public void renderToBuffer(@NotNull PoseStack matrixStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        body.render(matrixStack, buffer, packedLight, packedOverlay);
+    }
 
 	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;

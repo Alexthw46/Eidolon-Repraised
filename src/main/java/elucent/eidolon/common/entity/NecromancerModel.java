@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.AbstractIllager;
+import org.jetbrains.annotations.NotNull;
 
 public class NecromancerModel extends EntityModel<NecromancerEntity> {
 	private final ModelPart body, head, arms, leftArm, rightArm, leftLeg, rightLeg;
@@ -54,18 +55,18 @@ public class NecromancerModel extends EntityModel<NecromancerEntity> {
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
-	@Override
-	public void setupAnim(NecromancerEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-		this.head.xRot = headPitch * ((float)Math.PI / 180F);
-		this.arms.xRot = -0.75F;
-		if (this.riding) {
-			this.rightArm.xRot = (-(float)Math.PI / 5F);
-			this.rightArm.yRot = 0.0F;
-			this.rightArm.zRot = 0.0F;
-			this.leftArm.xRot = (-(float)Math.PI / 5F);
-			this.leftArm.yRot = 0.0F;
-			this.leftArm.zRot = 0.0F;
+    @Override
+    public void setupAnim(@NotNull NecromancerEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
+        this.head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.arms.xRot = -0.75F;
+        if (this.riding) {
+            this.rightArm.xRot = (-(float) Math.PI / 5F);
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.xRot = (-(float) Math.PI / 5F);
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
 			this.rightLeg.xRot = -1.4137167F;
 			this.rightLeg.yRot = ((float)Math.PI / 10F);
 			this.rightLeg.zRot = 0.07853982F;
@@ -134,10 +135,10 @@ public class NecromancerModel extends EntityModel<NecromancerEntity> {
 		this.rightArm.visible = !flag;
 	}
 
-	@Override
-	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		body.render(matrixStack, buffer, packedLight, packedOverlay);
-	}
+    @Override
+    public void renderToBuffer(@NotNull PoseStack matrixStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        body.render(matrixStack, buffer, packedLight, packedOverlay);
+    }
 
 	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MultiItemSacrifice extends ItemSacrifice {
 
-    public List<Ingredient> items = new ArrayList<>();
+    public final List<Ingredient> items = new ArrayList<>();
 
     public MultiItemSacrifice(ItemLike main, Object... items) {
         super(main);

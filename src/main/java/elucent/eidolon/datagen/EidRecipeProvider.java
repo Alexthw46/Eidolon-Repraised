@@ -29,6 +29,10 @@ public class EidRecipeProvider extends RecipeProvider {
 
         makeStonecutter(pFinishedRecipeConsumer, Registry.SMOOTH_STONE_BRICK.getBlock(), Registry.SMOOTH_STONE_ARCH.get(), "smooth_stone_arch");
         ShapelessRecipeBuilder.shapeless(Registry.MOSSY_SMOOTH_STONE_BRICKS.get()).requires(Registry.SMOOTH_STONE_BRICK.getBlock()).requires(Items.VINE).unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(Registry.SMOOTH_STONE_BRICK.getBlock())).save(pFinishedRecipeConsumer, Eidolon.prefix("mossy_smooth_stone_bricks"));
+
+        woodFromLogs(pFinishedRecipeConsumer, Registry.ILLWOOD_BARK.get(), Registry.ILLWOOD_LOG.get());
+        planksFromLog(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS.getBlock(), Registry.ILLWOOD_LOGS);
+        strippedLogToWood(pFinishedRecipeConsumer, Registry.STRIPPED_ILLWOOD_LOG.get(), Registry.STRIPPED_ILLWOOD_BARK.get());
     }
 
     private void buildDecoPack(Consumer<FinishedRecipe> consumer, Registry.DecoBlockPack decoBlockPack, List<Block> extras) {
@@ -92,5 +96,11 @@ public class EidRecipeProvider extends RecipeProvider {
     public static void makeStonecutter(Consumer<FinishedRecipe> consumer, ItemLike input, ItemLike output, int quantity, String reg) {
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), output, quantity).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(input)).save(consumer, new ResourceLocation(Eidolon.MODID, reg + "_stonecutter_" + STONECUTTER_COUNTER));
         STONECUTTER_COUNTER++;
+    }
+
+    private static void strippedLogToWood(Consumer<FinishedRecipe> recipeConsumer, ItemLike stripped, ItemLike output) {
+        ShapedRecipeBuilder.shaped(output, 3).define('#', stripped).pattern("##").pattern("##").group("bark")
+                .unlockedBy("has_illwood", InventoryChangeTrigger.TriggerInstance.hasItems(stripped))
+                .save(recipeConsumer);
     }
 }

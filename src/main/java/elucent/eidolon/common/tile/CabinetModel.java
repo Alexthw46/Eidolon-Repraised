@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class CabinetModel extends EntityModel<Entity> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -36,14 +37,14 @@ public class CabinetModel extends EntityModel<Entity> {
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
-	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    @Override
+    public void setupAnim(@NotNull Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
-	}
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		left_door.render(poseStack, buffer, packedLight, packedOverlay);
-		right_door.render(poseStack, buffer, packedLight, packedOverlay);
-	}
+    @Override
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        left_door.render(poseStack, buffer, packedLight, packedOverlay);
+        right_door.render(poseStack, buffer, packedLight, packedOverlay);
+    }
 }

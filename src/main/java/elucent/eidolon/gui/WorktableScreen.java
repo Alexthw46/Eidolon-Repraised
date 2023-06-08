@@ -2,12 +2,12 @@ package elucent.eidolon.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class WorktableScreen extends AbstractContainerScreen<WorktableContainer> {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID,"textures/gui/worktable.png");
@@ -19,7 +19,7 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableContainer>
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
 
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -27,11 +27,11 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableContainer>
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int x, int y) {
+    protected void renderLabels(@NotNull PoseStack matrixStack, int x, int y) {
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.setShaderTexture(0, BACKGROUND);
         int i = this.leftPos;
         int j = (this.height - this.imageHeight) / 2;

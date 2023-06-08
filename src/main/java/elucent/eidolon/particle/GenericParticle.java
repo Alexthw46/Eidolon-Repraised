@@ -1,12 +1,13 @@
 package elucent.eidolon.particle;
 
-import java.awt.Color;
-
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
 
 public class GenericParticle extends TextureSheetParticle {
     final GenericParticleData data;
@@ -54,7 +55,7 @@ public class GenericParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return SpriteParticleRenderType.INSTANCE;
     }
 }

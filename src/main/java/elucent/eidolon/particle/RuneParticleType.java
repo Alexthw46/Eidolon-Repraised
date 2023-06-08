@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.NotNull;
 
 public class RuneParticleType extends ParticleType<RuneParticleData> {
     public RuneParticleType() {
@@ -17,7 +18,7 @@ public class RuneParticleType extends ParticleType<RuneParticleData> {
     }
 
     @Override
-    public Codec<RuneParticleData> codec() {
+    public @NotNull Codec<RuneParticleData> codec() {
         return RuneParticleData.codecFor(this);
     }
 
@@ -27,16 +28,16 @@ public class RuneParticleType extends ParticleType<RuneParticleData> {
         }
 
         @Override
-        public Particle createParticle(RuneParticleData data, ClientLevel world, double x, double y, double z, double mx, double my, double mz) {
+        public Particle createParticle(@NotNull RuneParticleData data, @NotNull ClientLevel world, double x, double y, double z, double mx, double my, double mz) {
             RuneParticle ret = new RuneParticle(world, data, x, y, z, mx, my, mz);
             ret.pickSprite(new SpriteSet() {
                 @Override
-                public TextureAtlasSprite get(int particleAge, int particleMaxAge) {
+                public @NotNull TextureAtlasSprite get(int particleAge, int particleMaxAge) {
                     return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.rune.getSprite());
                 }
 
                 @Override
-                public TextureAtlasSprite get(RandomSource rand) {
+                public @NotNull TextureAtlasSprite get(@NotNull RandomSource rand) {
                     return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.rune.getSprite());
                 }
             });

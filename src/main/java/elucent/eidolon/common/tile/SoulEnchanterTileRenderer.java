@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchanterTileEntity> {
     public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation(Eidolon.MODID, "entity/enchanter_book");
@@ -26,17 +27,17 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
     }
 
     @Override
-    public void render(SoulEnchanterTileEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(SoulEnchanterTileEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 0.75D, 0.5D);
         float f = ClientEvents.getClientTicks();
         matrixStackIn.translate(0.0D, 0.1F + Mth.sin(f * 0.1F) * 0.01F, 0.0D);
 
         float f1;
-        for(f1 = tileEntityIn.nextPageAngle - tileEntityIn.pageAngle; f1 >= (float)Math.PI; f1 -= ((float)Math.PI * 2F)) {
+        for (f1 = tileEntityIn.nextPageAngle - tileEntityIn.pageAngle; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) {
         }
 
-        while(f1 < -(float)Math.PI) {
+        while (f1 < -(float) Math.PI) {
             f1 += ((float)Math.PI * 2F);
         }
 

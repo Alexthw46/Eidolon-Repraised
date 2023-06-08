@@ -11,6 +11,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -69,7 +70,7 @@ public class GlowingSlashParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return GlowParticleRenderType.INSTANCE;
     }
     
@@ -78,7 +79,7 @@ public class GlowingSlashParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer vc, Camera info, float pticks) {
+    public void render(@NotNull VertexConsumer vc, Camera info, float pticks) {
         VertexConsumer b = ClientConfig.BETTER_LAYERING.get() ? ClientEvents.getDelayedRender().getBuffer(RenderUtil.DELAYED_PARTICLE) : vc;
 
         float x = (float) (Mth.lerp(pticks, this.xo, this.x) - info.getPosition().x());

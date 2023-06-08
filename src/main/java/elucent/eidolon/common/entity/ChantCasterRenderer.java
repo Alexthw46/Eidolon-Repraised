@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
@@ -26,11 +27,11 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
     }
 
     @Override
-    public void render(ChantCasterEntity entity, float yaw, float pticks, PoseStack mStack, MultiBufferSource mb, int lmap) {
+    public void render(ChantCasterEntity entity, float yaw, float pticks, PoseStack mStack, @NotNull MultiBufferSource mb, int lmap) {
         mStack.pushPose();
         VertexConsumer b = ClientEvents.getDelayedRender().getBuffer(RenderUtil.GLOWING_SPRITE);
         VertexConsumer sb = ClientEvents.getDelayedRender().getBuffer(RenderUtil.GLOWING_BLOCK_PARTICLE);
-        
+
         Minecraft mc = Minecraft.getInstance();
         double ex = Mth.lerp(pticks, entity.xOld, entity.getX());
         double ey = Mth.lerp(pticks, entity.yOld, entity.getY());
@@ -180,7 +181,7 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ChantCasterEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ChantCasterEntity entity) {
         return new ResourceLocation(Eidolon.MODID, "textures/particle/beam.png");
     }
 }

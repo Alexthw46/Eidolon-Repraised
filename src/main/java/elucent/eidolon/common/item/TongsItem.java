@@ -1,9 +1,10 @@
 package elucent.eidolon.common.item;
 
 import elucent.eidolon.common.block.PipeBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class TongsItem extends ItemBase {
     public TongsItem(Properties properties) {
@@ -11,7 +12,7 @@ public class TongsItem extends ItemBase {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext ctx) {
+    public @NotNull InteractionResult useOn(UseOnContext ctx) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
         if (state.getBlock() instanceof PipeBlock && ctx.getClickedFace() != state.getValue(PipeBlock.IN)) {
             BlockState newState = state.setValue(PipeBlock.OUT, ctx.getClickedFace());

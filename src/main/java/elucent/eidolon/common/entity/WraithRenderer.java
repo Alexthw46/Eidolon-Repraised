@@ -5,6 +5,7 @@ import elucent.eidolon.Eidolon;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class WraithRenderer extends MobRenderer<WraithEntity, WraithModel> {
     public WraithRenderer(Context erm) {
@@ -12,7 +13,7 @@ public class WraithRenderer extends MobRenderer<WraithEntity, WraithModel> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(WraithEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull WraithEntity entity) {
         return new ResourceLocation(Eidolon.MODID, "textures/entity/wraith.png");
     }
 }

@@ -2,16 +2,12 @@ package elucent.eidolon.common.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class ZombieBruteModel extends EntityModel<ZombieBruteEntity> {
 	private final ModelPart chest;
@@ -41,21 +37,21 @@ public class ZombieBruteModel extends EntityModel<ZombieBruteEntity> {
 		return LayerDefinition.create(meshdefinition, 96, 64);
 	}
 
-	@Override
-	public void setupAnim(ZombieBruteEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		chest.getChild("right_leg").xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-		chest.getChild("left_leg").xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		chest.getChild("right_arm").xRot = (float)Math.toRadians(-80);
-		chest.getChild("left_arm").xRot = (float)Math.toRadians(-80);
-		chest.getChild("right_arm").zRot = (float)Math.toRadians(5);
-		chest.getChild("left_arm").zRot = (float)Math.toRadians(-5);
+    @Override
+    public void setupAnim(@NotNull ZombieBruteEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        chest.getChild("right_leg").xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
+        chest.getChild("left_leg").xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        chest.getChild("right_arm").xRot = (float) Math.toRadians(-80);
+        chest.getChild("left_arm").xRot = (float) Math.toRadians(-80);
+        chest.getChild("right_arm").zRot = (float) Math.toRadians(5);
+        chest.getChild("left_arm").zRot = (float) Math.toRadians(-5);
 
-		chest.getChild("head").xRot = (float)Math.toRadians(headPitch);
-		chest.getChild("head").yRot = (float)Math.toRadians(netHeadYaw);
-	}
+        chest.getChild("head").xRot = (float) Math.toRadians(headPitch);
+        chest.getChild("head").yRot = (float) Math.toRadians(netHeadYaw);
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		chest.render(poseStack, buffer, packedLight, packedOverlay);
-	}
+    @Override
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        chest.render(poseStack, buffer, packedLight, packedOverlay);
+    }
 }

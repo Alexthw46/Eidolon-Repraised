@@ -1,19 +1,20 @@
 package elucent.eidolon.common.block;
 
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class TwoHighHorizontalBlockBase extends BlockBase {
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
@@ -24,14 +25,14 @@ public class TwoHighHorizontalBlockBase extends BlockBase {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader world, @NotNull BlockPos pos) {
         return super.canSurvive(state, world, pos) && world.isEmptyBlock(pos.above());
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity entity, @NotNull ItemStack stack) {
         world.setBlockAndUpdate(pos.above(), defaultBlockState().setValue(HALF, Half.TOP)
-        	.setValue(HORIZONTAL_FACING, state.getValue(HORIZONTAL_FACING)));
+                .setValue(HORIZONTAL_FACING, state.getValue(HORIZONTAL_FACING)));
     }
 
     @Override

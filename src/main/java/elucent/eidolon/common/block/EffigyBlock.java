@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class EffigyBlock extends HorizontalWaterloggableBlock implements EntityBlock {
     public EffigyBlock(Properties properties) {
@@ -12,7 +13,7 @@ public class EffigyBlock extends HorizontalWaterloggableBlock implements EntityB
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new EffigyTileEntity(pos, state);
     }
 }

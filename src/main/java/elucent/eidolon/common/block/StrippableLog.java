@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 public class StrippableLog extends RotatedPillarBlock {
-    Supplier<Block> strippedState;
+    final Supplier<Block> strippedState;
 
     public StrippableLog(Properties properties, Supplier<Block> stateSupplier) {
         super(properties);

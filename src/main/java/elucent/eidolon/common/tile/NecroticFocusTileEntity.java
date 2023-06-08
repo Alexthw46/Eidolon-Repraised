@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class NecroticFocusTileEntity extends TileEntityBase implements IRitualItemFocus {
     ItemStack stack = ItemStack.EMPTY;
@@ -50,7 +51,7 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         stack = ItemStack.of(tag.getCompound("stack"));
     }
