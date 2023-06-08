@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
-version = '0.3.2.1'
+version = '0.3.2.2'
 group = 'elucent.eidolon'
 archivesBaseName = 'eidolon'
 

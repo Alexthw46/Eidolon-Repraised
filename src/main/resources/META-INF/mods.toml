@@ -1,18 +1,18 @@
 modLoader = "javafml" #mandatory
 loaderVersion = "[42,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license = "All rights reserved"
-issueTrackerURL = "http://my.issue.tracker/" #optional
+issueTrackerURL = "https://github.com/Alexthw46/Eidolon-Repraised/issues" #optional
 [[mods]] #mandatory
 modId = "eidolon" #mandatory
 version = "${file.jarVersion}" #mandatory
-displayName = "Eidolon" #mandatory
+displayName = "Eidolon : Repraised" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
 # displayURL="http://example.com/" #optional
-# logoFile="examplemod.png" #optional
-# credits="Thanks for this example mod goes to Java" #optional
+logoFile = "logo.png" #optional
+credits = "elucent as the original creator and maker of most of the assets" #optional
 authors = "elucent up to 0.3.0, currently maintained by Alexthw" #optional
 description = '''
-A spooky magic mod about necromancy.
+A spooky magic mod about necromancy. Now with a touch of opposing light!
 '''
 [[dependencies.eidolon]]
 modId = "curios"
