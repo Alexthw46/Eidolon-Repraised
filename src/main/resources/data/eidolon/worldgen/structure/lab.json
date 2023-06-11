@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "eidolon:lab",
+  "step": "underground_structures",
+  "biomes": "#minecraft:is_overworld",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "size": 1,
+  "start_height": {
+    "absolute": -5
+  },
+  "max_distance_from_center": 80,
+  "use_expansion_hack": true
+}

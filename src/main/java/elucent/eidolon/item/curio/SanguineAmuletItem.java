@@ -32,7 +32,6 @@ public class SanguineAmuletItem extends ItemBase {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            //MinecraftForgeClient.registerTooltipComponentFactory(SanguineAmuletTooltipInfo.class, SanguineAmuletTooltipComponent::new);
             MinecraftForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
             return null;
         });

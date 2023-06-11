@@ -1,0 +1,6 @@
+{
+    "type": "forge:add_features",
+    "biomes": { "type": "forge:any" },
+    "features": "eidolon:silver_ore",
+    "step": "underground_ores"
+}

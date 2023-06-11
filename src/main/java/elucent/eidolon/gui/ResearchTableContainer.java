@@ -63,9 +63,9 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
     
     @Override
-    public void clicked(int p_150400_, int p_150401_, ClickType p_150402_, Player p_150403_) {
-        if (p_150400_ >= slots.size()) return;
-        super.clicked(p_150400_, p_150401_, p_150402_, p_150403_);
+    public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer) {
+        if (pSlotId >= slots.size()) return;
+        super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
     
     public void updateSlots() {

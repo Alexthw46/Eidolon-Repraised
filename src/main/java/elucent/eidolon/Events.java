@@ -191,30 +191,6 @@ public class Events {
         }
     }
 
-    /*
-    @SubscribeEvent
-    public void registerSpawns(BiomeLoadingEvent ev) {
-        ResourceKey<Biome> key = ResourceKey.<Biome>create(ForgeRegistries.Keys.BIOMES, ev.getName());
-        if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && ev.getCategory() != Biome.BiomeCategory.MUSHROOM) {
-            ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Entities.WRAITH.get(), Config.WRAITH_SPAWN_WEIGHT.get(), 1, 2));
-            ev.getSpawns().addSpawn(MobCategory.MONSTER,
-                new MobSpawnSettings.SpawnerData(Entities.ZOMBIE_BRUTE.get(), Config.ZOMBIE_BRUTE_SPAWN_WEIGHT.get(), 1, 2));
-        }
-        if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD) && BiomeDictionary.hasType(key, BiomeDictionary.Type.FOREST)) {
-            ev.getSpawns().addSpawn(MobCategory.CREATURE,
-                new MobSpawnSettings.SpawnerData(Entities.RAVEN.get(), Config.RAVEN_SPAWN_WEIGHT.get(), 2, 5));
-        }
-        if (key.equals(Biomes.OLD_GROWTH_PINE_TAIGA) || key.equals(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || key.equals(Biomes.FLOWER_FOREST))
-            ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.ABOVEGROUND_SLUG_WEIGHT.get(), 2, 5));
-        if (key.equals(Biomes.LUSH_CAVES))
-            ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.UNDERGROUND_SLUG_WEIGHT.get(), 2, 5));
-    }
-
-     */
-
     @SubscribeEvent
     public void registerCustomAI(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {

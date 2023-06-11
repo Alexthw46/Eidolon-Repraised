@@ -6,9 +6,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import static elucent.eidolon.Registry.ITEMS;
+import static elucent.eidolon.Registry.itemProps;
 
 public class Entities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Eidolon.MODID);
@@ -43,11 +48,14 @@ public class Entities {
     }
 
     static <T extends Mob> RegistryObject<EntityType<T>> addEntity(String name, int color1, int color2, float width, float height, EntityType.EntityFactory<T> factory, MobCategory kind) {
-        //ITEMS.register("spawn_" + name, () -> new SpawnEggItem((EntityType<? extends T>) type, color1, color2, itemProps().tab(CreativeModeTab.TAB_MISC)));
-        return ENTITIES.register(name, () -> EntityType.Builder.of(factory, kind)
+        RegistryObject<EntityType<T>> entity = ENTITIES.register(name, () -> EntityType.Builder.of(factory, kind)
                 .setTrackingRange(64)
                 .setUpdateInterval(1)
                 .sized(width, height)
                 .build(Eidolon.MODID + ":" + name));
+
+        ITEMS.register("spawn_" + name, () -> new ForgeSpawnEggItem(entity, color1, color2, itemProps().tab(CreativeModeTab.TAB_MISC)));
+
+        return entity;
     }
 }

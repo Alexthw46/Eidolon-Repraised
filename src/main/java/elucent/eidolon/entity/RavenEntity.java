@@ -71,11 +71,11 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
 
     @Override
     protected PathNavigation createNavigation(Level worldIn) {
-        FlyingPathNavigation flyingpathnavigator = new FlyingPathNavigation(this, worldIn);
-        flyingpathnavigator.setCanOpenDoors(false);
-        flyingpathnavigator.setCanFloat(true);
-        flyingpathnavigator.setCanPassDoors(true);
-        return flyingpathnavigator;
+        FlyingPathNavigation navigation = new FlyingPathNavigation(this, worldIn);
+        navigation.setCanOpenDoors(false);
+        navigation.setCanFloat(true);
+        navigation.setCanPassDoors(true);
+        return navigation;
     }
 
     public static AttributeSupplier createAttributes() {

@@ -6,6 +6,7 @@ import elucent.eidolon.gui.SoulEnchanterScreen;
 import elucent.eidolon.gui.WoodenBrewingStandScreen;
 import elucent.eidolon.gui.WorktableScreen;
 import elucent.eidolon.item.AthameItem;
+import elucent.eidolon.item.curio.SanguineAmuletItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
@@ -39,6 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -88,9 +90,11 @@ public class Eidolon {
         WorldGen.preInit();
          */
         MinecraftForge.EVENT_BUS.register(new Events());
+
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.register(new ClientEvents());
             FMLJavaModLoadingContext.get().getModEventBus().register(new ClientRegistry());
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(Eidolon::registerTooltipComponent);
             return new Object();
         });
     }
@@ -170,5 +174,9 @@ public class Eidolon {
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
+    }
+
+    private static void registerTooltipComponent(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(SanguineAmuletItem.SanguineAmuletTooltipInfo.class, SanguineAmuletItem.SanguineAmuletTooltipComponent::new);
     }
 }

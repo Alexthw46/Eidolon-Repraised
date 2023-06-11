@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:lush_caves"
+  ],
+  "spawners": {
+    "type": "eidolon:slimy_slug",
+    "weight": 7,
+    "minCount": 2,
+    "maxCount": 5
+  }
+}

@@ -53,6 +53,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -75,7 +76,7 @@ public class Registry {
     public static TagKey<Item> GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
 
     static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Eidolon.MODID);
-    static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Eidolon.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Eidolon.MODID);
     static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Eidolon.MODID);
     static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Eidolon.MODID);
     static final DeferredRegister<RecipeSerializer<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Eidolon.MODID);
@@ -84,7 +85,7 @@ public class Registry {
 
     public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
-    static Item.Properties itemProps() {
+    public static Item.Properties itemProps() {
         return new Item.Properties().tab(Eidolon.TAB);
     }
 

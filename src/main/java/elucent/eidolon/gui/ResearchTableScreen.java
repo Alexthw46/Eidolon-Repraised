@@ -78,7 +78,15 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
     
     @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-    	if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
+		Slot slotUnderMouse = getSlotUnderMouse();
+
+		if (slotUnderMouse == null) {
+			return super.mouseClicked(mouseX, mouseY, button);
+		}
+
+		ItemStack stack = slotUnderMouse.getItem();
+
+		if (stack.getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
         	ItemStack notes = menu.slots.get(0).getItem();
         	if (!notes.hasTag() || !notes.getTag().contains("research")) return false;
         	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
@@ -106,6 +114,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         		return true;
         	}
         }
+
     	return super.mouseClicked(mouseX, mouseY, button);
     }   
     
