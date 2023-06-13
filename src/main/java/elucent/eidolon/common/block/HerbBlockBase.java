@@ -4,7 +4,6 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -77,7 +76,7 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     }
 
     public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {
-        int i = this.getAge(pState) + this.getBonemealAgeIncrease(pLevel);
+        int i = this.getAge(pState) + 1;
         int j = this.getMaxAge();
         if (i > j) {
             i = j;
@@ -98,17 +97,12 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
         return this.defaultBlockState().setValue(AGE, pAge);
     }
 
-    protected int getBonemealAgeIncrease(Level pLevel) {
-        return Mth.nextInt(pLevel.random, 2, 5);
-    }
-
-
     public boolean isValidBonemealTarget(@NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, boolean pIsClient) {
         return !this.isMaxAge(pState);
     }
 
     public boolean isBonemealSuccess(@NotNull Level pLevel, @NotNull RandomSource pRandom, @NotNull BlockPos pPos, @NotNull BlockState pState) {
-        return true;
+        return pRandom.nextFloat() < 0.45D;
     }
 
     public void performBonemeal(@NotNull ServerLevel pLevel, @NotNull RandomSource pRandom, @NotNull BlockPos pPos, @NotNull BlockState pState) {

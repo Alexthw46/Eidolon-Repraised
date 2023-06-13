@@ -5,7 +5,7 @@ issueTrackerURL = "https://github.com/Alexthw46/Eidolon-Repraised/issues" #optio
 [[mods]] #mandatory
 modId = "eidolon" #mandatory
 version = "${file.jarVersion}" #mandatory
-displayName = "Eidolon : Repraised" #mandatory
+displayName = "Eidolon:Repraised" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
 # displayURL="http://example.com/" #optional
 logoFile = "logo.png" #optional
@@ -14,6 +14,12 @@ authors = "elucent up to 0.3.0, currently maintained by Alexthw" #optional
 description = '''
 A spooky magic mod about necromancy. Now with a touch of opposing light!
 '''
+[[dependencies.eidolon]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.2, 1.19.3)"
+ordering = "AFTER"
+side = "BOTH"
 [[dependencies.eidolon]]
 modId = "curios"
 mandatory = true

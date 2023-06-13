@@ -18,28 +18,11 @@ public class WorldGen {
         return STRUCTURES.register(name, () -> structure);
     }
 
-    public static StructurePieceType LAB_PIECE, STRAY_TOWER_PIECE;
-
-    public static RegistryObject<StructureFeature<NoneFeatureConfiguration>> LAB_STRUCTURE = addStructure("lab",
-        new LabStructure(NoneFeatureConfiguration.CODEC),
-        GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
-        new StructureFeatureConfiguration(7, 5, 1337));
-
-    public static RegistryObject<StructureFeature<NoneFeatureConfiguration>> STRAY_TOWER_STRUCTURE = addStructure("stray_tower",
-        new StrayTowerStructure(NoneFeatureConfiguration.CODEC),
-        GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
-        new StructureFeatureConfiguration(16, 8, 1341));
-
     public static RegistryObject<StructureFeature<NoneFeatureConfiguration>> CATACOMB_STRUCTURE = addStructure("catacomb",
         new CatacombStructure(NoneFeatureConfiguration.CODEC),
         GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
         new StructureFeatureConfiguration(11, 7, 1347));
 
-    public static ConfiguredStructureFeature<NoneFeatureConfiguration, ? extends StructureFeature<NoneFeatureConfiguration>> LAB_FEATURE, STRAY_TOWER_FEATURE, CATACOMB_FEATURE;
-
-    public static void preInit() {
-        STRUCTURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
 
     public static void init() {
 
@@ -75,39 +58,7 @@ public class WorldGen {
         }
     }
     
-    public void onWorldLoad() {
-        if (event.getWorld() instanceof ServerLevel sl) {
-            ChunkGenerator chunkGenerator = sl.getChunkSource().getGenerator();
 
-            if (chunkGenerator instanceof FlatLevelSource && sl.dimensionType().equals(DimensionType.OVERWORLD_LOCATION)) {
-                return;
-            }
-
-            StructureSettings worldStructureConfig = chunkGenerator.getSettings();
-            HashMap<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> structureMap = new HashMap<>();
-            
-            for(Map.Entry<ResourceKey<Biome>, Biome> biomeEntry : sl.registryAccess().ownedRegistryOrThrow(net.minecraft.core.Registry.BIOME_REGISTRY).entrySet()) {
-                Biome.BiomeCategory biomeCategory = biomeEntry.getValue().getBiomeCategory();
-                if (Config.LAB_ENABLED.get()) 
-    	        	associateBiomeToConfiguredStructure(structureMap, LAB_FEATURE, biomeEntry.getKey());
-                if ((biomeCategory == BiomeCategory.ICY || biomeCategory == BiomeCategory.TAIGA) && Config.STRAY_TOWER_ENABLED.get())
-    	        	associateBiomeToConfiguredStructure(structureMap, STRAY_TOWER_FEATURE, biomeEntry.getKey());
-                if (Config.CATACOMB_ENABLED.get()) 
-    	        	associateBiomeToConfiguredStructure(structureMap, CATACOMB_FEATURE, biomeEntry.getKey());
-            }
-            
-            ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
-            worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !structureMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);
-            structureMap.forEach((key, value) -> tempStructureToMultiMap.put(key, ImmutableMultimap.copyOf(value)));
-            worldStructureConfig.configuredStructures = tempStructureToMultiMap.build();
-
-            Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(worldStructureConfig.structureConfig());
-            tempMap.putIfAbsent(STRAY_TOWER_STRUCTURE.get(), STRUCTURE_SETTINGS.get(STRAY_TOWER_STRUCTURE.getId()));
-            tempMap.putIfAbsent(LAB_STRUCTURE.get(), STRUCTURE_SETTINGS.get(LAB_STRUCTURE.getId()));
-            tempMap.putIfAbsent(CATACOMB_STRUCTURE.get(), STRUCTURE_SETTINGS.get(CATACOMB_STRUCTURE.getId()));
-            worldStructureConfig.structureConfig = tempMap;
-        }
-    }
 
 
 }

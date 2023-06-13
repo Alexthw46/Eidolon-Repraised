@@ -1,11 +1,11 @@
 package elucent.eidolon.common.entity;
 
+import elucent.eidolon.datagen.EidBiomeTagProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -43,28 +43,11 @@ public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
         getEntityData().set(TYPE, 0);
     }
 
-    /*
-    @Override
-    public void onAddedToWorld() {
-        Biome b = level.getBiome(getOnPos()).value();
-        if (Biomes.LUSH_CAVES.getRegistryName().equals(b.getRegistryName())) {
-            getEntityData().set(TYPE, 0);
-        }
-        else if (Biomes.OLD_GROWTH_PINE_TAIGA.location().equals(b.getRegistryName())
-                 || Biomes.OLD_GROWTH_SPRUCE_TAIGA.location().equals(b.getRegistryName())) {
-                    getEntityData().set(TYPE, 0);
-        }
-        else if (Biomes.FLOWER_FOREST.location().equals(b.getRegistryName())) {
-            getEntityData().set(TYPE, 2);
-        }
-    }
-     */
-
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         Holder<Biome> holder = pLevel.getBiome(this.blockPosition());
-        if (holder.is(BiomeTags.SPAWNS_COLD_VARIANT_FROGS)) {
+        if (holder.is(EidBiomeTagProvider.BROWN_SLUG_TAG)) {
             this.setVariant(2);
-        } else if (holder.is(BiomeTags.SPAWNS_WARM_VARIANT_FROGS)) {
+        } else if (holder.is(EidBiomeTagProvider.BANANA_SLUG_TAG)) {
             this.setVariant(1);
         } else {
             this.setVariant(0);

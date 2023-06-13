@@ -1,10 +1,10 @@
 {
   "type": "forge:add_spawns",
-  "biomes": "#eidolon:slimy_slug",
+  "biomes": "#eidolon:banana_slug",
   "spawners": {
     "type": "eidolon:slimy_slug",
-    "weight": 7,
+    "weight": 5,
     "minCount": 2,
-    "maxCount": 5
+    "maxCount": 3
   }
 }

@@ -32,7 +32,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -65,9 +64,8 @@ public class Events {
         if (event.getObject() instanceof Player) {
             event.addCapability(new ResourceLocation(Eidolon.MODID, "knowledge"), new IKnowledge.Provider());
             event.addCapability(new ResourceLocation(Eidolon.MODID, "player_data"), new IPlayerData.Provider());
-        }
-        if (event.getObject() instanceof LivingEntity)
             event.addCapability(new ResourceLocation(Eidolon.MODID, "soul"), new ISoul.Provider());
+        }
     }
 
     @SubscribeEvent
@@ -201,18 +199,6 @@ public class Events {
         }
     }
 
-
-/*
-        if (key.equals(Biomes.OLD_GROWTH_PINE_TAIGA) || key.equals(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || key.equals(Biomes.FLOWER_FOREST))
-            ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.ABOVEGROUND_SLUG_WEIGHT.get(), 2, 5));
-        if (key.equals(Biomes.LUSH_CAVES))
-            ev.getSpawns().addSpawn(MobCategory.AMBIENT,
-                new MobSpawnSettings.SpawnerData(Entities.SLIMY_SLUG.get(), Config.UNDERGROUND_SLUG_WEIGHT.get(), 2, 5));
-    }
-
-     */
-
     @SubscribeEvent
     public void registerCustomAI(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {
@@ -295,7 +281,7 @@ public class Events {
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
-        if ((isWither || event.getSource().isMagic())) {
+        if (isWither || event.getSource().isMagic()) {
             if (event.getSource().getEntity() instanceof LivingEntity living
                 && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
@@ -315,11 +301,4 @@ public class Events {
         });
     }
 
-    @SubscribeEvent
-    public void onGetSpeedFactor(StuckInBlockEvent event) {
-        if (event.getStuckMultiplier().length() < 1.0f && event.getEntity() instanceof LivingEntity living && living.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
-            Vec3 diff = new Vec3(1, 1, 1).subtract(event.getStuckMultiplier()).scale(0.5);
-            event.setStuckMultiplier(new Vec3(1, 1, 1).subtract(diff));
-        }
-    }
 }
