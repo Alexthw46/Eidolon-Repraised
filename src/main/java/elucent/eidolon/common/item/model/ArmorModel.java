@@ -81,7 +81,7 @@ public abstract class ArmorModel extends HumanoidModel<LivingEntity> {
         super.renderToBuffer(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public void copyFromDefault(HumanoidModel<LivingEntity> model) {
+    public void copyFromDefault(HumanoidModel<?> model) {
         body.copyFrom(model.body);
         pelvis.copyFrom(body);
         leftLegging.copyFrom(leftLeg);

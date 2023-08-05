@@ -9,9 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +36,7 @@ public class BrazierTileRenderer implements BlockEntityRenderer<BrazierTileEntit
             Ritual ritual = tileEntityIn.ritual;
             float r = ritual.getRed(), g = ritual.getGreen(), b = ritual.getBlue();
             RenderUtil.dragon(matrixStackIn, buffer, 0.5, 3.0, 0.5, 1, r, g, b);
-            TextureAtlasSprite sprite = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ritual.getSymbol());
+            TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol());
 
             BlockPos pos = tileEntityIn.getBlockPos();
             RenderUtil.litBillboard(matrixStackIn, buffer, 0.5, 3.0, 0.5, r, g, b, sprite);

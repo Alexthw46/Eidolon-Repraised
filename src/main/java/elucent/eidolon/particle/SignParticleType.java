@@ -6,10 +6,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SignParticleType extends ParticleType<SignParticleData> {
@@ -33,12 +33,12 @@ public class SignParticleType extends ParticleType<SignParticleData> {
             ret.pickSprite(new SpriteSet() {
                 @Override
                 public @NotNull TextureAtlasSprite get(int particleAge, int particleMaxAge) {
-                    return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.sign.getSprite());
+                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.getSprite());
                 }
 
                 @Override
                 public @NotNull TextureAtlasSprite get(@NotNull RandomSource rand) {
-                    return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ret.sign.getSprite());
+                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.getSprite());
                 }
             });
             return ret;

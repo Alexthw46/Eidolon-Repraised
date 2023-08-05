@@ -14,10 +14,10 @@ import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +62,7 @@ public class ChantPage extends Page {
         String title = I18n.get(this.title);
         int titleWidth = Minecraft.getInstance().font.width(title);
         PoseStack mStack = guiGraphics.pose();
-        drawText(gui, guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
+        drawText(guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
 
         RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
         Player entity = Minecraft.getInstance().player;
@@ -81,21 +81,21 @@ public class ChantPage extends Page {
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             CodexGui.blit(guiGraphics, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
 
-            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+            RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
             Sign sign = chant[i];
             float flicker = 0.875f + 0.125f * (float)Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks()));
             RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), baseX + i * 24 + 4, y + 32, 16, 16,
-                sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
             tess.end();
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), baseX + i * 24 + 4, y + 32, 16, 16,
-                sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
             tess.end();
         }
         RenderSystem.disableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        drawWrappingText(gui, guiGraphics, I18n.get(text), x + 4, y + 72, 120);
+        drawWrappingText(guiGraphics, I18n.get(text), x + 4, y + 72, 120);
     }
 }

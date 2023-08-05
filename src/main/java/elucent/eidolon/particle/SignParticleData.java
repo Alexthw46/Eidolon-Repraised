@@ -18,10 +18,8 @@ public class SignParticleData implements ParticleOptions {
 
     public static Codec<SignParticleData> codecFor(ParticleType<?> type) {
         return RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("sign").forGetter((d) -> d.sign.getRegistryName().toString())
-        ).apply(instance, (sign) -> {
-            return new SignParticleData(Signs.find(new ResourceLocation(sign)));
-        }));
+                Codec.STRING.fieldOf("sign").forGetter((d) -> d.sign.getRegistryName().toString())
+        ).apply(instance, (sign) -> new SignParticleData(Signs.find(new ResourceLocation(sign)))));
     }
 
     public SignParticleData(Sign sign) {

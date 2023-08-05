@@ -107,7 +107,7 @@ public class SummoningStaffItem extends ItemBase {
                 Optional<EntityType<?>> etype = EntityType.by(tag);
                 if (etype.isPresent() && !level.isClientSide) {
                     tag.remove("UUID");
-                    Optional<Entity> e = etype.get().create(tag, level);
+                    @SuppressWarnings("AccessStaticViaInstance") Optional<Entity> e = etype.get().create(tag, level);
                     if (e.isPresent()) {
                         e.get().setPos(pos);
                         EntityUtil.enthrall(entity, (LivingEntity) e.get());

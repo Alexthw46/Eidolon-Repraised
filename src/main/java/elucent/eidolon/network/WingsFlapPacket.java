@@ -1,14 +1,14 @@
 package elucent.eidolon.network;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import elucent.eidolon.capability.IPlayerData;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraft.world.level.Level;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 public class WingsFlapPacket {
     final UUID uuid;
@@ -37,9 +37,7 @@ public class WingsFlapPacket {
             if (world != null) {
                 Player player = world.getPlayerByUUID(packet.uuid);
                 if (player != null) {
-                    player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
-                        d.tryFlapWings(player);
-                    });
+                    player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> d.tryFlapWings(player));
                 }
             }
         });

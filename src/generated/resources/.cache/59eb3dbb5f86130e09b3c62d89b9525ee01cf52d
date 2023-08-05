@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-04T15:25:01.1680975	Loot Tables
+// 1.20.1	2023-08-05T12:07:41.7518731	Loot Tables
 2e9ac49affb379155257954e38f5aafbd7db70e4 data/eidolon/loot_tables/blocks/bone_pile.json
 2fe13bbcd0b8f9d569181cd95b92c9a01fda0c62 data/eidolon/loot_tables/blocks/bone_pile_slab.json
 fbc2c4964ac1845e21de977bb2d460681f67d86e data/eidolon/loot_tables/blocks/bone_pile_stairs.json
@@ -16,6 +16,7 @@ ec8d38b430cdac36563969ad7a1db56eb28119d8 data/eidolon/loot_tables/blocks/elder_p
 316693f939ee5e0be72ce720e75440be27e0432c data/eidolon/loot_tables/blocks/illwood_log.json
 7f92cf56c2315621a78118ce09a4b69fb002c69d data/eidolon/loot_tables/blocks/illwood_planks.json
 70b4cf81621be2bc3e3093bde9217fd2fb7853ee data/eidolon/loot_tables/blocks/illwood_planks_fence.json
+dc119f53b1ec036ca7ca18150daf74132fd74f23 data/eidolon/loot_tables/blocks/illwood_planks_fence_gate.json
 1ac3ef72c51c6bd7e44280628af94d5276f12999 data/eidolon/loot_tables/blocks/illwood_planks_slab.json
 e0a3cd86c5f8b016095d8ac4435a557c3a74a551 data/eidolon/loot_tables/blocks/illwood_planks_stairs.json
 9a2421ebce66166aa13590b6e11be5120f95fa76 data/eidolon/loot_tables/blocks/illwood_sapling.json

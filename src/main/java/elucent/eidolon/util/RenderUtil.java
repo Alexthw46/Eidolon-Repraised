@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -69,7 +70,7 @@ public class RenderUtil {
                     .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
                     .setLightmapState(new RenderStateShard.LightmapStateShard(false))
                     .setTransparencyState(ADDITIVE_TRANSPARENCY)
-                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setTextureState(new RenderStateShard.TextureStateShard(InventoryMenu.BLOCK_ATLAS, false, false))
                     .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingSpriteShader))
                     .createCompositeState(false)
     );
@@ -115,7 +116,7 @@ public class RenderUtil {
                     .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
                     .setLightmapState(new RenderStateShard.LightmapStateShard(false))
                     .setTransparencyState(ADDITIVE_TRANSPARENCY)
-                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setTextureState(new RenderStateShard.TextureStateShard(InventoryMenu.BLOCK_ATLAS, false, false))
                     .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingParticleShader))
                     .createCompositeState(false)
     );
@@ -126,7 +127,7 @@ public class RenderUtil {
             RenderType.CompositeState.builder()
                     .setLightmapState(new RenderStateShard.LightmapStateShard(false))
                     .setTransparencyState(NORMAL_TRANSPARENCY)
-                    .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                    .setTextureState(new RenderStateShard.TextureStateShard(InventoryMenu.BLOCK_ATLAS, false, false))
                     .setShaderState(new ShaderStateShard(ClientRegistry::getVaporShader))
                     .createCompositeState(false)
     );

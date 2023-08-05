@@ -12,11 +12,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
@@ -122,7 +122,7 @@ public class RuneParticle extends TextureSheetParticle {
         offY.sub(avector3f[3]);
         offY.mul(0.5f);
 
-        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
+        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
 
         for (int i = 0; i < 1; i++) {
 //        	float a = Mth.PI * i + Mth.PI * 2 * (age + pticks) / lifetime;

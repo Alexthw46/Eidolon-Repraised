@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor.ARGB32;
+import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -56,8 +56,8 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
             matrixStackIn.popPose();
         }
         if (tile.hasWater) {
-            TextureAtlasSprite water = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
-                .apply(new ResourceLocation("minecraft", "block/water_still"));
+            TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                    .apply(new ResourceLocation("minecraft", "block/water_still"));
             VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
             Matrix4f mat = matrixStackIn.last().pose();
             int color = BiomeColors.getAverageWaterColor(tile.getLevel(), tile.getBlockPos());

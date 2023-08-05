@@ -15,12 +15,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
@@ -101,18 +101,18 @@ public class CodexGui extends Screen {
 
         RenderSystem.enableBlend();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         bgx = baseX + 16;
         Tesselator tess = Tesselator.getInstance();
         for (Sign sign : chant) {
             /*
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
-                    1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
+                    1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(rune.getSprite()));
             tess.end();
             bgx += 12;
              */
             RenderUtil.litQuad(mStack.pose(), MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
-                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
             tess.end();
             bgx += 24;
         }
@@ -123,13 +123,13 @@ public class CodexGui extends Screen {
             /*
             Sign rune = chant.get(i);
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
-                flicker, flicker, flicker, 0.5f * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
+                flicker, flicker, flicker, 0.5f * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(rune.getSprite()));
             tess.end();
             bgx += 12;
              */
             Sign sign = chant.get(i);
             RenderUtil.litQuad(mStack.pose(), MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
-                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
             tess.end();
             bgx += 24;
         }

@@ -8,8 +8,7 @@ import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -30,7 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -64,25 +63,24 @@ public class NecromancerEntity extends SpellcasterIllager {
         hack = false;
         if (this.level.isClientSide && this.isCastingSpell()) {
             IllagerSpell spelltype = getCurrentSpell();
-            float f = this.yBodyRot * ((float)Math.PI / 180F) + Mth.cos((float)this.tickCount * 0.6662F) * 0.25F;
+            float f = this.yBodyRot * ((float) Math.PI / 180F) + Mth.cos((float) this.tickCount * 0.6662F) * 0.25F;
             float f1 = Mth.cos(f);
             float f2 = Mth.sin(f);
             if (spelltype == IllagerSpell.FANGS) {
                 Particles.create(EidolonParticles.SPARKLE_PARTICLE)
-                    .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
-                    .randomVelocity(0.05f).randomOffset(0.025f)
-                    .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
-                    .setSpin(0.4f)
-                    .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
-                    .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
-            }
-            else if (spelltype == IllagerSpell.SUMMON_VEX) {
+                        .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
+                        .randomVelocity(0.05f).randomOffset(0.025f)
+                        .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
+                        .setSpin(0.4f)
+                        .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
+                        .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
+            } else if (spelltype == IllagerSpell.SUMMON_VEX) {
                 Particles.create(EidolonParticles.WISP_PARTICLE)
-                    .setColor(0.75f, 1, 1, 0.125f, 0.125f, 0.875f)
-                    .randomVelocity(0.05f).randomOffset(0.025f)
-                    .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
-                    .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
-                    .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
+                        .setColor(0.75f, 1, 1, 0.125f, 0.125f, 0.875f)
+                        .randomVelocity(0.05f).randomOffset(0.025f)
+                        .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
+                        .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
+                        .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
             }
         }
     }
@@ -134,7 +132,7 @@ public class NecromancerEntity extends SpellcasterIllager {
             Vec3 diff = target.position().subtract(NecromancerEntity.this.position());
             Vec3 norm = diff.normalize();
             if (!level.isClientSide) {
-                for (int i = 0; i < 3; i ++) {
+                for (int i = 0; i < 3; i++) {
                     NecromancerSpellEntity spell = new NecromancerSpellEntity(level, getX(), getEyeY(), getZ(), norm.x + random.nextFloat() * 0.1 - 0.05, norm.y + 0.04 * diff.length() / 2 + random.nextFloat() * 0.1 - 0.05, norm.z + random.nextFloat() * 0.1 - 0.05, i * 5);
                     spell.casterId = new UUID(0, getId());
                     level.addFreshEntity(spell);
@@ -171,21 +169,19 @@ public class NecromancerEntity extends SpellcasterIllager {
         protected void performSpellCasting() {
             if (!level.isClientSide) {
                 EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
-                ResourceLocation biomeKey = ForgeRegistries.BIOMES.getKey(level.getBiome(blockPosition()).value());
-                ResourceKey<Biome> biomeEntry = ResourceKey.create(ForgeRegistries.Keys.BIOMES, biomeKey);
-                /*TODO: fix this
-                if (type == EntityType.SKELETON && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SNOWY))
+                Holder<Biome> biomeKey = level.getBiome(blockPosition());
+                if (type == EntityType.SKELETON && biomeKey.is(Tags.Biomes.IS_COLD))
                     type = EntityType.STRAY;
-                if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SANDY))
+                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_SANDY))
                     type = EntityType.HUSK;
-                if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.OCEAN))
+                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
                     type = EntityType.DROWNED;
-                 */
-                Monster entity = (Monster)type.create(level);
-                entity.setPos(getX(), getY(), getZ());
+                var entity = type.create(level);
+                if (!(entity instanceof Monster thrall)) return;
+                thrall.setPos(getX(), getY(), getZ());
                 level.addFreshEntity(entity);
-                entity.setTarget(getTarget());
-                EntityUtil.enthrall(NecromancerEntity.this, entity);
+                thrall.setTarget(getTarget());
+                EntityUtil.enthrall(NecromancerEntity.this, thrall);
                 Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
             }
         }
@@ -197,7 +193,7 @@ public class NecromancerEntity extends SpellcasterIllager {
 
         public void tick() {
             if (NecromancerEntity.this.getTarget() != null) {
-                NecromancerEntity.this.getLookControl().setLookAt(NecromancerEntity.this.getTarget(), (float)NecromancerEntity.this.getMaxHeadYRot(), (float)NecromancerEntity.this.getMaxHeadXRot());
+                NecromancerEntity.this.getLookControl().setLookAt(NecromancerEntity.this.getTarget(), (float) NecromancerEntity.this.getMaxHeadYRot(), (float) NecromancerEntity.this.getMaxHeadXRot());
             }
         }
     }
@@ -211,7 +207,7 @@ public class NecromancerEntity extends SpellcasterIllager {
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).isPresent() && e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).resolve().get().getReputation((Player)e, Deities.DARK_DEITY.getId()) >= 50)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).isPresent() && e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).resolve().get().getReputation((Player) e, Deities.DARK_DEITY.getId()) >= 50)).setUnseenMemoryTicks(300));
     }
 
     protected @NotNull SoundEvent getCastingSoundEvent() {
@@ -220,10 +216,10 @@ public class NecromancerEntity extends SpellcasterIllager {
 
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 100.0D)
-            .add(Attributes.MOVEMENT_SPEED, 0.25D)
-            .add(Attributes.FOLLOW_RANGE, 12.0D)
-            .build();
+                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.FOLLOW_RANGE, 12.0D)
+                .build();
     }
 
     @Override

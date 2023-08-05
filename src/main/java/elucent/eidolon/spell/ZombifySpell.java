@@ -10,7 +10,6 @@ import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -74,7 +73,7 @@ public class ZombifySpell extends PrayerSpell {
 
     private void zombify(Villager villager, ServerLevel level) {
         ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-        zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+        zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
         zombievillager.setVillagerData(villager.getVillagerData());
         zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
         zombievillager.setTradeOffers(villager.getOffers().createTag());

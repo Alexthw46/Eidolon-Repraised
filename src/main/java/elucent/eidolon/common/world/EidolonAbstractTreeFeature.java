@@ -35,9 +35,7 @@ public class EidolonAbstractTreeFeature extends Feature<TreeConfiguration> {
     }
 
     public static boolean isAirOrLeavesAt(LevelSimulatedReader reader, BlockPos pos) {
-        return reader.isStateAtPosition(pos, (state) -> {
-            return state.isAir() || state.is(BlockTags.LEAVES);
-        });
+        return reader.isStateAtPosition(pos, (state) -> state.isAir() || state.is(BlockTags.LEAVES));
     }
 
     public static boolean isAirOrLeavesOrLogsAt(LevelSimulatedReader reader, BlockPos pos) {

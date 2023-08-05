@@ -13,8 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,10 +72,10 @@ public class RitualPage extends Page {
         tess.end();
         //RenderSystem.enableTexture();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         for (int j = 0; j < 2; j++) {
             RenderUtil.litQuad(guiGraphics.pose(), MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
-                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ritual.getSymbol()));
+                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol()));
             tess.end();
         }
         RenderSystem.disableBlend();

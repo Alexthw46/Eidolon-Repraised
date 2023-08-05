@@ -17,12 +17,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -110,11 +110,11 @@ public class SignIndexPage extends Page {
                     colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.getColor());
                     mStack.popPose();
                 }
-                RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+                RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
                     float r = sign.getRed(), g = sign.getGreen(), b = sign.getBlue();
                     RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 12, yy + 12, 24, 24,
-                            sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
+                            sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
                     tess.end();
                 }
                 RenderSystem.disableBlend();

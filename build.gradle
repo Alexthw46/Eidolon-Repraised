@@ -22,7 +22,7 @@ apply plugin: 'net.neoforged.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
-version = '0.3.2.2.beta-1.20.1'
+version = '0.3.2.3.beta-1.20.1'
 archivesBaseName = 'eidolon'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -41,7 +41,7 @@ minecraft {
             arg "-mixin.config=" + archivesBaseName + ".mixins.json"
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'

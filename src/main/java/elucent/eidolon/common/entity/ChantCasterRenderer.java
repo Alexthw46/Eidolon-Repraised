@@ -11,10 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -41,14 +41,14 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
         double pz = Mth.lerp(pticks, mc.player.zOld, mc.player.getZ());
 //        mStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 //        mStack.translate(-px, -py, -pz);
-        TextureAtlasSprite beam = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Eidolon.MODID, "particle/beam"));
-        TextureAtlasSprite ring = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Eidolon.MODID, "particle/ring"));
+        TextureAtlasSprite beam = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/beam"));
+        TextureAtlasSprite ring = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/ring"));
 
         Vec3 look = entity.look;
         yaw = (float) Mth.atan2(look.x, look.z);
         Vec3 left = new Vec3(Math.cos(yaw), 0, -Math.sin(yaw));
         Vec3 up = left.cross(look);
-        
+
         SignSequence spell = SignSequence.deserializeNbt(entity.getEntityData().get(ChantCasterEntity.SIGNS));
         int i = 0;
         int sz = Math.max(0, spell.seq.size() - 1);
@@ -77,7 +77,7 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
                 Vector3f dx = new Vector3f((float)dxd.x, (float)dxd.y, (float)dxd.z);
                 Vector3f dy = new Vector3f((float)dyd.x, (float)dyd.y, (float)dyd.z);
 
-                TextureAtlasSprite spr = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(s.getSprite());
+                TextureAtlasSprite spr = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(s.getSprite());
 
                 float brightMod = Mth.clamp(Mth.sin(a + Mth.TWO_PI * entity.tickCount / 20), 0, 1);
                 brightMod *= brightMod;

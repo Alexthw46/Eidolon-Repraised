@@ -19,10 +19,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -112,10 +112,10 @@ public class RuneIndexPage extends Page {
                     colorBlit(mStack, -12, -12, 128, 20, 24, 24, 256, 256, ColorUtil.packColor(255, 255, 255, 255));
                     mStack.popPose();
                 }
-                RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+                RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 for (int j = 0; j < (hover ? 2 : 1); j++) {
                     RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 6, yy + 6, 8, 8,
-                        1, 1, 1, 0.75f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(runes[i].getSprite()));
+                            1, 1, 1, 0.75f, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(runes[i].getSprite()));
                     tess.end();
                 }
                 RenderSystem.disableBlend();

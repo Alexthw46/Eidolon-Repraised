@@ -22,6 +22,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -81,7 +82,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             if (k1 == 0) {
                 pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1, j + 14 + 19 * l, 0, 185, 108, 19);
             } else {
-                String s = "" + k1;
+                String s = String.valueOf(k1);
                 int l1 = 86 - this.font.width(s);
                 FormattedText formattedtext = EnchantmentNames.getInstance().getRandomName(this.font, l1);
                 int i2 = 6839882;
@@ -134,7 +135,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         Lighting.setupFor3DItems();
     }
 
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         pPartialTick = this.minecraft.getFrameTime();
         this.renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);

@@ -25,7 +25,7 @@ public class TitlePage extends Page {
     public void render(CodexGui gui, @NotNull GuiGraphics mStack, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
         String title = I18n.get(this.title);
         int titleWidth = Minecraft.getInstance().font.width(title);
-        drawText(gui, mStack, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
-        drawWrappingText(gui, mStack, I18n.get(text), x + 4, y + 24, 120);
+        drawText(mStack, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
+        drawWrappingText(mStack, I18n.get(text), x + 4, y + 24, 120);
     }
 }

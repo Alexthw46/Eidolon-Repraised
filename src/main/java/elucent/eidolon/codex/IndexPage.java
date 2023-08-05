@@ -109,7 +109,7 @@ public class IndexPage extends Page {
         for (int i = 0; i < entries.length; i++)
             if (entries[i].isUnlocked()) {
                 mStack.renderItem(entries[i].icon, x + 2, y + 8 + i * 20);
-                drawText(gui, mStack, I18n.get(entries[i].chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
+                drawText(mStack, I18n.get(entries[i].chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
             }
     }
 }

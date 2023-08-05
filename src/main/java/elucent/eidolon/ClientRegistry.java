@@ -467,7 +467,7 @@ public class ClientRegistry {
                 int k = guiGraphics.guiHeight() - 32 + 3;
                 guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 84, 182, 5);
                 //TODO
-                if (true) {
+                if (false) {
                     guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 74, 182, 5);
                 } else if (j > 0) {
                     guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);

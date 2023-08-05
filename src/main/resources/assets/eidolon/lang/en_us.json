@@ -677,6 +677,7 @@
   "argument.eidolon.deity.unknown": "Unknown Deity",
   "commands.eidolon.reputation.success.single": "Updated %s's Reputation",
   "commands.eidolon.reputation.success.multiple": "Updated Reputation of %s players",
+  "eidolon.message.prayer_cooldown": "You should wait before using this prayer again.",
   "blue": "Blue",
   "red": "Red",
   "green": "Green",

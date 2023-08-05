@@ -56,9 +56,7 @@ public class WoodenStandBlock extends BrewingStandBlock {
         } else {
             BlockEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof WoodenStandTileEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, p) -> {
-                    return new WoodenBrewingStandContainer(id, inventory, ((WoodenStandTileEntity) tileentity), ((WoodenStandTileEntity) tileentity).dataAccess);
-                }, ((WoodenStandTileEntity) tileentity).getDisplayName()), pos);
+                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, p) -> new WoodenBrewingStandContainer(id, inventory, ((WoodenStandTileEntity) tileentity), ((WoodenStandTileEntity) tileentity).dataAccess), ((WoodenStandTileEntity) tileentity).getDisplayName()), pos);
                 player.awardStat(Stats.INTERACT_WITH_BREWINGSTAND);
             }
 

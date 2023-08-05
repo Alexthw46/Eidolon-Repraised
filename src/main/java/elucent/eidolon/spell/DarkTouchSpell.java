@@ -7,12 +7,14 @@ import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +49,6 @@ public class DarkTouchSpell extends StaticSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        //TODO
         if (event.getSource().getEntity() instanceof LivingEntity living
             && !event.getSource().getMsgId().equals(living.damageSources().wither().getMsgId())
             && living.getMainHandItem().hasTag()
@@ -57,7 +58,7 @@ public class DarkTouchSpell extends StaticSpell {
             if (event.getAmount() <= 0) event.setCanceled(true);
             int prevHurtResist = event.getEntity().invulnerableTime;
             event.getEntity().invulnerableTime = 0;
-            if (event.getEntity().hurt(living.damageSources().mobAttack(living), amount)) {
+            if (event.getEntity().hurt(DamageTypeData.source(living.level, DamageTypes.WITHER, living, null), amount)) {
                 if (living.getHealth() <= 0) event.setCanceled(true);
                 else living.invulnerableTime = prevHurtResist;
             }

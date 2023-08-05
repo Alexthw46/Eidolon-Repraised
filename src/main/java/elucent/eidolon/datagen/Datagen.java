@@ -29,6 +29,8 @@ public class Datagen {
         gen.addProvider(event.includeServer(), new EidRecipeProvider(gen));
         gen.addProvider(event.includeServer(), new EidBiomeTagProvider(gen, provider, fileHelper));
         gen.addProvider(event.includeServer(), new EidWorldgenProvider(output, provider));
+        gen.addProvider(event.includeServer(), new EidDamageProvider.DamageTypeDataProvider(output, provider));
+        gen.addProvider(event.includeServer(), new EidDamageProvider.DamageTypeTagGen(output, provider, fileHelper));
     }
 
 }

@@ -20,6 +20,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 public class WarlockRobesItem extends ArmorItem implements IDyeable {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
@@ -86,7 +88,7 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             @Override
             public @NotNull WarlockArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {

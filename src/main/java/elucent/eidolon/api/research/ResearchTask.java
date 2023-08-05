@@ -3,6 +3,7 @@ package elucent.eidolon.api.research;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -220,7 +221,7 @@ public abstract class ResearchTask {
 
         @Override
         public void drawTooltip(@NotNull GuiGraphics stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
-            List<Component> tooltip = gui.getTooltipFromItem(gui.getMinecraft(), items.get(0));
+            List<Component> tooltip = Screen.getTooltipFromItem(gui.getMinecraft(), items.get(0));
             stack.renderComponentTooltip(Minecraft.getInstance().font, tooltip, (int) mouseX, (int) mouseY);
         }
 

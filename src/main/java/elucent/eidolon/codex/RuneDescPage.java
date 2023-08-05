@@ -26,8 +26,8 @@ public class RuneDescPage extends Page {
             String title = I18n.get(rl.getNamespace() + ".rune." + rl.getPath());
             String text = I18n.get(rl.getNamespace() + ".codex.rune." + rl.getPath());
             int titleWidth = Minecraft.getInstance().font.width(title);
-            drawText(gui, mStack, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
-            drawWrappingText(gui, mStack, text, x + 4, y + 24, 120);
+            drawText(mStack, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
+            drawWrappingText(mStack, text, x + 4, y + 24, 120);
         }
     }
 }

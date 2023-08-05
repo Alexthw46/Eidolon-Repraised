@@ -2,9 +2,11 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.network.LifestealEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,8 +45,7 @@ public class SappingSwordItem extends SwordItem {
         if (target.invulnerableTime > 0) {
             target.invulnerableTime = 0;
             float before = target.getHealth();
-            //TODO: DamageSource
-            target.hurt(target.damageSources().wither(), 2.0f);
+            target.hurt(DamageTypeData.source(target.level, DamageTypes.WITHER, attacker, null), 2.0f);
             float healing = before - target.getHealth();
             if (healing > 0) {
                 attacker.heal(healing);

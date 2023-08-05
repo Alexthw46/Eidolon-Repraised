@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrucibleRecipe implements Recipe<Container> {
-    List<Step> steps = new ArrayList<>();
+    List<Step> steps;
     ResourceLocation registryName;
     final ItemStack result;
 
@@ -103,7 +103,7 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inv, RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull Container inv, @NotNull RegistryAccess registryAccess) {
         return getResultItem();
     }
 

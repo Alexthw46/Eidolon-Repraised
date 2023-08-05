@@ -66,7 +66,7 @@ public class CruciblePage extends Page {
         Font font = Minecraft.getInstance().font;
         for (int i = 0; i < steps.length; i ++) {
             int tx = x, ty = y + yoff + i * 20;
-            drawText(gui, guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", tx + 7, ty + 17 - font.lineHeight);
+            drawText(guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", tx + 7, ty + 17 - font.lineHeight);
             tx += 24;
         }
     }

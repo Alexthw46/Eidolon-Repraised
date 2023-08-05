@@ -7,8 +7,9 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import elucent.eidolon.event.ClientEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.world.inventory.InventoryMenu;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 public class RuneParticleRenderType extends SpriteParticleRenderType {
@@ -18,18 +19,18 @@ public class RuneParticleRenderType extends SpriteParticleRenderType {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         ClientEvents.particleMVMatrix = RenderSystem.getModelViewMatrix();
         bufferBuilder.begin(Mode.QUADS, DefaultVertexFormat.PARTICLE);
     }
 
     private static void endRenderCommon() {
-        Minecraft.getInstance().textureManager.getTexture(TextureAtlas.LOCATION_BLOCKS).restoreLastBlurMipmap();
+        Minecraft.getInstance().textureManager.getTexture(InventoryMenu.BLOCK_ATLAS).restoreLastBlurMipmap();
         RenderSystem.depthMask(true);
     }
 
     @Override
-    public void begin(BufferBuilder b, TextureManager tex) {
+    public void begin(@NotNull BufferBuilder b, @NotNull TextureManager tex) {
         beginRenderCommon(b, tex);
     }
 

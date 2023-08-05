@@ -6,9 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -21,7 +21,7 @@ public class GobletTileRenderer implements BlockEntityRenderer<GobletTileEntity>
         Minecraft mc = Minecraft.getInstance();
 
         if (tile.getEntityType() != null) {
-            TextureAtlasSprite water = mc.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+            TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                     .apply(new ResourceLocation("minecraft", "block/water_still"));
             VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
             Matrix4f mat = matrixStackIn.last().pose();

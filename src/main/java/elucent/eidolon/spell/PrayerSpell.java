@@ -13,6 +13,7 @@ import elucent.eidolon.particle.Particles;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,8 +43,10 @@ public class PrayerSpell extends StaticSpell {
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime()))
+        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime())) {
+            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return false;
+        }
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         if (effigies.size() == 0) return false;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();

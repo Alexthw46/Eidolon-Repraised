@@ -69,6 +69,21 @@ public class DamageTypeData {
         return holder;
     }
 
+    static public DamageSource source(LevelAccessor level, ResourceKey<DamageType> key) {
+        Registry<DamageType> registry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+        return new DamageSource(registry.getHolderOrThrow(key));
+    }
+
+    static public DamageSource source(LevelAccessor level, ResourceKey<DamageType> key, @Nullable Entity entity, @Nullable Entity direct) {
+        Registry<DamageType> registry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+        if (entity != null && direct != null)
+            return new DamageSource(registry.getHolderOrThrow(key), entity, direct);
+        else if (entity != null)
+            return new DamageSource(registry.getHolderOrThrow(key), entity);
+        else
+            return new DamageSource(registry.getHolderOrThrow(key));
+    }
+
     public boolean is(@Nullable DamageSource source) {
         return source != null && is(source.type());
     }
@@ -276,7 +291,7 @@ public class DamageTypeData {
         /**
          * Deletes all entries after calling a function on them.
          *
-         * @param finalizer Do something with all of the values
+         * @param finalizer Do something with all the values
          */
         public void empty(Consumer<T> finalizer) {
             attached.values()

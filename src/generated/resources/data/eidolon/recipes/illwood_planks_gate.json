@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "eidolon:illwood_planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "SBS",
+    "SBS"
+  ],
+  "result": {
+    "item": "eidolon:illwood_planks_fence_gate"
+  },
+  "show_notification": true
+}

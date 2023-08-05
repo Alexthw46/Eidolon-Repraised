@@ -43,6 +43,7 @@ public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
         getEntityData().set(TYPE, 0);
     }
 
+    @SuppressWarnings("all")
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         Holder<Biome> holder = pLevel.getBiome(this.blockPosition());
         if (holder.is(EidBiomeTagProvider.BROWN_SLUG_TAG)) {

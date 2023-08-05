@@ -1,7 +1,6 @@
 package elucent.eidolon.common.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -97,14 +96,14 @@ public class ZombieBruteEntity extends Monster {
 
             ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
             if (zombievillager != null) {
-                zombievillager.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+                zombievillager.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
                 zombievillager.setVillagerData(villager.getVillagerData());
                 zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
                 zombievillager.setTradeOffers(villager.getOffers().createTag());
                 zombievillager.setVillagerXp(villager.getVillagerXp());
                 net.minecraftforge.event.ForgeEventFactory.onLivingConvert(pEntity, zombievillager);
                 if (!this.isSilent()) {
-                    pLevel.levelEvent((Player) null, 1026, this.blockPosition(), 0);
+                    pLevel.levelEvent(null, 1026, this.blockPosition(), 0);
                 }
 
                 flag = false;

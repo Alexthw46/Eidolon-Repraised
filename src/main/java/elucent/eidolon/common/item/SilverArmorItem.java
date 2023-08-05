@@ -37,7 +37,6 @@ public class SilverArmorItem extends ArmorItem {
                 case HELMET -> 2;
                 case LEGGINGS -> 4;
                 case BOOTS -> 2;
-                default -> 0;
             };
         }
 

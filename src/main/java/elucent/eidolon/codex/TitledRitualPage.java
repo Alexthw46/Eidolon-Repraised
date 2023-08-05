@@ -26,7 +26,7 @@ public class TitledRitualPage extends RitualPage {
         guiGraphics.blit(bg, x, y, 128, 64, 128, 24);
         String title = I18n.get(this.title);
         int titleWidth = Minecraft.getInstance().font.width(title);
-        drawText(gui, guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
+        drawText(guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
 
         RenderSystem.setShaderTexture(0, BACKGROUND);
         super.render(gui, guiGraphics, bg, x, y, mouseX, mouseY);

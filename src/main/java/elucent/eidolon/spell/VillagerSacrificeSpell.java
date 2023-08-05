@@ -10,6 +10,7 @@ import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -28,8 +29,10 @@ public class VillagerSacrificeSpell extends PrayerSpell {
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime()))
+        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime())) {
+            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return false;
+        }
         if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player.getUUID(), deity.getId()) < 15.0)
             return false;
         List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));

@@ -11,15 +11,15 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchanterTileEntity> {
     public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation(Eidolon.MODID, "entity/enchanter_book");
-    public static final Material BOOK_MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, BOOK_TEXTURE);
+    public static final Material BOOK_MATERIAL = new Material(InventoryMenu.BLOCK_ATLAS, BOOK_TEXTURE);
     private final BookModel model;
 
     public SoulEnchanterTileRenderer() {

@@ -6,12 +6,14 @@ import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
+import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -66,7 +68,7 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        //target.hurt(new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, level.getEntity((int)casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
+        target.hurt(DamageTypeData.source(target.level(), DamageTypes.WITHER, this, level.getEntity((int) casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
         onImpact(ray);
     }
 

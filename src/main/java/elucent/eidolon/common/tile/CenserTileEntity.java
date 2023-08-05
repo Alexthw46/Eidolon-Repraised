@@ -14,6 +14,7 @@ import elucent.eidolon.spell.AltarInfo;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -126,8 +127,10 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
 
     public void startBurning(Player player, Level world, BlockPos pos) {
         if (!world.getCapability(IReputation.INSTANCE).isPresent()) return;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, prefix("basic_incense"), world.getGameTime()))
+        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, prefix("basic_incense"), world.getGameTime())) {
+            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return;
+        }
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         if (effigies.size() == 0) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();

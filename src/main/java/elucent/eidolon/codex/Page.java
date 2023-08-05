@@ -36,7 +36,7 @@ public abstract class Page {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void drawText(CodexGui gui, GuiGraphics guiGraphics, String text, int x, int y) {
+    public static void drawText(GuiGraphics guiGraphics, String text, int x, int y) {
         Font font = Minecraft.getInstance().font;
         guiGraphics.drawString(font, text, x, y - 1, ColorUtil.packColor(128, 255, 255, 255), false);
         guiGraphics.drawString(font, text, x - 1, y, ColorUtil.packColor(128, 219, 212, 184), false);
@@ -46,7 +46,7 @@ public abstract class Page {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void drawWrappingText(CodexGui gui, GuiGraphics mStack, String text, int x, int y, int w) {
+    public static void drawWrappingText(GuiGraphics mStack, String text, int x, int y, int w) {
         Font font = Minecraft.getInstance().font;
         List<String> lines = new ArrayList<>();
         String[] words = text.split(" ");
@@ -59,7 +59,7 @@ public abstract class Page {
         }
         if (!line.isEmpty()) lines.add(line);
         for (int i = 0; i < lines.size(); i ++) {
-            drawText(gui, mStack, lines.get(i), x, y + i * (font.lineHeight + 1));
+            drawText(mStack, lines.get(i), x, y + i * (font.lineHeight + 1));
         }
     }
 
