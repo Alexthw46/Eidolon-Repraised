@@ -7,7 +7,7 @@ import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
-import net.minecraft.client.Minecraft;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +29,7 @@ public class DyeRecipeCategory implements ICraftingCategoryExtension {
         List<List<ItemStack>> inputs = recipe.getIngredients().stream()
                 .map(ingredient -> List.of(ingredient.getItems()))
                 .toList();
-        ItemStack resultItem = recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess());
+        ItemStack resultItem = recipe.getResultItem(RegistryAccess.EMPTY);
         List<ItemStack> results = new ArrayList<>();
         if (resultItem.getItem() instanceof IDyeable toDye) {
             var focus = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT)

@@ -22,7 +22,7 @@ apply plugin: 'net.neoforged.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
-version = '0.3.2.3.beta-1.20.1'
+version = '0.3.2.4.beta-1.20.1'
 archivesBaseName = 'eidolon'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

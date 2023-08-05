@@ -3,7 +3,6 @@ package elucent.eidolon.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.IDyeable;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.RecipeUtil;
@@ -113,7 +112,7 @@ public class DyeRecipe extends ShapelessRecipe {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItem(recipe.getResultItem(Eidolon.proxy.getWorld().registryAccess()));
+            buffer.writeItem(recipe.getResultItem(RegistryAccess.EMPTY));
         }
     }
 }
