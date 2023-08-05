@@ -3,13 +3,15 @@ package elucent.eidolon.codex;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 public class Category {
     final ItemStack icon;
@@ -64,7 +66,7 @@ public class Category {
         return false;
     }
 
-    public void draw(CodexGui gui, PoseStack mStack, int x, int y, boolean right, int mouseX, int mouseY) {
+    public void draw(CodexGui gui, GuiGraphics mStack, int x, int y, boolean right, int mouseX, int mouseY) {
         int w = 36;
         if (!right) x -= 36;
         w += hoveramount * 12;
@@ -81,17 +83,18 @@ public class Category {
         }
 
         RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
-        colorBlit(mStack, x, y, 208, right ? 208 : 227, 48, 19, 512, 512, color);
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(icon, x + (right ? 23 : 9), y + 1);
+        colorBlit(mStack.pose(), x, y, 208, right ? 208 : 227, 48, 19, 512, 512, color);
+        mStack.renderItem(icon, x + (right ? 23 : 9), y + 1);
     }
 
-    public void drawTooltip(CodexGui gui, PoseStack mStack, int x, int y, boolean right, int mouseX, int mouseY) {
+    public void drawTooltip(CodexGui gui, @NotNull GuiGraphics mStack, int x, int y, boolean right, int mouseX, int mouseY) {
         int w = 36;
         if (!right) x -= 36;
         w += hoveramount * 12;
         if (!right) x -= hoveramount * 12;
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
-        if (hover) gui.renderTooltip(mStack, Component.translatable("eidolon.codex.category." + key), mouseX, mouseY);
+        if (hover)
+            mStack.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.category." + key), mouseX, mouseY);
     }
 }

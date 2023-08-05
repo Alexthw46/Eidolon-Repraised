@@ -1,14 +1,11 @@
 package elucent.eidolon.common.item.curio;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -58,7 +55,7 @@ public class SanguineAmuletItem extends EidolonCurio {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         LivingEntity entity = slotContext.entity();
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             if (entity.tickCount % 80 == 0 &&
                 entity.getHealth() >= entity.getMaxHealth() - 0.0001 &&
                 entity instanceof Player player && ((Player) entity).getFoodData().getFoodLevel() >= 18 &&
@@ -129,17 +126,16 @@ public class SanguineAmuletItem extends EidolonCurio {
         }
 
         @Override
-        public void renderImage(@NotNull Font font, int x, int y, @NotNull PoseStack poseStack, @NotNull ItemRenderer itemRender, int p_194053_) {
+        public void renderImage(@NotNull Font font, int x, int y, @NotNull GuiGraphics pGuiGraphics) {
             Minecraft mc = Minecraft.getInstance();
-            RenderSystem.setShaderTexture(0, new ResourceLocation("minecraft", "textures/gui/icons.png"));
             int charge = getCharge(stack);
             int rows = (charge + 19) / 20;
             for (int i = 0; i < charge; i += 20) {
                 for (int j = 0; j < Mth.clamp(charge - i, 0, 20); j += 2) {
                     if (charge - (i + j) == 1) {
-                        GuiComponent.blit(poseStack, x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(new ResourceLocation("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
                     } else
-                        GuiComponent.blit(poseStack, x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(new ResourceLocation("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
                 }
             }
         }

@@ -28,7 +28,7 @@ public class FrostSpell extends StaticSpell {
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         if (!KnowledgeUtil.knowsResearch(player, Researches.FROST_SPELL.getRegistryName())) return false;
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (ray instanceof BlockHitResult rayTraceResult) {
             var fluidState = world.getFluidState(rayTraceResult.getBlockPos());
             if (fluidState.is(Fluids.WATER) && fluidState.isSource()) {
@@ -41,7 +41,7 @@ public class FrostSpell extends StaticSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         if (!world.isClientSide) {
-            HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+            HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
             if (ray instanceof BlockHitResult blockHitResult) {
                 var fluidState = world.getFluidState(blockHitResult.getBlockPos());
                 if (fluidState.is(Fluids.WATER) && fluidState.isSource()) {

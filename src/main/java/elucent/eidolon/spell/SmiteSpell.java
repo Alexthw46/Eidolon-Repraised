@@ -6,7 +6,6 @@ import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +21,7 @@ public class SmiteSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        var ray = rayTrace(player, player.getReachDistance(), 0, true);
+        var ray = rayTrace(player, player.getBlockReach(), 0, true);
 
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             return livingEntity.getMobType() == MobType.UNDEAD;
@@ -34,12 +33,12 @@ public class SmiteSpell extends StaticSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
 
-        var ray = rayTrace(player, player.getReachDistance(), 0, true);
+        var ray = rayTrace(player, player.getBlockReach(), 0, true);
 
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
                 if (world instanceof ServerLevel) {
-                    if (livingEntity.hurt(DamageSource.MAGIC, 10)) {
+                    if (livingEntity.hurt(livingEntity.damageSources().magic(), 10)) {
                         livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 2));
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
                     }

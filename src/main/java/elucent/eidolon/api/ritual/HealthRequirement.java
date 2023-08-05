@@ -43,7 +43,7 @@ public class HealthRequirement implements IRequirement {
         float acc = 0;
         for (LivingEntity target : targets) {
             float targetHealth = target.getHealth();
-            target.hurt(Registry.RITUAL_DAMAGE, Math.min(this.health - acc, targetHealth));
+            target.hurt(Registry.RITUAL_DAMAGE.source(world), Math.min(this.health - acc, targetHealth));
 
             acc += targetHealth;
             if (!world.isClientSide)

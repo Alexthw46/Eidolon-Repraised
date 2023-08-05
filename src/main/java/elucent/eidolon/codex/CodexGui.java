@@ -2,9 +2,7 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix4f;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
@@ -14,6 +12,7 @@ import elucent.eidolon.network.AttemptCastPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -22,9 +21,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -55,6 +54,10 @@ public class CodexGui extends Screen {
         lastChapter = currentChapter = CodexChapters.NATURE_INDEX;
     }
 
+    public static void blit(GuiGraphics guiGraphics, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+        guiGraphics.blit(CODEX_BACKGROUND, i, i1, i2, i3, i4, i5, i6, i7);
+    }
+
     protected void resetPages() {
         Page left = currentChapter.get(currentPage), right = currentChapter.get(currentPage + 1);
         if (left != null) left.reset();
@@ -71,7 +74,7 @@ public class CodexGui extends Screen {
         if (this.chant.size() < 18) this.chant.add(rune);
     }
 
-    protected void renderChant(PoseStack mStack, int x, int y, int mouseX, int mouseY, float pticks) {
+    protected void renderChant(@NotNull GuiGraphics mStack, int x, int y, int mouseX, int mouseY, float pticks) {
         int chantWidth = 32 + 24 * chant.size();
         int baseX = x + xSize / 2 - chantWidth / 2, baseY = y + 180;
 
@@ -92,8 +95,9 @@ public class CodexGui extends Screen {
         bgx += 36;
         boolean cancelHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
         blit(mStack, bgx, baseY - 4, 368, cancelHover ? 240 : 208, 32, 32, 512, 512);
-        if (chantHover) renderTooltip(mStack, Component.translatable("eidolon.codex.chant_hover"), mouseX, mouseY);
-        if (cancelHover) renderTooltip(mStack, Component.translatable("eidolon.codex.cancel_hover"), mouseX, mouseY);
+        if (chantHover) mStack.renderTooltip(font, Component.translatable("eidolon.codex.chant_hover"), mouseX, mouseY);
+        if (cancelHover)
+            mStack.renderTooltip(font, Component.translatable("eidolon.codex.cancel_hover"), mouseX, mouseY);
 
         RenderSystem.enableBlend();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
@@ -107,7 +111,7 @@ public class CodexGui extends Screen {
             tess.end();
             bgx += 12;
              */
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+            RenderUtil.litQuad(mStack.pose(), MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
                     sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
             tess.end();
             bgx += 24;
@@ -124,7 +128,7 @@ public class CodexGui extends Screen {
             bgx += 12;
              */
             Sign sign = chant.get(i);
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+            RenderUtil.litQuad(mStack.pose(), MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
                     sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
             tess.end();
             bgx += 24;
@@ -140,67 +144,57 @@ public class CodexGui extends Screen {
     int tooltipX = 0, tooltipY = 0;
 
     @Override
-    public void renderTooltip(PoseStack poseStack, @NotNull Component text, int x, int y) {
-        tooltipMatrix = poseStack.last().pose();
-        tooltipText = text;
-        tooltipX = x;
-        tooltipY = y;
-        hasTooltip = true;
-    }
-
-    @Override
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         hasTooltip = false;
-        renderBackground(matrixStack);
+        renderBackground(guiGraphics);
         Minecraft mc = Minecraft.getInstance();
         RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
 
         this.width = mc.getWindow().getGuiScaledWidth();
         this.height = mc.getWindow().getGuiScaledHeight();
         int guiLeft = (width - xSize) / 2, guiTop = (height - ySize) / 2;
-        blit(matrixStack, guiLeft, guiTop, 0, 256, xSize, ySize, 512, 512);
+        guiGraphics.blit(CODEX_BACKGROUND, guiLeft, guiTop, 0, 256, xSize, ySize, 512, 512);
 
         for (int i = 0; i < CodexChapters.categories.size(); i++) {
             int y = guiTop + 28 + (i % 8) * 20;
-            CodexChapters.categories.get(i).draw(this, matrixStack, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
+            CodexChapters.categories.get(i).draw(this, guiGraphics, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
         }
 
-        RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
-        blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
+        guiGraphics.blit(CODEX_BACKGROUND, guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
         Page left = currentChapter.get(currentPage), right = currentChapter.get(currentPage + 1);
-        if (left != null) left.fullRender(this, matrixStack, guiLeft + 14, guiTop + 24, mouseX, mouseY);
-        if (right != null) right.fullRender(this, matrixStack, guiLeft + 170, guiTop + 24, mouseX, mouseY);
+        if (left != null) left.fullRender(this, guiGraphics, guiLeft + 14, guiTop + 24, mouseX, mouseY);
+        if (right != null) right.fullRender(this, guiGraphics, guiLeft + 170, guiTop + 24, mouseX, mouseY);
 
-        RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
         if (currentPage > 0) { // left arrow
             int x = 10, y = 169;
             int v = 208;
             if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16)
                 v += 18;
-            blit(matrixStack, guiLeft + x, guiTop + y, 128, v, 32, 18, 512, 512);
+            guiGraphics.blit(CODEX_BACKGROUND, guiLeft + x, guiTop + y, 128, v, 32, 18, 512, 512);
         }
         if (currentPage + 2 < currentChapter.size()) { // right arrow
             int x = 270, y = 169;
             int v = 208;
             if (mouseX >= guiLeft + x && mouseY >= guiTop + y && mouseX <= guiLeft + x + 32 && mouseY <= guiTop + y + 16)
                 v += 18;
-            blit(matrixStack, guiLeft + x, guiTop + y, 160, v, 32, 18, 512, 512);
+            guiGraphics.blit(CODEX_BACKGROUND, guiLeft + x, guiTop + y, 160, v, 32, 18, 512, 512);
         }
 
-        if (chant.size() > 0) renderChant(matrixStack, guiLeft, guiTop, mouseX, mouseY, partialTicks);
+        if (chant.size() > 0) renderChant(guiGraphics, guiLeft, guiTop, mouseX, mouseY, partialTicks);
 
 
         for (int i = 0; i < CodexChapters.categories.size(); i++) {
             int y = guiTop + 28 + (i % 8) * 20;
-            CodexChapters.categories.get(i).drawTooltip(this, matrixStack, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
+            CodexChapters.categories.get(i).drawTooltip(this, guiGraphics, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
         }
 
         if (hasTooltip) {
-            matrixStack.pushPose();
-            matrixStack.setIdentity();
-            matrixStack.mulPoseMatrix(tooltipMatrix);
-            super.renderTooltip(matrixStack, tooltipText, tooltipX, tooltipY);
-            matrixStack.popPose();
+            var pose = guiGraphics.pose();
+            pose.pushPose();
+            pose.setIdentity();
+            pose.mulPoseMatrix(tooltipMatrix);
+            guiGraphics.renderTooltip(font, tooltipText, tooltipX, tooltipY);
+            pose.popPose();
         }
     }
 
@@ -225,13 +219,13 @@ public class CodexGui extends Screen {
             if (player == null || world == null) return false;
             Networking.sendToServer(new AttemptCastPacket(player, chant));
             chant.clear();
-            player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+            player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
             this.onClose();
             return true;
         }
         if (cancelHover) {
             chant.clear();
-            Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+            Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
             return true;
         }
         return false;
@@ -284,7 +278,7 @@ public class CodexGui extends Screen {
         } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
             if (chant.size() > 0 && currentChapter.get(currentPage) instanceof SignIndexPage) {
                 chant.remove(chant.size() - 1);
-                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
             }
             //otherwise, if it's not an index page, go back to the index page
@@ -300,8 +294,4 @@ public class CodexGui extends Screen {
         return false;
     }
 
-    @Override
-    public void renderTooltip(@NotNull PoseStack mStack, ItemStack stack, int x, int y) {
-        if (!stack.isEmpty()) super.renderTooltip(mStack, stack, x, y);
-    }
 }

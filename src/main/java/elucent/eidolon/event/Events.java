@@ -18,7 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -105,11 +105,11 @@ public class Events {
 
     @SubscribeEvent
     public void onTick(LivingTickEvent event) {
-        Level level = event.getEntity().getLevel();
+        Level level = event.getEntity().level();
         LivingEntity e = event.getEntity();
         if (e.hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
             float f = e.getLightLevelDependentMagicValue();
-            BlockPos blockpos = e.getVehicle() instanceof Boat ? (new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ())).above() : new BlockPos(e.getX(), (double) Math.round(e.getY()), e.getZ());
+            BlockPos blockpos = e.getVehicle() instanceof Boat ? (BlockPos.containing(e.getX(), (double) Math.round(e.getY()), e.getZ())).above() : BlockPos.containing(e.getX(), (double) Math.round(e.getY()), e.getZ());
             if (f > 0.5F && e.getRandom().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && level.canSeeSky(blockpos)) {
                 e.setSecondsOnFire(8);
             }
@@ -154,7 +154,7 @@ public class Events {
 
         if (event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity source) {
             ItemStack held = source.getMainHandItem();
-            if (!entity.level.isClientSide && (held.getItem() instanceof ReaperScytheItem || event.getSource() == Registry.RITUAL_DAMAGE)
+            if (!entity.level.isClientSide && (held.getItem() instanceof ReaperScytheItem || event.getSource().is(Registry.RITUAL_DAMAGE.key))
                 && entity.isInvertedHealAndHarm()) {
                 if (!(entity instanceof Player)) event.getDrops().clear();
                 int looting = ForgeHooks.getLootingLevel(entity, source, event.getSource());
@@ -238,7 +238,7 @@ public class Events {
 
                 if (d.isDashing(event.player)) d.doDashTick(event.player);
 
-                if (event.player.isOnGround()) {
+                if (event.player.onGround()) {
                     d.rechargeWings(event.player);
                     d.stopFlying(event.player);
                 }
@@ -280,8 +280,8 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
-        if (isWither || event.getSource().isMagic()) {
+        boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId());
+        if (isWither || event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO)) {
             if (event.getSource().getEntity() instanceof LivingEntity living
                 && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);

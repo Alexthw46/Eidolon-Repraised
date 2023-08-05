@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class WorktableContainer extends AbstractContainerMenu {
-    final CraftingContainer core = new CraftingContainer(this, 3, 3);
-    final CraftingContainer extras = new CraftingContainer(this, 2, 2);
+    final CraftingContainer core = new TransientCraftingContainer(this, 3, 3);
+    final CraftingContainer extras = new TransientCraftingContainer(this, 2, 2);
     final ResultContainer result = new ResultContainer();
     final Player player;
     final ContainerLevelAccess callable;
@@ -70,7 +70,7 @@ public class WorktableContainer extends AbstractContainerMenu {
                 if (optional.isPresent()) {
                     CraftingRecipe icraftingrecipe = optional.get();
                     if (inventoryResult.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
-                        itemstack = icraftingrecipe.assemble(inventory);
+                        itemstack = icraftingrecipe.assemble(inventory, world.registryAccess());
                     }
                 }
             }

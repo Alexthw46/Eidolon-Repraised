@@ -26,17 +26,17 @@ public class SilverArmorItem extends ArmorItem {
 
     public static class Material implements ArmorMaterial {
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slot) {
-            return MAX_DAMAGE_ARRAY[slot.getIndex()] * 17;
+        public int getDurabilityForType(Type slot) {
+            return MAX_DAMAGE_ARRAY[slot.getSlot().getIndex()] * 17;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slot) {
+        public int getDefenseForType(Type slot) {
             return switch (slot) {
-                case CHEST -> 6;
-                case HEAD -> 2;
-                case LEGS -> 4;
-                case FEET -> 2;
+                case CHESTPLATE -> 6;
+                case HELMET -> 2;
+                case LEGGINGS -> 4;
+                case BOOTS -> 2;
                 default -> 0;
             };
         }
@@ -74,7 +74,7 @@ public class SilverArmorItem extends ArmorItem {
         public static final Material INSTANCE = new Material();
     }
 
-    public SilverArmorItem(EquipmentSlot slot, Properties builderIn) {
+    public SilverArmorItem(Type slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
     }
 
@@ -89,9 +89,9 @@ public class SilverArmorItem extends ArmorItem {
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
                 float netHeadPitch = Mth.lerp(pticks, entity.xRotO, entity.getXRot());
-                ClientRegistry.SILVER_ARMOR_MODEL.slot = slot;
+                ClientRegistry.SILVER_ARMOR_MODEL.slot = getEquipmentSlot();
                 ClientRegistry.SILVER_ARMOR_MODEL.copyFromDefault(_default);
-                ClientRegistry.SILVER_ARMOR_MODEL.setupAnim(entity, entity.animationPosition, entity.animationSpeed, entity.tickCount + pticks, netHeadYaw, netHeadPitch);
+                ClientRegistry.SILVER_ARMOR_MODEL.setupAnim(entity, entity.walkAnimation.position(), entity.walkAnimation.speed(), entity.tickCount + pticks, netHeadYaw, netHeadPitch);
                 return ClientRegistry.SILVER_ARMOR_MODEL;
             }
         });

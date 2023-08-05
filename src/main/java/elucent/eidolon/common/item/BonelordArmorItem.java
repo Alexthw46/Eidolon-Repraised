@@ -34,16 +34,16 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
 
     public static class Material implements ArmorMaterial {
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slot) {
-            return MAX_DAMAGE_ARRAY[slot.getIndex()] * 38;
+        public int getDurabilityForType(Type slot) {
+            return MAX_DAMAGE_ARRAY[slot.getSlot().getIndex()] * 38;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slot) {
+        public int getDefenseForType(Type slot) {
             return switch (slot) {
-                case CHEST -> 9;
-                case HEAD -> 4;
-                case LEGS -> 7;
+                case CHESTPLATE -> 9;
+                case HELMET -> 4;
+                case LEGGINGS -> 7;
                 default -> 0;
             };
         }
@@ -85,20 +85,20 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
     
     private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
 
-    public BonelordArmorItem(EquipmentSlot slot, Properties builderIn) {
+    public BonelordArmorItem(Type slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
     }    
     
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         if (modifiers == null) {
-            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[this.slot.getIndex()];
+            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[this.getEquipmentSlot().getIndex()];
             modifiers = ImmutableMultimap.<Attribute, AttributeModifier>builder()
-                    .putAll(getDefaultAttributeModifiers(this.slot))
-                    .put(Registry.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.slot == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
+                    .putAll(getDefaultAttributeModifiers(this.getEquipmentSlot()))
+                    .put(Registry.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
                     .build();
         }
-        return slot == this.slot ? modifiers : super.getAttributeModifiers(slot, stack);
+        return slot == this.getEquipmentSlot() ? modifiers : super.getAttributeModifiers(slot, stack);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -112,9 +112,9 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
                 float netHeadPitch = Mth.lerp(pticks, entity.xRotO, entity.getXRot());
-                ClientRegistry.BONELORD_ARMOR_MODEL.slot = slot;
+                ClientRegistry.BONELORD_ARMOR_MODEL.slot = getEquipmentSlot();
                 ClientRegistry.BONELORD_ARMOR_MODEL.copyFromDefault(_default);
-                ClientRegistry.BONELORD_ARMOR_MODEL.setupAnim(entity, entity.animationPosition, entity.animationSpeed, entity.tickCount + pticks, netHeadYaw, netHeadPitch);
+                ClientRegistry.BONELORD_ARMOR_MODEL.setupAnim(entity, entity.walkAnimation.position(), entity.walkAnimation.speed(), entity.tickCount + pticks, netHeadYaw, netHeadPitch);
                 return ClientRegistry.BONELORD_ARMOR_MODEL;
             }
         });

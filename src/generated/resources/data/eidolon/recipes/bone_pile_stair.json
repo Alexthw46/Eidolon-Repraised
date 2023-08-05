@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "B": {
       "item": "eidolon:bone_pile"
@@ -13,5 +14,6 @@
   "result": {
     "count": 4,
     "item": "eidolon:bone_pile_stairs"
-  }
+  },
+  "show_notification": true
 }

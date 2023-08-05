@@ -79,7 +79,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     public void aiStep() {
         super.aiStep();
         Vec3 motion = this.getDeltaMovement();
-        if (!this.onGround && motion.y < 0.0D) {
+        if (!this.onGround() && motion.y < 0.0D) {
             this.setDeltaMovement(motion.multiply(1.0D, 0.6D, 1.0D));
         }
 
@@ -136,11 +136,11 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
                     this.tame(player);
                     this.level.broadcastEntityEvent(this, (byte) 7);
                 } else {
-                    this.level.broadcastEntityEvent(this, (byte)6);
+                    this.level.broadcastEntityEvent(this, (byte) 6);
                 }
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
-        } else if (onGround && this.isTame() && this.isOwnedBy(player)) {
+        } else if (onGround() && this.isTame() && this.isOwnedBy(player)) {
             if (!this.level.isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
@@ -152,7 +152,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
     
     @Override
     public boolean isFlying() {
-        return !onGround;
+        return !onGround();
     }
 
     @Override

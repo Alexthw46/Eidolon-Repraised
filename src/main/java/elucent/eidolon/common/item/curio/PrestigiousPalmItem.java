@@ -20,7 +20,7 @@ public class PrestigiousPalmItem extends EidolonCurio {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
-        map.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":prestigious_palm", 4.0f, AttributeModifier.Operation.ADDITION));
+        map.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":prestigious_palm", 4.0f, AttributeModifier.Operation.ADDITION));
         return map;
     }
 

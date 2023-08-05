@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -124,9 +125,9 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
                     for(int j1 = 0; j1 < 3; ++j1) {
                         List<EnchantmentInstance> list = getEnchantmentList(itemstack, j1);
-                        if (list != null && !list.isEmpty()) {
+                        if (!list.isEmpty()) {
                             EnchantmentInstance enchantmentdata = list.get(rand.nextInt(list.size()));
-                            enchantClue[j1] = net.minecraft.core.Registry.ENCHANTMENT.getId(enchantmentdata.enchantment);
+                            enchantClue[j1] = BuiltInRegistries.ENCHANTMENT.getId(enchantmentdata.enchantment);
                             worldClue[j1] = enchantmentdata.level;
                         }
                     }
@@ -212,7 +213,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         if (stack.isEmpty()) {
             return 0;
         } else {
-            ResourceLocation resourcelocation = net.minecraft.core.Registry.ENCHANTMENT.getKey(enchID);
+            ResourceLocation resourcelocation = BuiltInRegistries.ENCHANTMENT.getKey(enchID);
             ListTag listnbt = stack.getItem() == Items.ENCHANTED_BOOK ? EnchantedBookItem.getEnchantments(stack) : stack.getEnchantmentTags();
 
             for(int i = 0; i < listnbt.size(); ++i) {

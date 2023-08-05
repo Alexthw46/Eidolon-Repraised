@@ -6,9 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.event.ClientEvents;
@@ -21,6 +19,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.Random;
 
@@ -165,17 +166,17 @@ public class RenderUtil {
         Camera renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
         Vec3 vector3d = renderInfo.getPosition();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        float f = (float)(x);
-        float f1 = (float)(y);
-        float f2 = (float)(z);
-        Quaternion quaternion = renderInfo.rotation();
+        float f = (float) (x);
+        float f1 = (float) (y);
+        float f2 = (float) (z);
+        Quaternionf quaternion = renderInfo.rotation();
 
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-0.5f, -0.5f, 0.0f), new Vector3f(-0.5f, 0.5f, 0.0f), new Vector3f(0.5f, 0.5f, 0.0f), new Vector3f(0.5f, -0.5f, 0.0f)};
         float f4 = 1.0f;
 
-        for(int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             Vector3f vector3f = avector3f[i];
-            vector3f.transform(quaternion);
+            vector3f.rotate(quaternion);
             vector3f.mul(f4);
             vector3f.add(f, f1, f2);
         }
@@ -202,12 +203,12 @@ public class RenderUtil {
         float rotation = ClientEvents.getClientTicks() / 200;
 
         for(int i = 0; (float)i < (f5 + f5 * f5) / 2.0F * 60.0F; ++i) {
-            mStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
-            mStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
-            mStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F));
-            mStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
-            mStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
-            mStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F + rotation * 90.0F));
+            mStack.mulPose(Axis.XP.rotationDegrees(random.nextFloat() * 360.0F));
+            mStack.mulPose(Axis.YP.rotationDegrees(random.nextFloat() * 360.0F));
+            mStack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 360.0F));
+            mStack.mulPose(Axis.XP.rotationDegrees(random.nextFloat() * 360.0F));
+            mStack.mulPose(Axis.YP.rotationDegrees(random.nextFloat() * 360.0F));
+            mStack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 360.0F + rotation * 90.0F));
             float f3 = random.nextFloat() * 20.0F + 5.0F + f7 * 10.0F;
             float f4 = random.nextFloat() * 2.0F + 1.0F + f7 * 2.0F;
             f3 *= 0.05f * radius;

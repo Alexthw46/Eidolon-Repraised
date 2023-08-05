@@ -1,9 +1,9 @@
 package elucent.eidolon.gui.jei;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.codex.CodexGui;
+import elucent.eidolon.codex.WorktablePage;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -14,6 +14,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -75,8 +76,8 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
     }
 
     @Override
-    public void draw(@NotNull RecipeWrappers.Worktable recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
+    public void draw(@NotNull RecipeWrappers.Worktable recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
         recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-        recipe.getPage().render(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        recipe.getPage().render(CodexGui.DUMMY, mStack, WorktablePage.BACKGROUND, 5, 4, (int) mouseX, (int) mouseY);
     }
 }

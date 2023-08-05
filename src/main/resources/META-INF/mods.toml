@@ -17,7 +17,7 @@ A spooky magic mod about necromancy. Now with a touch of opposing light!
 [[dependencies.eidolon]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2, 1.19.3)"
+versionRange = "[1.20, 1.21)"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.eidolon]]

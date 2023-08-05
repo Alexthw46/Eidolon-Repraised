@@ -1,0 +1,9 @@
+// 1.20.1	2023-08-04T15:34:32.0406982	Registries
+9b92ae2fcf91d28f7b48e087e5b838ee989238e8 data/eidolon/worldgen/configured_feature/illwood_spawn.json
+aac514c50fce91c5aa663df154f32d3b27adadad data/eidolon/worldgen/configured_feature/illwood_tree.json
+6dbf9758e94a5a9a785ee414ab8a634d0c57b2c0 data/eidolon/worldgen/configured_feature/lead_ore.json
+b503cfb7ee190ddf0c42e130209d900418ec3b00 data/eidolon/worldgen/configured_feature/silver_ore.json
+1166c07943e517e5982098d585b16104c77e43a4 data/eidolon/worldgen/placed_feature/illwood_checked.json
+00befb29abbd9f5e3811c1877f5c2ca28145a90b data/eidolon/worldgen/placed_feature/illwood_placed.json
+b8798155636b12c205c89d57f1b3122cb6dfd9ca data/eidolon/worldgen/placed_feature/lead_ore_placed.json
+5151427cf5d949ca805ff400113c593edac80005 data/eidolon/worldgen/placed_feature/silver_ore_placed.json

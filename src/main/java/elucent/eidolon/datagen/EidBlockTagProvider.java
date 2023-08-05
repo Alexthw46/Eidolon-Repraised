@@ -2,23 +2,25 @@ package elucent.eidolon.datagen;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+
 public class EidBlockTagProvider extends BlockTagsProvider {
-    public EidBlockTagProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, Eidolon.MODID, existingFileHelper);
+    public EidBlockTagProvider(DataGenerator pGenerator, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(pGenerator.getPackOutput(), provider, Eidolon.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
-        //logsTag(Registry.ILLWOOD_LOG.get(), Registry.STRIPPED_ILLWOOD_LOG.get());
+    protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.LEAVES).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.SAPLINGS).add(Registry.ILLWOOD_SAPLING.get());

@@ -28,12 +28,12 @@ public class TopHatItem extends ArmorItem {
 
     public static class Material implements ArmorMaterial {
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slot) {
-            return MAX_DAMAGE_ARRAY[slot.getIndex()] * 7;
+        public int getDurabilityForType(Type slot) {
+            return MAX_DAMAGE_ARRAY[slot.getSlot().getIndex()] * 7;
         }
 
         @Override
-        public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
+        public int getDefenseForType(@NotNull Type slot) {
             return 1;
         }
 
@@ -87,7 +87,7 @@ public class TopHatItem extends ArmorItem {
     }
 
     public TopHatItem(Properties builderIn) {
-        super(Material.INSTANCE, EquipmentSlot.HEAD, builderIn);
+        super(Material.INSTANCE, Type.HELMET, builderIn);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -102,9 +102,9 @@ public class TopHatItem extends ArmorItem {
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
                 float netHeadPitch = Mth.lerp(pticks, entity.xRotO, entity.getXRot());
-                ClientRegistry.TOP_HAT_MODEL.slot = slot;
+                ClientRegistry.TOP_HAT_MODEL.slot = getEquipmentSlot();
                 ClientRegistry.TOP_HAT_MODEL.copyFromDefault(_default);
-                ClientRegistry.TOP_HAT_MODEL.setupAnim(entity, entity.animationPosition, entity.animationSpeed, entity.tickCount + pticks, netHeadYaw, netHeadPitch);
+                ClientRegistry.TOP_HAT_MODEL.setupAnim(entity, entity.walkAnimation.position(), entity.walkAnimation.speed(), entity.tickCount + pticks, netHeadYaw, netHeadPitch);
                 return ClientRegistry.TOP_HAT_MODEL;
             }
         });

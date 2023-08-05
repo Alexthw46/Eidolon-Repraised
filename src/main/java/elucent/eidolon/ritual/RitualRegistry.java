@@ -79,7 +79,7 @@ public class RitualRegistry {
         while (iter.hasNext()) {
             ItemStack focus = iter.next();
             for (RitualPage.RitualIngredient input : inputs) {
-                if (ItemStack.isSame(focus, input.stack) && ItemStack.tagMatches(focus, input.stack)
+                if (ItemStack.isSameItem(focus, input.stack) && ItemStack.isSameItemSameTags(focus, input.stack)
                     && !input.isFocus) {
                     input.isFocus = true;
                     iter.remove();

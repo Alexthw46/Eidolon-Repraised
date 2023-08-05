@@ -2,22 +2,18 @@ package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
@@ -26,7 +22,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -71,141 +66,118 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
-        Lighting.setupForFlatItems();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        int k = (int) this.minecraft.getWindow().getGuiScale();
-        RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
-        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
-        matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
-        RenderSystem.backupProjectionMatrix();
-        RenderSystem.setProjectionMatrix(matrix4f);
-        matrixStack.pushPose();
-        PoseStack.Pose posestack$pose = matrixStack.last();
-        posestack$pose.pose().setIdentity();
-        posestack$pose.normal().setIdentity();
-        matrixStack.translate(0.0D, 3.3F, 1984.0D);
-        float f = 5.0F;
-        matrixStack.scale(5.0F, 5.0F, 5.0F);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(20.0F));
-        float f1 = Mth.lerp(partialTicks, this.oOpen, this.open);
-        matrixStack.translate((1.0F - f1) * 0.2F, (1.0F - f1) * 0.1F, (1.0F - f1) * 0.25F);
-        float f2 = -(1.0F - f1) * 90.0F - 90.0F;
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(f2));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-        float f3 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
-        float f4 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
-        f3 = (f3 - (float) Mth.fastFloor(f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float) Mth.fastFloor(f4)) * 1.6F - 0.3F;
-        if (f3 < 0.0F) {
-            f3 = 0.0F;
-        }
-
-        if (f4 < 0.0F) {
-            f4 = 0.0F;
-        }
-
-        if (f3 > 1.0F) {
-            f3 = 1.0F;
-        }
-
-        if (f4 > 1.0F) {
-            f4 = 1.0F;
-        }
-
-        MODEL_BOOK.setupAnim(0.0F, f3, f4, f1);
-        MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        VertexConsumer vertexconsumer = multibuffersource$buffersource.getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
-        MODEL_BOOK.renderToBuffer(matrixStack, vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        multibuffersource$buffersource.endBatch();
-        matrixStack.popPose();
-        RenderSystem.viewport(0, 0, this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
-        RenderSystem.restoreProjectionMatrix();
-        Lighting.setupFor3DItems();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        this.renderBook(pGuiGraphics, i, j, pPartialTick);
         EnchantmentNames.getInstance().initSeed(this.menu.getXPSeed());
-        int l = this.menu.getSoulShardAmount();
+        int k = this.menu.getSoulShardAmount();
 
-        for(int i1 = 0; i1 < 3; ++i1) {
-            int j1 = i + 60;
-            int k1 = j1 + 20;
-            this.setBlitOffset(0);
-            RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
-            int l1 = menu.worldClue[i1];
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            int i2 = 86;
-            FormattedText itextproperties = EnchantmentNames.getInstance().getRandomName(this.font, i2);
-            int j2 = 6839882;
-            if (l1 < 1) {
-                this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+        for (int l = 0; l < 3; ++l) {
+            int i1 = i + 60;
+            int j1 = i1 + 20;
+            int k1 = (this.menu).worldClue[l];
+            if (k1 == 0) {
+                pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1, j + 14 + 19 * l, 0, 185, 108, 19);
             } else {
-                if (((l == 0 || this.minecraft.player.experienceLevel < l1) && !this.minecraft.player.getAbilities().instabuild) || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
-                    this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
-                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (menu.worldClue[i1] - 1), 239, 16, 16);
-                    this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
-                    j2 = 4226832;
+                String s = "" + k1;
+                int l1 = 86 - this.font.width(s);
+                FormattedText formattedtext = EnchantmentNames.getInstance().getRandomName(this.font, l1);
+                int i2 = 6839882;
+                if (((k < l + 1 || this.minecraft.player.experienceLevel < k1) && !this.minecraft.player.getAbilities().instabuild) || this.menu.enchantClue[l] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                    pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1, j + 14 + 19 * l, 0, 185, 108, 19);
+                    pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1 + 1, j + 15 + 19 * l, 16 * l, 239, 16, 16);
+                    pGuiGraphics.drawWordWrap(this.font, formattedtext, j1, j + 16 + 19 * l, l1, (i2 & 16711422) >> 1);
+                    i2 = 4226832;
                 } else {
-                    int k2 = x - (i + 60);
-                    int l2 = y - (j + 14 + 19 * i1);
-                    if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
-                        this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 204, 108, 19);
-                        j2 = 16777088;
+                    int j2 = pMouseX - (i + 60);
+                    int k2 = pMouseY - (j + 14 + 19 * l);
+                    if (j2 >= 0 && k2 >= 0 && j2 < 108 && k2 < 19) {
+                        pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1, j + 14 + 19 * l, 0, 204, 108, 19);
+                        i2 = 16777088;
                     } else {
-                        this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                        pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1, j + 14 + 19 * l, 0, 166, 108, 19);
                     }
 
-                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (menu.worldClue[i1] - 1), 223, 16, 16);
-                    this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, j2);
-                    j2 = 8453920;
+                    pGuiGraphics.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i1 + 1, j + 15 + 19 * l, 16 * l, 223, 16, 16);
+                    pGuiGraphics.drawWordWrap(this.font, formattedtext, j1, j + 16 + 19 * l, l1, i2);
+                    i2 = 8453920;
                 }
+
+                pGuiGraphics.drawString(this.font, s, j1 + 86 - this.font.width(s), j + 16 + 19 * l + 7, i2);
             }
         }
+
     }
 
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        partialTicks = this.minecraft.getFrameTime();
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    private void renderBook(GuiGraphics pGuiGraphics, int pX, int pY, float pPartialTick) {
+        float f = Mth.lerp(pPartialTick, this.oOpen, this.open);
+        float f1 = Mth.lerp(pPartialTick, this.oFlip, this.flip);
+        Lighting.setupForEntityInInventory();
+        pGuiGraphics.pose().pushPose();
+        pGuiGraphics.pose().translate((float) pX + 33.0F, (float) pY + 31.0F, 100.0F);
+        float f2 = 40.0F;
+        pGuiGraphics.pose().scale(-40.0F, 40.0F, 40.0F);
+        pGuiGraphics.pose().mulPose(Axis.XP.rotationDegrees(25.0F));
+        pGuiGraphics.pose().translate((1.0F - f) * 0.2F, (1.0F - f) * 0.1F, (1.0F - f) * 0.25F);
+        float f3 = -(1.0F - f) * 90.0F - 90.0F;
+        pGuiGraphics.pose().mulPose(Axis.YP.rotationDegrees(f3));
+        pGuiGraphics.pose().mulPose(Axis.XP.rotationDegrees(180.0F));
+        float f4 = Mth.clamp(Mth.frac(f1 + 0.25F) * 1.6F - 0.3F, 0.0F, 1.0F);
+        float f5 = Mth.clamp(Mth.frac(f1 + 0.75F) * 1.6F - 0.3F, 0.0F, 1.0F);
+        MODEL_BOOK.setupAnim(0.0F, f4, f5, f);
+        VertexConsumer vertexconsumer = pGuiGraphics.bufferSource().getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
+        MODEL_BOOK.renderToBuffer(pGuiGraphics.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        pGuiGraphics.flush();
+        pGuiGraphics.pose().popPose();
+        Lighting.setupFor3DItems();
+    }
+
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        pPartialTick = this.minecraft.getFrameTime();
+        this.renderBackground(pGuiGraphics);
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
         boolean flag = this.minecraft.player.getAbilities().instabuild;
         int i = this.menu.getSoulShardAmount();
 
         for (int j = 0; j < 3; ++j) {
-            Enchantment enchantment = Enchantment.byId((this.menu).enchantClue[j]);
+            int k = (this.menu).enchantClue[j];
+            Enchantment enchantment = Enchantment.byId(k);
             int l = (this.menu).worldClue[j];
             int i1 = j + 1;
-            if (this.isHovering(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && l > 0) {
+            if (this.isHovering(60, 14 + 19 * j, 108, 17, pMouseX, pMouseY) && k > 0) {
                 List<Component> list = Lists.newArrayList();
-                list.add(enchantment == null ? Component.literal("") : enchantment.getFullname(l));
+                list.add((Component.translatable("container.enchant.clue", enchantment == null ? "" : enchantment.getFullname(l))).withStyle(ChatFormatting.WHITE));
                 if (enchantment == null) {
                     list.add(Component.literal(""));
                     list.add(Component.translatable("forge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
                 } else if (!flag) {
-                    list.add(Component.empty());
-                    if (this.minecraft.player.experienceLevel < l) {
-                        list.add((Component.translatable("container.enchant.level.requirement", l)).withStyle(ChatFormatting.RED));
+                    list.add(CommonComponents.EMPTY);
+                    if (this.minecraft.player.experienceLevel < k) {
+                        list.add(Component.translatable("container.enchant.level.requirement", l).withStyle(ChatFormatting.RED));
                     } else {
-                        MutableComponent iformattabletextcomponent = Component.translatable("container.eidolon.enchant.shard.one", 1);
-
-                        list.add(iformattabletextcomponent.withStyle(minecraft.player.experienceLevel >= l ? ChatFormatting.GRAY : ChatFormatting.RED));
-                        MutableComponent iformattabletextcomponent1;
-                        if (l == 1) {
-                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.one");
+                        MutableComponent mutablecomponent;
+                        if (i1 == 1) {
+                            mutablecomponent = Component.translatable("container.enchant.lapis.one");
                         } else {
-                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.many", menu.worldClue[i1 - 1]);
+                            mutablecomponent = Component.translatable("container.enchant.lapis.many", i1);
                         }
 
-                        list.add(iformattabletextcomponent1.withStyle(ChatFormatting.GRAY));
+                        list.add(mutablecomponent.withStyle(i >= i1 ? ChatFormatting.GRAY : ChatFormatting.RED));
+                        MutableComponent mutablecomponent1;
+                        if (i1 == 1) {
+                            mutablecomponent1 = Component.translatable("container.enchant.level.one");
+                        } else {
+                            mutablecomponent1 = Component.translatable("container.enchant.level.many", i1);
+                        }
+
+                        list.add(mutablecomponent1.withStyle(ChatFormatting.GRAY));
                     }
                 }
 
-                this.renderComponentTooltip(matrixStack, list, mouseX, mouseY);
+                pGuiGraphics.renderComponentTooltip(this.font, list, pMouseX, pMouseY);
                 break;
             }
         }

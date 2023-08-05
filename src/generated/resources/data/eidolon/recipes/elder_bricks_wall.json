@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": {
       "item": "eidolon:elder_bricks"
@@ -12,5 +13,6 @@
   "result": {
     "count": 6,
     "item": "eidolon:elder_bricks_wall"
-  }
+  },
+  "show_notification": true
 }

@@ -2,6 +2,7 @@ package elucent.eidolon.common.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -37,7 +38,7 @@ public abstract class SpellProjectileEntity extends Entity {
         super.tick();
 
         if (!level.isClientSide) {
-            HitResult ray = ProjectileUtil.getHitResult(this, (e) -> !e.isSpectator() && e.isPickable() && !e.getUUID().equals(casterId));
+            HitResult ray = ProjectileUtil.getHitResultOnMoveVector(this, (e) -> !e.isSpectator() && e.isPickable() && !e.getUUID().equals(casterId));
             if (ray.getType() == HitResult.Type.ENTITY) {
                 onImpact(ray, ((EntityHitResult)ray).getEntity());
             }
@@ -72,7 +73,7 @@ public abstract class SpellProjectileEntity extends Entity {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

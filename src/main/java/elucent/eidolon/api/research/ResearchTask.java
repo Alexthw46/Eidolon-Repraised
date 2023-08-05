@@ -1,9 +1,8 @@
 package elucent.eidolon.api.research;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -42,10 +42,10 @@ public abstract class ResearchTask {
     public abstract int getWidth();
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void drawIcon(PoseStack stack, int x, int y);
+    public abstract void drawIcon(GuiGraphics stack, ResourceLocation texture, int x, int y);
 
     @OnlyIn(Dist.CLIENT)
-    public int drawCustom(PoseStack stack, int x, int y) {
+    public int drawCustom(@NotNull GuiGraphics stack, ResourceLocation texture, int x, int y) {
         return 0;
     }
 
@@ -55,7 +55,7 @@ public abstract class ResearchTask {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawTooltip(PoseStack stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
+    public void drawTooltip(@NotNull GuiGraphics stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
     }
 
     public record CompletenessResult(int nextSlot, boolean complete) {
@@ -185,43 +185,43 @@ public abstract class ResearchTask {
         }
 
         @Override
-        public void drawIcon(PoseStack stack, int x, int y) {
+        public void drawIcon(GuiGraphics stack, ResourceLocation texture, int x, int y) {
             int offset = (items.size() - 1) * -4;
             ItemRenderer ir = Minecraft.getInstance().getItemRenderer();
             for (int i = 0; i < items.size(); i++) {
-                ir.renderAndDecorateItem(items.get(i), x + i * 8 + offset, y);
-                ir.renderGuiItemDecorations(Minecraft.getInstance().font, items.get(i), x + i * 8 + offset, y, null);
+                stack.renderItem(items.get(i), x + i * 8 + offset, y);
+                stack.renderItemDecorations(Minecraft.getInstance().font, items.get(i), x + i * 8 + offset, y, null);
             }
         }
 
         @Override
-        public int drawCustom(PoseStack stack, int x, int y) {
-            Gui.blit(stack, x, y, 0, 88, 224, 1, 32, 256, 256);
+        public int drawCustom(@NotNull GuiGraphics guiGraphics, ResourceLocation texture, int x, int y) {
+            guiGraphics.blit(texture, x, y, 0, 88, 224, 1, 32, 256, 256);
             x += 1;
             for (int i = 0; i < items.size(); i++) {
                 if (items.size() == 1) {
-                    Gui.blit(stack, x, y, 0, 192, 0, 22, 32, 256, 256);
+                    guiGraphics.blit(texture, x, y, 0, 192, 0, 22, 32, 256, 256);
                     x += 22;
                 } else if (i == 0) {
-                    Gui.blit(stack, x, y, 0, 192, 32, 20, 32, 256, 256);
+                    guiGraphics.blit(texture, x, y, 0, 192, 32, 20, 32, 256, 256);
                     x += 19;
                 } else if (i == items.size() - 1) {
-                    Gui.blit(stack, x, y, 0, 228, 32, 20, 32, 256, 256);
+                    guiGraphics.blit(texture, x, y, 0, 228, 32, 20, 32, 256, 256);
                     x += 20;
                 } else {
-                    Gui.blit(stack, x, y, 0, 211, 32, 18, 32, 256, 256);
+                    guiGraphics.blit(texture, x, y, 0, 211, 32, 18, 32, 256, 256);
                     x += 17;
                 }
             }
-            Gui.blit(stack, x, y, 0, 88, 224, 2, 32, 256, 256);
+            guiGraphics.blit(texture, x, y, 0, 88, 224, 2, 32, 256, 256);
             x += 2;
             return 8 + 17 * items.size();
         }
 
         @Override
-        public void drawTooltip(PoseStack stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
-            List<Component> tooltip = gui.getTooltipFromItem(items.get(0));
-            gui.renderComponentTooltip(stack, tooltip, (int) mouseX, (int) mouseY);
+        public void drawTooltip(@NotNull GuiGraphics stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
+            List<Component> tooltip = gui.getTooltipFromItem(gui.getMinecraft(), items.get(0));
+            stack.renderComponentTooltip(Minecraft.getInstance().font, tooltip, (int) mouseX, (int) mouseY);
         }
 
         @Override
@@ -294,9 +294,9 @@ public abstract class ResearchTask {
         }
 
         @Override
-        public void drawIcon(PoseStack stack, int x, int y) {
+        public void drawIcon(GuiGraphics stack, ResourceLocation texture, int x, int y) {
             int offY = Minecraft.getInstance().player.experienceLevel < levels ? 16 : 0;
-            Gui.blit(stack, x, y, 0, (levels - 1) * 16, 224 + offY, 16, 16, 256, 256);
+            stack.blit(texture, x, y, 0, (levels - 1) * 16, 224 + offY, 16, 16, 256, 256);
         }
 
         @Override
@@ -305,7 +305,7 @@ public abstract class ResearchTask {
         }
 
         @Override
-        public void drawTooltip(PoseStack stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
+        public void drawTooltip(@NotNull GuiGraphics stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
             MutableComponent tooltip;
             if (levels == 1) {
                 tooltip = Component.translatable("container.enchant.level.one");
@@ -313,7 +313,7 @@ public abstract class ResearchTask {
                 tooltip = Component.translatable("container.enchant.level.many", levels);
             }
 
-            gui.renderTooltip(stack, tooltip, (int) mouseX, (int) mouseY);
+            stack.renderTooltip(Minecraft.getInstance().font, tooltip, (int) mouseX, (int) mouseY);
         }
 
         @Override

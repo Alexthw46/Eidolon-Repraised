@@ -1,9 +1,9 @@
 package elucent.eidolon.gui.jei;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.codex.CodexGui;
+import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
@@ -15,6 +15,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -74,10 +75,9 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
         StackIngredient last = new StackIngredient(ItemStack.EMPTY, Ingredient.EMPTY);
         while (iter.hasNext()) {
             StackIngredient i = iter.next();
-            if (!ItemStack.isSame(i.stack, last.stack) || !ItemStack.tagMatches(i.stack, last.stack) || last.stack.getCount() + i.stack.getCount() > last.stack.getMaxStackSize()) {
+            if (!ItemStack.isSameItem(i.stack, last.stack) || !ItemStack.isSameItemSameTags(i.stack, last.stack) || last.stack.getCount() + i.stack.getCount() > last.stack.getMaxStackSize()) {
                 last = i;
-            }
-            else {
+            } else {
                 last.stack.grow(i.stack.getCount());
                 iter.remove();
             }
@@ -111,9 +111,9 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
     }
 
     @Override
-    public void draw(RecipeWrappers.Crucible recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
+    public void draw(RecipeWrappers.Crucible recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
         recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-        recipe.getPage().render(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        recipe.getPage().render(CodexGui.DUMMY, mStack, CruciblePage.BACKGROUND, 5, 4, (int) mouseX, (int) mouseY);
     }
 }
 

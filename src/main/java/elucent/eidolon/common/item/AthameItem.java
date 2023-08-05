@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -22,11 +23,9 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -85,7 +84,8 @@ public class AthameItem extends SwordItem {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
         var random = ctx.getPlayer() != null ? ctx.getPlayer().getRandom() : ctx.getLevel().getRandom();
         float hardness = state.getDestroySpeed(ctx.getLevel(), ctx.getClickedPos());
-        if ((state.getMaterial() == Material.PLANT || state.getMaterial() == Material.REPLACEABLE_PLANT || state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.WATER_PLANT || state.getMaterial() == Material.REPLACEABLE_FIREPROOF_PLANT)
+        Block block = state.getBlock();
+        if ((block instanceof BushBlock || block instanceof LeavesBlock || state.is(BlockTags.LEAVES) || state.is(BlockTags.CROPS) || state.is(BlockTags.FLOWERS) || block instanceof GrowingPlantBlock)
             && hardness < 5.0f && hardness >= 0) {
             if (!ctx.getLevel().isClientSide) {
                 Vec3 hit = ctx.getClickLocation();

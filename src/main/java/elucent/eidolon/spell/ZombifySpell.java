@@ -36,7 +36,7 @@ public class ZombifySpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof Villager;
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         if (effigies.size() == 0) return false;
@@ -53,7 +53,7 @@ public class ZombifySpell extends PrayerSpell {
         if (effigies.size() == 0) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
 
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof Villager villager)) return;
 
         if (world instanceof ServerLevel level) {
@@ -76,7 +76,7 @@ public class ZombifySpell extends PrayerSpell {
         ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
         zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
         zombievillager.setVillagerData(villager.getVillagerData());
-        zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
+        zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
         zombievillager.setTradeOffers(villager.getOffers().createTag());
         zombievillager.setVillagerXp(villager.getVillagerXp());
         ForgeEventFactory.onLivingConvert(villager, zombievillager);

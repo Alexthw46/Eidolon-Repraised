@@ -2,6 +2,7 @@ package elucent.eidolon.common.item.curio;
 
 import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -16,11 +17,11 @@ public class WardedMailItem extends ItemBase {
 
     @SubscribeEvent
     public static void onDamage(LivingAttackEvent event) {
-        if (event.getSource().isMagic()) {
+        if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO)) {
             CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.WARDED_MAIL.get()).ifPresent((slots) -> {
 
                 event.setCanceled(true);
-                event.getEntity().hurt(new DamageSource(event.getSource().getMsgId()), event.getAmount());
+                event.getEntity().hurt(new DamageSource(event.getEntity().damageSources().generic().typeHolder()), event.getAmount());
 
             });
         }

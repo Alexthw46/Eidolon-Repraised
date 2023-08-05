@@ -24,17 +24,18 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
     public static class Material implements ArmorMaterial {
+
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slot) {
-            return MAX_DAMAGE_ARRAY[slot.getIndex()] * 21;
+        public int getDurabilityForType(Type slot) {
+            return MAX_DAMAGE_ARRAY[slot.getSlot().getIndex()] * 21;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slot) {
+        public int getDefenseForType(Type slot) {
             return switch (slot) {
-                case CHEST -> 7;
-                case HEAD -> 3;
-                case FEET -> 2;
+                case CHESTPLATE -> 7;
+                case HELMET -> 3;
+                case BOOTS -> 2;
                 default -> 0;
             };
         }
@@ -72,7 +73,7 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         public static final Material INSTANCE = new Material();
     }
 
-    public WarlockRobesItem(EquipmentSlot slot, Properties builderIn) {
+    public WarlockRobesItem(Type slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
     }
 
@@ -94,9 +95,9 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
                 float netHeadPitch = Mth.lerp(pticks, entity.xRotO, entity.getXRot());
-                ClientRegistry.WARLOCK_ARMOR_MODEL.slot = slot;
+                ClientRegistry.WARLOCK_ARMOR_MODEL.slot = getEquipmentSlot();
                 ClientRegistry.WARLOCK_ARMOR_MODEL.copyFromDefault(_default);
-                ClientRegistry.WARLOCK_ARMOR_MODEL.setupAnim(entity, entity.animationPosition, entity.animationSpeed, entity.tickCount + pticks, netHeadYaw, netHeadPitch);
+                ClientRegistry.WARLOCK_ARMOR_MODEL.setupAnim(entity, entity.walkAnimation.position(), entity.walkAnimation.speed(), entity.tickCount + pticks, netHeadYaw, netHeadPitch);
                 return ClientRegistry.WARLOCK_ARMOR_MODEL;
             }
         });
@@ -106,6 +107,7 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         var tag = stack.getOrCreateTag();
         return tag.contains("color") ? DyeColor.byId(tag.getInt("color")) : DyeColor.BLUE;
     }
+
 
     @OnlyIn(Dist.CLIENT)
     @Override

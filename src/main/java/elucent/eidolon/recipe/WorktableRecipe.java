@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -91,8 +92,8 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inv) {
-        return getResultItem();
+    public @NotNull ItemStack assemble(@NotNull Container inv, @NotNull RegistryAccess registryAccess) {
+        return getResultItem(registryAccess);
     }
 
     @Override
@@ -101,7 +102,7 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         return result;
     }
 
@@ -110,9 +111,13 @@ public class WorktableRecipe implements Recipe<Container> {
         return registryName;
     }
 
+    public ItemStack getResultItem() {
+        return result;
+    }
+
     public static class Type implements RecipeType<WorktableRecipe> {
         @Override
-        public String toString () {
+        public String toString() {
             return Eidolon.MODID + ":worktable";
         }
 

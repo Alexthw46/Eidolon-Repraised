@@ -1,7 +1,6 @@
 package elucent.eidolon.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
@@ -11,6 +10,7 @@ import elucent.eidolon.network.ResearchActionPacket;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,14 +34,14 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         this.imageWidth = 192;
     }
 
-	public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderLabels(@NotNull PoseStack matrixStack, int x, int y) {
+	protected void renderLabels(@NotNull GuiGraphics matrixStack, int x, int y) {
 		RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
 		int i = this.leftPos;
 		int j = (this.height - this.imageHeight) / 2;
@@ -114,72 +114,67 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 	}
 
 	@Override
-	protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
-		RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
+	protected void renderBg(@NotNull GuiGraphics matrixStack, float partialTicks, int x, int y) {
 		int i = this.leftPos;
 		int j = (this.height - this.imageHeight) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		matrixStack.blit(RESEARCH_TABLE_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
 		double mouseX = Minecraft.getInstance().mouseHandler.xpos();
 		double mouseY = Minecraft.getInstance().mouseHandler.ypos();
 		mouseX = mouseX * (double) Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double) Minecraft.getInstance().getWindow().getScreenWidth();
 		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
-        
-        if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
-        	ItemStack notes = menu.slots.get(0).getItem();
-        	if (!notes.hasTag() || !notes.getTag().contains("research")) return;
-        	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
-        	if (r == null) return;
-        	
-        	int progress = menu.getProgress();
-        	int amt = progress * 104 / 200;
-        	if (progress > 0) blit(matrixStack, i + 137, j + 17 + amt, 192, 92 + amt, 9, 104 - amt);
 
-        	int nstars = r.getStars();
-        	int done = notes.getTag().getInt("stepsDone");
-        	
-        	if (done < nstars && progress == 0) {
-                List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
-                int slotStart = 38;
-	        	for (int k = 0; k < tasks.size(); k ++) {
-	        		ResearchTask task = tasks.get(k);
-	    			int xx = 164, yy = 16 + 36 * k;
-	    	        RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
-	    			blit(matrixStack, i + xx, j + yy, 80, 224, 8, 32);
-	    			blit(matrixStack, i + xx + 8, j + yy, 112, 224, 24, 32);
-	    			task.drawIcon(matrixStack, i + xx + 12, j + yy + 8);
-	    	        RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
-	    			task.drawCustom(matrixStack, i + xx + 32, j + yy);
-	    	        RenderSystem.setShaderTexture(0, RESEARCH_TABLE_TEXTURE);
-	    	        
-	    	        CompletenessResult isComplete = task.isComplete(menu, Minecraft.getInstance().player, slotStart);
-	    	        if (isComplete.complete()) {
-	    	        	if (isHovering(xx + task.getWidth() - 30, yy + 9, 20, 13, mouseX, mouseY)) {
-	        	        	blit(matrixStack, i + xx + task.getWidth() - 32, j + yy, 184, 224, 24, 32);
-	    	        	}
-	    	        	else blit(matrixStack, i + xx + task.getWidth() - 32, j + yy, 160, 224, 24, 32);
-	    	        }
-	    	        else {
-	    	        	blit(matrixStack, i + xx + task.getWidth() - 32, j + yy, 136, 224, 24, 32);
-	    	        }
-	    			blit(matrixStack, i + xx + task.getWidth() - 8, j + yy, 96, 224, 8, 32);
-	    			
-	    			slotStart = isComplete.nextSlot();
-	        	}
+		if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
+			ItemStack notes = menu.slots.get(0).getItem();
+			if (!notes.hasTag() || !notes.getTag().contains("research")) return;
+			Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+			if (r == null) return;
+
+			int progress = menu.getProgress();
+			int amt = progress * 104 / 200;
+			if (progress > 0)
+				matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 137, j + 17 + amt, 192, 92 + amt, 9, 104 - amt);
+
+			int nstars = r.getStars();
+			int done = notes.getTag().getInt("stepsDone");
+
+			if (done < nstars && progress == 0) {
+				List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+				int slotStart = 38;
+				for (int k = 0; k < tasks.size(); k++) {
+					ResearchTask task = tasks.get(k);
+					int xx = 164, yy = 16 + 36 * k;
+					matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx, j + yy, 80, 224, 8, 32);
+					matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx + 8, j + yy, 112, 224, 24, 32);
+					task.drawIcon(matrixStack, RESEARCH_TABLE_TEXTURE, i + xx + 12, j + yy + 8);
+					task.drawCustom(matrixStack, RESEARCH_TABLE_TEXTURE, i + xx + 32, j + yy);
+
+					CompletenessResult isComplete = task.isComplete(menu, Minecraft.getInstance().player, slotStart);
+					if (isComplete.complete()) {
+						if (isHovering(xx + task.getWidth() - 30, yy + 9, 20, 13, mouseX, mouseY)) {
+							matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx + task.getWidth() - 32, j + yy, 184, 224, 24, 32);
+						} else
+							matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx + task.getWidth() - 32, j + yy, 160, 224, 24, 32);
+					} else {
+						matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx + task.getWidth() - 32, j + yy, 136, 224, 24, 32);
+					}
+					matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + xx + task.getWidth() - 8, j + yy, 96, 224, 8, 32);
+
+					slotStart = isComplete.nextSlot();
+				}
         	}
         	
         	int starsY = 61 + 5 * nstars;
         	for (int k = 0; k < nstars; k ++) {
-        		if (k < done) blit(matrixStack, i + 152, j + starsY - k * 10, 201, 82, 9, 10);
-        		else blit(matrixStack, i + 152, j + starsY - k * 10, 192, 82, 9, 10);
-        	}
+				if (k < done) matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 152, j + starsY - k * 10, 201, 82, 9, 10);
+				else matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 152, j + starsY - k * 10, 192, 82, 9, 10);
+			}
         	
         	if (done >= nstars && !menu.getSlot(1).getItem().isEmpty()) {
-	        	if (isHovering(75, 51, 17, 14, mouseX, mouseY)) {
-	        		blit(matrixStack, i + 73, j + 49, 234, 64, 21, 18);
-	        	}
-	        	else blit(matrixStack, i + 73, j + 49, 213, 64, 21, 18);
-        	}
+				if (isHovering(75, 51, 17, 14, mouseX, mouseY)) {
+					matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 73, j + 49, 234, 64, 21, 18);
+				} else matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 73, j + 49, 213, 64, 21, 18);
+			}
         }
     }
 }

@@ -8,7 +8,6 @@ import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -48,7 +47,7 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(DamageSource.indirectMagic(this, level.getPlayerByUUID(casterId)), 7.0f);
+        target.hurt(target.damageSources().indirectMagic(this, level.getPlayerByUUID(casterId)), 7.0f);
         onImpact(ray);
     }
 

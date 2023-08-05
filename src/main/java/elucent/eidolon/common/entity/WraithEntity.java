@@ -81,7 +81,7 @@ public class WraithEntity extends Monster {
     public void aiStep() {
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getLightLevelDependentMagicValue();
-            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ());
+            BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
                 this.setSecondsOnFire(8);
             }
@@ -103,7 +103,7 @@ public class WraithEntity extends Monster {
         // slow fall
         this.fallDistance = 0;
         Vec3 vector3d = this.getDeltaMovement();
-        if (!this.onGround && vector3d.y < 0.0D) {
+        if (!this.onGround() && vector3d.y < 0.0D) {
             this.setDeltaMovement(vector3d.multiply(1.0D, 0.6D, 1.0D));
         }
 

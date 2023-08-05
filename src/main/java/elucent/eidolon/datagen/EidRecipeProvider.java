@@ -17,21 +17,21 @@ import java.util.function.Consumer;
 
 public class EidRecipeProvider extends RecipeProvider {
     public EidRecipeProvider(DataGenerator pGenerator) {
-        super(pGenerator);
+        super(pGenerator.getPackOutput());
     }
 
     @Override
-    protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> pFinishedRecipeConsumer) {
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pFinishedRecipeConsumer) {
         buildDecoPack(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS);
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_BRICKS, List.of(Registry.ELDER_BRICKS_EYE.get(), Registry.ELDER_PILLAR.get(), Registry.ELDER_MASONRY.getBlock()));
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_MASONRY);
         buildDecoPack(pFinishedRecipeConsumer, Registry.BONE_PILE);
 
         makeStonecutter(pFinishedRecipeConsumer, Registry.SMOOTH_STONE_BRICK.getBlock(), Registry.SMOOTH_STONE_ARCH.get(), "smooth_stone_arch");
-        ShapelessRecipeBuilder.shapeless(Registry.MOSSY_SMOOTH_STONE_BRICKS.get()).requires(Registry.SMOOTH_STONE_BRICK.getBlock()).requires(Items.VINE).unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(Registry.SMOOTH_STONE_BRICK.getBlock())).save(pFinishedRecipeConsumer, Eidolon.prefix("mossy_smooth_stone_bricks"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Registry.MOSSY_SMOOTH_STONE_BRICKS.get()).requires(Registry.SMOOTH_STONE_BRICK.getBlock()).requires(Items.VINE).unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(Registry.SMOOTH_STONE_BRICK.getBlock())).save(pFinishedRecipeConsumer, Eidolon.prefix("mossy_smooth_stone_bricks"));
 
         woodFromLogs(pFinishedRecipeConsumer, Registry.ILLWOOD_BARK.get(), Registry.ILLWOOD_LOG.get());
-        planksFromLog(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS.getBlock(), Registry.ILLWOOD_LOGS);
+        planksFromLog(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS.getBlock(), Registry.ILLWOOD_LOGS, 4);
         strippedLogToWood(pFinishedRecipeConsumer, Registry.STRIPPED_ILLWOOD_LOG.get(), Registry.STRIPPED_ILLWOOD_BARK.get());
     }
 
@@ -68,23 +68,23 @@ public class EidRecipeProvider extends RecipeProvider {
     }
 
     private void makeSlab(Consumer<FinishedRecipe> consumer, Block block, Block slab, String basename) {
-        ShapedRecipeBuilder.shaped(slab, 6).pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_slab"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, slab, 6).pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_slab"));
     }
 
     private void makeWall(Consumer<FinishedRecipe> consumer, Block block, Block wall, String basename) {
-        ShapedRecipeBuilder.shaped(wall, 6).pattern("BBB").pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_wall"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, wall, 6).pattern("BBB").pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_wall"));
     }
 
     private void makeStairs(Consumer<FinishedRecipe> consumer, Block block, Block stairs, String basename) {
-        ShapedRecipeBuilder.shaped(stairs, 4).pattern("B  ").pattern("BB ").pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_stair"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, stairs, 4).pattern("B  ").pattern("BB ").pattern("BBB").define('B', block).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_stair"));
     }
 
     private void makeFence(Consumer<FinishedRecipe> consumer, Block block, Block fence, String basename) {
-        ShapedRecipeBuilder.shaped(fence, 3).pattern("BSB").pattern("BSB").define('B', block).define('S', Items.STICK).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_fence"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, fence, 3).pattern("BSB").pattern("BSB").define('B', block).define('S', Items.STICK).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_fence"));
     }
 
     private void makeGate(Consumer<FinishedRecipe> consumer, Block block, Block gate, String basename) {
-        ShapedRecipeBuilder.shaped(gate, 1).pattern("SBS").pattern("SBS").define('B', block).define('S', Items.STICK).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_gate"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, gate, 1).pattern("SBS").pattern("SBS").define('B', block).define('S', Items.STICK).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_gate"));
     }
 
     private static int STONECUTTER_COUNTER = 0;
@@ -94,12 +94,12 @@ public class EidRecipeProvider extends RecipeProvider {
     }
 
     public static void makeStonecutter(Consumer<FinishedRecipe> consumer, ItemLike input, ItemLike output, int quantity, String reg) {
-        SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), output, quantity).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(input)).save(consumer, new ResourceLocation(Eidolon.MODID, reg + "_stonecutter_" + STONECUTTER_COUNTER));
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), RecipeCategory.BUILDING_BLOCKS, output, quantity).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(input)).save(consumer, new ResourceLocation(Eidolon.MODID, reg + "_stonecutter_" + STONECUTTER_COUNTER));
         STONECUTTER_COUNTER++;
     }
 
     private static void strippedLogToWood(Consumer<FinishedRecipe> recipeConsumer, ItemLike stripped, ItemLike output) {
-        ShapedRecipeBuilder.shaped(output, 3).define('#', stripped).pattern("##").pattern("##").group("bark")
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, output, 3).define('#', stripped).pattern("##").pattern("##").group("bark")
                 .unlockedBy("has_illwood", InventoryChangeTrigger.TriggerInstance.hasItems(stripped))
                 .save(recipeConsumer);
     }

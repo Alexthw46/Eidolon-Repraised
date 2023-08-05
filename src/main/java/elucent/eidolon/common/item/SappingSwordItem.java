@@ -5,7 +5,6 @@ import elucent.eidolon.network.Networking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,19 +37,14 @@ public class SappingSwordItem extends SwordItem {
             tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
         }
     }
-    
-//    @Override
-//	public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-//    	if (toolAction == ToolActions.SWORD_SWEEP) return false;
-//    	return super.canPerformAction(stack, toolAction);
-//    }
 
     @Override
     public boolean hurtEnemy(@NotNull ItemStack stack, LivingEntity target, @NotNull LivingEntity attacker) {
         if (target.invulnerableTime > 0) {
             target.invulnerableTime = 0;
             float before = target.getHealth();
-            target.hurt(new EntityDamageSource("wither", attacker).bypassArmor(), 2.0f);
+            //TODO: DamageSource
+            target.hurt(target.damageSources().wither(), 2.0f);
             float healing = before - target.getHealth();
             if (healing > 0) {
                 attacker.heal(healing);

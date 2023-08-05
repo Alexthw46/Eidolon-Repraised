@@ -1,8 +1,7 @@
 package elucent.eidolon.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.ClientConfig;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
@@ -20,6 +19,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.awt.*;
 
@@ -38,14 +39,14 @@ public class RuneParticle extends TextureSheetParticle {
         this.setLifetime(20);
         this.gravity = -0.05f;
         Color.RGBtoHSB((int) (255 * Math.min(1.0f, data.r1)), (int) (255 * Math.min(1.0f, data.g1)), (int) (255 * Math.min(1.0f, data.b1)), hsv1);
-        Color.RGBtoHSB((int)(255 * Math.min(1.0f, data.r2)), (int)(255 * Math.min(1.0f, data.g2)), (int)(255 * Math.min(1.0f, data.b2)), hsv2);
+        Color.RGBtoHSB((int) (255 * Math.min(1.0f, data.r2)), (int) (255 * Math.min(1.0f, data.g2)), (int) (255 * Math.min(1.0f, data.b2)), hsv2);
         if (hsv1[0] < 0.01) hsv1[0] = hsv2[0];
         if (hsv1[1] < 0.01) hsv1[1] = 0.01f;
         updateTraits();
     }
 
     protected float getCoeff() {
-        float t = ((float)this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
+        float t = ((float) this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
         t = Mth.clamp(t, 0.001f, 0.999f);
         float ic = (1 - t) * (1 - t);
         return 1 - (Mth.sin(Mth.PI * 4 * t) * ic * 0.5f - 0.7f * t + 0.7f);
@@ -53,14 +54,14 @@ public class RuneParticle extends TextureSheetParticle {
 
     protected void updateTraits() {
         float coeff = getCoeff();
-        float t = ((float)this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
+        float t = ((float) this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
         t = Mth.clamp(t, 0.001f, 0.999f);
         float ic = (1 - t) * (1 - t);
         quadSize = Mth.lerp(coeff, 0.125f, 0.0625f);
         this.oRoll = roll;
         this.roll = Mth.PI * Mth.sin(Mth.cos(Mth.PI * 4 * t) * ic) / 8;
         setAlpha(Mth.lerp(coeff * coeff, 0.5f, 0));
-        
+
         float h = Mth.rotLerp(coeff, 360 * hsv1[0], 360 * hsv2[0]) / 360;
         float s = Mth.lerp(coeff, hsv1[1], hsv2[1]);
         float v = Mth.lerp(coeff, hsv1[2], hsv2[2]);
@@ -87,25 +88,25 @@ public class RuneParticle extends TextureSheetParticle {
         float f = (float) (Mth.lerp(pticks, this.xo, this.x) - vec3.x());
         float f1 = (float) (Mth.lerp(pticks, this.yo, this.y) - vec3.y());
         float f2 = (float) (Mth.lerp(pticks, this.zo, this.z) - vec3.z());
-        Quaternion quaternion;
+        Quaternionf quaternion;
         if (this.roll == 0.0F) {
             quaternion = info.rotation();
         } else {
-            quaternion = new Quaternion(info.rotation());
+            quaternion = new Quaternionf(info.rotation());
             float f3 = Mth.lerp(pticks, this.oRoll, this.roll);
-            quaternion.mul(Vector3f.ZP.rotation(f3));
+            quaternion.mul(Axis.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        vector3f1.transform(quaternion);
+        vector3f1.rotate(quaternion);
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
         float f4 = this.getQuadSize(pticks);
 
-        for(int i = 0; i < 4; ++i) {
-           Vector3f vector3f = avector3f[i];
-           vector3f.transform(quaternion);
-           vector3f.mul(f4);
-           vector3f.add(f, f1, f2);
+        for (int i = 0; i < 4; ++i) {
+            Vector3f vector3f = avector3f[i];
+            vector3f.rotate(quaternion);
+            vector3f.mul(f4);
+            vector3f.add(f, f1, f2);
         }
 
         float f7 = this.getU0();
@@ -113,17 +114,17 @@ public class RuneParticle extends TextureSheetParticle {
         float f5 = this.getV0();
         float f6 = this.getV1();
         int j = this.getLightColor(pticks);
-        
-        
-        Vector3f offX = avector3f[0].copy(), offY = avector3f[1].copy();
+
+
+        Vector3f offX = new Vector3f(avector3f[0]), offY = new Vector3f(avector3f[1]);
         offX.sub(avector3f[2]);
         offX.mul(0.5f);
         offY.sub(avector3f[3]);
         offY.mul(0.5f);
 
         TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
-        
-        for (int i = 0; i < 1; i ++) {
+
+        for (int i = 0; i < 1; i++) {
 //        	float a = Mth.PI * i + Mth.PI * 2 * (age + pticks) / lifetime;
 //        	float s = Mth.sin(a), c = Mth.cos(a);
 //        	float dx = offX.x() * c + offY.x() * s;

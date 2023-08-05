@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
@@ -13,6 +12,7 @@ import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.language.I18n;
@@ -20,6 +20,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+
+import static elucent.eidolon.codex.CodexGui.CODEX_BACKGROUND;
 
 public class ChantPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_chant_page.png");
@@ -54,28 +58,28 @@ public class ChantPage extends Page {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
+    public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
         String title = I18n.get(this.title);
         int titleWidth = Minecraft.getInstance().font.width(title);
-        drawText(gui, mStack, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
+        PoseStack mStack = guiGraphics.pose();
+        drawText(gui, guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
 
-        RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
+        RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
         int w = chant.length * 24;
         int baseX = x + 64 - w / 2;
-        CodexGui.blit(mStack, baseX - 16, y + 28, 256, 208, 16, 32, 512, 512);
-        for (int i = 0; i < chant.length; i ++) {
-            CodexGui.blit(mStack, baseX + i * 24, y + 28, 272, 208, 24, 32, 512, 512);
+        CodexGui.blit(guiGraphics, baseX - 16, y + 28, 256, 208, 16, 32, 512, 512);
+        for (int i = 0; i < chant.length; i++) {
+            CodexGui.blit(guiGraphics, baseX + i * 24, y + 28, 272, 208, 24, 32, 512, 512);
         }
-        CodexGui.blit(mStack, baseX + w, y + 28, 296, 208, 16, 32, 512, 512);
+        CodexGui.blit(guiGraphics, baseX + w, y + 28, 296, 208, 16, 32, 512, 512);
 
         Tesselator tess = Tesselator.getInstance();
         RenderSystem.enableBlend();
-        for (int i = 0; i < chant.length; i ++) {
-            RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
+        for (int i = 0; i < chant.length; i++) {
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            CodexGui.blit(mStack, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
+            CodexGui.blit(guiGraphics, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
             Sign sign = chant[i];
@@ -92,6 +96,6 @@ public class ChantPage extends Page {
         RenderSystem.disableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        drawWrappingText(gui, mStack, I18n.get(text), x + 4, y + 72, 120);
+        drawWrappingText(gui, guiGraphics, I18n.get(text), x + 4, y + 72, 120);
     }
 }

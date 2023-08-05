@@ -40,10 +40,10 @@ public class LightSpell extends StaticSpell {
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (ray instanceof BlockHitResult blockHitResult) {
             BlockPos blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
-            if (world.getBlockState(blockPos).getMaterial().isReplaceable() && world.isUnobstructed(Registry.GHOST_LIGHT.get().defaultBlockState(), blockPos, CollisionContext.of(player))) {
+            if (world.getBlockState(blockPos).canBeReplaced() && world.isUnobstructed(Registry.GHOST_LIGHT.get().defaultBlockState(), blockPos, CollisionContext.of(player))) {
                 BlockState lightBlockState = Registry.GHOST_LIGHT.get().defaultBlockState();
                 if (deity.getId().equals(Deities.DARK_DEITY_ID)) {
                     lightBlockState = lightBlockState.setValue(GhostLight.DEITY, false);

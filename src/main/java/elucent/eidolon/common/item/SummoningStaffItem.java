@@ -70,7 +70,7 @@ public class SummoningStaffItem extends ItemBase {
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity entity, int time) {
+    public void onUseTick(@NotNull Level pLevel, LivingEntity entity, @NotNull ItemStack stack, int time) {
         if (entity.level.isClientSide) {
             HitResult hit = entity.pick(16, 0, false);
             if (hit.getType() != Type.MISS) {
@@ -194,7 +194,7 @@ public class SummoningStaffItem extends ItemBase {
                     ((ServerPlayer) player).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.tooltip.active_summon").append(
                             Component.translatable(summonKey).withStyle(ChatFormatting.LIGHT_PURPLE)
                     )));
-                    player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5f, 1.0f);
+                    player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
                 }
                 return InteractionResultHolder.fail(stack);
             }

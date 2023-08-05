@@ -6,11 +6,9 @@ import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.EidolonSounds;
-import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -52,7 +50,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, level.getPlayerByUUID(casterId)), 4.0f);
+        target.hurt(target.damageSources().indirectMagic(this, level.getPlayerByUUID(casterId)), 4.0f);
         if (target instanceof LivingEntity)
             ((LivingEntity) target).addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 300, 0));
         onImpact(ray);
@@ -61,10 +59,10 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
     @Override
     protected void onImpact(HitResult ray) {
         kill();
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             Vec3 pos = ray.getLocation();
-            level.playSound(null, pos.x, pos.y, pos.z, EidolonSounds.SPLASH_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.5f, random.nextFloat() * 0.2f + 0.9f);
-            Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 192, 224, 255), ColorUtil.packColor(255, 96, 128, 192)));
+            level().playSound(null, pos.x, pos.y, pos.z, EidolonSounds.SPLASH_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.5f, random.nextFloat() * 0.2f + 0.9f);
+            Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 192, 224, 255), ColorUtil.packColor(255, 96, 128, 192)));
         }
     }
 }

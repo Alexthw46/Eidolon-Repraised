@@ -12,8 +12,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -68,7 +66,7 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, level.getEntity((int)casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
+        //target.hurt(new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, level.getEntity((int)casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
         onImpact(ray);
     }
 
@@ -81,4 +79,6 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
             Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 158, 92, 255), ColorUtil.packColor(255, 60, 62, 186)));
         }
     }
+
+
 }

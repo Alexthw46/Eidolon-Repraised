@@ -141,9 +141,9 @@ public class KnowledgeCommand {
         }
 
         if (players.size() == 1) {
-            sources.sendSuccess(Component.translatable("commands.eidolon.knowledge.success.single", players.iterator().next().getDisplayName()), true);
+            sources.sendSuccess(() -> Component.translatable("commands.eidolon.knowledge.success.single", players.iterator().next().getDisplayName()), true);
         } else {
-            sources.sendSuccess(Component.translatable("commands.eidolon.knowledge.success.multiple", players.size()), true);
+            sources.sendSuccess(() -> Component.translatable("commands.eidolon.knowledge.success.multiple", players.size()), true);
         }
 
         return players.size();

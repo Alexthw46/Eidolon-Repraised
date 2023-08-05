@@ -63,7 +63,7 @@ public interface IPlayerData {
     }
 
     default boolean canFlap(Player player) {
-        return !player.isOnGround() && !player.isInPowderSnow && !player.isSwimming() && !player.isPassenger() && !player.getAbilities().flying;
+        return !player.onGround() && !player.isInPowderSnow && !player.isSwimming() && !player.isPassenger() && !player.getAbilities().flying;
     }
 
     int getDashTicks(Player player);

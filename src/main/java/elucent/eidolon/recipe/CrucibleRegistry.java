@@ -26,10 +26,9 @@ public class CrucibleRegistry {
         ItemStack last = ItemStack.EMPTY;
         while (iter.hasNext()) {
             ItemStack i = iter.next();
-            if (!ItemStack.isSame(i, last) || !ItemStack.tagMatches(i, last) || last.getCount() + i.getCount() > last.getMaxStackSize()) {
+            if (!ItemStack.isSameItem(i, last) || !ItemStack.isSameItemSameTags(i, last) || last.getCount() + i.getCount() > last.getMaxStackSize()) {
                 last = i;
-            }
-            else {
+            } else {
                 last.grow(i.getCount());
                 iter.remove();
             }

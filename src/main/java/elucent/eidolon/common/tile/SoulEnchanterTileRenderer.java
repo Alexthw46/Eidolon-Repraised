@@ -2,7 +2,7 @@ package elucent.eidolon.common.tile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.event.ClientEvents;
 import net.minecraft.client.Minecraft;
@@ -38,12 +38,12 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
         }
 
         while (f1 < -(float) Math.PI) {
-            f1 += ((float)Math.PI * 2F);
+            f1 += ((float) Math.PI * 2F);
         }
 
         float f2 = tileEntityIn.pageAngle + f1 * partialTicks;
-        matrixStackIn.mulPose(Vector3f.YP.rotation(-f2));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(80.0F));
+        matrixStackIn.mulPose(Axis.YP.rotation(-f2));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(80.0F));
         float f3 = Mth.lerp(partialTicks, tileEntityIn.oFlip, tileEntityIn.flip);
         float f4 = Mth.frac(f3 + 0.25F) * 1.6F - 0.3F;
         float f5 = Mth.frac(f3 + 0.75F) * 1.6F - 0.3F;

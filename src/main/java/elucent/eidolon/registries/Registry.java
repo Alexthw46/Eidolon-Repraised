@@ -20,27 +20,34 @@ import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.DyeRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
+import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageEffects;
+import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.BlockGetter;
@@ -48,8 +55,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -68,6 +75,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
+import static net.minecraft.world.level.block.state.properties.WoodType.register;
+
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
     public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(new ResourceLocation(Eidolon.MODID, "illwood_logs"));
@@ -77,6 +86,8 @@ public class Registry {
     public static TagKey<Item> INGOTS_ARCANE_GOLD = ItemTags.create(new ResourceLocation("forge", "ingots/arcane_gold"));
     public static final TagKey<Item> INGOTS_SILVER = ItemTags.create(new ResourceLocation("forge", "ingots/silver"));
     public static TagKey<Item> GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
+
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Eidolon.MODID);
 
     static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Eidolon.MODID);
     static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Eidolon.MODID);
@@ -90,11 +101,22 @@ public class Registry {
     public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
     static Item.Properties itemProps() {
-        return new Item.Properties().tab(Eidolon.TAB);
+        return new Item.Properties();
     }
 
-    static BlockBehaviour.Properties blockProps(Material mat, MaterialColor color) {
-        return BlockBehaviour.Properties.of(mat, color);
+    public static final RegistryObject<CreativeModeTab> TAB = TABS.register("general", () -> CreativeModeTab.builder().icon(Registry.SHADOW_GEM.get()::getDefaultInstance).title(Component.translatable("itemGroup.eidolon"))
+            .displayItems((params, output) -> {
+                for (var entry : ITEMS.getEntries()) {
+                    output.accept(entry.get().getDefaultInstance());
+                }
+            }).build());
+
+    static BlockBehaviour.Properties blockProps(Block mat, DyeColor color) {
+        return BlockBehaviour.Properties.copy(mat).mapColor(color);
+    }
+
+    static BlockBehaviour.Properties blockProps(Block mat) {
+        return BlockBehaviour.Properties.copy(mat);
     }
 
     private static Boolean allowsSpawnOnLeaves(BlockState state, BlockGetter reader, BlockPos pos, EntityType<?> entity) {
@@ -130,6 +152,10 @@ public class Registry {
         return block;
     }
 
+    public static final WoodType ILLWOOD = register(new WoodType("illwood", BlockSetType.DARK_OAK));
+    public static final WoodType POLISHED = register(new WoodType("polished", BlockSetType.DARK_OAK));
+
+
     public static class DecoBlockPack {
         final DeferredRegister<Block> mainBlock;
         public final String basename;
@@ -151,9 +177,9 @@ public class Registry {
             return this;
         }
 
-        public DecoBlockPack addFence() {
+        public DecoBlockPack addFence(WoodType type) {
             fence = addBlock(basename + "_fence", () -> new FenceBlock(props));
-            fence_gate = addBlock(basename + "_fence_gate", () -> new FenceGateBlock(props));
+            fence_gate = addBlock(basename + "_fence_gate", () -> new FenceGateBlock(props, type));
             return this;
         }
 
@@ -183,7 +209,7 @@ public class Registry {
     }
 
     static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
-        return CONTAINERS.register(name, () -> new MenuType<>(factory));
+        return CONTAINERS.register(name, () -> new MenuType<>(factory, FeatureFlags.VANILLA_SET));
     }
 
     public static final RegistryObject<Item>
@@ -234,13 +260,13 @@ public class Registry {
             .setLore("lore.eidolon.cleaving_axe"));
     public static final RegistryObject<Item> SHADOW_GEM = addItem("shadow_gem");
     public static final RegistryObject<Item> WICKED_WEAVE = addItem("wicked_weave");
-    public static final RegistryObject<Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(EquipmentSlot.HEAD, itemProps()));
-    public static final RegistryObject<Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(EquipmentSlot.CHEST, itemProps()));
-    public static final RegistryObject<Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(EquipmentSlot.FEET, itemProps()));
-    public static final RegistryObject<Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(EquipmentSlot.HEAD, itemProps()));
-    public static final RegistryObject<Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(EquipmentSlot.CHEST, itemProps()));
-    public static final RegistryObject<Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(EquipmentSlot.LEGS, itemProps()));
-    public static final RegistryObject<Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(EquipmentSlot.FEET, itemProps()));
+    public static final RegistryObject<Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(Type.HELMET, itemProps()));
+    public static final RegistryObject<Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(Type.CHESTPLATE, itemProps()));
+    public static final RegistryObject<Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(Type.BOOTS, itemProps()));
+    public static final RegistryObject<Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(Type.HELMET, itemProps()));
+    public static final RegistryObject<Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(Type.CHESTPLATE, itemProps()));
+    public static final RegistryObject<Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(Type.LEGGINGS, itemProps()));
+    public static final RegistryObject<Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(Type.BOOTS, itemProps()));
     public static final RegistryObject<Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps()) {
 
                 @Override
@@ -301,11 +327,11 @@ public class Registry {
             .setLore("lore.eidolon.deathbringer_scythe"));
     public static final RegistryObject<Item> SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.soulbone_amulet"));
-    public static final RegistryObject<Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(EquipmentSlot.HEAD, itemProps().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(EquipmentSlot.CHEST, itemProps().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(EquipmentSlot.LEGS, itemProps().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new RecordItem(9, EidolonSounds.PAROUSIA,
-            itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 20));
+            itemProps().stacksTo(1).rarity(Rarity.RARE), 20));
     public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
     public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
     //public static final RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
@@ -331,90 +357,90 @@ public class Registry {
     }
 
     public static final RegistryObject<Block>
-            LEAD_ORE = addBlock("lead_ore", blockProps(Material.STONE, MaterialColor.STONE)
+            LEAD_ORE = addBlock("lead_ore", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<Block> DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Blocks.STONE)
             .sound(SoundType.DEEPSLATE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> LEAD_BLOCK = addBlock("lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+    public static final RegistryObject<Block> LEAD_BLOCK = addBlock("lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+    public static final RegistryObject<Block> RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.DEEPSLATE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SILVER_ORE = addBlock("silver_ore", blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> SILVER_ORE = addBlock("silver_ore", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Material.STONE, MaterialColor.DEEPSLATE)
+    public static final RegistryObject<Block> DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Blocks.STONE)
             .sound(SoundType.DEEPSLATE).strength(3.6f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SILVER_BLOCK = addBlock("silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
+    public static final RegistryObject<Block> SILVER_BLOCK = addBlock("silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
             .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_BLUE)
+    public static final RegistryObject<Block> RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
             .sound(SoundType.STONE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> PEWTER_BLOCK = addBlock("pewter_block", blockProps(Material.STONE, MaterialColor.COLOR_LIGHT_GRAY)
+    public static final RegistryObject<Block> PEWTER_BLOCK = addBlock("pewter_block", blockProps(Blocks.STONE, DyeColor.LIGHT_GRAY)
             .sound(SoundType.METAL).strength(4.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Material.STONE, MaterialColor.GOLD)
+    public static final RegistryObject<Block> ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Blocks.STONE, DyeColor.YELLOW)
             .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Material.STONE, MaterialColor.COLOR_PURPLE)
+    public static final RegistryObject<Block> SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)));
-    public static final RegistryObject<Block> STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setMainShape(Shapes.or(
                     Shapes.box(0, 0.375, 0, 1, 1, 1),
                     Shapes.box(0.0625, 0.125, 0.0625, 0.9375, 0.375, 0.9375)
             )));
-    public static final RegistryObject<Block> CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
+    public static final RegistryObject<Block> CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.WHITE)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(0.6f, 0.8f).noOcclusion()));
-    public static final RegistryObject<Block> CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+    public static final RegistryObject<Block> CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(1.2f, 2.0f).noOcclusion()));
-    public static final RegistryObject<Block> MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_RED)
+    public static final RegistryObject<Block> MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.RED)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(0.6f, 0.8f).noOcclusion()));
-    public static final RegistryObject<Block> MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Material.DECORATION, MaterialColor.GOLD)
+    public static final RegistryObject<Block> MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(1.2f, 2.0f).noOcclusion()));
-    public static final RegistryObject<Block> STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Material.PLANT, MaterialColor.COLOR_YELLOW)
+    public static final RegistryObject<Block> STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Blocks.HAY_BLOCK, DyeColor.YELLOW)
             .sound(SoundType.WOOD).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
 
-    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(blockProps(Blocks.GOLD_BLOCK, DyeColor.YELLOW)
             .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Material.METAL, MaterialColor.GOLD)
+    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Blocks.GOLD_BLOCK, DyeColor.YELLOW)
             .sound(SoundType.METAL).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops()
             .noOcclusion()).setShape(
             Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)
     ));
-    public static final RegistryObject<Block> WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)
             .noOcclusion()).setShape(Shapes.or(
             Shapes.box(0, 0, 0, 1, 0.25, 1),
             Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
-    public static final RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)
             .noOcclusion()).setShape(Shapes.or(
             Shapes.box(0, 0, 0, 1, 0.25, 1),
             Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
-    public static final RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)));
-    public static final RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875)));
-    public static final RegistryObject<Block> BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Material.WOOD, MaterialColor.METAL)
+    public static final RegistryObject<Block> BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Blocks.OAK_WOOD, DyeColor.GRAY)
             .sound(SoundType.METAL).strength(2.5f, 3.0f)
             .noOcclusion())
             .setShape(Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.75, 0.8125)));
-    public static final RegistryObject<Block> CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Material.METAL, MaterialColor.METAL)
+    public static final RegistryObject<Block> CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Blocks.IRON_BLOCK, DyeColor.GRAY)
             .sound(SoundType.METAL).strength(4.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.or(
@@ -428,95 +454,95 @@ public class Registry {
                     Shapes.box(0, 0.125, 0.875, 1, 0.875, 1),
                     Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.125, 0.9375)
             )));
-    public static final RegistryObject<Block> STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
-    public static final RegistryObject<Block> ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Material.DECORATION, MaterialColor.TERRACOTTA_WHITE)
+    public static final RegistryObject<Block> ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Blocks.REDSTONE_WIRE, DyeColor.WHITE)
             .sound(SoundType.STONE).strength(0.0f, 0.75f).noOcclusion())
             .setShape(Shapes.empty()));
-    public static final RegistryObject<Block> NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Material.STONE, MaterialColor.STONE)
+    public static final RegistryObject<Block> NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
-    public static final RegistryObject<Block> PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(2.0f, 3.0f)
             .noOcclusion())
             .setShape(Shapes.or(
                     Shapes.box(0, 0.25, 0, 1, 1, 1),
                     Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.75))));
-    public static final RegistryObject<Block> MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Blocks.GRASS)
             .sound(SoundType.GRASS).noOcclusion()));
-    public static final RegistryObject<Block> AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Blocks.GRASS)
             .sound(SoundType.GRASS).noOcclusion()));
-    public static final RegistryObject<Block> OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Blocks.GRASS)
             .sound(SoundType.GRASS).noOcclusion()));
-    public static final RegistryObject<Block> SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Blocks.GRASS)
             .sound(SoundType.GRASS).noOcclusion()));
-    public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new EidolonAbstractTreeFeature.TreeGrower(), blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new EidolonAbstractTreeFeature.TreeGrower(), blockProps(Blocks.GRASS)
             .sound(SoundType.GRASS).noOcclusion().noCollission()));
-    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Material.PLANT, MaterialColor.GRASS)
+    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Blocks.GRASS)
             .randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Registry::allowsSpawnOnLeaves)
             .isSuffocating(Registry::isntSolid).isViewBlocking(Registry::isntSolid)));
-    public static final RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
-    public static final RegistryObject<Block> STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
-    public static final RegistryObject<Block> ILLWOOD_LOG = addBlock("illwood_log", () -> new StrippableLog(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> ILLWOOD_LOG = addBlock("illwood_log", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f), STRIPPED_ILLWOOD_LOG));
-    public static final RegistryObject<Block> ILLWOOD_BARK = addBlock("illwood_bark", () -> new StrippableLog(blockProps(Material.WOOD, MaterialColor.WOOD)
+    public static final RegistryObject<Block> ILLWOOD_BARK = addBlock("illwood_bark", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f), STRIPPED_ILLWOOD_BARK));
 
-    public static final RegistryObject<Block> SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Material.STONE, MaterialColor.PODZOL)
+    public static final RegistryObject<Block> SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Blocks.ENCHANTING_TABLE)
             .sound(SoundType.STONE).strength(5.0f, 1200.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0, 0, 0, 1, 0.75, 1)));
-    public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Material.METAL, MaterialColor.WOOD)
+    public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Blocks.BREWING_STAND)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .noOcclusion()));
-    public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Material.AIR, MaterialColor.NONE)
+    public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Blocks.AIR)
             .sound(SoundType.FROGLIGHT).lightLevel(p -> p.getValue(GhostLight.DEITY) ? 12 : 8)));
     /*
-    public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
+    public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Blocks.METAL, DyeColor.GRAY)
             .sound(SoundType.GLASS).strength(2.0f, 3.0f)
             .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
-    public static final RegistryObject<Block> GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
+    public static final RegistryObject<Block> GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Blocks.GLASS, DyeColor.LIGHT_BLUE)
             .sound(SoundType.GLASS).strength(1.0f, 1.5f).noOcclusion()));
-    public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
+    public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Blocks.GLASS, DyeColor.LIGHT_BLUE)
             .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
             .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
      */
     public static DecoBlockPack
-            SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Material.STONE, MaterialColor.STONE)
+            SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f))
             .addWall(),
-            SMOOTH_STONE_TILES = new DecoBlockPack(BLOCKS, "smooth_stone_tiles", blockProps(Material.STONE, MaterialColor.STONE)
+            SMOOTH_STONE_TILES = new DecoBlockPack(BLOCKS, "smooth_stone_tiles", blockProps(Blocks.STONE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f)),
-            SMOOTH_STONE_MASONRY = new DecoBlockPack(BLOCKS, "smooth_stone_masonry", blockProps(Material.STONE, MaterialColor.STONE)
+            SMOOTH_STONE_MASONRY = new DecoBlockPack(BLOCKS, "smooth_stone_masonry", blockProps(Blocks.STONE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(1.6f, 3.0f)),
-            POLISHED_PLANKS = new DecoBlockPack(BLOCKS, "polished_planks", blockProps(Material.WOOD, MaterialColor.WOOD)
+            POLISHED_PLANKS = new DecoBlockPack(BLOCKS, "polished_planks", blockProps(Blocks.OAK_WOOD)
                     .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-                    .addFence(),
-            ILLWOOD_PLANKS = new DecoBlockPack(BLOCKS, "illwood_planks", blockProps(Material.WOOD, MaterialColor.WOOD)
+                    .addFence(POLISHED),
+            ILLWOOD_PLANKS = new DecoBlockPack(BLOCKS, "illwood_planks", blockProps(Blocks.OAK_WOOD)
                     .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-                    .addFence(),
-            ELDER_BRICKS = new DecoBlockPack(BLOCKS, "elder_bricks", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
+                    .addFence(ILLWOOD),
+            ELDER_BRICKS = new DecoBlockPack(BLOCKS, "elder_bricks", blockProps(Blocks.STONE, DyeColor.ORANGE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.0f, 3.0f))
                     .addWall(),
-            ELDER_MASONRY = new DecoBlockPack(BLOCKS, "elder_masonry", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
+            ELDER_MASONRY = new DecoBlockPack(BLOCKS, "elder_masonry", blockProps(Blocks.STONE, DyeColor.ORANGE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.4f, 3.0f)),
-            BONE_PILE = new DecoBlockPack(BLOCKS, "bone_pile", blockProps(Material.STONE, MaterialColor.QUARTZ)
+            BONE_PILE = new DecoBlockPack(BLOCKS, "bone_pile", blockProps(Blocks.BONE_BLOCK)
                     .sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops().strength(1.6f, 3.0f));
     public static final RegistryObject<Block>
-            POLISHED_WOOD_PILLAR = addBlock("polished_wood_pillar", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
+            POLISHED_WOOD_PILLAR = addBlock("polished_wood_pillar", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .strength(1.6f, 3.0f))),
-            SMOOTH_STONE_ARCH = addBlock("smooth_stone_arch", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.STONE)
+            SMOOTH_STONE_ARCH = addBlock("smooth_stone_arch", () -> new PillarBlockBase(blockProps(Blocks.STONE)
                     .sound(SoundType.STONE).strength(2.0f, 3.0f).requiresCorrectToolForDrops())),
-            MOSSY_SMOOTH_STONE_BRICKS = addBlock("mossy_smooth_stone_bricks", blockProps(Material.STONE, MaterialColor.STONE)
+            MOSSY_SMOOTH_STONE_BRICKS = addBlock("mossy_smooth_stone_bricks", blockProps(Blocks.STONE)
                     .sound(SoundType.STONE).strength(2.0f, 3.0f).requiresCorrectToolForDrops()),
-            ELDER_BRICKS_EYE = addBlock("elder_bricks_eye", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
+            ELDER_BRICKS_EYE = addBlock("elder_bricks_eye", blockProps(Blocks.STONE, DyeColor.ORANGE)
                     .sound(SoundType.STONE).strength(3.0f, 3.0f).requiresCorrectToolForDrops()),
-            ELDER_PILLAR = addBlock("elder_pillar", () -> new PillarBlockBase(blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
+            ELDER_PILLAR = addBlock("elder_pillar", () -> new PillarBlockBase(blockProps(Blocks.STONE, DyeColor.ORANGE)
                     .sound(SoundType.STONE).strength(3.0f, 3.0f)
                     .requiresCorrectToolForDrops()));
 
@@ -562,11 +588,10 @@ public class Registry {
         EidolonParticles.PARTICLES.register(modEventBus);
         EidolonSounds.SOUND_EVENTS.register(modEventBus);
         Worldgen.FEATURES.register(modEventBus);
-        Worldgen.PLACED_FEATURES.register(modEventBus);
-        Worldgen.CONFG_FEATURES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         ARG_TYPES.register(modEventBus);
+        TABS.register(modEventBus);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -596,15 +621,21 @@ public class Registry {
         WOODEN_STAND_TILE_ENTITY = TILE_ENTITIES.register("wooden_brewing_stand", () -> BlockEntityType.Builder.of(WoodenStandTileEntity::new, WOODEN_STAND.get()).build(null));
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
         CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
-        /*
-        CISTERN_TILE_ENTITY = TILE_ENTITIES.register("cistern", () -> BlockEntityType.Builder.of(CisternTileEntity::new, CISTERN.get()).build(null));
-        PIPE_TILE_ENTITY = TILE_ENTITIES.register("pipe", () -> BlockEntityType.Builder.of(PipeTileEntity::new, GLASS_TUBE.get()).build(null));
-         */
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
     }
 
-    public static final DamageSource RITUAL_DAMAGE = new DamageSource("ritual").bypassArmor().bypassMagic();
-    public static final DamageSource FROST_DAMAGE = new DamageSource("frost");
+    public static final DamageTypeData SAPPING = DamageTypeData.builder()
+            .simpleId("sap")
+            .scaling(DamageScaling.ALWAYS)
+            .build();
+
+    public static final DamageTypeData RITUAL_DAMAGE = DamageTypeData.builder()
+            .simpleId("ritual")
+            .scaling(DamageScaling.ALWAYS)
+            .tag(DamageTypeTags.BYPASSES_ARMOR)
+            .tag(DamageTypeTags.BYPASSES_ENCHANTMENTS)
+            .build();
+    public static final DamageTypeData FROST_DAMAGE = DamageTypeData.builder().simpleId("frost").effects(DamageEffects.FREEZING).build();
 
     public void registerCaps(RegisterCapabilitiesEvent event) {
         event.register(IReputation.class);
@@ -622,20 +653,21 @@ public class Registry {
         event.put(EidolonEntities.SLIMY_SLUG.get(), SlimySlugEntity.createAttributes());
     }
 
+    @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void registerFactories(RegisterParticleProvidersEvent evt) {
-        evt.register(EidolonParticles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
-        evt.register(EidolonParticles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
-        evt.register(EidolonParticles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
-        evt.register(EidolonParticles.WISP_PARTICLE.get(), WispParticleType.Factory::new);
-        evt.register(EidolonParticles.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
-        evt.register(EidolonParticles.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
-        evt.register(EidolonParticles.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
-        evt.register(EidolonParticles.SIGN_PARTICLE.get(), sprite -> new SignParticleType.Factory());
-        evt.register(EidolonParticles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
-        evt.register(EidolonParticles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
-        evt.register(EidolonParticles.RUNE_PARTICLE.get(), sprite -> new RuneParticleType.Factory());
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.WISP_PARTICLE.get(), WispParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.BUBBLE_PARTICLE.get(), BubbleParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.STEAM_PARTICLE.get(), SteamParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.LINE_WISP_PARTICLE.get(), LineWispParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.SIGN_PARTICLE.get(), sprite -> new SignParticleType.Factory());
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.RUNE_PARTICLE.get(), sprite -> new RuneParticleType.Factory());
     }
 
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));

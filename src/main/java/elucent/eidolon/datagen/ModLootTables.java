@@ -1,54 +1,56 @@
 package elucent.eidolon.datagen;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ModLootTables extends LootTableProvider {
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables;
 
     public ModLootTables(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn);
-        this.tables = ImmutableList.of(Pair.of(ModLootTables.BlockLootTable::new, LootContextParamSets.BLOCK));
+        super(dataGeneratorIn.getPackOutput(), new HashSet<>(), List.of(new SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)));
     }
 
-    protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        return this.tables;
-    }
+    private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
 
-    protected void validate(Map<ResourceLocation, LootTable> map, @NotNull ValidationContext validationTracker) {
-        map.forEach((resourceLocation, lootTable) -> LootTables.validate(validationTracker, resourceLocation, lootTable));
-    }
-
-    public @NotNull String getName() {
-        return "Eidolon Loot Tables";
-    }
-
-    public static class BlockLootTable extends BlockLoot {
+    public static class BlockLootTable extends BlockLootSubProvider {
         public final List<Block> list = new ArrayList<>();
 
-        public BlockLootTable() {
+        protected BlockLootTable() {
+            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), new HashMap<>());
         }
 
-        protected void addTables() {
+        @Override
+        public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> p_249322_) {
+            this.generate();
+            Set<ResourceLocation> set = new HashSet<>();
+
+            for (Block block : list) {
+                if (block.isEnabled(this.enabledFeatures)) {
+                    ResourceLocation resourcelocation = block.getLootTable();
+                    if (resourcelocation != BuiltInLootTables.EMPTY && set.add(resourcelocation)) {
+                        LootTable.Builder loottable$builder = this.map.remove(resourcelocation);
+                        if (loottable$builder == null) {
+                            continue;
+                        }
+
+                        p_249322_.accept(resourcelocation, loottable$builder);
+                    }
+                }
+            }
+        }
+
+        protected void generate() {
 
             registerLeavesAndSticks(Registry.ILLWOOD_LEAVES.get(), Registry.ILLWOOD_SAPLING.get());
             registerDropSelf(Registry.ILLWOOD_SAPLING.get());

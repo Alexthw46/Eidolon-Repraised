@@ -16,6 +16,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minecraft.world.entity.EquipmentSlot.*;
+
 public abstract class ArmorModel extends HumanoidModel<LivingEntity> {
     public EquipmentSlot slot;
     final ModelPart root;
@@ -60,16 +62,16 @@ public abstract class ArmorModel extends HumanoidModel<LivingEntity> {
 
     @Override
     protected @NotNull Iterable<ModelPart> headParts() {
-        return slot == EquipmentSlot.HEAD ? ImmutableList.of(head) : ImmutableList.of();
+        return slot == HEAD ? ImmutableList.of(head) : ImmutableList.of();
     }
 
     @Override
     protected @NotNull Iterable<ModelPart> bodyParts() {
-        if (slot == EquipmentSlot.CHEST) {
+        if (slot == CHEST) {
             return ImmutableList.of(body, leftArm, rightArm);
-        } else if (slot == EquipmentSlot.LEGS) {
+        } else if (slot == LEGS) {
             return ImmutableList.of(leftLegging, rightLegging, pelvis);
-        } else if (slot == EquipmentSlot.FEET) {
+        } else if (slot == FEET) {
             return ImmutableList.of(leftFoot, rightFoot);
         } else return ImmutableList.of();
     }

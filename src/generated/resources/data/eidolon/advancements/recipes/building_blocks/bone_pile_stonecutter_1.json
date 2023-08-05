@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_journal": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:bone_pile"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "eidolon:bone_pile_stonecutter_1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_journal",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "eidolon:bone_pile_stonecutter_1"
+    ]
+  },
+  "sends_telemetry_event": false
+}

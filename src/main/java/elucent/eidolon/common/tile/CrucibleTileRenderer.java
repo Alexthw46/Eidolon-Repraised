@@ -3,8 +3,7 @@ package elucent.eidolon.common.tile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.Minecraft;
@@ -21,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor.ARGB32;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEntity> {
     private final ModelPart stirrer;
@@ -49,7 +49,7 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
         if (!tile.getLevel().getBlockState(tile.getBlockPos().above()).isFaceSturdy(tile.getLevel(), tile.getBlockPos().above(), Direction.DOWN)) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0.5, 0.625, 0.5);
-            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(45 + coeff * 360));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(45 + coeff * 360));
             matrixStackIn.translate(0, -0.125 * Math.sin(coeff * Math.PI), 0.125);
             stirrer.xRot = (float) Math.PI / 8 * (1.0f - (float) Math.sin(coeff * Math.PI));
             stirrer.render(matrixStackIn, bufferIn.getBuffer(RenderType.entitySolid(STIRRER_TEXTURE)), combinedLightIn, combinedOverlayIn);

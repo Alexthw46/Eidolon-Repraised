@@ -29,7 +29,7 @@ public class ConvertZombieSpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         if (effigies.size() == 0) return false;
@@ -46,7 +46,7 @@ public class ConvertZombieSpell extends PrayerSpell {
         if (effigies.size() == 0) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
 
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager villager)) return;
 
         if (world instanceof ServerLevel level) {

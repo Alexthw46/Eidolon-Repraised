@@ -3,14 +3,11 @@ package elucent.eidolon.common.item.model;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+
+import static net.minecraft.world.entity.EquipmentSlot.CHEST;
 
 public class WarlockArmorModel extends ArmorModel {
 	public WarlockArmorModel(ModelPart root) {
@@ -62,9 +59,9 @@ public class WarlockArmorModel extends ArmorModel {
 		if (f < 1.0F) {
 			f = 1.0F;
 		}
-		if (slot == EquipmentSlot.CHEST) {
+		if (slot == CHEST) {
 			body.getChild("cloak").getChild("back_side").xRot = 0.1745f + Mth.abs(Mth.cos(limbSwing * 0.6662f) * 0.7f * limbSwingAmount / f);
-			body.getChild("cloak").getChild("left_side").zRot = 0.1745f + Mth.cos(limbSwing * 0.6662f + (float)Math.PI) * 0.2f * limbSwingAmount / f + 0.1f * limbSwingAmount / f;
+			body.getChild("cloak").getChild("left_side").zRot = 0.1745f + Mth.cos(limbSwing * 0.6662f + (float) Math.PI) * 0.2f * limbSwingAmount / f + 0.1f * limbSwingAmount / f;
 			body.getChild("cloak").getChild("right_side").zRot = -0.1745f - Mth.cos(limbSwing * 0.6662f) * 0.2f * limbSwingAmount / f - 0.1f * limbSwingAmount / f;
 		}
 	}

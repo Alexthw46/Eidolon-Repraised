@@ -14,6 +14,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+
 public class WorktableResultSlot extends Slot {
     private final CraftingContainer core, extras;
     private final Player player;
@@ -58,7 +60,7 @@ public class WorktableResultSlot extends Slot {
         }
 
         if (this.container instanceof RecipeHolder) {
-            ((RecipeHolder) this.container).awardUsedRecipes(this.player);
+            ((RecipeHolder) this.container).awardUsedRecipes(this.player, Collections.singletonList(stack));
         }
 
         player.playSound(SoundEvents.SMITHING_TABLE_USE, 1.0f, 1.0f);
@@ -96,7 +98,7 @@ public class WorktableResultSlot extends Slot {
             if (!remaining.isEmpty()) {
                 if (item.isEmpty()) {
                     inv.setItem(index, remaining);
-                } else if (ItemStack.isSame(item, remaining) && ItemStack.tagMatches(item, remaining)) {
+                } else if (ItemStack.isSameItem(item, remaining) && ItemStack.isSameItemSameTags(item, remaining)) {
                     remaining.grow(item.getCount());
                     inv.setItem(index, remaining);
                 } else if (!this.player.getInventory().add(remaining)) {

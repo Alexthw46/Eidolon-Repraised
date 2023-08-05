@@ -4,8 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
@@ -15,6 +14,7 @@ import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -25,6 +25,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 public class SignIndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
@@ -54,7 +56,7 @@ public class SignIndexPage extends Page {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             if (knowledge.knowsSign(entries[i].sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50) {
                 gui.changeChapter(entries[i].chapter);
-                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
             } else if (knowledge.knowsSign(entries[i].sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48) {
                 gui.addToChant(entries[i].sign);
@@ -85,16 +87,16 @@ public class SignIndexPage extends Page {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
+    public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
+        var mStack = guiGraphics.pose();
         for (int i = 0; i < entries.length; i++) {
-            RenderSystem.setShaderTexture(0, BACKGROUND);
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             Sign sign = entries[i].sign;
             boolean hover = knowledge.knowsSign(sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48;
             boolean infoHover = knowledge.knowsSign(sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50;
-            gui.blit(mStack, xx, yy, knowledge.knowsSign(entries[i].sign) ? 128 : 176, 0, 48, 48);
+            guiGraphics.blit(BACKGROUND, xx, yy, knowledge.knowsSign(entries[i].sign) ? 128 : 176, 0, 48, 48);
 
             if (knowledge.knowsSign(sign)) {
                 Tesselator tess = Tesselator.getInstance();
@@ -104,7 +106,7 @@ public class SignIndexPage extends Page {
                 if (hover && !infoHover) {
                     mStack.pushPose();
                     mStack.translate(xx + 24, yy + 24, 0);
-                    mStack.mulPose(Vector3f.ZP.rotationDegrees(ClientEvents.getClientTicks() * 1.5f));
+                    mStack.mulPose(Axis.ZP.rotationDegrees(ClientEvents.getClientTicks() * 1.5f));
                     colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.getColor());
                     mStack.popPose();
                 }
@@ -119,11 +121,10 @@ public class SignIndexPage extends Page {
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                 RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                RenderSystem.setShaderTexture(0, BACKGROUND);
-                gui.blit(mStack, xx + 38, yy + 38, infoHover ? 188 : 176, 48, 12, 14);
+                guiGraphics.blit(BACKGROUND, xx + 38, yy + 38, infoHover ? 188 : 176, 48, 12, 14);
 
                 if (infoHover) {
-                    gui.renderTooltip(mStack, Component.translatable("eidolon.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
+                    guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
                 }
             }
         }

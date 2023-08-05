@@ -4,8 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
@@ -17,6 +16,7 @@ import elucent.eidolon.spell.Runes;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -25,6 +25,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import java.util.Optional;
 
@@ -59,7 +61,7 @@ public class RuneIndexPage extends Page {
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
             if (knowledge.knowsRune(runes[i]) && mouseX >= xx && mouseX <= xx + 16 && mouseY >= yy && mouseY <= yy + 16) {
                 //gui.addToChant(runes[i]);
-                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
+                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level().random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
         }
@@ -86,16 +88,16 @@ public class RuneIndexPage extends Page {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
+    public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
         gui.hoveredRune = null;
+        PoseStack mStack = guiGraphics.pose();
         Player entity = Minecraft.getInstance().player;
         Optional<IKnowledge> knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve();
-        for (int i = 0; i < runes.length; i ++) {
-            RenderSystem.setShaderTexture(0, BACKGROUND);
+        for (int i = 0; i < runes.length; i++) {
             int xx = x + 2 + (i % 6) * 20, yy = y + 2 + (i / 6) * 20;
             boolean hover = knowledge.isPresent() && knowledge.get().knowsRune(runes[i]) && mouseX >= xx && mouseX <= xx + 16 && mouseY >= yy && mouseY <= yy + 16;
             if (hover) gui.hoveredRune = runes[i];
-            gui.blit(mStack, xx, yy, knowledge.isPresent() && knowledge.get().knowsRune(runes[i]) ? 128 : 148, 0, 20, 20);
+            guiGraphics.blit(bg, xx, yy, knowledge.isPresent() && knowledge.get().knowsRune(runes[i]) ? 128 : 148, 0, 20, 20);
 
             if (knowledge.isPresent() && knowledge.get().knowsRune(runes[i])) {
                 Tesselator tess = Tesselator.getInstance();
@@ -105,7 +107,7 @@ public class RuneIndexPage extends Page {
                 if (hover) {
                     mStack.pushPose();
                     mStack.translate(xx + 10, yy + 10, 0);
-                    mStack.mulPose(Vector3f.ZP.rotationDegrees(ClientEvents.getClientTicks() * 1.5f));
+                    mStack.mulPose(Axis.ZP.rotationDegrees(ClientEvents.getClientTicks() * 1.5f));
                     mStack.scale(0.5f, 0.5f, 1);
                     colorBlit(mStack, -12, -12, 128, 20, 24, 24, 256, 256, ColorUtil.packColor(255, 255, 255, 255));
                     mStack.popPose();

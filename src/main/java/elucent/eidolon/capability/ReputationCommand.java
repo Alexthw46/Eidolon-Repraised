@@ -32,7 +32,7 @@ public class ReputationCommand {
                                         .executes(
                                                 ctx -> applyGet(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getLevel().getCapability(IReputation.INSTANCE).ifPresent((k) -> {
                                                     var devotion = k.getReputation(player, DeityArgument.getDeity(ctx, "deity").getId());
-                                                    ctx.getSource().sendSuccess(Component.literal(player.getName().getString() + " : " + devotion), false);
+                                                    ctx.getSource().sendSuccess(() -> Component.literal(player.getName().getString() + " : " + devotion), false);
                                                 }))
                                         )
                                 )
@@ -56,9 +56,9 @@ public class ReputationCommand {
             action.accept(player, sources);
         }
         if (players.size() == 1) {
-            sources.sendSuccess(Component.translatable("commands.eidolon.reputation.success.single", players.iterator().next().getDisplayName()), true);
+            sources.sendSuccess(() -> Component.translatable("commands.eidolon.reputation.success.single", players.iterator().next().getDisplayName()), true);
         } else {
-            sources.sendSuccess(Component.translatable("commands.eidolon.reputation.success.multiple", players.size()), true);
+            sources.sendSuccess(() -> Component.translatable("commands.eidolon.reputation.success.multiple", players.size()), true);
         }
         return players.size();
     }

@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -102,7 +103,7 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inv) {
+    public @NotNull ItemStack assemble(@NotNull Container inv, RegistryAccess registryAccess) {
         return getResultItem();
     }
 
@@ -112,6 +113,10 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
+        return result;
+    }
+
     public @NotNull ItemStack getResultItem() {
         return result;
     }

@@ -5,8 +5,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+
+import static net.minecraft.world.entity.EquipmentSlot.CHEST;
 
 public class BonelordArmorModel extends ArmorModel {
 	public BonelordArmorModel(ModelPart root) {
@@ -80,7 +81,7 @@ public class BonelordArmorModel extends ArmorModel {
 		if (f < 1.0F) {
 			f = 1.0F;
 		}
-		if (slot == EquipmentSlot.CHEST) {
+		if (slot == CHEST) {
 			body.getChild("chest").getChild("hood").getChild("cape").xRot = 0.3927F + Mth.abs(Mth.cos(limbSwing * 0.6662f) * 0.4f * limbSwingAmount / f);
 		}
 	}

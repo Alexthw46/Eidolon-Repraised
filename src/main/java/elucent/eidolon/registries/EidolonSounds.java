@@ -23,7 +23,7 @@ public class EidolonSounds {
             WRAITH_HURT = addSound("wraith_hurt");
 
     static RegistryObject<SoundEvent> addSound(String name) {
-        SoundEvent event = new SoundEvent(new ResourceLocation(Eidolon.MODID, name));
+        SoundEvent event = SoundEvent.createVariableRangeEvent(new ResourceLocation(Eidolon.MODID, name));
         return SOUND_EVENTS.register(name, () -> event);
     }
 }

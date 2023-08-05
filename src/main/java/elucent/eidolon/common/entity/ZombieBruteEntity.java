@@ -78,7 +78,7 @@ public class ZombieBruteEntity extends Monster {
     public void aiStep() {
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getLightLevelDependentMagicValue();
-            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ());
+            BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
                 this.setSecondsOnFire(8);
             }
@@ -87,26 +87,28 @@ public class ZombieBruteEntity extends Monster {
         super.aiStep();
     }
 
-    public boolean wasKilled(@NotNull ServerLevel serverLevel, @NotNull LivingEntity livingEntity) {
-        boolean flag = super.wasKilled(serverLevel, livingEntity);
-        if ((serverLevel.getDifficulty() == Difficulty.NORMAL || serverLevel.getDifficulty() == Difficulty.HARD) && livingEntity instanceof Villager villager && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(livingEntity, EntityType.ZOMBIE_VILLAGER, (timer) -> {
+    public boolean killedEntity(@NotNull ServerLevel pLevel, @NotNull LivingEntity pEntity) {
+        boolean flag = super.killedEntity(pLevel, pEntity);
+        if ((pLevel.getDifficulty() == Difficulty.NORMAL || pLevel.getDifficulty() == Difficulty.HARD) && pEntity instanceof Villager villager && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(pEntity, EntityType.ZOMBIE_VILLAGER, (timer) -> {
         })) {
-            if (serverLevel.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
+            if (pLevel.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
                 return flag;
             }
 
             ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-            zombievillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
-            zombievillager.setVillagerData(villager.getVillagerData());
-            zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
-            zombievillager.setTradeOffers(villager.getOffers().createTag());
-            zombievillager.setVillagerXp(villager.getVillagerXp());
-            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(livingEntity, zombievillager);
-            if (!this.isSilent()) {
-                serverLevel.levelEvent(null, 1026, this.blockPosition(), 0);
-            }
+            if (zombievillager != null) {
+                zombievillager.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+                zombievillager.setVillagerData(villager.getVillagerData());
+                zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
+                zombievillager.setTradeOffers(villager.getOffers().createTag());
+                zombievillager.setVillagerXp(villager.getVillagerXp());
+                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(pEntity, zombievillager);
+                if (!this.isSilent()) {
+                    pLevel.levelEvent((Player) null, 1026, this.blockPosition(), 0);
+                }
 
-            flag = false;
+                flag = false;
+            }
         }
 
         return flag;

@@ -3,7 +3,6 @@ package elucent.eidolon.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import elucent.eidolon.ClientConfig;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.capability.IPlayerData;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -24,6 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -60,8 +59,7 @@ public class ClientEvents {
     public static Matrix4f particleMVMatrix = null;
 
     @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void onRenderLast(@SuppressWarnings("removal") RenderLevelLastEvent event) {
+    public static void onRenderLast() {
         if (ClientConfig.BETTER_LAYERING.get()) {
 
             PoseStack viewStack = RenderSystem.getModelViewStack();
@@ -84,7 +82,8 @@ public class ClientEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void renderWorldLastEvent(final RenderLevelStageEvent event) {
+    public static void onRenderStages(final RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) onRenderLast();
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS)
             clientTicks += event.getPartialTick();
     }
@@ -116,8 +115,8 @@ public class ClientEvents {
                     jumpTicks = 0;
                 }
             });
-            if (p.isOnGround()) jumpTicks = 0;
-            wasJumping = p.isOnGround() || lp.input.jumping;
+            if (p.onGround()) jumpTicks = 0;
+            wasJumping = p.onGround() || lp.input.jumping;
         }
     }
 }

@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -49,8 +47,9 @@ public class DarkTouchSpell extends StaticSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (!event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId())
-            && event.getSource().getEntity() instanceof LivingEntity living
+        //TODO
+        if (event.getSource().getEntity() instanceof LivingEntity living
+            && !event.getSource().getMsgId().equals(living.damageSources().wither().getMsgId())
             && living.getMainHandItem().hasTag()
             && living.getMainHandItem().getOrCreateTag().contains(NECROTIC_KEY)) {
             float amount = Math.min(1, event.getAmount());
@@ -58,7 +57,7 @@ public class DarkTouchSpell extends StaticSpell {
             if (event.getAmount() <= 0) event.setCanceled(true);
             int prevHurtResist = event.getEntity().invulnerableTime;
             event.getEntity().invulnerableTime = 0;
-            if (event.getEntity().hurt(new EntityDamageSource(DamageSource.WITHER.getMsgId(), event.getSource().getEntity()), amount)) {
+            if (event.getEntity().hurt(living.damageSources().mobAttack(living), amount)) {
                 if (living.getHealth() <= 0) event.setCanceled(true);
                 else living.invulnerableTime = prevHurtResist;
             }

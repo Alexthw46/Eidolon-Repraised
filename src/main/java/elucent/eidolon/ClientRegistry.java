@@ -3,8 +3,6 @@ package elucent.eidolon;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import elucent.eidolon.api.spells.Rune;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.entity.*;
 import elucent.eidolon.common.item.IManaRelatedItem;
@@ -12,18 +10,13 @@ import elucent.eidolon.common.item.curio.RavenCloakRenderer;
 import elucent.eidolon.common.item.curio.SanguineAmuletItem;
 import elucent.eidolon.common.item.model.*;
 import elucent.eidolon.common.tile.CrucibleTileRenderer;
-import elucent.eidolon.common.tile.SoulEnchanterTileRenderer;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.ritual.*;
-import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Signs;
-import elucent.eidolon.wip.reagent.Reagent;
-import elucent.eidolon.wip.reagent.ReagentRegistry;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -40,7 +33,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,32 +52,7 @@ public class ClientRegistry {
         event.register(SanguineAmuletItem.SanguineAmuletTooltipInfo.class, SanguineAmuletItem.SanguineAmuletTooltipComponent::new);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        event.addSprite(AbsorptionRitual.SYMBOL);
-        event.addSprite(CrystalRitual.SYMBOL);
-        event.addSprite(SummonRitual.SYMBOL);
-        event.addSprite(DeceitRitual.SYMBOL);
-        event.addSprite(AllureRitual.SYMBOL);
-        event.addSprite(DaylightRitual.SYMBOL);
-        event.addSprite(MoonlightRitual.SYMBOL);
-        event.addSprite(PurifyRitual.SYMBOL);
-        event.addSprite(RepellingRitual.SYMBOL);
-        event.addSprite(SanguineRitual.SYMBOL);
-        event.addSprite(RechargingRitual.SYMBOL);
-        event.addSprite(SoulEnchanterTileRenderer.BOOK_TEXTURE);
-
-        event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/aura"));
-        event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/beam"));
-        event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/ring"));
-        for (Reagent r : ReagentRegistry.getReagents()) event.addSprite(r.getTexture());
-        for (Sign s : Signs.getSigns()) event.addSprite(s.getSprite());
-        for (Rune r : Runes.getRunes()) event.addSprite(r.getSprite());
-    }
-
-    public static final ModelLayerLocation
-            SILVER_ARMOR_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "silver_armor"), "main");
+    public static final ModelLayerLocation SILVER_ARMOR_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "silver_armor"), "main");
     public static final ModelLayerLocation WARLOCK_ARMOR_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "warlock_armor"), "main");
     public static final ModelLayerLocation BONELORD_ARMOR_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "bonelord_armor"), "main");
     public static final ModelLayerLocation TOP_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "top_hat"), "main");
@@ -180,30 +147,18 @@ public class ClientRegistry {
 
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) throws IOException {
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing"), DefaultVertexFormat.POSITION_COLOR),
-                shader -> {
-                    GLOWING_SHADER = shader;
-                });
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_sprite"), DefaultVertexFormat.POSITION_TEX_COLOR),
-                shader -> {
-                    GLOWING_SPRITE_SHADER = shader;
-                });
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_particle"), DefaultVertexFormat.PARTICLE),
-                shader -> {
-                    GLOWING_PARTICLE_SHADER = shader;
-                });
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:glowing_entity"), DefaultVertexFormat.NEW_ENTITY),
-                shader -> {
-                    GLOWING_ENTITY_SHADER = shader;
-                });
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:vapor"), DefaultVertexFormat.BLOCK),
-                shader -> {
-                    VAPOR_SHADER = shader;
-                });
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("eidolon:sprite_particle"), DefaultVertexFormat.PARTICLE),
-                shader -> {
-                    SPRITE_PARTICLE_SHADER = shader;
-                });
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:glowing"), DefaultVertexFormat.POSITION_COLOR),
+                shader -> GLOWING_SHADER = shader);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:glowing_sprite"), DefaultVertexFormat.POSITION_TEX_COLOR),
+                shader -> GLOWING_SPRITE_SHADER = shader);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:glowing_particle"), DefaultVertexFormat.PARTICLE),
+                shader -> GLOWING_PARTICLE_SHADER = shader);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:glowing_entity"), DefaultVertexFormat.NEW_ENTITY),
+                shader -> GLOWING_ENTITY_SHADER = shader);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:vapor"), DefaultVertexFormat.BLOCK),
+                shader -> VAPOR_SHADER = shader);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("eidolon:sprite_particle"), DefaultVertexFormat.PARTICLE),
+                shader -> SPRITE_PARTICLE_SHADER = shader);
     }
 
     public static void initCurios() {
@@ -248,9 +203,10 @@ public class ClientRegistry {
         }
 
         @Override
-        public void render(ForgeGui gui, PoseStack mStack, float partialTicks, int width, int height) {
+        public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
+            var mStack = guiGraphics.pose();
             if (player == null) return;
             int xp = xPos(), yp = yPos();
             boolean isHoriz = horiz();
@@ -291,93 +247,92 @@ public class ClientRegistry {
 
             mStack.pushPose();
             mStack.translate(0, 0, 0.01);
-            RenderSystem.setShaderTexture(0, MANA_BAR_TEXTURE);
             if (isHoriz) {
                 ox -= 4;
-                gui.blit(mStack, ox, oy, 2, length == 0 ? 6 : 38, 6, 20);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 2, length == 0 ? 6 : 38, 6, 20);
                 if (xp > 0) {
-                    gui.blit(mStack, ox - 23, oy - 2, 0, 64, 24, 24);
-                    gui.blit(mStack, ox - 18, oy + 4, iconU, iconV, 12, 12);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox - 23, oy - 2, 0, 64, 24, 24);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox - 18, oy + 4, iconU, iconV, 12, 12);
                 }
                 ox += 6;
 
                 int firstSegment = Math.min(8, length);
                 length -= firstSegment;
-                gui.blit(mStack, ox, oy, 8, 38, firstSegment, 20);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 8, 38, firstSegment, 20);
                 ox += firstSegment;
                 if (firstSegment < 8) {
-                    gui.blit(mStack, ox, oy, 8 + firstSegment, 6, 8 - firstSegment, 20);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 8 + firstSegment, 6, 8 - firstSegment, 20);
                     ox += 8 - firstSegment;
                 }
 
                 for (int i = 0; i < 6; i++) {
                     int segment = Math.min(16, length);
                     length -= segment;
-                    gui.blit(mStack, ox, oy, 16, 38, segment, 20);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 16, 38, segment, 20);
                     ox += segment;
                     if (segment < 16) {
-                        gui.blit(mStack, ox, oy, 16 + segment, 6, 16 - segment, 20);
+                        guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 16 + segment, 6, 16 - segment, 20);
                         ox += 16 - segment;
                     }
                 }
 
                 int lastSegment = Math.min(8, length);
                 length -= lastSegment;
-                gui.blit(mStack, ox, oy, 32, 38, lastSegment, 20);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 32, 38, lastSegment, 20);
                 ox += lastSegment;
                 if (lastSegment < 8) {
-                    gui.blit(mStack, ox, oy, 32 + lastSegment, 6, 8 - lastSegment, 20);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 32 + lastSegment, 6, 8 - lastSegment, 20);
                     ox += 8 - lastSegment;
                 }
 
-                gui.blit(mStack, ox, oy, 40, Mth.ceil(barlength * magic / maxMagic) == barlength ? 6 : 38, 7, 20);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 40, Mth.ceil(barlength * magic / maxMagic) == barlength ? 6 : 38, 7, 20);
                 if (xp <= 0) {
-                    gui.blit(mStack, ox + 5, oy - 2, 32, 64, 24, 24);
-                    gui.blit(mStack, ox + 12, oy + 4, iconU, iconV, 12, 12);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox + 5, oy - 2, 32, 64, 24, 24);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox + 12, oy + 4, iconU, iconV, 12, 12);
                 }
             } else {
                 oy += 16;
                 oy += barlength;
-                gui.blit(mStack, ox, oy, length == 0 ? 54 : 86, 40, 20, 6);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, length == 0 ? 54 : 86, 40, 20, 6);
                 if (yp < 0) {
-                    gui.blit(mStack, ox - 2, oy + 5, 32, 96, 24, 24);
-                    gui.blit(mStack, ox + 4, oy + 12, iconU, iconV, 12, 12);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox - 2, oy + 5, 32, 96, 24, 24);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox + 4, oy + 12, iconU, iconV, 12, 12);
                 }
 
                 int firstSegment = Math.min(8, length);
                 length -= firstSegment;
                 oy -= firstSegment;
-                gui.blit(mStack, ox, oy, 86, 32, 20, firstSegment);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 86, 32, 20, firstSegment);
                 if (firstSegment < 8) {
                     oy -= 8 - firstSegment;
-                    gui.blit(mStack, ox, oy, 54, 32 + firstSegment, 20, 8 - firstSegment);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 54, 32 + firstSegment, 20, 8 - firstSegment);
                 }
 
                 for (int i = 0; i < 6; i++) {
                     int segment = Math.min(16, length);
                     length -= segment;
                     oy -= segment;
-                    gui.blit(mStack, ox, oy, 86, 16, 20, segment);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 86, 16, 20, segment);
                     if (segment < 16) {
                         oy -= 16 - segment;
-                        gui.blit(mStack, ox, oy, 54, 16 + segment, 20, 16 - segment);
+                        guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 54, 16 + segment, 20, 16 - segment);
                     }
                 }
 
                 int lastSegment = Math.min(8, length);
                 length -= lastSegment;
                 oy -= lastSegment;
-                gui.blit(mStack, ox, oy, 86, 8, 20, lastSegment);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 86, 8, 20, lastSegment);
                 if (lastSegment < 8) {
                     oy -= 8 - lastSegment;
-                    gui.blit(mStack, ox, oy, 54, 8 + lastSegment, 20, 8 - lastSegment);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, 54, 8 + lastSegment, 20, 8 - lastSegment);
                 }
 
                 oy -= 6;
-                gui.blit(mStack, ox, oy, Mth.ceil(barlength * magic / maxMagic) == barlength ? 54 : 86, 2, 20, 6);
+                guiGraphics.blit(MANA_BAR_TEXTURE, ox, oy, Mth.ceil(barlength * magic / maxMagic) == barlength ? 54 : 86, 2, 20, 6);
                 if (yp >= 0) {
-                    gui.blit(mStack, ox - 2, oy - 23, 0, 96, 24, 24);
-                    gui.blit(mStack, ox + 4, oy - 18, iconU, iconV, 12, 12);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox - 2, oy - 23, 0, 96, 24, 24);
+                    guiGraphics.blit(MANA_BAR_TEXTURE, ox + 4, oy - 18, iconU, iconV, 12, 12);
                 }
             }
 
@@ -391,7 +346,8 @@ public class ClientRegistry {
         long lastHealthTime = 0;
 
         @Override
-        public void render(ForgeGui gui, PoseStack mStack, float partialTicks, int width, int height) {
+        public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
+            PoseStack mStack = guiGraphics.pose();
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
             if (!gui.shouldDrawSurvivalElements() || player == null) return;
@@ -457,7 +413,7 @@ public class ClientRegistry {
                 int heart = (i + 1) % 10;
                 int x = left + heart * 8;
                 int y = top - extraRowHeight * Math.max(0, row - healthRows + 1) - rowHeight * Math.min(row, healthRows - 1);
-                mc.gui.blit(mStack, x, y, highlight ? 9 : 0, 18, 9, 9);
+                guiGraphics.blit(ICONS_TEXTURE, x, y, highlight ? 9 : 0, 18, 9, 9);
             }
             for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
                 int row = (i + 1) / 10;
@@ -466,9 +422,9 @@ public class ClientRegistry {
                 int y = top - extraRowHeight * Math.max(0, row - healthRows + 1) - rowHeight * Math.min(row, healthRows - 1);
                 int i2 = i - (Mth.ceil((healthMax + absorb) / 2.0f) - 1);
                 if (i2 * 2 + 1 < etherealHealth)
-                    mc.gui.blit(mStack, x, y, 0, 9, 9, 9);
+                    guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 9, 9, 9);
                 else if (i2 * 2 + 1 == etherealHealth)
-                    mc.gui.blit(mStack, x, y, 9, 9, 9, 9);
+                    guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 9, 9, 9);
             }
             for (int i = Mth.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; --i) {
                 int row = i / 10;
@@ -482,9 +438,9 @@ public class ClientRegistry {
                 RenderSystem.enableBlend();
                 if (player.hasEffect(EidolonPotions.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
                     if (i * 2 + 1 < health)
-                        mc.gui.blit(mStack, x, y, 0, 0, 9, 9);
+                        guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 0, 9, 9);
                     else if (i * 2 + 1 == health)
-                        mc.gui.blit(mStack, x, y, 9, 0, 9, 9);
+                        guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 0, 9, 9);
                 }
                 RenderSystem.disableBlend();
             }
@@ -493,11 +449,35 @@ public class ClientRegistry {
     }
 
     public static class EidolonRaven implements IGuiOverlay {
+        protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+
         @Override
-        public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+        public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
             if (ClientEvents.jumpTicks >= 5) {
                 gui.setupOverlayRenderState(true, false);
-                gui.renderJumpMeter(poseStack, screenWidth / 2 - 91);
+                var x = screenWidth / 2 - 91;
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.disableBlend();
+
+                var minecraft = gui.getMinecraft();
+                minecraft.getProfiler().push("ravenJumpBar");
+                float f = minecraft.player.getJumpRidingScale();
+                int i = 182;
+                int j = (int) (f * 183.0F);
+                int k = guiGraphics.guiHeight() - 32 + 3;
+                guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 84, 182, 5);
+                //TODO
+                if (true) {
+                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 74, 182, 5);
+                } else if (j > 0) {
+                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);
+                }
+
+                minecraft.getProfiler().pop();
+
+                RenderSystem.enableBlend();
+                gui.getMinecraft().getProfiler().pop();
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
     }

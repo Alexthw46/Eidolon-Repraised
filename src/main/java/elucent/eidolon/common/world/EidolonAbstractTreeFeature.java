@@ -3,7 +3,7 @@ package elucent.eidolon.common.world;
 import com.mojang.serialization.Codec;
 import elucent.eidolon.registries.Worldgen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EidolonAbstractTreeFeature extends Feature<TreeConfiguration> {
 
@@ -136,10 +135,9 @@ public class EidolonAbstractTreeFeature extends Feature<TreeConfiguration> {
     }
 
     public static class TreeGrower extends AbstractTreeGrower {
-        @Nullable
         @Override
-        protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(@NotNull RandomSource p_60014_, boolean p_60015_) {
-            return Worldgen.ILLWOOD_TREE_CFG.getHolder().get();
+        protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(@NotNull RandomSource p_60014_, boolean p_60015_) {
+            return Worldgen.ILLWOOD_TREE_CFG;
         }
     }
 

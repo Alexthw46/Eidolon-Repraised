@@ -1,12 +1,11 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -91,7 +91,7 @@ public class IndexPage extends Page {
             if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
                 gui.changeChapter(entries[i].chapter);
                 assert Minecraft.getInstance().player != null;
-                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
             }
         }
@@ -100,15 +100,16 @@ public class IndexPage extends Page {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        for (int i = 0; i < entries.length; i ++) {
-            gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries[i].isUnlocked() ? 0 : 96, 122, 18);
+    public void render(CodexGui gui, @NotNull GuiGraphics mStack, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
+        //RenderSystem.setShaderTexture(0, BACKGROUND);
+        for (int i = 0; i < entries.length; i++) {
+            mStack.blit(bg, x + 1, y + 7 + i * 20, 128, entries[i].isUnlocked() ? 0 : 96, 122, 18);
         }
 
-        for (int i = 0; i < entries.length; i ++) if (entries[i].isUnlocked()) {
-            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries[i].icon, x + 2, y + 8 + i * 20);
-            drawText(gui, mStack, I18n.get(entries[i].chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
-        }
+        for (int i = 0; i < entries.length; i++)
+            if (entries[i].isUnlocked()) {
+                mStack.renderItem(entries[i].icon, x + 2, y + 8 + i * 20);
+                drawText(gui, mStack, I18n.get(entries[i].chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
+            }
     }
 }
