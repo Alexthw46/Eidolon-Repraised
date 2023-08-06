@@ -9,7 +9,7 @@
         "value": {
           "type": "forge:or",
           "values": [
-            "minecraft:deepdark",
+            "minecraft:deep_dark",
             "#forge:is_mushroom"
           ]
         }
