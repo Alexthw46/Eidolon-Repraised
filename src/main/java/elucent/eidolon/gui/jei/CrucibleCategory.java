@@ -24,6 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,7 +103,9 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
             condense(stepInputs);
 
             for (StackIngredient stepInput : stepInputs) {
-                layout.addSlot(RecipeIngredientRole.INPUT, tx, ty).addIngredients(stepInput.ingredient);
+                List<ItemStack> inputs = Arrays.stream(stepInput.ingredient.getItems()).map(ItemStack::copy).toList();
+                inputs.forEach(ii -> ii.setCount(stepInput.stack.getCount()));
+                layout.addSlot(RecipeIngredientRole.INPUT, tx, ty).addItemStacks(inputs);
                 tx += 17;
             }
         }
