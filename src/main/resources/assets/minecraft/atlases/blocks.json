@@ -9,6 +9,10 @@
       "type": "directory",
       "source": "rune",
       "prefix": "rune/"
+    },
+    {
+      "type": "single",
+      "resource": "eidolon:entity/enchanter_book"
     }
   ]
 }
