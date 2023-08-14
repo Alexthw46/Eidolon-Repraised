@@ -119,6 +119,10 @@ public class AthameItem extends SwordItem {
         harvestables.put(getRegistryName(Blocks.JUNGLE_LEAVES), new ItemStack(Registry.SILDRIAN_SEED.get()));
         harvestables.put(getRegistryName(Blocks.LILY_PAD), new ItemStack(Registry.OANNA_BLOOM.get()));
         harvestables.put(getRegistryName(Blocks.OXEYE_DAISY), new ItemStack(Registry.MERAMMER_ROOT.get()));
+        harvestables.put(getRegistryName(Blocks.LILY_OF_THE_VALLEY), new ItemStack(Registry.MERAMMER_ROOT.get()));
+        harvestables.put(getRegistryName(Blocks.WHITE_TULIP), new ItemStack(Registry.MERAMMER_ROOT.get()));
+
+
         harvestables.put(getRegistryName(Blocks.FERN), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
     }
 

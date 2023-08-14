@@ -6,6 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,11 @@ public class EidBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.LEAVES).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.SAPLINGS).add(Registry.ILLWOOD_SAPLING.get());
+
+        tag(Registry.CRUCIBLE_HOT_BLOCKS).add(Blocks.MAGMA_BLOCK,
+                Blocks.FIRE,
+                Blocks.SOUL_FIRE,
+                Blocks.LAVA);
     }
 
     void logsTag(Block... blocks) {

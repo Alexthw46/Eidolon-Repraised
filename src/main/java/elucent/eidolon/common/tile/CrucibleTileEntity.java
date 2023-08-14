@@ -21,7 +21,6 @@ import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -92,13 +91,8 @@ public class CrucibleTileEntity extends TileEntityBase {
     }
 
     public static final List<Predicate<BlockState>> HOT_BLOCKS = new ArrayList<>(List.of(
-            (BlockState b) -> b.getBlock() == Blocks.MAGMA_BLOCK,
-            (BlockState b) -> b.getBlock() == Blocks.FIRE,
-            (BlockState b) -> b.getBlock() == Blocks.SOUL_FIRE,
-            (BlockState b) -> b.getBlock() == Blocks.LAVA,
-            (BlockState b) -> b.getBlock() == Blocks.CAMPFIRE && b.getValue(CampfireBlock.LIT),
-            (BlockState b) -> b.getBlock() == Blocks.SOUL_CAMPFIRE && b.getValue(CampfireBlock.LIT)
-    ));
+            (BlockState b) -> b.is(Registry.CRUCIBLE_HOT_BLOCKS),
+            (BlockState b) -> b.getBlock() instanceof CampfireBlock && b.hasProperty(CampfireBlock.LIT) && b.getValue(CampfireBlock.LIT)));
 
     public CrucibleTileEntity(BlockPos pos, BlockState state) {
         this(Registry.CRUCIBLE_TILE_ENTITY.get(), pos, state);
