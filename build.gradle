@@ -22,7 +22,7 @@ apply plugin: 'net.neoforged.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
-version = '0.3.2.8.beta-1.20.1'
+version = '0.3.2.9.beta-1.20.1'
 archivesBaseName = 'eidolon'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -146,6 +146,10 @@ dependencies {
     //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
     //runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
     //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4448157")
+
+
+    implementation fg.deobf("curse.maven:placebo-283644:4691637")
+    implementation fg.deobf("curse.maven:aphoattr-898963:4698919")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

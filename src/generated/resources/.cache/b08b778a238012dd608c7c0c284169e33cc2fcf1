@@ -1,4 +1,5 @@
-// 1.20.1	2023-08-04T15:25:01.1661679	Tags for minecraft:item mod id eidolon
+// 1.20.1	2023-08-14T22:52:19.0634346	Tags for minecraft:item mod id eidolon
 8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/items/scribe_items.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/items/leaves.json
+15994e7ba2e0c75652884601c7636ba69c1c0522 data/minecraft/tags/items/music_discs.json
 4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/items/saplings.json

@@ -1,6 +1,7 @@
 package elucent.eidolon.event;
 
 import com.mojang.authlib.GameProfile;
+import elucent.eidolon.Config;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.*;
@@ -18,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -299,6 +301,13 @@ public class Events {
                 Networking.sendToTracking(event.getEntity().level, event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
             }
         });
+    }
+
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            player.getAttribute(Registry.MAX_SOUL_HEARTS.get()).setBaseValue(Config.MAX_ETHEREAL_HEALTH.get());
+        }
     }
 
 }
