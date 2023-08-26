@@ -21,6 +21,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -131,7 +132,7 @@ public class Events {
             Level world = entity.level;
             BlockPos pos = entity.blockPosition();
             List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2), pos.offset(3, 3, 3)));
-            if (goblets.size() > 0) {
+            if (!goblets.isEmpty()) {
                 GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((g) -> g.getBlockPos().distSqr(pos))).get();
                 goblet.setEntityType(entity.getType());
             }
@@ -147,7 +148,7 @@ public class Events {
             return;
         }
 
-        if (entity instanceof ZombieBruteEntity z && entity.hasEffect(MobEffects.WITHER) && !entity.level.isClientSide) {
+        if (entity instanceof ZombieBruteEntity && (entity.hasEffect(MobEffects.WITHER) || event.getSource().is(DamageTypes.WITHER)) && !entity.level.isClientSide) {
             for (ItemEntity item : event.getDrops())
                 if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
                     item.setItem(new ItemStack(Registry.WITHERED_HEART.get(), item.getItem().getCount()));
