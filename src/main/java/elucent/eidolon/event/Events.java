@@ -19,9 +19,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -130,7 +132,7 @@ public class Events {
             Level world = entity.level;
             BlockPos pos = entity.blockPosition();
             List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2), pos.offset(3, 3, 3)));
-            if (goblets.size() > 0) {
+            if (!goblets.isEmpty()) {
                 GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((g) -> g.getBlockPos().distSqr(pos))).get();
                 goblet.setEntityType(entity.getType());
             }
@@ -146,7 +148,7 @@ public class Events {
             return;
         }
 
-        if (entity instanceof ZombieBruteEntity z && entity.hasEffect(MobEffects.WITHER) && !entity.level.isClientSide) {
+        if (entity instanceof ZombieBruteEntity && entity.hasEffect(MobEffects.WITHER) && !entity.level.isClientSide) {
             for (ItemEntity item : event.getDrops())
                 if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
                     item.setItem(new ItemStack(Registry.WITHERED_HEART.get(), item.getItem().getCount()));
@@ -305,7 +307,8 @@ public class Events {
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getAttribute(Registry.MAX_SOUL_HEARTS.get()).setBaseValue(Config.MAX_ETHEREAL_HEALTH.get());
+            AttributeInstance attr = player.getAttribute(Registry.MAX_SOUL_HEARTS.get());
+            if (attr != null) attr.setBaseValue(Config.MAX_ETHEREAL_HEALTH.get());
         }
     }
 
