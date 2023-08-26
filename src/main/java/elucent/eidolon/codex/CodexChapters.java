@@ -31,7 +31,7 @@ public class CodexChapters {
 
     static Chapter NATURE_INDEX, MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS, DECORATIONS,
             RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
-            ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE,
+            ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
             THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
             SIGNS_INDEX, WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
             RUNES_INDEX,
@@ -154,14 +154,14 @@ public class CodexChapters {
             DECORATIONS = new Chapter(
                     "eidolon.codex.chapter.decorations",
                     new TitlePage("eidolon.codex.page.decorations"),
+                    new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16),
+                            new CrucibleStep(new ItemStack(Blocks.MUD, 4)),
+                            new CrucibleStep(1, new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Registry.SOUL_SHARD.get()))
+                    ),
                     new CraftingPage(new ItemStack(Registry.ELDER_BRICKS.getBlock(), 4),
                             new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
                             new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
                             ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
-                    ),
-                    new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16),
-                            new CrucibleStep(new ItemStack(Blocks.MUD, 4)),
-                            new CrucibleStep(1, new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Registry.SOUL_SHARD.get()))
                     ),
                     new CraftingPage(new ItemStack(Registry.BONE_PILE.getBlock(), 1),
                             new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE),
@@ -756,6 +756,32 @@ public class CodexChapters {
                             new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()), new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()))
             );
 
+            //WIPS
+
+            RAVEN_CLOAK = new Chapter("eidolon.codex.chapter.raven_cloak",
+                    new TitlePage("eidolon.codex.page.raven_cloak"),
+                    new WorktablePage(new ItemStack(Registry.RAVEN_CLOAK.get()),
+                            new ItemStack(Registry.RAVEN_FEATHER.get()), ItemStack.EMPTY, new ItemStack(Registry.RAVEN_FEATHER.get()),
+                            new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()),
+                            new ItemStack(Registry.TATTERED_CLOTH.get()), new ItemStack(Registry.GRAVITY_BELT.get()), new ItemStack(Registry.TATTERED_CLOTH.get()),
+                            Items.PHANTOM_MEMBRANE.getDefaultInstance(), new ItemStack(Registry.RAVEN_FEATHER.get()), Items.PHANTOM_MEMBRANE.getDefaultInstance(), new ItemStack(Registry.RAVEN_FEATHER.get())
+                    )
+            );
+
+            NECROMANCER_STAFF = new Chapter("eidolon.codex.chapter.summoning_staff",
+                    new TitlePage("eidolon.codex.page.summoning_staff")
+            );
+
+            ARROW_RING = new Chapter("eidolon.codex.chapter.angel_sight",
+                    new TitlePage("eidolon.codex.page.angel_sight"),
+                    new WorktablePage(new ItemStack(Registry.ANGELS_SIGHT.get()),
+                            ItemStack.EMPTY, new ItemStack(Registry.SHADOW_GEM.get()), ItemStack.EMPTY,
+                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.BASIC_RING.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
+                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
+                            Items.WITHER_SKELETON_SKULL.getDefaultInstance(), Items.ARROW.getDefaultInstance(), new ItemStack(Registry.UNHOLY_SYMBOL.get()), Items.ARROW.getDefaultInstance())
+            );
+
+
             ARTIFICE_INDEX = new Chapter(
                     "eidolon.codex.chapter.artifice",
                     new TitledIndexPage("eidolon.codex.page.artifice",
@@ -792,6 +818,11 @@ public class CodexChapters {
                             new IndexEntry(RESOLUTE_BELT, new ItemStack(Registry.RESOLUTE_BELT.get())),
                             new IndexEntry(GLASS_HAND, new ItemStack(Registry.GLASS_HAND.get())),
                             new IndexEntry(SOULBONE, new ItemStack(Registry.SOULBONE_AMULET.get()))
+                    ),
+                    new IndexPage(
+                            new IndexEntry(RAVEN_CLOAK, new ItemStack(Registry.RAVEN_CLOAK.get())),
+                            new IndexEntry(NECROMANCER_STAFF, new ItemStack(Registry.SUMMONING_STAFF.get())),
+                            new IndexEntry(ARROW_RING, new ItemStack(Registry.ANGELS_SIGHT.get()))
                     )
             );
 
