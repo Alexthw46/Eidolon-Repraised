@@ -6,6 +6,7 @@ import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public abstract class Deity implements RGBProvider {
         }
 
         public Stage next(double rep) {
-            return steps.ceilingEntry((int) (rep + 0.5f)).getValue();
+            return steps.ceilingEntry(Mth.clamp((int) (rep + 0.5f), 0, max)).getValue();
         }
 
         public Stage last(double rep) {
@@ -131,7 +132,7 @@ public abstract class Deity implements RGBProvider {
         }
 
         public Stage prev(double rep) {
-            return steps.floorEntry((int) (steps.floorKey((int) rep) - 0.5F)).getValue();
+            return steps.floorEntry(steps.floorKey((int) Math.max(rep - 0.5F, 0F))).getValue();
         }
 
 

@@ -29,7 +29,7 @@ public class CodexChapters {
     static public final List<Category> categories = new CopyOnWriteArrayList<>();
     static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, RUNES, SPELLS;
 
-    static Chapter NATURE_INDEX, MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS,
+    static Chapter NATURE_INDEX, MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS, DECORATIONS,
             RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
             ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE,
             THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
@@ -123,7 +123,7 @@ public class CodexChapters {
                     ),
                     new CruciblePage(new ItemStack(Registry.MAGICIANS_WAX.get(), 4),
                             new CrucibleStep(new ItemStack(Registry.ENDER_CALX.get())),
-                            new CrucibleStep(new ItemStack(Items.REDSTONE), new ItemStack(Items.RED_DYE)),
+                            new CrucibleStep(new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.RED_DYE, 2)),
                             new CrucibleStep(2, new ItemStack(Registry.TALLOW.get()))
                     ),
                     new CraftingPage(new ItemStack(Registry.ARCANE_SEAL.get(), 2),
@@ -132,16 +132,16 @@ public class CodexChapters {
                             ItemStack.EMPTY, new ItemStack(Registry.MAGICIANS_WAX.get()), ItemStack.EMPTY
                     ),
                     new CruciblePage(new ItemStack(Registry.MAGIC_INK.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.GLOW_INK_SAC), new ItemStack(Items.BLACK_DYE)),
+                            new CrucibleStep(new ItemStack(Items.GLOW_INK_SAC), new ItemStack(Items.BLACK_DYE, 2)),
                             new CrucibleStep(1, new ItemStack(Items.BLUE_DYE)),
-                            new CrucibleStep(1, new ItemStack(Registry.SILVER_NUGGET.get())),
+                            new CrucibleStep(1, new ItemStack(Registry.SILVER_NUGGET.get(), 2)),
                             new CrucibleStep(new ItemStack(Items.GLASS_BOTTLE))
                     ),
                     new CruciblePage(new ItemStack(Registry.PARCHMENT.get(), 4),
                             new CrucibleStep(new ItemStack(Items.LEATHER)),
                             new CrucibleStep(1),
                             new CrucibleStep(1),
-                            new CrucibleStep(new ItemStack(Items.PAPER), new ItemStack(Registry.ENCHANTED_ASH.get()))
+                            new CrucibleStep(new ItemStack(Items.PAPER, 3), new ItemStack(Registry.ENCHANTED_ASH.get()))
                     ),
                     new CraftingPage(new ItemStack(Registry.NOTETAKING_TOOLS.get()),
                             new ItemStack(Registry.PARCHMENT.get()), new ItemStack(Registry.MAGIC_INK.get()), ItemStack.EMPTY,
@@ -151,6 +151,24 @@ public class CodexChapters {
 
             );
 
+            DECORATIONS = new Chapter(
+                    "eidolon.codex.chapter.decorations",
+                    new TitlePage("eidolon.codex.page.decorations"),
+                    new CraftingPage(new ItemStack(Registry.ELDER_BRICKS.getBlock(), 4),
+                            new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
+                            new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
+                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+                    ),
+                    new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16),
+                            new CrucibleStep(new ItemStack(Blocks.MUD, 4)),
+                            new CrucibleStep(1, new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Registry.SOUL_SHARD.get()))
+                    ),
+                    new CraftingPage(new ItemStack(Registry.BONE_PILE.getBlock(), 1),
+                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE),
+                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE),
+                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE)
+                    )
+            );
 
             NATURE_INDEX = new Chapter(
                     "eidolon.codex.chapter.nature_index",
@@ -161,7 +179,11 @@ public class CodexChapters {
                             new IndexEntry(PEWTER, new ItemStack(Registry.PEWTER_INGOT.get())),
                             new IndexEntry(ENCHANTED_ASH, new ItemStack(Registry.ENCHANTED_ASH.get())),
                             new IndexEntry(PLANTS, new ItemStack(Registry.OANNA_BLOOM.get()))
-                    ), new IndexPage(new IndexEntry(RESEARCHS, new ItemStack(Registry.RESEARCH_TABLE.get())))
+                    ),
+                    new IndexPage(
+                            new IndexEntry(RESEARCHS, new ItemStack(Registry.RESEARCH_TABLE.get())),
+                            new IndexEntry(DECORATIONS, new ItemStack(Registry.ELDER_BRICKS_EYE.get()))
+                    )
             );
 
             categories.add(NATURE = new Category(
