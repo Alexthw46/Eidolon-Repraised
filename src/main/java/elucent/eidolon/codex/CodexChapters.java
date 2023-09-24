@@ -16,6 +16,7 @@ import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spells;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -100,17 +101,8 @@ public class CodexChapters {
                     "eidolon.codex.chapter.plants",
                     new TitlePage("eidolon.codex.page.plants"),
                     new TextPage("eidolon.codex.page.plants.1"),
-                    new WorktablePage(Registry.ATHAME.get().getDefaultInstance(), ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INLAY.get()), ItemStack.EMPTY,
-                            Items.ENDER_PEARL.getDefaultInstance(), ItemStack.EMPTY, ItemStack.EMPTY,
-                            Items.GOLD_NUGGET.getDefaultInstance(), ItemStack.EMPTY, new ItemStack(Registry.SILVER_NUGGET.get()), ItemStack.EMPTY
-                    ),
-                    new WorktablePage(Registry.PLANTER.get().asItem().getDefaultInstance(), new ItemStack(Registry.PEWTER_INGOT.get()), Items.DIRT.getDefaultInstance(), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Items.OAK_PLANKS), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Items.OAK_PLANKS),
-                            new ItemStack(Items.OAK_PLANKS), ItemStack.EMPTY, new ItemStack(Items.OAK_PLANKS),
-                            new ItemStack(Registry.ENCHANTED_ASH.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY
-                    )
-
+                    new WorktablePage(Registry.ATHAME.get()),
+                    new WorktablePage(Registry.PLANTER.get().asItem())
             );
 
             RESEARCHS = new Chapter(
@@ -154,10 +146,7 @@ public class CodexChapters {
             DECORATIONS = new Chapter(
                     "eidolon.codex.chapter.decorations",
                     new TitlePage("eidolon.codex.page.decorations"),
-                    new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16),
-                            new CrucibleStep(new ItemStack(Blocks.MUD, 4)),
-                            new CrucibleStep(1, new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Registry.SOUL_SHARD.get()))
-                    ),
+                    new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16)),
                     new CraftingPage(new ItemStack(Registry.ELDER_BRICKS.getBlock(), 4),
                             new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
                             new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
@@ -774,11 +763,14 @@ public class CodexChapters {
 
             ARROW_RING = new Chapter("eidolon.codex.chapter.angel_sight",
                     new TitlePage("eidolon.codex.page.angel_sight"),
+                    new WorktablePage(new ItemStack(Registry.ANGELS_SIGHT.get()), new ResourceLocation("eidolon:angel_sight"))
+                    /*
                     new WorktablePage(new ItemStack(Registry.ANGELS_SIGHT.get()),
                             ItemStack.EMPTY, new ItemStack(Registry.SHADOW_GEM.get()), ItemStack.EMPTY,
                             new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.BASIC_RING.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
                             ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
                             Items.WITHER_SKELETON_SKULL.getDefaultInstance(), Items.ARROW.getDefaultInstance(), new ItemStack(Registry.UNHOLY_SYMBOL.get()), Items.ARROW.getDefaultInstance())
+            */
             );
 
 

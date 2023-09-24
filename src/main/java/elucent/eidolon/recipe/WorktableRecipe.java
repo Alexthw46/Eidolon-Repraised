@@ -34,6 +34,18 @@ public class WorktableRecipe implements Recipe<Container> {
         this.result = result;
     }
 
+    //for use in the codex
+    @Deprecated
+    public WorktableRecipe(ItemStack[] inputs, ItemStack result) {
+        this.core = new Ingredient[9];
+        this.extras = new Ingredient[4];
+        for (int i = 0; i < inputs.length; i++) {
+            if (i < 9) core[i] = Ingredient.of(inputs[i]);
+            else extras[i - 9] = Ingredient.of(inputs[i]);
+        }
+        this.result = result;
+    }
+
     public ResourceLocation getRegistryName() {
         return registryName;
     }

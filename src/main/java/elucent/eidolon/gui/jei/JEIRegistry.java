@@ -2,9 +2,9 @@ package elucent.eidolon.gui.jei;
 
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.recipe.CrucibleRegistry;
+import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.DyeRecipe;
-import elucent.eidolon.recipe.WorktableRegistry;
+import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.ritual.RitualRegistry;
 import mezz.jei.api.IModPlugin;
@@ -16,12 +16,13 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
 public class JEIRegistry implements IModPlugin {
-    public static final RecipeType<RecipeWrappers.Crucible> CRUCIBLE_CATEGORY = RecipeType.create(Eidolon.MODID, "crucible", RecipeWrappers.Crucible.class);
-    public static final RecipeType<RecipeWrappers.Worktable> WORKTABLE_CATEGORY = RecipeType.create(Eidolon.MODID, "worktable", RecipeWrappers.Worktable.class);
+    public static final RecipeType<CrucibleRecipe> CRUCIBLE_CATEGORY = RecipeType.create(Eidolon.MODID, "crucible", CrucibleRecipe.class);
+    public static final RecipeType<WorktableRecipe> WORKTABLE_CATEGORY = RecipeType.create(Eidolon.MODID, "worktable", WorktableRecipe.class);
     public static final RecipeType<RecipeWrappers.RitualRecipe> RITUAL_CATEGORY = RecipeType.create(Eidolon.MODID, "rituals", RecipeWrappers.RitualRecipe.class);
 
     @Override
@@ -47,8 +48,11 @@ public class JEIRegistry implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
-        registry.addRecipes(CRUCIBLE_CATEGORY, CrucibleRegistry.getWrappedRecipes());
-        registry.addRecipes(WORKTABLE_CATEGORY, WorktableRegistry.getWrappedRecipes());
+
+        RecipeManager manager = Eidolon.proxy.getWorld().getRecipeManager();
+
+        registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(CrucibleRecipe.Type.INSTANCE));
+        registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(WorktableRecipe.Type.INSTANCE));
         registry.addRecipes(RITUAL_CATEGORY, RitualRegistry.getWrappedRecipes());
     }
 

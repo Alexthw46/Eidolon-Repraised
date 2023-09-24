@@ -1,17 +1,16 @@
 package elucent.eidolon.recipe;
 
+import elucent.eidolon.codex.Page;
+import elucent.eidolon.codex.WorktablePage;
+import elucent.eidolon.util.RecipeUtil;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import elucent.eidolon.codex.Page;
-import elucent.eidolon.codex.WorktablePage;
-import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.util.RecipeUtil;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 
 public class WorktableRegistry {
     static final Map<ResourceLocation, WorktableRecipe> recipes = new HashMap<>();
@@ -28,18 +27,6 @@ public class WorktableRegistry {
         for (Object o : recipe.core) stacks.add(RecipeUtil.stackFromObject(o));
         for (Object o : recipe.extras) stacks.add(RecipeUtil.stackFromObject(o));
         return new WorktablePage(recipe.result.copy(), stacks.toArray(new ItemStack[0]));
-    }
-
-    public static List<RecipeWrappers.Worktable> getWrappedRecipes() {
-        List<RecipeWrappers.Worktable> wrappers = new ArrayList<>();
-        for (WorktableRecipe recipe : recipes.values()) {
-            Page page = null; // linkedPages.getOrDefault(entry.getKey(), null);
-            wrappers.add(new RecipeWrappers.Worktable(
-                recipe,
-                page
-            ));
-        }
-        return wrappers;
     }
 
     public static WorktableRecipe find(ResourceLocation loc) {

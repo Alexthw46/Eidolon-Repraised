@@ -1,15 +1,5 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
-import elucent.eidolon.util.ColorUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 
 public class Category {
     final ItemStack icon;
@@ -27,24 +17,6 @@ public class Category {
 
     protected void reset() {
         hoveramount = 0;
-    }
-
-    static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        Matrix4f matrix = mStack.last().pose();
-        int maxX = x + width, maxY = y + height;
-        float minU = (float) uOffset / textureWidth, minV = (float) vOffset / textureHeight;
-        float maxU = minU + (float) width / textureWidth, maxV = minV + (float) height / textureHeight;
-        int r = ColorUtil.getRed(color),
-                g = ColorUtil.getGreen(color),
-                b = ColorUtil.getBlue(color);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float) x, (float) maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     public boolean click(CodexGui gui, int x, int y, boolean right, int mouseX, int mouseY) {

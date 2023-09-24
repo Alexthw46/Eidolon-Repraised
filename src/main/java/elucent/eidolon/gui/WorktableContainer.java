@@ -1,7 +1,6 @@
 package elucent.eidolon.gui;
 
 import elucent.eidolon.recipe.WorktableRecipe;
-import elucent.eidolon.recipe.WorktableRegistry;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,8 +35,8 @@ public class WorktableContainer extends AbstractContainerMenu {
         this.callable = callable;
         this.addSlot(new WorktableResultSlot(inventory.player, core, extras, result, 0, 163, 58));
 
-        for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 3; ++j) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
                 this.addSlot(new Slot(this.core, j + i * 3, 40 + j * 18, 40 + i * 18));
             }
         }
@@ -46,37 +45,42 @@ public class WorktableContainer extends AbstractContainerMenu {
         this.addSlot(new Slot(this.extras, 2, 58, 98));
         this.addSlot(new Slot(this.extras, 3, 18, 58));
 
-        for(int k = 0; k < 3; ++k) {
-            for(int i1 = 0; i1 < 9; ++i1) {
+        for (int k = 0; k < 3; ++k) {
+            for (int i1 = 0; i1 < 9; ++i1) {
                 this.addSlot(new Slot(inventory, i1 + k * 9 + 9, 16 + i1 * 18, 142 + k * 18));
             }
         }
 
-        for(int l = 0; l < 9; ++l) {
+        for (int l = 0; l < 9; ++l) {
             this.addSlot(new Slot(inventory, l, 16 + l * 18, 200));
         }
     }
 
     protected void updateCraftingResult(int id, Level world, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
-        if (!world.isClientSide) {
-            ServerPlayer serverplayerentity = (ServerPlayer)player;
+        if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
             ItemStack itemstack = ItemStack.EMPTY;
-            WorktableRecipe recipe = WorktableRegistry.find(core, extras);
-            if (recipe != null) {
-                itemstack = recipe.getResult();
+            var worktableRecipeOptional = world.getRecipeManager().getAllRecipesFor(WorktableRecipe.Type.INSTANCE);
+            if (!extras.isEmpty()) {
+                for (WorktableRecipe worktableRecipe : worktableRecipeOptional) {
+                    if (worktableRecipe.matches(core, extras)) {
+                        itemstack = worktableRecipe.getResult();
+                        break;
+                    }
+                }
             }
-            else {
-                Optional<CraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
+            if (itemstack.isEmpty()) {
+                Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
                 if (optional.isPresent()) {
                     CraftingRecipe icraftingrecipe = optional.get();
                     if (inventoryResult.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
                         itemstack = icraftingrecipe.assemble(inventory);
+
                     }
                 }
             }
 
             inventoryResult.setItem(0, itemstack);
-            serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(id, incrementStateId(), 0, itemstack));
+            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(id, incrementStateId(), 0, itemstack));
         }
     }
 
