@@ -2,6 +2,7 @@ package elucent.eidolon.proxy;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class ServerProxy implements ISidedProxy {
     @Override
@@ -11,7 +12,7 @@ public class ServerProxy implements ISidedProxy {
 
     @Override
     public Level getWorld() {
-        return null;
+        return ServerLifecycleHooks.getCurrentServer().overworld();
     }
 
     @Override

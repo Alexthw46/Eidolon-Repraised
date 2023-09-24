@@ -42,7 +42,7 @@ public class ListPage extends Page {
         }
 
         for (int i = 0; i < entries.length; i++) {
-            drawItem(gui, mStack, entries[i].icon, x + 2, y + 8 + i * 20, mouseX, mouseY);
+            drawItem(mStack, entries[i].icon, x + 2, y + 8 + i * 20, mouseX, mouseY);
             drawText(mStack, I18n.get(key + "." + entries[i].key), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
         }
     }

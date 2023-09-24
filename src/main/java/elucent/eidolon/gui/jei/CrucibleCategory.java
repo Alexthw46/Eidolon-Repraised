@@ -2,8 +2,6 @@ package elucent.eidolon.gui.jei;
 
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.codex.CodexGui;
-import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
@@ -15,6 +13,8 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -28,7 +28,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible> {
+import static elucent.eidolon.codex.CruciblePage.BACKGROUND;
+import static elucent.eidolon.codex.Page.drawText;
+
+public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "crucible");
     private final IDrawable background, icon;
 
@@ -42,13 +45,13 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
      * @since 9.5.0
      */
     @Override
-    public @NotNull RecipeType<RecipeWrappers.Crucible> getRecipeType() {
+    public @NotNull RecipeType<CrucibleRecipe> getRecipeType() {
         return JEIRegistry.CRUCIBLE_CATEGORY;
     }
 
     @Override
     public @NotNull Component getTitle() {
-        return Component.translatable(I18n.get("jei." + Eidolon.MODID + ".crucible"));
+        return Component.translatable("jei." + Eidolon.MODID + ".crucible");
     }
 
     @Override
@@ -61,7 +64,7 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
         return icon;
     }
 
-    protected static class StackIngredient {
+    public static class StackIngredient {
         ItemStack stack;
         Ingredient ingredient;
 
@@ -86,9 +89,9 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, RecipeWrappers.Crucible recipe, @NotNull IFocusGroup focusGroup) {
+    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, CrucibleRecipe recipe, @NotNull IFocusGroup focusGroup) {
 
-        List<CrucibleRecipe.Step> steps = recipe.recipe.getSteps();
+        List<CrucibleRecipe.Step> steps = recipe.getSteps();
         int h = steps.size() * 20 + 32;
         int yoff = 80 - h / 2;
         for (int i = 0; i < steps.size(); i++) {
@@ -110,13 +113,39 @@ public class CrucibleCategory implements IRecipeCategory<RecipeWrappers.Crucible
             }
         }
 
-        layout.addSlot(RecipeIngredientRole.OUTPUT, 60, yoff + steps.size() * 20 + 14).addItemStack(recipe.recipe.getResultItem());
+        layout.addSlot(RecipeIngredientRole.OUTPUT, 60, yoff + steps.size() * 20 + 14).addItemStack(recipe.getResultItem());
     }
 
     @Override
-    public void draw(RecipeWrappers.Crucible recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
-        recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-        recipe.getPage().render(CodexGui.DUMMY, mStack, CruciblePage.BACKGROUND, 5, 4, (int) mouseX, (int) mouseY);
+    public void draw(CrucibleRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        var steps = recipe.getSteps();
+        int h = steps.size() * 20 + 32;
+        int yoff = 80 - h / 2;
+        int x = 4, y = 5;
+        for (int i = 0; i < steps.size(); i++) {
+            int tx = x, ty = (y + yoff + i * 20);
+            guiGraphics.blit(BACKGROUND, tx, ty, 128, 0, 128, 20);
+            tx += 24;
+            for (int j = 0; j < steps.get(i).matches.size(); j++) {
+                if (!steps.get(i).matches.get(j).isEmpty()) {
+                    guiGraphics.blit(BACKGROUND, tx, ty + 1, 176, 32, 16, 17);
+                    tx += 17;
+                }
+            }
+            for (int j = 0; j < steps.get(i).stirs; j++) {
+                guiGraphics.blit(BACKGROUND, tx, ty + 1, 192, 32, 16, 17);
+                tx += 17;
+            }
+        }
+        guiGraphics.blit(BACKGROUND, x, y + yoff + steps.size() * 20, 128, 64, 128, 32);
+
+        Font font = Minecraft.getInstance().font;
+        for (int i = 0; i < steps.size(); i++) {
+            int tx = x, ty = y + yoff + i * 20;
+            drawText(guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", tx + 7, ty + 17 - font.lineHeight);
+            tx += 24;
+        }
+
     }
 }
 

@@ -2,14 +2,13 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,7 +18,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 public class SignPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_page.png");
@@ -28,24 +26,6 @@ public class SignPage extends Page {
     public SignPage(Sign sign) {
         super(BACKGROUND);
         this.sign = sign;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
-        Matrix4f matrix = mStack.last().pose();
-        int maxX = x + width, maxY = y + height;
-        float minU = (float)uOffset / textureWidth, minV = (float)vOffset / textureHeight;
-        float maxU = minU + (float)width / textureWidth, maxV = minV + (float)height / textureHeight;
-        int r = ColorUtil.getRed(color),
-            g = ColorUtil.getGreen(color),
-            b = ColorUtil.getBlue(color);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override

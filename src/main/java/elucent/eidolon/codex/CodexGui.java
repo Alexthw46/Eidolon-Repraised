@@ -185,7 +185,7 @@ public class CodexGui extends Screen {
 
         for (int i = 0; i < CodexChapters.categories.size(); i++) {
             int y = guiTop + 28 + (i % 8) * 20;
-            CodexChapters.categories.get(i).drawTooltip(this, guiGraphics, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
+            CodexChapters.categories.get(i).drawTooltip(guiGraphics, guiLeft + (i >= 8 ? 304 : 8), y, i >= 8, mouseX, mouseY);
         }
 
         if (hasTooltip) {

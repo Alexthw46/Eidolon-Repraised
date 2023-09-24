@@ -2,8 +2,7 @@ package elucent.eidolon.gui.jei;
 
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.codex.CodexGui;
-import elucent.eidolon.codex.WorktablePage;
+import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -22,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
-public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktable> {
+public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
     static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "worktable");
     private final IDrawable background, icon;
 
@@ -36,7 +35,7 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
      * @since 9.5.0
      */
     @Override
-    public @NotNull RecipeType<RecipeWrappers.Worktable> getRecipeType() {
+    public @NotNull RecipeType<WorktableRecipe> getRecipeType() {
         return JEIRegistry.WORKTABLE_CATEGORY;
     }
 
@@ -56,15 +55,15 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull RecipeWrappers.Worktable recipe, @NotNull IFocusGroup ingredients) {
-        Ingredient[] inputs = recipe.recipe.getCore();
-        Ingredient[] outers = recipe.recipe.getOuter();
+    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull WorktableRecipe recipe, @NotNull IFocusGroup ingredients) {
+        Ingredient[] inputs = recipe.getCore();
+        Ingredient[] outers = recipe.getOuter();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int index = i * 3 + j;
                 if (index >= inputs.length) break;
-                layout.addSlot(RecipeIngredientRole.INPUT, 44 + j * 17, 36 + i * 17).addIngredients(inputs[index]);
+                layout.addSlot(RecipeIngredientRole.INPUT, 44 + j * 17, 37 + i * 17).addIngredients(inputs[index]);
             }
         }
         layout.addSlot(RecipeIngredientRole.INPUT, 61, 15).addIngredients(outers[0]);
@@ -72,12 +71,14 @@ public class WorktableCategory implements IRecipeCategory<RecipeWrappers.Worktab
         layout.addSlot(RecipeIngredientRole.INPUT, 61, 93).addIngredients(outers[2]);
         layout.addSlot(RecipeIngredientRole.INPUT, 22, 54).addIngredients(outers[3]);
 
-        layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(recipe.recipe.getResultItem());
+        layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(recipe.getResultItem());
     }
 
     @Override
-    public void draw(@NotNull RecipeWrappers.Worktable recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
-        recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-        recipe.getPage().render(CodexGui.DUMMY, mStack, WorktablePage.BACKGROUND, 5, 4, (int) mouseX, (int) mouseY);
+    public void draw(@NotNull WorktableRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
+        mStack.blit(BACKGROUND, 5, 4, 0, 0, 128, 160);
     }
+
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_worktable_page.png");
+
 }

@@ -2,8 +2,7 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
@@ -11,7 +10,6 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.EidolonSounds;
-import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,7 +24,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 public class SignIndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
@@ -67,24 +64,6 @@ public class SignIndexPage extends Page {
         return false;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
-        Matrix4f matrix = mStack.last().pose();
-        int maxX = x + width, maxY = y + height;
-        float minU = (float) uOffset / textureWidth, minV = (float) vOffset / textureHeight;
-        float maxU = minU + (float) width / textureWidth, maxV = minV + (float) height / textureHeight;
-        int r = ColorUtil.getRed(color),
-                g = ColorUtil.getGreen(color),
-                b = ColorUtil.getBlue(color);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float) x, (float) maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
-    }
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
@@ -112,7 +91,6 @@ public class SignIndexPage extends Page {
                 }
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
-                    float r = sign.getRed(), g = sign.getGreen(), b = sign.getBlue();
                     RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 12, yy + 12, 24, 24,
                             sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
                     tess.end();

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -27,6 +28,17 @@ public class CrucibleRecipe implements Recipe<Container> {
     List<Step> steps;
     ResourceLocation registryName;
     final ItemStack result;
+
+    @Deprecated
+    public CrucibleRecipe(CruciblePage.CrucibleStep[] steps, ItemStack result) {
+        this.result = result;
+        this.steps = new ArrayList<>();
+        for (CruciblePage.CrucibleStep step : steps) {
+            List<Ingredient> ingredients = new ArrayList<>();
+            for (ItemStack stack : step.stacks) ingredients.add(Ingredient.of(stack));
+            this.steps.add(new Step(step.stirs, ingredients));
+        }
+    }
 
     public ItemStack getResult() {
         return result;
@@ -55,11 +67,6 @@ public class CrucibleRecipe implements Recipe<Container> {
         return registryName;
     }
 
-    public CrucibleRecipe setRegistryName(String domain, String path) {
-        this.registryName = new ResourceLocation(domain, path);
-        return this;
-    }
-
     public CrucibleRecipe setRegistryName(ResourceLocation registryName) {
         this.registryName = registryName;
         return this;
@@ -71,7 +78,7 @@ public class CrucibleRecipe implements Recipe<Container> {
         List<Ingredient> matchList = new ArrayList<>();
         List<ItemStack> itemList = new ArrayList<>();
 
-        for (int i = 0; i < steps.size(); i ++) {
+        for (int i = 0; i < steps.size(); i++) {
             Step correct = steps.get(i);
             CrucibleStep provided = items.get(i);
             if (correct.stirs != provided.getStirs()) return false;
@@ -81,17 +88,17 @@ public class CrucibleRecipe implements Recipe<Container> {
             matchList.addAll(correct.matches);
             itemList.addAll(provided.getContents());
 
-            for (int j = 0; j < matchList.size(); j ++) {
-                for (int k = 0; k < itemList.size(); k ++) {
+            for (int j = 0; j < matchList.size(); j++) {
+                for (int k = 0; k < itemList.size(); k++) {
                     if (matchList.get(j).test(itemList.get(k))) {
-                        matchList.remove(j --);
-                        itemList.remove(k --);
+                        matchList.remove(j--);
+                        itemList.remove(k--);
                         break;
                     }
                 }
             }
 
-            if (matchList.size() != 0 || itemList.size() != 0) return false;
+            if (!matchList.isEmpty() || !itemList.isEmpty()) return false;
         }
 
         return true;
@@ -128,7 +135,7 @@ public class CrucibleRecipe implements Recipe<Container> {
 
     public static class Type implements RecipeType<CrucibleRecipe> {
         @Override
-        public String toString () {
+        public String toString() {
             return Eidolon.MODID + ":crucible";
         }
 

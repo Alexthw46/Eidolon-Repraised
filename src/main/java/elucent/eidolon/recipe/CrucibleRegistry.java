@@ -3,7 +3,6 @@ package elucent.eidolon.recipe;
 import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
-import elucent.eidolon.gui.jei.RecipeWrappers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,7 +34,7 @@ public class CrucibleRegistry {
         }
     }
 
-    public static Page getDefaultPage(CrucibleRecipe recipe) {
+    public static CruciblePage getDefaultPage(CrucibleRecipe recipe) {
         List<CruciblePage.CrucibleStep> steps = new ArrayList<>();
         for (CrucibleRecipe.Step step : recipe.getSteps()) {
             List<ItemStack> stacks = step.matches.stream().map((i) -> i.getItems()[0].copy()).collect(Collectors.toList());
@@ -47,18 +46,6 @@ public class CrucibleRegistry {
 
     public static void linkPage(ResourceLocation recipe, Page page) {
         linkedPages.put(recipe, page);
-    }
-
-    public static List<RecipeWrappers.Crucible> getWrappedRecipes() {
-        List<RecipeWrappers.Crucible> wrappers = new ArrayList<>();
-        for (CrucibleRecipe recipe : recipes.values()) {
-            Page page = null; // linkedPages.getOrDefault(entry.getKey(), null);
-            wrappers.add(new RecipeWrappers.Crucible(
-                recipe,
-                page
-            ));
-        }
-        return wrappers;
     }
 
     public static CrucibleRecipe find(ResourceLocation loc) {

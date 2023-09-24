@@ -25,9 +25,9 @@ public class CraftingPage extends Page {
             for (int j = 0; j < 3; j++) {
                 int index = i * 3 + j;
                 if (index < inputs.length && !inputs[index].isEmpty())
-                    drawItem(gui, mStack, inputs[index], x + 36 + j * 20, y + 36 + i * 20, mouseX, mouseY);
+                    drawItem(mStack, inputs[index], x + 36 + j * 20, y + 36 + i * 20, mouseX, mouseY);
             }
         }
-        drawItem(gui, mStack, result, x + 56, y + 112, mouseX, mouseY);
+        drawItem(mStack, result, x + 56, y + 112, mouseX, mouseY);
     }
 }

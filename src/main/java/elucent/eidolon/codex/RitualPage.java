@@ -93,8 +93,8 @@ public class RitualPage extends Page {
             double a = Math.toRadians(rootAngle + angleStep * i);
             int dx = (int) (64 + 48 * Math.cos(a));
             int dy = (int) (88 + 48 * Math.sin(a));
-            drawItem(gui, mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
+            drawItem(mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
         }
-        drawItem(gui, mStack, center, x + 56, y + 80, mouseX, mouseY);
+        drawItem(mStack, center, x + 56, y + 80, mouseX, mouseY);
     }
 }

@@ -2,26 +2,22 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 import static elucent.eidolon.codex.CodexGui.CODEX_BACKGROUND;
 
@@ -38,24 +34,6 @@ public class ChantPage extends Page {
         this.chant = chant;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
-        Matrix4f matrix = mStack.last().pose();
-        int maxX = x + width, maxY = y + height;
-        float minU = (float)uOffset / textureWidth, minV = (float)vOffset / textureHeight;
-        float maxU = minU + (float)width / textureWidth, maxV = minV + (float)height / textureHeight;
-        int r = ColorUtil.getRed(color),
-            g = ColorUtil.getGreen(color),
-            b = ColorUtil.getBlue(color);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float)x, (float)maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float)maxX, (float)y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
-    }
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
@@ -65,8 +43,6 @@ public class ChantPage extends Page {
         drawText(guiGraphics, title, x + 64 - titleWidth / 2, y + 15 - Minecraft.getInstance().font.lineHeight);
 
         RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
-        Player entity = Minecraft.getInstance().player;
-        IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
         int w = chant.length * 24;
         int baseX = x + 64 - w / 2;
         CodexGui.blit(guiGraphics, baseX - 16, y + 28, 256, 208, 16, 32, 512, 512);

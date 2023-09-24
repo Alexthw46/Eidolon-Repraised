@@ -21,7 +21,7 @@ public class SmeltingPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderIngredients(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
-        drawItem(gui, mStack, input, x + 56, y + 34, mouseX, mouseY);
-        drawItem(gui, mStack, result, x + 56, y + 107, mouseX, mouseY);
+        drawItem(mStack, input, x + 56, y + 34, mouseX, mouseY);
+        drawItem(mStack, result, x + 56, y + 107, mouseX, mouseY);
     }
 }
