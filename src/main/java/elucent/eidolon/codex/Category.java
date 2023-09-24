@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public class Category {
     final ItemStack icon;
     final String key;
-    final Chapter chapter;
+    final Index chapter;
     final int color;
     float hoveramount = 0;
 
-    public Category(String name, ItemStack icon, int color, Chapter chapter) {
+    public Category(String name, ItemStack icon, int color, Index chapter) {
         this.icon = icon;
         this.key = name;
         this.chapter = chapter;

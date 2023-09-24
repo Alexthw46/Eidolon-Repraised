@@ -8,6 +8,8 @@ import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +43,12 @@ public class HealSpell extends StaticSpell {
             } else toHeal = player;
 
             toHeal.heal(5);
-            toHeal.getActiveEffects().stream().filter(effectInstance -> !effectInstance.getEffect().isBeneficial() && effectInstance.getEffect().getCurativeItems().contains(Items.MILK_BUCKET.getDefaultInstance())).forEach(effectInstance -> toHeal.removeEffect(effectInstance.getEffect()));
+            for (MobEffectInstance effectInstance : toHeal.getActiveEffects()) {
+                MobEffect effect = effectInstance.getEffect();
+                if (!effect.isBeneficial() && effect.getCurativeItems().contains(Items.MILK_BUCKET.getDefaultInstance())) {
+                    toHeal.removeEffect(effect);
+                }
+            }
             //toHeal.curePotionEffects(Items.MILK_BUCKET.getDefaultInstance());
 
             if (other) {
