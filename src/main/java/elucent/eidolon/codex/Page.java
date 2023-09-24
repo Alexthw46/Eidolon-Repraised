@@ -43,7 +43,7 @@ public abstract class Page {
     public static void drawItems(GuiGraphics guiGraphics, Ingredient ingredient, int x, int y, int mouseX, int mouseY) {
         if (ingredient.isEmpty()) return;
         ItemStack[] items = ingredient.getItems();
-        ItemStack stack = items[(int) Eidolon.proxy.getWorld().getGameTime() % (items.length)];
+        ItemStack stack = items[((int) Eidolon.proxy.getWorld().getGameTime() / 20) % items.length];
         guiGraphics.renderItem(stack, x, y);
         var font = Minecraft.getInstance().font;
         guiGraphics.renderItemDecorations(font, stack, x, y, null);
@@ -83,13 +83,13 @@ public abstract class Page {
     @OnlyIn(Dist.CLIENT)
     public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, bg);
-        renderBackground(gui, mStack, x, y, mouseX, mouseY);
+        renderBackground(mStack, x, y, mouseX, mouseY);
         render(gui, mStack, bg, x, y, mouseX, mouseY);
         renderIngredients(gui, mStack, x, y, mouseX, mouseY);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderBackground(CodexGui gui, @NotNull GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
+    public void renderBackground(@NotNull GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
         mStack.blit(bg, x, y, 0, 0, 128, 160);
     }
 

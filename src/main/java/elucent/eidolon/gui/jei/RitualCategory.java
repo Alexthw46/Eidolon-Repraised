@@ -88,7 +88,7 @@ public class RitualCategory implements IRecipeCategory<RecipeWrappers.RitualReci
 
     @Override
     public void draw(RecipeWrappers.RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics mStack, double mouseX, double mouseY) {
-        recipe.page.renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        recipe.page.renderBackground(mStack, 5, 4, (int) mouseX, (int) mouseY);
         recipe.page.render(CodexGui.DUMMY, mStack, RitualPage.BACKGROUND, 5, 4, (int) mouseX, (int) mouseY);
     }
 

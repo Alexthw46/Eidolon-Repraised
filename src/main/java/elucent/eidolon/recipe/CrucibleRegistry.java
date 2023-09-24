@@ -1,13 +1,12 @@
 package elucent.eidolon.recipe;
 
-import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CrucibleRegistry {
     static final Map<ResourceLocation, Page> linkedPages = new HashMap<>();
@@ -18,30 +17,6 @@ public class CrucibleRegistry {
         assert loc != null;
         recipes.put(loc, recipe);
         return recipe;
-    }
-
-    public static void condense(List<ItemStack> stacks) {
-        Iterator<ItemStack> iter = stacks.iterator();
-        ItemStack last = ItemStack.EMPTY;
-        while (iter.hasNext()) {
-            ItemStack i = iter.next();
-            if (!ItemStack.isSameItem(i, last) || !ItemStack.isSameItemSameTags(i, last) || last.getCount() + i.getCount() > last.getMaxStackSize()) {
-                last = i;
-            } else {
-                last.grow(i.getCount());
-                iter.remove();
-            }
-        }
-    }
-
-    public static CruciblePage getDefaultPage(CrucibleRecipe recipe) {
-        List<CruciblePage.CrucibleStep> steps = new ArrayList<>();
-        for (CrucibleRecipe.Step step : recipe.getSteps()) {
-            List<ItemStack> stacks = step.matches.stream().map((i) -> i.getItems()[0].copy()).collect(Collectors.toList());
-            condense(stacks);
-            steps.add(new CruciblePage.CrucibleStep(step.stirs, stacks.toArray(new ItemStack[0])));
-        }
-        return new CruciblePage(recipe.result.copy(), steps.toArray(new CruciblePage.CrucibleStep[0]));
     }
 
     public static void linkPage(ResourceLocation recipe, Page page) {

@@ -1,7 +1,6 @@
 package elucent.eidolon.codex;
 
 import elucent.eidolon.capability.Facts;
-import elucent.eidolon.codex.CruciblePage.CrucibleStep;
 import elucent.eidolon.codex.IndexPage.FactLockedEntry;
 import elucent.eidolon.codex.IndexPage.IndexEntry;
 import elucent.eidolon.codex.IndexPage.ResearchLockedEntry;
@@ -16,7 +15,6 @@ import elucent.eidolon.ritual.RitualRegistry;
 import elucent.eidolon.spell.Signs;
 import elucent.eidolon.spell.Spells;
 import elucent.eidolon.util.ColorUtil;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -26,17 +24,111 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static elucent.eidolon.Eidolon.prefix;
+
 public class CodexChapters {
     static public final List<Category> categories = new CopyOnWriteArrayList<>();
-    static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, RUNES, SPELLS;
+    static Category NATURE;
+    static Category RITUALS;
+    static Category ARTIFICE;
+    static Category THEURGY;
+    static Category SIGNS;
+    static Category SPELLS;
 
-    static Chapter NATURE_INDEX, MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHS, DECORATIONS,
-            RITUALS_INDEX, BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
-            ARTIFICE_INDEX, WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
-            THEURGY_INDEX, INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
-            SIGNS_INDEX, WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
-            RUNES_INDEX,
-            SPELLS_INDEX, MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE;
+    static Chapter NATURE_INDEX;
+    static Chapter MONSTERS;
+    static Chapter CRITTERS;
+    static Chapter ORES;
+    static Chapter PEWTER;
+    static Chapter ENCHANTED_ASH;
+    static Chapter PLANTS;
+    static Chapter RESEARCHES;
+    static Chapter DECORATIONS;
+    static Chapter RITUALS_INDEX;
+    static Chapter BRAZIER;
+    static Chapter ITEM_PROVIDERS;
+    static Chapter CRYSTAL_RITUAL;
+    static Chapter SUMMON_RITUAL;
+    static Chapter ALLURE_RITUAL;
+    static Chapter REPELLING_RITUAL;
+    static Chapter DECEIT_RITUAL;
+    static Chapter TIME_RITUALS;
+    static Chapter PURIFY_RITUAL;
+    static Chapter SANGUINE_RITUAL;
+    static Chapter RECHARGE_RITUAL;
+    static Chapter CAPTURE_RITUAL;
+    static Chapter ARTIFICE_INDEX;
+    static Chapter WOODEN_STAND;
+    static Chapter TALLOW;
+    static Chapter CRUCIBLE;
+    static Chapter ARCANE_GOLD;
+    static Chapter REAGENTS;
+    static Chapter SOUL_GEMS;
+    static Chapter SHADOW_GEM;
+    static Chapter WARPED_SPROUTS;
+    static Chapter BASIC_ALCHEMY;
+    static Chapter INLAYS;
+    static Chapter BASIC_BAUBLES;
+    static Chapter MAGIC_WORKBENCH;
+    static Chapter VOID_AMULET;
+    static Chapter WARDED_MAIL;
+    static Chapter SOULFIRE_WAND;
+    static Chapter BONECHILL_WAND;
+    static Chapter REAPER_SCYTHE;
+    static Chapter CLEAVING_AXE;
+    static Chapter SOUL_ENCHANTER;
+    static Chapter REVERSAL_PICK;
+    static Chapter WARLOCK_ARMOR;
+    static Chapter GRAVITY_BELT;
+    static Chapter PRESTIGIOUS_PALM;
+    static Chapter MIND_SHIELDING_PLATE;
+    static Chapter RESOLUTE_BELT;
+    static Chapter GLASS_HAND;
+    static Chapter SOULBONE;
+    static Chapter RAVEN_CLOAK;
+    static Chapter ARROW_RING;
+    static Chapter NECROMANCER_STAFF;
+    static Chapter THEURGY_INDEX;
+    static Chapter INTRO_SIGNS;
+    static Chapter EFFIGY;
+    static Chapter ALTARS;
+    static Chapter ALTAR_LIGHTS;
+    static Chapter ALTAR_SKULLS;
+    static Chapter ALTAR_HERBS;
+    static Chapter GOBLET;
+    static Chapter CENSER;
+    static Chapter DARK_PRAYER;
+    static Chapter ANIMAL_SACRIFICE;
+    static Chapter DARK_TOUCH;
+    static Chapter STONE_ALTAR;
+    static Chapter UNHOLY_EFFIGY;
+    static Chapter HOLY_EFFIGY;
+    static Chapter VILLAGER_SACRIFICE;
+    static Chapter LIGHT_PRAYER;
+    static Chapter INCENSE_BURN;
+    static Chapter HEAL;
+    static Chapter HOLY_TOUCH;
+    static Chapter SIGNS_INDEX;
+    static Chapter WICKED_SIGN;
+    static Chapter SACRED_SIGN;
+    static Chapter BLOOD_SIGN;
+    static Chapter SOUL_SIGN;
+    static Chapter MIND_SIGN;
+    static Chapter FLAME_SIGN;
+    static Chapter WINTER_SIGN;
+    static Chapter HARMONY_SIGN;
+    static Chapter DEATH_SIGN;
+    static Chapter WARDING_SIGN;
+    static Chapter MAGIC_SIGN;
+    static Chapter SPELLS_INDEX;
+    static Chapter MANA;
+    static Chapter LIGHT;
+    static Chapter FIRE_TOUCH;
+    static Chapter CHILL_TOUCH;
+    static Chapter ZOMBIFY;
+    static Chapter CURE_ZOMBIE;
+    static Chapter ENTHRALL;
+    static Chapter SMITE;
 
     public static void init() {
 
@@ -65,30 +157,19 @@ public class CodexChapters {
                     new TitlePage("eidolon.codex.page.ores.silver_ore"),
                     new SmeltingPage(new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_ORE.get())),
                     new SmeltingPage(new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_ORE.get())),
-
-                    new CraftingPage(new ItemStack(Registry.LEAD_BLOCK.get()),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get())),
-                    new CraftingPage(new ItemStack(Registry.SILVER_BLOCK.get()),
-                            new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()),
-                            new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()),
-                            new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_INGOT.get())),
-                    new CraftingPage(new ItemStack(Registry.LEAD_NUGGET.get(), 9), new ItemStack(Registry.LEAD_INGOT.get())),
-                    new CraftingPage(new ItemStack(Registry.SILVER_NUGGET.get(), 9), new ItemStack(Registry.SILVER_INGOT.get()))
+                    new CraftingPage(Registry.LEAD_BLOCK.get().asItem()),
+                    new CraftingPage(Registry.SILVER_BLOCK.get().asItem()),
+                    new CraftingPage(new ItemStack(Registry.LEAD_NUGGET.get(), 9), prefix("decompress_lead_ingot")),
+                    new CraftingPage(new ItemStack(Registry.SILVER_NUGGET.get(), 9), prefix("decompress_silver_ingot"))
             );
 
             PEWTER = new Chapter(
                     "eidolon.codex.chapter.pewter",
                     new TitlePage("eidolon.codex.page.pewter"),
-                    new CraftingPage(new ItemStack(Registry.PEWTER_BLEND.get(), 2),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Items.IRON_INGOT)),
+                    new CraftingPage(new ItemStack(Registry.PEWTER_BLEND.get(), 2)),
                     new SmeltingPage(new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_BLEND.get())),
-                    new CraftingPage(new ItemStack(Registry.PEWTER_BLOCK.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get())),
-                    new CraftingPage(new ItemStack(Registry.PEWTER_NUGGET.get(), 9), new ItemStack(Registry.PEWTER_INGOT.get()))
+                    new CraftingPage(Registry.PEWTER_BLOCK.get().asItem()),
+                    new CraftingPage(new ItemStack(Registry.PEWTER_NUGGET.get(), 9), prefix("decompress_pewter_ingot"))
             );
 
             ENCHANTED_ASH = new Chapter(
@@ -102,61 +183,27 @@ public class CodexChapters {
                     new TitlePage("eidolon.codex.page.plants"),
                     new TextPage("eidolon.codex.page.plants.1"),
                     new WorktablePage(Registry.ATHAME.get()),
-                    new WorktablePage(Registry.PLANTER.get().asItem())
+                    new WorktablePage(Registry.PLANTER.get().asItem()),
+                    new CraftingPage(Registry.MERAMMER_RESIN.get())
             );
 
-            RESEARCHS = new Chapter(
-                    "eidolon.codex.chapter.researchs",
-                    new TitlePage("eidolon.codex.page.researchs.0"),
-                    new CraftingPage(Registry.RESEARCH_TABLE.get().asItem().getDefaultInstance(),
-                            ItemStack.EMPTY, new ItemStack(Registry.MAGIC_CANDLE.get()), ItemStack.EMPTY,
-                            new ItemStack(Items.RED_CARPET), new ItemStack(Items.RED_CARPET), new ItemStack(Items.RED_CARPET),
-                            new ItemStack(Items.OAK_PLANKS), new ItemStack(Items.OAK_PLANKS), new ItemStack(Items.OAK_PLANKS)
-                    ),
-                    new CruciblePage(new ItemStack(Registry.MAGICIANS_WAX.get(), 4),
-                            new CrucibleStep(new ItemStack(Registry.ENDER_CALX.get())),
-                            new CrucibleStep(new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.RED_DYE, 2)),
-                            new CrucibleStep(2, new ItemStack(Registry.TALLOW.get()))
-                    ),
-                    new CraftingPage(new ItemStack(Registry.ARCANE_SEAL.get(), 2),
-                            ItemStack.EMPTY, new ItemStack(Registry.MAGICIANS_WAX.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.MAGICIANS_WAX.get()), new ItemStack(Registry.MAGICIANS_WAX.get()), new ItemStack(Registry.MAGICIANS_WAX.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.MAGICIANS_WAX.get()), ItemStack.EMPTY
-                    ),
-                    new CruciblePage(new ItemStack(Registry.MAGIC_INK.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.GLOW_INK_SAC), new ItemStack(Items.BLACK_DYE, 2)),
-                            new CrucibleStep(1, new ItemStack(Items.BLUE_DYE)),
-                            new CrucibleStep(1, new ItemStack(Registry.SILVER_NUGGET.get(), 2)),
-                            new CrucibleStep(new ItemStack(Items.GLASS_BOTTLE))
-                    ),
-                    new CruciblePage(new ItemStack(Registry.PARCHMENT.get(), 4),
-                            new CrucibleStep(new ItemStack(Items.LEATHER)),
-                            new CrucibleStep(1),
-                            new CrucibleStep(1),
-                            new CrucibleStep(new ItemStack(Items.PAPER, 3), new ItemStack(Registry.ENCHANTED_ASH.get()))
-                    ),
-                    new CraftingPage(new ItemStack(Registry.NOTETAKING_TOOLS.get()),
-                            new ItemStack(Registry.PARCHMENT.get()), new ItemStack(Registry.MAGIC_INK.get()), ItemStack.EMPTY,
-                            new ItemStack(Items.FEATHER), new ItemStack(Registry.ARCANE_GOLD_NUGGET.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
-                    )
-
+            RESEARCHES = new Chapter(
+                    "eidolon.codex.chapter.researches",
+                    new TitlePage("eidolon.codex.page.researches.0"),
+                    new CraftingPage(Registry.RESEARCH_TABLE.get().asItem()),
+                    new CruciblePage(new ItemStack(Registry.MAGICIANS_WAX.get(), 4)),
+                    new CraftingPage(new ItemStack(Registry.ARCANE_SEAL.get(), 2)),
+                    new CruciblePage(new ItemStack(Registry.MAGIC_INK.get(), 2)),
+                    new CruciblePage(new ItemStack(Registry.PARCHMENT.get(), 4)),
+                    new CraftingPage(Registry.NOTETAKING_TOOLS.get())
             );
 
             DECORATIONS = new Chapter(
                     "eidolon.codex.chapter.decorations",
                     new TitlePage("eidolon.codex.page.decorations"),
                     new CruciblePage(new ItemStack(Registry.ELDER_BRICK.get(), 16)),
-                    new CraftingPage(new ItemStack(Registry.ELDER_BRICKS.getBlock(), 4),
-                            new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ELDER_BRICK.get()), new ItemStack(Registry.ELDER_BRICK.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
-                    ),
-                    new CraftingPage(new ItemStack(Registry.BONE_PILE.getBlock(), 1),
-                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE),
-                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE),
-                            new ItemStack(Items.BONE), new ItemStack(Items.BONE), new ItemStack(Items.BONE)
-                    )
+                    new CraftingPage(new ItemStack(Registry.ELDER_BRICKS.getBlock(), 4)),
+                    new CraftingPage(Registry.BONE_PILE.getBlock().asItem())
             );
 
             NATURE_INDEX = new Chapter(
@@ -170,7 +217,7 @@ public class CodexChapters {
                             new IndexEntry(PLANTS, new ItemStack(Registry.OANNA_BLOOM.get()))
                     ),
                     new IndexPage(
-                            new IndexEntry(RESEARCHS, new ItemStack(Registry.RESEARCH_TABLE.get())),
+                            new IndexEntry(RESEARCHES, new ItemStack(Registry.RESEARCH_TABLE.get())),
                             new IndexEntry(DECORATIONS, new ItemStack(Registry.ELDER_BRICKS_EYE.get()))
                     )
             );
@@ -189,24 +236,15 @@ public class CodexChapters {
                     "eidolon.codex.chapter.brazier",
                     new TitlePage("eidolon.codex.page.brazier.0"),
                     new TextPage("eidolon.codex.page.brazier.1"),
-                    new CraftingPage(new ItemStack(Registry.BRAZIER.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.COAL_BLOCK), ItemStack.EMPTY,
-                            new ItemStack(Items.STICK), ItemStack.EMPTY, new ItemStack(Items.STICK))
+                    new CraftingPage(Registry.BRAZIER.get().asItem())
             );
 
             ITEM_PROVIDERS = new Chapter(
                     "eidolon.codex.chapter.item_providers",
                     new TitlePage("eidolon.codex.page.item_providers.0"),
-                    new CraftingPage(new ItemStack(Registry.STONE_HAND.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.STONE_SLAB), ItemStack.EMPTY,
-                            new ItemStack(Blocks.STONE_SLAB), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE_SLAB),
-                            ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY),
+                    new CraftingPage(Registry.STONE_HAND.get().asItem()),
                     new TitlePage("eidolon.codex.page.item_providers.1"),
-                    new CraftingPage(new ItemStack(Registry.NECROTIC_FOCUS.get()),
-                            new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
-                            new ItemStack(Blocks.STONE), new ItemStack(Items.BONE), new ItemStack(Blocks.STONE),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.PEWTER_INGOT.get()))
+                    new CraftingPage(Registry.NECROTIC_FOCUS.get().asItem())
             );
 
             CRYSTAL_RITUAL = new Chapter(
@@ -398,15 +436,9 @@ public class CodexChapters {
             WOODEN_STAND = new Chapter(
                     "eidolon.codex.chapter.wooden_stand",
                     new TitlePage("eidolon.codex.page.wooden_stand.0"),
-                    new CraftingPage(new ItemStack(Registry.WOODEN_STAND.get()),
-                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Items.STICK), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get())),
+                    new CraftingPage(Registry.WOODEN_STAND.get().asItem()),
                     new TitlePage("eidolon.codex.page.wooden_stand.1"),
-                    new CruciblePage(new ItemStack(Registry.FUNGUS_SPROUTS.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.BROWN_MUSHROOM)),
-                            new CrucibleStep(2, new ItemStack(Items.BONE_MEAL)),
-                            new CrucibleStep(new ItemStack(Items.WHEAT_SEEDS)))
+                    new CruciblePage(new ItemStack(Registry.FUNGUS_SPROUTS.get(), 2))
             );
 
             TALLOW = new Chapter(
@@ -414,347 +446,198 @@ public class CodexChapters {
                     new TitlePage("eidolon.codex.page.tallow.0"),
                     new SmeltingPage(new ItemStack(Registry.TALLOW.get()), new ItemStack(Items.ROTTEN_FLESH)),
                     new TitlePage("eidolon.codex.page.tallow.1"),
-                    new CraftingPage(new ItemStack(Registry.CANDLE.get(), 4),
-                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Items.STRING), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.TALLOW.get()), ItemStack.EMPTY),
-                    new CraftingPage(new ItemStack(Registry.CANDLESTICK.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_NUGGET.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.CANDLE.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_NUGGET.get()), ItemStack.EMPTY)
+                    new CraftingPage(new ItemStack(Registry.CANDLE.get(), 4)),
+                    new CraftingPage(Registry.CANDLESTICK.get().asItem())
             );
 
             CRUCIBLE = new Chapter(
                     "eidolon.codex.chapter.crucible",
                     new TitlePage("eidolon.codex.page.crucible.0"),
                     new TextPage("eidolon.codex.page.crucible.1"),
-                    new CraftingPage(new ItemStack(Registry.CRUCIBLE.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()))
+                    new CraftingPage(Registry.CRUCIBLE.get().asItem())
             );
 
             ARCANE_GOLD = new Chapter(
                     "eidolon.codex.chapter.arcane_gold",
                     new TitlePage("eidolon.codex.page.arcane_gold"),
-                    new CruciblePage(new ItemStack(Registry.ARCANE_GOLD_INGOT.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.REDSTONE, 2), new ItemStack(Registry.SOUL_SHARD.get())),
-                            new CrucibleStep(new ItemStack(Items.GOLD_INGOT, 2))),
-                    new CraftingPage(new ItemStack(Registry.ARCANE_GOLD_BLOCK.get()),
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get())),
-                    new CraftingPage(new ItemStack(Registry.ARCANE_GOLD_NUGGET.get(), 9), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()))
+                    new CruciblePage(new ItemStack(Registry.ARCANE_GOLD_INGOT.get(), 2), prefix("arcane_gold_ingot_alchemy")),
+                    new CraftingPage(new ItemStack(Registry.ARCANE_GOLD_BLOCK.get())),
+                    new CraftingPage(new ItemStack(Registry.ARCANE_GOLD_NUGGET.get(), 9), prefix("decompress_arcane_gold_ingot"))
             );
 
             REAGENTS = new Chapter(
                     "eidolon.codex.chapter.reagents",
                     new TitlePage("eidolon.codex.page.reagents.0"),
-                    new CruciblePage(new ItemStack(Registry.SULFUR.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.COAL), new ItemStack(Registry.ENCHANTED_ASH.get()))),
+                    new CruciblePage(new ItemStack(Registry.SULFUR.get(), 2)),
                     new TitlePage("eidolon.codex.page.reagents.1"),
-                    new CruciblePage(new ItemStack(Registry.DEATH_ESSENCE.get(), 4),
-                            new CrucibleStep(new ItemStack(Registry.ZOMBIE_HEART.get()), new ItemStack(Items.ROTTEN_FLESH)),
-                            new CrucibleStep(2, new ItemStack(Items.BONE_MEAL, 2)),
-                            new CrucibleStep(new ItemStack(Items.CHARCOAL))),
+                    new CruciblePage(new ItemStack(Registry.DEATH_ESSENCE.get(), 4)),
                     new TitlePage("eidolon.codex.page.reagents.2"),
-                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 4),
-                            new CrucibleStep(new ItemStack(Blocks.CRIMSON_FUNGUS), new ItemStack(Items.NETHER_WART)),
-                            new CrucibleStep(1, new ItemStack(Registry.SULFUR.get()))),
-                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 2),
-                            new CrucibleStep(new ItemStack(Blocks.CRIMSON_ROOTS), new ItemStack(Items.NETHER_WART)),
-                            new CrucibleStep(1, new ItemStack(Registry.SULFUR.get()))),
-                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 2),
-                            new CrucibleStep(new ItemStack(Blocks.WEEPING_VINES), new ItemStack(Items.NETHER_WART)),
-                            new CrucibleStep(1, new ItemStack(Registry.SULFUR.get()))),
+                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 4), prefix("crimson_essence_fungus")),
+                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 2), prefix("crimson_essence_vines")),
+                    new CruciblePage(new ItemStack(Registry.CRIMSON_ESSENCE.get(), 2), prefix("crimson_essence_roots")),
                     new TitlePage("eidolon.codex.page.reagents.3"),
-                    new CruciblePage(new ItemStack(Registry.ENDER_CALX.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.ENDER_PEARL), new ItemStack(Registry.ENCHANTED_ASH.get())))
+                    new CruciblePage(new ItemStack(Registry.ENDER_CALX.get(), 2))
             );
 
             SOUL_GEMS = new Chapter(
                     "eidolon.codex.chapter.soul_gems",
                     new TitlePage("eidolon.codex.page.soul_gems"),
-                    new CruciblePage(new ItemStack(Registry.LESSER_SOUL_GEM.get()),
-                            new CrucibleStep(new ItemStack(Items.REDSTONE, 2), new ItemStack(Items.LAPIS_LAZULI, 2)),
-                            new CrucibleStep(2, new ItemStack(Registry.SOUL_SHARD.get(), 4)),
-                            new CrucibleStep(new ItemStack(Items.QUARTZ)))
+                    new CruciblePage(Registry.LESSER_SOUL_GEM.get())
             );
 
             SHADOW_GEM = new Chapter(
                     "eidolon.codex.chapter.shadow_gem",
                     new TitlePage("eidolon.codex.page.shadow_gem"),
-                    new CruciblePage(new ItemStack(Registry.SHADOW_GEM.get()),
-                            new CrucibleStep(new ItemStack(Items.COAL)),
-                            new CrucibleStep(1, new ItemStack(Items.GHAST_TEAR), new ItemStack(Registry.DEATH_ESSENCE.get())),
-                            new CrucibleStep(1, new ItemStack(Registry.SOUL_SHARD.get(), 2), new ItemStack(Registry.DEATH_ESSENCE.get())),
-                            new CrucibleStep(new ItemStack(Items.DIAMOND)))
+                    new CruciblePage(Registry.SHADOW_GEM.get())
             );
 
             WARPED_SPROUTS = new Chapter(
                     "eidolon.codex.chapter.warped_sprouts",
                     new TitlePage("eidolon.codex.page.warped_sprouts.0"),
-                    new CruciblePage(new ItemStack(Registry.WARPED_SPROUTS.get(), 2),
-                            new CrucibleStep(new ItemStack(Items.WARPED_FUNGUS)),
-                            new CrucibleStep(2, new ItemStack(Registry.ENDER_CALX.get())),
-                            new CrucibleStep(new ItemStack(Items.NETHER_WART))),
+                    new CruciblePage(new ItemStack(Registry.WARPED_SPROUTS.get(), 2)),
                     new TitlePage("eidolon.codex.page.warped_sprouts.1")
             );
 
             BASIC_ALCHEMY = new Chapter(
                     "eidolon.codex.chapter.basic_alchemy",
                     new TitlePage("eidolon.codex.page.basic_alchemy.0"),
-                    new CruciblePage(new ItemStack(Items.LEATHER),
-                            new CrucibleStep(new ItemStack(Registry.ENCHANTED_ASH.get(), 2)),
-                            new CrucibleStep(2, new ItemStack(Items.ROTTEN_FLESH))),
+                    new CruciblePage(new ItemStack(Items.LEATHER), prefix("flesh_to_leather")),
                     new TitlePage("eidolon.codex.page.basic_alchemy.1"),
-                    new CruciblePage(new ItemStack(Items.ROTTEN_FLESH),
-                            new CrucibleStep(new ItemStack(Items.PORKCHOP), new ItemStack(Items.RED_MUSHROOM))),
+                    new CruciblePage(new ItemStack(Items.ROTTEN_FLESH), prefix("meat_to_flesh")),
                     new TitlePage("eidolon.codex.page.basic_alchemy.2"),
-                    new CruciblePage(new ItemStack(Items.GUNPOWDER, 4),
-                            new CrucibleStep(new ItemStack(Items.BONE_MEAL), new ItemStack(Registry.SULFUR.get())),
-                            new CrucibleStep(1, new ItemStack(Items.CHARCOAL))),
+                    new CruciblePage(new ItemStack(Items.GUNPOWDER, 4), prefix("gunpowder_alchemy")),
                     new TitlePage("eidolon.codex.page.basic_alchemy.3"),
-                    new CruciblePage(new ItemStack(Items.GOLDEN_APPLE),
-                            new CrucibleStep(new ItemStack(Items.GOLD_INGOT, 2)),
-                            new CrucibleStep(2, new ItemStack(Registry.ENCHANTED_ASH.get())),
-                            new CrucibleStep(new ItemStack(Items.APPLE))),
-                    new CruciblePage(new ItemStack(Items.GOLDEN_CARROT),
-                            new CrucibleStep(new ItemStack(Items.GOLD_NUGGET, 2)),
-                            new CrucibleStep(2, new ItemStack(Registry.ENCHANTED_ASH.get())),
-                            new CrucibleStep(new ItemStack(Items.CARROT))),
-                    new CruciblePage(new ItemStack(Items.GLISTERING_MELON_SLICE),
-                            new CrucibleStep(new ItemStack(Items.GOLD_NUGGET, 2)),
-                            new CrucibleStep(2, new ItemStack(Registry.ENCHANTED_ASH.get())),
-                            new CrucibleStep(new ItemStack(Items.MELON_SLICE)))
+                    new CruciblePage(new ItemStack(Items.GOLDEN_APPLE), prefix("gilding_apple")),
+                    new CruciblePage(new ItemStack(Items.GOLDEN_CARROT), prefix("gilding_carrot")),
+                    new CruciblePage(new ItemStack(Items.GLISTERING_MELON_SLICE), prefix("gilding_melon"))
             );
 
             INLAYS = new Chapter(
                     "eidolon.codex.chapter.inlays",
                     new TitlePage("eidolon.codex.page.inlays"),
-                    new CraftingPage(new ItemStack(Registry.PEWTER_INLAY.get(), 2),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY),
-                    new CraftingPage(new ItemStack(Registry.GOLD_INLAY.get(), 2),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY)
+                    new CraftingPage(new ItemStack(Registry.PEWTER_INLAY.get(), 2)),
+                    new CraftingPage(new ItemStack(Registry.GOLD_INLAY.get(), 2))
             );
 
             BASIC_BAUBLES = new Chapter(
                     "eidolon.codex.chapter.basic_baubles",
                     new TitlePage("eidolon.codex.page.basic_baubles"),
-                    new CraftingPage(new ItemStack(Registry.BASIC_AMULET.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.STRING), ItemStack.EMPTY,
-                            new ItemStack(Items.STRING), ItemStack.EMPTY, new ItemStack(Items.STRING),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY),
-                    new CraftingPage(new ItemStack(Registry.BASIC_RING.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY),
-                    new CraftingPage(new ItemStack(Registry.BASIC_BELT.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.LEATHER), ItemStack.EMPTY,
-                            new ItemStack(Items.LEATHER), ItemStack.EMPTY, new ItemStack(Items.LEATHER),
-                            ItemStack.EMPTY, new ItemStack(Items.LEATHER), ItemStack.EMPTY)
+                    new CraftingPage(Registry.BASIC_AMULET.get()),
+                    new CraftingPage(Registry.BASIC_RING.get()),
+                    new CraftingPage(Registry.BASIC_BELT.get())
             );
 
             MAGIC_WORKBENCH = new Chapter(
                     "eidolon.codex.chapter.magic_workbench",
                     new TitlePage("eidolon.codex.page.magic_workbench"),
-                    new CraftingPage(new ItemStack(Registry.WORKTABLE.get()),
-                            new ItemStack(Blocks.RED_CARPET), new ItemStack(Blocks.RED_CARPET), new ItemStack(Blocks.RED_CARPET),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Blocks.OAK_PLANKS), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Blocks.OAK_PLANKS), new ItemStack(Blocks.OAK_PLANKS), new ItemStack(Blocks.OAK_PLANKS))
+                    new CraftingPage(Registry.WORKTABLE.get().asItem())
             );
 
             VOID_AMULET = new Chapter(
                     "eidolon.codex.chapter.void_amulet",
                     new TitlePage("eidolon.codex.page.void_amulet"),
-                    new WorktablePage(new ItemStack(Registry.VOID_AMULET.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.BASIC_AMULET.get()), new ItemStack(Registry.PEWTER_INLAY.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.OBSIDIAN), ItemStack.EMPTY,
-                            new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY)
+                    new WorktablePage(Registry.VOID_AMULET.get())
             );
 
             WARDED_MAIL = new Chapter(
                     "eidolon.codex.chapter.warded_mail",
                     new TitlePage("eidolon.codex.page.warded_mail"),
-                    new WorktablePage(new ItemStack(Registry.WARDED_MAIL.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.LESSER_SOUL_GEM.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Registry.ENCHANTED_ASH.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ENCHANTED_ASH.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.PEWTER_INLAY.get()))
+                    new WorktablePage(Registry.WARDED_MAIL.get())
             );
 
             SOULFIRE_WAND = new Chapter(
                     "eidolon.codex.chapter.soulfire_wand",
                     new TitlePage("eidolon.codex.page.soulfire_wand"),
-                    new WorktablePage(new ItemStack(Registry.SOULFIRE_WAND.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.SHADOW_GEM.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.STICK), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY, ItemStack.EMPTY,
-                            new ItemStack(Registry.LESSER_SOUL_GEM.get()), new ItemStack(Items.BLAZE_POWDER), new ItemStack(Items.BLAZE_POWDER), new ItemStack(Items.BLAZE_POWDER))
+                    new WorktablePage(Registry.SOULFIRE_WAND.get())
             );
 
             BONECHILL_WAND = new Chapter(
                     "eidolon.codex.chapter.bonechill_wand",
                     new TitlePage("eidolon.codex.page.bonechill_wand"),
-                    new WorktablePage(new ItemStack(Registry.BONECHILL_WAND.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.WRAITH_HEART.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.STICK), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Registry.PEWTER_INLAY.get()), ItemStack.EMPTY, ItemStack.EMPTY,
-                            new ItemStack(Registry.LESSER_SOUL_GEM.get()), new ItemStack(Items.BONE_MEAL), new ItemStack(Items.BONE_MEAL), new ItemStack(Items.BONE_MEAL))
+                    new WorktablePage(Registry.BONECHILL_WAND.get())
             );
 
             REAPER_SCYTHE = new Chapter(
                     "eidolon.codex.chapter.reaper_scythe",
                     new TitlePage("eidolon.codex.page.reaper_scythe"),
-                    new WorktablePage(new ItemStack(Registry.REAPER_SCYTHE.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Items.STICK), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY,
-                            new ItemStack(Registry.UNHOLY_SYMBOL.get()), new ItemStack(Registry.TATTERED_CLOTH.get()), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.TATTERED_CLOTH.get())),
+                    new WorktablePage(Registry.REAPER_SCYTHE.get()),
                     new TitlePage("eidolon.codex.page.death_scythe"),
-                    new WorktablePage(new ItemStack(Registry.DEATHBRINGER_SCYTHE.get()),
-                            new ItemStack(Items.BONE), new ItemStack(Items.WITHER_SKELETON_SKULL), new ItemStack(Items.BONE),
-                            new ItemStack(Items.BONE), new ItemStack(Registry.REAPER_SCYTHE.get()), new ItemStack(Items.BONE),
-                            new ItemStack(Items.BONE), new ItemStack(Items.SKELETON_SKULL), new ItemStack(Items.BONE),
-                            new ItemStack(Registry.SHADOW_GEM.get()), new ItemStack(Registry.DEATH_ESSENCE.get()), new ItemStack(Registry.SHADOW_GEM.get()), new ItemStack(Registry.DEATH_ESSENCE.get()))
-
+                    new WorktablePage(Registry.DEATHBRINGER_SCYTHE.get())
             );
 
             CLEAVING_AXE = new Chapter(
                     "eidolon.codex.chapter.cleaving_axe",
                     new TitlePage("eidolon.codex.page.cleaving_axe"),
-                    new WorktablePage(new ItemStack(Registry.CLEAVING_AXE.get()),
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Items.STICK), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Items.STICK), ItemStack.EMPTY,
-                            new ItemStack(Registry.UNHOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INLAY.get()), ItemStack.EMPTY)
+                    new WorktablePage(Registry.CLEAVING_AXE.get())
             );
 
             SOUL_ENCHANTER = new Chapter(
                     "eidolon.codex.chapter.soul_enchanter",
                     new TitlePage("eidolon.codex.page.soul_enchanter.0"),
                     new TextPage("eidolon.codex.page.soul_enchanter.1"),
-                    new WorktablePage(new ItemStack(Registry.SOUL_ENCHANTER.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.BOOK), ItemStack.EMPTY,
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Blocks.OBSIDIAN), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            new ItemStack(Blocks.OBSIDIAN), new ItemStack(Blocks.OBSIDIAN), new ItemStack(Blocks.OBSIDIAN),
-                            new ItemStack(Items.DIAMOND), new ItemStack(Registry.GOLD_INLAY.get()), new ItemStack(Items.DIAMOND), new ItemStack(Registry.GOLD_INLAY.get()))
+                    new WorktablePage(Registry.SOUL_ENCHANTER.get().asItem())
             );
 
             REVERSAL_PICK = new Chapter(
                     "eidolon.codex.chapter.reversal_pick",
                     new TitlePage("eidolon.codex.page.reversal_pick"),
-                    new WorktablePage(new ItemStack(Registry.REVERSAL_PICK.get()),
-                            new ItemStack(Blocks.OBSIDIAN), new ItemStack(Blocks.CRYING_OBSIDIAN), new ItemStack(Blocks.OBSIDIAN),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INLAY.get()), ItemStack.EMPTY,
-                            new ItemStack(Items.ENDER_PEARL), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.LESSER_SOUL_GEM.get()), new ItemStack(Registry.SOUL_SHARD.get()))
+                    new WorktablePage(Registry.REVERSAL_PICK.get())
             );
 
             WARLOCK_ARMOR = new Chapter(
                     "eidolon.codex.chapter.warlock_armor",
                     new TitlePage("eidolon.codex.page.warlock_armor.0"),
-                    new WorktablePage(new ItemStack(Registry.WICKED_WEAVE.get(), 8),
-                            new ItemStack(Items.WHITE_WOOL), new ItemStack(Items.WHITE_WOOL), new ItemStack(Items.WHITE_WOOL),
-                            new ItemStack(Items.WHITE_WOOL), new ItemStack(Registry.SHADOW_GEM.get()), new ItemStack(Items.WHITE_WOOL),
-                            new ItemStack(Items.WHITE_WOOL), new ItemStack(Items.WHITE_WOOL), new ItemStack(Items.WHITE_WOOL),
-                            new ItemStack(Registry.UNHOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Items.BLUE_DYE), ItemStack.EMPTY),
+                    new WorktablePage(new ItemStack(Registry.WICKED_WEAVE.get(), 8)),
                     new TitlePage("eidolon.codex.page.warlock_armor.1"),
-                    new WorktablePage(new ItemStack(Registry.WARLOCK_HAT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY),
+                    new WorktablePage(Registry.WARLOCK_HAT.get()),
                     new TitlePage("eidolon.codex.page.warlock_armor.2"),
-                    new WorktablePage(new ItemStack(Registry.WARLOCK_CLOAK.get()),
-                            new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY),
+                    new WorktablePage(Registry.WARLOCK_CLOAK.get()),
                     new TitlePage("eidolon.codex.page.warlock_armor.3"),
-                    new WorktablePage(new ItemStack(Registry.WARLOCK_BOOTS.get()),
-                            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                            new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY, new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY)
+                    new WorktablePage(Registry.WARLOCK_BOOTS.get())
             );
 
             GRAVITY_BELT = new Chapter(
                     "eidolon.codex.chapter.gravity_belt",
                     new TitlePage("eidolon.codex.page.gravity_belt"),
-                    new WorktablePage(new ItemStack(Registry.GRAVITY_BELT.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.ENDER_PEARL), ItemStack.EMPTY,
-                            new ItemStack(Items.FEATHER), new ItemStack(Registry.BASIC_BELT.get()), new ItemStack(Items.FEATHER),
-                            ItemStack.EMPTY, new ItemStack(Registry.LESSER_SOUL_GEM.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.PEWTER_INLAY.get()))
+                    new WorktablePage(Registry.GRAVITY_BELT.get())
             );
 
             PRESTIGIOUS_PALM = new Chapter(
                     "eidolon.codex.chapter.prestigious_palm",
                     new TitlePage("eidolon.codex.page.prestigious_palm"),
-                    new WorktablePage(new ItemStack(Registry.PRESTIGIOUS_PALM.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.WICKED_WEAVE.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.LESSER_SOUL_GEM.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.WARPED_SPROUTS.get()), new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.ENDER_CALX.get()))
+                    new WorktablePage(Registry.PRESTIGIOUS_PALM.get())
             );
 
             MIND_SHIELDING_PLATE = new Chapter(
                     "eidolon.codex.chapter.mind_shielding_plate",
                     new TitlePage("eidolon.codex.page.mind_shielding_plate"),
-                    new WorktablePage(new ItemStack(Registry.MIND_SHIELDING_PLATE.get()),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
-                            new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_INGOT.get()),
-                            new ItemStack(Items.LEATHER), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Items.LEATHER),
-                            new ItemStack(Items.LAPIS_BLOCK), ItemStack.EMPTY, new ItemStack(Items.QUARTZ), ItemStack.EMPTY)
+                    new WorktablePage(Registry.MIND_SHIELDING_PLATE.get())
             );
 
             RESOLUTE_BELT = new Chapter(
                     "eidolon.codex.chapter.resolute_belt",
                     new TitlePage("eidolon.codex.page.resolute_belt"),
-                    new WorktablePage(new ItemStack(Registry.RESOLUTE_BELT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.BASIC_BELT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.DIAMOND), ItemStack.EMPTY,
-                            new ItemStack(Items.LEATHER), new ItemStack(Registry.SOUL_SHARD.get()), new ItemStack(Registry.ENCHANTED_ASH.get()), new ItemStack(Registry.SOUL_SHARD.get()))
+                    new WorktablePage(Registry.RESOLUTE_BELT.get())
             );
 
             GLASS_HAND = new Chapter(
                     "eidolon.codex.chapter.glass_hand",
                     new TitlePage("eidolon.codex.page.glass_hand"),
-                    new WorktablePage(new ItemStack(Registry.GLASS_HAND.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.DIAMOND_BLOCK), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.BASIC_AMULET.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Blocks.GLASS), ItemStack.EMPTY,
-                            new ItemStack(Registry.ZOMBIE_HEART.get()), new ItemStack(Registry.LESSER_SOUL_GEM.get()), new ItemStack(Registry.WRAITH_HEART.get()), new ItemStack(Registry.LESSER_SOUL_GEM.get()))
+                    new WorktablePage(Registry.GLASS_HAND.get())
             );
 
             SOULBONE = new Chapter(
                     "eidolon.codex.chapter.soulbone_amulet",
                     new TitlePage("eidolon.codex.page.soulbone_amulet"),
                     new TitlePage("eidolon.codex.page.soulbone_amulet.1"),
-                    new WorktablePage(new ItemStack(Registry.SOULBONE_AMULET.get()),
-                            Items.BONE.getDefaultInstance(), new ItemStack(Registry.BASIC_AMULET.get()), Items.BONE.getDefaultInstance(),
-                            Items.BONE.getDefaultInstance(), new ItemStack(Registry.WRAITH_HEART.get()), Items.BONE.getDefaultInstance(),
-                            ItemStack.EMPTY, new ItemStack(Registry.SHADOW_GEM.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()), new ItemStack(Registry.ENDER_CALX.get()), new ItemStack(Registry.DEATH_ESSENCE.get()))
+                    new WorktablePage(Registry.SOULBONE_AMULET.get())
             );
 
             //WIPS
 
             RAVEN_CLOAK = new Chapter("eidolon.codex.chapter.raven_cloak",
                     new TitlePage("eidolon.codex.page.raven_cloak"),
-                    new WorktablePage(new ItemStack(Registry.RAVEN_CLOAK.get()),
-                            new ItemStack(Registry.RAVEN_FEATHER.get()), ItemStack.EMPTY, new ItemStack(Registry.RAVEN_FEATHER.get()),
-                            new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()), new ItemStack(Registry.WICKED_WEAVE.get()),
-                            new ItemStack(Registry.TATTERED_CLOTH.get()), new ItemStack(Registry.GRAVITY_BELT.get()), new ItemStack(Registry.TATTERED_CLOTH.get()),
-                            Items.PHANTOM_MEMBRANE.getDefaultInstance(), new ItemStack(Registry.RAVEN_FEATHER.get()), Items.PHANTOM_MEMBRANE.getDefaultInstance(), new ItemStack(Registry.RAVEN_FEATHER.get())
-                    )
+                    new WorktablePage(Registry.RAVEN_CLOAK.get())
             );
 
             NECROMANCER_STAFF = new Chapter("eidolon.codex.chapter.summoning_staff",
@@ -763,14 +646,7 @@ public class CodexChapters {
 
             ARROW_RING = new Chapter("eidolon.codex.chapter.angel_sight",
                     new TitlePage("eidolon.codex.page.angel_sight"),
-                    new WorktablePage(new ItemStack(Registry.ANGELS_SIGHT.get()), new ResourceLocation("eidolon:angel_sight"))
-                    /*
-                    new WorktablePage(new ItemStack(Registry.ANGELS_SIGHT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.SHADOW_GEM.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.BASIC_RING.get()), new ItemStack(Registry.PEWTER_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.PEWTER_INGOT.get()), ItemStack.EMPTY,
-                            Items.WITHER_SKELETON_SKULL.getDefaultInstance(), Items.ARROW.getDefaultInstance(), new ItemStack(Registry.UNHOLY_SYMBOL.get()), Items.ARROW.getDefaultInstance())
-            */
+                    new WorktablePage(Registry.ANGELS_SIGHT.get())
             );
 
 
@@ -837,20 +713,14 @@ public class CodexChapters {
             EFFIGY = new Chapter(
                     "eidolon.codex.chapter.effigy",
                     new TitlePage("eidolon.codex.page.effigy"),
-                    new CraftingPage(new ItemStack(Registry.STRAW_EFFIGY.get()),
-                            ItemStack.EMPTY, new ItemStack(Items.WHEAT), ItemStack.EMPTY,
-                            new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT),
-                            ItemStack.EMPTY, new ItemStack(Items.WHEAT), ItemStack.EMPTY)
+                    new CraftingPage(Registry.STRAW_EFFIGY.get().asItem())
             );
 
             ALTARS = new Chapter(
                     "eidolon.codex.chapter.altars",
                     new TitlePage("eidolon.codex.page.altars.0"),
                     new TextPage("eidolon.codex.page.altars.1"),
-                    new CraftingPage(new ItemStack(Registry.WOODEN_ALTAR.get(), 3),
-                            new ItemStack(Blocks.OAK_SLAB), new ItemStack(Blocks.OAK_SLAB), new ItemStack(Blocks.OAK_SLAB),
-                            new ItemStack(Blocks.OAK_PLANKS), ItemStack.EMPTY, new ItemStack(Blocks.OAK_PLANKS),
-                            new ItemStack(Blocks.OAK_PLANKS), ItemStack.EMPTY, new ItemStack(Blocks.OAK_PLANKS))
+                    new CraftingPage(new ItemStack(Registry.WOODEN_ALTAR.get(), 3))
             );
 
             ALTAR_LIGHTS = new Chapter(
@@ -884,18 +754,12 @@ public class CodexChapters {
             GOBLET = new Chapter(
                     "eidolon.codex.chapter.goblet",
                     new TitlePage("eidolon.codex.page.goblet"),
-                    new CraftingPage(new ItemStack(Registry.GOBLET.get()),
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY,
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY)
+                    new CraftingPage(Registry.GOBLET.get().asItem())
             );
             CENSER = new Chapter(
                     "eidolon.codex.chapter.censer",
                     new TitlePage("eidolon.codex.page.censer"),
-                    new CraftingPage(new ItemStack(Registry.CENSER.get()),
-                            ItemStack.EMPTY, new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), ItemStack.EMPTY,
-                            new ItemStack(Registry.SILVER_INGOT.get()), ItemStack.EMPTY, new ItemStack(Registry.SILVER_INGOT.get()),
-                            new ItemStack(Registry.ARCANE_GOLD_INGOT.get()), new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.ARCANE_GOLD_INGOT.get()))
+                    new CraftingPage(Registry.CENSER.get().asItem())
             );
 
             DARK_PRAYER = new Chapter(
@@ -918,11 +782,7 @@ public class CodexChapters {
             INCENSE_BURN = new Chapter(
                     "eidolon.codex.chapter.censer_offering",
                     new TitlePage("eidolon.codex.page.censer_offering"),
-                    new CruciblePage(new ItemStack(Registry.OFFERING_INCENSE.get(), 2),
-                            new CrucibleStep(new ItemStack(Registry.MERAMMER_RESIN.get()), new ItemStack(Registry.ENCHANTED_ASH.get())),
-                            new CrucibleStep(new ItemStack(Registry.OANNA_BLOOM.get(), 2)),
-                            new CrucibleStep(2)
-                    )
+                    new CruciblePage(new ItemStack(Registry.OFFERING_INCENSE.get(), 2))
             );
 
             DARK_TOUCH = new Chapter(
@@ -940,31 +800,20 @@ public class CodexChapters {
             STONE_ALTAR = new Chapter(
                     "eidolon.codex.chapter.stone_altar",
                     new TitlePage("eidolon.codex.page.stone_altar"),
-                    new WorktablePage(new ItemStack(Registry.STONE_ALTAR.get(), 3),
-                            new ItemStack(Blocks.SMOOTH_STONE_SLAB), new ItemStack(Blocks.SMOOTH_STONE_SLAB), new ItemStack(Blocks.SMOOTH_STONE_SLAB),
-                            new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
-                            new ItemStack(Blocks.STONE), new ItemStack(Registry.PEWTER_INLAY.get()), new ItemStack(Blocks.STONE),
-                            new ItemStack(Registry.SOUL_SHARD.get()), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY)
+                    new WorktablePage(new ItemStack(Registry.STONE_ALTAR.get(), 3)
+                    )
             );
 
             UNHOLY_EFFIGY = new Chapter(
                     "eidolon.codex.chapter.unholy_effigy",
                     new TitlePage("eidolon.codex.page.unholy_effigy"),
-                    new WorktablePage(new ItemStack(Registry.ELDER_EFFIGY.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.SMOOTH_STONE), ItemStack.EMPTY,
-                            new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
-                            ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY,
-                            new ItemStack(Registry.UNHOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY)
+                    new WorktablePage(Registry.ELDER_EFFIGY.get().asItem())
             );
 
             HOLY_EFFIGY = new Chapter(
                     "eidolon.codex.chapter.holy_effigy",
                     new TitlePage("eidolon.codex.page.holy_effigy"),
-                    new WorktablePage(new ItemStack(Registry.ELDER_EFFIGY.get()),
-                            ItemStack.EMPTY, new ItemStack(Blocks.SMOOTH_STONE), ItemStack.EMPTY,
-                            new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONE),
-                            ItemStack.EMPTY, new ItemStack(Blocks.STONE), ItemStack.EMPTY,
-                            new ItemStack(Registry.HOLY_SYMBOL.get()), ItemStack.EMPTY, new ItemStack(Registry.GOLD_INLAY.get()), ItemStack.EMPTY)
+                    new WorktablePage(Registry.ELDER_EFFIGY.get().asItem())
             );
 
             VILLAGER_SACRIFICE = new Chapter(
