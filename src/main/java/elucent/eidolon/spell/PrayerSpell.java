@@ -54,7 +54,7 @@ public class PrayerSpell extends StaticSpell {
         player.getCapability(ISoul.INSTANCE).ifPresent((soul) -> {
             var capacity = altarInfo.getCapacity();
             var power = altarInfo.getPower();
-            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), reputation * (1 + capacity / 2)));
+            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), 20 + reputation * (1 + capacity / 2)));
             soul.setMagic((float) Math.max(soul.getMagic(), soul.getMagic() + reputation + power * 2));
             if (!world.isClientSide) Networking.sendToTracking(world, player.getOnPos(), new SoulUpdatePacket(player));
         });

@@ -126,11 +126,6 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY.get(), (trd) -> new GobletTileRenderer());
         BlockEntityRenderers.register(Registry.CENSER_TILE_ENTITY.get(), (trd) -> new CenserRenderer());
 
-        /*
-        BlockEntityRenderers.register(Registry.CISTERN_TILE_ENTITY.get(), (trd) -> new CisternTileRenderer());
-        BlockEntityRenderers.register(Registry.PIPE_TILE_ENTITY.get(), (trd) -> new PipeTileRenderer());
-        */
-
         event.enqueueWork(() -> {
             MenuScreens.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
             MenuScreens.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);

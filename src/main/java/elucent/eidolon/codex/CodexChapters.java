@@ -28,107 +28,15 @@ import static elucent.eidolon.Eidolon.prefix;
 
 public class CodexChapters {
     static public final List<Category> categories = new CopyOnWriteArrayList<>();
-    static Category NATURE;
-    static Category RITUALS;
-    static Category ARTIFICE;
-    static Category THEURGY;
-    static Category SIGNS;
-    static Category SPELLS;
+    static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, SPELLS;
 
-    static Chapter NATURE_INDEX;
-    static Chapter MONSTERS;
-    static Chapter CRITTERS;
-    static Chapter ORES;
-    static Chapter PEWTER;
-    static Chapter ENCHANTED_ASH;
-    static Chapter PLANTS;
-    static Chapter RESEARCHES;
-    static Chapter DECORATIONS;
-    static Chapter RITUALS_INDEX;
-    static Chapter BRAZIER;
-    static Chapter ITEM_PROVIDERS;
-    static Chapter CRYSTAL_RITUAL;
-    static Chapter SUMMON_RITUAL;
-    static Chapter ALLURE_RITUAL;
-    static Chapter REPELLING_RITUAL;
-    static Chapter DECEIT_RITUAL;
-    static Chapter TIME_RITUALS;
-    static Chapter PURIFY_RITUAL;
-    static Chapter SANGUINE_RITUAL;
-    static Chapter RECHARGE_RITUAL;
-    static Chapter CAPTURE_RITUAL;
-    static Chapter ARTIFICE_INDEX;
-    static Chapter WOODEN_STAND;
-    static Chapter TALLOW;
-    static Chapter CRUCIBLE;
-    static Chapter ARCANE_GOLD;
-    static Chapter REAGENTS;
-    static Chapter SOUL_GEMS;
-    static Chapter SHADOW_GEM;
-    static Chapter WARPED_SPROUTS;
-    static Chapter BASIC_ALCHEMY;
-    static Chapter INLAYS;
-    static Chapter BASIC_BAUBLES;
-    static Chapter MAGIC_WORKBENCH;
-    static Chapter VOID_AMULET;
-    static Chapter WARDED_MAIL;
-    static Chapter SOULFIRE_WAND;
-    static Chapter BONECHILL_WAND;
-    static Chapter REAPER_SCYTHE;
-    static Chapter CLEAVING_AXE;
-    static Chapter SOUL_ENCHANTER;
-    static Chapter REVERSAL_PICK;
-    static Chapter WARLOCK_ARMOR;
-    static Chapter GRAVITY_BELT;
-    static Chapter PRESTIGIOUS_PALM;
-    static Chapter MIND_SHIELDING_PLATE;
-    static Chapter RESOLUTE_BELT;
-    static Chapter GLASS_HAND;
-    static Chapter SOULBONE;
-    static Chapter RAVEN_CLOAK;
-    static Chapter ARROW_RING;
-    static Chapter NECROMANCER_STAFF;
-    static Chapter THEURGY_INDEX;
-    static Chapter INTRO_SIGNS;
-    static Chapter EFFIGY;
-    static Chapter ALTARS;
-    static Chapter ALTAR_LIGHTS;
-    static Chapter ALTAR_SKULLS;
-    static Chapter ALTAR_HERBS;
-    static Chapter GOBLET;
-    static Chapter CENSER;
-    static Chapter DARK_PRAYER;
-    static Chapter ANIMAL_SACRIFICE;
-    static Chapter DARK_TOUCH;
-    static Chapter STONE_ALTAR;
-    static Chapter UNHOLY_EFFIGY;
-    static Chapter HOLY_EFFIGY;
-    static Chapter VILLAGER_SACRIFICE;
-    static Chapter LIGHT_PRAYER;
-    static Chapter INCENSE_BURN;
-    static Chapter HEAL;
-    static Chapter HOLY_TOUCH;
-    static Chapter SIGNS_INDEX;
-    static Chapter WICKED_SIGN;
-    static Chapter SACRED_SIGN;
-    static Chapter BLOOD_SIGN;
-    static Chapter SOUL_SIGN;
-    static Chapter MIND_SIGN;
-    static Chapter FLAME_SIGN;
-    static Chapter WINTER_SIGN;
-    static Chapter HARMONY_SIGN;
-    static Chapter DEATH_SIGN;
-    static Chapter WARDING_SIGN;
-    static Chapter MAGIC_SIGN;
-    static Chapter SPELLS_INDEX;
-    static Chapter MANA;
-    static Chapter LIGHT;
-    static Chapter FIRE_TOUCH;
-    static Chapter CHILL_TOUCH;
-    static Chapter ZOMBIFY;
-    static Chapter CURE_ZOMBIE;
-    static Chapter ENTHRALL;
-    static Chapter SMITE;
+    static Index NATURE_INDEX, RITUALS_INDEX, ARTIFICE_INDEX, THEURGY_INDEX, SIGNS_INDEX, SPELLS_INDEX;
+    static Chapter MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHES, DECORATIONS,
+            BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
+            WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
+            INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
+            WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
+            MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE;
 
     public static void init() {
 
@@ -155,8 +63,8 @@ public class CodexChapters {
                     "eidolon.codex.chapter.ores",
                     new TitlePage("eidolon.codex.page.ores.lead_ore"),
                     new TitlePage("eidolon.codex.page.ores.silver_ore"),
-                    new SmeltingPage(new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_ORE.get())),
-                    new SmeltingPage(new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_ORE.get())),
+                    new SmeltingPage(new ItemStack(Registry.LEAD_INGOT.get()), new ItemStack(Registry.LEAD_ORE.get()), prefix("smelt_lead_ore")),
+                    new SmeltingPage(new ItemStack(Registry.SILVER_INGOT.get()), new ItemStack(Registry.SILVER_ORE.get()), prefix("smelt_silver_ore")),
                     new CraftingPage(Registry.LEAD_BLOCK.get().asItem()),
                     new CraftingPage(Registry.SILVER_BLOCK.get().asItem()),
                     new CraftingPage(new ItemStack(Registry.LEAD_NUGGET.get(), 9), prefix("decompress_lead_ingot")),
@@ -167,7 +75,7 @@ public class CodexChapters {
                     "eidolon.codex.chapter.pewter",
                     new TitlePage("eidolon.codex.page.pewter"),
                     new CraftingPage(new ItemStack(Registry.PEWTER_BLEND.get(), 2)),
-                    new SmeltingPage(new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_BLEND.get())),
+                    new SmeltingPage(new ItemStack(Registry.PEWTER_INGOT.get()), new ItemStack(Registry.PEWTER_BLEND.get()), prefix("smelt_pewter_blend")),
                     new CraftingPage(Registry.PEWTER_BLOCK.get().asItem()),
                     new CraftingPage(new ItemStack(Registry.PEWTER_NUGGET.get(), 9), prefix("decompress_pewter_ingot"))
             );
@@ -206,7 +114,7 @@ public class CodexChapters {
                     new CraftingPage(Registry.BONE_PILE.getBlock().asItem())
             );
 
-            NATURE_INDEX = new Chapter(
+            NATURE_INDEX = new Index(
                     "eidolon.codex.chapter.nature_index",
                     new TitledIndexPage("eidolon.codex.page.nature_index.0",
                             new IndexEntry(MONSTERS, new ItemStack(Registry.TATTERED_CLOTH.get())),
@@ -401,7 +309,7 @@ public class CodexChapters {
                     new TextPage("eidolon.codex.page.capture_ritual")
             );
 
-            RITUALS_INDEX = new Chapter(
+            RITUALS_INDEX = new Index(
                     "eidolon.codex.chapter.rituals",
                     new TitledIndexPage("eidolon.codex.page.rituals.0",
                             new IndexEntry(BRAZIER, new ItemStack(Registry.BRAZIER.get())),
@@ -650,7 +558,7 @@ public class CodexChapters {
             );
 
 
-            ARTIFICE_INDEX = new Chapter(
+            ARTIFICE_INDEX = new Index(
                     "eidolon.codex.chapter.artifice",
                     new TitledIndexPage("eidolon.codex.page.artifice",
                             new IndexEntry(WOODEN_STAND, new ItemStack(Registry.WOODEN_STAND.get())),
@@ -826,7 +734,7 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.lay_on_hands", Spells.LAY_ON_HANDS.signs())
             );
 
-            THEURGY_INDEX = new Chapter(
+            THEURGY_INDEX = new Index(
                     "eidolon.codex.chapter.theurgy",
                     new TitledIndexPage(
                             "eidolon.codex.page.theurgy",
@@ -936,7 +844,7 @@ public class CodexChapters {
                     new SignPage(Signs.MAGIC_SIGN)
             );
 
-            SIGNS_INDEX = new Chapter(
+            SIGNS_INDEX = new Index(
                     "eidolon.codex.chapter.signs_index",
                     new SignIndexPage(
                             new SignEntry(WICKED_SIGN, Signs.WICKED_SIGN),
@@ -1003,7 +911,7 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.smite", Spells.SMITE_CHANT.signs())
             );
 
-            SPELLS_INDEX = new Chapter(
+            SPELLS_INDEX = new Index(
                     "eidolon.codex.chapter.spells",
                     new TitledIndexPage(
                             "eidolon.codex.page.spells",
