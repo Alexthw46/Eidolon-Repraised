@@ -8,6 +8,9 @@ import elucent.eidolon.recipe.CrucibleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,36 +21,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class CruciblePage extends RecipePage<CrucibleRecipe> {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_crucible_page.png");
-    public CrucibleStep[] steps;
 
     @Override
     public CrucibleRecipe getRecipe(ResourceLocation id) {
         return CrucibleRegistry.find(id);
-    }
-
-    public static class CrucibleStep {
-        public final ItemStack[] stacks;
-        public final int stirs;
-
-        public CrucibleStep(int stirs) {
-            this(stirs, ItemStack.EMPTY);
-        }
-
-        public CrucibleStep(ItemStack... stacks) {
-            this(0, stacks);
-        }
-
-        public CrucibleStep(int stirs, ItemStack... stacks) {
-            this.stacks = stacks;
-            this.stirs = stirs;
-        }
-    }
-
-    @Deprecated
-    public CruciblePage(ItemStack result, CrucibleStep... steps) {
-        super(BACKGROUND, null, result);
-        this.steps = steps;
-        this.cachedRecipe = new CrucibleRecipe(steps, result);
     }
 
     public CruciblePage(ItemStack result, ResourceLocation id) {
@@ -56,6 +33,10 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
 
     public CruciblePage(ItemStack result) {
         this(result, ForgeRegistries.ITEMS.getKey(result.getItem()));
+    }
+
+    public CruciblePage(Item result) {
+        this(result.getDefaultInstance(), ForgeRegistries.ITEMS.getKey(result));
     }
 
 
@@ -89,6 +70,7 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
             int tx = x, ty = y + yoff + i * 20;
             drawText(gui, mStack, I18n.get("enchantment.level." + (i + 1)) + ".", tx + 7, ty + 17 - font.lineHeight);
             tx += 24;
+
         }
     }
 

@@ -135,8 +135,16 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
             int tx = x, ty = (y + yoff + i * 20);
             guiGraphics.blit(BACKGROUND, tx, ty, 128, 0, 128, 20);
             tx += 24;
-            for (int j = 0; j < steps.get(i).matches.size(); j++) {
-                if (!steps.get(i).matches.get(j).isEmpty()) {
+
+            List<StackIngredient> stepInputs = new ArrayList<>();
+            for (Ingredient o : steps.get(i).matches) {
+                ItemStack stack = o.getItems().length > 0 ? o.getItems()[0].copy() : ItemStack.EMPTY.copy();
+                if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, o));
+            }
+            condense(stepInputs);
+
+            for (var counter : stepInputs) {
+                if (!counter.stack.isEmpty()) {
                     guiGraphics.blit(BACKGROUND, tx, ty + 1, 176, 32, 16, 17);
                     tx += 17;
                 }
@@ -150,9 +158,8 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
 
         Font font = Minecraft.getInstance().font;
         for (int i = 0; i < steps.size(); i++) {
-            int tx = x, ty = y + yoff + i * 20;
-            drawText(guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", tx + 7, ty + 17 - font.lineHeight);
-            tx += 24;
+            int ty = y + yoff + i * 20;
+            drawText(guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", x + 7, ty + 17 - font.lineHeight);
         }
 
     }

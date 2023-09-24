@@ -3,7 +3,8 @@
   "group": "eidolon",
   "pattern": [
     " x ",
-    "yyy"
+    "yyy",
+    "   "
   ],
   "key": {
     "x": {

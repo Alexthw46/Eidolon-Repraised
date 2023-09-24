@@ -44,7 +44,7 @@ public abstract class Page {
     public static void drawItems(CodexGui guiGraphics, Ingredient ingredient, int x, int y, int mouseX, int mouseY) {
         if (ingredient.isEmpty()) return;
         ItemStack[] items = ingredient.getItems();
-        ItemStack stack = items[(int) Eidolon.proxy.getWorld().getGameTime() % (items.length)];
+        ItemStack stack = items[((int) Eidolon.proxy.getWorld().getGameTime() / 20) % items.length];
         ItemRenderer ir = Minecraft.getInstance().getItemRenderer();
         ir.renderAndDecorateItem(stack, x, y);
         ir.renderGuiItemDecorations(Minecraft.getInstance().font, stack, x, y, null);

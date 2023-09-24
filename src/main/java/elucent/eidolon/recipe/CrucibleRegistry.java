@@ -1,13 +1,12 @@
 package elucent.eidolon.recipe;
 
-import elucent.eidolon.codex.CruciblePage;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CrucibleRegistry {
     static final Map<ResourceLocation, Page> linkedPages = new HashMap<>();

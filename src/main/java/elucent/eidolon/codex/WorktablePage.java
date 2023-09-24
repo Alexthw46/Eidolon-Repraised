@@ -20,10 +20,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class WorktablePage extends RecipePage<WorktableRecipe> {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_worktable_page.png");
 
-    @Deprecated
-    public WorktablePage(ItemStack result, ItemStack... inputs) {
-        super(BACKGROUND, null, result);
-        cachedRecipe = new WorktableRecipe(inputs, result);
+    public WorktablePage(ItemStack result) {
+        super(BACKGROUND, ForgeRegistries.ITEMS.getKey(result.getItem()), result);
     }
 
     public WorktablePage(ItemStack result, ResourceLocation id) {
