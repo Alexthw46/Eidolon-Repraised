@@ -101,9 +101,8 @@ public class AthameItem extends SwordItem {
                             ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                             ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                         }
-                        if (!ctx.getPlayer().isCreative()) ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> {
-                            player.broadcastBreakEvent(ctx.getHand());
-                        });
+                        if (!ctx.getPlayer().isCreative())
+                            ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
                     }
                 }
             }

@@ -72,9 +72,7 @@ public class AngelSightItem extends EidolonCurio {
                 }
                 abstractarrowentity.setArrow(innerarrow);
 
-                stack.hurtAndBreak(1, player, (p) -> {
-                    p.broadcastBreakEvent(player.getUsedItemHand());
-                });
+                stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(player.getUsedItemHand()));
                 if (flag1 || player.getAbilities().instabuild && (stack.getItem() == Items.SPECTRAL_ARROW || stack.getItem() == Items.TIPPED_ARROW)) {
                     abstractarrowentity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }

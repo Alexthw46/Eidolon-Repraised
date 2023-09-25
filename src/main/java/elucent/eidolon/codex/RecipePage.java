@@ -15,7 +15,7 @@ public abstract class RecipePage<T extends Recipe<?>> extends Page {
 
     T cachedRecipe;
 
-    ResourceLocation recipeId;
+    final ResourceLocation recipeId;
 
     final ItemStack result;
 

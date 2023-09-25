@@ -102,14 +102,14 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     for (int k = -1; k <= 1; ++k) {
                         for (int l = -1; l <= 1; ++l) {
                             if ((k != 0 || l != 0) && world.isEmptyBlock(pos.offset(l, 0, k)) && world.isEmptyBlock(pos.offset(l, 1, k))) {
-                                power += getPower(world, pos.offset(l * 2, 0, k * 2));
-                                power += getPower(world, pos.offset(l * 2, 1, k * 2));
+                                power += (int) getPower(world, pos.offset(l * 2, 0, k * 2));
+                                power += (int) getPower(world, pos.offset(l * 2, 1, k * 2));
 
                                 if (l != 0 && k != 0) {
-                                    power += getPower(world, pos.offset(l * 2, 0, k));
-                                    power += getPower(world, pos.offset(l * 2, 1, k));
-                                    power += getPower(world, pos.offset(l, 0, k * 2));
-                                    power += getPower(world, pos.offset(l, 1, k * 2));
+                                    power += (int) getPower(world, pos.offset(l * 2, 0, k));
+                                    power += (int) getPower(world, pos.offset(l * 2, 1, k));
+                                    power += (int) getPower(world, pos.offset(l, 0, k * 2));
+                                    power += (int) getPower(world, pos.offset(l, 1, k * 2));
                                 }
                             }
                         }
@@ -278,9 +278,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
      */
     public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
-        this.worldPosCallable.execute((world, pos) -> {
-            this.clearContainer(playerIn, this.tableInventory);
-        });
+        this.worldPosCallable.execute((world, pos) -> this.clearContainer(playerIn, this.tableInventory));
     }
 
     /**

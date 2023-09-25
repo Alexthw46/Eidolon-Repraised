@@ -36,7 +36,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
             return false;
         List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0 || goblets.size() == 0) return false;
+        if (effigies.isEmpty() || goblets.isEmpty()) return false;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         if (goblet.getEntityType() == null) return false;
@@ -48,7 +48,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
     public void cast(Level world, BlockPos pos, Player player) {
         List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0 || goblets.size() == 0) return;
+        if (effigies.isEmpty() || goblets.isEmpty()) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         if (!world.isClientSide) {

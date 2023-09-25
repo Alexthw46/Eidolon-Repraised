@@ -31,9 +31,7 @@ public class SoulfireWandItem extends WandItem {
                     pos.x, pos.y, pos.z, vel.x, vel.y, vel.z, entity.getUUID()
             ));
             world.playSound(null, pos.x, pos.y, pos.z, EidolonSounds.CAST_SOULFIRE_EVENT.get(), SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
-            stack.hurtAndBreak(1, entity, (player) -> {
-                player.broadcastBreakEvent(hand);
-            });
+            stack.hurtAndBreak(1, entity, (player) -> player.broadcastBreakEvent(hand));
             entity.getCooldowns().addCooldown(this, 15);
         }
         if (!entity.swinging) entity.swing(hand);
