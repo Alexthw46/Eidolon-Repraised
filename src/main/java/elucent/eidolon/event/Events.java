@@ -6,6 +6,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.*;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
+import elucent.eidolon.common.entity.ai.FollowOwnerGoal;
 import elucent.eidolon.common.entity.ai.PriestBarterGoal;
 import elucent.eidolon.common.entity.ai.WitchBarterGoal;
 import elucent.eidolon.common.item.*;
@@ -77,9 +78,9 @@ public class Events {
         Capability<ISoul> SOUL = ISoul.INSTANCE;
         Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
         event.getOriginal().reviveCaps();
-        event.getEntity().getCapability(KNOWLEDGE).ifPresent((k) -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-        event.getEntity().getCapability(SOUL).ifPresent((k) -> event.getOriginal().getCapability(SOUL).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-        event.getEntity().getCapability(PDATA).ifPresent((k) -> event.getOriginal().getCapability(PDATA).ifPresent((o) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+        event.getEntity().getCapability(KNOWLEDGE).ifPresent(k -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+        event.getEntity().getCapability(SOUL).ifPresent(k -> event.getOriginal().getCapability(SOUL).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+        event.getEntity().getCapability(PDATA).ifPresent(k -> event.getOriginal().getCapability(PDATA).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
         event.getOriginal().invalidateCaps();
         if (!event.getEntity().level.isClientSide) {
             Networking.sendTo(event.getEntity(), new KnowledgeUpdatePacket(event.getEntity(), false));
@@ -98,9 +99,9 @@ public class Events {
         if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
             var lastHurt = event.getOriginalTarget().getLastHurtMob();
             var lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
-            if (lastHurtBy != null && lastHurtBy != event.getEntity()) {
+            if (lastHurtBy != null && lastHurtBy != event.getEntity() && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(event.getEntity(), lastHurtBy))) {
                 event.setNewTarget(lastHurtBy);
-            } else if (lastHurt != null && lastHurt != event.getEntity()) {
+            } else if (lastHurt != null && lastHurt != event.getEntity() && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(event.getEntity(), lastHurt))) {
                 event.setNewTarget(lastHurt);
             } else event.setNewTarget(null);
         }
@@ -133,7 +134,7 @@ public class Events {
             BlockPos pos = entity.blockPosition();
             List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2), pos.offset(3, 3, 3)));
             if (!goblets.isEmpty()) {
-                GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((g) -> g.getBlockPos().distSqr(pos))).get();
+                GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble(g -> g.getBlockPos().distSqr(pos))).get();
                 goblet.setEntityType(entity.getType());
             }
         }
@@ -212,26 +213,30 @@ public class Events {
             if (event.getEntity() instanceof Witch witch) {
                 witch.goalSelector.addGoal(1, new WitchBarterGoal(
                         witch,
-                        (stack) -> stack.getItem() == Registry.CODEX.get(),
-                        (stack) -> CodexItem.withSign(stack, Signs.WICKED_SIGN)
+                        stack -> stack.getItem() == Registry.CODEX.get(),
+                        stack -> CodexItem.withSign(stack, Signs.WICKED_SIGN)
                 ));
             }
             if (event.getEntity() instanceof Villager villager) {
                 villager.goalSelector.addGoal(1, new PriestBarterGoal(
                         villager,
-                        (stack) -> stack.getItem() == Registry.CODEX.get(),
-                        (stack) -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
+                        stack -> stack.getItem() == Registry.CODEX.get(),
+                        stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
             }
             if (event.getEntity() instanceof PathfinderMob mob && Eidolon.getTrueMobType(mob) == MobType.UNDEAD) {
-                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
+                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
+                try {
+                    mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));
+                } catch (IllegalArgumentException ignored) {
+                }
             }
         }
     }
 
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) event.player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
+        if (event.phase == TickEvent.Phase.END) event.player.getCapability(IPlayerData.INSTANCE).ifPresent(d -> {
             if (!d.getWingsItem(event.player).isEmpty()) {
                 if (event.player.isCrouching() && event.player.getDeltaMovement().y < -0.1) {
                     d.startFlying(event.player);
@@ -268,6 +273,7 @@ public class Events {
     }
 
     @SubscribeEvent
+    @Deprecated
     public void onPotionApplicable(Added event) {
         if (event.getEntity().hasEffect(MobEffects.HUNGER) && event.getEffectInstance().getEffect() == EidolonPotions.UNDEATH_EFFECT.get()) {
             event.getEntity().removeEffect(MobEffects.HUNGER);
@@ -302,6 +308,24 @@ public class Events {
                 Networking.sendToTracking(event.getEntity().level, event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
             }
         });
+    }
+
+    @SubscribeEvent
+    public void onLivingAttack(LivingAttackEvent event) {
+        if (event.getSource().getEntity() instanceof LivingEntity source) {
+            if (EntityUtil.isEnthralledBy(event.getEntity(), source)) {
+                if (source.getMainHandItem().getItem() instanceof SummoningStaffItem summoningStaffItem) {
+                    CompoundTag eTag = event.getEntity().serializeNBT();
+                    event.getEntity().remove(Entity.RemovalReason.KILLED);
+                    summoningStaffItem.addCharge(source.getMainHandItem(), eTag);
+                    event.setCanceled(true);
+                }
+            } else if (EntityUtil.isEnthralledBy(source, event.getEntity())) {
+                event.setCanceled(true);
+            } else if (EntityUtil.isEnthralled(event.getEntity()) && EntityUtil.isEnthralled(source)) {
+                if (EntityUtil.sameMaster(event.getEntity(), source)) event.setCanceled(true);
+            }
+        }
     }
 
     @SubscribeEvent

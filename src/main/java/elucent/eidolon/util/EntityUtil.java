@@ -2,6 +2,7 @@ package elucent.eidolon.util;
 
 import elucent.eidolon.Eidolon;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityUtil {
     public static final String THRALL_KEY = Eidolon.MODID + ":thrall";
@@ -16,5 +17,9 @@ public class EntityUtil {
 
     public static boolean isEnthralledBy(LivingEntity entity, LivingEntity owner) {
         return entity != null && owner != null && isEnthralled(entity) && entity.getPersistentData().getUUID(THRALL_KEY).equals(owner.getUUID());
+    }
+
+    public static boolean sameMaster(@NotNull LivingEntity entity, @NotNull LivingEntity source) {
+        return entity.getPersistentData().getUUID(THRALL_KEY).equals(source.getPersistentData().getUUID(THRALL_KEY));
     }
 }

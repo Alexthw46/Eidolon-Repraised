@@ -1,6 +1,5 @@
 package elucent.eidolon.common.item;
 
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
@@ -23,7 +22,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -38,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class SummoningStaffItem extends ItemBase {
     public SummoningStaffItem(Properties builderIn) {
@@ -55,19 +52,6 @@ public class SummoningStaffItem extends ItemBase {
         return 72000;
     }
 
-    Random random = new Random();
-
-    @Override
-    public boolean hurtEnemy(@NotNull ItemStack pStack, @NotNull LivingEntity pTarget, @NotNull LivingEntity pAttacker) {
-        if (EntityUtil.isEnthralledBy(pTarget, pAttacker) && Eidolon.getTrueMobType(pTarget) == MobType.UNDEAD) {
-            CompoundTag eTag = pTarget.serializeNBT();
-            pTarget.remove(Entity.RemovalReason.KILLED);
-            addCharge(pStack, eTag);
-
-            return false;
-        }
-        return super.hurtEnemy(pStack, pTarget, pAttacker);
-    }
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity entity, int time) {
