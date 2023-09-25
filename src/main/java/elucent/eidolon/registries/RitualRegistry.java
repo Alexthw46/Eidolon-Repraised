@@ -1,4 +1,4 @@
-package elucent.eidolon.ritual;
+package elucent.eidolon.registries;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -7,8 +7,7 @@ import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.codex.Page;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.registries.EidolonEntities;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.ritual.*;
 import elucent.eidolon.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -79,7 +78,7 @@ public class RitualRegistry {
         while (iter.hasNext()) {
             ItemStack focus = iter.next();
             for (RitualPage.RitualIngredient input : inputs) {
-                if (ItemStack.isSame(focus, input.stack) && ItemStack.tagMatches(focus, input.stack)
+                if (ItemStack.isSameItem(focus, input.stack) && ItemStack.isSameItemSameTags(focus, input.stack)
                     && !input.isFocus) {
                     input.isFocus = true;
                     iter.remove();
@@ -131,7 +130,7 @@ public class RitualRegistry {
                 }
                 if (matches.size() == before) return false; // failed to satisfy match with any item
             }
-            return matches.size() == 0; // all matches satisfied
+            return matches.isEmpty(); // all matches satisfied
         } else {
             return match.main.test(sacrifice);
         }

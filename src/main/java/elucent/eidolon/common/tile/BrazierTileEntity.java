@@ -7,7 +7,7 @@ import elucent.eidolon.network.*;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.ritual.RitualRegistry;
+import elucent.eidolon.registries.RitualRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -62,9 +62,7 @@ public class BrazierTileEntity extends TileEntityBase implements IBurner {
                 boolean canBurn = canStartBurning();
                 if (canBurn
                     && player.getItemInHand(hand).getItem() instanceof FlintAndSteelItem) {
-                    player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> {
-                        p.broadcastBreakEvent(hand);
-                    });
+                    player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
                     startBurning();
                     return InteractionResult.SUCCESS;
                 } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
@@ -132,7 +130,7 @@ public class BrazierTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    public void startBurning(Player player, Level world, BlockPos pos) {
+    public void startBurning(Player player, @NotNull Level world, BlockPos pos) {
         startBurning();
     }
 

@@ -1,6 +1,7 @@
 package elucent.eidolon.gui;
 
 import elucent.eidolon.recipe.WorktableRecipe;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +60,7 @@ public class WorktableContainer extends AbstractContainerMenu {
     protected void updateCraftingResult(int id, Level world, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
         if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
             ItemStack itemstack = ItemStack.EMPTY;
-            var worktableRecipeOptional = world.getRecipeManager().getAllRecipesFor(WorktableRecipe.Type.INSTANCE);
+            var worktableRecipeOptional = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get());
             if (!extras.isEmpty()) {
                 for (WorktableRecipe worktableRecipe : worktableRecipeOptional) {
                     if (worktableRecipe.matches(core, extras)) {

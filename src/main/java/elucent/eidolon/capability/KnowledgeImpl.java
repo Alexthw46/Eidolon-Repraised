@@ -2,8 +2,8 @@ package elucent.eidolon.capability;
 
 import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Runes;
+import elucent.eidolon.registries.Signs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

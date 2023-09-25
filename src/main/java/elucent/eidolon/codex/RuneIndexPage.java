@@ -16,7 +16,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.EidolonSounds;
-import elucent.eidolon.spell.Runes;
+import elucent.eidolon.registries.Runes;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;

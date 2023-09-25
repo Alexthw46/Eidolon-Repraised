@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
@@ -8,6 +9,7 @@ import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

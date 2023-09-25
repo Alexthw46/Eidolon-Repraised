@@ -4,9 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.registries.Registry;
+
+import elucent.eidolon.registries.EidolonRecipes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -116,15 +117,6 @@ public class CrucibleRecipe implements Recipe<Container> {
         return registryName;
     }
 
-    public static class Type implements RecipeType<CrucibleRecipe> {
-        @Override
-        public String toString() {
-            return Eidolon.MODID + ":crucible";
-        }
-
-        public static final CrucibleRecipe.Type INSTANCE = new CrucibleRecipe.Type();
-    }
-
     public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
         @Override
         public @NotNull CrucibleRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {
@@ -174,12 +166,12 @@ public class CrucibleRecipe implements Recipe<Container> {
 
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
-        return Registry.CRUCIBLE_RECIPE.get();
+        return EidolonRecipes.CRUCIBLE_RECIPE.get();
     }
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return CrucibleRecipe.Type.INSTANCE;
+        return EidolonRecipes.CRUCIBLE_TYPE.get();
     }
 
     @Override

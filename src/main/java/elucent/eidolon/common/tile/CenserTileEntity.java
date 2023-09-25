@@ -1,5 +1,6 @@
 package elucent.eidolon.common.tile;
 
+import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
@@ -10,7 +11,6 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.spell.AltarInfo;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +32,7 @@ import java.util.List;
 
 import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.spell.PrayerSpell.updateMagic;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
 
 public class CenserTileEntity extends TileEntityBase implements IBurner {
     public CenserTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
@@ -58,9 +59,9 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             if (burnCounter >= 400) {
                 if (incense.isEmpty()) {
                     isBurning = false;
+                    level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
                     burnCounter = 0;
                     Networking.sendToTracking(level, worldPosition, new ExtinguishEffectPacket(worldPosition));
-
                 }
             }
             sync();
@@ -124,12 +125,12 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
         return InteractionResult.PASS;
     }
 
-    public void startBurning(Player player, Level world, BlockPos pos) {
+    public void startBurning(Player player, @NotNull Level world, BlockPos pos) {
         if (!world.getCapability(IReputation.INSTANCE).isPresent()) return;
         if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, prefix("basic_incense"), world.getGameTime()))
             return;
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0) return;
+        if (effigies.isEmpty()) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         if (effigy.ready()) {
             Deity deity = Deities.LIGHT_DEITY;
@@ -142,9 +143,15 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             isBurning = true;
+            world.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
             burnCounter = 0;
             sync();
         }
+    }
+
+    @Override
+    public void sync() {
+        super.sync();
     }
 
     @Override

@@ -13,7 +13,7 @@ import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.*;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
