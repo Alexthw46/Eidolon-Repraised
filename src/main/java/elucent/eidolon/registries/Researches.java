@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
-import elucent.eidolon.spell.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

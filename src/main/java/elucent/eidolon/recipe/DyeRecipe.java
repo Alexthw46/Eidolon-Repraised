@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import elucent.eidolon.api.IDyeable;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.util.RecipeUtil;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -15,10 +15,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +55,12 @@ public class DyeRecipe extends ShapelessRecipe {
 
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
-        return Registry.DYE_RECIPE.get();
+        return EidolonRecipes.DYE_RECIPE.get();
+    }
+
+    @Override
+    public @NotNull RecipeType<?> getType() {
+        return EidolonRecipes.DYE_TYPE.get();
     }
 
     public static JsonElement asRecipe(Item item) {

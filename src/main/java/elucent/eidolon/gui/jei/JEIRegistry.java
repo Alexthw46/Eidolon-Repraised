@@ -5,8 +5,9 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.DyeRecipe;
 import elucent.eidolon.recipe.WorktableRecipe;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.ritual.RitualRegistry;
+import elucent.eidolon.registries.RitualRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
@@ -51,8 +52,8 @@ public class JEIRegistry implements IModPlugin {
 
         RecipeManager manager = Eidolon.proxy.getWorld().getRecipeManager();
 
-        registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(CrucibleRecipe.Type.INSTANCE));
-        registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(WorktableRecipe.Type.INSTANCE));
+        registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get()));
+        registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get()));
         registry.addRecipes(RITUAL_CATEGORY, RitualRegistry.getWrappedRecipes());
     }
 

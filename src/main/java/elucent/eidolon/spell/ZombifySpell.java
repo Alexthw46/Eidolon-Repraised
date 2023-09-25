@@ -1,5 +1,6 @@
 package elucent.eidolon.spell;
 
+import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
@@ -8,6 +9,7 @@ import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.deity.Deities;
 import elucent.eidolon.deity.DeityLocks;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtOps;
@@ -38,7 +40,7 @@ public class ZombifySpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof Villager;
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0) return false;
+        if (effigies.isEmpty()) return false;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
         if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.ELDER_EFFIGY.get())
@@ -49,7 +51,7 @@ public class ZombifySpell extends PrayerSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0) return;
+        if (effigies.isEmpty()) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
 
         HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);

@@ -294,4 +294,24 @@ public class CodexGui extends Screen {
         return false;
     }
 
+    @Override
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+        if (pDelta < 0) {
+            if (currentPage + 1 < currentChapter.size()) {
+                currentPage += 1;
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                resetPages();
+                return true;
+            }
+        } else if (pDelta > 0) {
+            if (currentPage > 0) {
+                currentPage -= 1;
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                resetPages();
+                return true;
+            }
+        }
+
+        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+    }
 }

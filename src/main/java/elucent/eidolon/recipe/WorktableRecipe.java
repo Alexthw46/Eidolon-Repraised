@@ -4,8 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.EidolonRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -127,15 +126,6 @@ public class WorktableRecipe implements Recipe<Container> {
         return result;
     }
 
-    public static class Type implements RecipeType<WorktableRecipe> {
-        @Override
-        public String toString() {
-            return Eidolon.MODID + ":worktable";
-        }
-
-        public static final Type INSTANCE = new Type();
-    }
-
     public static class Serializer implements RecipeSerializer<WorktableRecipe> {
         @Override
         public @NotNull WorktableRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {
@@ -186,12 +176,12 @@ public class WorktableRecipe implements Recipe<Container> {
 
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
-        return Registry.WORKTABLE_RECIPE.get();
+        return EidolonRecipes.WORKTABLE_RECIPE.get();
     }
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return Type.INSTANCE;
+        return EidolonRecipes.WORKTABLE_TYPE.get();
     }
 
     @Override

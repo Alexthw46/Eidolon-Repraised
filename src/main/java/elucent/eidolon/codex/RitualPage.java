@@ -7,7 +7,7 @@ import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.ritual.RitualRegistry;
+import elucent.eidolon.registries.RitualRegistry;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

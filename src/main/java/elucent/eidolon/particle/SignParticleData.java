@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.registries.EidolonParticles;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;

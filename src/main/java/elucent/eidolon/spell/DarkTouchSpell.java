@@ -7,6 +7,7 @@ import elucent.eidolon.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

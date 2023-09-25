@@ -1,6 +1,6 @@
 package elucent.eidolon.api.spells;
 
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

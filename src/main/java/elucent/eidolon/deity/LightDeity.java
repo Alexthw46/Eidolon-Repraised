@@ -3,7 +3,7 @@ package elucent.eidolon.deity;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.capability.Facts;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;

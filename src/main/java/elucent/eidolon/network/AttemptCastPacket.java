@@ -2,7 +2,7 @@ package elucent.eidolon.network;
 
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.entity.ChantCasterEntity;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -48,17 +48,17 @@ public class AttemptCastPacket {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
 
-            Level world = ctx.get().getSender().level;
-            if (world != null) {
-                Player player = world.getPlayerByUUID(packet.uuid);
-                if (player != null) {
-                    List<Sign> runes = packet.runes;
-                    for (Sign rune : runes) if (!KnowledgeUtil.knowsSign(player, rune)) return;
-                    Vec3 placement = player.position().add(0, player.getBbHeight() * 2 / 3, 0).add(player.getLookAngle().scale(0.5f));
-                    ChantCasterEntity entity = new ChantCasterEntity(world, player, runes, player.getLookAngle());
-                    entity.setPos(placement.x, placement.y, placement.z);
-                    world.addFreshEntity(entity);
-                }
+            Player player = ctx.get().getSender();
+            if (player == null) return;
+            Level world = player.level();
+            player = world.getPlayerByUUID(packet.uuid);
+            if (player != null) {
+                List<Sign> runes = packet.runes;
+                for (Sign rune : runes) if (!KnowledgeUtil.knowsSign(player, rune)) return;
+                Vec3 placement = player.position().add(0, player.getBbHeight() * 2 / 3, 0).add(player.getLookAngle().scale(0.5f));
+                ChantCasterEntity entity = new ChantCasterEntity(world, player, runes, player.getLookAngle());
+                entity.setPos(placement.x, placement.y, placement.z);
+                world.addFreshEntity(entity);
             }
         });
         ctx.get().setPacketHandled(true);

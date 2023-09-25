@@ -2,7 +2,7 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;

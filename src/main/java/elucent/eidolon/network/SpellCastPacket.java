@@ -3,7 +3,7 @@ package elucent.eidolon.network;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
-import elucent.eidolon.spell.Spells;
+import elucent.eidolon.registries.Spells;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
