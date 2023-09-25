@@ -30,8 +30,8 @@ public class Category {
     public boolean click(CodexGui gui, int x, int y, boolean right, int mouseX, int mouseY) {
         int w = 36;
         if (!right) x -= 36;
-        w += hoveramount * 12;
-        if (!right) x -= hoveramount * 12;
+        w += (int) (hoveramount * 12);
+        if (!right) x -= (int) (hoveramount * 12);
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
         if (hover) {
@@ -47,8 +47,8 @@ public class Category {
     public void draw(CodexGui gui, GuiGraphics mStack, int x, int y, boolean right, int mouseX, int mouseY) {
         int w = 36;
         if (!right) x -= 36;
-        w += hoveramount * 12;
-        if (!right) x -= hoveramount * 12;
+        w += (int) (hoveramount * 12);
+        if (!right) x -= (int) (hoveramount * 12);
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
         if (hover && hoveramount < 1) hoveramount += Minecraft.getInstance().getFrameTime() / 4;
@@ -57,7 +57,7 @@ public class Category {
 
         if (right) {
             x -= 12;
-            x += hoveramount * 12;
+            x += (int) (hoveramount * 12);
         }
 
         RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
@@ -69,8 +69,8 @@ public class Category {
     public void drawTooltip(@NotNull GuiGraphics mStack, int x, int y, boolean right, int mouseX, int mouseY) {
         int w = 36;
         if (!right) x -= 36;
-        w += hoveramount * 12;
-        if (!right) x -= hoveramount * 12;
+        w += (int) (hoveramount * 12);
+        if (!right) x -= (int) (hoveramount * 12);
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
         if (hover)

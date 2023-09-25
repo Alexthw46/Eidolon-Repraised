@@ -67,7 +67,9 @@ public class SoulEnchanterTileEntity extends TileEntityBase {
         }
 
         float f2;
-        for(f2 = this.tRot - this.nextPageAngle; f2 >= (float)Math.PI; f2 -= ((float)Math.PI * 2F)) {
+        f2 = this.tRot - this.nextPageAngle;
+        while (f2 >= (float) Math.PI) {
+            f2 -= ((float) Math.PI * 2F);
         }
 
         while(f2 < -(float)Math.PI) {

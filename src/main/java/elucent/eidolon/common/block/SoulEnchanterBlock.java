@@ -31,9 +31,7 @@ public class SoulEnchanterBlock extends HorizontalBlockBase implements EntityBlo
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            player.openMenu(new SimpleMenuProvider((id, inventory, p) -> {
-                return new SoulEnchanterContainer(id, inventory, ContainerLevelAccess.create(world, pos));
-            }, Component.literal("")));
+            player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new SoulEnchanterContainer(id, inventory, ContainerLevelAccess.create(world, pos)), Component.literal("")));
             player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
             return InteractionResult.CONSUME;
         }

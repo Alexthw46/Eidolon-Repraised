@@ -145,7 +145,7 @@ public class SlashParticle extends TextureSheetParticle {
             decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v0, al1, lmap);
             decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v1, al1, lmap);
 
-            // horiz back
+            // back
             decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v1, al2, lmap);
             decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v0, al2, lmap);
             decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v0, al1, lmap);
@@ -157,7 +157,7 @@ public class SlashParticle extends TextureSheetParticle {
             decoVert(b.vertex(ox + dx1 * r + yax * -w1 * 0.5f, oy + dy1 * r + yay * -w1 * 0.5f, oz + dz1 * r + yaz * -w1 * 0.5f), u0, v0, al1, lmap);
             decoVert(b.vertex(ox + dx1 * r + yax * w1 * 0.5f, oy + dy1 * r + yay * w1 * 0.5f, oz + dz1 * r + yaz * w1 * 0.5f), u0, v1, al1, lmap);
 
-            // vert back
+            // back
             decoVert(b.vertex(ox + dx2 * r + yax * -w2, oy + dy2 * r + yay * -w2, oz + dz2 * r + yaz * -w2), u1, v1, al2, lmap);
             decoVert(b.vertex(ox + dx2 * r + yax * w2, oy + dy2 * r + yay * w2, oz + dz2 * r + yaz * w2), u1, v0, al2, lmap);
             decoVert(b.vertex(ox + dx1 * r + yax * w1, oy + dy1 * r + yay * w1, oz + dz1 * r + yaz * w1), u0, v0, al1, lmap);

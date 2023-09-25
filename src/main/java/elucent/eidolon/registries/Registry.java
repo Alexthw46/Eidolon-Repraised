@@ -9,8 +9,6 @@ import elucent.eidolon.common.item.Tiers;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.item.curio.*;
 import elucent.eidolon.common.tile.*;
-import elucent.eidolon.common.tile.reagent.CisternTileEntity;
-import elucent.eidolon.common.tile.reagent.PipeTileEntity;
 import elucent.eidolon.common.world.EidolonAbstractTreeFeature;
 import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
@@ -600,8 +598,6 @@ public class Registry {
     public static RegistryObject<BlockEntityType<WoodenStandTileEntity>> WOODEN_STAND_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<CisternTileEntity>> CISTERN_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<PipeTileEntity>> PIPE_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
 
     static {

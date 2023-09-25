@@ -31,9 +31,7 @@ public class RuneParticleData implements ParticleOptions {
                 Codec.FLOAT.fieldOf("r2").forGetter((d) -> d.r2),
                 Codec.FLOAT.fieldOf("g2").forGetter((d) -> d.g2),
                 Codec.FLOAT.fieldOf("b2").forGetter((d) -> d.b2)
-        ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> {
-            return new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2);
-        }));
+        ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2)));
     }
 
     public RuneParticleData(Rune rune, float r1, float g1, float b1, float r2, float g2, float b2) {

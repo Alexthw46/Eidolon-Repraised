@@ -36,17 +36,13 @@ public class SoulUpdatePacket {
         this.isPlayer = entity instanceof Player;
         if (isPlayer) this.uuid = entity.getUUID();
         else this.id = entity.getId();
-        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> {
-            this.tag = ((INBTSerializable<CompoundTag>)k).serializeNBT();
-        });
+        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
     }
 
     public SoulUpdatePacket(Player entity) {
         this.isPlayer = true;
         this.uuid = entity.getUUID();
-        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> {
-            this.tag = ((INBTSerializable<CompoundTag>)k).serializeNBT();
-        });
+        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
     }
 
     public static void encode(SoulUpdatePacket object, FriendlyByteBuf buffer) {
@@ -69,9 +65,7 @@ public class SoulUpdatePacket {
             Level world = Eidolon.proxy.getWorld();
             LivingEntity e = packet.isPlayer ? world.getPlayerByUUID(packet.uuid) : (LivingEntity)world.getEntity(packet.id);
             if (e != null) {
-                e.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> {
-                    ((INBTSerializable<CompoundTag>)k).deserializeNBT(packet.tag);
-                });
+                e.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(packet.tag));
             }
         });
         ctx.get().setPacketHandled(true);

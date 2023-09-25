@@ -46,7 +46,7 @@ public class GlowingSlashParticle extends TextureSheetParticle {
     }
 
     protected float getSqInvCoeff(float pticks) {
-        float inv = (this.lifetime - (float)this.age + pticks) / this.lifetime;
+        float inv = (this.lifetime - (float) this.age + pticks) / this.lifetime;
         return inv * inv;
     }
 
@@ -98,9 +98,6 @@ public class GlowingSlashParticle extends TextureSheetParticle {
         float nxax = xax * cro - yax * sro;
         float nxay = xay * cro - yay * sro;
         float nxaz = xaz * cro - yaz * sro;
-        yax = xax * sro + yax * cro;
-        yay = xay * sro + yay * cro;
-        yaz = xaz * sro + yaz * cro;
         xax = nxax;
         xay = nxay;
         xaz = nxaz;
@@ -115,7 +112,6 @@ public class GlowingSlashParticle extends TextureSheetParticle {
         float hlwidth = 4 + 4 * getSqInvCoeff(pticks);
         for (float i = 0; i < 18; i ++) {
             float c1 = i / 18, c2 = (i + 1) / 18;
-            float basea = this.alpha - data.highlight;
             float angle1 = -data.angle / 2 + c1 * data.angle, angle2 = -data.angle / 2 + c2 * data.angle;
             float al1 = Mth.sin(c1 * Mth.PI), al2 = Mth.sin(c2 * Mth.PI);
             float dangle1 = Mth.clamp((angle1 - hlangle) / data.angle, -1 / hlwidth, 1 / hlwidth), dangle2 = Mth.clamp((angle2 - hlangle) / data.angle, -1 / hlwidth, 1 / hlwidth);
@@ -133,28 +129,23 @@ public class GlowingSlashParticle extends TextureSheetParticle {
             float dx2 = sa2 * xax + ca2 * zax, dy2 = sa2 * xay + ca2 * zay, dz2 = sa2 * xaz + ca2 * zaz;
 
             // horiz
-            decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v1, al2, lmap);
-            decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v0, al2, lmap);
-            decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v0, al1, lmap);
-            decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v1, al1, lmap);
-
-            // horiz back
-            decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v1, al2, lmap);
-            decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v0, al2, lmap);
-            decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v0, al1, lmap);
-            decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v1, al1, lmap);
+            decoVert(b, ox, dx2, r, w2, oy, dy2, oz, dz2, u1, v1, al2, lmap, v0, dx1, w1, dy1, dz1, u0, al1);
 
             // vert
-            decoVert(b.vertex(ox + dx2 * r + yax * w2, oy + dy2 * r + yay * w2, oz + dz2 * r + yaz * w2), u1, v1, al2, lmap);
-            decoVert(b.vertex(ox + dx2 * r + yax * -w2, oy + dy2 * r + yay * -w2, oz + dz2 * r + yaz * -w2), u1, v0, al2, lmap);
-            decoVert(b.vertex(ox + dx1 * r + yax * -w1, oy + dy1 * r + yay * -w1, oz + dz1 * r + yaz * -w1), u0, v0, al1, lmap);
-            decoVert(b.vertex(ox + dx1 * r + yax * w1, oy + dy1 * r + yay * w1, oz + dz1 * r + yaz * w1), u0, v1, al1, lmap);
-
-            // vert back
-            decoVert(b.vertex(ox + dx2 * r + yax * -w2, oy + dy2 * r + yay * -w2, oz + dz2 * r + yaz * -w2), u1, v1, al2, lmap);
-            decoVert(b.vertex(ox + dx2 * r + yax * w2, oy + dy2 * r + yay * w2, oz + dz2 * r + yaz * w2), u1, v0, al2, lmap);
-            decoVert(b.vertex(ox + dx1 * r + yax * w1, oy + dy1 * r + yay * w1, oz + dz1 * r + yaz * w1), u0, v0, al1, lmap);
-            decoVert(b.vertex(ox + dx1 * r + yax * -w1, oy + dy1 * r + yay * -w1, oz + dz1 * r + yaz * -w1), u0, v1, al1, lmap);
+            decoVert(b, ox, dx2, r, w2, oy, dy2, oz, dz2, u1, v1, al2, lmap, v0, dx1, w1, dy1, dz1, u0, al1);
         }
+    }
+
+    private void decoVert(VertexConsumer b, float ox, float dx2, float r, float w2, float oy, float dy2, float oz, float dz2, float u1, float v1, float al2, int lmap, float v0, float dx1, float w1, float dy1, float dz1, float u0, float al1) {
+        decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v1, al2, lmap);
+        decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v0, al2, lmap);
+        decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v0, al1, lmap);
+        decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v1, al1, lmap);
+
+        // back
+        decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v1, al2, lmap);
+        decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v0, al2, lmap);
+        decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v0, al1, lmap);
+        decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v1, al1, lmap);
     }
 }

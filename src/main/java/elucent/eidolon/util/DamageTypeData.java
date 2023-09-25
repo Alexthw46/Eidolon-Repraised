@@ -215,7 +215,7 @@ public class DamageTypeData {
     public static class WorldAttached<T> {
 
         // weak references to prevent leaking hashmaps when a WorldAttached is GC'd during runtime
-        static List<WeakReference<Map<LevelAccessor, ?>>> allMaps = new ArrayList<>();
+        static final List<WeakReference<Map<LevelAccessor, ?>>> allMaps = new ArrayList<>();
         private final Map<LevelAccessor, T> attached;
         private final Function<LevelAccessor, T> factory;
 

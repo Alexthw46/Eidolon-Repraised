@@ -65,8 +65,8 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
     }
 
     public static class StackIngredient {
-        ItemStack stack;
-        Ingredient ingredient;
+        final ItemStack stack;
+        final Ingredient ingredient;
 
         public StackIngredient(ItemStack stack, Ingredient ingredient) {
             this.stack = stack;

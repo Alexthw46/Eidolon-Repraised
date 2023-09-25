@@ -34,7 +34,9 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
         matrixStackIn.translate(0.0D, 0.1F + Mth.sin(f * 0.1F) * 0.01F, 0.0D);
 
         float f1;
-        for (f1 = tileEntityIn.nextPageAngle - tileEntityIn.pageAngle; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) {
+        f1 = tileEntityIn.nextPageAngle - tileEntityIn.pageAngle;
+        while (f1 >= (float) Math.PI) {
+            f1 -= ((float) Math.PI * 2F);
         }
 
         while (f1 < -(float) Math.PI) {

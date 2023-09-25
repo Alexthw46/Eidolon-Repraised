@@ -20,8 +20,7 @@ public class RuneDescPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, @NotNull GuiGraphics mStack, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
-        if (gui.hoveredRune == null) {
-        } else {
+        if (gui.hoveredRune != null) {
             ResourceLocation rl = gui.hoveredRune.getRegistryName();
             String title = I18n.get(rl.getNamespace() + ".rune." + rl.getPath());
             String text = I18n.get(rl.getNamespace() + ".codex.rune." + rl.getPath());

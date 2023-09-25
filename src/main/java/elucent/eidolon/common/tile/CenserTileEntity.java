@@ -153,11 +153,6 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    public void sync() {
-        super.sync();
-    }
-
-    @Override
     public void load(@NotNull CompoundTag pTag) {
         super.load(pTag);
         if (pTag.contains("incense")) {

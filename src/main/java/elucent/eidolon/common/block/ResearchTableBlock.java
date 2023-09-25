@@ -32,9 +32,7 @@ public class ResearchTableBlock extends HorizontalBlockBase implements EntityBlo
         } else {
             BlockEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof ResearchTableTileEntity researchTable) {
-                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, p) -> {
-                    return new ResearchTableContainer(id, inventory, researchTable, researchTable.dataAccess);
-                }, researchTable.getDisplayName()), pos);
+                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, p) -> new ResearchTableContainer(id, inventory, researchTable, researchTable.dataAccess), researchTable.getDisplayName()), pos);
             }
 
             return InteractionResult.CONSUME;

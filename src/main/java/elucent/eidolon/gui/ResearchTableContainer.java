@@ -6,6 +6,7 @@ import elucent.eidolon.common.tile.ResearchTableTileEntity;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -79,21 +80,23 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
             }
         }
         while (slots.size() > 38) popSlot(); // Pare down to just the base 2 slots + player inventory.
-        while (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
-            if (getProgress() > 0) break; // Slots don't appear when research is in progress.
-            ItemStack stack = slots.get(0).getItem();
-            if (!stack.hasTag() || !stack.getTag().contains("research")) break;
-            Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
-            if (r == null) break;
-            if (stack.getTag().getInt("stepsDone") >= r.getStars()) break;
-            List<ResearchTask> tasks = r.getTasks(getSeed(stack), stack.getTag().getInt("stepsDone"));
-            for (int i = 0; i < tasks.size(); i ++) {
-                int x = 189, y = 17 + 36 * i;
-                tasks.get(i).modifyContainer(this, x, y);
-            }
-            break;
-        }
+        checkTask();
         if (tile instanceof ResearchTableTileEntity) this.broadcastFullState();
+    }
+
+    private void checkTask() {
+        if (!slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get()) || getProgress() > 0) return;
+        // Slots don't appear when research is in progress.
+        ItemStack stack = slots.get(0).getItem();
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains("research")) return;
+        Research r = Researches.find(new ResourceLocation(tag.getString("research")));
+        if (r == null || tag.getInt("stepsDone") >= r.getStars()) return;
+        List<ResearchTask> tasks = r.getTasks(getSeed(stack), tag.getInt("stepsDone"));
+        for (int i = 0; i < tasks.size(); i++) {
+            int x = 189, y = 17 + 36 * i;
+            tasks.get(i).modifyContainer(this, x, y);
+        }
     }
 
     @Override

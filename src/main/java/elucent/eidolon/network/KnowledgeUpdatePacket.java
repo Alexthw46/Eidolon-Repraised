@@ -1,18 +1,18 @@
 package elucent.eidolon.network;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.capability.IKnowledge;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 public class KnowledgeUpdatePacket {
     final UUID uuid;
@@ -27,9 +27,7 @@ public class KnowledgeUpdatePacket {
 
     public KnowledgeUpdatePacket(Player entity, boolean playSound) {
         this.uuid = entity.getUUID();
-        entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
-            this.tag = ((INBTSerializable<CompoundTag>)k).serializeNBT();
-        });
+        entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
         this.playSound = playSound;
     }
 
