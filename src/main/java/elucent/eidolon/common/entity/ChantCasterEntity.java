@@ -43,7 +43,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     public static final EntityDataAccessor<Optional<UUID>> CASTER_ID = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     public static final EntityDataAccessor<Boolean> SUCCEEDED = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.BOOLEAN);
     public int timer = 0, deathTimer = 0;
-    Vec3 look;
+    public Vec3 look;
 
     public ChantCasterEntity(Level world, Player caster, List<Sign> runes, Vec3 look) {
         super(EidolonEntities.CHANT_CASTER.get(), world);

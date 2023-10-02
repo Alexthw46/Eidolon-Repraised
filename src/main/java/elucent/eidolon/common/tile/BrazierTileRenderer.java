@@ -22,11 +22,11 @@ public class BrazierTileRenderer implements BlockEntityRenderer<BrazierTileEntit
     public void render(BrazierTileEntity tileEntityIn, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer ir = mc.getItemRenderer();
-        if (!tileEntityIn.stack.isEmpty()) {
+        if (!tileEntityIn.getStack().isEmpty()) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0.5, 0.9375, 0.5);
             matrixStackIn.mulPose(Axis.YP.rotationDegrees(3 * (mc.level.getGameTime() % 360 + partialTicks)));
-            ir.renderStatic(tileEntityIn.stack, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, mc.level, 0);
+            ir.renderStatic(tileEntityIn.getStack(), ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, mc.level, 0);
             matrixStackIn.popPose();
         }
 
