@@ -2,8 +2,8 @@ package elucent.eidolon.common.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.BonelordArmorModel;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;

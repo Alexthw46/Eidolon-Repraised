@@ -3,6 +3,7 @@ package elucent.eidolon.common.tile;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.ritual.Ritual.RitualResult;
 import elucent.eidolon.api.ritual.Ritual.SetupResult;
+import elucent.eidolon.common.block.SingleItemTile;
 import elucent.eidolon.network.*;
 import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
@@ -24,8 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-public class BrazierTileEntity extends TileEntityBase implements IBurner {
-    ItemStack stack = ItemStack.EMPTY;
+import java.util.List;
+
+public class BrazierTileEntity extends SingleItemTile implements IBurner {
     boolean burning = false;
     int findingCounter = 0;
     int stepCounter = 0;
@@ -231,5 +233,9 @@ public class BrazierTileEntity extends TileEntityBase implements IBurner {
     @Override
     public AABB getRenderBoundingBox() {
         return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 4, worldPosition.getZ() + 1);
+    }
+
+    public List<ItemStack> getPedestalItems() {
+        return List.of();
     }
 }

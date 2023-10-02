@@ -1,11 +1,13 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.client.model.NecromancerModel;
+import elucent.eidolon.common.entity.NecromancerEntity;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;

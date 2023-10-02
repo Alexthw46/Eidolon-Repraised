@@ -1,10 +1,11 @@
-package elucent.eidolon.common.entity;// Made with Blockbench 3.7.4
+package elucent.eidolon.client.model;// Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import elucent.eidolon.common.entity.RavenEntity;
 import elucent.eidolon.event.ClientEvents;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;

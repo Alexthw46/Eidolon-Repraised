@@ -1,7 +1,8 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import elucent.eidolon.common.entity.WraithEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

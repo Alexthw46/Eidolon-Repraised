@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.IDyeable;
+import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.WarlockArmorModel;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;

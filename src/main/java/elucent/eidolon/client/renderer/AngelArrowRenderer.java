@@ -1,6 +1,7 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import elucent.eidolon.common.entity.AngelArrowEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;

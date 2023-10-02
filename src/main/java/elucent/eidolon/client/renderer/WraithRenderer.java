@@ -1,7 +1,9 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.renderer;
 
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.client.model.WraithModel;
+import elucent.eidolon.common.entity.WraithEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

@@ -1,5 +1,7 @@
 package elucent.eidolon;
 
+import elucent.eidolon.client.ClientConfig;
+import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.codex.CodexChapters;
 import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;

@@ -33,7 +33,7 @@ import java.util.UUID;
 public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
     private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(Items.PUMPKIN_SEEDS);
     float yRotTrail = 0.0f;
-    float squishAmount = 1.0f;
+    public float squishAmount = 1.0f;
     public static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(SlimySlugEntity.class, EntityDataSerializers.INT);
 
     public SlimySlugEntity(EntityType<SlimySlugEntity> type, Level worldIn) {
