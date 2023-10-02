@@ -2,9 +2,9 @@ package elucent.eidolon.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import elucent.eidolon.ClientConfig;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
+import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Camera;

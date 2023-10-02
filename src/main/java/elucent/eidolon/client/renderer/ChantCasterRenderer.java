@@ -1,10 +1,11 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.SignSequence;
+import elucent.eidolon.common.entity.ChantCasterEntity;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;

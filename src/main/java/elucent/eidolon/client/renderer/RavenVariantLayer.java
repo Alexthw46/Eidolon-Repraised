@@ -1,8 +1,9 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import elucent.eidolon.ClientRegistry;
+import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.client.model.RavenModel;
 import elucent.eidolon.registries.EidolonEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;

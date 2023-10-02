@@ -1,4 +1,4 @@
-package elucent.eidolon.common.entity;
+package elucent.eidolon.client.model;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -6,6 +6,7 @@ package elucent.eidolon.common.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import elucent.eidolon.common.entity.NecromancerEntity;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;

@@ -28,7 +28,7 @@ import java.util.List;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class AngelArrowEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
-    AbstractArrow internal = null;
+    public AbstractArrow internal = null;
 
     public AngelArrowEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
