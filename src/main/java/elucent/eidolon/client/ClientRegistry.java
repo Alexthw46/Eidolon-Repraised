@@ -4,10 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.capability.IPlayerData;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.client.model.*;
 import elucent.eidolon.client.renderer.*;
 import elucent.eidolon.common.item.IManaRelatedItem;
+import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.common.item.curio.RavenCloakRenderer;
 import elucent.eidolon.common.item.curio.SanguineAmuletItem;
 import elucent.eidolon.common.item.model.*;
@@ -30,6 +32,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -409,7 +412,6 @@ public class ClientRegistry {
 
             gui.leftHeight += extraHealthRows * extraRowHeight;
 
-            RenderSystem.setShaderTexture(0, ICONS_TEXTURE);
             for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
                 int row = (i + 1) / 10;
                 int heart = (i + 1) % 10;
@@ -450,37 +452,58 @@ public class ClientRegistry {
         }
     }
 
-    public static class EidolonRaven implements IGuiOverlay {
+    public static class EidolonRavenCharge implements IGuiOverlay {
         protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
 
         @Override
         public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
-            if (ClientEvents.jumpTicks >= 5) {
-                gui.setupOverlayRenderState(true, false);
-                var x = screenWidth / 2 - 91;
-                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                RenderSystem.disableBlend();
+            PoseStack mStack = guiGraphics.pose();
+            Minecraft mc = gui.getMinecraft();
+            LocalPlayer player = mc.player;
 
-                var minecraft = gui.getMinecraft();
-                minecraft.getProfiler().push("ravenJumpBar");
-                float f = minecraft.player.getJumpRidingScale();
-                int i = 182;
-                int j = (int) (f * 183.0F);
-                int k = guiGraphics.guiHeight() - 32 + 3;
-                guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 84, 182, 5);
-                //TODO
-                if (false) {
-                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 74, 182, 5);
-                } else if (j > 0) {
-                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);
+            if (!gui.shouldDrawSurvivalElements() || player == null || player.onGround()) return;
+            player.getCapability(IPlayerData.INSTANCE).ifPresent(d -> {
+
+                ItemStack wings = d.getWingsItem(player);
+                if (!(wings.getItem() instanceof IWingsItem wing)) return;
+
+                int remainingFlaps = d.getWingCharges(player);
+
+                //TODO render an icon
+                //renders the number of remaining flaps
+                String s = "" + remainingFlaps;
+                int i1 = (screenWidth - gui.getFont().width(s)) / 2;
+                int j1 = screenHeight - 46;
+                guiGraphics.drawString(gui.getFont(), s, i1 + 1, j1, 0, false);
+                guiGraphics.drawString(gui.getFont(), s, i1 - 1, j1, 0, false);
+                guiGraphics.drawString(gui.getFont(), s, i1, j1 + 1, 0, false);
+                guiGraphics.drawString(gui.getFont(), s, i1, j1 - 1, 0, false);
+                guiGraphics.drawString(gui.getFont(), s, i1, j1, 6505166, false);
+
+                if (ClientEvents.jumpTicks >= 5) {
+                    gui.setupOverlayRenderState(false, false);
+                    var x = screenWidth / 2 - 91;
+                    guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    //RenderSystem.disableBlend();
+
+                    mc.getProfiler().push("ravenJumpBar");
+                    float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTime()) / 15.0f;
+                    int i = 182;
+                    int j = (int) (f * 183.0F);
+                    int k = guiGraphics.guiHeight() - 32 + 3;
+                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 84, 182, 5);
+                    if (j > 0) {
+                        guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);
+                    }
+
+                    mc.getProfiler().pop();
+
+                    RenderSystem.enableBlend();
+                    gui.getMinecraft().getProfiler().pop();
+                    guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                 }
-
-                minecraft.getProfiler().pop();
-
-                RenderSystem.enableBlend();
-                gui.getMinecraft().getProfiler().pop();
-                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            }
+            });
         }
     }
+
 }

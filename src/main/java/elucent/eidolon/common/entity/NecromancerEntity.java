@@ -1,7 +1,7 @@
 package elucent.eidolon.common.entity;
 
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.deity.Deities;
+import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.particle.Particles;

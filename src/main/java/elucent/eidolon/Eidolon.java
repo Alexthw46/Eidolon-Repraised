@@ -40,8 +40,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 
 @Mod(Eidolon.MODID)
 public class Eidolon {
@@ -125,16 +123,10 @@ public class Eidolon {
     public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
         evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new ClientRegistry.EidolonHearts());
         evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new ClientRegistry.EidolonManaBar());
-        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new ClientRegistry.EidolonRaven());
+        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new ClientRegistry.EidolonRavenCharge());
     }
 
     public void sendImc(InterModEnqueueEvent evt) {
         InterModComms.sendTo("consecration", "holy_material", () -> "silver");
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.CHARM.getMessageBuilder().build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().size(2).build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BELT.getMessageBuilder().build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
     }
 }

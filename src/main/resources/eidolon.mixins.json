@@ -8,7 +8,6 @@
     "AbstractContainerMenuMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
-    "LocalPlayerMixin",
     "PlayerRendererMixin",
     "PotionBrewingMixin",
     "ProjectileMixin"
