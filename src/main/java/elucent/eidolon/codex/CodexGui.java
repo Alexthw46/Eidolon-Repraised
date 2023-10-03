@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.network.AttemptCastPacket;
 import elucent.eidolon.network.Networking;
@@ -187,7 +187,7 @@ public class CodexGui extends Screen {
             blit(matrixStack, guiLeft + x, guiTop + y, 160, v, 32, 18, 512, 512);
         }
 
-        if (chant.size() > 0) renderChant(matrixStack, guiLeft, guiTop, mouseX, mouseY, partialTicks);
+        if (!chant.isEmpty()) renderChant(matrixStack, guiLeft, guiTop, mouseX, mouseY, partialTicks);
 
 
         for (int i = 0; i < CodexChapters.categories.size(); i++) {
@@ -280,9 +280,9 @@ public class CodexGui extends Screen {
             if (right != null)
                 if (right.click(this, guiLeft + 170, guiTop + 24, (int) mouseX, (int) mouseY)) return true;
 
-            return chant.size() > 0 && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
+            return !chant.isEmpty() && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
         } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (chant.size() > 0 && currentChapter.get(currentPage) instanceof SignIndexPage) {
+            if (!chant.isEmpty() && currentChapter.get(currentPage) instanceof SignIndexPage) {
                 chant.remove(chant.size() - 1);
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;

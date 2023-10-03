@@ -50,7 +50,7 @@ public class AttemptCastPacket {
 
             Player player = ctx.get().getSender();
             if (player == null) return;
-            Level world = player.level();
+            Level world = player.level;
             player = world.getPlayerByUUID(packet.uuid);
             if (player != null) {
                 List<Sign> runes = packet.runes;

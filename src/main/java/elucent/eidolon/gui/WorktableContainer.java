@@ -73,7 +73,7 @@ public class WorktableContainer extends AbstractContainerMenu {
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
                 if (optional.isPresent()) {
                     CraftingRecipe icraftingrecipe = optional.get();
-                    if (inventoryResult.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
+                    if (inventoryResult.setRecipeUsed(world, serverPlayer, icraftingrecipe)) {
                         itemstack = icraftingrecipe.assemble(inventory);
 
                     }
@@ -87,9 +87,7 @@ public class WorktableContainer extends AbstractContainerMenu {
 
     @Override
     public void slotsChanged(@NotNull Container inventoryIn) {
-        callable.execute((p_217069_1_, p_217069_2_) -> {
-            updateCraftingResult(this.containerId, p_217069_1_, player, core, result);
-        });
+        callable.execute((p_217069_1_, p_217069_2_) -> updateCraftingResult(this.containerId, p_217069_1_, player, core, result));
     }
 
     @Override
@@ -114,9 +112,7 @@ public class WorktableContainer extends AbstractContainerMenu {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 0) {
-                callable.execute((p_217067_2_, p_217067_3_) -> {
-                    itemstack1.getItem().onCraftedBy(itemstack1, p_217067_2_, playerIn);
-                });
+                callable.execute((p_217067_2_, p_217067_3_) -> itemstack1.getItem().onCraftedBy(itemstack1, p_217067_2_, playerIn));
                 if (!this.moveItemStackTo(itemstack1, 14, 50, true)) {
                     return ItemStack.EMPTY;
                 }

@@ -1,9 +1,10 @@
 package elucent.eidolon.gui.jei;
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
-
+import elucent.eidolon.codex.CodexGui;
 import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
@@ -78,8 +79,8 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
     @Override
 
     public void draw(@NotNull WorktableRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
-        mStack.blit(BACKGROUND, 5, 4, 0, 0, 128, 160);
-        recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+        CodexGui.DUMMY.blit(mStack, 5, 4, 0, 0, 128, 160);
     }
 
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_worktable_page.png");

@@ -1,18 +1,13 @@
 package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.Eidolon;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
 import elucent.eidolon.recipe.WorktableRecipe;
 import elucent.eidolon.recipe.WorktableRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -44,7 +39,7 @@ public class WorktablePage extends RecipePage<WorktableRecipe> {
             for (int j = 0; j < 3; j++) {
                 int index = i * 3 + j;
                 if (index < core.length && !core[index].isEmpty())
-                    drawItems(mStack, core[index], x + 39 + j * 17, y + 33 + i * 17, mouseX, mouseY);
+                    drawItems(gui, mStack, core[index], x + 39 + j * 17, y + 33 + i * 17, mouseX, mouseY);
             }
         }
 

@@ -9,8 +9,8 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.event.ClientEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -193,7 +193,7 @@ public class RenderUtil {
 
     public static void dragon(PoseStack mStack, MultiBufferSource buf, double x, double y, double z, float radius, float r, float g, float b) {
         float f5 = 0.5f; // max number of beams
-        float f7 = Math.min(f5 > 0.8F ? (f5 - 0.8F) / 0.2F : 0.0F, 1.0F);
+        float f7 = 0;//Math.min(f5 > 0.8F ? (f5 - 0.8F) / 0.2F : 0.0F, 1.0F);
         Random random = new Random(432L);
         VertexConsumer builder = buf.getBuffer(GLOWING);
         mStack.pushPose();

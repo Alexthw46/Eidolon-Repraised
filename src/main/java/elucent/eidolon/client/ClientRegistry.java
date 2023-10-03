@@ -1,12 +1,14 @@
-package elucent.eidolon;
+package elucent.eidolon.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.common.entity.*;
+import elucent.eidolon.client.model.*;
+import elucent.eidolon.client.renderer.*;
 import elucent.eidolon.common.item.IManaRelatedItem;
 import elucent.eidolon.common.item.curio.RavenCloakRenderer;
 import elucent.eidolon.common.item.curio.SanguineAmuletItem;
@@ -14,14 +16,8 @@ import elucent.eidolon.common.item.model.*;
 import elucent.eidolon.common.tile.CrucibleTileRenderer;
 import elucent.eidolon.common.tile.SoulEnchanterTileRenderer;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.registries.EidolonEntities;
-import elucent.eidolon.registries.EidolonPotions;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.*;
 import elucent.eidolon.ritual.*;
-import elucent.eidolon.spell.Runes;
-import elucent.eidolon.spell.Signs;
-import elucent.eidolon.wip.reagent.Reagent;
-import elucent.eidolon.wip.reagent.ReagentRegistry;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -79,7 +75,6 @@ public class ClientRegistry {
         event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/aura"));
         event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/beam"));
         event.addSprite(new ResourceLocation(Eidolon.MODID, "particle/ring"));
-        for (Reagent r : ReagentRegistry.getReagents()) event.addSprite(r.getTexture());
         for (Sign s : Signs.getSigns()) event.addSprite(s.getSprite());
         for (Rune r : Runes.getRunes()) event.addSprite(r.getSprite());
     }

@@ -1,20 +1,19 @@
 package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public abstract class Page {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void drawItems(CodexGui guiGraphics, Ingredient ingredient, int x, int y, int mouseX, int mouseY) {
+    public static void drawItems(CodexGui gui, PoseStack mStack, Ingredient ingredient, int x, int y, int mouseX, int mouseY) {
         if (ingredient.isEmpty()) return;
         ItemStack[] items = ingredient.getItems();
         ItemStack stack = items[((int) Eidolon.proxy.getWorld().getGameTime() / 20) % items.length];
@@ -110,6 +109,7 @@ public abstract class Page {
 
     @OnlyIn(Dist.CLIENT)
     static void colorBlit(PoseStack mStack, int x, int y, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight, int color) {
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         Matrix4f matrix = mStack.last().pose();
         int maxX = x + width, maxY = y + height;
         float minU = (float) uOffset / textureWidth, minV = (float) vOffset / textureHeight;
@@ -125,4 +125,5 @@ public abstract class Page {
         bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
+
 }

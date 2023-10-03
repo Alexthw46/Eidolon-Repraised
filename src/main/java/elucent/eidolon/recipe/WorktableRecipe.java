@@ -121,10 +121,6 @@ public class WorktableRecipe implements Recipe<Container> {
         return registryName;
     }
 
-    public ItemStack getResultItem() {
-        return result;
-    }
-
     public static class Serializer implements RecipeSerializer<WorktableRecipe> {
         @Override
         public @NotNull WorktableRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {

@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import elucent.eidolon.ClientRegistry;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.client.ClientRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -64,7 +64,7 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
             int r = ARGB32.red(color), g = ARGB32.green(color),
                 b = ARGB32.blue(color), a = ARGB32.alpha(color);
 
-            if (tile.steps.size() > 0) {
+            if (!tile.steps.isEmpty()) {
                 r = (int)(tile.getRed() * 255);
                 g = (int)(tile.getGreen() * 255);
                 b = (int)(tile.getBlue() * 255);

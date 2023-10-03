@@ -1,23 +1,18 @@
 package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 public class CruciblePage extends RecipePage<CrucibleRecipe> {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_crucible_page.png");
@@ -89,7 +84,7 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
             tx += 24;
             for (int j = 0; j < steps.get(i).matches.size(); j++) {
                 if (!steps.get(i).matches.get(j).isEmpty()) {
-                    drawItems(mStack, steps.get(i).matches.get(j), tx, ty + 1, mouseX, mouseY);
+                    drawItems(gui, mStack, steps.get(i).matches.get(j), tx, ty + 1, mouseX, mouseY);
                     tx += 17;
                 }
             }
@@ -99,12 +94,4 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
 
     }
 
-    public CruciblePage linkRecipe(String modid, String recipe) {
-        return linkRecipe(new ResourceLocation(modid, recipe));
-    }
-
-    public CruciblePage linkRecipe(ResourceLocation recipe) {
-        CrucibleRegistry.linkPage(recipe, this);
-        return this;
-    }
 }

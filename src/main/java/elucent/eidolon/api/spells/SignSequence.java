@@ -1,7 +1,7 @@
 package elucent.eidolon.api.spells;
 
 import com.mojang.math.Vector3f;
-import elucent.eidolon.spell.Signs;
+import elucent.eidolon.registries.Signs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

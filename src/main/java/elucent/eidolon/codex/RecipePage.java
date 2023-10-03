@@ -1,6 +1,6 @@
 package elucent.eidolon.codex;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,7 +20,7 @@ public abstract class RecipePage<T extends Recipe<?>> extends Page {
     final ItemStack result;
 
     @Override
-    public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
+    public void fullRender(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         if (recipeId != null && cachedRecipe == null) {
             cachedRecipe = getRecipe(recipeId);
             if (cachedRecipe == null) {

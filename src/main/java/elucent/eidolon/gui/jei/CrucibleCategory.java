@@ -1,10 +1,10 @@
 package elucent.eidolon.gui.jei;
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.codex.CodexGui;
-
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
@@ -16,10 +16,8 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -123,17 +121,16 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
 
     @Override
 
-    public void draw(CrucibleRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack guiGraphics, double mouseX, double mouseY) {
-        //recipe.getPage().renderBackground(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-        //recipe.getPage().render(CodexGui.DUMMY, mStack, 5, 4, (int) mouseX, (int) mouseY);
-
+    public void draw(CrucibleRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack mStack, double mouseX, double mouseY) {
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+        CodexGui guiGraphics = CodexGui.DUMMY;
         var steps = recipe.getSteps();
         int h = steps.size() * 20 + 32;
         int yoff = 80 - h / 2;
         int x = 4, y = 5;
         for (int i = 0; i < steps.size(); i++) {
             int tx = x, ty = (y + yoff + i * 20);
-            guiGraphics.blit(BACKGROUND, tx, ty, 128, 0, 128, 20);
+            guiGraphics.blit(mStack, tx, ty, 128, 0, 128, 20);
             tx += 24;
 
             List<StackIngredient> stepInputs = new ArrayList<>();
@@ -145,21 +142,21 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
 
             for (var counter : stepInputs) {
                 if (!counter.stack.isEmpty()) {
-                    guiGraphics.blit(BACKGROUND, tx, ty + 1, 176, 32, 16, 17);
+                    guiGraphics.blit(mStack, tx, ty + 1, 176, 32, 16, 17);
                     tx += 17;
                 }
             }
             for (int j = 0; j < steps.get(i).stirs; j++) {
-                guiGraphics.blit(BACKGROUND, tx, ty + 1, 192, 32, 16, 17);
+                guiGraphics.blit(mStack, tx, ty + 1, 192, 32, 16, 17);
                 tx += 17;
             }
         }
-        guiGraphics.blit(BACKGROUND, x, y + yoff + steps.size() * 20, 128, 64, 128, 32);
+        guiGraphics.blit(mStack, x, y + yoff + steps.size() * 20, 128, 64, 128, 32);
 
         Font font = Minecraft.getInstance().font;
         for (int i = 0; i < steps.size(); i++) {
             int ty = y + yoff + i * 20;
-            drawText(guiGraphics, I18n.get("enchantment.level." + (i + 1)) + ".", x + 7, ty + 17 - font.lineHeight);
+            drawText(guiGraphics, mStack, I18n.get("enchantment.level." + (i + 1)) + ".", x + 7, ty + 17 - font.lineHeight);
         }
 
     }
