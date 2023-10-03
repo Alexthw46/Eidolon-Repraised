@@ -5,7 +5,7 @@ import elucent.eidolon.network.RitualConsumePacket;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HealthRequirement implements IRequirement {
+    public float getHealth() {
+        return health;
+    }
+
     final float health;
 
     public HealthRequirement(float health) {
@@ -21,7 +25,8 @@ public class HealthRequirement implements IRequirement {
 
     @Override
     public RequirementInfo isMet(Ritual ritual, Level world, BlockPos pos) {
-        List<PathfinderMob> entities = world.getEntitiesOfClass(PathfinderMob.class, Ritual.getDefaultBounds(pos), (entity) -> !entity.isInvertedHealAndHarm());
+        if (health <= 0) return RequirementInfo.TRUE;
+        List<Mob> entities = world.getEntitiesOfClass(Mob.class, Ritual.getDefaultBounds(pos), (entity) -> !entity.isInvertedHealAndHarm());
         List<Player> players = world.getEntitiesOfClass(Player.class, Ritual.getDefaultBounds(pos));
         List<LivingEntity> targets = new ArrayList<>();
         targets.addAll(entities);
@@ -35,7 +40,8 @@ public class HealthRequirement implements IRequirement {
     }
 
     public void whenMet(Ritual ritual, Level world, BlockPos pos, RequirementInfo info) {
-        List<PathfinderMob> entities = world.getEntitiesOfClass(PathfinderMob.class, Ritual.getDefaultBounds(pos), (entity) -> !entity.isInvertedHealAndHarm());
+        if (health <= 0) return;
+        List<Mob> entities = world.getEntitiesOfClass(Mob.class, Ritual.getDefaultBounds(pos), (entity) -> !entity.isInvertedHealAndHarm());
         List<Player> players = world.getEntitiesOfClass(Player.class, Ritual.getDefaultBounds(pos));
         List<LivingEntity> targets = new ArrayList<>();
         targets.addAll(entities);

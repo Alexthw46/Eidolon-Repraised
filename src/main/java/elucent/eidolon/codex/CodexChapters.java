@@ -6,7 +6,6 @@ import elucent.eidolon.codex.IndexPage.IndexEntry;
 import elucent.eidolon.codex.IndexPage.ResearchLockedEntry;
 import elucent.eidolon.codex.IndexPage.SignLockedEntry;
 import elucent.eidolon.codex.ListPage.ListEntry;
-import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
 import elucent.eidolon.registries.*;
 import elucent.eidolon.util.ColorUtil;
@@ -14,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -152,155 +150,71 @@ public class CodexChapters {
 
             CRYSTAL_RITUAL = new Chapter(
                     "eidolon.codex.chapter.crystal_ritual",
-                    new TitledRitualPage("eidolon.codex.page.crystal_ritual", RitualRegistry.CRYSTAL_RITUAL, new ItemStack(Items.BONE_MEAL),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false)),
+                    new TitledRitualPage("eidolon.codex.page.crystal_ritual", RitualRegistry.CRYSTAL_RITUAL),
                     new TextPage("eidolon.codex.page.crystal_ritual")
             );
 
             SUMMON_RITUAL = new Chapter(
                     "eidolon.codex.chapter.summon_ritual",
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.0", RitualRegistry.SUMMON_ZOMBIE, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.ROTTEN_FLESH), false),
-                            new RitualIngredient(new ItemStack(Items.ROTTEN_FLESH), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.0", prefix("summon_zombie")),
                     new TextPage("eidolon.codex.page.summon_ritual.0"),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.1", RitualRegistry.SUMMON_SKELETON, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.BONE), false),
-                            new RitualIngredient(new ItemStack(Items.BONE), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.2", RitualRegistry.SUMMON_PHANTOM, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.PHANTOM_MEMBRANE), false),
-                            new RitualIngredient(new ItemStack(Items.PHANTOM_MEMBRANE), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.3", RitualRegistry.SUMMON_WITHER_SKELETON, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.BONE), false),
-                            new RitualIngredient(new ItemStack(Blocks.SOUL_SAND), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.4", RitualRegistry.SUMMON_HUSK, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.ROTTEN_FLESH), false),
-                            new RitualIngredient(new ItemStack(Blocks.SAND), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.5", RitualRegistry.SUMMON_DROWNED, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.ROTTEN_FLESH), false),
-                            new RitualIngredient(new ItemStack(Items.PRISMARINE_SHARD), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.6", RitualRegistry.SUMMON_STRAY, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Items.BONE), false),
-                            new RitualIngredient(new ItemStack(Items.STRING), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
-                    new TitledRitualPage("eidolon.codex.page.summon_ritual.7", RitualRegistry.SUMMON_WRAITH, new ItemStack(Items.CHARCOAL),
-                            new RitualIngredient(new ItemStack(Registry.TATTERED_CLOTH.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.TATTERED_CLOTH.get()), true),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false))
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.1", prefix("summon_skeleton")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.2", prefix("summon_phantom")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.3", prefix("summon_wither_skeleton")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.4", prefix("summon_husk")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.5", prefix("summon_drowned")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.6", prefix("summon_stray")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual.7", prefix("summon_wraith"))
             );
 
             ALLURE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.allure_ritual",
-                    new TitledRitualPage("eidolon.codex.page.allure_ritual", RitualRegistry.ALLURE_RITUAL, new ItemStack(Items.ROSE_BUSH),
-                            new RitualIngredient(new ItemStack(Items.GOLDEN_APPLE), false),
-                            new RitualIngredient(new ItemStack(Items.RED_DYE), false),
-                            new RitualIngredient(new ItemStack(Items.RED_DYE), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.allure_ritual", RitualRegistry.ALLURE_RITUAL),
                     new TextPage("eidolon.codex.page.allure_ritual")
             );
 
             REPELLING_RITUAL = new Chapter(
                     "eidolon.codex.chapter.repelling_ritual",
-                    new TitledRitualPage("eidolon.codex.page.repelling_ritual", RitualRegistry.REPELLING_RITUAL, new ItemStack(Items.NAUTILUS_SHELL),
-                            new RitualIngredient(new ItemStack(Items.IRON_INGOT), false),
-                            new RitualIngredient(new ItemStack(Items.LEATHER), false),
-                            new RitualIngredient(new ItemStack(Items.QUARTZ), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.repelling_ritual", RitualRegistry.REPELLING_RITUAL),
                     new TextPage("eidolon.codex.page.repelling_ritual")
             );
 
             DECEIT_RITUAL = new Chapter(
                     "eidolon.codex.chapter.deceit_ritual",
-                    new TitledRitualPage("eidolon.codex.page.deceit_ritual", RitualRegistry.DECEIT_RITUAL, new ItemStack(Items.EMERALD),
-                            new RitualIngredient(new ItemStack(Items.EMERALD), false),
-                            new RitualIngredient(new ItemStack(Items.FERMENTED_SPIDER_EYE), false),
-                            new RitualIngredient(new ItemStack(Items.RED_MUSHROOM), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.deceit_ritual", RitualRegistry.DECEIT_RITUAL),
                     new TextPage("eidolon.codex.page.deceit_ritual")
             );
 
             TIME_RITUALS = new Chapter(
                     "eidolon.codex.chapter.time_rituals",
-                    new TitledRitualPage("eidolon.codex.page.time_rituals.0", RitualRegistry.DAYLIGHT_RITUAL, new ItemStack(Items.SUNFLOWER),
-                            new RitualIngredient(new ItemStack(Items.CHARCOAL), false),
-                            new RitualIngredient(new ItemStack(Items.WHEAT_SEEDS), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.time_rituals.0", RitualRegistry.DAYLIGHT_RITUAL),
                     new TextPage("eidolon.codex.page.time_rituals.0"),
-                    new TitledRitualPage("eidolon.codex.page.time_rituals.1", RitualRegistry.MOONLIGHT_RITUAL, new ItemStack(Items.BLACK_DYE),
-                            new RitualIngredient(new ItemStack(Items.SNOWBALL), false),
-                            new RitualIngredient(new ItemStack(Items.SPIDER_EYE), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.time_rituals.1", RitualRegistry.MOONLIGHT_RITUAL),
                     new TextPage("eidolon.codex.page.time_rituals.1")
             );
 
             PURIFY_RITUAL = new Chapter(
                     "eidolon.codex.chapter.purify_ritual",
-                    new TitledRitualPage("eidolon.codex.page.purify_ritual", RitualRegistry.PURIFY_RITUAL, new ItemStack(Items.GLISTERING_MELON_SLICE),
-                            new RitualIngredient(new ItemStack(Registry.ENCHANTED_ASH.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.ENCHANTED_ASH.get()), false),
-                            new RitualIngredient(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)),
+                    new TitledRitualPage("eidolon.codex.page.purify_ritual", RitualRegistry.PURIFY_RITUAL),
                     new TextPage("eidolon.codex.page.purify_ritual")
             );
 
             SANGUINE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.sanguine_ritual",
-                    new TitledRitualPage("eidolon.codex.page.sanguine_ritual.0", RitualRegistry.SANGUINE_SWORD, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING),
-                            new RitualIngredient(new ItemStack(Registry.SHADOW_GEM.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Items.IRON_SWORD), true),
-                            new RitualIngredient(new ItemStack(Items.GHAST_TEAR), false),
-                            new RitualIngredient(new ItemStack(Items.NETHER_WART), false),
-                            new RitualIngredient(new ItemStack(Items.NETHER_WART), false)),
+                    new TitledRitualPage("eidolon.codex.page.sanguine_ritual.0", Registry.SAPPING_SWORD.get().getDefaultInstance()),
                     new TextPage("eidolon.codex.page.sanguine_ritual.0"),
-                    new TitledRitualPage("eidolon.codex.page.sanguine_ritual.1", RitualRegistry.SANGUINE_AMULET, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false),
-                            new RitualIngredient(new ItemStack(Items.DIAMOND), false),
-                            new RitualIngredient(new ItemStack(Registry.BASIC_AMULET.get()), true),
-                            new RitualIngredient(new ItemStack(Registry.LESSER_SOUL_GEM.get()), false),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false),
-                            new RitualIngredient(new ItemStack(Items.REDSTONE), false)),
+                    new TitledRitualPage("eidolon.codex.page.sanguine_ritual.1", Registry.SANGUINE_AMULET.get().getDefaultInstance()),
                     new TextPage("eidolon.codex.page.sanguine_ritual.1")
             );
             RECHARGE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.recharge_ritual",
-                    new TitledRitualPage("eidolon.codex.page.recharge_ritual.soulfire", RitualRegistry.RECHARGE_SOULFIRE_RITUAL, Registry.LESSER_SOUL_GEM.get().getDefaultInstance(),
-                            new RitualIngredient(Items.BLAZE_POWDER.getDefaultInstance(), false),
-                            new RitualIngredient(Items.BLAZE_POWDER.getDefaultInstance(), false),
-                            new RitualIngredient(Registry.SOULFIRE_WAND.get().getDefaultInstance(), true),
-                            new RitualIngredient(Items.REDSTONE.getDefaultInstance(), false)
-                    ),
-                    new TitledRitualPage("eidolon.codex.page.recharge_ritual.bonechill", RitualRegistry.RECHARGE_BONECHILL_RITUAL, Registry.LESSER_SOUL_GEM.get().getDefaultInstance(),
-                            new RitualIngredient(Items.SNOWBALL.getDefaultInstance(), false),
-                            new RitualIngredient(Items.SNOWBALL.getDefaultInstance(), false),
-                            new RitualIngredient(Registry.BONECHILL_WAND.get().getDefaultInstance(), true),
-                            new RitualIngredient(Items.REDSTONE.getDefaultInstance(), false)
-                    ),
+                    new TitledRitualPage("eidolon.codex.page.recharge_ritual.soulfire", RitualRegistry.RECHARGE_SOULFIRE_RITUAL),
+                    new TitledRitualPage("eidolon.codex.page.recharge_ritual.bonechill", RitualRegistry.RECHARGE_BONECHILL_RITUAL),
                     new TextPage("eidolon.codex.page.recharge_ritual")
             );
             CAPTURE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.capture_ritual",
-                    new TitledRitualPage("eidolon.codex.page.capture_ritual", RitualRegistry.ABSORB_RITUAL, new ItemStack(Registry.DEATH_ESSENCE.get()),
-                            new RitualIngredient(new ItemStack(Registry.TATTERED_CLOTH.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.TATTERED_CLOTH.get()), false),
-                            new RitualIngredient(new ItemStack(Items.BONE), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false),
-                            new RitualIngredient(new ItemStack(Registry.SOUL_SHARD.get()), false)
-                    ),
+                    new TitledRitualPage("eidolon.codex.page.capture_ritual", RitualRegistry.ABSORB_RITUAL),
                     new TextPage("eidolon.codex.page.capture_ritual")
             );
 
@@ -875,6 +789,7 @@ public class CodexChapters {
                     "eidolon.codex.chapter.light",
                     new ChantPage("eidolon.codex.page.light", Spells.LIGHT_CHANT.signs())
             );
+
             FIRE_TOUCH = new Chapter(
                     "eidolon.codex.chapter.fire_touch",
                     new ChantPage("eidolon.codex.page.fire_touch", Spells.FIRE_CHANT.signs())
@@ -917,7 +832,9 @@ public class CodexChapters {
                             new FactLockedEntry(CURE_ZOMBIE, new ItemStack(Items.GOLDEN_APPLE), Facts.ZOMBIE_CURE),
                             new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
                             new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE)
-                    )
+                    ), new IndexPage(
+
+            )
             );
 
             categories.add(SPELLS = new Category(

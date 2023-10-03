@@ -2,6 +2,7 @@ package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.capability.*;
+import elucent.eidolon.client.particle.*;
 import elucent.eidolon.common.block.CandleBlock;
 import elucent.eidolon.common.block.*;
 import elucent.eidolon.common.entity.*;
@@ -14,6 +15,7 @@ import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
 import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.gui.WorktableContainer;
+
 import elucent.eidolon.particle.*;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.DyeRecipe;
@@ -220,6 +222,8 @@ public class Registry {
     public static final RegistryObject<Item> SOUL_SHARD = addItem("soul_shard");
     public static final RegistryObject<Item> DEATH_ESSENCE = addItem("death_essence");
     public static final RegistryObject<Item> CRIMSON_ESSENCE = addItem("crimson_essence");
+    public static final RegistryObject<Item> CRIMSON_GEM = addItem("crimson_gem");
+
     public static final RegistryObject<Item> FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build()));
     public static final RegistryObject<Item> WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).effect(() -> new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT.get(), 900), 1).build()));
     public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
@@ -308,7 +312,6 @@ public class Registry {
             itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 20));
     public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
     public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
-    //public static final RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
     public static final RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
     public static final RegistryObject<Item> MAGIC_INK = addItem("magic_ink");
     public static final RegistryObject<Item> MAGICIANS_WAX = addItem("magicians_wax");
@@ -456,6 +459,7 @@ public class Registry {
     public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new EidolonAbstractTreeFeature.TreeGrower(), blockProps(Material.PLANT, MaterialColor.GRASS)
             .sound(SoundType.GRASS).noOcclusion().noCollission()));
     public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Material.PLANT, MaterialColor.GRASS)
+
             .randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Registry::allowsSpawnOnLeaves)
             .isSuffocating(Registry::isntSolid).isViewBlocking(Registry::isntSolid)));
     public static final RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
@@ -476,16 +480,7 @@ public class Registry {
             .noOcclusion()));
     public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Material.AIR, MaterialColor.NONE)
             .sound(SoundType.FROGLIGHT).lightLevel(p -> p.getValue(GhostLight.DEITY) ? 12 : 8)));
-    /*
-    public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Material.METAL, MaterialColor.METAL)
-            .sound(SoundType.GLASS).strength(2.0f, 3.0f)
-            .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
-    public static final RegistryObject<Block> GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
-            .sound(SoundType.GLASS).strength(1.0f, 1.5f).noOcclusion()));
-    public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Material.GLASS, MaterialColor.COLOR_LIGHT_BLUE)
-            .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
-            .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
-     */
+
     public static DecoBlockPack
             SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Material.STONE, MaterialColor.STONE)
             .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f))
@@ -532,7 +527,7 @@ public class Registry {
     public static final RegistryObject<Attribute>
             MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
     public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
-
+    public static final RegistryObject<Attribute> CHANTING_SPEED = ATTRIBUTES.register("chanting_speed", () -> new RangedAttribute(Eidolon.MODID + ".chanting_speed", 1, 0, 100).setSyncable(true));
 
     @SubscribeEvent
     public void addCustomAttributes(EntityAttributeModificationEvent event) {
@@ -540,6 +535,9 @@ public class Registry {
             if (event.has(t, Attributes.MAX_HEALTH)) {
                 event.add(t, Registry.PERSISTENT_SOUL_HEARTS.get());
                 event.add(t, Registry.MAX_SOUL_HEARTS.get());
+            }
+            if (t == EntityType.PLAYER) {
+                event.add(t, Registry.CHANTING_SPEED.get());
             }
         }
     }
@@ -589,10 +587,6 @@ public class Registry {
         WOODEN_STAND_TILE_ENTITY = TILE_ENTITIES.register("wooden_brewing_stand", () -> BlockEntityType.Builder.of(WoodenStandTileEntity::new, WOODEN_STAND.get()).build(null));
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
         CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
-        /*
-        CISTERN_TILE_ENTITY = TILE_ENTITIES.register("cistern", () -> BlockEntityType.Builder.of(CisternTileEntity::new, CISTERN.get()).build(null));
-        PIPE_TILE_ENTITY = TILE_ENTITIES.register("pipe", () -> BlockEntityType.Builder.of(PipeTileEntity::new, GLASS_TUBE.get()).build(null));
-         */
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
     }
 
@@ -613,6 +607,7 @@ public class Registry {
         event.put(EidolonEntities.NECROMANCER.get(), NecromancerEntity.createAttributes());
         event.put(EidolonEntities.RAVEN.get(), RavenEntity.createAttributes());
         event.put(EidolonEntities.SLIMY_SLUG.get(), SlimySlugEntity.createAttributes());
+        event.put(EidolonEntities.GIANT_SKEL.get(), GiantSkeletonEntity.createAttributes().build());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -629,6 +624,9 @@ public class Registry {
         evt.register(EidolonParticles.SLASH_PARTICLE.get(), SlashParticleType.Factory::new);
         evt.register(EidolonParticles.GLOWING_SLASH_PARTICLE.get(), GlowingSlashParticleType.Factory::new);
         evt.register(EidolonParticles.RUNE_PARTICLE.get(), sprite -> new RuneParticleType.Factory());
+
+        evt.register(EidolonParticles.FEATHER_PARTICLE.get(), FeatherParticleType.Factory::new);
+        
     }
 
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));

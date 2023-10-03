@@ -1,0 +1,29 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "eidolon:enchanted_ash"
+    },
+    {
+      "item": "eidolon:enchanted_ash"
+    },
+    {
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:healing\"}"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    }
+  ],
+  "reagent": [
+    {
+      "item": "minecraft:glistering_melon_slice"
+    }
+  ],
+  "ritual": "eidolon:purify"
+}

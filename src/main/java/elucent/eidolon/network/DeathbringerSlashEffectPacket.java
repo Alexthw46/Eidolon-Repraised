@@ -1,8 +1,8 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.particle.Particles;
-import elucent.eidolon.particle.SlashParticleData;
+import elucent.eidolon.client.particle.Particles;
+import elucent.eidolon.client.particle.SlashParticleData;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,15 +1,16 @@
 package elucent.eidolon.common.tile;
 
 import elucent.eidolon.Config;
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.CrucibleFailPacket;
 import elucent.eidolon.network.CrucibleSuccessPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.particle.Particles;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -24,8 +25,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +52,32 @@ public class CrucibleTileEntity extends TileEntityBase {
     long seed = 0;
     final Random random = new Random();
 
+    private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> this.tank);
+
+    //internal tank that can hold one water bucket
+    public FluidTank tank = new FluidTank(1000) {
+
+        @Override
+        public boolean isFluidValid(FluidStack stack) {
+            return stack.getFluid().isSame(Fluids.WATER);
+        }
+
+        @Override
+        public void onContentsChanged() {
+            super.onContentsChanged();
+            if (level != null) {
+                hasWater = getFluid().getAmount() == 1000;
+                if (!level.isClientSide) sync();
+            }
+        }
+
+    };
+
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        return capability == ForgeCapabilities.FLUID_HANDLER ? this.holder.cast() : super.getCapability(capability, facing);
+    }
+
     public float getRed() {
         random.setSeed(seed);
         return random.nextFloat();
@@ -56,6 +92,15 @@ public class CrucibleTileEntity extends TileEntityBase {
         random.setSeed(seed * 3);
         return random.nextFloat();
     }
+
+    public void fill() {
+        tank.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    private void drain() {
+        this.tank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+    }
+
 
     public static class CrucibleStep {
         final int stirs;
@@ -102,20 +147,23 @@ public class CrucibleTileEntity extends TileEntityBase {
         super(tileEntityTypeIn, pos, state);
     }
 
+
     @Override
     public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && level != null) {
+            if (FluidUtil.interactWithFluidHandler(player, hand, this.tank))
+                return InteractionResult.SUCCESS;
+
             if (player.isShiftKeyDown() && player.getItemInHand(hand).isEmpty() && hasWater) {
                 boiling = false;
-                hasWater = false;
                 stirs = 0;
                 steps.clear();
                 if (!level.isClientSide) {
-                    sync();
+                    drain(); //sync();
                     level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
                 }
                 return InteractionResult.SUCCESS;
-            } else if (player.getItemInHand(hand).isEmpty() && stirTicks == 0 && this.steps.size() > 0) {
+            } else if (player.getItemInHand(hand).isEmpty() && stirTicks == 0 && !this.steps.isEmpty()) {
                 stirs++;
                 stirTicks = 20;
                 if (!level.isClientSide) {
@@ -136,7 +184,8 @@ public class CrucibleTileEntity extends TileEntityBase {
         ListTag steps = tag.getList("steps", Tag.TAG_COMPOUND);
         for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step));
         boiling = tag.getBoolean("boiling");
-        hasWater = tag.getBoolean("hasWater");
+        tank.readFromNBT(tag);
+        hasWater = tank.getFluidAmount() == 1000;
         stirs = tag.getInt("stirs");
         stirTicks = tag.getInt("stirTicks");
         seed = steps.stream().map(Object::hashCode).reduce(0, (a, b) -> a ^ b);
@@ -148,9 +197,11 @@ public class CrucibleTileEntity extends TileEntityBase {
         for (CrucibleStep step : this.steps) steps.add(step.write());
         tag.put("steps", steps);
         tag.putBoolean("boiling", boiling);
-        tag.putBoolean("hasWater", hasWater);
         tag.putInt("stirs", stirs);
         tag.putInt("stirTicks", stirTicks);
+        if (!tank.isEmpty()) {
+            tank.writeToNBT(tag);
+        }
     }
 
     public void tick() {
@@ -173,12 +224,13 @@ public class CrucibleTileEntity extends TileEntityBase {
             }
         }
 
-        float bubbleR = steps.size() > 0 ? Math.min(1.0f, getRed() * 1.25f) : 0.25f;
-        float bubbleG = steps.size() > 0 ? Math.min(1.0f, getGreen() * 1.25f) : 0.5f;
-        float bubbleB = steps.size() > 0 ? Math.min(1.0f, getBlue() * 1.25f) : 1.0f;
-        float steamR = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getRed(), 2)) : 1.0f;
-        float steamG = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getGreen(), 2)) : 1.0f;
-        float steamB = steps.size() > 0 ? Math.min(1.0f, 1 - (float) Math.pow(1 - getBlue(), 2)) : 1.0f;
+        boolean stepSize = steps.isEmpty();
+        float bubbleR = !stepSize ? Math.min(1.0f, getRed() * 1.25f) : 0.25f;
+        float bubbleG = !stepSize ? Math.min(1.0f, getGreen() * 1.25f) : 0.5f;
+        float bubbleB = !stepSize ? Math.min(1.0f, getBlue() * 1.25f) : 1.0f;
+        float steamR = !stepSize ? Math.min(1.0f, 1 - (float) Math.pow(1 - getRed(), 2)) : 1.0f;
+        float steamG = !stepSize ? Math.min(1.0f, 1 - (float) Math.pow(1 - getGreen(), 2)) : 1.0f;
+        float steamB = !stepSize ? Math.min(1.0f, 1 - (float) Math.pow(1 - getBlue(), 2)) : 1.0f;
 
         if (level.isClientSide && hasWater && boiling) for (int i = 0; i < 2; i++) {
             Particles.create(EidolonParticles.BUBBLE_PARTICLE)
@@ -218,8 +270,8 @@ public class CrucibleTileEntity extends TileEntityBase {
                     Networking.sendToTracking(level, worldPosition, new CrucibleFailPacket(worldPosition));
                     steps.clear();
                     stirs = 0;
-                    hasWater = boiling = false;
-                    sync();
+                    boiling = false;
+                    drain(); //sync();
                 } else {
                     CrucibleStep step = new CrucibleStep(stirs, contents);
                     steps.add(step);
@@ -234,7 +286,8 @@ public class CrucibleTileEntity extends TileEntityBase {
                         level.addFreshEntity(entity);
                         contents.clear();
                         steps.clear();
-                        hasWater = boiling = false;
+                        boiling = false;
+                        drain();
                     } else {
                         level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
                         stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
@@ -245,10 +298,10 @@ public class CrucibleTileEntity extends TileEntityBase {
             }
         }
 
-        if (!level.isClientSide && stepCounter == 0 && steps.size() == 0
+        if (!level.isClientSide && stepCounter == 0 && stepSize
             && hasWater && boiling && level.getGameTime() % 100 == 0) {
             List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
-            if (items.size() > 0) stepCounter = Config.CRUCIBLE_STEP_DURATION.get() / 2;
+            if (!items.isEmpty()) stepCounter = Config.CRUCIBLE_STEP_DURATION.get() / 2;
         }
     }
 }

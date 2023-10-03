@@ -1,25 +1,18 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:dusts/silver"
+  },
+  "result": "eidolon:silver_ingot",
+  "experience": 0.5,
+  "cookingtime": 100,
+  "conditions": [
     {
-      "conditions": [
-        {
-          "value": {
-            "tag": "forge:dusts/silver",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:blasting",
-        "ingredient": {
-          "tag": "forge:dusts/silver"
-        },
-        "result": "eidolon:silver_ingot",
-        "experience": 0.5,
-        "cookingtime": 100
-      }
+      "value": {
+        "tag": "forge:dusts/silver",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
     }
   ]
 }

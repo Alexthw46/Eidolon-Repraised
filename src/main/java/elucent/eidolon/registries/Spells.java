@@ -3,8 +3,8 @@ package elucent.eidolon.registries;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
-import elucent.eidolon.deity.Deities;
-import elucent.eidolon.spell.*;
+import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.common.spell.*;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -109,8 +109,22 @@ public class Spells {
             Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN
     ));
 
+
+    public static final Spell UNDEAD_LURE = register(new UndeadLureSpell(
+            new ResourceLocation(Eidolon.MODID, "undead_lure"),
+            Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN
+    ));
+
+    public static final Spell SUNDER_ARMOR = register(new SunderArmorSpell(
+            new ResourceLocation(Eidolon.MODID, "sunder_armor"),
+            Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN, Signs.MAGIC_SIGN, Signs.FLAME_SIGN
+    ));
+
+    public static final Spell LIGHT_ARMOR = register(new LightArmorSpell(
+            new ResourceLocation(Eidolon.MODID, "light_armor"),
+            Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN
+    ));
+
     //TODO Undead Lure - neutral
-    //TODO Inflict Weakness / Armor down
-    //TODO Buff defense
 
 }

@@ -9,9 +9,11 @@ import elucent.eidolon.capability.IPlayerData;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.util.RenderUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,6 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -28,6 +31,9 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static elucent.eidolon.common.spell.DarkTouchSpell.NECROTIC_KEY;
+import static elucent.eidolon.common.spell.LightTouchSpell.SACRED_KEY;
 
 @Mod.EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEvents {
@@ -118,6 +124,20 @@ public class ClientEvents {
             });
             if (p.isOnGround()) jumpTicks = 0;
             wasJumping = p.isOnGround() || lp.input.jumping;
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void tooltip(ItemTooltipEvent event) {
+        var tag = event.getItemStack().getTag();
+        if (tag != null) {
+            if (tag.contains(NECROTIC_KEY)) {
+                event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
+            }
+            if (tag.contains(SACRED_KEY)) {
+                event.getToolTip().add(Component.translatable("eidolon.tooltip.sacred").withStyle(ChatFormatting.GOLD));
+            }
         }
     }
 }

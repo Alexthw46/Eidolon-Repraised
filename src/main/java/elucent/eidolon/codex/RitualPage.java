@@ -5,10 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.client.ClientRegistry;
-import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.registries.RitualRegistry;
+import elucent.eidolon.common.ritual.CraftingRitual;
+import elucent.eidolon.gui.jei.RitualCategory;
+import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -16,41 +18,83 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class RitualPage extends Page {
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
-    final Ritual ritual;
-    final ItemStack center;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public RitualIngredient[] getInputs() {
-        return inputs;
+import java.util.ArrayList;
+
+import static elucent.eidolon.Eidolon.prefix;
+import static elucent.eidolon.util.RegistryUtil.getRegistryName;
+
+public class RitualPage extends RecipePage<RitualRecipe> {
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
+    Ritual ritual;
+    Ingredient center;
+
+    RitualIngredient[] inputs;
+
+    public RitualPage(ResourceLocation background, ResourceLocation recipeName, ItemStack empty) {
+        super(background, (recipeName.getNamespace().equals("eidolon")) ? prefix("rituals/" + recipeName.getPath()) : recipeName, empty);
     }
 
-    final RitualIngredient[] inputs;
+    @Override
+    public @Nullable RitualRecipe getRecipe(ResourceLocation id) {
+        return (RitualRecipe) Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+    }
 
     public static class RitualIngredient {
-        public final ItemStack stack;
+        public final Ingredient stack;
         public boolean isFocus;
 
-        public RitualIngredient(ItemStack stack, boolean isFocus) {
+        public RitualIngredient(Ingredient stack, boolean isFocus) {
             this.stack = stack;
             this.isFocus = isFocus;
         }
+
+        public RitualIngredient(ItemLike stack, boolean isFocus) {
+            this.stack = Ingredient.of(stack);
+            this.isFocus = isFocus;
+        }
+
     }
 
-    public RitualPage(Ritual ritual, ItemStack center, RitualIngredient... inputs) {
-        super(BACKGROUND);
+    public RitualPage(ResourceLocation recipeName) {
+        this(BACKGROUND, recipeName, ItemStack.EMPTY);
+    }
+
+    public RitualPage(ResourceLocation recipeName, ItemStack result) {
+        this(BACKGROUND, recipeName, result);
+    }
+
+    public RitualPage(Ritual ritual) {
+        this(BACKGROUND, ritual instanceof CraftingRitual cr ?
+                        getRegistryName(cr.getResult().getItem()) : prefix("ritual_" + ritual.getRegistryName().getPath()),
+                ritual instanceof CraftingRitual sr ? sr.getResult() : ItemStack.EMPTY);
         this.ritual = ritual;
-        this.center = center;
-        this.inputs = inputs;
-        RitualRegistry.wrappedRituals.add(new RecipeWrappers.RitualRecipe(ritual, this, RitualRegistry.getMatch(ritual)));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
+        if (cachedRecipe == null) return;
+
+        //cache recipe ingredients upon first render
+        if (inputs == null || center == null) {
+            int nIngredients = cachedRecipe.pedestalItems.size() + cachedRecipe.focusItems.size();
+            if (nIngredients > 0) {
+                var items = new ArrayList<RitualIngredient>(nIngredients);
+                RitualCategory.rearrangeIngredients(cachedRecipe, items);
+                inputs = items.toArray(new RitualIngredient[nIngredients]);
+                center = cachedRecipe.reagent;
+            } else return;
+        }
+
+
         float angleStep = Math.min(30, 180 / inputs.length);
         double rootAngle = 90 - (inputs.length - 1) * angleStep / 2;
         for (int i = 0; i < inputs.length; i ++) {
@@ -60,6 +104,14 @@ public class RitualPage extends Page {
             if (inputs[i].isFocus) gui.blit(mStack, x + dx - 13, y + dy - 13, 128, 0, 26, 24);
             else gui.blit(mStack, x + dx - 8, y + dy - 8, 154, 0, 16, 16);
         }
+
+        if (ritual == null) {
+            ritual = cachedRecipe.getRitual();
+            if (ritual == null) return;
+        }
+
+        if (ritual.getInvariants().stream().anyMatch(FocusItemPresentRequirement.class::isInstance))
+            guiGraphics.blit(bg, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
@@ -86,14 +138,22 @@ public class RitualPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderIngredients(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
+        if (cachedRecipe == null || inputs == null || inputs.length == 0 || center == null) return;
         float angleStep = Math.min(30, 180 / inputs.length);
         double rootAngle = 90 - (inputs.length - 1) * angleStep / 2;
         for (int i = 0; i < inputs.length; i ++) {
             double a = Math.toRadians(rootAngle + angleStep * i);
-            int dx = (int)(64 + 48 * Math.cos(a));
-            int dy = (int)(88 + 48 * Math.sin(a));
-            drawItem(gui, mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
+
+            int dx = (int) (64 + 48 * Math.cos(a));
+            int dy = (int) (88 + 48 * Math.sin(a));
+            drawItems(mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
         }
-        drawItem(gui, mStack, center,x + 56, y + 80, mouseX, mouseY);
+        drawItems(mStack, center, x + 56, y + 80, mouseX, mouseY);
+
+        if (ritual != null) {
+            FocusItemPresentRequirement invariants = ritual.getInvariants().stream().filter(FocusItemPresentRequirement.class::isInstance).map(FocusItemPresentRequirement.class::cast).findFirst().orElse(null);
+            if (invariants == null) return;
+            drawItems(mStack, invariants.getMatch(), x + 86, y + 80, mouseX, mouseY);
+        }
     }
 }

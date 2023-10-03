@@ -10,11 +10,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static elucent.eidolon.util.RegistryUtil.getRegistryName;
+
 public class TitledRitualPage extends RitualPage {
     final String title;
 
-    public TitledRitualPage(String textKey, Ritual ritual, ItemStack center, RitualIngredient... inputs) {
-        super(ritual, center, inputs);
+    public TitledRitualPage(String textKey, ResourceLocation recipeName) {
+        super(recipeName);
+        this.title = textKey + ".title";
+    }
+
+    public TitledRitualPage(String textKey, ItemStack result) {
+        super(getRegistryName(result.getItem()), result);
+        this.title = textKey + ".title";
+    }
+
+    public TitledRitualPage(String textKey, Ritual ritual) {
+        super(ritual);
         this.title = textKey + ".title";
     }
 

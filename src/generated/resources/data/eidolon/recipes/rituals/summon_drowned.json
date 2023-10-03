@@ -1,0 +1,24 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "focusItems": [
+    {
+      "tag": "forge:dusts/prismarine"
+    }
+  ],
+  "output": {
+    "entity": "minecraft:drowned"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  ],
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
+}

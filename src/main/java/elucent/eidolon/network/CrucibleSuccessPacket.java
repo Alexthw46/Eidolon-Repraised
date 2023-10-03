@@ -1,7 +1,7 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.particle.Particles;
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

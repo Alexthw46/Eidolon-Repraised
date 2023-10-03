@@ -5,9 +5,9 @@ import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
+import elucent.eidolon.client.particle.RuneParticleData;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SpellCastPacket;
-import elucent.eidolon.particle.RuneParticleData;
 import elucent.eidolon.registries.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,6 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+
+import org.jetbrains.annotations.Nullable;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +48,12 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     public int timer = 0, deathTimer = 0;
     public Vec3 look;
 
+    @Nullable Player caster;
+
     public ChantCasterEntity(Level world, Player caster, List<Sign> runes, Vec3 look) {
         super(EidolonEntities.CHANT_CASTER.get(), world);
         this.look = look;
+        this.caster = caster;
         //setRunesTag(runes);
         setChantTag(runes);
         getEntityData().set(CASTER_ID, Optional.of(caster.getUUID()));
@@ -55,17 +62,17 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     public ChantCasterEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
-    
+
     protected CompoundTag getNoRunesTag() {
         CompoundTag emptyRunes = new CompoundTag();
         emptyRunes.put("runes", new ListTag());
         return emptyRunes;
     }
-    
+
     protected List<Rune> loadRunesTag() {
         List<Rune> runes = new ArrayList<>();
         ListTag runesTag = getEntityData().get(RUNES).getList("runes", Tag.TAG_STRING);
-        for (int i = 0; i < runesTag.size(); i ++) {
+        for (int i = 0; i < runesTag.size(); i++) {
             Rune r = Runes.find(new ResourceLocation(runesTag.getString(i)));
             if (r != null) runes.add(r);
         }
@@ -113,12 +120,12 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
     public void tick() {
         super.tick();
         if (deathTimer > 0) {
-            deathTimer --;
+            deathTimer--;
             if (deathTimer <= 0) remove(RemovalReason.KILLED);
             return;
         }
         if (timer > 0) {
-            timer --;
+            timer--;
             if (timer <= 0) {
                 CompoundTag signData = getEntityData().get(SIGNS);
                 Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
@@ -130,8 +137,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                         spell.cast(level, blockPosition(), player, seq);
                         Networking.sendToTracking(level, blockPosition(), new SpellCastPacket(player, blockPosition(), spell, seq));
                         getEntityData().set(SUCCEEDED, true);
-                    }
-                    else {
+                    } else {
                         level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         getEntityData().set(SUCCEEDED, false);
                     }
@@ -141,7 +147,11 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
             }
         }
 
-        if (tickCount % 5 == 0) {
+        //updates cached caster
+        cacheCaster();
+        var castSpeed = caster != null ? caster.getAttribute(Registry.CHANTING_SPEED.get()).getValue() : 1.0;
+
+        if (tickCount % Mth.floor(5 / castSpeed) == 0) {
             List<Sign> runes = loadChantTag();
             SignSequence seq = SignSequence.deserializeNbt(getEntityData().get(SIGNS));
             Vector3f initColor = seq.getAverageColor();
@@ -150,37 +160,40 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
             if (index >= runes.size()) return;
             Sign sign = runes.get(index);
             seq.addRight(sign);
-            /*
-            RuneResult result = rune.doEffect(seq);
-            if (result == RuneResult.FAIL) {
-                if (!level.isClientSide) {
-                    level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    getEntityData().set(INDEX, runes.size());
-                    getEntityData().set(SUCCEEDED, false);
-                }
-                deathTimer = 20;
-            } else
-             */
-            {
-                Vector3f afterColor = seq.getAverageColor();
-                double x = getX() + 0.1 * random.nextGaussian(),
-                        y = getY() + 0.1 * random.nextGaussian(),
-                        z = getZ() + 0.1 * random.nextGaussian();
-                for (int i = 0; i < 2; i++) {
-                    level.addParticle(new RuneParticleData(
-                            Runes.find(ResourceLocation.tryParse("eidolon:sin")),
-                            initColor.x(), initColor.y(), initColor.z(),
-                            afterColor.x(), afterColor.y(), afterColor.z()
-                    ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
-                }
-                level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
-                if (index + 1 >= runes.size()) {
-                    timer = 20;
-                }
-                if (!level.isClientSide) {
-                    getEntityData().set(INDEX, index + 1);
-                    getEntityData().set(SIGNS, seq.serializeNbt());
-                }
+
+            Vector3f afterColor = seq.getAverageColor();
+            double x = getX() + 0.1 * random.nextGaussian(),
+                    y = getY() + 0.1 * random.nextGaussian(),
+                    z = getZ() + 0.1 * random.nextGaussian();
+            for (int i = 0; i < 2; i++) {
+                level.addParticle(new RuneParticleData(
+                        Runes.find(ResourceLocation.tryParse("eidolon:sin")),
+                        initColor.x(), initColor.y(), initColor.z(),
+                        afterColor.x(), afterColor.y(), afterColor.z()
+                ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
+            }
+            level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
+            if (index + 1 >= runes.size()) {
+                timer = 20;
+            }
+            if (!level.isClientSide) {
+                getEntityData().set(INDEX, index + 1);
+                getEntityData().set(SIGNS, seq.serializeNbt());
+            }
+        }
+
+        if (caster != null) {
+            this.setPos(caster.getEyePosition().add(0, -0.5, 0));
+            this.look = caster.getLookAngle();
+        }
+    }
+
+    private void cacheCaster() {
+        if (caster == null) {
+            Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
+            if (optuuid.isPresent()) {
+                Player e = level.getPlayerByUUID(optuuid.get());
+                if (e != null) caster = e;
             }
         }
     }

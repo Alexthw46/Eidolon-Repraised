@@ -4,11 +4,11 @@ import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.deity.Deities;
-import elucent.eidolon.deity.DeityLocks;
+import elucent.eidolon.client.particle.Particles;
+import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.network.ExtinguishEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -31,7 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static elucent.eidolon.Eidolon.prefix;
-import static elucent.eidolon.spell.PrayerSpell.updateMagic;
+import static elucent.eidolon.common.spell.PrayerSpell.updateMagic;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
 
 public class CenserTileEntity extends TileEntityBase implements IBurner {

@@ -1,7 +1,7 @@
 package elucent.eidolon.capability;
 
 import elucent.eidolon.api.deity.Deity;
-import elucent.eidolon.deity.Deities;
+import elucent.eidolon.common.deity.Deities;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
