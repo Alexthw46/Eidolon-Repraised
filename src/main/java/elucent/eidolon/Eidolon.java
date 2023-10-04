@@ -41,6 +41,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.List;
+
 @Mod(Eidolon.MODID)
 public class Eidolon {
     public static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
@@ -78,6 +80,7 @@ public class Eidolon {
         Networking.init();
         event.enqueueWork(() -> {
             RitualRegistry.init();
+            EidolonRecipes.ritualRecipeTypes.addAll(List.of(EidolonRecipes.CRAFTING_RITUAL_TYPE.get(), EidolonRecipes.SUMMON_RITUAL_TYPE.get(), EidolonRecipes.COMMAND_RITUAL_TYPE.get(), EidolonRecipes.RITUAL_TYPE.get()));
             EidolonPotions.addBrewingRecipes();
             AltarEntries.init();
             Researches.init();

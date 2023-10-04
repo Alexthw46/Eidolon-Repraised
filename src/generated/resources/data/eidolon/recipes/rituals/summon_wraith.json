@@ -1,0 +1,22 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "focusItems": [
+    {
+      "item": "eidolon:tattered_cloth"
+    }
+  ],
+  "output": {
+    "entity": "eidolon:wraith"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:tattered_cloth"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:charcoal"
+  }
+}

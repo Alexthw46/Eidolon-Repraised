@@ -1,0 +1,36 @@
+{
+  "type": "eidolon:ritual_brazier_crafting",
+  "focusItems": [
+    {
+      "item": "minecraft:iron_sword"
+    }
+  ],
+  "keepNbtOfReagent": true,
+  "output": {
+    "item": "eidolon:sapping_sword"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:shadow_gem"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:potion"
+  },
+  "sacrifice": 20.0
+}

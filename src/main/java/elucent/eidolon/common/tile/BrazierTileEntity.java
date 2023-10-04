@@ -1,12 +1,16 @@
 package elucent.eidolon.common.tile;
 
+import elucent.eidolon.api.ritual.IRitualItemFocus;
+import elucent.eidolon.api.ritual.IRitualItemProvider;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.ritual.Ritual.RitualResult;
 import elucent.eidolon.api.ritual.Ritual.SetupResult;
 import elucent.eidolon.common.block.SingleItemTile;
 import elucent.eidolon.network.*;
 import elucent.eidolon.particle.Particles;
+import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.registries.EidolonParticles;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.RitualRegistry;
 import net.minecraft.core.BlockPos;
@@ -19,12 +23,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrazierTileEntity extends SingleItemTile implements IBurner {
@@ -177,10 +184,15 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
             }
             findingCounter ++;
             if (findingCounter == 80) {
-                Ritual r = RitualRegistry.find(level, worldPosition, stack);
-                stack = ItemStack.EMPTY;
-                findingCounter = 81;
-                setRitual(r);
+                List<RitualRecipe> recipes = getRitualRecipes(level);
+                recipes.stream().filter(recipe -> recipe.matches(this, level)).findFirst().ifPresentOrElse(recipe -> {
+                    setRitual(recipe.getRitualWithRequirements());
+                    stack = ItemStack.EMPTY;
+                    findingCounter = 81;
+                }, () -> {
+                    ritualDone = true;
+                    extinguish();
+                });
             }
         }
         if (burning && ritual != null && !ritualDone) {
@@ -235,7 +247,24 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 4, worldPosition.getZ() + 1);
     }
 
-    public List<ItemStack> getPedestalItems() {
-        return List.of();
+    public void providePedestalItems(List<ItemStack> pedestalItems, List<ItemStack> focusItems) {
+        Ritual.getTilesWithinAABB(IRitualItemProvider.class, level, ritual.getSearchBounds(this.worldPosition)).forEach(tile -> {
+            if (tile instanceof IRitualItemFocus provider) {
+                focusItems.add(provider.provide());
+            } else {
+                pedestalItems.add(tile.provide());
+            }
+        });
     }
+
+    public List<RitualRecipe> getRitualRecipes(Level world) {
+        List<RitualRecipe> recipes = new ArrayList<>();
+        RecipeManager manager = world.getRecipeManager();
+        for (RecipeType<? extends RitualRecipe> type : EidolonRecipes.ritualRecipeTypes) {
+            recipes.addAll(manager.getAllRecipesFor(type));
+        }
+        return recipes;
+    }
+
+
 }

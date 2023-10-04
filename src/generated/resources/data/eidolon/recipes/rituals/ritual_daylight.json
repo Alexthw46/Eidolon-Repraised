@@ -1,0 +1,22 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:sunflower"
+  },
+  "ritual": "eidolon:daylight"
+}

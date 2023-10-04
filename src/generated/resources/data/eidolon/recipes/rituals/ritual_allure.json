@@ -1,0 +1,25 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "minecraft:golden_apple"
+    },
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:rose_bush"
+  },
+  "ritual": "eidolon:allure"
+}

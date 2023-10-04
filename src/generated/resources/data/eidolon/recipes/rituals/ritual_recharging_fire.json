@@ -1,0 +1,19 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  ],
+  "reagent": {
+    "item": "eidolon:lesser_soul_gem"
+  },
+  "ritual": "eidolon:recharging_fire"
+}

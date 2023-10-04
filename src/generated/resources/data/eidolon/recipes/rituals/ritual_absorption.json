@@ -1,0 +1,25 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "eidolon:tattered_cloth"
+    },
+    {
+      "item": "eidolon:tattered_cloth"
+    },
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    }
+  ],
+  "reagent": {
+    "item": "eidolon:death_essence"
+  },
+  "ritual": "eidolon:absorption"
+}

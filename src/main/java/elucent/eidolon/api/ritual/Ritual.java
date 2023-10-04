@@ -52,6 +52,11 @@ public abstract class Ritual {
         return this;
     }
 
+    public Ritual addRequirements(IRequirement... requirements) {
+        stepRequirements.addAll(List.of(requirements));
+        return this;
+    }
+
     public Ritual addInvariant(IRequirement requirement) {
         continuousRequirements.add(requirement);
         return this;
@@ -130,7 +135,7 @@ public abstract class Ritual {
                 Set<BlockPos> tiles = c.getBlockEntitiesPos();
                 for (BlockPos p : tiles) if (bb.contains(p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5)) {
                     BlockEntity t = world.getBlockEntity(p);
-                    if (type.isInstance(t)) tileList.add((T)t);
+                    if (type.isInstance(t)) tileList.add(type.cast(t));
                 }
             }
         }

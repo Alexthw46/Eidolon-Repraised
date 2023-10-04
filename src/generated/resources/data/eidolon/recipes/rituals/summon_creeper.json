@@ -1,0 +1,22 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "focusItems": [
+    {
+      "item": "minecraft:gunpowder"
+    }
+  ],
+  "output": {
+    "entity": "minecraft:creeper"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:charcoal"
+  }
+}

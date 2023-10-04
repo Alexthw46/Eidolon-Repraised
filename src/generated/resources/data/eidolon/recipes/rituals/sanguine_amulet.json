@@ -1,0 +1,39 @@
+{
+  "type": "eidolon:ritual_brazier_crafting",
+  "focusItems": [
+    {
+      "item": "eidolon:basic_amulet"
+    }
+  ],
+  "keepNbtOfReagent": true,
+  "output": {
+    "item": "eidolon:sanguine_amulet"
+  },
+  "pedestalItems": [
+    {
+      "tag": "forge:gems/diamond"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "item": "eidolon:basic_amulet"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "item": "eidolon:lesser_soul_gem"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:potion"
+  },
+  "sacrifice": 40.0
+}

@@ -1,0 +1,16 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "tag": "forge:dusts/redstone"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:bone_meal"
+  },
+  "ritual": "eidolon:crystal"
+}

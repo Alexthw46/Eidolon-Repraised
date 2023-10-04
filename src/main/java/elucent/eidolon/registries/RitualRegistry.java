@@ -12,16 +12,12 @@ import elucent.eidolon.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
 import java.util.*;
@@ -152,10 +148,8 @@ public class RitualRegistry {
         ABSORB_RITUAL;
 
     public static void init() {
-        CRYSTAL_RITUAL = register(Items.BONE_MEAL, new CrystalRitual().setRegistryName(Eidolon.MODID, "crystal")
-            .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
-            .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE)));
 
+        /*
         // summons
         SUMMON_ZOMBIE = register(new MultiItemSacrifice(Items.CHARCOAL, Items.ROTTEN_FLESH), new SummonRitual(EntityType.ZOMBIE).setRegistryName(Eidolon.MODID, "summon_zombie")
             .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
@@ -190,45 +184,7 @@ public class RitualRegistry {
                 .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
                 .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get())));
 
-        DECEIT_RITUAL = register(Tags.Items.GEMS_EMERALD, new DeceitRitual().setRegistryName(Eidolon.MODID, "deceit")
-            .addRequirement(new ItemRequirement(Tags.Items.GEMS_EMERALD))
-            .addRequirement(new ItemRequirement(Items.FERMENTED_SPIDER_EYE))
-            .addRequirement(new ItemRequirement(Tags.Items.MUSHROOMS))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-
-        ALLURE_RITUAL = register(Items.ROSE_BUSH, new AllureRitual().setRegistryName(Eidolon.MODID, "allure")
-            .addRequirement(new ItemRequirement(Items.GOLDEN_APPLE))
-            .addRequirement(new ItemRequirement(Items.RED_DYE))
-            .addRequirement(new ItemRequirement(Items.RED_DYE))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-
-        REPELLING_RITUAL = register(Items.NAUTILUS_SHELL, new RepellingRitual().setRegistryName(Eidolon.MODID, "repelling")
-            .addRequirement(new ItemRequirement(Tags.Items.INGOTS_IRON))
-            .addRequirement(new ItemRequirement(Items.LEATHER))
-            .addRequirement(new ItemRequirement(Tags.Items.GEMS_QUARTZ))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-
-        DAYLIGHT_RITUAL = register(Items.SUNFLOWER, new DaylightRitual().setRegistryName(Eidolon.MODID, "daylight")
-            .addRequirement(new ItemRequirement(Items.CHARCOAL))
-            .addRequirement(new ItemRequirement(Items.WHEAT_SEEDS))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-
-        MOONLIGHT_RITUAL = register(Tags.Items.DYES_BLACK, new MoonlightRitual().setRegistryName(Eidolon.MODID, "moonlight")
-            .addRequirement(new ItemRequirement(Items.SNOWBALL))
-            .addRequirement(new ItemRequirement(Items.SPIDER_EYE))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
-
-        PURIFY_RITUAL = register(Items.GLISTERING_MELON_SLICE, new PurifyRitual().setRegistryName(Eidolon.MODID, "purify")
-            .addRequirement(new ItemRequirement(Registry.ENCHANTED_ASH.get()))
-            .addRequirement(new ItemRequirement(Registry.ENCHANTED_ASH.get()))
-            .addRequirement(new ItemRequirement(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING)))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
+        //crafting
 
         SANGUINE_SWORD = register(new MultiItemSacrifice(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING), Items.IRON_SWORD), new SanguineRitual(new ItemStack(Registry.SAPPING_SWORD.get())).setRegistryName(Eidolon.MODID, "sanguine_sapping_sword")
             .addRequirement(new ItemRequirement(Registry.SHADOW_GEM.get()))
@@ -250,23 +206,33 @@ public class RitualRegistry {
             .addRequirement(new ItemRequirement(Registry.LESSER_SOUL_GEM.get()))
             .addRequirement(new HealthRequirement(40)));
 
-        RECHARGE_SOULFIRE_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging")
-            .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
-            .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
-            .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
+        */
+
+        //hardcoded
+
+        CRYSTAL_RITUAL = register(Items.BONE_MEAL, new CrystalRitual().setRegistryName(Eidolon.MODID, "crystal"));
+
+
+        DECEIT_RITUAL = register(Tags.Items.GEMS_EMERALD, new DeceitRitual().setRegistryName(Eidolon.MODID, "deceit"));
+
+        ALLURE_RITUAL = register(Items.ROSE_BUSH, new AllureRitual().setRegistryName(Eidolon.MODID, "allure"));
+
+        REPELLING_RITUAL = register(Items.NAUTILUS_SHELL, new RepellingRitual().setRegistryName(Eidolon.MODID, "repelling"));
+
+        DAYLIGHT_RITUAL = register(Items.SUNFLOWER, new DaylightRitual().setRegistryName(Eidolon.MODID, "daylight"));
+
+        MOONLIGHT_RITUAL = register(Tags.Items.DYES_BLACK, new MoonlightRitual().setRegistryName(Eidolon.MODID, "moonlight"));
+
+        PURIFY_RITUAL = register(Items.GLISTERING_MELON_SLICE, new PurifyRitual().setRegistryName(Eidolon.MODID, "purify"));
+
+        RECHARGE_SOULFIRE_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_soulfire")
             .addInvariant(new FocusItemPresentRequirement(Registry.SOULFIRE_WAND.get())));
 
-        RECHARGE_BONECHILL_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging")
-            .addRequirement(new ItemRequirement(Items.SNOWBALL))
-            .addRequirement(new ItemRequirement(Items.SNOWBALL))
-            .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
+        RECHARGE_BONECHILL_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_chill")
             .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get())));
 
         ABSORB_RITUAL = register(Registry.DEATH_ESSENCE.get(), new AbsorptionRitual().setRegistryName(Eidolon.MODID, "absorption")
-            .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
-            .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
-            .addRequirement(new ItemRequirement(Items.BONE))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-            .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
+                .addInvariant(new FocusItemPresentRequirement(Registry.SUMMONING_STAFF.get())));
     }
+
 }

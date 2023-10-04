@@ -1,0 +1,22 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "focusItems": [
+    {
+      "item": "minecraft:soul_sand"
+    }
+  ],
+  "output": {
+    "entity": "minecraft:wither_skeleton"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:bone"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:charcoal"
+  }
+}
