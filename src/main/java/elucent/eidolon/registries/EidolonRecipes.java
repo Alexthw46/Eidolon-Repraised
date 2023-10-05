@@ -17,8 +17,8 @@ public class EidolonRecipes {
     public static final RegistryObject<RecipeSerializer<DyeRecipe>> DYE_RECIPE = RECIPE_SERIALIZERS.register("dye", DyeRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<CrucibleRecipe>> CRUCIBLE_RECIPE = RECIPE_SERIALIZERS.register("crucible", CrucibleRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<WorktableRecipe>> WORKTABLE_RECIPE = RECIPE_SERIALIZERS.register("worktable", WorktableRecipe.Serializer::new);
-    public static final RegistryObject<RecipeSerializer<ItemRitualRecipe>> CRAFTING_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_craft", ItemRitualRecipe.SerializerCrafting::new);
-    public static final RegistryObject<RecipeSerializer<SummonRitualRecipe>> SUMMON_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_summon", SummonRitualRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<ItemRitualRecipe>> CRAFTING_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_crafting", ItemRitualRecipe.SerializerCrafting::new);
+    public static final RegistryObject<RecipeSerializer<SummonRitualRecipe>> SUMMON_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_summoning", SummonRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<CommandRitualRecipe>> COMMAND_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_command", CommandRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<GenericRitualRecipe>> RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier", GenericRitualRecipe.Serializer::new);
 
@@ -53,7 +53,7 @@ public class EidolonRecipes {
         }
     });
 
-    public static final RegistryObject<RecipeType<SummonRitualRecipe>> SUMMON_RITUAL_TYPE = RECIPE_TYPES.register("ritual_brazier_summon", () -> new RecipeType<>() {
+    public static final RegistryObject<RecipeType<SummonRitualRecipe>> SUMMON_RITUAL_TYPE = RECIPE_TYPES.register("ritual_brazier_summoning", () -> new RecipeType<>() {
         @Override
         public String toString() {
             return "eidolon:ritual_brazier_summoning";

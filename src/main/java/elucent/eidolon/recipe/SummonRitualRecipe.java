@@ -83,7 +83,7 @@ public class SummonRitualRecipe extends RitualRecipe {
             JsonArray focusItems = GsonHelper.getAsJsonArray(json, "focusItems");
             List<Ingredient> foci = getPedestalItems(focusItems);
 
-            JsonObject resultObj = GsonHelper.getAsJsonObject(json, "entity");
+            JsonObject resultObj = GsonHelper.getAsJsonObject(json, "output");
             ResourceLocation entity = new ResourceLocation(GsonHelper.getAsString(resultObj, "entity"));
             int count = resultObj.has("count") ? GsonHelper.getAsInt(resultObj, "count") : 1;
 

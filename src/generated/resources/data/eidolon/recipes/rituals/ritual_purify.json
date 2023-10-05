@@ -18,8 +18,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "item": "minecraft:glistering_melon_slice"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:glistering_melon_slice"
+    }
+  ],
   "ritual": "eidolon:purify"
 }

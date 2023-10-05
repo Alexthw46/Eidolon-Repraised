@@ -12,8 +12,10 @@
       "tag": "forge:dusts/redstone"
     }
   ],
-  "reagent": {
-    "item": "eidolon:lesser_soul_gem"
-  },
+  "reagent": [
+    {
+      "item": "eidolon:lesser_soul_gem"
+    }
+  ],
   "ritual": "eidolon:recharging_chill"
 }

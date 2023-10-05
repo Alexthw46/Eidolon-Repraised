@@ -19,7 +19,9 @@
       "item": "minecraft:rotten_flesh"
     }
   ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
 }

@@ -18,8 +18,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "tag": "forge:gems/emerald"
-  },
+  "reagent": [
+    {
+      "tag": "forge:gems/emerald"
+    }
+  ],
   "ritual": "eidolon:deceit"
 }

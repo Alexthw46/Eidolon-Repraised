@@ -15,8 +15,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "item": "minecraft:sunflower"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:sunflower"
+    }
+  ],
   "ritual": "eidolon:daylight"
 }

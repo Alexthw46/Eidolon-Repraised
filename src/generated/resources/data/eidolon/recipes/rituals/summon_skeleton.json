@@ -16,7 +16,9 @@
       "item": "minecraft:bone"
     }
   ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
 }

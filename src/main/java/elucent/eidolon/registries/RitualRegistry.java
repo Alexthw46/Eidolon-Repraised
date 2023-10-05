@@ -3,12 +3,12 @@ package elucent.eidolon.registries;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.ritual.*;
-import elucent.eidolon.codex.Page;
-import elucent.eidolon.codex.RitualPage;
+import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
+import elucent.eidolon.api.ritual.IRitualItemFocus;
+import elucent.eidolon.api.ritual.ItemSacrifice;
+import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.*;
 import elucent.eidolon.gui.jei.RecipeWrappers;
-import elucent.eidolon.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -20,7 +20,10 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class RitualRegistry {
@@ -58,6 +61,7 @@ public class RitualRegistry {
         return ritual;
     }
 
+    /*
     public static Page getDefaultPage(Ritual ritual, ItemSacrifice sacrifice) {
         List<RitualPage.RitualIngredient> inputs = new ArrayList<>();
         List<ItemStack> foci = new ArrayList<>();
@@ -66,8 +70,8 @@ public class RitualRegistry {
         }
         int slot = 0;
         for (IRequirement r : ritual.getRequirements()) {
-            if (r instanceof ItemRequirement)
-                inputs.add(new RitualPage.RitualIngredient(RecipeUtil.stackFromObject(((ItemRequirement) r).getMatch()), false));
+            if (r instanceof ItemRequirement ir)
+                inputs.add(new RitualPage.RitualIngredient(ir.getMatch(), false));
             slot++;
         }
         Iterator<ItemStack> iter = foci.iterator();
@@ -86,6 +90,7 @@ public class RitualRegistry {
 
         return new RitualPage(ritual, center, inputs.toArray(new RitualPage.RitualIngredient[0]));
     }
+     */
 
 
     public static final List<RecipeWrappers.RitualRecipe> wrappedRituals = new ArrayList<>();

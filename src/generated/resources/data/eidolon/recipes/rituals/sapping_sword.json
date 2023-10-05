@@ -29,8 +29,10 @@
       "item": "minecraft:ghast_tear"
     }
   ],
-  "reagent": {
-    "item": "minecraft:potion"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:potion"
+    }
+  ],
   "sacrifice": 20.0
 }

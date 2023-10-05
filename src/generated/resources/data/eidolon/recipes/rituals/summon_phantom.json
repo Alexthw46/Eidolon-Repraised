@@ -16,7 +16,9 @@
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
 }

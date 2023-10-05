@@ -19,7 +19,9 @@
       "item": "minecraft:prismarine_crystals"
     }
   ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
 }

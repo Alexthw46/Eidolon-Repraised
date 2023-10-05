@@ -108,7 +108,7 @@ public class EidRitualProvider extends SimpleDataProvider {
 
         crafting(Registry.SANGUINE_AMULET.get().getDefaultInstance(), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING),
                 ingredientsFromObjects(List.of(Tags.Items.GEMS_DIAMOND, Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE,
-                        Registry.BASIC_AMULET.get(), Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE,
+                        Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE,
                         Registry.LESSER_SOUL_GEM.get())),
                 List.of(Ingredient.of(Registry.BASIC_AMULET.get())), 40);
 
@@ -163,7 +163,7 @@ public class EidRitualProvider extends SimpleDataProvider {
                 .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
                 .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
 
-        generic(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_fire")
+        generic(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_soulfire")
                 .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
                 .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
                 .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE)));

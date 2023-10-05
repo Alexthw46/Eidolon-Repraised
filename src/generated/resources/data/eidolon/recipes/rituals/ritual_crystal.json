@@ -9,8 +9,10 @@
       "tag": "forge:dusts/redstone"
     }
   ],
-  "reagent": {
-    "item": "minecraft:bone_meal"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
   "ritual": "eidolon:crystal"
 }

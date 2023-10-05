@@ -9,13 +9,20 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class SanguineRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/sanguine_ritual");
+public class CraftingRitual extends Ritual {
     final ItemStack result;
 
-    public SanguineRitual(ItemStack result) {
-        super(SYMBOL, ColorUtil.packColor(255, 255, 51, 85));
+    public CraftingRitual(ResourceLocation symbol, int color, ItemStack result) {
+        super(symbol, color);
         this.result = result;
+    }
+
+    public static class SanguineRitual extends CraftingRitual {
+        public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/sanguine_ritual");
+
+        public SanguineRitual(ItemStack result) {
+            super(SYMBOL, ColorUtil.packColor(255, 255, 51, 85), result);
+        }
     }
 
     public ItemStack getResult() {

@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import elucent.eidolon.api.ritual.Ritual;
-import elucent.eidolon.common.ritual.SanguineRitual;
+import elucent.eidolon.common.ritual.CraftingRitual;
 import elucent.eidolon.common.tile.BrazierTileEntity;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.util.RegistryUtil;
@@ -34,10 +34,11 @@ public class ItemRitualRecipe extends RitualRecipe {
         this.keepNbtOfReagent = keepNbtOfReagent;
     }
 
-    public ItemStack getResult(ItemStack reagent, BrazierTileEntity BrazierTile) {
+    @Override
+    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv, @NotNull RegistryAccess registryAccess) {
         ItemStack result = this.result.copy();
-        if (keepNbtOfReagent && reagent.hasTag()) {
-            result.setTag(reagent.getTag());
+        if (keepNbtOfReagent && inv.getStack().hasTag()) {
+            result.setTag(inv.getStack().getTag());
             result.setDamageValue(0);
         }
         return result.copy();
@@ -50,7 +51,7 @@ public class ItemRitualRecipe extends RitualRecipe {
 
     @Override
     public Ritual getRitual() {
-        return new SanguineRitual(result);
+        return new CraftingRitual.SanguineRitual(result);
     }
 
     @Override

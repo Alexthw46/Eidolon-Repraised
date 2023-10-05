@@ -16,7 +16,9 @@
       "item": "eidolon:tattered_cloth"
     }
   ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
 }

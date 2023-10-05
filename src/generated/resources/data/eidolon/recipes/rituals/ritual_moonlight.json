@@ -15,8 +15,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "tag": "forge:dyes/black"
-  },
+  "reagent": [
+    {
+      "tag": "forge:dyes/black"
+    }
+  ],
   "ritual": "eidolon:moonlight"
 }

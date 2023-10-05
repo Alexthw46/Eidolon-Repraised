@@ -257,7 +257,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         });
     }
 
-    public List<RitualRecipe> getRitualRecipes(Level world) {
+    public static List<RitualRecipe> getRitualRecipes(Level world) {
         List<RitualRecipe> recipes = new ArrayList<>();
         RecipeManager manager = world.getRecipeManager();
         for (RecipeType<? extends RitualRecipe> type : EidolonRecipes.ritualRecipeTypes) {

@@ -61,7 +61,9 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     }
 
     public static void addRitualElements(RitualRecipe RitualRecipe, JsonObject jsonobject) {
-        jsonobject.add("reagent", RitualRecipe.reagent.toJson());
+        JsonArray reagent = new JsonArray();
+        reagent.add(RitualRecipe.reagent.toJson());
+        jsonobject.add("reagent", reagent);
         if (RitualRecipe.healthRequirement > 0) jsonobject.addProperty("sacrifice", RitualRecipe.healthRequirement);
 
         JsonArray pedestalArr = new JsonArray();

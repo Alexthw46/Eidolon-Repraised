@@ -18,8 +18,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "item": "minecraft:nautilus_shell"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:nautilus_shell"
+    }
+  ],
   "ritual": "eidolon:repelling"
 }

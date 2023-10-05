@@ -18,8 +18,10 @@
       "item": "eidolon:soul_shard"
     }
   ],
-  "reagent": {
-    "item": "minecraft:rose_bush"
-  },
+  "reagent": [
+    {
+      "item": "minecraft:rose_bush"
+    }
+  ],
   "ritual": "eidolon:allure"
 }
