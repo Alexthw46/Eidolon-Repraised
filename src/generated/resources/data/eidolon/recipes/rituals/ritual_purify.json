@@ -9,7 +9,9 @@
       "item": "eidolon:enchanted_ash"
     },
     {
-      "item": "minecraft:potion"
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:healing\"}"
     },
     {
       "item": "eidolon:soul_shard"

@@ -26,6 +26,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -60,7 +61,7 @@ public class EidRitualProvider extends SimpleDataProvider {
         //SummonRituals
         makeSummon(prefix("summon_zombie"),
                 EntityType.ZOMBIE,
-                List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH, Items.ROTTEN_FLESH),
+                List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH),
                 List.of(Items.ROTTEN_FLESH));
 
         makeSummon(prefix("summon_skeleton"),
@@ -89,7 +90,7 @@ public class EidRitualProvider extends SimpleDataProvider {
 
         makeSummon(prefix("summon_drowned"), EntityType.DROWNED,
                 Items.CHARCOAL,
-                ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH, Items.PRISMARINE_CRYSTALS)),
+                ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
                 List.of(Ingredient.of(Tags.Items.DUSTS_PRISMARINE)));
 
         makeSummon(prefix("summon_stray"), EntityType.STRAY,
@@ -175,7 +176,7 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     public void crafting(ItemStack result, ItemStack reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, Ingredient.of(reagent), result, true, healthCost));
+        rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, PartialNBTIngredient.of(reagent.getItem(), reagent.getOrCreateTag()), result, true, healthCost));
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {

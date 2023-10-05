@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 
 import java.util.List;
 
@@ -21,7 +22,11 @@ public class ItemRequirement implements IRequirement {
     }
 
     public ItemRequirement(ItemStack item) {
-        this.match = Ingredient.of(item);
+        if (item.hasTag()) {
+            this.match = PartialNBTIngredient.of(item.getItem(), item.getOrCreateTag());
+        } else {
+            this.match = Ingredient.of(item);
+        }
     }
 
     public ItemRequirement(Item item) {

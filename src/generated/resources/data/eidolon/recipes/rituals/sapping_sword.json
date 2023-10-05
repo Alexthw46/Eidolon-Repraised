@@ -31,7 +31,9 @@
   ],
   "reagent": [
     {
-      "item": "minecraft:potion"
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:harming\"}"
     }
   ],
   "sacrifice": 20.0

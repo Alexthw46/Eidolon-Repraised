@@ -29,7 +29,7 @@ import static elucent.eidolon.Eidolon.prefix;
 
 public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
 
-    public Ingredient reagent; // Used in the arcane pedestal
+    public Ingredient reagent; // Item on the brazier
     public List<Ingredient> pedestalItems; // Items part of the recipe, on stone hands
     public List<Ingredient> focusItems; // Items part of the recipe, on necrotic focus
 
