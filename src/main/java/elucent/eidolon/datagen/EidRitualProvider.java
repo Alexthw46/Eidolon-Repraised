@@ -173,6 +173,9 @@ public class EidRitualProvider extends SimpleDataProvider {
                 .addRequirement(new ItemRequirement(Items.SNOWBALL))
                 .addRequirement(new ItemRequirement(Items.SNOWBALL))
                 .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE)));
+
+        // tester for command ritual
+        // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
     }
 
     public void crafting(ItemStack result, ItemStack reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {

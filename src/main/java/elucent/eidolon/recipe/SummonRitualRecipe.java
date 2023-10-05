@@ -69,7 +69,7 @@ public class SummonRitualRecipe extends RitualRecipe {
 
     @Override
     public Ritual getRitual() {
-        return new SummonRitual(ForgeRegistries.ENTITY_TYPES.getValue(entity), count);
+        return new SummonRitual(ForgeRegistries.ENTITY_TYPES.getValue(entity), count).setRegistryName(id);
     }
 
     public static class Serializer extends RitualRecipe.Serializer<SummonRitualRecipe> {

@@ -43,7 +43,7 @@ public class CommandRitualRecipe extends RitualRecipe {
 
     @Override
     public Ritual getRitual() {
-        return new ExecCommandRitual(symbol, color, command);
+        return new ExecCommandRitual(symbol, color, command).setRegistryName(id);
     }
 
     @Override
