@@ -17,6 +17,11 @@ public class CraftingRitual extends Ritual {
         this.result = result;
     }
 
+    @Override
+    public Ritual cloneRitual() {
+        return new CraftingRitual(getSymbol(), getColor(), result);
+    }
+
     public static class SanguineRitual extends CraftingRitual {
         public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/sanguine_ritual");
 

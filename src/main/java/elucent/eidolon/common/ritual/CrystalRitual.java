@@ -22,6 +22,12 @@ public class CrystalRitual extends Ritual {
         super(SYMBOL, ColorUtil.packColor(255, 247, 156, 220));
     }
 
+
+    @Override
+    public Ritual cloneRitual() {
+        return new CrystalRitual();
+    }
+
     @Override
     public RitualResult start(Level world, BlockPos pos) {
         List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), LivingEntity::isInvertedHealAndHarm);

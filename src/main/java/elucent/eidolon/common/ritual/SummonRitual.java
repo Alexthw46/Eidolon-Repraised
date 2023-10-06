@@ -24,17 +24,23 @@ public class SummonRitual extends Ritual {
         return count;
     }
 
-    int count = 1;
+    final int count;
 
     public SummonRitual(EntityType<?> entity) {
         super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
         this.entity = entity;
+        this.count = 1;
     }
 
     public SummonRitual(EntityType<?> entity, int count) {
         super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
         this.entity = entity;
         this.count = count;
+    }
+
+    @Override
+    public Ritual cloneRitual() {
+        return new SummonRitual(entity, count);
     }
 
     @Override

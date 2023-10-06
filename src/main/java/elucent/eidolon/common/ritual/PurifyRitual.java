@@ -29,6 +29,11 @@ public class PurifyRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new PurifyRitual();
+    }
+
+    @Override
     public RitualResult start(Level world, BlockPos pos) {
         List<PathfinderMob> purifiable = world.getEntitiesOfClass(PathfinderMob.class, Ritual.getDefaultBounds(pos), (entity) -> entity instanceof ZombieVillager || entity instanceof ZombifiedPiglin || entity instanceof Zoglin);
 

@@ -132,7 +132,7 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     public abstract Ritual getRitual();
 
     public Ritual getRitualWithRequirements() {
-        Ritual ritual = getRitual().addRequirements(pedestalItems.stream().map(ItemRequirement::new).toArray(ItemRequirement[]::new));
+        Ritual ritual = getRitual().clone().addRequirements(pedestalItems.stream().map(ItemRequirement::new).toArray(ItemRequirement[]::new));
         if (!focusItems.isEmpty())
             ritual.addRequirements(focusItems.stream().map(ItemRequirement::new).toArray(ItemRequirement[]::new));
         if (healthRequirement > 0) ritual.addRequirement(new HealthRequirement(healthRequirement));

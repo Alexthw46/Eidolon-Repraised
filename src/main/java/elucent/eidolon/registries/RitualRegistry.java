@@ -1,65 +1,25 @@
 package elucent.eidolon.registries;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
-import elucent.eidolon.api.ritual.IRitualItemFocus;
-import elucent.eidolon.api.ritual.ItemSacrifice;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.*;
-import elucent.eidolon.gui.jei.RecipeWrappers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import static elucent.eidolon.Eidolon.prefix;
 
 public class RitualRegistry {
     static final Map<ResourceLocation, Ritual> rituals = new HashMap<>();
-    static final BiMap<ItemSacrifice, Ritual> matches = HashBiMap.create();
 
-    public static void register(ItemStack sacrifice, Ritual ritual) {
-        ResourceLocation name = ritual.getRegistryName();
+    public static Ritual register(ResourceLocation name, Ritual ritual) {
         assert name != null;
+        ritual.setRegistryName(name);
         rituals.put(name, ritual);
-        matches.put(new ItemSacrifice(sacrifice), ritual);
-    }
-
-    public static Ritual register(ItemLike sacrifice, Ritual ritual) {
-        ResourceLocation name = ritual.getRegistryName();
-        assert name != null;
-        rituals.put(name, ritual);
-        matches.put(new ItemSacrifice(sacrifice), ritual);
         return ritual;
     }
 
-    public static Ritual register(TagKey<Item> sacrifice, Ritual ritual) {
-        ResourceLocation name = ritual.getRegistryName();
-        assert name != null;
-        rituals.put(name, ritual);
-        matches.put(new ItemSacrifice(sacrifice), ritual);
-        return ritual;
-    }
-
-    public static Ritual register(MultiItemSacrifice sacrifice, Ritual ritual) {
-        ResourceLocation name = ritual.getRegistryName();
-        assert name != null;
-        rituals.put(name, ritual);
-        matches.put(sacrifice, ritual);
-        return ritual;
-    }
 
     /*
     public static Page getDefaultPage(Ritual ritual, ItemSacrifice sacrifice) {
@@ -93,64 +53,29 @@ public class RitualRegistry {
      */
 
 
-    public static final List<RecipeWrappers.RitualRecipe> wrappedRituals = new ArrayList<>();
-
-    public static ItemSacrifice getMatch(Ritual ritual) {
-        return matches.inverse().getOrDefault(ritual, new ItemSacrifice(Ingredient.EMPTY));
-    }
-
-    public static List<RecipeWrappers.RitualRecipe> getWrappedRecipes() {
-        return wrappedRituals;
-    }
-
     public static Ritual find(ResourceLocation name) {
         return rituals.get(name);
     }
 
-    static boolean matches(Level world, BlockPos pos, ItemSacrifice match, ItemStack sacrifice) {
-        if (match instanceof MultiItemSacrifice mis) {
-            // check main item first, avoid complicated work
-            if (!match.main.test(sacrifice)) return false;
-
-            List<Ingredient> matches = new ArrayList<>(mis.items);
-            List<IRitualItemFocus> foci = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, Ritual.getDefaultBounds(pos));
-            List<ItemStack> items = new ArrayList<>();
-            for (IRitualItemFocus focus : foci) items.add(focus.provide());
-            if (items.size() != matches.size()) return false;
-            for (int i = 0; i < matches.size(); i++) {
-                int before = matches.size();
-                for (int j = 0; j < items.size(); j ++) {
-                    Ingredient m = matches.get(i);
-                    ItemStack item = items.get(j);
-                    if (m.test(item)) {
-                        matches.remove(i);
-                        i--; // we removed an item, so we need to go back one
-                        items.remove(j);
-                        break;
-                    }
-                }
-                if (matches.size() == before) return false; // failed to satisfy match with any item
-            }
-            return matches.isEmpty(); // all matches satisfied
-        } else {
-            return match.main.test(sacrifice);
-        }
-    }
-
-    public static Ritual find(Level world, BlockPos pos, ItemStack sacrifice) {
-        for (Entry<ItemSacrifice, Ritual> entry : matches.entrySet()) {
-            if (matches(world, pos, entry.getKey(), sacrifice)) return entry.getValue();
-        }
-        return null;
-    }
-
     public static Ritual CRYSTAL_RITUAL,
-        SUMMON_ZOMBIE, SUMMON_SKELETON, SUMMON_PHANTOM, SUMMON_HUSK, SUMMON_DROWNED,
-        SUMMON_STRAY, SUMMON_WITHER_SKELETON, SUMMON_WRAITH,
-        ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, DAYLIGHT_RITUAL, MOONLIGHT_RITUAL,
-        PURIFY_RITUAL, RECHARGE_SOULFIRE_RITUAL, RECHARGE_BONECHILL_RITUAL,
-        SANGUINE_SWORD, SANGUINE_AMULET,
-        ABSORB_RITUAL;
+            SUMMON_ZOMBIE, SUMMON_SKELETON, SUMMON_PHANTOM, SUMMON_HUSK, SUMMON_DROWNED,
+            SUMMON_STRAY, SUMMON_WITHER_SKELETON, SUMMON_WRAITH,
+            ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, DAYLIGHT_RITUAL, MOONLIGHT_RITUAL,
+            PURIFY_RITUAL, RECHARGE_SOULFIRE_RITUAL, RECHARGE_BONECHILL_RITUAL,
+            SANGUINE_SWORD, SANGUINE_AMULET,
+            ABSORB_RITUAL;
+
+    public static ResourceLocation CRYSTAL_RITUAL_RL = prefix("crystal");
+    public static ResourceLocation ALLURE_RITUAL_RL = prefix("allure");
+    public static ResourceLocation REPELLING_RITUAL_RL = prefix("repelling");
+    public static ResourceLocation DECEIT_RITUAL_RL = prefix("deceit");
+    public static ResourceLocation DAYLIGHT_RITUAL_RL = prefix("daylight");
+    public static ResourceLocation MOONLIGHT_RITUAL_RL = prefix("moonlight");
+    public static ResourceLocation PURIFY_RITUAL_RL = prefix("purify");
+    public static ResourceLocation RECHARGE_SOULFIRE_RITUAL_RL = prefix("recharging_soulfire");
+    public static ResourceLocation RECHARGE_BONECHILL_RITUAL_RL = prefix("recharging_chill");
+    public static ResourceLocation ABSORB_RITUAL_RL = prefix("absorption");
+
 
     public static void init() {
 
@@ -215,29 +140,25 @@ public class RitualRegistry {
 
         //hardcoded
 
-        CRYSTAL_RITUAL = register(Items.BONE_MEAL, new CrystalRitual().setRegistryName(Eidolon.MODID, "crystal"));
+        CRYSTAL_RITUAL = register(CRYSTAL_RITUAL_RL, new CrystalRitual());
 
+        DECEIT_RITUAL = register(DECEIT_RITUAL_RL, new DeceitRitual());
 
-        DECEIT_RITUAL = register(Tags.Items.GEMS_EMERALD, new DeceitRitual().setRegistryName(Eidolon.MODID, "deceit"));
+        ALLURE_RITUAL = register(ALLURE_RITUAL_RL, new AllureRitual());
 
-        ALLURE_RITUAL = register(Items.ROSE_BUSH, new AllureRitual().setRegistryName(Eidolon.MODID, "allure"));
+        REPELLING_RITUAL = register(REPELLING_RITUAL_RL, new RepellingRitual());
 
-        REPELLING_RITUAL = register(Items.NAUTILUS_SHELL, new RepellingRitual().setRegistryName(Eidolon.MODID, "repelling"));
+        DAYLIGHT_RITUAL = register(DAYLIGHT_RITUAL_RL, new DaylightRitual());
 
-        DAYLIGHT_RITUAL = register(Items.SUNFLOWER, new DaylightRitual().setRegistryName(Eidolon.MODID, "daylight"));
+        MOONLIGHT_RITUAL = register(MOONLIGHT_RITUAL_RL, new MoonlightRitual());
 
-        MOONLIGHT_RITUAL = register(Tags.Items.DYES_BLACK, new MoonlightRitual().setRegistryName(Eidolon.MODID, "moonlight"));
+        PURIFY_RITUAL = register(PURIFY_RITUAL_RL, new PurifyRitual());
 
-        PURIFY_RITUAL = register(Items.GLISTERING_MELON_SLICE, new PurifyRitual().setRegistryName(Eidolon.MODID, "purify"));
+        RECHARGE_SOULFIRE_RITUAL = register(RECHARGE_SOULFIRE_RITUAL_RL, new RechargingRitual().addInvariant(new FocusItemPresentRequirement(Registry.SOULFIRE_WAND.get())));
 
-        RECHARGE_SOULFIRE_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_soulfire")
-            .addInvariant(new FocusItemPresentRequirement(Registry.SOULFIRE_WAND.get())));
+        RECHARGE_BONECHILL_RITUAL = register(RECHARGE_BONECHILL_RITUAL_RL, new RechargingRitual().addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get())));
 
-        RECHARGE_BONECHILL_RITUAL = register(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_chill")
-            .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get())));
-
-        ABSORB_RITUAL = register(Registry.DEATH_ESSENCE.get(), new AbsorptionRitual().setRegistryName(Eidolon.MODID, "absorption")
-                .addInvariant(new FocusItemPresentRequirement(Registry.SUMMONING_STAFF.get())));
+        ABSORB_RITUAL = register(ABSORB_RITUAL_RL, new AbsorptionRitual().addInvariant(new FocusItemPresentRequirement(Registry.SUMMONING_STAFF.get())));
     }
 
 }

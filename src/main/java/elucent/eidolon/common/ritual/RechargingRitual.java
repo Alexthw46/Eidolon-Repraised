@@ -23,6 +23,11 @@ public class RechargingRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new RechargingRitual();
+    }
+
+    @Override
     public RitualResult start(Level world, BlockPos pos) {
         List<IRitualItemFocus> tiles = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, getSearchBounds(pos));
         if (!tiles.isEmpty()) for (IRitualItemFocus tile : tiles) {

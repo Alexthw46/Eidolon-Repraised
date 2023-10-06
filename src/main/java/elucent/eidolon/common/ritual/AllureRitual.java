@@ -22,6 +22,11 @@ public class AllureRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new AllureRitual();
+    }
+
+    @Override
     public RitualResult tick(Level world, BlockPos pos) {
         if (world.getGameTime() % 200 == 0) {
             List<Animal> animals = world.getEntitiesOfClass(Animal.class, new AABB(pos).inflate(96, 16, 96));

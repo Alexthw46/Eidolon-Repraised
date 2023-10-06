@@ -25,6 +25,11 @@ public class RepellingRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new RepellingRitual();
+    }
+
+    @Override
     public RitualResult tick(Level world, BlockPos pos) {
         if (world.getGameTime() % 200 == 0) {
             List<Monster> monsters = world.getEntitiesOfClass(Monster.class, new AABB(pos).inflate(96, 16, 96));

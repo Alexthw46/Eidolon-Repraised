@@ -19,6 +19,11 @@ public class DeceitRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new DeceitRitual();
+    }
+
+    @Override
     public RitualResult tick(Level world, BlockPos pos) {
         if (world.getGameTime() % 20 == 0) {
             List<Villager> villagers = world.getEntitiesOfClass(Villager.class, new AABB(pos).inflate(48, 16, 48));

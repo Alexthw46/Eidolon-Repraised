@@ -27,6 +27,11 @@ public class ExecCommandRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new ExecCommandRitual(getSymbol(), getColor(), command);
+    }
+
+    @Override
     public RitualResult start(Level world, BlockPos pos) {
 
         if (world instanceof ServerLevel) {

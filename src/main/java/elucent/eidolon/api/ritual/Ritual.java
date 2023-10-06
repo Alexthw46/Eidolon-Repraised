@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ritual {
+public abstract class Ritual implements Cloneable {
     ResourceLocation name = null;
     final int color;
     final ResourceLocation symbol;
@@ -86,6 +86,14 @@ public abstract class Ritual {
         return continuousRequirements;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Ritual clone() {
+        return cloneRitual().setRegistryName(getRegistryName());
+    }
+
+    public abstract Ritual cloneRitual();
+
     public enum SetupResult {
         FAIL,
         PASS,
@@ -141,4 +149,6 @@ public abstract class Ritual {
         }
         return tileList;
     }
+
+
 }
