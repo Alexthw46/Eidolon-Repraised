@@ -58,7 +58,7 @@ public class EidolonFakePlayer extends FakePlayer {
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal("AN_Fake_Player");
+        return Component.literal("Eidolon_Fake_Player");
     }
 
     private static class FakePlayNetHandler extends ServerGamePacketListenerImpl {
