@@ -28,6 +28,9 @@ public class ItemRitualRecipe extends RitualRecipe {
     public ItemStack result; // Result item
     public boolean keepNbtOfReagent = false;
 
+    public ResourceLocation symbol;
+    public int color;
+
     public ItemRitualRecipe(ResourceLocation recipeId, List<Ingredient> stacks, List<Ingredient> foci, Ingredient reagent, ItemStack output, boolean keepNbtOfReagent, float healthRequirement) {
         super(recipeId, reagent, stacks, foci, healthRequirement);
         this.result = output;
@@ -51,6 +54,8 @@ public class ItemRitualRecipe extends RitualRecipe {
 
     @Override
     public Ritual getRitual() {
+        if (symbol != null && color != 0)
+            return new CraftingRitual(symbol, color, result, keepNbtOfReagent);
         return new CraftingRitual.SanguineRitual(result);
     }
 

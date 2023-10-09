@@ -2,9 +2,12 @@
   "type": "eidolon:ritual_brazier_crafting",
   "focusItems": [
     {
-      "item": "minecraft:iron_sword"
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:harming\"}"
     }
   ],
+  "healthRequirement": 20.0,
   "keepNbtOfReagent": true,
   "output": {
     "item": "eidolon:sapping_sword"
@@ -31,10 +34,7 @@
   ],
   "reagent": [
     {
-      "type": "forge:partial_nbt",
-      "item": "minecraft:potion",
-      "nbt": "{Potion:\"minecraft:harming\"}"
+      "item": "minecraft:iron_sword"
     }
-  ],
-  "sacrifice": 20.0
+  ]
 }

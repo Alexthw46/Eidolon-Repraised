@@ -242,6 +242,8 @@ public class Registry {
     public static final RegistryObject<Item> SOUL_SHARD = addItem("soul_shard");
     public static final RegistryObject<Item> DEATH_ESSENCE = addItem("death_essence");
     public static final RegistryObject<Item> CRIMSON_ESSENCE = addItem("crimson_essence");
+    public static final RegistryObject<Item> CRIMSON_GEM = addItem("crimson_gem");
+
     public static final RegistryObject<Item> FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build()));
     public static final RegistryObject<Item> WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).effect(() -> new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT.get(), 900), 1).build()));
     public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
@@ -498,16 +500,7 @@ public class Registry {
             .noOcclusion()));
     public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(blockProps(Blocks.AIR)
             .sound(SoundType.FROGLIGHT).lightLevel(p -> p.getValue(GhostLight.DEITY) ? 12 : 8)));
-    /*
-    public static final RegistryObject<Block> INCUBATOR = addBlock("incubator", () -> new TwoHighBlockBase(blockProps(Blocks.METAL, DyeColor.GRAY)
-            .sound(SoundType.GLASS).strength(2.0f, 3.0f)
-            .noOcclusion()).setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
-    public static final RegistryObject<Block> GLASS_TUBE = addBlock("glass_tube", () -> new PipeBlock(blockProps(Blocks.GLASS, DyeColor.LIGHT_BLUE)
-            .sound(SoundType.GLASS).strength(1.0f, 1.5f).noOcclusion()));
-    public static final RegistryObject<Block> CISTERN = addBlock("cistern", () -> new CisternBlock(blockProps(Blocks.GLASS, DyeColor.LIGHT_BLUE)
-            .sound(SoundType.GLASS).strength(1.5f, 1.5f).noOcclusion())
-            .setShape(Shapes.box(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)));
-     */
+
     public static DecoBlockPack
             SMOOTH_STONE_BRICK = new DecoBlockPack(BLOCKS, "smooth_stone_bricks", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f))
@@ -554,7 +547,7 @@ public class Registry {
     public static final RegistryObject<Attribute>
             MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
     public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
-
+    public static final RegistryObject<Attribute> CHANTING_SPEED = ATTRIBUTES.register("chanting_speed", () -> new RangedAttribute(Eidolon.MODID + ".chanting_speed", 1, 0, 100).setSyncable(true));
 
     @SubscribeEvent
     public void addCustomAttributes(EntityAttributeModificationEvent event) {
@@ -562,6 +555,9 @@ public class Registry {
             if (event.has(t, Attributes.MAX_HEALTH)) {
                 event.add(t, Registry.PERSISTENT_SOUL_HEARTS.get());
                 event.add(t, Registry.MAX_SOUL_HEARTS.get());
+            }
+            if (t == EntityType.PLAYER) {
+                event.add(t, Registry.CHANTING_SPEED.get());
             }
         }
     }

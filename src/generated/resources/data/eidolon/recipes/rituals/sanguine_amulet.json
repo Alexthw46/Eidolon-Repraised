@@ -2,9 +2,12 @@
   "type": "eidolon:ritual_brazier_crafting",
   "focusItems": [
     {
-      "item": "eidolon:basic_amulet"
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:harming\"}"
     }
   ],
+  "healthRequirement": 40.0,
   "keepNbtOfReagent": true,
   "output": {
     "item": "eidolon:sanguine_amulet"
@@ -31,10 +34,7 @@
   ],
   "reagent": [
     {
-      "type": "forge:partial_nbt",
-      "item": "minecraft:potion",
-      "nbt": "{Potion:\"minecraft:harming\"}"
+      "item": "eidolon:basic_amulet"
     }
-  ],
-  "sacrifice": 40.0
+  ]
 }

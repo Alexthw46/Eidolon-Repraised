@@ -64,7 +64,8 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
         JsonArray reagent = new JsonArray();
         reagent.add(RitualRecipe.reagent.toJson());
         jsonobject.add("reagent", reagent);
-        if (RitualRecipe.healthRequirement > 0) jsonobject.addProperty("sacrifice", RitualRecipe.healthRequirement);
+        if (RitualRecipe.healthRequirement > 0)
+            jsonobject.addProperty("healthRequirement", RitualRecipe.healthRequirement);
 
         JsonArray pedestalArr = new JsonArray();
         for (Ingredient i : RitualRecipe.pedestalItems) {
@@ -132,9 +133,9 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     public abstract Ritual getRitual();
 
     public Ritual getRitualWithRequirements() {
-        Ritual ritual = getRitual().clone().addRequirements(pedestalItems.stream().map(ItemRequirement::new).toArray(ItemRequirement[]::new));
+        Ritual ritual = getRitual().clone().addRequirements(pedestalItems.stream().map(ItemRequirement::new).collect(Collectors.toList()));
         if (!focusItems.isEmpty())
-            ritual.addRequirements(focusItems.stream().map(ItemRequirement::new).toArray(ItemRequirement[]::new));
+            ritual.addRequirements(focusItems.stream().map(ItemRequirement::new).collect(Collectors.toList()));
         if (healthRequirement > 0) ritual.addRequirement(new HealthRequirement(healthRequirement));
         return ritual;
     }

@@ -101,17 +101,19 @@ public class EidRitualProvider extends SimpleDataProvider {
                 List.of(Registry.SOUL_SHARD.get(), Registry.TATTERED_CLOTH.get()),
                 List.of(Registry.TATTERED_CLOTH.get()));
 
+        ItemStack HarmingPotion = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING);
+        var harmingIngredient = PartialNBTIngredient.of(HarmingPotion.getItem(), HarmingPotion.getOrCreateTag());
 
-        crafting(Registry.SAPPING_SWORD.get().getDefaultInstance(), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING),
+        crafting(Registry.SAPPING_SWORD.get().getDefaultInstance(), Ingredient.of(Items.IRON_SWORD),
                 ingredientsFromObjects(List.of(Registry.SHADOW_GEM.get(), Registry.SOUL_SHARD.get(), Registry.SOUL_SHARD.get(),
                         Items.NETHER_WART, Items.NETHER_WART, Items.GHAST_TEAR)),
-                List.of(Ingredient.of(Items.IRON_SWORD)), 20);
+                List.of(harmingIngredient), 20);
 
-        crafting(Registry.SANGUINE_AMULET.get().getDefaultInstance(), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING),
+        crafting(Registry.SANGUINE_AMULET.get().getDefaultInstance(), Ingredient.of(Registry.BASIC_AMULET.get()),
                 ingredientsFromObjects(List.of(Tags.Items.GEMS_DIAMOND, Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE,
                         Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE,
                         Registry.LESSER_SOUL_GEM.get())),
-                List.of(Ingredient.of(Registry.BASIC_AMULET.get())), 40);
+                List.of(harmingIngredient), 40);
 
         generic(Items.BONE_MEAL, new CrystalRitual().setRegistryName(Eidolon.MODID, "crystal")
                 .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
@@ -178,8 +180,8 @@ public class EidRitualProvider extends SimpleDataProvider {
         // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
     }
 
-    public void crafting(ItemStack result, ItemStack reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, PartialNBTIngredient.of(reagent.getItem(), reagent.getOrCreateTag()), result, true, healthCost));
+    public void crafting(ItemStack result, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
+        rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, reagent, result, true, healthCost));
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {

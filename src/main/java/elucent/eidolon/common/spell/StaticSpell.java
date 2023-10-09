@@ -64,7 +64,7 @@ public abstract class StaticSpell extends Spell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player, SignSequence signs) {
-        if (getCost() > 0) {
+        if (getCost() > 0 && !player.isCreative()) {
             if (player.getCapability(ISoul.INSTANCE).isPresent()) {
                 ISoul soul = player.getCapability(ISoul.INSTANCE).resolve().get();
                 if (soul.getMagic() < getCost()) {

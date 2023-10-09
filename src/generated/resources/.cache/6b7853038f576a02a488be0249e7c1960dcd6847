@@ -1,4 +1,4 @@
-// 1.20.1	2023-10-06T14:18:51.9977791	Eidolon Rituals
+// 1.20.1	2023-10-09T14:43:28.5529559	Eidolon Rituals
 9be7f9fb012607b5eb199bb6f6f3fafd39726d6f data/eidolon/recipes/rituals/ritual_absorption.json
 d25f6c3dfe22c8054c60ce2299c8f0d524c4dce6 data/eidolon/recipes/rituals/ritual_allure.json
 72d8cc7c6780d50332710e814a238b5ad1c3ed11 data/eidolon/recipes/rituals/ritual_crystal.json
@@ -9,8 +9,8 @@ d874b7b6d62858cb96b7a1767de7c7b3e73fdccc data/eidolon/recipes/rituals/ritual_moo
 c97e67db40dcd65a16979a38cbbf2168ea7ca5f4 data/eidolon/recipes/rituals/ritual_recharging_chill.json
 fd5e6a8826d28c897d6d7271791a5e8776a083ba data/eidolon/recipes/rituals/ritual_recharging_soulfire.json
 793ab466a4676442040b614846606098301883f3 data/eidolon/recipes/rituals/ritual_repelling.json
-23fe3a405a81391e99d3b35b4a666cc893cc8c0c data/eidolon/recipes/rituals/sanguine_amulet.json
-45e2b41e8b4122898f89647c2642b545f141d1bb data/eidolon/recipes/rituals/sapping_sword.json
+15ff69ec7701e8346ea4760a2b4828194f1f49a6 data/eidolon/recipes/rituals/sanguine_amulet.json
+db397233a848c6484eae068562b0b9c10c0cdd47 data/eidolon/recipes/rituals/sapping_sword.json
 5999bed185a216fe6ed9e2b66d9ba069ea44ad6c data/eidolon/recipes/rituals/summon_creeper.json
 bf93477f4fb6ef15569d87f7f0dee40dadc8e503 data/eidolon/recipes/rituals/summon_drowned.json
 d2296fec89b7a798b98a088915d427376389bcf8 data/eidolon/recipes/rituals/summon_husk.json

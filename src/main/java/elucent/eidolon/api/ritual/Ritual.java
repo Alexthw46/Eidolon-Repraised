@@ -52,13 +52,18 @@ public abstract class Ritual implements Cloneable {
         return this;
     }
 
-    public Ritual addRequirements(IRequirement... requirements) {
-        stepRequirements.addAll(List.of(requirements));
+    public Ritual addRequirements(List<IRequirement> requirements) {
+        stepRequirements.addAll((requirements));
         return this;
     }
 
     public Ritual addInvariant(IRequirement requirement) {
         continuousRequirements.add(requirement);
+        return this;
+    }
+
+    public Ritual addInvariants(List<IRequirement> requirements) {
+        continuousRequirements.addAll(requirements);
         return this;
     }
 
@@ -89,7 +94,8 @@ public abstract class Ritual implements Cloneable {
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Ritual clone() {
-        return cloneRitual().setRegistryName(getRegistryName());
+
+        return cloneRitual().addInvariants(this.getInvariants()).setRegistryName(getRegistryName());
     }
 
     public abstract Ritual cloneRitual();

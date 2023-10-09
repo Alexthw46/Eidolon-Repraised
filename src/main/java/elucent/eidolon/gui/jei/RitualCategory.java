@@ -5,6 +5,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
+import elucent.eidolon.api.ritual.HealthRequirement;
+import elucent.eidolon.api.ritual.IRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.codex.RitualPage;
@@ -86,11 +89,17 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             layout.addSlot(RecipeIngredientRole.INPUT, dx - 8, dy - 8).addIngredients(inputs.get(i).stack);
         }
 
-        layout.addSlot(RecipeIngredientRole.CATALYST, 60, 85).addIngredients(recipe.reagent);
+        layout.addSlot(RecipeIngredientRole.INPUT, 60, 85).addIngredients(recipe.reagent);
+
+        for (IRequirement iRequirement : recipe.getRitual().getInvariants()) {
+            if (iRequirement instanceof FocusItemPresentRequirement focusItemPresentRequirement) {
+                layout.addSlot(RecipeIngredientRole.CATALYST, 91, 82).addIngredients(focusItemPresentRequirement.getMatch());
+                break;
+            }
+        }
 
         if (recipe instanceof ItemRitualRecipe resultRitual)
             layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResultItem(RegistryAccess.EMPTY));
-
     }
 
     public static void rearrangeIngredients(@NotNull RitualRecipe recipe, List<RitualIngredient> inputs) {
@@ -120,7 +129,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
         List<RitualIngredient> inputs = new ArrayList<>();
         rearrangeIngredients(recipe, inputs);
 
-        Ritual ritual = recipe.getRitual();
+        Ritual ritual = recipe.getRitualWithRequirements();
         float angleStep = Math.min(30, 180 / inputs.size());
         double rootAngle = 90 - (inputs.size() - 1) * angleStep / 2;
         for (int i = 0; i < inputs.size(); i++) {
@@ -130,6 +139,17 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             if (inputs.get(i).isFocus) guiGraphics.blit(bg, x + dx - 13, y + dy - 13, 128, 0, 26, 24);
             else guiGraphics.blit(bg, x + dx - 8, y + dy - 8, 154, 0, 16, 16);
         }
+
+        for (IRequirement iRequirement : ritual.getInvariants()) {
+            if (iRequirement instanceof FocusItemPresentRequirement) {
+                guiGraphics.blit(bg, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
+                break;
+            }
+        }
+
+        ritual.getRequirements().stream().filter(HealthRequirement.class::isInstance).map(HealthRequirement.class::cast).findFirst().ifPresent(
+                healthRequirement -> guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("eidolon.jei.health_sacrifice", healthRequirement.getHealth() / 2), x + 8, y + 5, 0xFF0000, false)
+        );
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
