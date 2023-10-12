@@ -1,0 +1,26 @@
+{
+  "type": "eidolon:worktable",
+  "pattern": [
+    " c ",
+    " r",
+    "   "
+  ],
+  "reagents": "sfsf",
+  "key": {
+    "r": {
+      "item": "eidolon:basic_ring"
+    },
+    "c": {
+      "item": "eidolon:crimson_gem"
+    },
+    "s": {
+      "item": "eidolon:sildran_seed"
+    },
+    "f": {
+      "item": "eidolon:fungus_sprouts"
+    }
+  },
+  "result": {
+    "item": "eidolon:enervating_ring"
+  }
+}

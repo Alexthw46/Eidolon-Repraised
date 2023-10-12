@@ -97,16 +97,18 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         super.load(tag);
         stack = ItemStack.of(tag.getCompound("stack"));
         burning = tag.getBoolean("burning");
-        if (tag.contains("ritual")) {
+
+        step = tag.getInt("step");
+        ritualDone = tag.getBoolean("ritualDone");
+        //sync if there is a ritual running
+        if (burning && tag.contains("ritual")) {
             var rid = new ResourceLocation(tag.getString("ritual"));
             //try match with classic Rituals
             ritual = RitualRegistry.find(rid);
             //try match with other recipes
             if (ritual == null && level != null)
                 getRitualRecipes(level).stream().filter(r -> r.id.equals(rid)).findFirst().ifPresent(r -> ritual = r.getRitual());
-        }
-        step = tag.getInt("step");
-        ritualDone = tag.getBoolean("ritualDone");
+        } else ritual = null;
     }
 
     @Override
