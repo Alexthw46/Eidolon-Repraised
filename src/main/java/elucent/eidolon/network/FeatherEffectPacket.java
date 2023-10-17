@@ -40,27 +40,38 @@ public class FeatherEffectPacket {
 
             Level world = Eidolon.proxy.getWorld();
             if (world != null) {
-                double x = packet.x, y = packet.y, z = packet.z;
+                double x = packet.x, y = packet.y + 0.5, z = packet.z;
 
                 Particles.create(EidolonParticles.FEATHER_PARTICLE)
                         .setAlpha(0.5f, 0).setScale(0.5f, 0).setLifetime(20)
                         .randomOffset(0.125, 0.125).randomVelocity(0.0625f)
-                        .setColor(0.2F, 0.2F, 0.8F)
+                        .setColor(0.2F, 0.2F, 0.7F)
                         .repeat(world, x, y, z, 6);
-                /*
+
+                Particles.create(EidolonParticles.FEATHER_PARTICLE)
+                        .setAlpha(0.25f, 0).setScale(0.5f, 0).setLifetime(10)
+                        .randomOffset(0.125, 0.125).randomVelocity(0.0625f)
+                        .setColor(0.3F, 0.3F, 0.7F)
+                        .repeat(world, x + 0.5, y, z + 0.5, 6);
+
+                Particles.create(EidolonParticles.FEATHER_PARTICLE)
+                        .setAlpha(0.5f, 0).setScale(0.5f, 0).setLifetime(10)
+                        .randomOffset(0.125, 0.125).randomVelocity(0.0625f)
+                        .setColor(0.3F, 0.3F, 0.7F)
+                        .repeat(world, x - 0.5, y, z - 0.5, 6);
+
                 Particles.create(EidolonParticles.SPARKLE_PARTICLE)
                         .setAlpha(1, 0).setScale(0.0625f, 0).setLifetime(80)
                         .randomOffset(0.0625, 0).randomVelocity(0.125f, 0.125f)
                         .addVelocity(0, 0.25f, 0)
-                        //.setColor(r1, g1, b1, r2, g2, b2)
+                        .setColor(0.2F, 0.2F, 0.7F)
                         .enableGravity().setSpin(0.4f)
                         .repeat(world, x, y, z, world.random.nextInt(4) + 3);
                 Particles.create(EidolonParticles.SMOKE_PARTICLE)
                         .setAlpha(0.25f, 0).setScale(0.375f, 0).setLifetime(20)
                         .randomOffset(0.25, 0.25).randomVelocity(0.015625f, 0.015625f)
-                        //.setColor(r2, g2, b2)
+                        .setColor(0.2F, 0.2F, 0.7F)
                         .repeat(world, x, y, z, 6);
-                */
             }
         });
         ctx.get().setPacketHandled(true);
