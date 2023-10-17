@@ -15,7 +15,10 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
@@ -58,10 +61,13 @@ public class DyeRecipe extends ShapelessRecipe {
         return EidolonRecipes.DYE_RECIPE.get();
     }
 
+    /*
+
     @Override
     public @NotNull RecipeType<?> getType() {
         return EidolonRecipes.DYE_TYPE.get();
     }
+    */
 
     public static JsonElement asRecipe(Item item) {
         JsonObject jsonobject = new JsonObject();

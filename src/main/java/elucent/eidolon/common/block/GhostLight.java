@@ -1,6 +1,6 @@
 package elucent.eidolon.common.block;
 
-import elucent.eidolon.particle.Particles;
+import elucent.eidolon.client.particle.Particles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;

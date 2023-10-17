@@ -2,6 +2,7 @@ package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.capability.*;
+import elucent.eidolon.client.particle.*;
 import elucent.eidolon.common.block.CandleBlock;
 import elucent.eidolon.common.block.*;
 import elucent.eidolon.common.entity.*;
@@ -14,7 +15,6 @@ import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
 import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.gui.WorktableContainer;
-import elucent.eidolon.particle.*;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -479,7 +479,7 @@ public class Registry {
             .sound(SoundType.GRASS).noOcclusion()));
     public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new EidolonAbstractTreeFeature.TreeGrower(), blockProps(Blocks.OAK_SAPLING)
             .sound(SoundType.GRASS).noOcclusion().noCollission()));
-    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Blocks.GRASS)
+    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Blocks.MANGROVE_LEAVES)
             .randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Registry::allowsSpawnOnLeaves)
             .isSuffocating(Registry::isntSolid).isViewBlocking(Registry::isntSolid)));
     public static final RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
@@ -642,6 +642,7 @@ public class Registry {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void registerFactories(RegisterParticleProvidersEvent evt) {
+        Minecraft.getInstance().particleEngine.register(EidolonParticles.FEATHER_PARTICLE.get(), FeatherParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(EidolonParticles.FLAME_PARTICLE.get(), FlameParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(EidolonParticles.SMOKE_PARTICLE.get(), SmokeParticleType.Factory::new);
         Minecraft.getInstance().particleEngine.register(EidolonParticles.SPARKLE_PARTICLE.get(), SparkleParticleType.Factory::new);

@@ -1,11 +1,11 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -185,6 +185,14 @@ public class Networking {
             WingsDataUpdatePacket::encode,
             WingsDataUpdatePacket::decode,
             WingsDataUpdatePacket::consume
+        );
+
+        INSTANCE.registerMessage(
+                ++id,
+                FeatherEffectPacket.class,
+                FeatherEffectPacket::encode,
+                FeatherEffectPacket::decode,
+                FeatherEffectPacket::consume
         );
     }
 

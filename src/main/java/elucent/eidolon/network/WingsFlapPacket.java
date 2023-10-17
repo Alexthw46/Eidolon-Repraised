@@ -2,6 +2,7 @@ package elucent.eidolon.network;
 
 import elucent.eidolon.capability.IPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
@@ -33,12 +34,14 @@ public class WingsFlapPacket {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
 
-            Level world = ctx.get().getSender().level;
-            if (world != null) {
-                Player player = world.getPlayerByUUID(packet.uuid);
-                if (player != null) {
-                    player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> d.tryFlapWings(player));
-                }
+            ServerPlayer sender = ctx.get().getSender();
+            if (sender == null) return;
+            Level world = sender.level;
+            Player player = world.getPlayerByUUID(packet.uuid);
+            if (player != null) {
+                player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> d.tryFlapWings(player));
+                var pos = player.getOnPos();
+                Networking.sendToTracking(world, pos, new FeatherEffectPacket(pos));
             }
         });
         ctx.get().setPacketHandled(true);

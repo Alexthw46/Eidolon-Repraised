@@ -789,6 +789,7 @@ public class CodexChapters {
                     "eidolon.codex.chapter.light",
                     new ChantPage("eidolon.codex.page.light", Spells.LIGHT_CHANT.signs())
             );
+
             FIRE_TOUCH = new Chapter(
                     "eidolon.codex.chapter.fire_touch",
                     new ChantPage("eidolon.codex.page.fire_touch", Spells.FIRE_CHANT.signs())
@@ -831,7 +832,9 @@ public class CodexChapters {
                             new FactLockedEntry(CURE_ZOMBIE, new ItemStack(Items.GOLDEN_APPLE), Facts.ZOMBIE_CURE),
                             new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
                             new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE)
-                    )
+                    ), new IndexPage(
+
+            )
             );
 
             categories.add(SPELLS = new Category(

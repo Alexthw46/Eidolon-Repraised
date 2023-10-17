@@ -1,7 +1,7 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.particle.*;
+import elucent.eidolon.client.particle.*;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -31,4 +31,7 @@ public class EidolonParticles {
             SMOKE_PARTICLE = PARTICLES.register("smoke_particle", SmokeParticleType::new);
     public static final RegistryObject<FlameParticleType>
             FLAME_PARTICLE = PARTICLES.register("flame_particle", FlameParticleType::new);
+    public static final RegistryObject<FeatherParticleType>
+            FEATHER_PARTICLE = PARTICLES.register("feather_particle", FeatherParticleType::new);
+
 }

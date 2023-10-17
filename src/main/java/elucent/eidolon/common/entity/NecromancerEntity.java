@@ -1,10 +1,10 @@
 package elucent.eidolon.common.entity;
 
 import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
@@ -176,13 +176,15 @@ public class NecromancerEntity extends SpellcasterIllager {
                     type = EntityType.HUSK;
                 if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
                     type = EntityType.DROWNED;
-                var entity = type.create(level);
-                if (!(entity instanceof Monster thrall)) return;
-                thrall.setPos(getX(), getY(), getZ());
-                level.addFreshEntity(entity);
-                thrall.setTarget(getTarget());
-                EntityUtil.enthrall(NecromancerEntity.this, thrall);
-                Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
+                for (int i = 0; i < 3; i++) {
+                    var entity = type.create(level);
+                    if (!(entity instanceof Monster thrall)) return;
+                    thrall.setPos(getX(), getY(), getZ());
+                    level.addFreshEntity(entity);
+                    thrall.setTarget(getTarget());
+                    EntityUtil.enthrall(NecromancerEntity.this, thrall);
+                    Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
+                }
             }
         }
     }
@@ -216,7 +218,7 @@ public class NecromancerEntity extends SpellcasterIllager {
 
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.MAX_HEALTH, 50.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 12.0D)
                 .build();
@@ -229,5 +231,10 @@ public class NecromancerEntity extends SpellcasterIllager {
     @Override
     public @NotNull SoundEvent getCelebrateSound() {
         return SoundEvents.EVOKER_CELEBRATE;
+    }
+
+    @Override
+    public int getMaxSpawnClusterSize() {
+        return 1;
     }
 }

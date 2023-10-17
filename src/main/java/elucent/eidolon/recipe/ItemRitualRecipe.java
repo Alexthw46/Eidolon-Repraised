@@ -130,7 +130,7 @@ public class ItemRitualRecipe extends RitualRecipe {
                 }
             }
 
-            int healthRequirement = buffer.readInt();
+            float healthRequirement = buffer.readFloat();
 
             ItemStack output = buffer.readItem();
             boolean keepNbtOfReagent = buffer.readBoolean();

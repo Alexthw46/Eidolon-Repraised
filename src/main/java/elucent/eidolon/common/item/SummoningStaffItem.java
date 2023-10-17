@@ -1,8 +1,8 @@
 package elucent.eidolon.common.item;
 
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;

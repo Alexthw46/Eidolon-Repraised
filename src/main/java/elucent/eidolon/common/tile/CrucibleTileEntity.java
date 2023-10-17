@@ -1,10 +1,10 @@
 package elucent.eidolon.common.tile;
 
 import elucent.eidolon.Config;
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.CrucibleFailPacket;
 import elucent.eidolon.network.CrucibleSuccessPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.particle.Particles;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.registries.EidolonParticles;

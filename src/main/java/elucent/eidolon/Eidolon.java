@@ -23,6 +23,7 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -87,6 +88,8 @@ public class Eidolon {
             Runes.init();
             AthameItem.initHarvestables();
             CodexChapters.init();
+
+            Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
         });
     }
 
