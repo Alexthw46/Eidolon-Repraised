@@ -19,7 +19,7 @@ public class LightDeity extends Deity {
                 .requirement(new ResearchRequirement(DeityLocks.CURE_ZOMBIE))
         ).add(new Stage(DeityLocks.SMITE_UNDEAD, 35, true)
                 .requirement(new ResearchRequirement(DeityLocks.SMITE_UNDEAD))
-        ).setMax(50);
+        ).setMax(100);
     }
 
     @Override
