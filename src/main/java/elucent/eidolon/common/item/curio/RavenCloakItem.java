@@ -28,7 +28,7 @@ public class RavenCloakItem extends EidolonCurio implements IWingsItem {
         }
     }
 
-    public static final int MAX_CHARGES = 12;
+    public static final int MAX_CHARGES = 10;
 
     @Override
     public int getMaxCharges(ItemStack stack) {

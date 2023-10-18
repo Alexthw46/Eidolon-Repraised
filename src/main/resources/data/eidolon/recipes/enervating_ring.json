@@ -2,12 +2,15 @@
   "type": "eidolon:worktable",
   "pattern": [
     " c ",
-    " r",
-    "   "
+    "rbr",
+    " r "
   ],
   "reagents": "sfsf",
   "key": {
     "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "b": {
       "item": "eidolon:basic_ring"
     },
     "c": {

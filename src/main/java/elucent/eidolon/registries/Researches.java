@@ -98,7 +98,7 @@ public class Researches {
                 new ResearchTask.TaskItems(new ItemStack(Items.SNOW, 10)),
                 new ResearchTask.XP(6)
         ).addSpecialTasks(5, new ResearchTask.TaskItems(new ItemStack(Registry.WRAITH_HEART.get(), 3))
-        ), EntityType.STRAY);
+        ), EntityType.STRAY, EidolonEntities.WRAITH.get());
     }
 
 }

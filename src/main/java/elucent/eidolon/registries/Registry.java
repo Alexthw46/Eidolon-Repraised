@@ -636,6 +636,7 @@ public class Registry {
         event.put(EidolonEntities.NECROMANCER.get(), NecromancerEntity.createAttributes());
         event.put(EidolonEntities.RAVEN.get(), RavenEntity.createAttributes());
         event.put(EidolonEntities.SLIMY_SLUG.get(), SlimySlugEntity.createAttributes());
+        event.put(EidolonEntities.GIANT_SKEL.get(), GiantSkeletonEntity.createAttributes().build());
     }
 
     @SuppressWarnings("deprecation")

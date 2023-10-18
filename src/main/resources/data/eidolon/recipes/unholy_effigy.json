@@ -14,7 +14,7 @@
       "item": "minecraft:smooth_stone"
     },
     "u": {
-      "item": "eidolon:unholy_symbol"
+      "tag": "eidolon:patron_symbol"
     },
     "i": {
       "item": "eidolon:gold_inlay"

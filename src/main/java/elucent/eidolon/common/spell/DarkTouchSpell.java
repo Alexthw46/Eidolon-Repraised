@@ -3,15 +3,14 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.DamageTypeData;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,13 +24,9 @@ import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 
 import java.util.List;
 
@@ -42,35 +37,27 @@ public class DarkTouchSpell extends StaticSpell {
         super(name, signs);
 
         MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::tooltip);
-            return new Object();
-        });
     }
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity living
-            && !event.getSource().getMsgId().equals(living.damageSources().wither().getMsgId())
-            && living.getMainHandItem().hasTag()
-            && living.getMainHandItem().getOrCreateTag().contains(NECROTIC_KEY)) {
-            float amount = Math.min(1, event.getAmount());
-            event.setAmount(event.getAmount() - amount);
-            if (event.getAmount() <= 0) event.setCanceled(true);
-            int prevHurtResist = event.getEntity().invulnerableTime;
-            event.getEntity().invulnerableTime = 0;
-            if (event.getEntity().hurt(DamageTypeData.source(living.level, DamageTypes.WITHER, living, null), amount)) {
-                if (living.getHealth() <= 0) event.setCanceled(true);
-                else living.invulnerableTime = prevHurtResist;
-            }
-        }
-    }
+        if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().is(DamageTypes.WITHER)) {
+            var tag = living.getMainHandItem().getTag();
+            if (tag != null && tag.contains(NECROTIC_KEY)) {
+                float amount = Math.min(1, event.getAmount());
+                event.setAmount(event.getAmount() - amount);
+                if (event.getAmount() <= 0) event.setCanceled(true);
+                int prevHurtResist = event.getEntity().invulnerableTime;
+                event.getEntity().invulnerableTime = 0;
+                if (event.getEntity().hurt(DamageTypeData.source(living.level, DamageTypes.WITHER, living, null), amount)) {
 
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void tooltip(ItemTooltipEvent event) {
-        if (event.getItemStack().hasTag() && event.getItemStack().getOrCreateTag().contains(NECROTIC_KEY)) {
-            event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
+                    tag.putInt(NECROTIC_KEY, -1);
+                    if (tag.getInt(NECROTIC_KEY) <= 0) tag.remove(NECROTIC_KEY);
+
+                    if (living.getHealth() <= 0) event.setCanceled(true);
+                    else living.invulnerableTime = prevHurtResist;
+                }
+            }
         }
     }
 
@@ -91,7 +78,7 @@ public class DarkTouchSpell extends StaticSpell {
         return stack.getItem() == Registry.PEWTER_INLAY.get()
                || stack.getItem() == Items.BLACK_WOOL
                || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-                ;//|| (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+               || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
@@ -101,13 +88,12 @@ public class DarkTouchSpell extends StaticSpell {
             return new ItemStack(Registry.TOP_HAT.get());
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
-        /*
         else {
             ISoul.expendMana(player, getCost());
-            stack.getOrCreateTag().putBoolean(NECROTIC_KEY, true);
+            stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
             return stack;
-        }*/
-        else return stack;
+        }
+
     }
 
     @Override
