@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
+import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.IRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.client.ClientRegistry;
@@ -16,6 +17,7 @@ import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.recipe.ItemRitualRecipe;
 import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -106,7 +108,6 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             inputs.add(new RitualIngredient(ingredient, false));
         }
 
-
         //put foci in the middle
         int nIngredients = inputs.size();
         int middle = nIngredients / 2;
@@ -148,11 +149,18 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             }
         }
 
-        /*
         ritual.getRequirements().stream().filter(HealthRequirement.class::isInstance).map(HealthRequirement.class::cast).findFirst().ifPresent(
-                healthRequirement -> guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("eidolon.jei.health_sacrifice", healthRequirement.getHealth() / 2), x + 8, y + 5, 0xFF0000, false)
+                healthRequirement -> {
+                    var font = Minecraft.getInstance().font;
+                    Component text = Component.translatable("eidolon.jei.health_sacrifice", healthRequirement.getHealth() / 2);
+                    font.draw(stack, text, x, y - 1, ColorUtil.packColor(128, 255, 255, 255));
+                    font.draw(stack, text, x - 1, y, ColorUtil.packColor(128, 219, 212, 184));
+                    font.draw(stack, text, x + 1, y, ColorUtil.packColor(128, 219, 212, 184));
+                    font.draw(stack, text, x, y + 1, ColorUtil.packColor(128, 191, 179, 138));
+                    font.draw(stack, text, x, y, ColorUtil.packColor(255, 79, 59, 47));
+                }
         );
-         */
+
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         Tesselator tess = Tesselator.getInstance();

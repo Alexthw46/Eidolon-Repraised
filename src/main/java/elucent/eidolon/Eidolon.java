@@ -93,6 +93,7 @@ public class Eidolon {
     public void setup(final FMLCommonSetupEvent event) {
         Networking.init();
         event.enqueueWork(() -> {
+            RitualRegistry.init();
             EidolonRecipes.ritualRecipeTypes.addAll(List.of(EidolonRecipes.CRAFTING_RITUAL_TYPE.get(), EidolonRecipes.SUMMON_RITUAL_TYPE.get(), EidolonRecipes.COMMAND_RITUAL_TYPE.get(), EidolonRecipes.RITUAL_TYPE.get()));
             EidolonPotions.addBrewingRecipes();
             AltarEntries.init();
