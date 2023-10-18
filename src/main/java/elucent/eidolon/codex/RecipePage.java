@@ -24,7 +24,7 @@ public abstract class RecipePage<T extends Recipe<?>> extends Page {
         if (recipeId != null && cachedRecipe == null) {
             cachedRecipe = getRecipe(recipeId);
             if (cachedRecipe == null && !result.isEmpty()) {
-                mStack.drawString(gui.getMinecraft().font, "No matching recipe found for " + recipeId, x + 10, y + 10, 0x000000);
+                drawText(gui, mStack, "No matching recipe found for " + recipeId, x + 10, y + 10);
             }
         }
         super.fullRender(gui, mStack, x, y, mouseX, mouseY);

@@ -3,13 +3,14 @@ package elucent.eidolon.gui.jei;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
-import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.IRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.codex.CodexGui;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.recipe.ItemRitualRecipe;
@@ -26,11 +27,9 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -99,7 +98,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
         }
 
         if (recipe instanceof ItemRitualRecipe resultRitual)
-            layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResultItem(RegistryAccess.EMPTY));
+            layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResultItem());
     }
 
     public static void rearrangeIngredients(@NotNull RitualRecipe recipe, List<RitualIngredient> inputs) {
@@ -121,10 +120,12 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
     }
 
     @Override
-    public void draw(@NotNull RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(@NotNull RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
         var bg = RitualPage.BACKGROUND;
+        RenderSystem.setShaderTexture(0, bg);
         int x = 5, y = 4;
-        guiGraphics.blit(bg, x, y, 0, 0, 128, 160);
+        var guiGraphics = CodexGui.DUMMY;
+        guiGraphics.blit(stack, x, y, 0, 0, 128, 160);
 
         List<RitualIngredient> inputs = new ArrayList<>();
         rearrangeIngredients(recipe, inputs);
@@ -136,34 +137,35 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             double a = Math.toRadians(rootAngle + angleStep * i);
             int dx = (int) (64 + 48 * Math.cos(a));
             int dy = (int) (88 + 48 * Math.sin(a));
-            if (inputs.get(i).isFocus) guiGraphics.blit(bg, x + dx - 13, y + dy - 13, 128, 0, 26, 24);
-            else guiGraphics.blit(bg, x + dx - 8, y + dy - 8, 154, 0, 16, 16);
+            if (inputs.get(i).isFocus) guiGraphics.blit(stack, x + dx - 13, y + dy - 13, 128, 0, 26, 24);
+            else guiGraphics.blit(stack, x + dx - 8, y + dy - 8, 154, 0, 16, 16);
         }
 
         for (IRequirement iRequirement : ritual.getInvariants()) {
             if (iRequirement instanceof FocusItemPresentRequirement) {
-                guiGraphics.blit(bg, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
+                guiGraphics.blit(stack, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
                 break;
             }
         }
 
+        /*
         ritual.getRequirements().stream().filter(HealthRequirement.class::isInstance).map(HealthRequirement.class::cast).findFirst().ifPresent(
                 healthRequirement -> guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("eidolon.jei.health_sacrifice", healthRequirement.getHealth() / 2), x + 8, y + 5, 0xFF0000, false)
         );
-
+         */
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         Tesselator tess = Tesselator.getInstance();
         //RenderSystem.disableTexture();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(ClientRegistry::getGlowingShader);
-        RenderUtil.dragon(guiGraphics.pose(), MultiBufferSource.immediate(tess.getBuilder()), x + 64, y + 48, 20, 20, ritual.getRed(), ritual.getGreen(), ritual.getBlue());
+        RenderUtil.dragon(stack, MultiBufferSource.immediate(tess.getBuilder()), x + 64, y + 48, 20, 20, ritual.getRed(), ritual.getGreen(), ritual.getBlue());
         tess.end();
         //RenderSystem.enableTexture();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         for (int j = 0; j < 2; j++) {
-            RenderUtil.litQuad(guiGraphics.pose(), MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
+            RenderUtil.litQuad(stack, MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
                     ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol()));
             tess.end();
         }

@@ -28,11 +28,6 @@ public class EidolonFakePlayer extends FakePlayer {
     public static final GameProfile PROFILE =
             new GameProfile(UUID.fromString("edaa2c36-64e2-11ee-8c99-0242ac120002"), "Eidolon");
 
-    @Override
-    public double getBlockReach() {
-        return 4.5; //Forge default
-    }
-
     private EidolonFakePlayer(ServerLevel world) {
         super(world, PROFILE);
         connection = new FakePlayNetHandler(world.getServer(), this);

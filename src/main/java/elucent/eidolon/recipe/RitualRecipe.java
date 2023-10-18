@@ -7,7 +7,6 @@ import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.ItemRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.tile.BrazierTileEntity;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.StackedContents;
@@ -150,7 +149,7 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv) {
         return ItemStack.EMPTY;
     }
 
@@ -160,7 +159,7 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
+    public @NotNull ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 

@@ -15,7 +15,7 @@ public class SunderArmorSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        return rayTrace(player, player.getBlockReach(), 0, true) instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity;
+        return rayTrace(player, player.getReachDistance(), 0, true) instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity;
     }
 
     @Override

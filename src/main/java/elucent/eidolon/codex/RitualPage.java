@@ -22,8 +22,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -97,10 +95,10 @@ public class RitualPage extends RecipePage<RitualRecipe> {
 
         float angleStep = Math.min(30, 180 / inputs.length);
         double rootAngle = 90 - (inputs.length - 1) * angleStep / 2;
-        for (int i = 0; i < inputs.length; i ++) {
+        for (int i = 0; i < inputs.length; i++) {
             double a = Math.toRadians(rootAngle + angleStep * i);
-            int dx = (int)(64 + 48 * Math.cos(a));
-            int dy = (int)(88 + 48 * Math.sin(a));
+            int dx = (int) (64 + 48 * Math.cos(a));
+            int dy = (int) (88 + 48 * Math.sin(a));
             if (inputs[i].isFocus) gui.blit(mStack, x + dx - 13, y + dy - 13, 128, 0, 26, 24);
             else gui.blit(mStack, x + dx - 8, y + dy - 8, 154, 0, 16, 16);
         }
@@ -111,7 +109,7 @@ public class RitualPage extends RecipePage<RitualRecipe> {
         }
 
         if (ritual.getInvariants().stream().anyMatch(FocusItemPresentRequirement.class::isInstance))
-            guiGraphics.blit(bg, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
+            gui.blit(mStack, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
@@ -126,7 +124,7 @@ public class RitualPage extends RecipePage<RitualRecipe> {
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         for (int j = 0; j < 2; j++) {
             RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
-                ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ritual.getSymbol()));
+                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ritual.getSymbol()));
             tess.end();
         }
         RenderSystem.disableBlend();
@@ -141,19 +139,19 @@ public class RitualPage extends RecipePage<RitualRecipe> {
         if (cachedRecipe == null || inputs == null || inputs.length == 0 || center == null) return;
         float angleStep = Math.min(30, 180 / inputs.length);
         double rootAngle = 90 - (inputs.length - 1) * angleStep / 2;
-        for (int i = 0; i < inputs.length; i ++) {
+        for (int i = 0; i < inputs.length; i++) {
             double a = Math.toRadians(rootAngle + angleStep * i);
 
             int dx = (int) (64 + 48 * Math.cos(a));
             int dy = (int) (88 + 48 * Math.sin(a));
-            drawItems(mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
+            drawItems(gui, mStack, inputs[i].stack, x + dx - 8, y + dy - 8, mouseX, mouseY);
         }
-        drawItems(mStack, center, x + 56, y + 80, mouseX, mouseY);
+        drawItems(gui, mStack, center, x + 56, y + 80, mouseX, mouseY);
 
         if (ritual != null) {
             FocusItemPresentRequirement invariants = ritual.getInvariants().stream().filter(FocusItemPresentRequirement.class::isInstance).map(FocusItemPresentRequirement.class::cast).findFirst().orElse(null);
             if (invariants == null) return;
-            drawItems(mStack, invariants.getMatch(), x + 86, y + 80, mouseX, mouseY);
+            drawItems(gui, mStack, invariants.getMatch(), x + 86, y + 80, mouseX, mouseY);
         }
     }
 }

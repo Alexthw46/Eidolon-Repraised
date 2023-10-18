@@ -15,12 +15,6 @@ import elucent.eidolon.gui.ResearchTableContainer;
 import elucent.eidolon.gui.SoulEnchanterContainer;
 import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.gui.WorktableContainer;
-
-import elucent.eidolon.particle.*;
-import elucent.eidolon.recipe.CrucibleRecipe;
-import elucent.eidolon.recipe.DyeRecipe;
-import elucent.eidolon.recipe.WorktableRecipe;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;

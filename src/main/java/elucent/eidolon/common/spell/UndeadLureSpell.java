@@ -15,7 +15,7 @@ public class UndeadLureSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         return ray instanceof BlockHitResult;
     }
 

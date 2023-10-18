@@ -23,6 +23,7 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -45,6 +46,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
+
+import java.util.List;
 
 @Mod(Eidolon.MODID)
 public class Eidolon {
@@ -90,13 +93,15 @@ public class Eidolon {
     public void setup(final FMLCommonSetupEvent event) {
         Networking.init();
         event.enqueueWork(() -> {
-            RitualRegistry.init();
+            EidolonRecipes.ritualRecipeTypes.addAll(List.of(EidolonRecipes.CRAFTING_RITUAL_TYPE.get(), EidolonRecipes.SUMMON_RITUAL_TYPE.get(), EidolonRecipes.COMMAND_RITUAL_TYPE.get(), EidolonRecipes.RITUAL_TYPE.get()));
             EidolonPotions.addBrewingRecipes();
             AltarEntries.init();
             Researches.init();
             Runes.init();
             AthameItem.initHarvestables();
             CodexChapters.init();
+
+            Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
         });
     }
 

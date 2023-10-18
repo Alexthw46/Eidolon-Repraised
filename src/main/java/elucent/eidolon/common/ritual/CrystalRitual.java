@@ -32,7 +32,7 @@ public class CrystalRitual extends Ritual {
     public RitualResult start(Level world, BlockPos pos) {
         List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), LivingEntity::isInvertedHealAndHarm);
         for (LivingEntity e : entities) {
-            e.hurt(Registry.RITUAL_DAMAGE.source(world), e.getMaxHealth() * 1000);
+            e.hurt(Registry.RITUAL_DAMAGE, e.getMaxHealth() * 1000);
             if (!world.isClientSide) {
                 Networking.sendToTracking(world, e.blockPosition(), new CrystallizeEffectPacket(e.blockPosition()));
                 world.addFreshEntity(new ItemEntity(world, e.getX(), e.getY(), e.getZ(), new ItemStack(Registry.SOUL_SHARD.get(), 1 + world.random.nextInt(3))));

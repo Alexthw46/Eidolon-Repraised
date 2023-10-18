@@ -13,11 +13,11 @@ import elucent.eidolon.common.item.IManaRelatedItem;
 import elucent.eidolon.common.item.curio.RavenCloakRenderer;
 import elucent.eidolon.common.item.curio.SanguineAmuletItem;
 import elucent.eidolon.common.item.model.*;
+import elucent.eidolon.common.ritual.*;
 import elucent.eidolon.common.tile.CrucibleTileRenderer;
 import elucent.eidolon.common.tile.SoulEnchanterTileRenderer;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.*;
-import elucent.eidolon.ritual.*;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -68,7 +68,7 @@ public class ClientRegistry {
         event.addSprite(MoonlightRitual.SYMBOL);
         event.addSprite(PurifyRitual.SYMBOL);
         event.addSprite(RepellingRitual.SYMBOL);
-        event.addSprite(SanguineRitual.SYMBOL);
+        event.addSprite(CraftingRitual.SanguineRitual.SYMBOL);
         event.addSprite(RechargingRitual.SYMBOL);
         event.addSprite(SoulEnchanterTileRenderer.BOOK_TEXTURE);
 
@@ -88,6 +88,7 @@ public class ClientRegistry {
     public static final ModelLayerLocation NECROMANCER_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "necromancer"), "main");
     public static final ModelLayerLocation WRAITH_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "wraith"), "main");
     public static final ModelLayerLocation ZOMBIE_BRUTE_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "zombie_brute"), "main");
+    public static final ModelLayerLocation GIANT_SKEL_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "giant_skeleton"), "main");
     public static final ModelLayerLocation SLUG_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "slimy_slug"), "main");
     public static final ModelLayerLocation CRUCIBLE_STIRRER_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "crucible_stirrer"), "main");
     public static final ModelLayerLocation RAVEN_CLOAK_LAYER = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "raven_cloak"), "main");
@@ -97,6 +98,7 @@ public class ClientRegistry {
     public static TopHatModel TOP_HAT_MODEL = null;
     public static SilverArmorModel SILVER_ARMOR_MODEL = null;
     public static ZombieBruteModel ZOMBIE_BRUTE_MODEL = null;
+    public static BruteSkeletonModel GIANT_SKEL_MODEL = null;
     public static WraithModel WRAITH_MODEL = null;
     public static RavenModel RAVEN_MODEL = null;
     public static NecromancerModel NECROMANCER_MODEL = null;
@@ -112,6 +114,7 @@ public class ClientRegistry {
 
         event.registerLayerDefinition(RAVEN_LAYER, RavenModel::createBodyLayer);
         event.registerLayerDefinition(ZOMBIE_BRUTE_LAYER, ZombieBruteModel::createBodyLayer);
+        event.registerLayerDefinition(GIANT_SKEL_LAYER, BruteSkeletonModel::createBodyLayer);
         event.registerLayerDefinition(WRAITH_LAYER, WraithModel::createBodyLayer);
         event.registerLayerDefinition(NECROMANCER_LAYER, NecromancerModel::createBodyLayer);
         event.registerLayerDefinition(SLUG_LAYER, SlimySlugModel::createBodyLayer);
@@ -128,6 +131,7 @@ public class ClientRegistry {
 
         RAVEN_MODEL = new RavenModel(event.getEntityModels().bakeLayer(RAVEN_LAYER));
         ZOMBIE_BRUTE_MODEL = new ZombieBruteModel(event.getEntityModels().bakeLayer(ZOMBIE_BRUTE_LAYER));
+        GIANT_SKEL_MODEL = new BruteSkeletonModel(event.getEntityModels().bakeLayer(GIANT_SKEL_LAYER));
         WRAITH_MODEL = new WraithModel(event.getEntityModels().bakeLayer(WRAITH_LAYER));
         NECROMANCER_MODEL = new NecromancerModel(event.getEntityModels().bakeLayer(NECROMANCER_LAYER));
         SLUG_MODEL = new SlimySlugModel(event.getEntityModels().bakeLayer(SLUG_LAYER));
@@ -136,6 +140,7 @@ public class ClientRegistry {
     @SubscribeEvent
     public static void onRegisterEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
         EntityRenderers.register(EidolonEntities.ZOMBIE_BRUTE.get(), ZombieBruteRenderer::new);
+        EntityRenderers.register(EidolonEntities.GIANT_SKEL.get(), GiantSkeletonRenderer::new);
         EntityRenderers.register(EidolonEntities.WRAITH.get(), WraithRenderer::new);
         EntityRenderers.register(EidolonEntities.NECROMANCER.get(), NecromancerRenderer::new);
         EntityRenderers.register(EidolonEntities.SOULFIRE_PROJECTILE.get(), NoopRenderer::new);

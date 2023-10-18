@@ -9,12 +9,12 @@ import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
-import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +41,7 @@ public class DarkTouchSpell extends StaticSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().is(DamageTypes.WITHER)) {
+        if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId())) {
             var tag = living.getMainHandItem().getTag();
             if (tag != null && tag.contains(NECROTIC_KEY)) {
                 float amount = Math.min(1, event.getAmount());
@@ -49,7 +49,7 @@ public class DarkTouchSpell extends StaticSpell {
                 if (event.getAmount() <= 0) event.setCanceled(true);
                 int prevHurtResist = event.getEntity().invulnerableTime;
                 event.getEntity().invulnerableTime = 0;
-                if (event.getEntity().hurt(DamageTypeData.source(living.level, DamageTypes.WITHER, living, null), amount)) {
+                if (event.getEntity().hurt(new EntityDamageSource(DamageSource.WITHER.getMsgId(), living), amount)) {
 
                     tag.putInt(NECROTIC_KEY, -1);
                     if (tag.getInt(NECROTIC_KEY) <= 0) tag.remove(NECROTIC_KEY);

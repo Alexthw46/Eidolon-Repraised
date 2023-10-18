@@ -1,7 +1,8 @@
 package elucent.eidolon.client.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.client.ClientConfig;
@@ -12,15 +13,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.awt.*;
 
@@ -88,23 +87,23 @@ public class RuneParticle extends TextureSheetParticle {
         float f = (float) (Mth.lerp(pticks, this.xo, this.x) - vec3.x());
         float f1 = (float) (Mth.lerp(pticks, this.yo, this.y) - vec3.y());
         float f2 = (float) (Mth.lerp(pticks, this.zo, this.z) - vec3.z());
-        Quaternionf quaternion;
+        Quaternion quaternion;
         if (this.roll == 0.0F) {
             quaternion = info.rotation();
         } else {
-            quaternion = new Quaternionf(info.rotation());
+            quaternion = new Quaternion(info.rotation());
             float f3 = Mth.lerp(pticks, this.oRoll, this.roll);
-            quaternion.mul(Axis.ZP.rotation(f3));
+            quaternion.mul(Vector3f.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        vector3f1.rotate(quaternion);
+        vector3f1.transform(quaternion);
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
         float f4 = this.getQuadSize(pticks);
 
         for (int i = 0; i < 4; ++i) {
             Vector3f vector3f = avector3f[i];
-            vector3f.rotate(quaternion);
+            vector3f.transform(quaternion);
             vector3f.mul(f4);
             vector3f.add(f, f1, f2);
         }
@@ -116,13 +115,13 @@ public class RuneParticle extends TextureSheetParticle {
         int j = this.getLightColor(pticks);
 
 
-        Vector3f offX = new Vector3f(avector3f[0]), offY = new Vector3f(avector3f[1]);
+        Vector3f offX = avector3f[0].copy(), offY = avector3f[1].copy();
         offX.sub(avector3f[2]);
         offX.mul(0.5f);
         offY.sub(avector3f[3]);
         offY.mul(0.5f);
 
-        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
+        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
 
         for (int i = 0; i < 1; i++) {
 //        	float a = Mth.PI * i + Mth.PI * 2 * (age + pticks) / lifetime;

@@ -8,7 +8,6 @@ import elucent.eidolon.common.ritual.CraftingRitual;
 import elucent.eidolon.common.tile.BrazierTileEntity;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.util.RegistryUtil;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -38,7 +37,7 @@ public class ItemRitualRecipe extends RitualRecipe {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv) {
         ItemStack result = this.result.copy();
         if (keepNbtOfReagent && inv.getStack().hasTag()) {
             result.setTag(inv.getStack().getTag());
@@ -48,7 +47,7 @@ public class ItemRitualRecipe extends RitualRecipe {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
+    public @NotNull ItemStack getResultItem() {
         return result == null ? ItemStack.EMPTY : result.copy();
     }
 

@@ -14,6 +14,7 @@ import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +30,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,21 +39,24 @@ import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RecipeUtil.ingredientsFromObjects;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
-public class EidRitualProvider extends SimpleDataProvider {
+public class EidRitualProvider implements DataProvider {
 
+    private final DataGenerator generator;
 
     public EidRitualProvider(DataGenerator dataGenerator) {
-        super(dataGenerator);
+        this.generator = (dataGenerator);
     }
 
     List<RitualRecipe> rituals = new ArrayList<>();
 
     @Override
-    public void collectJsons(CachedOutput pOutput) {
+    public void run(@NotNull CachedOutput cache) throws IOException {
+        Path output = this.generator.getOutputFolder();
+
         addRituals();
         for (RitualRecipe recipe : rituals) {
             Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            DataProvider.saveStable(cache, recipe.asRecipe(), path);
         }
     }
 

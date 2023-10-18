@@ -8,8 +8,7 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -30,7 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -171,14 +170,12 @@ public class NecromancerEntity extends SpellcasterIllager {
         protected void performSpellCasting() {
             if (!level.isClientSide) {
                 EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
-                ResourceLocation biomeKey = ForgeRegistries.BIOMES.getKey(level.getBiome(blockPosition()).value());
-                ResourceKey<Biome> biomeEntry = ResourceKey.create(ForgeRegistries.Keys.BIOMES, biomeKey);
-                
-                if (type == EntityType.SKELETON && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SNOWY))
+                Holder<Biome> biomeKey = level.getBiome(blockPosition());
+                if (type == EntityType.SKELETON && biomeKey.is(Tags.Biomes.IS_COLD))
                     type = EntityType.STRAY;
-                if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.SANDY))
+                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_SANDY))
                     type = EntityType.HUSK;
-                if (type == EntityType.ZOMBIE && BiomeDictionary.hasType(biomeEntry, BiomeDictionary.Type.OCEAN))
+                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
                     type = EntityType.DROWNED;
 
                 for (int i = 0; i < 3; i++) {
