@@ -1,0 +1,26 @@
+{
+  "type": "eidolon:worktable",
+  "pattern": [
+    "bsb",
+    "s s",
+    "   "
+  ],
+  "reagents": "ht t",
+  "key": {
+    "b": {
+      "item": "eidolon:imbued_bones"
+    },
+    "s": {
+      "item": "eidolon:silver_ingot"
+    },
+    "t": {
+      "item": "eidolon:tattered_cloth"
+    },
+    "h": {
+      "item": "eidolon:holy_symbol"
+    }
+  },
+  "result": {
+    "item": "eidolon:bonelord_helm"
+  }
+}

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "modid": "occultism",
+      "type": "forge:mod_loaded"
+    }
+  ],
   "type": "occultism:miner",
   "ingredient": {
     "tag": "occultism:miners/deeps"
