@@ -26,7 +26,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -90,11 +95,11 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         boolean flag = this.canBrew();
         boolean flag1 = this.brewTime > 0;
         ItemStack itemstack1 = this.brewingItemStacks.get(3);
-        if (level.getGameTime() % 20 == 0) {
+        if (level != null && level.getGameTime() % 20 == 0) {
             BlockEntity below = level.getBlockEntity(worldPosition.below());
-            if (below instanceof CrucibleTileEntity) {
+            if (below instanceof CrucibleTileEntity crucibleTileEntity) {
                 int prevHeat = heat;
-                heat = ((CrucibleTileEntity)below).boiling ? 1 : 0;
+                heat = crucibleTileEntity.boiling ? 1 : 0;
                 if (prevHeat != heat) setChanged();
             }
         }
@@ -167,11 +172,11 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     }
 
     private void brewPotions() {
-        if (net.minecraftforge.event.ForgeEventFactory.onPotionAttemptBrew(brewingItemStacks)) return;
+        if (level == null || ForgeEventFactory.onPotionAttemptBrew(brewingItemStacks)) return;
         ItemStack itemstack = this.brewingItemStacks.get(3);
 
         BrewingRecipeRegistry.brewPotions(brewingItemStacks, itemstack, OUTPUT_SLOTS);
-        net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(brewingItemStacks);
+        ForgeEventFactory.onPotionBrewed(brewingItemStacks);
         BlockPos blockpos = this.getBlockPos();
         if (itemstack.hasCraftingRemainingItem()) {
             ItemStack itemstack1 = itemstack.getCraftingRemainingItem();
@@ -227,7 +232,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        if (this.level.getBlockEntity(this.worldPosition) != this) {
+        if (level == null || this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
             return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
@@ -278,11 +283,11 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         return new WoodenBrewingStandContainer(id, player, this, this.dataAccess);
     }
 
-    final net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    final LazyOptional<? extends IItemHandler>[] handlers =
+            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
     @Override
-    public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
         if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
             if (facing == Direction.UP)
                 return handlers[0].cast();
@@ -297,7 +302,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     @Override
     public void setRemoved() {
         super.setRemoved();
-        for (net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler> handler : handlers)
+        for (LazyOptional<? extends IItemHandler> handler : handlers)
             handler.invalidate();
     }
 }

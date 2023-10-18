@@ -22,7 +22,7 @@ public class HealSpell extends StaticSpell {
 
 
     public HealSpell(ResourceLocation name, Sign... signs) {
-        super(name, 20, signs);
+        super(name, 15, signs);
     }
 
     @Override

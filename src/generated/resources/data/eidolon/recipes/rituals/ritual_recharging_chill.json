@@ -1,0 +1,21 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focusItems": [],
+  "pedestalItems": [
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  ],
+  "reagent": [
+    {
+      "item": "eidolon:lesser_soul_gem"
+    }
+  ],
+  "ritual": "eidolon:recharging_chill"
+}

@@ -14,20 +14,45 @@ import net.minecraft.world.level.Level;
 public class SummonRitual extends Ritual {
     public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/summon_ritual");
 
+    public EntityType<?> getEntityType() {
+        return entity;
+    }
+
     final EntityType<?> entity;
+
+    public int getCount() {
+        return count;
+    }
+
+    final int count;
 
     public SummonRitual(EntityType<?> entity) {
         super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
         this.entity = entity;
+        this.count = 1;
+    }
+
+    public SummonRitual(EntityType<?> entity, int count) {
+        super(SYMBOL, ColorUtil.packColor(255, 121, 94, 255));
+        this.entity = entity;
+        this.count = count;
+    }
+
+    @Override
+    public Ritual cloneRitual() {
+        return new SummonRitual(entity, count);
     }
 
     @Override
     public RitualResult start(Level world, BlockPos pos) {
         if (!world.isClientSide) {
             Networking.sendToTracking(world, pos, new CrystallizeEffectPacket(pos));
-            Entity e = entity.create(world);
-            e.setPos(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
-            world.addFreshEntity(e);
+            for (int i = 0; i < count; i++) {
+                Entity e = entity.create(world);
+                if (e == null) continue;
+                e.setPos(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
+                world.addFreshEntity(e);
+            }
         }
         return RitualResult.TERMINATE;
     }

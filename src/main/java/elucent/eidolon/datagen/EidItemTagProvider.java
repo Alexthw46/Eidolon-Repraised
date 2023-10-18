@@ -24,6 +24,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
     }
 
     public static final TagKey<Item> SCRIBE_ITEMS = eidolonItemTag("scribe_items");
+    public static final TagKey<Item> PATRON_SYMBOL = eidolonItemTag("patron_symbol");
 
     @NotNull
     private static TagKey<Item> eidolonItemTag(String name) {
@@ -34,6 +35,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(ItemTags.MUSIC_DISCS).add(Registry.PAROUSIA_DISC.get());
         tag(SCRIBE_ITEMS).add(Items.CHARCOAL, Items.FEATHER, Items.BOOK, Registry.CANDLE.get().asItem(), Registry.PARCHMENT.get(), Registry.MAGIC_INK.get());
+        tag(PATRON_SYMBOL).add(Registry.HOLY_SYMBOL.get(), Registry.UNHOLY_SYMBOL.get());
         this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
         this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
 

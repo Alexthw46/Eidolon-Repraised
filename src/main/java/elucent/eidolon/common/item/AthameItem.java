@@ -95,7 +95,7 @@ public class AthameItem extends SwordItem {
                     if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
                         ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
                     else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
-                    if (random.nextInt(10) == 0) {
+                    if (random.nextInt(6) == 0) {
                         ItemStack drop = getHarvestable(state);
                         if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                             ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);

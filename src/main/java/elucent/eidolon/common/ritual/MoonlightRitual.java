@@ -20,6 +20,11 @@ public class MoonlightRitual extends Ritual {
     }
 
     @Override
+    public Ritual cloneRitual() {
+        return new MoonlightRitual();
+    }
+
+    @Override
     public RitualResult tick(Level world, BlockPos pos) {
         if (world.getDayTime() % 24000 < 13000 && world.getDayTime() % 24000 >= 0) {
             if (!world.isClientSide) {

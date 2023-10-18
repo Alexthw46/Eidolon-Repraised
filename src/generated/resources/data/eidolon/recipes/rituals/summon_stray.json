@@ -1,0 +1,24 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "focusItems": [
+    {
+      "item": "minecraft:string"
+    }
+  ],
+  "output": {
+    "entity": "minecraft:stray"
+  },
+  "pedestalItems": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:bone"
+    }
+  ],
+  "reagent": [
+    {
+      "item": "minecraft:charcoal"
+    }
+  ]
+}

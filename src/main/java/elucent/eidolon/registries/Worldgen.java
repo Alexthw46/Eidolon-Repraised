@@ -87,7 +87,7 @@ public class Worldgen {
 
         context.register(LEAD_ORE_GEN, new PlacedFeature(configured.get(LEAD_ORE_CFG).get(),
                 commonOrePlacement(6, // VeinsPerChunk
-                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-27), VerticalAnchor.absolute(41))
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-47), VerticalAnchor.absolute(41))
                 )));
 
         context.register(SILVER_ORE_GEN, new PlacedFeature(configured.get(SILVER_ORE_CFG).get(),

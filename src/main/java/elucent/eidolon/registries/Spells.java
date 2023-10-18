@@ -124,7 +124,7 @@ public class Spells {
             new ResourceLocation(Eidolon.MODID, "light_armor"),
             Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN
     ));
+
     //TODO Undead Lure - neutral
-    //TODO Inflict Weakness / Armor down
 
 }

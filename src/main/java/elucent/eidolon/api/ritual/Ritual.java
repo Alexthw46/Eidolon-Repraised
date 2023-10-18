@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ritual {
+public abstract class Ritual implements Cloneable {
     ResourceLocation name = null;
     final int color;
     final ResourceLocation symbol;
@@ -52,8 +52,18 @@ public abstract class Ritual {
         return this;
     }
 
+    public Ritual addRequirements(List<IRequirement> requirements) {
+        stepRequirements.addAll((requirements));
+        return this;
+    }
+
     public Ritual addInvariant(IRequirement requirement) {
         continuousRequirements.add(requirement);
+        return this;
+    }
+
+    public Ritual addInvariants(List<IRequirement> requirements) {
+        continuousRequirements.addAll(requirements);
         return this;
     }
 
@@ -80,6 +90,15 @@ public abstract class Ritual {
     public List<IRequirement> getInvariants() {
         return continuousRequirements;
     }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Ritual clone() {
+
+        return cloneRitual().addInvariants(this.getInvariants()).setRegistryName(getRegistryName());
+    }
+
+    public abstract Ritual cloneRitual();
 
     public enum SetupResult {
         FAIL,
@@ -130,10 +149,12 @@ public abstract class Ritual {
                 Set<BlockPos> tiles = c.getBlockEntitiesPos();
                 for (BlockPos p : tiles) if (bb.contains(p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5)) {
                     BlockEntity t = world.getBlockEntity(p);
-                    if (type.isInstance(t)) tileList.add((T)t);
+                    if (type.isInstance(t)) tileList.add(type.cast(t));
                 }
             }
         }
         return tileList;
     }
+
+
 }

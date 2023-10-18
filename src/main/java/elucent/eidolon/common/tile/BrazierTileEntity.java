@@ -1,12 +1,16 @@
 package elucent.eidolon.common.tile;
 
+import elucent.eidolon.api.ritual.IRitualItemFocus;
+import elucent.eidolon.api.ritual.IRitualItemProvider;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.ritual.Ritual.RitualResult;
 import elucent.eidolon.api.ritual.Ritual.SetupResult;
+import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.block.SingleItemTile;
 import elucent.eidolon.network.*;
-import elucent.eidolon.particle.Particles;
+import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.registries.EidolonParticles;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.RitualRegistry;
 import net.minecraft.core.BlockPos;
@@ -19,12 +23,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrazierTileEntity extends SingleItemTile implements IBurner {
@@ -46,7 +53,8 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
     @Override
     public void onDestroyed(BlockState state, BlockPos pos) {
         super.onDestroyed(state, pos);
-        if (!stack.isEmpty()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        if (!stack.isEmpty())
+            Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
     }
 
     @Override
@@ -89,9 +97,18 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         super.load(tag);
         stack = ItemStack.of(tag.getCompound("stack"));
         burning = tag.getBoolean("burning");
-        ritual = tag.contains("ritual") ? RitualRegistry.find(new ResourceLocation(tag.getString("ritual"))) : null;
+
         step = tag.getInt("step");
         ritualDone = tag.getBoolean("ritualDone");
+        //sync if there is a ritual running
+        if (burning && tag.contains("ritual")) {
+            var rid = new ResourceLocation(tag.getString("ritual"));
+            //try match with classic Rituals
+            ritual = RitualRegistry.find(rid);
+            //try match with other recipes
+            if (ritual == null && level != null)
+                getRitualRecipes(level).stream().filter(r -> r.id.equals(rid)).findFirst().ifPresent(r -> ritual = r.getRitual());
+        } else ritual = null;
     }
 
     @Override
@@ -171,31 +188,35 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
                 float y = getBlockPos().getY() + 0.875f;
                 float z = getBlockPos().getZ() + 0.5f + Mth.cos(angle) * radius;
                 Particles.create(EidolonParticles.WISP_PARTICLE)
-                    .setAlpha(0.25f * progress, 0).setScale(0.125f, 0.0625f).setLifetime(20)
-                    .setColor(1.0f, 0.5f, 0.25f, 1.0f, 0.25f, 0.375f)
-                    .spawn(level, x, y, z);
+                        .setAlpha(0.25f * progress, 0).setScale(0.125f, 0.0625f).setLifetime(20)
+                        .setColor(1.0f, 0.5f, 0.25f, 1.0f, 0.25f, 0.375f)
+                        .spawn(level, x, y, z);
             }
-            findingCounter ++;
+            findingCounter++;
             if (findingCounter == 80) {
-                Ritual r = RitualRegistry.find(level, worldPosition, stack);
-                stack = ItemStack.EMPTY;
-                findingCounter = 81;
-                setRitual(r);
+                List<RitualRecipe> recipes = getRitualRecipes(level);
+                recipes.stream().filter(recipe -> recipe.matches(this, level)).findFirst().ifPresentOrElse(recipe -> {
+                    setRitual(recipe.getRitualWithRequirements());
+                    stack = ItemStack.EMPTY;
+                    findingCounter = 81;
+                }, () -> {
+                    ritualDone = true;
+                    extinguish();
+                });
             }
         }
         if (burning && ritual != null && !ritualDone) {
-            stepCounter ++;
+            stepCounter++;
             if (stepCounter == 40) {
                 SetupResult result = ritual.setup(level, worldPosition, step);
                 if (result == SetupResult.SUCCEED) {
                     ritualDone = true;
                     if (!level.isClientSide) sync();
                     if (ritual.start(level, worldPosition) == RitualResult.TERMINATE) complete();
-                }
-                else if (result == SetupResult.FAIL && !level.isClientSide) extinguish();
+                } else if (result == SetupResult.FAIL && !level.isClientSide) extinguish();
                 else if (!level.isClientSide) {
                     stepCounter = 0;
-                    step ++;
+                    step++;
                     sync();
                 }
             }
@@ -209,11 +230,11 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
             float g = ritual == null ? 0.5f : ritual.getGreen();
             float b = ritual == null ? 0.25f : ritual.getBlue();
             Particles.create(EidolonParticles.FLAME_PARTICLE)
-                .setAlpha(0.5f, 0).setScale(0.3125f, 0.125f).setLifetime(20)
-                .randomOffset(0.25, 0.125).randomVelocity(0.00625f, 0.01875f)
-                .addVelocity(0, 0.00625f, 0)
-                .setColor(r, g, b, r, g * 0.5f, b * 1.5f)
-                .spawn(level, x, y, z);
+                    .setAlpha(0.5f, 0).setScale(0.3125f, 0.125f).setLifetime(20)
+                    .randomOffset(0.25, 0.125).randomVelocity(0.00625f, 0.01875f)
+                    .addVelocity(0, 0.00625f, 0)
+                    .setColor(r, g, b, r, g * 0.5f, b * 1.5f)
+                    .spawn(level, x, y, z);
             if (level.random.nextInt(5) == 0) Particles.create(EidolonParticles.SMOKE_PARTICLE)
                     .setAlpha(0.125f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(0.25, 0.125).randomVelocity(0.025f, 0.025f)
@@ -235,7 +256,24 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 4, worldPosition.getZ() + 1);
     }
 
-    public List<ItemStack> getPedestalItems() {
-        return List.of();
+    public void providePedestalItems(List<ItemStack> pedestalItems, List<ItemStack> focusItems) {
+        Ritual.getTilesWithinAABB(IRitualItemProvider.class, level, Ritual.getDefaultBounds(this.worldPosition)).forEach(tile -> {
+            if (tile instanceof IRitualItemFocus provider) {
+                focusItems.add(provider.provide());
+            } else {
+                pedestalItems.add(tile.provide());
+            }
+        });
     }
+
+    public static List<RitualRecipe> getRitualRecipes(Level world) {
+        List<RitualRecipe> recipes = new ArrayList<>();
+        RecipeManager manager = world.getRecipeManager();
+        for (RecipeType<? extends RitualRecipe> type : EidolonRecipes.ritualRecipeTypes) {
+            recipes.addAll(manager.getAllRecipesFor(type));
+        }
+        return recipes;
+    }
+
+
 }

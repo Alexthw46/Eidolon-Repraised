@@ -6,15 +6,22 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import static elucent.eidolon.registries.Registry.ITEMS;
 
 public class EidolonEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Eidolon.MODID);
 
     public static final RegistryObject<EntityType<ZombieBruteEntity>>
             ZOMBIE_BRUTE = addEntity("zombie_brute", 7969893, 44975, 1.2f, 2.5f, ZombieBruteEntity::new, MobCategory.MONSTER);
+    public static final RegistryObject<EntityType<GiantSkeletonEntity>>
+            GIANT_SKEL = addEntity("giant_skel", 0x706e6b, 0xadacbd, 1.2f, 2.75f, GiantSkeletonEntity::new, MobCategory.MONSTER);
+
     public static final RegistryObject<EntityType<WraithEntity>>
             WRAITH = addEntity("wraith", 0x706e6b, 0xadacbd, 0.6f, 1.9f, WraithEntity::new, MobCategory.MONSTER);
     public static final RegistryObject<EntityType<SoulfireProjectileEntity>>
@@ -27,6 +34,7 @@ public class EidolonEntities {
             CHANT_CASTER = addEntity("chant_caster", 0.1f, 0.1f, ChantCasterEntity::new, MobCategory.MISC);
     public static final RegistryObject<EntityType<AngelArrowEntity>>
             ANGEL_ARROW = addEntity("angel_arrow", 0.5f, 0.5f, AngelArrowEntity::new, MobCategory.MISC);
+
     public static final RegistryObject<EntityType<NecromancerEntity>>
             NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 1.9f, NecromancerEntity::new, MobCategory.MONSTER);
     public static final RegistryObject<EntityType<RavenEntity>>
@@ -43,11 +51,12 @@ public class EidolonEntities {
     }
 
     static <T extends Mob> RegistryObject<EntityType<T>> addEntity(String name, int color1, int color2, float width, float height, EntityType.EntityFactory<T> factory, MobCategory kind) {
-        //ITEMS.register("spawn_" + name, () -> new SpawnEggItem((EntityType<? extends T>) type, color1, color2, itemProps().tab(CreativeModeTab.TAB_MISC)));
-        return ENTITIES.register(name, () -> EntityType.Builder.of(factory, kind)
+        var type = ENTITIES.register(name, () -> EntityType.Builder.of(factory, kind)
                 .setTrackingRange(64)
                 .setUpdateInterval(1)
                 .sized(width, height)
                 .build(Eidolon.MODID + ":" + name));
+        ITEMS.register("spawn_" + name, () -> new ForgeSpawnEggItem(type, color1, color2, new Item.Properties()));
+        return type;
     }
 }

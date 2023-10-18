@@ -89,12 +89,4 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
         drawItem(mStack, result, x + 56, y + yoff + steps.size() * 20 + 11, mouseX, mouseY);
     }
 
-    public CruciblePage linkRecipe(String modid, String recipe) {
-        return linkRecipe(new ResourceLocation(modid, recipe));
-    }
-
-    public CruciblePage linkRecipe(ResourceLocation recipe) {
-        CrucibleRegistry.linkPage(recipe, this);
-        return this;
-    }
 }
