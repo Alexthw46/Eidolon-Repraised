@@ -34,7 +34,7 @@ public class DarkTouchSpell extends StaticSpell {
     public static final String NECROTIC_KEY = new ResourceLocation(Eidolon.MODID, "necrotic").toString();
 
     public DarkTouchSpell(ResourceLocation name, Sign... signs) {
-        super(name, signs);
+        super(name, 20, signs);
 
         MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
     }

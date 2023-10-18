@@ -27,7 +27,7 @@ public class LightSpell extends StaticSpell {
     final Deity deity;
 
     public LightSpell(ResourceLocation name, Deity deity, Sign... signs) {
-        super(name, 5, signs);
+        super(name, 3, signs);
         this.deity = deity;
     }
 
