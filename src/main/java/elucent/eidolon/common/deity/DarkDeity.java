@@ -19,7 +19,7 @@ public class DarkDeity extends Deity {
                 .requirement(new ResearchRequirement(DeityLocks.ZOMBIFY_VILLAGER))
         ).add(new Stage(DeityLocks.ENTHRALL_UNDEAD, 35, true)
                 .requirement(new ResearchRequirement(DeityLocks.ENTHRALL_UNDEAD))
-        ).setMax(50);
+        ).setMax(100);
     }
 
     @Override
