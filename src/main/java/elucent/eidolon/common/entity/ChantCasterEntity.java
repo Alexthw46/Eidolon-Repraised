@@ -183,7 +183,8 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         }
 
         if (caster != null) {
-            this.setPos(caster.getEyePosition().add(0, -0.5, 0));
+            double rad = Math.toRadians(caster.yHeadRot);
+            this.setPos(caster.getEyePosition().add(-Math.sin(rad) / 2, -0.5, +Math.cos(rad) / 2));
             this.look = caster.getLookAngle();
         }
     }
