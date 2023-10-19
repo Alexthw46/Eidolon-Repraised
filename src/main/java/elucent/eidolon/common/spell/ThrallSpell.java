@@ -27,7 +27,7 @@ public class ThrallSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach() + 3, 0, false);
         if (ray instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity living) {
             var type = Eidolon.getTrueMobType(living);
             return type == MobType.UNDEAD;
@@ -38,7 +38,7 @@ public class ThrallSpell extends StaticSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         if (world instanceof ServerLevel && player instanceof ServerPlayer sp) {
-            HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+            HitResult ray = rayTrace(player, player.getBlockReach() + 3, 0, false);
             if (ray instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity living) {
                 float actualCost = 2 * getCost() * living.getHealth() / living.getMaxHealth();
                 player.getCapability(ISoul.INSTANCE).ifPresent(soul -> {
