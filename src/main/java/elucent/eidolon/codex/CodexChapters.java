@@ -41,7 +41,12 @@ public class CodexChapters {
                     new EntityPage(EidolonEntities.ZOMBIE_BRUTE.get()),
                     new TitlePage("eidolon.codex.page.monsters.wraith"),
                     new EntityPage(EidolonEntities.WRAITH.get()),
-                    new TitlePage("eidolon.codex.page.monsters.chilled")
+                    new TitlePage("eidolon.codex.page.monsters.chilled"),
+                    new TextPage(""),
+                    new EntityPage(EidolonEntities.GIANT_SKEL.get()),
+                    new TitlePage("eidolon.codex.page.monsters.giant_skeleton"),
+                    new EntityPage(EidolonEntities.NECROMANCER.get()),
+                    new TitlePage("eidolon.codex.page.monsters.necromancer")
             );
 
             CRITTERS = new Chapter(

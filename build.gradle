@@ -145,8 +145,9 @@ dependencies {
     //runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}:${ars_version}")
     //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
     //runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
-    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4448157")
 
+    //implementation fg.deobf("curse.maven:embeddium-908741:4800420")
+    //implementation fg.deobf("curse.maven:modernfix-790626:4792389")
 
     implementation fg.deobf("curse.maven:placebo-283644:4691637")
     implementation fg.deobf("curse.maven:aphoattr-898963:4698919")

@@ -5,6 +5,7 @@ import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonParticles;
+import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,8 +15,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -46,29 +49,31 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
         Vec3 motion = getDeltaMovement();
         Vec3 pos = position();
         Vec3 norm = motion.normalize().scale(0.025f);
-        for (int i = 0; i < 8; i ++) {
+        for (int i = 0; i < 8; i++) {
             double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
             Particles.create(EidolonParticles.WISP_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.375f, 0).setScale(0.25f, 0)
-                .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
-                .setLifetime(5)
-                .spawn(level, lerpX, lerpY, lerpZ);
+                    .addVelocity(-norm.x, -norm.y, -norm.z)
+                    .setAlpha(0.375f, 0).setScale(0.25f, 0)
+                    .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
+                    .setLifetime(5)
+                    .spawn(level, lerpX, lerpY, lerpZ);
             Particles.create(EidolonParticles.SMOKE_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.0625f, 0).setScale(0.3125f, 0.125f)
-                .setColor(0.625f, 0.375f, 1, 0.25f, 0.25f, 0.75f)
-                .randomVelocity(0.025f, 0.025f)
-                .setLifetime(20)
-                .spawn(level, lerpX, lerpY, lerpZ);
+                    .addVelocity(-norm.x, -norm.y, -norm.z)
+                    .setAlpha(0.0625f, 0).setScale(0.3125f, 0.125f)
+                    .setColor(0.625f, 0.375f, 1, 0.25f, 0.25f, 0.75f)
+                    .randomVelocity(0.025f, 0.025f)
+                    .setLifetime(20)
+                    .spawn(level, lerpX, lerpY, lerpZ);
         }
     }
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
         target.hurt(DamageTypeData.source(target.level(), DamageTypes.WITHER, this, level.getEntity((int) casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
+        if (target instanceof LivingEntity living)
+            living.addEffect(new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT.get(), 100));
         onImpact(ray);
     }
 
