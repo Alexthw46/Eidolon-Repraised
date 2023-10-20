@@ -1,16 +1,13 @@
 package elucent.eidolon.gui.jei;
 
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.IRequirement;
 import elucent.eidolon.api.ritual.Ritual;
-import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.codex.CodexGui;
 import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
@@ -18,7 +15,6 @@ import elucent.eidolon.recipe.ItemRitualRecipe;
 import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.ColorUtil;
-import elucent.eidolon.util.RenderUtil;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -29,18 +25,17 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static elucent.eidolon.codex.RitualPage.renderRitualSymbol;
 
 public class RitualCategory implements IRecipeCategory<RitualRecipe> {
     static final ResourceLocation UUID = new ResourceLocation(Eidolon.MODID, "ritual");
@@ -161,26 +156,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
                 }
         );
 
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        Tesselator tess = Tesselator.getInstance();
-        //RenderSystem.disableTexture();
-        RenderSystem.depthMask(false);
-        RenderSystem.setShader(ClientRegistry::getGlowingShader);
-        RenderUtil.dragon(stack, MultiBufferSource.immediate(tess.getBuilder()), x + 64, y + 48, 20, 20, ritual.getRed(), ritual.getGreen(), ritual.getBlue());
-        tess.end();
-        //RenderSystem.enableTexture();
-        RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        for (int j = 0; j < 2; j++) {
-            RenderUtil.litQuad(stack, MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
-                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol()));
-            tess.end();
-        }
-        RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        renderRitualSymbol(ritual, stack, x, y);
 
     }
 

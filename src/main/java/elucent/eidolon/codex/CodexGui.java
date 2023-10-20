@@ -3,7 +3,6 @@ package elucent.eidolon.codex;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Rune;
@@ -99,34 +98,21 @@ public class CodexGui extends Screen {
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         bgx = baseX + 16;
-        Tesselator tess = Tesselator.getInstance();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         for (Sign sign : chant) {
-            /*
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
-                    1, 1, 1, 0.5f, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
-            tess.end();
-            bgx += 12;
-             */
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+            RenderUtil.litQuad(mStack, bufferSource, bgx + 4, baseY + 4, 16, 16,
                     sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-            tess.end();
+            bufferSource.endBatch();
             bgx += 24;
         }
         bgx = baseX + 16;
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         for (int i = 0; i < chant.size(); i++) {
             float flicker = 0.75f + 0.25f * (float) Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks() - 360.0f * i / chant.size()));
-            /*
-            Sign rune = chant.get(i);
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 2, baseY + 8, 8, 8,
-                flicker, flicker, flicker, 0.5f * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rune.getSprite()));
-            tess.end();
-            bgx += 12;
-             */
             Sign sign = chant.get(i);
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), bgx + 4, baseY + 4, 16, 16,
+            RenderUtil.litQuad(mStack, bufferSource, bgx + 4, baseY + 4, 16, 16,
                     sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-            tess.end();
+            bufferSource.endBatch();
             bgx += 24;
         }
         RenderSystem.defaultBlendFunc();

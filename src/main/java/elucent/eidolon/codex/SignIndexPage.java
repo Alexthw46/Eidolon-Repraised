@@ -97,7 +97,7 @@ public class SignIndexPage extends Page {
             gui.blit(mStack, xx, yy, knowledge.knowsSign(entries[i].sign) ? 128 : 176, 0, 48, 48);
 
             if (knowledge.knowsSign(sign)) {
-                Tesselator tess = Tesselator.getInstance();
+                MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
                 RenderSystem.enableBlend();
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
                 RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
@@ -111,9 +111,9 @@ public class SignIndexPage extends Page {
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
                     float r = sign.getRed(), g = sign.getGreen(), b = sign.getBlue();
-                    RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 12, yy + 12, 24, 24,
+                    RenderUtil.litQuad(mStack, bufferSource, xx + 12, yy + 12, 24, 24,
                             sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-                    tess.end();
+                    bufferSource.endBatch();
                 }
                 RenderSystem.disableBlend();
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

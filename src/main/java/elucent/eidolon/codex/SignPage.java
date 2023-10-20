@@ -50,7 +50,6 @@ public class SignPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, BACKGROUND);
-        Tesselator tess = Tesselator.getInstance();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
@@ -61,10 +60,11 @@ public class SignPage extends Page {
         colorBlit(mStack, -40, -40, 128, 96, 80, 80, 256, 256, sign.getColor());
         mStack.popPose();
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         for (int i = 0; i < 2; i ++) {
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), x + 44, y + 60, 40, 40,
+            RenderUtil.litQuad(mStack, bufferSource, x + 44, y + 60, 40, 40,
                 sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-            tess.end();
+            bufferSource.endBatch();
         }
         RenderSystem.disableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

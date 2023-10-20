@@ -69,9 +69,9 @@ public class ChantPage extends Page {
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 272, 208, 24, 32, 512, 512);
         }
         CodexGui.blit(mStack, baseX + w, y + 28, 296, 208, 16, 32, 512, 512);
-
-        Tesselator tess = Tesselator.getInstance();
         RenderSystem.enableBlend();
+
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         for (int i = 0; i < chant.length; i ++) {
             RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -82,13 +82,14 @@ public class ChantPage extends Page {
             float flicker = 0.875f + 0.125f * (float)Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks()));
             RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), baseX + i * 24 + 4, y + 32, 16, 16,
+            RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
                 sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-            tess.end();
-            RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), baseX + i * 24 + 4, y + 32, 16, 16,
+            bufferSource.endBatch();
+            RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
                 sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
-            tess.end();
+            bufferSource.endBatch();
         }
+
         RenderSystem.disableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
