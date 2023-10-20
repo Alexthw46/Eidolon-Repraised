@@ -18,8 +18,8 @@ import java.util.Optional;
 public class LivingEntityMixin {
     @Inject(method = "getMobType", at = @At("HEAD"), cancellable = true)
     public void eidolonrepraised$getMobType(CallbackInfoReturnable<MobType> ci) {
-        //doublecast to not make the IDE freak out
-        if (((Entity) (Object) this) instanceof LivingEntity living && living.hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && !Eidolon.trueMobType) {
+        //doublecast to not make the IDE freak out, activeEffectsMaps can be not initialized for reasons
+        if (((Entity) (Object) this) instanceof LivingEntity living && living.getActiveEffectsMap() != null && living.hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && !Eidolon.trueMobType) {
             ci.setReturnValue(MobType.UNDEAD);
         }
     }
