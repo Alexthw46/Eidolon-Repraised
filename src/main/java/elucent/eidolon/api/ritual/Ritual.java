@@ -29,6 +29,12 @@ public abstract class Ritual implements Cloneable {
         this.color = color;
     }
 
+    public Ritual(ResourceLocation symbol, int color, ResourceLocation name) {
+        this.symbol = symbol;
+        this.color = color;
+        this.name = name;
+    }
+
     public ResourceLocation getSymbol() {
         return this.symbol;
     }
