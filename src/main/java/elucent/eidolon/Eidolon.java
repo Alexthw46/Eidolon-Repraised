@@ -100,8 +100,6 @@ public class Eidolon {
             Researches.init();
             Runes.init();
             AthameItem.initHarvestables();
-            CodexChapters.init();
-
             Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
         });
     }
@@ -129,6 +127,8 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.CENSER_TILE_ENTITY.get(), (trd) -> new CenserRenderer());
 
         event.enqueueWork(() -> {
+            CodexChapters.init();
+
             MenuScreens.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
             MenuScreens.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);
             MenuScreens.register(Registry.WOODEN_STAND_CONTAINER.get(), WoodenBrewingStandScreen::new);

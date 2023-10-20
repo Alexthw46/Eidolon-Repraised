@@ -20,7 +20,7 @@ public class EidolonEntities {
     public static final RegistryObject<EntityType<ZombieBruteEntity>>
             ZOMBIE_BRUTE = addEntity("zombie_brute", 7969893, 44975, 1.2f, 2.5f, ZombieBruteEntity::new, MobCategory.MONSTER);
     public static final RegistryObject<EntityType<GiantSkeletonEntity>>
-            GIANT_SKEL = addEntity("giant_skel", 0x706e6b, 0xadacbd, 1.2f, 2.75f, GiantSkeletonEntity::new, MobCategory.MONSTER);
+            GIANT_SKEL = addEntity("giant_skeleton", 0x706e6b, 0xadacbd, 1.2f, 2.75f, GiantSkeletonEntity::new, MobCategory.MONSTER);
 
     public static final RegistryObject<EntityType<WraithEntity>>
             WRAITH = addEntity("wraith", 0x706e6b, 0xadacbd, 0.6f, 1.9f, WraithEntity::new, MobCategory.MONSTER);
