@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerRenderer.class)
 public class PlayerRendererMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void constructor(CallbackInfo ci) {
+    public void eidolonrepraised$constructor(CallbackInfo ci) {
          ((PlayerRenderer)(Object)this).addLayer(new RavenVariantLayer<>(((PlayerRenderer)(Object)this)));
     }
 }
