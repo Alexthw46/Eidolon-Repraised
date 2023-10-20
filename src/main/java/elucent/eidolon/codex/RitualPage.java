@@ -2,7 +2,6 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.Tesselator;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.Ritual;
@@ -39,6 +38,29 @@ public class RitualPage extends RecipePage<RitualRecipe> {
 
     public RitualPage(ResourceLocation background, ResourceLocation recipeName, ItemStack empty) {
         super(background, (recipeName.getNamespace().equals("eidolon")) ? prefix("rituals/" + recipeName.getPath()) : recipeName, empty);
+    }
+
+    public static void renderRitualSymbol(@NotNull GuiGraphics guiGraphics, int x, int y, Ritual ritual) {
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        MultiBufferSource.BufferSource buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
+        //RenderSystem.disableTexture();
+        RenderSystem.depthMask(false);
+        RenderSystem.setShader(ClientRegistry::getGlowingShader);
+        RenderUtil.dragon(guiGraphics.pose(), buffersource, x + 64, y + 48, 20, 20, ritual.getRed(), ritual.getGreen(), ritual.getBlue());
+        buffersource.endBatch();
+        //RenderSystem.enableTexture();
+        RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        for (int j = 0; j < 2; j++) {
+            RenderUtil.litQuad(guiGraphics.pose(), buffersource, x + 52, y + 36, 24, 24,
+                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol()));
+            buffersource.endBatch();
+        }
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
     }
 
     @Override
@@ -111,26 +133,7 @@ public class RitualPage extends RecipePage<RitualRecipe> {
         if (ritual.getInvariants().stream().anyMatch(FocusItemPresentRequirement.class::isInstance))
             guiGraphics.blit(bg, x + 86 - 5, y + 80 - 5, 128, 0, 26, 24);
 
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        Tesselator tess = Tesselator.getInstance();
-        //RenderSystem.disableTexture();
-        RenderSystem.depthMask(false);
-        RenderSystem.setShader(ClientRegistry::getGlowingShader);
-        RenderUtil.dragon(guiGraphics.pose(), MultiBufferSource.immediate(tess.getBuilder()), x + 64, y + 48, 20, 20, ritual.getRed(), ritual.getGreen(), ritual.getBlue());
-        tess.end();
-        //RenderSystem.enableTexture();
-        RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        for (int j = 0; j < 2; j++) {
-            RenderUtil.litQuad(guiGraphics.pose(), MultiBufferSource.immediate(tess.getBuilder()), x + 52, y + 36, 24, 24,
-                    ritual.getRed(), ritual.getGreen(), ritual.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ritual.getSymbol()));
-            tess.end();
-        }
-        RenderSystem.disableBlend();
-        RenderSystem.depthMask(true);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        renderRitualSymbol(guiGraphics, x, y, ritual);
     }
 
     @Override

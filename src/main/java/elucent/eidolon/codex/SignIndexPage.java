@@ -2,7 +2,6 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
@@ -78,7 +77,7 @@ public class SignIndexPage extends Page {
             guiGraphics.blit(BACKGROUND, xx, yy, knowledge.knowsSign(entries[i].sign) ? 128 : 176, 0, 48, 48);
 
             if (knowledge.knowsSign(sign)) {
-                Tesselator tess = Tesselator.getInstance();
+                MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
                 RenderSystem.enableBlend();
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
                 RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
@@ -91,9 +90,9 @@ public class SignIndexPage extends Page {
                 }
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
-                    RenderUtil.litQuad(mStack, MultiBufferSource.immediate(tess.getBuilder()), xx + 12, yy + 12, 24, 24,
+                    RenderUtil.litQuad(mStack, bufferSource, xx + 12, yy + 12, 24, 24,
                             sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
-                    tess.end();
+                    bufferSource.endBatch();
                 }
                 RenderSystem.disableBlend();
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

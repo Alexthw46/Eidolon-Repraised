@@ -1,13 +1,12 @@
 package elucent.eidolon.codex;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -31,10 +30,9 @@ public class EntityPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
         Entity e = type.create(Minecraft.getInstance().level);
+        if (e == null) return;
         EntityRenderer<? super Entity> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(e);
-        RenderSystem.disableCull();
-        RenderSystem.enableDepthTest();
-        RenderSystem.enableBlend();
+
         Tesselator tess = Tesselator.getInstance();
         PoseStack mStack = guiGraphics.pose();
         mStack.pushPose();
@@ -44,14 +42,12 @@ public class EntityPage extends Page {
         float scale = 112 / e.getBbHeight();
         scale = Math.min(scale, 100);
         mStack.scale(scale, -scale, scale);
-        RenderSystem.setShader(GameRenderer::getRendertypeEntityAlphaShader);
-        RenderSystem.setupShaderLights(RenderSystem.getShader());
-        RenderSystem.setShaderTexture(0, renderer.getTextureLocation(e));
-        renderer.render(e, e.getYRot(), 0, mStack, MultiBufferSource.immediate(tess.getBuilder()), 0xf000f0);
-        tess.end();
+        MultiBufferSource.BufferSource buf = MultiBufferSource.immediate(tess.getBuilder());
+        Lighting.setupForFlatItems();
+        renderer.render(e, e.getYRot(), 0, mStack, buf, 0xf000f0);
+        buf.endLastBatch();
+        Lighting.setupFor3DItems();
         mStack.popPose();
-        RenderSystem.enableCull();
-        RenderSystem.disableBlend();
-        RenderSystem.disableDepthTest();
+
     }
 }
