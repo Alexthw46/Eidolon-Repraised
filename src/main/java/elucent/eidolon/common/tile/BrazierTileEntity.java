@@ -53,7 +53,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
     @Override
     public void onDestroyed(BlockState state, BlockPos pos) {
         super.onDestroyed(state, pos);
-        if (!stack.isEmpty())
+        if (!stack.isEmpty() && level != null)
             Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
     }
 
@@ -124,7 +124,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         burning = false;
         stepCounter = 0;
         findingCounter = 0;
-        if (!level.isClientSide) {
+        if (level != null && !level.isClientSide) {
             if (ritual != null)
                 Networking.sendToTracking(level, worldPosition.above(2), new RitualCompletePacket(worldPosition.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
             ritual = null;
@@ -138,7 +138,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
         burning = false;
         stepCounter = 0;
         findingCounter = 0;
-        if (!level.isClientSide) {
+        if (level != null && !level.isClientSide) {
             if (ritual != null)
                 Networking.sendToTracking(level, worldPosition.above(2), new FlameEffectPacket(worldPosition.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
             ritual = null;
@@ -156,7 +156,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
     public void startBurning() {
         burning = true;
         findingCounter = 0;
-        if (!level.isClientSide) {
+        if (level != null && !level.isClientSide) {
             Networking.sendToTracking(level, worldPosition, new IgniteEffectPacket(worldPosition, 1.0f, 0.5f, 0.25f));
             sync();
         }
@@ -169,7 +169,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
             stepCounter = 0;
             step = 0;
             ritualDone = false;
-            if (!level.isClientSide) {
+            if (level != null && !level.isClientSide) {
                 Networking.sendToTracking(level, worldPosition.above(2), new FlameEffectPacket(worldPosition.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
                 sync();
             }
@@ -264,6 +264,9 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
                 pedestalItems.add(tile.provide());
             }
         });
+        //clean up empty stacks
+        focusItems.removeIf(ItemStack::isEmpty);
+        pedestalItems.removeIf(ItemStack::isEmpty);
     }
 
     public static List<RitualRecipe> getRitualRecipes(Level world) {
