@@ -23,7 +23,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
 version = "${mc_version}-${mod_version}"
-archivesBaseName = 'eidolon'
+archivesBaseName = 'eidolon_repraised'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
