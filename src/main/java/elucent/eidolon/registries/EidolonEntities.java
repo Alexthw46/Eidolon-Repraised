@@ -36,7 +36,7 @@ public class EidolonEntities {
             ANGEL_ARROW = addEntity("angel_arrow", 0.5f, 0.5f, AngelArrowEntity::new, MobCategory.MISC);
 
     public static final RegistryObject<EntityType<NecromancerEntity>>
-            NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 1.9f, NecromancerEntity::new, MobCategory.MONSTER);
+            NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 2.2f, NecromancerEntity::new, MobCategory.MONSTER);
     public static final RegistryObject<EntityType<RavenEntity>>
             RAVEN = addEntity("raven", 0x1e1f24, 0x404f66, 0.375f, 0.5f, RavenEntity::new, MobCategory.CREATURE);
     public static final RegistryObject<EntityType<SlimySlugEntity>>
