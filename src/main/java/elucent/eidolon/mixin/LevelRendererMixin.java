@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LevelRendererMixin {
     @Inject(method = "renderLevel", at = @At(value = "INVOKE",
         target = "Lnet/minecraft/client/renderer/LevelRenderer;checkPoseStack(Lcom/mojang/blaze3d/vertex/PoseStack;)V", ordinal = 1))
-    private void customRenderLevel(CallbackInfo ci) {
+    private void eidolonrepraised$customRenderLevel(CallbackInfo ci) {
         ClientEvents.getDelayedRender().endBatch(RenderUtil.VAPOR_TRANSLUCENT);
         ClientEvents.getDelayedRender().endBatch(RenderUtil.GLOWING_BLOCK_PARTICLE);
     }
