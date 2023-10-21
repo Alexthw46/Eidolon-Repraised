@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -46,7 +47,7 @@ public class AbsorptionRitual extends Ritual {
             }
         }
 
-        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), (e) -> Eidolon.getTrueMobType(e) == MobType.UNDEAD && !EntityUtil.isEnthralled(e) && e.getHealth() <= e.getMaxHealth() / 5);
+        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), (e) -> Eidolon.getTrueMobType(e) == MobType.UNDEAD && !(e instanceof Player) && !EntityUtil.isEnthralled(e) && e.getHealth() <= e.getMaxHealth() / 5);
         ListTag entityTags = new ListTag();
         for (LivingEntity e : entities) {
             e.setHealth(e.getMaxHealth());
@@ -58,10 +59,6 @@ public class AbsorptionRitual extends Ritual {
                 }
             }
             CompoundTag eTag = e.serializeNBT();
-            entityTags.add(eTag);
-            entityTags.add(eTag);
-            entityTags.add(eTag);
-            entityTags.add(eTag);
             entityTags.add(eTag);
             e.remove(RemovalReason.KILLED);
         }
