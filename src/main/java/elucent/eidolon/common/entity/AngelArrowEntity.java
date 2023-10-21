@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -23,11 +22,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class AngelArrowEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
     public AbstractArrow internal = null;
+
+    public Predicate<LivingEntity> mode = (e) -> true;
 
     public AngelArrowEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
@@ -71,9 +73,9 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         internal.copyPosition(this);
         internal.setDeltaMovement(getDeltaMovement());
         if (!inGround) {
-            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12), (e) -> e != getOwner() && e.isAlive() && !(getOwner() != null && e.isAlliedTo(getOwner())) && (!level.isClientSide || e != Minecraft.getInstance().player));
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12), (e) -> mode.test(e) && e != getOwner() && e.isAlive() && !(getOwner() != null && e.isAlliedTo(getOwner())) && (!level.isClientSide || e != Minecraft.getInstance().player));
             if (!entities.isEmpty()) {
-                for (Entity e : entities) System.out.println(e);
+                //for (Entity e : entities) System.out.println(e);
                 LivingEntity nearest = entities.stream().min(Comparator.comparingDouble((e) -> e.distanceToSqr(this))).get();
                 Vec3 diff = nearest.position().add(0, nearest.getBbHeight() / 2, 0).subtract(position());
                 double speed = getDeltaMovement().length();
