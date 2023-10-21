@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,7 +21,6 @@ import javax.annotation.Nullable;
 public class SingleItemTile extends TileEntityBase implements Container {
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
     protected ItemStack stack = ItemStack.EMPTY;
-    public ItemEntity renderEntity;
 
     public SingleItemTile(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
@@ -113,7 +111,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     @Override
     public void load(@NotNull CompoundTag compound) {
         super.load(compound);
-        stack = ItemStack.of((CompoundTag) compound.get("itemStack"));
+        stack = ItemStack.of(compound.getCompound("stack"));
     }
 
     @Override
@@ -122,7 +120,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
         if (stack != null) {
             CompoundTag stackTag = new CompoundTag();
             stack.save(stackTag);
-            tag.put("itemStack", stackTag);
+            tag.put("stack", stackTag);
         }
     }
 }

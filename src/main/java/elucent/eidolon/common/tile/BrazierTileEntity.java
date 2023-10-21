@@ -95,7 +95,6 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        stack = ItemStack.of(tag.getCompound("stack"));
         burning = tag.getBoolean("burning");
 
         step = tag.getInt("step");
@@ -112,8 +111,8 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        tag.put("stack", stack.save(new CompoundTag()));
+    public void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.putBoolean("burning", burning);
         if (ritual != null) tag.putString("ritual", ritual.getRegistryName().toString());
         tag.putInt("step", step);
