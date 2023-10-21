@@ -54,8 +54,8 @@ public class ItemRitualRecipe extends RitualRecipe {
     @Override
     public Ritual getRitual() {
         if (symbol != null && color != 0)
-            return new CraftingRitual(symbol, color, result, keepNbtOfReagent);
-        return new CraftingRitual.SanguineRitual(result);
+            return new CraftingRitual(symbol, color, result, keepNbtOfReagent).setRegistryName(id);
+        return new CraftingRitual.SanguineRitual(result).setRegistryName(id);
     }
 
     @Override
