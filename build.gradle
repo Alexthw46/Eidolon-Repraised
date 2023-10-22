@@ -135,6 +135,9 @@ dependencies {
 
     //runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}:${ars_version}")
     //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
+
+    implementation fg.deobf("curse.maven:placebo-283644:4759853")
+    implementation fg.deobf("curse.maven:apotheosis-313970:4730358")
     runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
     //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4448157")
 
