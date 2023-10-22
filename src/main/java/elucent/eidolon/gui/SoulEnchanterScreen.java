@@ -63,7 +63,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             double d0 = mouseX - (double)(i + 60);
             double d1 = mouseY - (double)(j + 14 + 19 * k);
             if (d0 >= 0.0D && d1 >= 0.0D && d0 < 108.0D && d1 < 19.0D && this.menu.clickMenuButton(this.minecraft.player, k)) {
-                this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, k);
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, k);
                 return true;
             }
         }
@@ -137,7 +137,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             int k1 = j1 + 20;
             this.setBlitOffset(0);
             RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
-            int experienceLevelCost = Math.min(5, menu.worldClue[i1]);
+            int experienceLevelCost = Math.min(10, menu.worldClue[i1]);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i2 = 86;
             FormattedText itextproperties = EnchantmentNames.getInstance().getRandomName(this.font, i2);
@@ -145,7 +145,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             if (experienceLevelCost < 1) {
                 this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
-                if (((l == 0 || this.minecraft.player.experienceLevel < experienceLevelCost) && !this.minecraft.player.getAbilities().instabuild) || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                if ((l == 0 || this.minecraft.player.experienceLevel < experienceLevelCost) && !this.minecraft.player.getAbilities().instabuild || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
                     this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
                     this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (experienceLevelCost - 1), 239, 16, 16);
                     this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
@@ -177,9 +177,9 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         int soulShardAmount = this.menu.getSoulShardAmount();
 
         for (int j = 0; j < 3; ++j) {
-            Enchantment enchantment = Enchantment.byId((this.menu).enchantClue[j]);
-            int enchantmentLevel = (this.menu).worldClue[j];
-            int experienceLevelCost = Math.min(5, enchantmentLevel);
+            Enchantment enchantment = Enchantment.byId(this.menu.enchantClue[j]);
+            int enchantmentLevel = this.menu.worldClue[j];
+            int experienceLevelCost = Math.min(10, enchantmentLevel);
             if (this.isHovering(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && enchantmentLevel > 0) {
                 List<Component> list = Lists.newArrayList();
                 list.add(enchantment == null ? Component.literal("") : enchantment.getFullname(enchantmentLevel));
@@ -189,7 +189,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
                 } else if (!flag) {
                     list.add(Component.empty());
                     if (this.minecraft.player.experienceLevel < experienceLevelCost) {
-                        list.add((Component.translatable("container.enchant.level.requirement", experienceLevelCost)).withStyle(ChatFormatting.RED));
+                        list.add(Component.translatable("container.enchant.level.requirement", experienceLevelCost).withStyle(ChatFormatting.RED));
                     } else {
                         MutableComponent iformattabletextcomponent = Component.translatable("container.eidolon.enchant.shard.one", 1);
 
@@ -228,7 +228,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         boolean flag = false;
 
         for(int i = 0; i < 3; ++i) {
-            if ((this.menu).worldClue[i] != 0) {
+            if (this.menu.worldClue[i] != 0) {
                 flag = true;
                 break;
             }
