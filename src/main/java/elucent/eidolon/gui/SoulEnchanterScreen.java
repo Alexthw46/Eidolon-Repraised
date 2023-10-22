@@ -174,31 +174,31 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
         boolean flag = this.minecraft.player.getAbilities().instabuild;
-        int i = this.menu.getSoulShardAmount();
+        int soulShardAmount = this.menu.getSoulShardAmount();
 
         for (int j = 0; j < 3; ++j) {
             Enchantment enchantment = Enchantment.byId((this.menu).enchantClue[j]);
-            int l = (this.menu).worldClue[j];
-            int i1 = j + 1;
-            if (this.isHovering(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && l > 0) {
+            int enchantmentLevel = (this.menu).worldClue[j];
+            int experienceLevelCost = Math.min(5, enchantmentLevel);
+            if (this.isHovering(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && enchantmentLevel > 0) {
                 List<Component> list = Lists.newArrayList();
-                list.add(enchantment == null ? Component.literal("") : enchantment.getFullname(l));
+                list.add(enchantment == null ? Component.literal("") : enchantment.getFullname(enchantmentLevel));
                 if (enchantment == null) {
                     list.add(Component.literal(""));
                     list.add(Component.translatable("forge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
                 } else if (!flag) {
                     list.add(Component.empty());
-                    if (this.minecraft.player.experienceLevel < l) {
-                        list.add((Component.translatable("container.enchant.level.requirement", l)).withStyle(ChatFormatting.RED));
+                    if (this.minecraft.player.experienceLevel < experienceLevelCost) {
+                        list.add((Component.translatable("container.enchant.level.requirement", experienceLevelCost)).withStyle(ChatFormatting.RED));
                     } else {
                         MutableComponent iformattabletextcomponent = Component.translatable("container.eidolon.enchant.shard.one", 1);
 
-                        list.add(iformattabletextcomponent.withStyle(minecraft.player.experienceLevel >= l ? ChatFormatting.GRAY : ChatFormatting.RED));
+                        list.add(iformattabletextcomponent.withStyle(soulShardAmount > 0 ? ChatFormatting.GRAY : ChatFormatting.RED));
                         MutableComponent iformattabletextcomponent1;
-                        if (l == 1) {
+                        if (experienceLevelCost == 1) {
                             iformattabletextcomponent1 = Component.translatable("container.enchant.level.one");
                         } else {
-                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.many", menu.worldClue[i1 - 1]);
+                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.many", experienceLevelCost);
                         }
 
                         list.add(iformattabletextcomponent1.withStyle(ChatFormatting.GRAY));

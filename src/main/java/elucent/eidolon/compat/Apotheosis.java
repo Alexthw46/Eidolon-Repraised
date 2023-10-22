@@ -35,7 +35,7 @@ public class Apotheosis {
             try {
                 return (Integer) getMaxLevel.invoke(null, enchantment);
             } catch (IllegalAccessException | InvocationTargetException exception) {
-                Eidolon.LOG.error("An error occurred while calling Apotheosis isTreasureOnly method", exception);
+                Eidolon.LOG.error("An error occurred while calling Apotheosis getMaxLevel method", exception);
             }
         }
 

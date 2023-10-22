@@ -148,11 +148,19 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     }
 
     private boolean isValidItem(final ItemStack itemStack) {
-        return !itemStack.isEmpty() && canSoulEnchant(itemStack) && (itemStack.isEnchantable() || itemStack.isEnchanted() || itemStack.getItem() == Items.ENCHANTED_BOOK);
+        return !itemStack.isEmpty() && canSoulEnchant(itemStack) && hasValidEnchantmentAmount(itemStack) && (itemStack.isEnchantable() || itemStack.isEnchanted() || itemStack.getItem() == Items.ENCHANTED_BOOK);
+    }
+
+    private boolean hasValidEnchantmentAmount(final ItemStack itemStack) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get() < 0) {
+            return true;
+        }
+
+        return itemStack.getAllEnchantments().size() <= Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get();
     }
 
     private void incrementSoulEnchant(final ItemStack enchantedItem) {
-        if (Config.MAXIMUM_SOUL_ENCHANTING_USES.get() < 0) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return;
         }
 
@@ -161,7 +169,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     }
 
     private boolean canSoulEnchant(final ItemStack itemstack) {
-        if (Config.MAXIMUM_SOUL_ENCHANTING_USES.get() < 0) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return true;
         }
 
@@ -169,7 +177,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
         if (tag != null) {
             int soulEnchantUses = tag.getInt(SOUL_ENCHANT_USES_TAG);
-            return soulEnchantUses < Config.MAXIMUM_SOUL_ENCHANTING_USES.get();
+            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
         }
 
         return true;
