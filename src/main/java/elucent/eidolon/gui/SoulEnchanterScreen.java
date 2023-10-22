@@ -137,17 +137,17 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             int k1 = j1 + 20;
             this.setBlitOffset(0);
             RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
-            int l1 = menu.worldClue[i1];
+            int experienceLevelCost = Math.min(5, menu.worldClue[i1]);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i2 = 86;
             FormattedText itextproperties = EnchantmentNames.getInstance().getRandomName(this.font, i2);
             int j2 = 6839882;
-            if (l1 < 1) {
+            if (experienceLevelCost < 1) {
                 this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
-                if (((l == 0 || this.minecraft.player.experienceLevel < l1) && !this.minecraft.player.getAbilities().instabuild) || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                if (((l == 0 || this.minecraft.player.experienceLevel < experienceLevelCost) && !this.minecraft.player.getAbilities().instabuild) || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
                     this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
-                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (menu.worldClue[i1] - 1), 239, 16, 16);
+                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (experienceLevelCost - 1), 239, 16, 16);
                     this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
                     j2 = 4226832;
                 } else {
@@ -160,7 +160,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
                         this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
                     }
 
-                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (menu.worldClue[i1] - 1), 223, 16, 16);
+                    this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (experienceLevelCost - 1), 223, 16, 16);
                     this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, j2);
                     j2 = 8453920;
                 }
