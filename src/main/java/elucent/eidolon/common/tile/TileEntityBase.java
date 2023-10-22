@@ -32,6 +32,7 @@ public class TileEntityBase extends BlockEntity {
         setChanged();
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag);
+        if (level == null) return;
         if (level.isClientSide)
             Networking.INSTANCE.sendToServer(new TESyncPacket(worldPosition, tag));
         else {
