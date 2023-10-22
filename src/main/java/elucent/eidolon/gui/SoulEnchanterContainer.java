@@ -1,6 +1,8 @@
 package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
+import elucent.eidolon.Config;
+import elucent.eidolon.compat.Apotheosis;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -35,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class SoulEnchanterContainer extends AbstractContainerMenu {
+    private static final String SOUL_ENCHANT_USES_TAG = "soul_enchant_uses";
+
     private final Container tableInventory = new SimpleContainer(2) {
         public void setChanged() {
             super.setChanged();
@@ -95,7 +99,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     public void slotsChanged(@NotNull Container inventoryIn) {
         if (inventoryIn == this.tableInventory) {
             ItemStack itemstack = inventoryIn.getItem(0);
-            if (!itemstack.isEmpty() && (itemstack.isEnchantable() || itemstack.isEnchanted() || itemstack.getItem() == Items.ENCHANTED_BOOK)) {
+            if (isValidItem(itemstack)) {
                 this.worldPosCallable.execute((world, pos) -> {
                     int power = 0;
 
@@ -143,23 +147,66 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
     }
 
+    private boolean isValidItem(final ItemStack itemStack) {
+        return !itemStack.isEmpty() && canSoulEnchant(itemStack) && hasValidEnchantmentAmount(itemStack) && (itemStack.isEnchantable() || itemStack.isEnchanted() || itemStack.getItem() == Items.ENCHANTED_BOOK);
+    }
+
+    private boolean hasValidEnchantmentAmount(final ItemStack itemStack) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get() < 0) {
+            return true;
+        }
+
+        return itemStack.getAllEnchantments().size() <= Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get();
+    }
+
+    private void incrementSoulEnchant(final ItemStack enchantedItem) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
+            return;
+        }
+
+        CompoundTag tag = enchantedItem.getOrCreateTag();
+        tag.putInt(SOUL_ENCHANT_USES_TAG, tag.getInt(SOUL_ENCHANT_USES_TAG) + 1);
+    }
+
+    private boolean canSoulEnchant(final ItemStack itemstack) {
+        if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
+            return true;
+        }
+
+        CompoundTag tag = itemstack.getTag();
+
+        if (tag != null) {
+            int soulEnchantUses = tag.getInt(SOUL_ENCHANT_USES_TAG);
+            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
+        }
+
+        return true;
+    }
+
     /**
      * Handles the given Button-click on the server, currently only used by enchanting. Name is for legacy.
      */
     public boolean clickMenuButton(@NotNull Player playerIn, int id) {
         ItemStack itemstack = this.tableInventory.getItem(0);
-        ItemStack itemstack1 = this.tableInventory.getItem(1);
-        int i = id + 1;
-        if ((itemstack1.isEmpty() || itemstack1.getCount() < 1) && !playerIn.getAbilities().instabuild) {
+
+        if (!isValidItem(itemstack)) {
             return false;
-        } else if (itemstack.isEmpty() || playerIn.experienceLevel < this.worldClue[id] && !playerIn.getAbilities().instabuild) {
+        }
+
+        ItemStack soulShards = this.tableInventory.getItem(1);
+        int i = id + 1;
+        // Texture only goes up to 5 - maybe need to dynamically render the level?
+        int experienceLevelCost = Math.min(5, this.worldClue[id]);
+        if ((soulShards.isEmpty() || soulShards.getCount() < 1) && !playerIn.getAbilities().instabuild) {
+            return false;
+        } else if (itemstack.isEmpty() || playerIn.experienceLevel < experienceLevelCost && !playerIn.getAbilities().instabuild) {
             return false;
         } else {
             this.worldPosCallable.execute((p_217003_6_, p_217003_7_) -> {
                 ItemStack itemstack2 = itemstack;
                 List<EnchantmentInstance> list = this.getEnchantmentList(itemstack, id);
                 if (!list.isEmpty()) {
-                    playerIn.onEnchantmentPerformed(itemstack, worldClue[id]);
+                    playerIn.onEnchantmentPerformed(itemstack, experienceLevelCost);
                     boolean flag = itemstack.getItem() == Items.BOOK;
                     if (flag) {
                         itemstack2 = new ItemStack(Items.ENCHANTED_BOOK);
@@ -187,8 +234,9 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     }
 
                     if (!playerIn.getAbilities().instabuild) {
-                        itemstack1.shrink(1);
-                        if (itemstack1.isEmpty()) {
+                        incrementSoulEnchant(itemstack2);
+                        soulShards.shrink(1);
+                        if (soulShards.isEmpty()) {
                             this.tableInventory.setItem(1, ItemStack.EMPTY);
                         }
                     }
@@ -239,10 +287,16 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         valid.removeIf((ench) -> {
             boolean canApply = ench.canEnchant(finalTest) ||
                 finalTest.getItem() == Items.BOOK && ench.isAllowedOnBooks();
-            return !canApply
-                || ench.isTreasureOnly()
-                || existing.containsKey(ench) && existing.get(ench) >= ench.getMaxLevel()
-                || ench.isCurse();
+
+            if (!canApply || ench.isCurse()) {
+                return true;
+            }
+
+            if (Apotheosis.IS_LOADED) {
+                return Apotheosis.isTreasureOnly(ench) || existing.containsKey(ench) && existing.get(ench) >= Apotheosis.getMaxLevel(ench);
+            }
+
+            return ench.isTreasureOnly() || existing.containsKey(ench) && existing.get(ench) >= ench.getMaxLevel();
         });
 
         for (Map.Entry<Enchantment, Integer> e : existing.entrySet()) {
