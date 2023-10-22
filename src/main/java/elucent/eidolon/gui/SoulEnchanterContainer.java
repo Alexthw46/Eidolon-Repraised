@@ -235,9 +235,6 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
                     if (!playerIn.getAbilities().instabuild) {
                         incrementSoulEnchant(itemstack2);
-                    }
-
-                    if (!playerIn.getAbilities().instabuild) {
                         soulShards.shrink(1);
                         if (soulShards.isEmpty()) {
                             this.tableInventory.setItem(1, ItemStack.EMPTY);
