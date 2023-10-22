@@ -170,7 +170,7 @@ public class CodexGui extends Screen {
             guiGraphics.blit(CODEX_BACKGROUND, guiLeft + x, guiTop + y, 160, v, 32, 18, 512, 512);
         }
 
-        if (chant.size() > 0) renderChant(guiGraphics, guiLeft, guiTop, mouseX, mouseY, partialTicks);
+        if (!chant.isEmpty()) renderChant(guiGraphics, guiLeft, guiTop, mouseX, mouseY, partialTicks);
 
 
         for (int i = 0; i < CodexChapters.categories.size(); i++) {
@@ -264,9 +264,9 @@ public class CodexGui extends Screen {
             if (right != null)
                 if (right.click(this, guiLeft + 170, guiTop + 24, (int) mouseX, (int) mouseY)) return true;
 
-            return chant.size() > 0 && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
+            return !chant.isEmpty() && interactChant(guiLeft, guiTop, (int) mouseX, (int) mouseY);
         } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (chant.size() > 0 && currentChapter.get(currentPage) instanceof SignIndexPage) {
+            if (!chant.isEmpty() && currentChapter.get(currentPage) instanceof SignIndexPage) {
                 chant.remove(chant.size() - 1);
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
@@ -287,7 +287,7 @@ public class CodexGui extends Screen {
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
         if (pDelta < 0) {
-            if (currentPage + 1 < currentChapter.size()) {
+            if (currentPage + 2 < currentChapter.size()) {
                 currentPage += 1;
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 resetPages();

@@ -14,7 +14,7 @@ public class Chapter {
     }
 
     public Page get(int i) {
-        if (i >= size()) return null;
+        if (i >= size() || i < 0) return null;
         return pages.get(i);
     }
 
