@@ -83,9 +83,9 @@ public class ChantPage extends Page {
             RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
-                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
             RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
-                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
         }
         bufferSource.endBatch();
         RenderSystem.disableBlend();
