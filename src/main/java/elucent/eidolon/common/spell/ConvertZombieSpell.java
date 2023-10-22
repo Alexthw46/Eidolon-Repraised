@@ -34,7 +34,7 @@ public class ConvertZombieSpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0) return false;
+        if (effigies.isEmpty()) return false;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
         if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.ELDER_EFFIGY.get())
@@ -45,7 +45,7 @@ public class ConvertZombieSpell extends PrayerSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.size() == 0) return;
+        if (effigies.isEmpty()) return;
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
 
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
@@ -60,7 +60,7 @@ public class ConvertZombieSpell extends PrayerSpell {
                 rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
-            villager.finishConversion(level);
+            villager.startConverting(player.getUUID(), 20);
             ISoul.expendMana(player, getCost());
         } else {
             playSuccessSound(world, player, effigy, Signs.HARMONY_SIGN);

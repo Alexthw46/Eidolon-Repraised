@@ -537,7 +537,10 @@ public class CodexChapters {
                     "eidolon.codex.chapter.altars",
                     new TitlePage("eidolon.codex.page.altars.0"),
                     new TextPage("eidolon.codex.page.altars.1"),
-                    new CraftingPage(new ItemStack(Registry.WOODEN_ALTAR.get(), 3))
+                    new CraftingPage(new ItemStack(Registry.WOODEN_ALTAR.get(), 3)),
+                    new TitlePage("eidolon.codex.page.stone_altar"),
+                    new WorktablePage(new ItemStack(Registry.STONE_ALTAR.get(), 3)
+                    )
             );
 
             ALTAR_LIGHTS = new Chapter(
@@ -614,13 +617,6 @@ public class CodexChapters {
                     new TextPage("eidolon.codex.page.holy_touch.1")
             );
 
-            STONE_ALTAR = new Chapter(
-                    "eidolon.codex.chapter.stone_altar",
-                    new TitlePage("eidolon.codex.page.stone_altar"),
-                    new WorktablePage(new ItemStack(Registry.STONE_ALTAR.get(), 3)
-                    )
-            );
-
             UNHOLY_EFFIGY = new Chapter(
                     "eidolon.codex.chapter.unholy_effigy",
                     new TitlePage("eidolon.codex.page.unholy_effigy"),
@@ -643,6 +639,16 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.lay_on_hands", Spells.LAY_ON_HANDS.signs())
             );
 
+            ZOMBIFY = new Chapter(
+                    "eidolon.codex.chapter.villager_zombie",
+                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY.signs())
+            );
+
+            CURE_ZOMBIE = new Chapter(
+                    "eidolon.codex.chapter.villager_cure",
+                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT.signs())
+            );
+
             THEURGY_INDEX = new Index(
                     "eidolon.codex.chapter.theurgy",
                     new TitledIndexPage(
@@ -659,9 +665,9 @@ public class CodexChapters {
                             new SignLockedEntry(DARK_PRAYER, new ItemStack(Registry.SHADOW_GEM.get()), Signs.WICKED_SIGN),
                             new SignLockedEntry(ANIMAL_SACRIFICE, new ItemStack(Items.PORKCHOP), Signs.BLOOD_SIGN),
                             new SignLockedEntry(DARK_TOUCH, new ItemStack(Registry.UNHOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.WICKED_SIGN),
-                            new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
                             new SignLockedEntry(UNHOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.WICKED_SIGN, Signs.SOUL_SIGN),
-                            new FactLockedEntry(VILLAGER_SACRIFICE, new ItemStack(Items.IRON_SWORD), Facts.VILLAGER_SACRIFICE)
+                            new FactLockedEntry(VILLAGER_SACRIFICE, new ItemStack(Items.IRON_SWORD), Facts.VILLAGER_SACRIFICE),
+                            new FactLockedEntry(ZOMBIFY, new ItemStack(Registry.ZOMBIE_HEART.get()), Facts.ZOMBIFY)
                     ),
                     //TODO light path - EFFIGY
                     new IndexPage(
@@ -669,9 +675,9 @@ public class CodexChapters {
                             new SignLockedEntry(LIGHT_PRAYER, new ItemStack(Registry.ENCHANTED_ASH.get()), Signs.SACRED_SIGN),
                             new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.OFFERING_INCENSE.get()), Signs.FLAME_SIGN),
                             new SignLockedEntry(HOLY_TOUCH, new ItemStack(Registry.HOLY_SYMBOL.get()), Signs.SOUL_SIGN, Signs.SACRED_SIGN),
-                            new SignLockedEntry(STONE_ALTAR, new ItemStack(Registry.STONE_ALTAR.get()), Signs.SOUL_SIGN),
                             new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),
-                            new FactLockedEntry(HEAL, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), Facts.VILLAGER_HEALING)
+                            new FactLockedEntry(HEAL, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), Facts.VILLAGER_HEALING),
+                            new FactLockedEntry(CURE_ZOMBIE, new ItemStack(Items.GOLDEN_APPLE), Facts.ZOMBIE_CURE)
                     )
             );
 
@@ -800,16 +806,6 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.chill_touch", Spells.FROST_CHANT.signs())
             );
 
-            ZOMBIFY = new Chapter(
-                    "eidolon.codex.chapter.villager_zombie",
-                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY.signs())
-            );
-
-            CURE_ZOMBIE = new Chapter(
-                    "eidolon.codex.chapter.villager_cure",
-                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT.signs())
-            );
-
             ENTHRALL = new Chapter(
                     "eidolon.codex.chapter.enthrall",
                     new ChantPage("eidolon.codex.page.enthrall", Spells.ENTHRALL_UNDEAD.signs()),
@@ -828,8 +824,7 @@ public class CodexChapters {
                             new SignLockedEntry(LIGHT, new ItemStack(Items.LANTERN), Signs.FLAME_SIGN),
                             new ResearchLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Researches.FIRE_SPELL),
                             new ResearchLockedEntry(CHILL_TOUCH, new ItemStack(Items.ICE), Researches.FROST_SPELL),
-                            new FactLockedEntry(ZOMBIFY, new ItemStack(Registry.ZOMBIE_HEART.get()), Facts.ZOMBIFY),
-                            new FactLockedEntry(CURE_ZOMBIE, new ItemStack(Items.GOLDEN_APPLE), Facts.ZOMBIE_CURE),
+
                             new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
                             new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE)
                     ), new IndexPage(
