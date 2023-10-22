@@ -1,8 +1,8 @@
 package elucent.eidolon.compat;
 
+import dev.shadowsoffire.apotheosis.ench.asm.EnchHooks;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.fml.ModList;
-import shadows.apotheosis.ench.asm.EnchHooks;
 
 public class Apotheosis {
     public static final boolean IS_LOADED = ModList.get().isLoaded("apotheosis");

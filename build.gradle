@@ -144,8 +144,9 @@ dependencies {
     //implementation fg.deobf("curse.maven:embeddium-908741:4800420")
     //implementation fg.deobf("curse.maven:modernfix-790626:4792389")
 
-    implementation fg.deobf("curse.maven:placebo-283644:4691637")
-    implementation fg.deobf("curse.maven:aphoattr-898963:4698919")
+    implementation fg.deobf("curse.maven:placebo-283644:4723708")
+    implementation fg.deobf("curse.maven:apothic-attributes-898963:4731488")
+    implementation fg.deobf("curse.maven:apotheosis-313970:4724390")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
