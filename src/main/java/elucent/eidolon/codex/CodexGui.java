@@ -290,4 +290,26 @@ public class CodexGui extends Screen {
     public void renderTooltip(@NotNull PoseStack mStack, ItemStack stack, int x, int y) {
         if (!stack.isEmpty()) super.renderTooltip(mStack, stack, x, y);
     }
+
+    @Override
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+        if (pDelta < 0) {
+            if (currentPage + 2 < currentChapter.size()) {
+                currentPage += 1;
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                resetPages();
+                return true;
+            }
+        } else if (pDelta > 0) {
+            if (currentPage > 0) {
+                currentPage -= 1;
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                resetPages();
+                return true;
+            }
+        }
+
+        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+    }
+
 }
