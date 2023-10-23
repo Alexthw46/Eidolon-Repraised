@@ -6,6 +6,7 @@ import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.block.GhostLight;
 import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +54,7 @@ public class LightSpell extends StaticSpell {
                 ISoul.expendMana(player, getCost());
             }
         } else if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
+            living.addEffect(new MobEffectInstance(MobEffects.GLOWING, EidolonAttributes.getSpellEffectDuration(player, 200)));
             ISoul.expendMana(player, getCost());
         }
     }

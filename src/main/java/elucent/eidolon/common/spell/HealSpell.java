@@ -5,6 +5,7 @@ import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +51,7 @@ public class HealSpell extends StaticSpell {
                 other = living.getHealth() < living.getMaxHealth();
             } else toHeal = player;
 
-            toHeal.heal(heal.get());
+            toHeal.heal(EidolonAttributes.getSpellHealing(player, heal.get()));
             for (MobEffectInstance effectInstance : toHeal.getActiveEffects()) {
                 MobEffect effect = effectInstance.getEffect();
                 if (!effect.isBeneficial() && effect.getCurativeItems().contains(Items.MILK_BUCKET.getDefaultInstance())) {

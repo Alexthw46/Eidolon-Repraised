@@ -51,7 +51,7 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
     @Override
     protected void onImpact(HitResult ray, Entity target) {
         Player player = level.getPlayerByUUID(casterId);
-        target.hurt(DamageSource.indirectMagic(this, player), EidolonAttributes.getMagicalDamage(player, 7.0f));
+        target.hurt(DamageSource.indirectMagic(this, player), EidolonAttributes.getSpellDamage(player, 7.0f));
         onImpact(ray);
     }
 

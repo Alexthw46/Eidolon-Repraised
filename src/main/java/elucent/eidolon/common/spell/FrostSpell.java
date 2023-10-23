@@ -2,6 +2,7 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -49,7 +50,7 @@ public class FrostSpell extends StaticSpell {
                     world.playSound(player, pos, SoundEvents.PLAYER_HURT_FREEZE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
                 } else return;
             } else if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living) {
-                living.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 200));
+                living.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), EidolonAttributes.getSpellEffectDuration(player, 200)));
             } else return;
             ISoul.expendMana(player, getCost());
         }
