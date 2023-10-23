@@ -1,5 +1,7 @@
 {
   "itemGroup.eidolon": "Eidolon",
+  "attribute.eidolon.magical_knowledge": "Magical Knowledge",
+  "attribute.eidolon.magical_knowledge.description": "A persons capability to rule over the arcane arts. Increases damage with magic.",
   "lore.eidolon.wraith_heart": "It's very cold...",
   "lore.eidolon.zombie_heart": "Is it still beating?",
   "lore.eidolon.sapping_sword": "Steals life from target.",

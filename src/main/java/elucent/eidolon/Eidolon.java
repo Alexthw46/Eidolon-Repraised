@@ -5,6 +5,7 @@ import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.codex.CodexChapters;
 import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;
+import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.event.Events;
 import elucent.eidolon.gui.ResearchTableScreen;
 import elucent.eidolon.gui.SoulEnchanterScreen;
@@ -91,6 +92,8 @@ public class Eidolon {
         proxy.init();
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new Events());
+
+        CompatHandler.initialize();
     }
 
     public void setup(final FMLCommonSetupEvent event) {
