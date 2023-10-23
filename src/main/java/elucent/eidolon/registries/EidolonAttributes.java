@@ -18,16 +18,28 @@ public class EidolonAttributes {
 
     public static final RegistryObject<Attribute> MAGICAL_KNOWLEDGE = ATTRIBUTES.register("magical_knowledge", () -> new RangedAttribute("attribute.eidolon.magical_knowledge", 1, 0, 10).setSyncable(true));
 
-    public static float getMagicalKnowledge(final LivingEntity livingEntity) {
-        if (livingEntity == null) {
+    public static float getMagicalKnowledge(final Entity entity) {
+        if (!(entity instanceof LivingEntity livingEntity)) {
             return 1;
         }
 
         return (float) livingEntity.getAttributeValue(MAGICAL_KNOWLEDGE.get());
     }
 
-    public static float getMagicalDamage(final LivingEntity livingEntity, float baseValue) {
-        return baseValue * getMagicalKnowledge(livingEntity);
+    public static int getSpellEffectAmplifier(final Entity entity, float baseValue) {
+        return (int) (baseValue * getMagicalKnowledge(entity));
+    }
+
+    public static int getSpellEffectDuration(final Entity entity, float baseValue) {
+        return (int) (baseValue * getMagicalKnowledge(entity));
+    }
+
+    public static float getSpellDamage(final Entity entity, float baseValue) {
+        return baseValue * getMagicalKnowledge(entity);
+    }
+
+    public static float getSpellHealing(final Entity entity, float baseValue) {
+        return baseValue * getMagicalKnowledge(entity);
     }
 
     @SubscribeEvent

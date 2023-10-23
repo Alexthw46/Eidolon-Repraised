@@ -7,6 +7,7 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import net.minecraft.core.BlockPos;
@@ -41,21 +42,21 @@ public class DarkTouchSpell extends StaticSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId())) {
-            var tag = living.getMainHandItem().getTag();
+        if (event.getSource().getEntity() instanceof LivingEntity caster && !event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId())) {
+            var tag = caster.getMainHandItem().getTag();
             if (tag != null && tag.contains(NECROTIC_KEY)) {
-                float amount = Math.min(1, event.getAmount());
+                float amount = EidolonAttributes.getSpellDamage(caster, Math.min(1, event.getAmount()));
                 event.setAmount(event.getAmount() - amount);
                 if (event.getAmount() <= 0) event.setCanceled(true);
                 int prevHurtResist = event.getEntity().invulnerableTime;
                 event.getEntity().invulnerableTime = 0;
-                if (event.getEntity().hurt(new EntityDamageSource(DamageSource.WITHER.getMsgId(), living), amount)) {
+                if (event.getEntity().hurt(new EntityDamageSource(DamageSource.WITHER.getMsgId(), caster), amount)) {
 
                     tag.putInt(NECROTIC_KEY, -1);
                     if (tag.getInt(NECROTIC_KEY) <= 0) tag.remove(NECROTIC_KEY);
 
-                    if (living.getHealth() <= 0) event.setCanceled(true);
-                    else living.invulnerableTime = prevHurtResist;
+                    if (caster.getHealth() <= 0) event.setCanceled(true);
+                    else caster.invulnerableTime = prevHurtResist;
                 }
             }
         }

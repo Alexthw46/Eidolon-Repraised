@@ -2,6 +2,7 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.DeityLocks;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -39,8 +40,8 @@ public class SmiteSpell extends StaticSpell {
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
                 if (world instanceof ServerLevel) {
-                    if (livingEntity.hurt(DamageSource.MAGIC, 10)) {
-                        livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 2));
+                    if (livingEntity.hurt(DamageSource.MAGIC, EidolonAttributes.getSpellDamage(player, 10))) {
+                        livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, EidolonAttributes.getSpellEffectDuration(player, 200), EidolonAttributes.getSpellEffectAmplifier(player, 2)));
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
                     }
                 } else {
