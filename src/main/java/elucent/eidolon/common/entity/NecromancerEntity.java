@@ -12,10 +12,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -23,9 +22,12 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.SpellcasterIllager;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
@@ -54,6 +56,19 @@ public class NecromancerEntity extends SpellcasterIllager {
     @Override
     public boolean isCastingSpell() {
         return (!level.isClientSide || !hack) && super.isCastingSpell();
+    }
+
+    @Override
+    public boolean isAlliedTo(@NotNull Entity pEntity) {
+        if (pEntity == this) {
+            return true;
+        } else if (super.isAlliedTo(pEntity)) {
+            return true;
+        } else if (pEntity instanceof LivingEntity && ((LivingEntity) pEntity).getMobType() == MobType.ILLAGER) {
+            return this.getTeam() == null && pEntity.getTeam() == null;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -183,6 +198,7 @@ public class NecromancerEntity extends SpellcasterIllager {
                     level.addFreshEntity(entity);
                     thrall.setTarget(getTarget());
                     EntityUtil.enthrall(NecromancerEntity.this, thrall);
+                    thrall.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 999999, 0, false, false));
                     Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
                 }
             }
@@ -201,15 +217,19 @@ public class NecromancerEntity extends SpellcasterIllager {
     }
 
     protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new CastingSpellGoal());
         this.goalSelector.addGoal(5, new AttackSpellGoal());
         this.goalSelector.addGoal(4, new SummonSpellGoal());
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).isPresent() && e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).resolve().get().getReputation((Player) e, Deities.DARK_DEITY.getId()) >= 50)).setUnseenMemoryTicks(300));
+        //this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
     }
 
     protected @NotNull SoundEvent getCastingSoundEvent() {
