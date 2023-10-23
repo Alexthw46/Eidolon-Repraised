@@ -3,26 +3,24 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.mixin.AbstractArrowMixin;
 import elucent.eidolon.mixin.ProjectileMixin;
 import elucent.eidolon.registries.EidolonEntities;
-import net.minecraft.client.Minecraft;
+import elucent.eidolon.util.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.function.Predicate;
 
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
@@ -30,7 +28,7 @@ import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 public class AngelArrowEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
     public AbstractArrow internal = null;
 
-    public Predicate<LivingEntity> mode = (e) -> true;
+    public Predicate<Entity> mode = target -> true;
 
     public AngelArrowEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
@@ -64,6 +62,7 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
             removeAfterChangingDimensions();
             return;
         }
+
         super.tick();
         internal.tick();
         internal.xo = xo;
@@ -73,17 +72,9 @@ public class AngelArrowEntity extends AbstractArrow implements IEntityAdditional
         internal.yRotO = yRotO;
         internal.copyPosition(this);
         internal.setDeltaMovement(getDeltaMovement());
+
         if (!inGround) {
-            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12), (e) -> mode.test(e) && e != getOwner() && e.isAlive() && !(getOwner() != null && e.isAlliedTo(getOwner())) && (!level.isClientSide || e != Minecraft.getInstance().player));
-            if (!entities.isEmpty()) {
-                //for (Entity e : entities) System.out.println(e);
-                LivingEntity nearest = entities.stream().min(Comparator.comparingDouble((e) -> e.distanceToSqr(this))).get();
-                Vec3 diff = nearest.position().add(0, nearest.getBbHeight() / 2, 0).subtract(position());
-                double speed = getDeltaMovement().length();
-                Vec3 newmotion = getDeltaMovement().add(diff.normalize().scale(speed)).scale(0.5);
-                if (newmotion.length() == 0) newmotion = newmotion.add(0.01, 0, 0); // avoid divide by zero
-                setDeltaMovement(newmotion.scale(speed / newmotion.length()));
-            }
+            EntityUtil.moveTowardsTarget(this);
         }
     }
 

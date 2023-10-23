@@ -1,5 +1,17 @@
 {
   "itemGroup.eidolon": "Eidolon",
+
+  "affix.eidolon:wand/tracking": "Seeking",
+  "affix.eidolon:wand/tracking.suffix": "of the Seeking",
+  "affix.eidolon:wand/tracking.desc": "Up to {0} projectiles will seek out the nearest enemy.",
+  "affix.eidolon:wand/hailing": "Hailing",
+  "affix.eidolon:wand/hailing.suffix": "of the Barrage",
+  "affix.eidolon:wand/hailing.desc": "Fires {0} additional projectiles.",
+  "affix.eidolon:wand/attribute/magic_power": "Arcane",
+  "affix.eidolon:wand/attribute/magic_power.suffix": "of the Wizard",
+  "attribute.eidolon.magic_power": "Magic Power",
+  "attribute.eidolon.magic_power.desc": "A persons capability to rule over the arcane arts. Increases your magic damage.",
+
   "lore.eidolon.wraith_heart": "It's very cold...",
   "lore.eidolon.zombie_heart": "Is it still beating?",
   "lore.eidolon.sapping_sword": "Steals life from target.",

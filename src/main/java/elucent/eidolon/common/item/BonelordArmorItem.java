@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.BonelordArmorModel;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -95,7 +96,8 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
             UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[this.getEquipmentSlot().getIndex()];
             modifiers = ImmutableMultimap.<Attribute, AttributeModifier>builder()
                     .putAll(getDefaultAttributeModifiers(this.getEquipmentSlot()))
-                    .put(Registry.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
+                    .put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
+
                     .build();
         }
         return slot == this.getEquipmentSlot() ? modifiers : super.getAttributeModifiers(slot, stack);

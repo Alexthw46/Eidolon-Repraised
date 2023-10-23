@@ -5,7 +5,6 @@ import elucent.eidolon.capability.*;
 import elucent.eidolon.client.particle.*;
 import elucent.eidolon.common.block.CandleBlock;
 import elucent.eidolon.common.block.*;
-import elucent.eidolon.common.entity.*;
 import elucent.eidolon.common.item.Tiers;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.item.curio.*;
@@ -37,10 +36,9 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+
 import net.minecraft.world.flag.FeatureFlags;
+
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -58,8 +56,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -96,7 +92,6 @@ public class Registry {
     static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Eidolon.MODID);
     static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Eidolon.MODID);
 
-    static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
     static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Eidolon.MODID);
 
     static Item.Properties itemProps() {
@@ -496,27 +491,10 @@ public class Registry {
     public static final RegistryObject<MenuType<ResearchTableContainer>>
             RESEARCH_TABLE_CONTAINER = addContainer("research_table", ResearchTableContainer::new);
 
-    public static final RegistryObject<Attribute>
-            MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
-    public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
-    public static final RegistryObject<Attribute> CHANTING_SPEED = ATTRIBUTES.register("chanting_speed", () -> new RangedAttribute(Eidolon.MODID + ".chanting_speed", 1, 0, 100).setSyncable(true));
-
-    @SubscribeEvent
-    public void addCustomAttributes(EntityAttributeModificationEvent event) {
-        for (EntityType<? extends LivingEntity> t : event.getTypes()) {
-            if (event.has(t, Attributes.MAX_HEALTH)) {
-                event.add(t, Registry.PERSISTENT_SOUL_HEARTS.get());
-                event.add(t, Registry.MAX_SOUL_HEARTS.get());
-            }
-            if (t == EntityType.PLAYER) {
-                event.add(t, Registry.CHANTING_SPEED.get());
-            }
-        }
-    }
 
     public static void init() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ATTRIBUTES.register(modEventBus);
+        EidolonAttributes.ATTRIBUTES.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         EidolonEntities.ENTITIES.register(modEventBus);
@@ -590,16 +568,6 @@ public class Registry {
         event.register(IKnowledge.class);
         event.register(ISoul.class);
         event.register(IPlayerData.class);
-    }
-
-    @SubscribeEvent
-    public void defineAttributes(EntityAttributeCreationEvent event) {
-        event.put(EidolonEntities.ZOMBIE_BRUTE.get(), ZombieBruteEntity.createAttributes());
-        event.put(EidolonEntities.WRAITH.get(), WraithEntity.createAttributes());
-        event.put(EidolonEntities.NECROMANCER.get(), NecromancerEntity.createAttributes());
-        event.put(EidolonEntities.RAVEN.get(), RavenEntity.createAttributes());
-        event.put(EidolonEntities.SLIMY_SLUG.get(), SlimySlugEntity.createAttributes());
-        event.put(EidolonEntities.GIANT_SKEL.get(), GiantSkeletonEntity.createAttributes().build());
     }
 
     @SuppressWarnings("deprecation")

@@ -149,7 +149,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
 
         //updates cached caster
         cacheCaster();
-        var castSpeed = caster != null ? caster.getAttribute(Registry.CHANTING_SPEED.get()).getValue() : 1.0;
+        var castSpeed = caster != null ? caster.getAttribute(EidolonAttributes.CHANTING_SPEED.get()).getValue() : 1.0;
 
         if (tickCount % Mth.floor(5 / castSpeed) == 0) {
             List<Sign> runes = loadChantTag();

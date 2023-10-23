@@ -2,7 +2,8 @@ package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
 import elucent.eidolon.Config;
-import elucent.eidolon.compat.Apotheosis;
+import elucent.eidolon.compat.apotheosis.Apotheosis;
+import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -293,7 +294,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                 return true;
             }
 
-            if (Apotheosis.IS_LOADED) {
+            if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
                 return Apotheosis.isTreasureOnly(ench) || existing.containsKey(ench) && existing.get(ench) >= Apotheosis.getMaxLevel(ench);
             }
 
