@@ -1,5 +1,7 @@
 package elucent.eidolon.compat;
 
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.compat.apotheosis.Apotheosis;
 import net.minecraftforge.fml.ModList;
 
 import java.util.Map;
@@ -16,6 +18,7 @@ public class CompatHandler {
             if (ModList.get().isLoaded(modId)) {
                 data.initialize.run();
                 data.isLoaded = true;
+                Eidolon.LOG.info("Loaded [{}] compatibility", modId);
             }
         });
     }

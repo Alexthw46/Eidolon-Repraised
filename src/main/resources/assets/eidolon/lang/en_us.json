@@ -1,7 +1,14 @@
 {
   "itemGroup.eidolon": "Eidolon",
+
+  "affix.eidolon:wand/tracking": "Seeking",
+  "affix.eidolon:wand/tracking.suffix": "of the Seeking",
+  "affix.eidolon:wand/tracking.desc": "The projectiles of this weapon track the nearest entity.",
+  "affix.eidolon:wand/attribute/magical_knowledge": "Arcane",
+  "affix.eidolon:wand/attribute/magical_knowledge.suffix": "of the Wizard",
   "attribute.eidolon.magical_knowledge": "Magical Knowledge",
-  "attribute.eidolon.magical_knowledge.description": "A persons capability to rule over the arcane arts. Increases damage with magic.",
+  "attribute.eidolon.magical_knowledge.description": "A persons capability to rule over the arcane arts. Increases the effect and damage of spells.",
+
   "lore.eidolon.wraith_heart": "It's very cold...",
   "lore.eidolon.zombie_heart": "Is it still beating?",
   "lore.eidolon.sapping_sword": "Steals life from target.",
