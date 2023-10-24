@@ -3,7 +3,6 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
@@ -70,7 +69,7 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
     @Override
     protected void onImpact(HitResult ray, Entity target) {
         Entity caster = level.getEntity((int) casterId.getLeastSignificantBits());
-        target.hurt(new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, caster), EidolonAttributes.getSpellDamage(caster, 3.0f + level.getDifficulty().getId()));
+        handleSpellDamage(caster, target, new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, caster), 3 + level.getDifficulty().getId());
         onImpact(ray);
     }
 

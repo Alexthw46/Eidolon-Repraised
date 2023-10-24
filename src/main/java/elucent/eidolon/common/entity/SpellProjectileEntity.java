@@ -1,9 +1,13 @@
 package elucent.eidolon.common.entity;
 
+import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.util.EntityUtil;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,12 +27,16 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class SpellProjectileEntity extends Entity {
-    UUID casterId = null;
-    private final Predicate<Entity> impactPredicate = this::shouldImpact;
-    public Predicate<Entity> trackingPredicate = this::shouldTrack;
+    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Eidolon.MODID, "trackable"));
+    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Eidolon.MODID, "trackable_blacklist"));
 
+    public Predicate<Entity> trackingPredicate = this::shouldTrack;
     public boolean isTracking;
     public boolean noImmunityFrame;
+
+    protected UUID casterId = null;
+
+    private final Predicate<Entity> impactPredicate = this::shouldImpact;
 
     public SpellProjectileEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
@@ -51,8 +59,7 @@ public abstract class SpellProjectileEntity extends Entity {
     }
 
     private boolean shouldTrack(final Entity target) {
-        // TODO :: Create tag
-        return !target.isSpectator() && !target.getUUID().equals(casterId) && target instanceof Enemy;
+        return !target.isSpectator() && !target.getUUID().equals(casterId) && !target.getType().is(TRACKABLE_BLACKLIST) && (target instanceof Enemy || target.getType().is(TRACKABLE));
     }
 
     @Override
@@ -90,14 +97,14 @@ public abstract class SpellProjectileEntity extends Entity {
     protected abstract void onImpact(HitResult ray, Entity target);
     protected abstract void onImpact(HitResult ray);
 
-    protected void handleDamage(final Entity target, final DamageSource damageSource, float rawDamage) {
+    protected void handleSpellDamage(final Entity caster, final Entity target, final DamageSource damageSource, float rawDamage) {
         int prevHurtResist = target.invulnerableTime;
 
         if (noImmunityFrame) {
             target.invulnerableTime = 0;
         }
 
-        target.hurt(damageSource.setMagic(), EidolonAttributes.getSpellDamage(getCaster(), rawDamage));
+        target.hurt(damageSource.setMagic(), EidolonAttributes.getSpellDamage(caster, rawDamage));
 
         if (noImmunityFrame) {
             target.invulnerableTime = prevHurtResist;
