@@ -28,7 +28,7 @@ import java.util.Map;
 import static elucent.eidolon.common.item.SoulfireWandItem.random;
 
 public class WandItem extends ItemBase implements IRechargeableWand {
-    private static final double OFFSET = 1.3;
+    private static final double OFFSET = 1.5;
 
     public WandItem(Properties properties) {
         super(properties);
@@ -108,9 +108,9 @@ public class WandItem extends ItemBase implements IRechargeableWand {
                 AffixInstance affixInstance = affixes.get(affix);
 
                 if (affix instanceof HailingAffix hailingAffix) {
-                    projectileAmount = Apotheosis.affixToAmount(affixInstance.rarity(), hailingAffix.getMinRarity());
+                    projectileAmount += Apotheosis.affixToAmount(affixInstance.rarity(), hailingAffix.getMinRarity());
                 } else if (affix instanceof TrackingAffix trackingAffix) {
-                    trackingAmount = Apotheosis.affixToAmount(affixInstance.rarity(), trackingAffix.getMinRarity());
+                    trackingAmount += Apotheosis.affixToAmount(affixInstance.rarity(), trackingAffix.getMinRarity());
                 }
             }
         }
