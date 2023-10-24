@@ -2,7 +2,7 @@ package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
 import elucent.eidolon.Config;
-import elucent.eidolon.compat.Apotheosis;
+import elucent.eidolon.compat.apotheosis.Apotheosis;
 import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
