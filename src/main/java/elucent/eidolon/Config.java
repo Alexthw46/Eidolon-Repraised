@@ -23,14 +23,14 @@ public class Config {
         		.defineInRange("maxEtherealHealth", 80, 0, 1000);
         builder.pop();
 
-        builder.push("Soul Enchanter").push("soulEnchanter");
+        builder.comment("Soul Enchanter").push("soulEnchanter");
         SOUL_ENCHANTER_MAXIMUM_USES = builder.comment("How often the Soul Enchanter can apply enchantments on an item (a value below 0 means unlimited)")
                 .define("soulEnchanterMaximumUses", -1);
         SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS = builder.comment("How many enchantments the item is allowed to have to be applicable for soul enchanting (a value below 0 means unlimited)")
                         .define("soulEnchanterMaximumEnchantments", -1);
         builder.pop();
 
-        builder.push("Mod Compatibility").push("modCompat");
+        builder.comment("Mod Compatibility").push("modCompat");
         IRONS_SPELLBOOKS_ATTRIBUTE_USAGE = builder.comment("By how much (percentage) the attribute values of this mod should apply to Eidolon")
                         .defineInRange("ironsSpellbooksAttributeUsage", 1.0, 0, 1);
         builder.pop();
