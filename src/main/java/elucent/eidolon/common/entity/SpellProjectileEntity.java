@@ -1,7 +1,5 @@
 package elucent.eidolon.common.entity;
 
-import elucent.eidolon.compat.CompatHandler;
-import elucent.eidolon.compat.apotheosis.TrackingAffix;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -16,10 +14,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import shadows.apotheosis.adventure.affix.Affix;
-import shadows.apotheosis.adventure.affix.AffixHelper;
 
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -28,27 +23,13 @@ public abstract class SpellProjectileEntity extends Entity {
     private final Predicate<Entity> impactPredicate = this::shouldImpact;
     public Predicate<Entity> trackingPredicate = this::shouldTrack;
 
-    private boolean isTracking;
+    public boolean isTracking;
 
     public SpellProjectileEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
     public Entity shoot(double x, double y, double z, double vx, double vy, double vz, final UUID caster, final ItemStack stack) {
-        if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-            if (caster != null) {
-                Set<Affix> affixes = AffixHelper.getAffixes(stack).keySet();
-
-                // TODO :: Add affix to spawn multiple projectiles and the rarity of the affix determines the amounf of projectiles being tracking ones
-                for (Affix affix : affixes) {
-                    if (affix instanceof TrackingAffix) {
-                        isTracking = true;
-                        break;
-                    }
-                }
-            }
-        }
-
         setPos(x, y, z);
         setDeltaMovement(vx, vy, vz);
         casterId = caster;

@@ -12,18 +12,18 @@ import shadows.placebo.json.PSerializer;
 
 import java.util.function.Consumer;
 
-public class TrackingAffix extends Affix {
-    public static final Codec<TrackingAffix> CODEC = RecordCodecBuilder.create(inst -> inst
+public class HailingAffix extends Affix {
+    public static final Codec<HailingAffix> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(
-                    LootRarity.CODEC.fieldOf("min_rarity").forGetter(TrackingAffix::getMinRarity))
-            .apply(inst, TrackingAffix::new));
+                    LootRarity.CODEC.fieldOf("min_rarity").forGetter(HailingAffix::getMinRarity))
+            .apply(inst, HailingAffix::new));
 
 
-    public static final PSerializer<TrackingAffix> SERIALIZER = PSerializer.fromCodec("Tracking Affix", CODEC);
+    public static final PSerializer<HailingAffix> SERIALIZER = PSerializer.fromCodec("Hailing Affix", CODEC);
 
     private final LootRarity minRarity;
 
-    public TrackingAffix(final LootRarity minRarity) {
+    public HailingAffix(final LootRarity minRarity) {
         super(AffixType.ABILITY);
         this.minRarity = minRarity;
     }
