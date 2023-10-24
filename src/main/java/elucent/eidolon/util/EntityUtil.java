@@ -49,7 +49,7 @@ public class EntityUtil {
             targetPredicate = target -> true;
         } else if (entity instanceof SpellProjectileEntity spellProjectile) {
             if (spellProjectile.getCasterId() != null) {
-                owner = entity.level.getPlayerByUUID(spellProjectile.getCasterId());
+                owner = spellProjectile.getCaster();
             } else {
                 owner = null;
             }

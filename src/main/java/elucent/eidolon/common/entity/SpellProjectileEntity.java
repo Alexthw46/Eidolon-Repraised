@@ -1,11 +1,14 @@
 package elucent.eidolon.common.entity;
 
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -14,6 +17,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -24,6 +28,7 @@ public abstract class SpellProjectileEntity extends Entity {
     public Predicate<Entity> trackingPredicate = this::shouldTrack;
 
     public boolean isTracking;
+    public boolean noImmunityFrame;
 
     public SpellProjectileEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
@@ -84,6 +89,24 @@ public abstract class SpellProjectileEntity extends Entity {
 
     protected abstract void onImpact(HitResult ray, Entity target);
     protected abstract void onImpact(HitResult ray);
+
+    protected void handleDamage(final Entity target, final DamageSource damageSource, float rawDamage) {
+        int prevHurtResist = target.invulnerableTime;
+
+        if (noImmunityFrame) {
+            target.invulnerableTime = 0;
+        }
+
+        target.hurt(damageSource.setMagic(), EidolonAttributes.getSpellDamage(getCaster(), rawDamage));
+
+        if (noImmunityFrame) {
+            target.invulnerableTime = prevHurtResist;
+        }
+    }
+
+    public @Nullable Player getCaster() {
+        return level.getPlayerByUUID(casterId);
+    }
 
     @Override
     protected void defineSynchedData() {

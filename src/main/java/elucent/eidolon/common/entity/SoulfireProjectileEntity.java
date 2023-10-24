@@ -3,7 +3,6 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ColorUtil;
@@ -12,7 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -50,8 +48,7 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        Player player = level.getPlayerByUUID(casterId);
-        target.hurt(DamageSource.indirectMagic(this, player), EidolonAttributes.getSpellDamage(player, 7.0f));
+        handleDamage(target, DamageSource.indirectMagic(this, getCaster()), 7);
         onImpact(ray);
     }
 

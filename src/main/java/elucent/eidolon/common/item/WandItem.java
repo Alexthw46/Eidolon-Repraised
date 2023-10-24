@@ -27,6 +27,8 @@ import java.util.Map;
 import static elucent.eidolon.common.item.SoulfireWandItem.random;
 
 public class WandItem extends ItemBase implements IRechargeableWand {
+    private static final double OFFSET = 1.3;
+
     public WandItem(Properties properties) {
         super(properties);
     }
@@ -69,15 +71,15 @@ public class WandItem extends ItemBase implements IRechargeableWand {
                         trackingAmount--;
                     }
 
-                    Vec3 offset = Vec3.ZERO;
+                    Vec3 randomized = Vec3.ZERO;
 
                     if (i > 0) {
-                        double amount = 1.3;
-                        offset = new Vec3(random.nextDouble(-amount, amount), random.nextDouble(-amount, amount), random.nextDouble(-amount, amount));
+                        randomized = new Vec3(random.nextDouble(-OFFSET, OFFSET), random.nextDouble(-OFFSET, OFFSET), random.nextDouble(-OFFSET, OFFSET));
+                        spellProjectileEntity.noImmunityFrame = true;
                     }
 
                     world.addFreshEntity(spellProjectileEntity.shoot(
-                            pos.x + offset.x(), pos.y + offset.y(), pos.z + offset.z(), vel.x, vel.y, vel.z, entity.getUUID(), stack
+                            pos.x + randomized.x(), pos.y + randomized.y(), pos.z + randomized.z(), vel.x, vel.y, vel.z, entity.getUUID(), stack
                     ));
                 }
             }
