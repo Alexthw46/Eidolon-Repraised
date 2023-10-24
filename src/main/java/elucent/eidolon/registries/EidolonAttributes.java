@@ -1,5 +1,6 @@
 package elucent.eidolon.registries;
 
+import elucent.eidolon.Config;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.compat.irons_spellbooks.IronsSpellbooks;
@@ -41,6 +42,7 @@ public class EidolonAttributes {
 
         if (CompatHandler.isModLoaded(CompatHandler.IRONS_SPELLBOOKS)) {
             addition += IronsSpellbooks.getSpellPower(entity) - 1;
+            addition *= Config.IRONS_SPELLBOOKS_ATTRIBUTE_USAGE.get();
         }
 
         return baseValue * (getMagicalKnowledge(entity) + addition);
@@ -48,6 +50,17 @@ public class EidolonAttributes {
 
     public static float getSpellHealing(final Entity entity, float baseValue) {
         return baseValue * getMagicalKnowledge(entity);
+    }
+
+    public static int getSpellCooldown(final Entity entity, float baseValue) {
+        float addition = 0;
+
+        if (CompatHandler.isModLoaded(CompatHandler.IRONS_SPELLBOOKS)) {
+            addition += IronsSpellbooks.getCooldownReduction(entity) - 1;
+            addition *= Config.IRONS_SPELLBOOKS_ATTRIBUTE_USAGE.get();
+        }
+
+        return (int) (baseValue / (getMagicalKnowledge(entity) + addition));
     }
 
     @SubscribeEvent

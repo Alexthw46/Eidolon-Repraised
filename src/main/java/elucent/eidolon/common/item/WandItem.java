@@ -6,6 +6,7 @@ import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.compat.apotheosis.Apotheosis;
 import elucent.eidolon.compat.apotheosis.HailingAffix;
 import elucent.eidolon.compat.apotheosis.TrackingAffix;
+import elucent.eidolon.registries.EidolonAttributes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -86,7 +87,7 @@ public class WandItem extends ItemBase implements IRechargeableWand {
 
             world.playSound(null, pos.x, pos.y, pos.z, soundEvent, SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
             stack.hurtAndBreak(1, entity, player -> player.broadcastBreakEvent(hand));
-            entity.getCooldowns().addCooldown(this, 15);
+            entity.getCooldowns().addCooldown(this, EidolonAttributes.getSpellCooldown(entity, 15));
         }
 
         if (!entity.swinging) {

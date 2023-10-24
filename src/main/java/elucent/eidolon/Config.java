@@ -5,10 +5,15 @@ import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Config {
-	// generic
+	// Generic Settings
 	public static ConfigValue<Integer> CRUCIBLE_STEP_DURATION, MAX_ETHEREAL_HEALTH;
+
+    // Soul Enchanter
     public static ConfigValue<Integer> SOUL_ENCHANTER_MAXIMUM_USES;
     public static ConfigValue<Integer> SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS;
+
+    // Mod Compatibility
+    public static ConfigValue<Double> IRONS_SPELLBOOKS_ATTRIBUTE_USAGE;
 
     public Config(ForgeConfigSpec.Builder builder) {
         builder.comment("Generic settings").push("generic");
@@ -16,12 +21,19 @@ public class Config {
         		.defineInRange("crucibleStepDuration", 100, 20, 1200);
         MAX_ETHEREAL_HEALTH = builder.comment("Maximum amount of ethereal health (soul half-hearts) an entity can have at once.")
         		.defineInRange("maxEtherealHealth", 80, 0, 1000);
+        builder.pop();
+
+        builder.push("Soul Enchanter").push("soulEnchanter");
         SOUL_ENCHANTER_MAXIMUM_USES = builder.comment("How often the Soul Enchanter can apply enchantments on an item (a value below 0 means unlimited)")
                 .define("soulEnchanterMaximumUses", -1);
         SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS = builder.comment("How many enchantments the item is allowed to have to be applicable for soul enchanting (a value below 0 means unlimited)")
                         .define("soulEnchanterMaximumEnchantments", -1);
         builder.pop();
 
+        builder.push("Mod Compatibility").push("modCompat");
+        IRONS_SPELLBOOKS_ATTRIBUTE_USAGE = builder.comment("By how much (percentage) the attribute values of this mod should apply to Eidolon")
+                        .defineInRange("ironsSpellbooksAttributeUsage", 1.0, 0, 1);
+        builder.pop();
     }
 
     public static final Config INSTANCE;
