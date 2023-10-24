@@ -2,15 +2,18 @@ package elucent.eidolon.compat;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.compat.apotheosis.Apotheosis;
+import elucent.eidolon.compat.irons_spellbooks.IronsSpellbooks;
 import net.minecraftforge.fml.ModList;
 
 import java.util.Map;
 
 public class CompatHandler {
     public final static String APOTHEOSIS = "apotheosis";
+    public final static String IRONS_SPELLBOOKS = "irons_spellbooks";
 
     private static final Map<String, ModData> MODS = Map.of(
-            APOTHEOSIS, new ModData(Apotheosis::initialize)
+            APOTHEOSIS, new ModData(Apotheosis::initialize),
+            IRONS_SPELLBOOKS, new ModData(IronsSpellbooks::initialize)
     );
 
     public static void initialize() {
