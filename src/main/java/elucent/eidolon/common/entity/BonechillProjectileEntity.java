@@ -12,7 +12,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -50,8 +49,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        Player player = level.getPlayerByUUID(casterId);
-        target.hurt(new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, player), EidolonAttributes.getSpellDamage(player, 4.0f));
+        handleDamage(target, new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, getCaster()), 4);
 
         if (target instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 300, 0));
