@@ -1,6 +1,8 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.compat.CompatHandler;
+import elucent.eidolon.compat.irons_spellbooks.IronsSpellbooks;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -35,7 +37,13 @@ public class EidolonAttributes {
     }
 
     public static float getSpellDamage(final Entity entity, float baseValue) {
-        return baseValue * getMagicalKnowledge(entity);
+        float addition = 0;
+
+        if (CompatHandler.isModLoaded(CompatHandler.IRONS_SPELLBOOKS)) {
+            addition += IronsSpellbooks.getSpellPower(entity) - 1;
+        }
+
+        return baseValue * (getMagicalKnowledge(entity) + addition);
     }
 
     public static float getSpellHealing(final Entity entity, float baseValue) {

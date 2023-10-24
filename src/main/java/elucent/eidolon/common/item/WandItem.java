@@ -56,14 +56,9 @@ public class WandItem extends ItemBase implements IRechargeableWand {
             Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
 
-            int projectileAmount = 1;
-            int trackingAmount = 0;
-
-            if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                Pair<Integer, Integer> affixData = handleAffix(stack);
-                projectileAmount = affixData.first;
-                trackingAmount = affixData.second;
-            }
+            Pair<Integer, Integer> affixData = handleAffix(stack);
+            int projectileAmount = affixData.first;
+            int trackingAmount = affixData.second;
 
             for (int i = 0; i < projectileAmount; i++) {
                 SpellProjectileEntity spellProjectileEntity = spellProjectile.create(world);
@@ -99,7 +94,6 @@ public class WandItem extends ItemBase implements IRechargeableWand {
         return InteractionResultHolder.success(stack);
     }
 
-    // TODO :: Convert to some data class?
     public Pair<Integer, Integer> handleAffix(final ItemStack stack) {
         int projectileAmount = 1;
         int trackingAmount = 0;
@@ -107,7 +101,6 @@ public class WandItem extends ItemBase implements IRechargeableWand {
         if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
             Map<Affix, AffixInstance> affixes = AffixHelper.getAffixes(stack);
 
-            // TODO :: Add affix to spawn multiple projectiles and the rarity of the affix determines the amounf of projectiles being tracking ones
             for (Affix affix : affixes.keySet()) {
                 AffixInstance affixInstance = affixes.get(affix);
 
