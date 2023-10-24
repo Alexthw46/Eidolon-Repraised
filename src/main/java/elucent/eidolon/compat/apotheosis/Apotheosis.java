@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import shadows.apotheosis.adventure.affix.AffixManager;
 import shadows.apotheosis.adventure.loot.LootCategory;
+import shadows.apotheosis.adventure.loot.LootRarity;
 import shadows.apotheosis.ench.asm.EnchHooks;
 
 public class Apotheosis {
@@ -20,11 +21,21 @@ public class Apotheosis {
         return EnchHooks.getMaxLevel(enchantment);
     }
 
+    public static int rarityToNumber(final LootRarity rarity) {
+        return LootRarity.LIST.indexOf(rarity);
+    }
+
+    public static int affixToAmount(final LootRarity affixRarity, final LootRarity minRarity) {
+        // This way the amount starts at the minimum rarity with 1
+        return 1 + Apotheosis.rarityToNumber(affixRarity) - Apotheosis.rarityToNumber(minRarity);
+    }
+
     private static EquipmentSlot[] toArray(final EquipmentSlot... equipmentSlots) {
         return equipmentSlots;
     }
 
     public static void initialize() {
         AffixManager.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "tracking"), TrackingAffix.SERIALIZER);
+        AffixManager.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "hailing"), HailingAffix.SERIALIZER);
     }
 }
