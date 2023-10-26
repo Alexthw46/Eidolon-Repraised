@@ -8,7 +8,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -91,13 +90,4 @@ public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
         yRotTrail = Mth.rotLerp(yRotTrail, getYRot(), 0.2f);
     }
 
-    @Override
-    public boolean hurt(@NotNull DamageSource source, float amt) {
-        if (source.getEntity() instanceof Player p && p.getGameProfile().getId().equals(UUID.fromString("0ca54301-6170-4c44-b3e0-b8afa6b81ed2"))) {
-            // SammySemicolon is not allowed to hurt slugs >:/
-            p.hurt(source, amt);
-            return false;
-        }
-        return super.hurt(source, amt);
-    }
 }
