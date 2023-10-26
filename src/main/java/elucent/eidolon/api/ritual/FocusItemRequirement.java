@@ -28,6 +28,10 @@ public class FocusItemRequirement implements IRequirement {
         this.match = Ingredient.of(item);
     }
 
+    public FocusItemRequirement(Ingredient ingredient) {
+        this.match = ingredient;
+    }
+
     @Override
     public RequirementInfo isMet(Ritual ritual, Level world, BlockPos pos) {
         List<IRitualItemFocus> tiles = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, ritual.getSearchBounds(pos));

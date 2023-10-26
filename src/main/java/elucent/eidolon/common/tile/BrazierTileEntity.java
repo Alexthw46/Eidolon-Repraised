@@ -252,7 +252,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner {
 
     @Override
     public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 4, worldPosition.getZ() + 1);
+        return new AABB(worldPosition.getX() - 1, worldPosition.getY(), worldPosition.getZ() - 1, worldPosition.getX() + 1, worldPosition.getY() + 4, worldPosition.getZ() + 1);
     }
 
     public void providePedestalItems(List<ItemStack> pedestalItems, List<ItemStack> focusItems) {

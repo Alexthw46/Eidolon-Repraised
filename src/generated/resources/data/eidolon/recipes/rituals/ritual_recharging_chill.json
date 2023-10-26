@@ -1,6 +1,11 @@
 {
   "type": "eidolon:ritual_brazier",
   "focusItems": [],
+  "invariantItems": [
+    {
+      "item": "eidolon:bonechill_wand"
+    }
+  ],
   "pedestalItems": [
     {
       "item": "minecraft:snowball"

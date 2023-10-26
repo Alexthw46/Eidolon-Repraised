@@ -3,6 +3,7 @@ package elucent.eidolon.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import elucent.eidolon.api.ritual.FocusItemRequirement;
 import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.ItemRequirement;
 import elucent.eidolon.api.ritual.Ritual;
@@ -31,10 +32,16 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     public Ingredient reagent; // Item on the brazier
     public List<Ingredient> pedestalItems; // Items part of the recipe, on stone hands
     public List<Ingredient> focusItems; // Items part of the recipe, on necrotic focus
+    public List<Ingredient> invariantItems = new ArrayList<>(2); // Items part of the recipe, on necrotic focus
 
     public ResourceLocation id;
 
     float healthRequirement = 0;
+
+    public RitualRecipe(ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, List<Ingredient> invariantItems, float healthRequirement) {
+        this(id, reagent, pedestalItems, focusItems, healthRequirement);
+        this.invariantItems = invariantItems;
+    }
 
     public RitualRecipe(ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems) {
         this.reagent = reagent;
@@ -78,6 +85,14 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
             focusArr.add(i.toJson());
         }
         jsonobject.add("focusItems", focusArr);
+
+        if (!RitualRecipe.invariantItems.isEmpty()) {
+            JsonArray invariantArr = new JsonArray();
+            for (Ingredient i : RitualRecipe.invariantItems) {
+                invariantArr.add(i.toJson());
+            }
+            jsonobject.add("invariantItems", invariantArr);
+        }
     }
 
     public boolean excludeJei() {
@@ -134,7 +149,7 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     public Ritual getRitualWithRequirements() {
         Ritual ritual = getRitual().clone().addRequirements(pedestalItems.stream().map(ItemRequirement::new).collect(Collectors.toList()));
         if (!focusItems.isEmpty())
-            ritual.addRequirements(focusItems.stream().map(ItemRequirement::new).collect(Collectors.toList()));
+            ritual.addRequirements(focusItems.stream().map(FocusItemRequirement::new).collect(Collectors.toList()));
         if (healthRequirement > 0) ritual.addRequirement(new HealthRequirement(healthRequirement));
         return ritual;
     }

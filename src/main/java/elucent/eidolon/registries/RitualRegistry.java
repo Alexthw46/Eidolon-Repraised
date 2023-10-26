@@ -1,6 +1,5 @@
 package elucent.eidolon.registries;
 
-import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.*;
 import net.minecraft.resources.ResourceLocation;
@@ -154,11 +153,11 @@ public class RitualRegistry {
 
         PURIFY_RITUAL = register(PURIFY_RITUAL_RL, new PurifyRitual());
 
-        RECHARGE_SOULFIRE_RITUAL = register(RECHARGE_SOULFIRE_RITUAL_RL, new RechargingRitual().addInvariant(new FocusItemPresentRequirement(Registry.SOULFIRE_WAND.get())));
+        RECHARGE_SOULFIRE_RITUAL = register(RECHARGE_SOULFIRE_RITUAL_RL, new RechargingRitual());
 
-        RECHARGE_BONECHILL_RITUAL = register(RECHARGE_BONECHILL_RITUAL_RL, new RechargingRitual().addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get())));
+        RECHARGE_BONECHILL_RITUAL = register(RECHARGE_BONECHILL_RITUAL_RL, new RechargingRitual());
 
-        ABSORB_RITUAL = register(ABSORB_RITUAL_RL, new AbsorptionRitual().addInvariant(new FocusItemPresentRequirement(Registry.SUMMONING_STAFF.get())));
+        ABSORB_RITUAL = register(ABSORB_RITUAL_RL, new AbsorptionRitual());
     }
 
 }

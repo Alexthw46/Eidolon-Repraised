@@ -9,6 +9,9 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 
 public class FocusItemPresentRequirement extends FocusItemRequirement {
+    public FocusItemPresentRequirement(Ingredient ingredient) {
+        super(ingredient);
+    }
     public FocusItemPresentRequirement(ItemStack item) {
         super(item);
     }

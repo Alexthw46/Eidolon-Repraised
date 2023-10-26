@@ -1,6 +1,11 @@
 {
   "type": "eidolon:ritual_brazier",
   "focusItems": [],
+  "invariantItems": [
+    {
+      "item": "eidolon:summoning_staff"
+    }
+  ],
   "pedestalItems": [
     {
       "item": "eidolon:tattered_cloth"
