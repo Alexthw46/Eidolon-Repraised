@@ -130,7 +130,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         Lighting.setupFor3DItems();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         EnchantmentNames.getInstance().initSeed(this.menu.getXPSeed());
-        int l = this.menu.getSoulShardAmount();
+        int soulShardAmount = this.menu.getSoulShardAmount();
 
         for(int i1 = 0; i1 < 3; ++i1) {
             int j1 = i + 60;
@@ -145,7 +145,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             if (experienceLevelCost < 1) {
                 this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
-                if ((l == 0 || this.minecraft.player.experienceLevel < experienceLevelCost) && !this.minecraft.player.getAbilities().instabuild || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                if ((soulShardAmount == 0 || this.minecraft.player.experienceLevel < experienceLevelCost) && !this.minecraft.player.getAbilities().instabuild || this.menu.enchantClue[i1] == -1) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
                     this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
                     this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * (experienceLevelCost - 1), 239, 16, 16);
                     this.font.drawWordWrap(itextproperties, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
