@@ -3,12 +3,14 @@ package elucent.eidolon.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.RitualRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -17,16 +19,32 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenericRitualRecipe extends RitualRecipe {
 
     ResourceLocation ritualRL;
 
-    public GenericRitualRecipe(ResourceLocation id, ResourceLocation ritualRL, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
-        super(id, reagent, pedestalItems, focusItems, healthRequirement);
+    public GenericRitualRecipe(ResourceLocation id, ResourceLocation ritualRL, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, List<Ingredient> invariants, float healthRequirement) {
+        super(id, reagent, pedestalItems, focusItems, invariants, healthRequirement);
         this.ritualRL = ritualRL;
     }
 
+    @Override
+    public Ritual getRitualWithRequirements() {
+        Ritual ritual = super.getRitualWithRequirements();
+        if (!invariantItems.isEmpty())
+            ritual.addInvariants(invariantItems.stream().map(FocusItemPresentRequirement::new).collect(Collectors.toList()));
+        return ritual;
+    }
+
+    @Override
+    public boolean isMatch(List<ItemStack> pedestalItems, List<ItemStack> focusItems, ItemStack reagent) {
+        //do not count invariants
+        if (!this.invariantItems.isEmpty())
+            focusItems.removeIf(i -> invariantItems.stream().anyMatch(ing -> ing.test(i)));
+        return super.isMatch(pedestalItems, focusItems, reagent);
+    }
 
     @Override
     public Ritual getRitual() {
@@ -64,7 +82,9 @@ public class GenericRitualRecipe extends RitualRecipe {
             List<Ingredient> foci = getPedestalItems(focusItems);
 
             ResourceLocation ritualRL = new ResourceLocation(GsonHelper.getAsString(json, "ritual"));
-            return new GenericRitualRecipe(recipeId, ritualRL, reagent, stacks, foci, healthRequirement);
+            List<Ingredient> invariants = json.has("invariantItems") ? getPedestalItems(GsonHelper.getAsJsonArray(json, "invariantItems")) : new ArrayList<>(0);
+
+            return new GenericRitualRecipe(recipeId, ritualRL, reagent, stacks, foci, invariants, healthRequirement);
         }
 
         @Override
@@ -95,13 +115,31 @@ public class GenericRitualRecipe extends RitualRecipe {
             float healthRequirement = pBuffer.readFloat();
 
             ResourceLocation ritualRL = pBuffer.readResourceLocation();
-            return new GenericRitualRecipe(pRecipeId, ritualRL, reagent, stacks, foci, healthRequirement);
+
+            int length3 = pBuffer.readInt();
+
+            List<Ingredient> invariantItems = new ArrayList<>();
+            for (int i = 0; i < length3; i++) {
+                try {
+                    invariantItems.add(Ingredient.fromNetwork(pBuffer));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+
+
+            return new GenericRitualRecipe(pRecipeId, ritualRL, reagent, stacks, foci, invariantItems, healthRequirement);
         }
 
         @Override
         public void toNetwork(@NotNull FriendlyByteBuf buf, @NotNull GenericRitualRecipe recipe) {
             super.toNetwork(buf, recipe);
             buf.writeResourceLocation(recipe.ritualRL);
+            buf.writeInt(recipe.invariantItems.size());
+            for (Ingredient i : recipe.invariantItems) {
+                i.toNetwork(buf);
+            }
         }
     }
 
