@@ -1,10 +1,7 @@
 package elucent.eidolon.datagen;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.ritual.HealthRequirement;
-import elucent.eidolon.api.ritual.ItemRequirement;
-import elucent.eidolon.api.ritual.ItemSacrifice;
-import elucent.eidolon.api.ritual.Ritual;
+import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.common.ritual.*;
 import elucent.eidolon.recipe.GenericRitualRecipe;
 import elucent.eidolon.recipe.ItemRitualRecipe;
@@ -34,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RecipeUtil.ingredientsFromObjects;
@@ -169,17 +167,21 @@ public class EidRitualProvider implements DataProvider {
                 .addRequirement(new ItemRequirement(Registry.TATTERED_CLOTH.get()))
                 .addRequirement(new ItemRequirement(Items.BONE))
                 .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
-                .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
+                .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
+                .addInvariant(new FocusItemPresentRequirement(Registry.SUMMONING_STAFF.get())));
 
         generic(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_soulfire")
                 .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
                 .addRequirement(new ItemRequirement(Items.BLAZE_POWDER))
-                .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE)));
+                .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
+                .addInvariant(new FocusItemPresentRequirement(Registry.SOULFIRE_WAND.get())));
 
         generic(Registry.LESSER_SOUL_GEM.get(), new RechargingRitual().setRegistryName(Eidolon.MODID, "recharging_chill")
                 .addRequirement(new ItemRequirement(Items.SNOWBALL))
                 .addRequirement(new ItemRequirement(Items.SNOWBALL))
-                .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE)));
+                .addRequirement(new ItemRequirement(Tags.Items.DUSTS_REDSTONE))
+                .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get()))
+        );
 
         // tester for command ritual
         // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
@@ -209,8 +211,9 @@ public class EidRitualProvider implements DataProvider {
         List<Ingredient> pedestal = ritual.getRequirements().stream().filter(req -> req instanceof ItemRequirement).map(req -> (ItemRequirement) req).map(ItemRequirement::getMatch).toList();
         Ingredient reagent = keys.main;
         List<Ingredient> foci = keys instanceof MultiItemSacrifice mis ? mis.items : List.of();
+        List<Ingredient> invariants = ritual.getInvariants().stream().filter(iRequirement -> iRequirement instanceof FocusItemPresentRequirement).map(iRequirement -> (FocusItemPresentRequirement) iRequirement).map(FocusItemPresentRequirement::getMatch).collect(Collectors.toList());
         float health = ritual.getRequirements().stream().filter(req -> req instanceof HealthRequirement).map(req -> (HealthRequirement) req).map(HealthRequirement::getHealth).findFirst().orElse(0f);
-        rituals.add(new GenericRitualRecipe(prefix("ritual_" + ritual.getRegistryName().getPath()), ritual.getRegistryName(), reagent, pedestal, foci, health));
+        rituals.add(new GenericRitualRecipe(prefix("ritual_" + ritual.getRegistryName().getPath()), ritual.getRegistryName(), reagent, pedestal, foci, invariants, health));
     }
 
     /**
