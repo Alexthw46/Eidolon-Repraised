@@ -31,6 +31,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageScaling;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -81,8 +82,13 @@ public class Registry {
     public static TagKey<Item> INGOTS_ARCANE_GOLD = ItemTags.create(new ResourceLocation("forge", "ingots/arcane_gold"));
     public static final TagKey<Item> INGOTS_SILVER = ItemTags.create(new ResourceLocation("forge", "ingots/silver"));
     public static TagKey<Item> GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
+    public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
     public static TagKey<Block> CRUCIBLE_HOT_BLOCKS = BlockTags.create(new ResourceLocation(Eidolon.MODID, "crucible_hot_blocks"));
+    public static TagKey<DamageType> FORGE_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_magic"));
+    public static TagKey<DamageType> FORGE_WITHER = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_wither"));
+
+
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Eidolon.MODID);
 
     static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Eidolon.MODID);
@@ -92,9 +98,6 @@ public class Registry {
 
     static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
     static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Eidolon.MODID);
-
-
-    public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
     static Item.Properties itemProps() {
         return new Item.Properties();
@@ -332,7 +335,6 @@ public class Registry {
             itemProps().stacksTo(1).rarity(Rarity.RARE), 20));
     public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
     public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
-    //public static final RegistryObject<Item> ALCHEMISTS_TONGS = addItem("alchemists_tongs", () -> new TongsItem(itemProps().stacksTo(1)));
     public static final RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
     public static final RegistryObject<Item> MAGIC_INK = addItem("magic_ink");
     public static final RegistryObject<Item> MAGICIANS_WAX = addItem("magicians_wax");
@@ -609,9 +611,12 @@ public class Registry {
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
     }
 
+
+
     public static final DamageTypeData SAPPING = DamageTypeData.builder()
             .simpleId("sap")
             .scaling(DamageScaling.ALWAYS)
+            .tag(FORGE_WITHER)
             .build();
 
     public static final DamageTypeData RITUAL_DAMAGE = DamageTypeData.builder()
@@ -620,7 +625,11 @@ public class Registry {
             .tag(DamageTypeTags.BYPASSES_ARMOR)
             .tag(DamageTypeTags.BYPASSES_ENCHANTMENTS)
             .build();
-    public static final DamageTypeData FROST_DAMAGE = DamageTypeData.builder().simpleId("frost").effects(DamageEffects.FREEZING).build();
+    public static final DamageTypeData FROST_DAMAGE = DamageTypeData.builder()
+            .simpleId("frost")
+            .effects(DamageEffects.FREEZING)
+            .tag(FORGE_MAGIC)
+            .build();
 
     public void registerCaps(RegisterCapabilitiesEvent event) {
         event.register(IReputation.class);

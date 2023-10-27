@@ -1,3 +1,5 @@
-// 1.20.1	2023-08-05T12:07:41.7578719	Tags for minecraft:damage_type mod id eidolon
+// 1.20.1	2023-10-26T11:44:21.864085	Tags for minecraft:damage_type mod id eidolon
+6614946ee0f1493d3322b9272e16f58b4eb66f81 data/forge/tags/damage_type/is_magic.json
+92f1992a704f57cd8d09a3e794494ce61faaceb0 data/forge/tags/damage_type/is_wither.json
 56afcfb2863d22e8b6c3261c367a536e6e61abf0 data/minecraft/tags/damage_type/bypasses_armor.json
 56afcfb2863d22e8b6c3261c367a536e6e61abf0 data/minecraft/tags/damage_type/bypasses_enchantments.json
