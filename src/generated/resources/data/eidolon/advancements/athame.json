@@ -34,5 +34,6 @@
     [
       "has_athame"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

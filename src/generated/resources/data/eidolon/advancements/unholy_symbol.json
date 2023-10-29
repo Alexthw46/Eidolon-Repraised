@@ -33,5 +33,6 @@
     [
       "has_unholy_symbol"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

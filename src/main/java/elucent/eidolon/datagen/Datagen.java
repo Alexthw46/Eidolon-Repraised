@@ -32,6 +32,7 @@ public class Datagen {
         gen.addProvider(event.includeServer(), new EidDamageProvider.DamageTypeDataProvider(output, provider));
         gen.addProvider(event.includeServer(), new EidDamageProvider.DamageTypeTagGen(output, provider, fileHelper));
         gen.addProvider(event.includeServer(), new EidRitualProvider(gen));
+        gen.addProvider(event.includeServer(), new EidAdvancementProvider(gen, provider, fileHelper));
         gen.addProvider(true, new StructureUpdater("structures", Eidolon.MODID, fileHelper, output));
         gen.addProvider(true, new StructureUpdater("structures/catacombs", Eidolon.MODID, fileHelper, output));
 

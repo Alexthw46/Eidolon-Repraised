@@ -25,5 +25,6 @@
     [
       "sacred_path"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

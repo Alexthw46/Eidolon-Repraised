@@ -33,5 +33,6 @@
     [
       "has_stone_altar"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

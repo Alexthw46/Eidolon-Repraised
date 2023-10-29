@@ -25,5 +25,6 @@
     [
       "lay_on_hands"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

@@ -33,5 +33,6 @@
     [
       "has_straw_effigy"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

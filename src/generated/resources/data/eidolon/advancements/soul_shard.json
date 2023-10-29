@@ -33,5 +33,6 @@
     [
       "has_soul_shard"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

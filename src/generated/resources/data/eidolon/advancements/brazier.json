@@ -33,5 +33,6 @@
     [
       "has_brazier"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

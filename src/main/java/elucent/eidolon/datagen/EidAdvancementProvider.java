@@ -1,16 +1,15 @@
 package elucent.eidolon.datagen;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.AdvancementTriggers;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,29 +26,22 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class EidAdvancementProvider extends AdvancementProvider {
-    private final List<Consumer<Consumer<Advancement>>> advancements = ImmutableList.of(new EidolonAdvancements());
+public class EidAdvancementProvider extends ForgeAdvancementProvider {
 
-    public EidAdvancementProvider(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
-        super(generatorIn, fileHelperIn);
+    public EidAdvancementProvider(DataGenerator generatorIn, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper fileHelperIn) {
+        super(generatorIn.getPackOutput(), registries, fileHelperIn, List.of(new EidolonAdvancements()));
     }
 
 
-    @Override
-    protected void registerAdvancements(@NotNull Consumer<Advancement> consumer, @NotNull ExistingFileHelper fileHelper) {
-        for (Consumer<Consumer<Advancement>> consumer1 : this.advancements) {
-            consumer1.accept(consumer);
-        }
-    }
-
-    static class EidolonAdvancements implements Consumer<Consumer<Advancement>> {
+    static class EidolonAdvancements implements ForgeAdvancementProvider.AdvancementGenerator {
         Consumer<Advancement> advCon;
 
         @Override
-        public void accept(Consumer<Advancement> con) {
+        public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<Advancement> con, @NotNull ExistingFileHelper existingFileHelper) {
             this.advCon = con;
             Advancement root = builder(Eidolon.MODID).display(Registry.CODEX.get(), Component.translatable("eidolon.advancement.title.root"),
                     Component.translatable("eidolon.advancement.desc.root"),
@@ -94,7 +87,7 @@ public class EidAdvancementProvider extends AdvancementProvider {
         }
 
         private Advancement saveWithTrigger(Advancement parent, @NotNull ItemLike display, PlayerTrigger playerTrigger) {
-            return builder(playerTrigger.getId().getPath()).display(display, FrameType.TASK).addCriterion(new PlayerTrigger.TriggerInstance(playerTrigger.getId(), EntityPredicate.Composite.ANY)).parent(parent).save(advCon);
+            return builder(playerTrigger.getId().getPath()).display(display, FrameType.TASK).addCriterion(new PlayerTrigger.TriggerInstance(playerTrigger.getId(), ContextAwarePredicate.ANY)).parent(parent).save(advCon);
         }
 
         public AdvancementBuilder buildBasicItem(ItemLike item, Advancement parent) {
@@ -126,7 +119,7 @@ public class EidAdvancementProvider extends AdvancementProvider {
         private String modid;
         private String fileKey;
 
-        private AdvancementBuilder(@Nullable ResourceLocation pParentId, @Nullable DisplayInfo pDisplay, AdvancementRewards pRewards, Map<String, Criterion> pCriteria, String[][] pRequirements) {
+        private AdvancementBuilder(@Nullable ResourceLocation pParentId, @Nullable DisplayInfo pDisplay, AdvancementRewards pRewards, Map<String, Criterion> pCriteria, String[] @org.jetbrains.annotations.Nullable [] pRequirements) {
             this.parentId = pParentId;
             this.display = pDisplay;
             this.rewards = pRewards;
@@ -258,7 +251,7 @@ public class EidAdvancementProvider extends AdvancementProvider {
                     this.requirements = this.requirementsStrategy.createRequirements(this.criteria.keySet());
                 }
 
-                return new Advancement(pId, this.parent, this.display, this.rewards, this.criteria, this.requirements);
+                return new Advancement(pId, this.parent, this.display, this.rewards, this.criteria, this.requirements, false);
             }
         }
 

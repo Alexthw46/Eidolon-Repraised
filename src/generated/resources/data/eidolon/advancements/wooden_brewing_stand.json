@@ -33,5 +33,6 @@
     [
       "has_wooden_brewing_stand"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }

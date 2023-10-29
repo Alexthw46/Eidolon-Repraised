@@ -33,5 +33,6 @@
     [
       "eidolon:ars_ecclesia"
     ]
-  ]
+  ],
+  "sends_telemetry_event": false
 }
