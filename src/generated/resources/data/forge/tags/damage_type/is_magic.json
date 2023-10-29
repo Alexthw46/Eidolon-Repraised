@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#minecraft:witch_resistant_to",
+    {
+      "id": "eidolon:frost",
+      "required": false
+    }
+  ]
+}

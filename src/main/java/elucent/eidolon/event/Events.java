@@ -21,7 +21,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -306,8 +305,8 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId());
-        if (isWither || event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO)) {
+        boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId()); //TODO .is(Registry.FORGE_WITHER);
+        if (isWither || event.getSource().is(Registry.FORGE_MAGIC)) {
             if (event.getSource().getEntity() instanceof LivingEntity living
                 && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
