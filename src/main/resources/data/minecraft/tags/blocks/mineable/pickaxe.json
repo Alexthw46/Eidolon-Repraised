@@ -41,6 +41,9 @@
     "eidolon:stone_altar",
     "eidolon:stone_hand",
     "eidolon:unholy_effigy",
-    "eidolon:censer"
+    "eidolon:censer",
+    "eidolon:bone_pile",
+    "eidolon:bone_pile_slab",
+    "eidolon:bone_pile_stairs"
   ]
 }
