@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -183,7 +184,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
 
         if (caster != null) {
             double rad = Math.toRadians(caster.yHeadRot);
-            this.setPos(caster.getEyePosition().add(-Math.sin(rad) / 2, -0.5, +Math.cos(rad) / 2));
+            this.setPos(caster.getEyePosition().add(-Math.sin(rad) / 2, -0.75, Math.cos(rad) / 2));
             this.look = caster.getLookAngle();
         }
     }

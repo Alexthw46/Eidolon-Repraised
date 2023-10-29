@@ -6,6 +6,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.AdvancementTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -23,6 +24,7 @@ public class KnowledgeUtil {
             k.addSign(sign);
 
             player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_sign", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))));
+            AdvancementTriggers.triggerSign(sign, player);
             Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
         });
     }
@@ -43,6 +45,7 @@ public class KnowledgeUtil {
             if (k.knowsResearch(research)) return;
             k.addResearch(research.getRegistryName());
             research.onLearned(serverPlayer);
+            AdvancementTriggers.triggerResearch(research.getName(), serverPlayer);
             serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + research.getName())));
             Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
@@ -53,6 +56,7 @@ public class KnowledgeUtil {
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsResearch(research)) return;
             k.addResearch(research);
+            AdvancementTriggers.triggerResearch(research.getPath(), serverPlayer);
             Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
     }

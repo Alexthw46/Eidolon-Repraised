@@ -1,0 +1,38 @@
+{
+  "parent": "eidolon:worktable",
+  "criteria": {
+    "has_reaper_scythe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:reaper_scythe"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.reaper_scythe"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:reaper_scythe",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.reaper_scythe"
+    }
+  },
+  "requirements": [
+    [
+      "has_reaper_scythe"
+    ]
+  ]
+}

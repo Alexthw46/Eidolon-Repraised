@@ -1,0 +1,30 @@
+{
+  "parent": "eidolon:unholy_symbol",
+  "criteria": {
+    "villager_sacrifice": {
+      "conditions": {},
+      "trigger": "eidolon:villager_sacrifice"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.villager_sacrifice"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:iron_sword",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.villager_sacrifice"
+    }
+  },
+  "requirements": [
+    [
+      "villager_sacrifice"
+    ]
+  ]
+}

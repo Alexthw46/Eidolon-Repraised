@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:incense",
+  "criteria": {
+    "has_holy_symbol": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:holy_symbol"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.holy_symbol"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:holy_symbol"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.holy_symbol"
+    }
+  },
+  "requirements": [
+    [
+      "has_holy_symbol"
+    ]
+  ]
+}

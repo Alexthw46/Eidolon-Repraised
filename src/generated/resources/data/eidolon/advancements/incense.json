@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:sacred_path",
+  "criteria": {
+    "incense": {
+      "conditions": {},
+      "trigger": "eidolon:incense"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.incense"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:censer"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.incense"
+    }
+  },
+  "requirements": [
+    [
+      "incense"
+    ]
+  ]
+}

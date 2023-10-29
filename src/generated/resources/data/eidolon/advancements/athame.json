@@ -1,0 +1,38 @@
+{
+  "parent": "eidolon:worktable",
+  "criteria": {
+    "has_athame": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:athame"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.athame"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:athame",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.athame"
+    }
+  },
+  "requirements": [
+    [
+      "has_athame"
+    ]
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:crucible",
+  "criteria": {
+    "has_research_notes": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:research_notes"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.research_notes"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:research_notes"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.research_notes"
+    }
+  },
+  "requirements": [
+    [
+      "has_research_notes"
+    ]
+  ]
+}

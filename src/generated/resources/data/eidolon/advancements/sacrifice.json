@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:wicked_path",
+  "criteria": {
+    "sacrifice": {
+      "conditions": {},
+      "trigger": "eidolon:sacrifice"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.sacrifice"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:goblet"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.sacrifice"
+    }
+  },
+  "requirements": [
+    [
+      "sacrifice"
+    ]
+  ]
+}

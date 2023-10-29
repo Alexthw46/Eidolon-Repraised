@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:root",
+  "criteria": {
+    "has_straw_effigy": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:straw_effigy"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.straw_effigy"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:straw_effigy"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.straw_effigy"
+    }
+  },
+  "requirements": [
+    [
+      "has_straw_effigy"
+    ]
+  ]
+}

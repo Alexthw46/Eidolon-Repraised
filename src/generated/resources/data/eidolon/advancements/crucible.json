@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:pewter_ingot",
+  "criteria": {
+    "has_crucible": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:crucible"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.crucible"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:crucible"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.crucible"
+    }
+  },
+  "requirements": [
+    [
+      "has_crucible"
+    ]
+  ]
+}

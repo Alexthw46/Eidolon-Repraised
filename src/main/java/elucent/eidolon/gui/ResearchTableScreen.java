@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -108,8 +109,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
     	return super.mouseClicked(mouseX, mouseY, button);
     }
 
-	protected void slotClicked(@NotNull Slot p_97778_, int p_97779_, int p_97780_, @NotNull ClickType p_97781_) {
-		if (p_97779_ >= menu.slots.size()) return;
+	@Override
+	protected void slotClicked(@Nullable Slot p_97778_, int p_97779_, int p_97780_, @NotNull ClickType p_97781_) {
+		if (p_97779_ >= menu.slots.size() || p_97778_ == null) return;
 		super.slotClicked(p_97778_, p_97779_, p_97780_, p_97781_);
 	}
 

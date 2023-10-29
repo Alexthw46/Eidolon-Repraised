@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:pewter_ingot",
+  "criteria": {
+    "has_worktable": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:worktable"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.worktable"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:worktable"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.worktable"
+    }
+  },
+  "requirements": [
+    [
+      "has_worktable"
+    ]
+  ]
+}

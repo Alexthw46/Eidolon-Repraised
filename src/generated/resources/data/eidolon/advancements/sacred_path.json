@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:straw_effigy",
+  "criteria": {
+    "sacred_path": {
+      "conditions": {},
+      "trigger": "eidolon:sacred_path"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.sacred_path"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:holy_symbol"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.sacred_path"
+    }
+  },
+  "requirements": [
+    [
+      "sacred_path"
+    ]
+  ]
+}
