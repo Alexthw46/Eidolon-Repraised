@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:straw_effigy",
+  "criteria": {
+    "has_wooden_altar": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:wooden_altar"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.wooden_altar"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:wooden_altar"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.wooden_altar"
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden_altar"
+    ]
+  ]
+}

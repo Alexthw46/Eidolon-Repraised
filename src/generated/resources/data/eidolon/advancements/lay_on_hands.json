@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:holy_symbol",
+  "criteria": {
+    "lay_on_hands": {
+      "conditions": {},
+      "trigger": "eidolon:lay_on_hands"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.lay_on_hands"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.lay_on_hands"
+    }
+  },
+  "requirements": [
+    [
+      "lay_on_hands"
+    ]
+  ]
+}

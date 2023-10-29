@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:root",
+  "criteria": {
+    "has_pewter_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:pewter_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.pewter_ingot"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:pewter_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.pewter_ingot"
+    }
+  },
+  "requirements": [
+    [
+      "has_pewter_ingot"
+    ]
+  ]
+}

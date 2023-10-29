@@ -12,6 +12,9 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EidBlockTagProvider extends BlockTagsProvider {
     public EidBlockTagProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator, Eidolon.MODID, existingFileHelper);
@@ -36,6 +39,7 @@ public class EidBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_AXE).add(blocks);
     }
 
+    //only used on demand as the tag already exists,
     void addPickMineable(int level, Block... blocks) {
         for (Block block : blocks) {
             tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
@@ -47,6 +51,21 @@ public class EidBlockTagProvider extends BlockTagsProvider {
             }
         }
 
+    }
+
+    void addPickMineableDeco(int level, Registry.DecoBlockPack blockpack) {
+        List<Block> blocks = new ArrayList<>();
+        blocks.add(blockpack.getBlock());
+        blocks.add(blockpack.getSlab());
+        blocks.add(blockpack.getStairs());
+        blocks.add(blockpack.getWall());
+        blocks.add(blockpack.getFence());
+        blocks.add(blockpack.getFenceGate());
+
+        for (var block : blocks) {
+            if (block == null) continue;
+            addPickMineable(level, block);
+        }
     }
 
     @Override

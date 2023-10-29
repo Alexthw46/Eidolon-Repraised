@@ -55,6 +55,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 
@@ -138,6 +139,20 @@ public class Events {
             if (!goblets.isEmpty()) {
                 GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble(g -> g.getBlockPos().distSqr(pos))).get();
                 goblet.setEntityType(entity.getType());
+            }
+        }
+
+        if (event.getSource().getEntity() instanceof Player && !entity.level.isClientSide()) {
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            //if it's Halloween period, add one of the two candies to the loot table with 10% chance
+            if ((month == 10 && day >= 28 || month == 11 && day <= 2) && entity.level.random.nextInt(10) == 0) {
+                if (entity instanceof Zombie) {
+                    event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.RED_CANDY.get())));
+                } else if (entity instanceof AbstractSkeleton) {
+                    event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.GRAPE_CANDY.get())));
+                }
             }
         }
 

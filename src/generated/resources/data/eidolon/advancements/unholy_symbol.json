@@ -1,0 +1,37 @@
+{
+  "parent": "eidolon:sacrifice",
+  "criteria": {
+    "has_unholy_symbol": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:unholy_symbol"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.unholy_symbol"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:unholy_symbol"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.unholy_symbol"
+    }
+  },
+  "requirements": [
+    [
+      "has_unholy_symbol"
+    ]
+  ]
+}

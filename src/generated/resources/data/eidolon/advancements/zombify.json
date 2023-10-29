@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:villager_sacrifice",
+  "criteria": {
+    "zombify": {
+      "conditions": {},
+      "trigger": "eidolon:zombify"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.zombify"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:zombie_heart"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.zombify"
+    }
+  },
+  "requirements": [
+    [
+      "zombify"
+    ]
+  ]
+}

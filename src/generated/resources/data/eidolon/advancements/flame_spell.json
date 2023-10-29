@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:research_notes",
+  "criteria": {
+    "flame_spell": {
+      "conditions": {},
+      "trigger": "eidolon:flame_spell"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.flame_spell"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:campfire"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.flame_spell"
+    }
+  },
+  "requirements": [
+    [
+      "flame_spell"
+    ]
+  ]
+}

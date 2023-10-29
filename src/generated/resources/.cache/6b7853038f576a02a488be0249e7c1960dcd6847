@@ -1,13 +1,13 @@
-// 1.19.2	2023-10-18T18:42:42.9338767	Eidolon Rituals
-9be7f9fb012607b5eb199bb6f6f3fafd39726d6f data/eidolon/recipes/rituals/ritual_absorption.json
+// 1.19.2	2023-10-26T23:14:15.7363017	Eidolon Rituals
+c85794f40cf066e7d22adb72a76edf72d06ea02d data/eidolon/recipes/rituals/ritual_absorption.json
 d25f6c3dfe22c8054c60ce2299c8f0d524c4dce6 data/eidolon/recipes/rituals/ritual_allure.json
 72d8cc7c6780d50332710e814a238b5ad1c3ed11 data/eidolon/recipes/rituals/ritual_crystal.json
 7e1fbbe518028f318ce399bd48ba4af7b7f0eae2 data/eidolon/recipes/rituals/ritual_daylight.json
 12b80d7ae28da39cc263aa3076c071d4e74f5571 data/eidolon/recipes/rituals/ritual_deceit.json
 d874b7b6d62858cb96b7a1767de7c7b3e73fdccc data/eidolon/recipes/rituals/ritual_moonlight.json
 825c7eb109c3f00517de5187ea15c7486606c65c data/eidolon/recipes/rituals/ritual_purify.json
-c97e67db40dcd65a16979a38cbbf2168ea7ca5f4 data/eidolon/recipes/rituals/ritual_recharging_chill.json
-fd5e6a8826d28c897d6d7271791a5e8776a083ba data/eidolon/recipes/rituals/ritual_recharging_soulfire.json
+55e530f98362843f2e79b6b4cae96a73d265fbab data/eidolon/recipes/rituals/ritual_recharging_chill.json
+35bae614f8eeb3d04feb897da4558a3d88162cbb data/eidolon/recipes/rituals/ritual_recharging_soulfire.json
 793ab466a4676442040b614846606098301883f3 data/eidolon/recipes/rituals/ritual_repelling.json
 15ff69ec7701e8346ea4760a2b4828194f1f49a6 data/eidolon/recipes/rituals/sanguine_amulet.json
 db397233a848c6484eae068562b0b9c10c0cdd47 data/eidolon/recipes/rituals/sapping_sword.json

@@ -1,0 +1,29 @@
+{
+  "parent": "eidolon:research_notes",
+  "criteria": {
+    "frost_spell": {
+      "conditions": {},
+      "trigger": "eidolon:frost_spell"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.frost_spell"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:blue_ice"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.frost_spell"
+    }
+  },
+  "requirements": [
+    [
+      "frost_spell"
+    ]
+  ]
+}

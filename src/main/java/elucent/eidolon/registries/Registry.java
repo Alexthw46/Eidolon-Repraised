@@ -554,6 +554,7 @@ public class Registry {
         EidolonRecipes.RECIPE_TYPES.register(modEventBus);
         EidolonRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         ARG_TYPES.register(modEventBus);
+        AdvancementTriggers.init();
     }
 
     @OnlyIn(Dist.CLIENT)

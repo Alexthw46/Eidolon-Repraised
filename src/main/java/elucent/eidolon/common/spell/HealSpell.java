@@ -18,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class HealSpell extends StaticSpell {
 
 
@@ -34,6 +36,12 @@ public class HealSpell extends StaticSpell {
     public void cast(Level world, BlockPos pos, Player player) {
 
         if (!world.isClientSide) {
+            AtomicReference<Float> heal = new AtomicReference<>(5F);
+
+            world.getCapability(IReputation.INSTANCE).ifPresent(
+                    iReputation -> heal.updateAndGet(v -> (float) (v + iReputation.getReputation(player.getUUID(), Deities.LIGHT_DEITY.getId()) / 20F))
+            );
+
             HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
             LivingEntity toHeal;
             boolean other = false;
@@ -42,14 +50,13 @@ public class HealSpell extends StaticSpell {
                 other = living.getHealth() < living.getMaxHealth();
             } else toHeal = player;
 
-            toHeal.heal(5);
+            toHeal.heal(heal.get());
             for (MobEffectInstance effectInstance : toHeal.getActiveEffects()) {
                 MobEffect effect = effectInstance.getEffect();
                 if (!effect.isBeneficial() && effect.getCurativeItems().contains(Items.MILK_BUCKET.getDefaultInstance())) {
                     toHeal.removeEffect(effect);
                 }
             }
-            //toHeal.curePotionEffects(Items.MILK_BUCKET.getDefaultInstance());
 
             if (other) {
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);

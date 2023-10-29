@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "eidolon:ars_ecclesia": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "eidolon:codex"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "eidolon:textures/block/bone_pile.png",
+    "description": {
+      "translate": "eidolon.advancement.desc.root"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:codex"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "eidolon.advancement.title.root"
+    }
+  },
+  "requirements": [
+    [
+      "eidolon:ars_ecclesia"
+    ]
+  ]
+}
