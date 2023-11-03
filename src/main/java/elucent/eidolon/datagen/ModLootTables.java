@@ -1,5 +1,8 @@
 package elucent.eidolon.datagen;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
+import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -73,14 +76,21 @@ public class ModLootTables extends LootTableProvider {
             this.dropSelf(block);
         }
 
-        public void registerDropSelf(Registry.DecoBlockPack blockpack) {
+        public void registerDropSelf(DecoBlockPack blockpack) {
             List<Block> blocks = new ArrayList<>();
             blocks.add(blockpack.getBlock());
             blocks.add(blockpack.getSlab());
             blocks.add(blockpack.getStairs());
             blocks.add(blockpack.getWall());
-            blocks.add(blockpack.getFence());
-            blocks.add(blockpack.getFenceGate());
+
+            if (blockpack instanceof DecoBlockPack.WoodDecoBlock woodDecoBlock) {
+                blocks.add(woodDecoBlock.getFence());
+                blocks.add(woodDecoBlock.getFenceGate());
+                blocks.add(woodDecoBlock.getButton());
+                blocks.add(woodDecoBlock.getPressurePlate());
+                blocks.add(woodDecoBlock.getStandingSign());
+                blocks.add(woodDecoBlock.getWallSign());
+            }
 
             for (var block : blocks) {
                 if (block == null) continue;

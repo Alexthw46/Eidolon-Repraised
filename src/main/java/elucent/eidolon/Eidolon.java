@@ -16,7 +16,9 @@ import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
 import elucent.eidolon.registries.*;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -112,6 +114,7 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.SOUL_ENCHANTER_TILE_ENTITY.get(), (trd) -> new SoulEnchanterTileRenderer());
         BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY.get(), (trd) -> new GobletTileRenderer());
         BlockEntityRenderers.register(Registry.CENSER_TILE_ENTITY.get(), (trd) -> new CenserRenderer());
+        BlockEntityRenderers.register(Registry.SIGN_BLOCKENTITY.get(), SignRenderer::new);
 
         event.enqueueWork(() -> {
             CodexChapters.init();
@@ -122,6 +125,9 @@ public class Eidolon {
             MenuScreens.register(Registry.RESEARCH_TABLE_CONTAINER.get(), ResearchTableScreen::new);
 
             ClientRegistry.initCurios();
+
+            Sheets.addWoodType(Registry.ILLWOOD);
+            Sheets.addWoodType(Registry.POLISHED);
         });
     }
 

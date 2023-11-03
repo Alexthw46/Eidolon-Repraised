@@ -1,6 +1,11 @@
-// 1.20.1	2023-10-18T10:42:06.9668311	Tags for minecraft:item mod id eidolon
+// 1.19.2	2023-11-03T14:59:22.0932062	Tags for minecraft:item
 899586c41b931b92762c1abc2471518c2eee8f75 data/eidolon/tags/items/patron_symbol.json
 8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/items/scribe_items.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/items/leaves.json
 15994e7ba2e0c75652884601c7636ba69c1c0522 data/minecraft/tags/items/music_discs.json
 4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/items/saplings.json
+8d35948aeaa6d77dfae9bc470c017f9f72dcacc3 data/minecraft/tags/items/signs.json
+5fec2e225c411afa465b1a3b1229b6710ed83468 data/minecraft/tags/items/wooden_buttons.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/items/wooden_doors.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/items/wooden_pressure_plates.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/items/wooden_stairs.json
