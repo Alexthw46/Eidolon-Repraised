@@ -1,6 +1,7 @@
 package elucent.eidolon.datagen;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -26,7 +27,11 @@ public class EidBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.LEAVES).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(Registry.ILLWOOD_LEAVES.get());
         tag(BlockTags.SAPLINGS).add(Registry.ILLWOOD_SAPLING.get());
-
+        tag(BlockTags.WOODEN_BUTTONS).add(Registry.ILLWOOD_PLANKS.getButton(), Registry.POLISHED_PLANKS.getButton());
+        tag(BlockTags.WALL_SIGNS).add(Registry.ILLWOOD_PLANKS.getWallSign(), Registry.POLISHED_PLANKS.getWallSign());
+        tag(BlockTags.STANDING_SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign(), Registry.POLISHED_PLANKS.getStandingSign());
+        tag(BlockTags.PRESSURE_PLATES).add(Registry.ILLWOOD_PLANKS.getPressurePlate(), Registry.POLISHED_PLANKS.getPressurePlate());
+        //tag(BlockTags.WOODEN_TRAPDOORS).add(Registry.ILLWOOD_PLANKS.getTrapdoor(), Registry.POLISHED_PLANKS.getTrapdoor());
         tag(Registry.CRUCIBLE_HOT_BLOCKS).add(Blocks.MAGMA_BLOCK,
                 Blocks.FIRE,
                 Blocks.SOUL_FIRE,
@@ -53,15 +58,16 @@ public class EidBlockTagProvider extends BlockTagsProvider {
 
     }
 
-    void addPickMineableDeco(int level, Registry.DecoBlockPack blockpack) {
+    void addPickMineableDeco(int level, DecoBlockPack blockpack) {
         List<Block> blocks = new ArrayList<>();
         blocks.add(blockpack.getBlock());
         blocks.add(blockpack.getSlab());
         blocks.add(blockpack.getStairs());
         blocks.add(blockpack.getWall());
-        blocks.add(blockpack.getFence());
-        blocks.add(blockpack.getFenceGate());
-
+        if (blockpack instanceof DecoBlockPack.WoodDecoBlock woodPack) {
+            blocks.add(woodPack.getFence());
+            blocks.add(woodPack.getFenceGate());
+        }
         for (var block : blocks) {
             if (block == null) continue;
             addPickMineable(level, block);

@@ -1,6 +1,7 @@
 package elucent.eidolon.datagen;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,6 +28,7 @@ public class EidRecipeProvider extends RecipeProvider {
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_BRICKS, List.of(Registry.ELDER_BRICKS_EYE.get(), Registry.ELDER_PILLAR.get(), Registry.ELDER_MASONRY.getBlock()));
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_MASONRY);
         buildDecoPack(pFinishedRecipeConsumer, Registry.BONE_PILE);
+        buildDecoPack(pFinishedRecipeConsumer, Registry.POLISHED_PLANKS);
 
         makeStonecutter(pFinishedRecipeConsumer, Registry.SMOOTH_STONE_BRICK.getBlock(), Registry.SMOOTH_STONE_ARCH.get(), "smooth_stone_arch");
         ShapelessRecipeBuilder.shapeless(Registry.MOSSY_SMOOTH_STONE_BRICKS.get()).requires(Registry.SMOOTH_STONE_BRICK.getBlock()).requires(Items.VINE).unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(Registry.SMOOTH_STONE_BRICK.getBlock())).save(pFinishedRecipeConsumer, Eidolon.prefix("mossy_smooth_stone_bricks"));
@@ -35,36 +38,71 @@ public class EidRecipeProvider extends RecipeProvider {
         strippedLogToWood(pFinishedRecipeConsumer, Registry.STRIPPED_ILLWOOD_LOG.get(), Registry.STRIPPED_ILLWOOD_BARK.get());
     }
 
-    private void buildDecoPack(Consumer<FinishedRecipe> consumer, Registry.DecoBlockPack decoBlockPack, List<Block> extras) {
+    private void buildDecoPack(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack, List<Block> extras) {
         Block block = decoBlockPack.getBlock();
 
-        makeSlab(consumer, block, decoBlockPack.getSlab(), decoBlockPack.basename);
-        makeStairs(consumer, block, decoBlockPack.getStairs(), decoBlockPack.basename);
-        makeStonecutter(consumer, block, decoBlockPack.getSlab(), 2, decoBlockPack.basename);
-        makeStonecutter(consumer, block, decoBlockPack.getStairs(), decoBlockPack.basename);
+        makeSlab(consumer, block, decoBlockPack.getSlab(), decoBlockPack.baseBlockName);
+        makeStairs(consumer, block, decoBlockPack.getStairs(), decoBlockPack.baseBlockName);
+        makeStonecutter(consumer, block, decoBlockPack.getSlab(), 2, decoBlockPack.baseBlockName);
+        makeStonecutter(consumer, block, decoBlockPack.getStairs(), decoBlockPack.baseBlockName);
 
         if (decoBlockPack.getWall() != null) {
-            makeWall(consumer, block, decoBlockPack.getWall(), decoBlockPack.basename);
-            makeStonecutter(consumer, block, decoBlockPack.getWall(), decoBlockPack.basename);
+            makeWall(consumer, block, decoBlockPack.getWall(), decoBlockPack.baseBlockName);
+            makeStonecutter(consumer, block, decoBlockPack.getWall(), decoBlockPack.baseBlockName);
         }
-        if (decoBlockPack.getFence() != null) {
-            makeFence(consumer, block, decoBlockPack.getFence(), decoBlockPack.basename);
-            makeStonecutter(consumer, block, decoBlockPack.getFence(), decoBlockPack.basename);
+
+        if (decoBlockPack.getPressurePlate() != null) {
+            makePressurePlate(consumer, block, decoBlockPack.getPressurePlate(), decoBlockPack.baseBlockName);
         }
-        if (decoBlockPack.getFenceGate() != null) {
-            makeGate(consumer, block, decoBlockPack.getFenceGate(), decoBlockPack.basename);
-            makeStonecutter(consumer, block, decoBlockPack.getFence(), decoBlockPack.basename);
+
+        if (decoBlockPack instanceof DecoBlockPack.WoodDecoBlock woodDecoBlock) {
+
+            if (woodDecoBlock.getFence() != null) {
+                makeFence(consumer, block, woodDecoBlock.getFence(), decoBlockPack.baseBlockName);
+                makeStonecutter(consumer, block, woodDecoBlock.getFence(), decoBlockPack.baseBlockName);
+            }
+            if (woodDecoBlock.getFenceGate() != null) {
+                makeGate(consumer, block, woodDecoBlock.getFenceGate(), decoBlockPack.baseBlockName);
+                makeStonecutter(consumer, block, woodDecoBlock.getFence(), decoBlockPack.baseBlockName);
+            }
+            if (woodDecoBlock.getButton() != null) {
+                makeButton(consumer, block, woodDecoBlock.getButton(), decoBlockPack.baseBlockName);
+            }
+            /*
+            if (woodDecoBlock.getDoor() != null) {
+                makeDoor(consumer, block, woodDecoBlock.getDoor(), decoBlockPack.baseBlockName);
+            }*/
+            if (woodDecoBlock.getStandingSign() != null) {
+                makeSign(consumer, decoBlockPack, woodDecoBlock, block);
+            }
+
         }
 
         for (Block extra : extras) {
-            makeStonecutter(consumer, block, extra, decoBlockPack.basename);
+            makeStonecutter(consumer, block, extra, decoBlockPack.baseBlockName);
         }
 
         STONECUTTER_COUNTER = 0;
     }
 
-    private void buildDecoPack(Consumer<FinishedRecipe> consumer, Registry.DecoBlockPack decoBlockPack) {
+    private static void makeSign(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack, DecoBlockPack.WoodDecoBlock woodDecoBlock, Block block) {
+        signBuilder(woodDecoBlock.getStandingSign(), Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, decoBlockPack.baseBlockName + "_sign"));
+    }
+
+    private void makeButton(Consumer<FinishedRecipe> consumer, Block block, ButtonBlock button, String baseBlockName) {
+        buttonBuilder(button, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, baseBlockName + "_button"));
+    }
+
+    private void buildDecoPack(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack) {
         buildDecoPack(consumer, decoBlockPack, List.of());
+    }
+
+    private void makeDoor(Consumer<FinishedRecipe> consumer, Block block, Block door, String basename) {
+        doorBuilder(door, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_door"));
+    }
+
+    private void makePressurePlate(Consumer<FinishedRecipe> consumer, Block block, Block pressurePlate, String basename) {
+        pressurePlateBuilder(pressurePlate, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_pressure_plate"));
     }
 
     private void makeSlab(Consumer<FinishedRecipe> consumer, Block block, Block slab, String basename) {

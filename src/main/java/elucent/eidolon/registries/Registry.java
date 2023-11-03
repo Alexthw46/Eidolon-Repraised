@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -59,12 +60,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
+
+    public static final WoodType ILLWOOD = WoodType.register(WoodType.create("eidolon:illwood"));
+    public static final WoodType POLISHED = WoodType.register(WoodType.create("eidolon:polished"));
+
     public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(new ResourceLocation(Eidolon.MODID, "illwood_logs"));
     public static TagKey<Item>
             INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead"));
@@ -120,63 +124,12 @@ public class Registry {
         return block;
     }
 
-    static RegistryObject<Block> addBlock(String name, Supplier<Block> b) {
+    static <T extends Block> RegistryObject<T> addBlock(String name, Supplier<T> b) {
         var block = BLOCKS.register(name, b);
         ITEMS.register(name, () -> new BlockItem(block.get(), itemProps()));
         return block;
     }
 
-    public static class DecoBlockPack {
-        final DeferredRegister<Block> mainBlock;
-        public final String basename;
-        final BlockBehaviour.Properties props;
-        RegistryObject<Block> full, slab, stair;
-        @Nullable RegistryObject<Block> wall = null, fence = null, fence_gate = null;
-
-        public DecoBlockPack(DeferredRegister<Block> blocks, String basename, BlockBehaviour.Properties props) {
-            this.mainBlock = blocks;
-            this.basename = basename;
-            this.props = props;
-            full = addBlock(basename, () -> new Block(props));
-            slab = addBlock(basename + "_slab", () -> new SlabBlock(props));
-            stair = addBlock(basename + "_stairs", () -> new StairBlock(() -> full.get().defaultBlockState(), props));
-        }
-
-        public DecoBlockPack addWall() {
-            wall = addBlock(basename + "_wall", () -> new WallBlock(props));
-            return this;
-        }
-
-        public DecoBlockPack addFence() {
-            fence = addBlock(basename + "_fence", () -> new FenceBlock(props));
-            fence_gate = addBlock(basename + "_fence_gate", () -> new FenceGateBlock(props));
-            return this;
-        }
-
-        public Block getBlock() {
-            return full.get();
-        }
-
-        public Block getSlab() {
-            return slab.get();
-        }
-
-        public Block getStairs() {
-            return stair.get();
-        }
-
-        public Block getWall() {
-            return wall == null ? null : wall.get();
-        }
-
-        public Block getFence() {
-            return fence == null ? null : fence.get();
-        }
-
-        public Block getFenceGate() {
-            return fence_gate == null ? null : fence_gate.get();
-        }
-    }
 
     static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
         return CONTAINERS.register(name, () -> new MenuType<>(factory));
@@ -483,19 +436,23 @@ public class Registry {
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f)),
             SMOOTH_STONE_MASONRY = new DecoBlockPack(BLOCKS, "smooth_stone_masonry", blockProps(Material.STONE, MaterialColor.STONE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(1.6f, 3.0f)),
-            POLISHED_PLANKS = new DecoBlockPack(BLOCKS, "polished_planks", blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-                    .addFence(),
-            ILLWOOD_PLANKS = new DecoBlockPack(BLOCKS, "illwood_planks", blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-                    .addFence(),
-            ELDER_BRICKS = new DecoBlockPack(BLOCKS, "elder_bricks", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
-                    .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.0f, 3.0f))
-                    .addWall(),
+
+    ELDER_BRICKS = new DecoBlockPack(BLOCKS, "elder_bricks", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
+            .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.0f, 3.0f))
+            .addWall(),
             ELDER_MASONRY = new DecoBlockPack(BLOCKS, "elder_masonry", blockProps(Material.STONE, MaterialColor.TERRACOTTA_ORANGE)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops().strength(2.4f, 3.0f)),
             BONE_PILE = new DecoBlockPack(BLOCKS, "bone_pile", blockProps(Material.STONE, MaterialColor.QUARTZ)
                     .sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops().strength(1.6f, 3.0f));
+
+    public static DecoBlockPack.WoodDecoBlock
+            POLISHED_PLANKS = new DecoBlockPack.WoodDecoBlock(BLOCKS, "polished_planks", POLISHED, blockProps(Material.WOOD, MaterialColor.WOOD)
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f))
+            .addFence().addButton().addSign().addPressurePlate(),
+            ILLWOOD_PLANKS = new DecoBlockPack.WoodDecoBlock(BLOCKS, "illwood_planks", ILLWOOD, blockProps(Material.WOOD, MaterialColor.WOOD)
+                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))
+                    .addFence().addButton().addSign().addPressurePlate();
+
     public static final RegistryObject<Block>
             POLISHED_WOOD_PILLAR = addBlock("polished_wood_pillar", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)
             .strength(1.6f, 3.0f))),
@@ -571,6 +528,8 @@ public class Registry {
     public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
+    public static RegistryObject<BlockEntityType<SignBlockEntityCopy>> SIGN_BLOCKENTITY;
+
 
     static {
         HAND_TILE_ENTITY = TILE_ENTITIES.register("hand_tile", () -> BlockEntityType.Builder.of(HandTileEntity::new, STONE_HAND.get()).build(null));
@@ -583,6 +542,7 @@ public class Registry {
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
         CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
+        SIGN_BLOCKENTITY = TILE_ENTITIES.register("sign", () -> BlockEntityType.Builder.of(SignBlockEntityCopy::new, ILLWOOD_PLANKS.getStandingSign(), ILLWOOD_PLANKS.getWallSign(), POLISHED_PLANKS.getStandingSign(), POLISHED_PLANKS.getWallSign()).build(null));
     }
 
     public static final DamageSource RITUAL_DAMAGE = new DamageSource("ritual").bypassArmor().bypassMagic();
@@ -621,7 +581,7 @@ public class Registry {
         evt.register(EidolonParticles.RUNE_PARTICLE.get(), sprite -> new RuneParticleType.Factory());
 
         evt.register(EidolonParticles.FEATHER_PARTICLE.get(), FeatherParticleType.Factory::new);
-        
+
     }
 
     public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));

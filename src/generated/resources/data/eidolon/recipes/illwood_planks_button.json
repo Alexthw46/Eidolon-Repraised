@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "eidolon:illwood_planks"
+    }
+  ],
+  "result": {
+    "item": "eidolon:illwood_button"
+  }
+}

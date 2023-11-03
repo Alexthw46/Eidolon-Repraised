@@ -1,4 +1,4 @@
-// 1.19.2	2023-06-07T13:58:07.4712643	Eidolon Loot Tables
+// 1.19.2	2023-11-03T14:59:22.0962062	Eidolon Loot Tables
 ac0f617c297cb8e2f51499f573cc7e3becfcae08 data/eidolon/loot_tables/blocks/bone_pile.json
 06eddb866d2e31547ec6634e8ed3d433d7f6157c data/eidolon/loot_tables/blocks/bone_pile_slab.json
 f999883030109bad5a25b0b828a53d9871bd8187 data/eidolon/loot_tables/blocks/bone_pile_stairs.json
@@ -12,6 +12,7 @@ e8da0b383e3591f6b994f3250fb7f321654d9443 data/eidolon/loot_tables/blocks/elder_m
 b9ed71b39af0de128451d05d6a706cd043615400 data/eidolon/loot_tables/blocks/elder_masonry_stairs.json
 045de5e09b5ca87b0b3ebd2c125905770eb6d7a4 data/eidolon/loot_tables/blocks/elder_pillar.json
 63d01b56b91aabc4c5c1bb17fff4b58345cfdb98 data/eidolon/loot_tables/blocks/illwood_bark.json
+b5d0effab52b516a47903a0dcec1441db6177c97 data/eidolon/loot_tables/blocks/illwood_button.json
 4d98e972a0810d30de376166981028353bbd4481 data/eidolon/loot_tables/blocks/illwood_leaves.json
 2a1fe9f574ed647194c6bfbb32491b11bcc4e018 data/eidolon/loot_tables/blocks/illwood_log.json
 1e1f17947938d448aa094de291ded897a0ac9986 data/eidolon/loot_tables/blocks/illwood_planks.json
@@ -19,7 +20,10 @@ c6d4a85f9720d0b83fd9231de5603ab998515791 data/eidolon/loot_tables/blocks/illwood
 7b8513208c03408d0da4084491de6ae183baf49e data/eidolon/loot_tables/blocks/illwood_planks_fence_gate.json
 aea2806ca79ec5dc785562008bbfdad30a0e17f2 data/eidolon/loot_tables/blocks/illwood_planks_slab.json
 9be93c7f8467a121a9105fb130f47ebce16fbd09 data/eidolon/loot_tables/blocks/illwood_planks_stairs.json
+1644d855b9e93f237c7415024de4dc0c27a1f3c7 data/eidolon/loot_tables/blocks/illwood_pressure_plate.json
 55b58afe2cc97a1b2c3d81112d6a1bc9bdfd1cc5 data/eidolon/loot_tables/blocks/illwood_sapling.json
+3ff77bc86a898027cc434e74a28c4bfa8f2f1929 data/eidolon/loot_tables/blocks/illwood_standing_sign.json
+3ff77bc86a898027cc434e74a28c4bfa8f2f1929 data/eidolon/loot_tables/blocks/illwood_wall_sign.json
 eab1552512ab373bb4e02fe2f2672ad664947896 data/eidolon/loot_tables/blocks/mossy_smooth_stone_bricks.json
 88c551dee03cf63f4c99e305870b218703a1cefa data/eidolon/loot_tables/blocks/smooth_stone_arch.json
 1335bc2fde58853f657a4ad14d3ea4291b4137a5 data/eidolon/loot_tables/blocks/stripped_illwood_bark.json

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "eidolon:polished_planks"
+    }
+  ],
+  "result": {
+    "item": "eidolon:polished_button"
+  }
+}

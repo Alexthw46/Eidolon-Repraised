@@ -16,6 +16,7 @@ public class Datagen {
         DataGenerator gen = event.getGenerator();
 
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
+        gen.addProvider(event.includeClient(), new EidBlockStateProvider(gen, fileHelper));
         var blockGen = new EidBlockTagProvider(gen, fileHelper);
         gen.addProvider(event.includeServer(), blockGen);
         gen.addProvider(event.includeServer(), new EidItemTagProvider(gen, blockGen, fileHelper));
