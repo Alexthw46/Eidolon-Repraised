@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -37,7 +38,7 @@ public class DecoBlockPack {
     }
 
     public DecoBlockPack addPressurePlate(PressurePlateBlock.Sensitivity sensitivity) {
-        pressure_plate = Registry.addBlock(baseBlockName + "_pressure_plate", () -> new PressurePlateBlock(sensitivity, props));
+        pressure_plate = Registry.addBlock(baseBlockName + "_pressure_plate", () -> new PressurePlateBlock(sensitivity, props, BlockSetType.DARK_OAK));
         return this;
     }
 
@@ -91,24 +92,24 @@ public class DecoBlockPack {
         }
 
         public WoodDecoBlock addButton() {
-            button = Registry.addBlock(woodName + "_button", () -> new WoodButtonBlock(props));
+            button = Registry.addBlock(woodName + "_button", () -> new ButtonBlock(props, BlockSetType.DARK_OAK, 30, true));
             return this;
         }
 
         public WoodDecoBlock addFence() {
             fence = Registry.addBlock(baseBlockName + "_fence", () -> new FenceBlock(props));
-            fence_gate = Registry.addBlock(baseBlockName + "_fence_gate", () -> new FenceGateBlock(props));
+            fence_gate = Registry.addBlock(baseBlockName + "_fence_gate", () -> new FenceGateBlock(props, WoodType.DARK_OAK));
             return this;
         }
 
         public WoodDecoBlock addPressurePlate() {
-            pressure_plate = Registry.addBlock(woodName + "_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, props));
+            pressure_plate = Registry.addBlock(woodName + "_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, props, BlockSetType.DARK_OAK));
             return this;
         }
 
         public WoodDecoBlock addDoors() {
-            door = Registry.addBlock(woodName + "_door", () -> new DoorBlock(props));
-            trapdoor = Registry.addBlock(woodName + "_trapdoor", () -> new TrapDoorBlock(props));
+            door = Registry.addBlock(woodName + "_door", () -> new DoorBlock(props, BlockSetType.DARK_OAK));
+            trapdoor = Registry.addBlock(woodName + "_trapdoor", () -> new TrapDoorBlock(props, BlockSetType.DARK_OAK));
             return this;
         }
 

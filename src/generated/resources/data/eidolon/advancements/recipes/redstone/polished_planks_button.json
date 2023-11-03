@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "eidolon:polished_planks_gate"
+        "recipe": "eidolon:polished_planks_button"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,8 @@
   ],
   "rewards": {
     "recipes": [
-      "eidolon:polished_planks_gate"
+      "eidolon:polished_planks_button"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

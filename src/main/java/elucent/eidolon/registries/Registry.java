@@ -51,10 +51,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
-
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,9 +74,6 @@ import static net.minecraft.world.level.block.state.properties.WoodType.register
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
-
-    public static final WoodType ILLWOOD = WoodType.register(WoodType.create("eidolon:illwood"));
-    public static final WoodType POLISHED = WoodType.register(WoodType.create("eidolon:polished"));
 
     public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(new ResourceLocation(Eidolon.MODID, "illwood_logs"));
     public static TagKey<Item>
@@ -156,8 +151,8 @@ public class Registry {
         return block;
     }
 
-    public static final WoodType ILLWOOD = register(new WoodType("illwood", BlockSetType.DARK_OAK));
-    public static final WoodType POLISHED = register(new WoodType("polished", BlockSetType.DARK_OAK));
+    public static final WoodType ILLWOOD = register(new WoodType("eidolon:illwood", BlockSetType.DARK_OAK));
+    public static final WoodType POLISHED = register(new WoodType("eidolon:polished", BlockSetType.DARK_OAK));
 
     static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
         return CONTAINERS.register(name, () -> new MenuType<>(factory, FeatureFlags.VANILLA_SET));

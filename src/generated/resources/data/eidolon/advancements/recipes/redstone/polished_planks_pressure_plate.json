@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "eidolon:polished_planks_sign"
+        "recipe": "eidolon:polished_planks_pressure_plate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,8 @@
   ],
   "rewards": {
     "recipes": [
-      "eidolon:polished_planks_sign"
+      "eidolon:polished_planks_pressure_plate"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

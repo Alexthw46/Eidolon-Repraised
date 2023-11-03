@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "eidolon:illwood_planks"
+              "eidolon:polished_planks"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "eidolon:illwood_planks_button"
+        "recipe": "eidolon:polished_planks_sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,8 @@
   ],
   "rewards": {
     "recipes": [
-      "eidolon:illwood_planks_button"
+      "eidolon:polished_planks_sign"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

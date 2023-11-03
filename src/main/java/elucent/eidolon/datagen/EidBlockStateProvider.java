@@ -16,7 +16,7 @@ import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class EidBlockStateProvider extends BlockStateProvider {
     public EidBlockStateProvider(DataGenerator gen, ExistingFileHelper fileHelper) {
-        super(gen, Eidolon.MODID, fileHelper);
+        super(gen.getPackOutput(), Eidolon.MODID, fileHelper);
     }
 
     @Override

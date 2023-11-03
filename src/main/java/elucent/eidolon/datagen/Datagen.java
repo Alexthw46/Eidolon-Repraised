@@ -22,6 +22,7 @@ public class Datagen {
         CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
         PackOutput output = gen.getPackOutput();
 
+        gen.addProvider(event.includeClient(), new EidBlockStateProvider(gen, fileHelper));
         var blockGen = new EidBlockTagProvider(gen, provider, fileHelper);
         gen.addProvider(event.includeServer(), blockGen);
         gen.addProvider(event.includeServer(), new EidItemTagProvider(gen, provider, blockGen, fileHelper));

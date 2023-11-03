@@ -102,7 +102,7 @@ public class EidRecipeProvider extends RecipeProvider {
     }
 
     private void makePressurePlate(Consumer<FinishedRecipe> consumer, Block block, Block pressurePlate, String basename) {
-        pressurePlateBuilder(pressurePlate, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_pressure_plate"));
+        pressurePlateBuilder(RecipeCategory.REDSTONE, pressurePlate, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, basename + "_pressure_plate"));
     }
 
     private void makeSlab(Consumer<FinishedRecipe> consumer, Block block, Block slab, String basename) {

@@ -30,5 +30,6 @@
     "recipes": [
       "eidolon:polished_planks_fence"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

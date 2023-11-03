@@ -30,5 +30,6 @@
     "recipes": [
       "eidolon:polished_planks_stonecutter_1"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
