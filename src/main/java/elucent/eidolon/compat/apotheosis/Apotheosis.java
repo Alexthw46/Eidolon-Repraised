@@ -2,25 +2,21 @@ package elucent.eidolon.compat.apotheosis;
 
 
 import com.ibm.icu.impl.Pair;
-import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import dev.shadowsoffire.apotheosis.ench.asm.EnchHooks;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import dev.shadowsoffire.placebo.util.StepFunction;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.common.item.WandItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.jetbrains.annotations.NotNull;
+import shadows.apotheosis.adventure.affix.Affix;
+import shadows.apotheosis.adventure.affix.AffixHelper;
+import shadows.apotheosis.adventure.affix.AffixInstance;
 import shadows.apotheosis.adventure.affix.AffixManager;
 import shadows.apotheosis.adventure.loot.LootCategory;
 import shadows.apotheosis.adventure.loot.LootRarity;
 import shadows.apotheosis.ench.asm.EnchHooks;
-import org.jetbrains.annotations.NotNull;
+import shadows.placebo.util.StepFunction;
 
 import java.util.Map;
 
@@ -38,29 +34,29 @@ public class Apotheosis {
     }
 
     public static int affixToAmount(final AffixInstance affixInstance) {
-        if (affixInstance.affix().get() instanceof StepScalingAffix scalingAffix) {
+        if (affixInstance.affix() instanceof StepScalingAffix scalingAffix) {
             return (int) scalingAffix.affixToAmount(affixInstance);
         }
         return 0;
     }
 
     public static void initialize() {
-        AffixRegistry.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "tracking"), TrackingAffix.SERIALIZER);
-        AffixRegistry.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "hailing"), HailingAffix.SERIALIZER);
+        AffixManager.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "tracking"), TrackingAffix.SERIALIZER);
+        AffixManager.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "hailing"), HailingAffix.SERIALIZER);
     }
 
     public static Pair<Integer, Integer> handleWandAffix(final ItemStack stack) {
         int projectileAmount = 1;
         int trackingAmount = 0;
 
-        Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
+        Map<Affix, AffixInstance> affixes = AffixHelper.getAffixes(stack);
 
-        for (DynamicHolder<? extends Affix> affix : affixes.keySet()) {
+        for (Affix affix : affixes.keySet()) {
             AffixInstance affixInstance = affixes.get(affix);
 
-            if (affix.get() instanceof HailingAffix) {
+            if (affix instanceof HailingAffix) {
                 projectileAmount += affixToAmount(affixInstance);
-            } else if (affix.get() instanceof TrackingAffix) {
+            } else if (affix instanceof TrackingAffix) {
                 trackingAmount += affixToAmount(affixInstance);
             }
         }
@@ -78,7 +74,7 @@ public class Apotheosis {
         }
 
         default float affixToAmount(final AffixInstance affixInstance) {
-            return affixToAmount(affixInstance.rarity().get(), affixInstance.level());
+            return affixToAmount(affixInstance.rarity(), affixInstance.level());
         }
     }
 

@@ -4,8 +4,6 @@ import com.ibm.icu.impl.Pair;
 import elucent.eidolon.common.entity.SpellProjectileEntity;
 import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.compat.apotheosis.Apotheosis;
-import elucent.eidolon.compat.apotheosis.HailingAffix;
-import elucent.eidolon.compat.apotheosis.TrackingAffix;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -18,11 +16,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import shadows.apotheosis.adventure.affix.Affix;
-import shadows.apotheosis.adventure.affix.AffixHelper;
-import shadows.apotheosis.adventure.affix.AffixInstance;
-
-import java.util.Map;
 
 import static elucent.eidolon.common.item.SoulfireWandItem.random;
 
@@ -41,8 +34,8 @@ public class WandItem extends ItemBase implements IRechargeableWand {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant) {
         return super.canApplyAtEnchantingTable(stack, enchant)
-                || enchant == Enchantments.UNBREAKING
-                || enchant == Enchantments.MENDING;
+               || enchant == Enchantments.UNBREAKING
+               || enchant == Enchantments.MENDING;
     }
 
     @Override
@@ -58,7 +51,7 @@ public class WandItem extends ItemBase implements IRechargeableWand {
             Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
 
-            Pair<Integer, Integer> affixData = handleAffix(stack);
+            Pair<Integer, Integer> affixData = CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS) ? Apotheosis.handleWandAffix(stack) : Pair.of(1, 0);
             int projectileAmount = affixData.first;
             int trackingAmount = affixData.second;
 
@@ -86,7 +79,7 @@ public class WandItem extends ItemBase implements IRechargeableWand {
 
             world.playSound(null, pos.x, pos.y, pos.z, soundEvent, SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
             stack.hurtAndBreak(1, entity, player -> player.broadcastBreakEvent(hand));
-            entity.getCooldowns().addCooldown(this,  15);
+            entity.getCooldowns().addCooldown(this, 15);
         }
 
         if (!entity.swinging) {
@@ -94,26 +87,5 @@ public class WandItem extends ItemBase implements IRechargeableWand {
         }
 
         return InteractionResultHolder.success(stack);
-    }
-
-    public Pair<Integer, Integer> handleAffix(final ItemStack stack) {
-        int projectileAmount = 1;
-        int trackingAmount = 0;
-
-        if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-            Map<Affix, AffixInstance> affixes = AffixHelper.getAffixes(stack);
-
-            for (Affix affix : affixes.keySet()) {
-                AffixInstance affixInstance = affixes.get(affix);
-
-                if (affix instanceof HailingAffix hailingAffix) {
-                    projectileAmount += Apotheosis.affixToAmount(affixInstance.rarity(), hailingAffix.getMinRarity());
-                } else if (affix instanceof TrackingAffix trackingAffix) {
-                    trackingAmount += Apotheosis.affixToAmount(affixInstance.rarity(), trackingAffix.getMinRarity());
-                }
-            }
-        }
-
-        return Pair.of(projectileAmount, trackingAmount);
     }
 }
