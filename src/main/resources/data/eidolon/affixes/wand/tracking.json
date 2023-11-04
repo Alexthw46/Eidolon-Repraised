@@ -1,4 +1,21 @@
 {
   "type": "eidolon:tracking",
-  "min_rarity": "epic"
+  "min_rarity": "epic",
+  "values": {
+    "epic": {
+      "min": 1,
+      "steps": 3,
+      "step": 1
+    },
+    "mythic": {
+      "min": 2,
+      "steps": 3,
+      "step": 1
+    },
+    "ancient": {
+      "min": 2,
+      "steps": 4,
+      "step": 1
+    }
+  }
 }
