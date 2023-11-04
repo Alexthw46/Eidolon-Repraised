@@ -2,13 +2,13 @@ package elucent.eidolon.compat.apotheosis;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixType;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import dev.shadowsoffire.placebo.json.PSerializer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import shadows.apotheosis.adventure.affix.Affix;
-import shadows.apotheosis.adventure.affix.AffixType;
-import shadows.apotheosis.adventure.loot.LootCategory;
-import shadows.apotheosis.adventure.loot.LootRarity;
-import shadows.placebo.json.PSerializer;
 
 import java.util.function.Consumer;
 
