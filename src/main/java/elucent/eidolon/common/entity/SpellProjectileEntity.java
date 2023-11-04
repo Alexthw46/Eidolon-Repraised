@@ -2,7 +2,6 @@ package elucent.eidolon.common.entity;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.util.EntityUtil;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -20,6 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,8 +27,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class SpellProjectileEntity extends Entity {
-    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Eidolon.MODID, "trackable"));
-    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Eidolon.MODID, "trackable_blacklist"));
+    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(Eidolon.MODID, "trackable"));
+    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(Eidolon.MODID, "trackable_blacklist"));
 
     public Predicate<Entity> trackingPredicate = this::shouldTrack;
     public boolean isTracking;
@@ -74,8 +74,7 @@ public abstract class SpellProjectileEntity extends Entity {
         super.tick();
 
         if (!level.isClientSide) {
-            HitResult ray = ProjectileUtil.getHitResultOnMoveVector(this, (e) -> !e.isSpectator() && e.isPickable() && !e.getUUID().equals(casterId));
-            HitResult ray = ProjectileUtil.getHitResult(this, impactPredicate);
+            HitResult ray = ProjectileUtil.getHitResultOnMoveVector(this, impactPredicate);
             if (ray.getType() == HitResult.Type.ENTITY) {
                 onImpact(ray, ((EntityHitResult)ray).getEntity());
             }
@@ -105,7 +104,7 @@ public abstract class SpellProjectileEntity extends Entity {
             target.invulnerableTime = 0;
         }
 
-        target.hurt(damageSource.setMagic(), rawDamage);
+        target.hurt(damageSource, rawDamage);
 
         if (noImmunityFrame) {
             target.invulnerableTime = prevHurtResist;

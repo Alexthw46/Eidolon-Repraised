@@ -44,6 +44,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class Eidolon {
     public static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     public static final String MODID = "eidolon";
-
+    public static final Logger LOG = LogManager.getLogger("Eidolon Repraised");
     public static ResourceLocation prefix(String path) {
         return new ResourceLocation("eidolon", path);
     }

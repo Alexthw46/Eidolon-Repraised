@@ -25,7 +25,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -310,13 +309,9 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-//<<<<<<<
-        boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId()); //TODO .is(Registry.FORGE_WITHER);
-        if (isWither || event.getSource().is(Registry.FORGE_MAGIC)) {
-//=======
 
-        boolean isMagic = event.getSource().isMagic();
-        boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
+        boolean isMagic = event.getSource().is(Registry.FORGE_MAGIC);
+        boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId()); //TODO .is(Registry.FORGE_WITHER);
 
         if (isMagic && event.getSource().getEntity() instanceof LivingEntity living) {
             AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGIC_POWER.get());
@@ -326,7 +321,6 @@ public class Events {
         }
 
         if (isWither) {
-//>>>>>>> 
             if (event.getSource().getEntity() instanceof LivingEntity living
                 && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
