@@ -10,36 +10,47 @@ import shadows.apotheosis.adventure.loot.LootCategory;
 import shadows.apotheosis.adventure.loot.LootRarity;
 import shadows.placebo.json.PSerializer;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixType;
+import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.bonus.GemBonus;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import dev.shadowsoffire.placebo.json.PSerializer;
+import dev.shadowsoffire.placebo.util.StepFunction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class TrackingAffix extends Affix {
-    public static final Codec<TrackingAffix> CODEC = RecordCodecBuilder.create(inst -> inst
-            .group(
-                    LootRarity.CODEC.fieldOf("min_rarity").forGetter(TrackingAffix::getMinRarity))
-            .apply(inst, TrackingAffix::new));
+public class TrackingAffix extends Affix implements Apotheosis.StepScalingAffix {
+
+    public static final Codec<TrackingAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(GemBonus.VALUES_CODEC.fieldOf("values").forGetter((a) -> a.values)).apply(inst, TrackingAffix::new));
+
+    public @NotNull Map<LootRarity, StepFunction> getValues() {
+        return values;
+    }
+
+    protected final Map<LootRarity, StepFunction> values;
 
 
     public static final PSerializer<TrackingAffix> SERIALIZER = PSerializer.fromCodec("Tracking Affix", CODEC);
 
-    private final LootRarity minRarity;
-
-    public TrackingAffix(final LootRarity minRarity) {
+    public TrackingAffix(Map<LootRarity, StepFunction> values) {
         super(AffixType.ABILITY);
-        this.minRarity = minRarity;
+        this.values = values;
     }
 
-    public LootRarity getMinRarity() {
-        return minRarity;
-    }
 
     @Override
     public boolean canApplyTo(final ItemStack stack, final LootCategory category, final LootRarity rarity) {
-        return category == Apotheosis.WAND && rarity.isAtLeast(this.minRarity);
+        return category == Apotheosis.WAND && this.values.containsKey(rarity);
     }
 
     @Override
     public void addInformation(final ItemStack stack, final LootRarity rarity, float level, final Consumer<Component> list) {
-        list.accept(Component.translatable("affix." + this.getId() + ".desc", Apotheosis.affixToAmount(rarity, getMinRarity())));
+        list.accept(Component.translatable("affix." + this.getId() + ".desc", fmt(affixToAmount(rarity, level))));
     }
 
     @Override

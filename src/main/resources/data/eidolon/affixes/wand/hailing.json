@@ -1,4 +1,25 @@
 {
   "type": "eidolon:hailing",
-  "min_rarity": "rare"
+  "values": {
+    "rare": {
+      "min": 1,
+      "steps": 2,
+      "step": 1
+    },
+    "epic": {
+      "min": 1,
+      "steps": 3,
+      "step": 1
+    },
+    "mythic": {
+      "min": 2,
+      "steps": 3,
+      "step": 1
+    },
+    "ancient": {
+      "min": 2,
+      "steps": 4,
+      "step": 1
+    }
+  }
 }
