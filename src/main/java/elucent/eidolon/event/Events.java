@@ -12,6 +12,7 @@ import elucent.eidolon.common.entity.ai.WitchBarterGoal;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.*;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
@@ -25,6 +26,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -58,6 +60,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public class Events {
     @SubscribeEvent
@@ -306,17 +309,27 @@ public class Events {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
+
+        boolean isMagic = event.getSource().isMagic();
         boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
-        if (isWither || event.getSource().isMagic()) {
+
+        if (isMagic && event.getSource().getEntity() instanceof LivingEntity living) {
+            AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGICAL_KNOWLEDGE.get());
+            if (attribute != null) {
+                event.setAmount(event.getAmount() * (float) attribute.getValue());
+            }
+        }
+
+        if (isWither) {
             if (event.getSource().getEntity() instanceof LivingEntity living
                 && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
                 event.setAmount(event.getAmount() * 1.5f);
-                if (isWither)
-                    living.heal(event.getAmount() / 2);
+                living.heal(event.getAmount() / 2);
             }
-            if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarlockRobesItem)
-                event.setAmount(event.getAmount() / 2);
         }
+
+        if ((isMagic || isWither) && event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarlockRobesItem)
+            event.setAmount(event.getAmount() / 2);
 
         event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
             if (s.hasEtherealHealth()) {
@@ -348,9 +361,12 @@ public class Events {
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            AttributeInstance attr = player.getAttribute(Registry.MAX_SOUL_HEARTS.get());
-            if (attr != null) attr.setBaseValue(Config.MAX_ETHEREAL_HEALTH.get());
+            AttributeInstance attr = player.getAttribute(EidolonAttributes.MAX_SOUL_HEARTS.get());
+            if (attr != null)
+                attr.addPermanentModifier(new AttributeModifier(etherealHealthUUID, "eidolon:configured_max_ethereal" ,Config.MAX_ETHEREAL_HEALTH.get(), AttributeModifier.Operation.ADDITION));
         }
     }
+
+    UUID etherealHealthUUID = UUID.fromString("e7d7b2d0-4b8a-11eb-ae93-0242ac130002");
 
 }

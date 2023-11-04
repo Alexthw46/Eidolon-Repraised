@@ -1,7 +1,6 @@
 package elucent.eidolon.common.entity;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -104,7 +103,7 @@ public abstract class SpellProjectileEntity extends Entity {
             target.invulnerableTime = 0;
         }
 
-        target.hurt(damageSource.setMagic(), EidolonAttributes.getSpellDamage(caster, rawDamage));
+        target.hurt(damageSource.setMagic(), rawDamage);
 
         if (noImmunityFrame) {
             target.invulnerableTime = prevHurtResist;
