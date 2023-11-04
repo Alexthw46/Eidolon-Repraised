@@ -1,5 +1,6 @@
 package elucent.eidolon.common.item;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.IDyeable;
@@ -120,9 +121,13 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
 
     @Override
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot pEquipmentSlot) {
-        var map = super.getDefaultAttributeModifiers(pEquipmentSlot);
-        if (pEquipmentSlot == EquipmentSlot.HEAD)
-            map.put(EidolonAttributes.MAGICAL_KNOWLEDGE.get(), new AttributeModifier(Eidolon.MODID + ":warlock_hat", 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
+        Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(pEquipmentSlot);
+        if (pEquipmentSlot == EquipmentSlot.HEAD && this == Registry.WARLOCK_HAT.get()) {
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+            builder.putAll(map);
+            builder.put(EidolonAttributes.MAGIC_POWER.get(), new AttributeModifier(Eidolon.MODID + ":warlock_hat", 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
+            map = builder.build();
+        }
         return map;
     }
 

@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "eidolon:magical_knowledge",
+  "attribute": "eidolon:magic_power",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {

@@ -314,7 +314,7 @@ public class Events {
         boolean isWither = event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId());
 
         if (isMagic && event.getSource().getEntity() instanceof LivingEntity living) {
-            AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGICAL_KNOWLEDGE.get());
+            AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGIC_POWER.get());
             if (attribute != null) {
                 event.setAmount(event.getAmount() * (float) attribute.getValue());
             }
@@ -362,7 +362,7 @@ public class Events {
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             AttributeInstance attr = player.getAttribute(EidolonAttributes.MAX_SOUL_HEARTS.get());
-            if (attr != null)
+            if (attr != null && attr.getModifier(etherealHealthUUID) == null)
                 attr.addPermanentModifier(new AttributeModifier(etherealHealthUUID, "eidolon:configured_max_ethereal" ,Config.MAX_ETHEREAL_HEALTH.get(), AttributeModifier.Operation.ADDITION));
         }
     }

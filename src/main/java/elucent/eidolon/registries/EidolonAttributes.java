@@ -17,13 +17,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EidolonAttributes {
-
     static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Eidolon.MODID);
     public static final RegistryObject<Attribute> CHANTING_SPEED = ATTRIBUTES.register("chanting_speed", () -> new RangedAttribute(Eidolon.MODID + ".chanting_speed", 1, 0, 100).setSyncable(true));
     public static final RegistryObject<Attribute> PERSISTENT_SOUL_HEARTS = ATTRIBUTES.register("persistent_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".persistent_soul_hearts", 0, 0, 2000).setSyncable(true));
-    public static final RegistryObject<Attribute>
-            MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
-    public static final RegistryObject<Attribute> MAGICAL_KNOWLEDGE = ATTRIBUTES.register("magical_knowledge", () -> new RangedAttribute("attribute.eidolon.magical_knowledge", 1, 0, 10).setSyncable(true));
+    public static final RegistryObject<Attribute> MAX_SOUL_HEARTS = ATTRIBUTES.register("max_soul_hearts", () -> new RangedAttribute(Eidolon.MODID + ".max_soul_hearts", 80, 0, 2000).setSyncable(true));
+    public static final RegistryObject<Attribute> MAGIC_POWER = ATTRIBUTES.register("magic_power", () -> new RangedAttribute("attribute.eidolon.magic_power", 1, 0, 10).setSyncable(true));
 
     @SubscribeEvent
     public static void addCustomAttributes(EntityAttributeModificationEvent event) {
@@ -33,7 +31,7 @@ public class EidolonAttributes {
                 event.add(t, MAX_SOUL_HEARTS.get());
             }
             if (t == EntityType.PLAYER) {
-                event.add(t, MAGICAL_KNOWLEDGE.get());
+                event.add(t, MAGIC_POWER.get());
                 event.add(t, CHANTING_SPEED.get());
             }
         }
