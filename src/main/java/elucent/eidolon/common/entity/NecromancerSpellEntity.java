@@ -68,7 +68,8 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, level.getEntity((int)casterId.getLeastSignificantBits())), 3.0f + level.getDifficulty().getId());
+        Entity caster = level.getEntity((int) casterId.getLeastSignificantBits());
+        handleSpellDamage(caster, target, new IndirectEntityDamageSource(DamageSource.WITHER.getMsgId(), this, caster), 3 + level.getDifficulty().getId());
         onImpact(ray);
     }
 

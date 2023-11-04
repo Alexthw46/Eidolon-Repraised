@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -71,16 +72,16 @@ public class AngelSightItem extends EidolonCurio {
 
         var ring = CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.ANGELS_SIGHT.get());
 
-        Predicate<LivingEntity> mode = null;
+        Predicate<Entity> mode = null;
 
         if (ring.isEmpty()) return;
         else {
             CompoundTag ringTag = ring.get().stack().getTag();
             if (ringTag != null) {
                 mode = switch (ringTag.getInt("mode")) {
-                    case 1 -> (e) -> !(e instanceof Player);
-                    case 2 -> (e) -> e instanceof Enemy;
-                    default -> (e) -> true;
+                    case 1 -> target -> target instanceof LivingEntity && !(target instanceof Player);
+                    case 2 -> target -> target instanceof Enemy;
+                    default -> target -> target instanceof LivingEntity;
                 };
             }
         }

@@ -23,6 +23,7 @@ public class Datagen {
         gen.addProvider(event.includeServer(), new ModLootTables(gen));
         gen.addProvider(event.includeServer(), new EidRecipeProvider(gen));
         gen.addProvider(event.includeServer(), new EidRitualProvider(gen));
+        gen.addProvider(event.includeServer(), new EidEntityTagProvider(gen, fileHelper));
         gen.addProvider(event.includeClient(), new EidBiomeTagProvider(gen, fileHelper));
         gen.addProvider(event.includeServer(), new EidAdvancementProvider(gen, fileHelper));
     }

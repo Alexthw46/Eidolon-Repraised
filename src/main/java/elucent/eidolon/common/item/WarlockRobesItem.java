@@ -1,9 +1,12 @@
 package elucent.eidolon.common.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.IDyeable;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.WarlockArmorModel;
+import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,6 +16,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
@@ -113,4 +118,17 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         DyeColor dyeColor = getColor(stack);
         return Eidolon.MODID + ":textures/entity/warlock_robes/" + dyeColor.getName() + ".png";
     }
+
+    @Override
+    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot pEquipmentSlot) {
+        Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(pEquipmentSlot);
+        if (pEquipmentSlot == EquipmentSlot.HEAD && this == Registry.WARLOCK_HAT.get()) {
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+            builder.putAll(map);
+            builder.put(EidolonAttributes.MAGIC_POWER.get(), new AttributeModifier(Eidolon.MODID + ":warlock_hat", 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
+            map = builder.build();
+        }
+        return map;
+    }
+
 }

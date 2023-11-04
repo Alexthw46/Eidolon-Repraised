@@ -36,8 +36,8 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity living && event.getEntity() instanceof Mob mob && mob.getMobType() == MobType.UNDEAD) {
-            var tag = living.getMainHandItem().getTag();
+        if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity() instanceof Mob mob && mob.getMobType() == MobType.UNDEAD) {
+            var tag = caster.getMainHandItem().getTag();
             if (tag != null && tag.contains(SACRED_KEY)) {
                 event.setAmount(event.getAmount() * 1.5f);
                 tag.putInt(SACRED_KEY, tag.getInt(SACRED_KEY) - 1);

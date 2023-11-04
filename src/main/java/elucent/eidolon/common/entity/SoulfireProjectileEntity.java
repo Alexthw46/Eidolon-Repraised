@@ -11,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +49,8 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(DamageSource.indirectMagic(this, level.getPlayerByUUID(casterId)), 7.0f);
+        Player caster = getCaster();
+        handleSpellDamage(caster, target, DamageSource.indirectMagic(this, caster), 7);
         onImpact(ray);
     }
 

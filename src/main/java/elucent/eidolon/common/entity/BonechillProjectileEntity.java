@@ -3,10 +3,7 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.EidolonParticles;
-import elucent.eidolon.registries.EidolonPotions;
-import elucent.eidolon.registries.EidolonSounds;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.*;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -15,6 +12,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -52,9 +50,13 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
-        target.hurt(new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, level.getPlayerByUUID(casterId)), 4.0f);
-        if (target instanceof LivingEntity)
-            ((LivingEntity) target).addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 300, 0));
+        Player caster = getCaster();
+        handleSpellDamage(caster, target, new IndirectEntityDamageSource(Registry.FROST_DAMAGE.getMsgId(), this, caster), 4);
+
+        if (target instanceof LivingEntity livingEntity) {
+            livingEntity.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 300, 0));
+        }
+
         onImpact(ray);
     }
 

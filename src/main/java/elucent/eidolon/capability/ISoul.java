@@ -2,7 +2,7 @@ package elucent.eidolon.capability;
 
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.EidolonAttributes;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
@@ -84,7 +84,7 @@ public interface ISoul {
     }
 
     static float getPersistentHealth(LivingEntity entity) {
-        AttributeInstance attr = entity.getAttribute(Registry.PERSISTENT_SOUL_HEARTS.get());
+        AttributeInstance attr = entity.getAttribute(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get());
         if (attr != null) return (float) attr.getValue();
         else return 0;
     }
