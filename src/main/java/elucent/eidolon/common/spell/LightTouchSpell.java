@@ -5,7 +5,6 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +39,7 @@ public class LightTouchSpell extends DarkTouchSpell {
         if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity() instanceof Mob mob && mob.getMobType() == MobType.UNDEAD) {
             var tag = caster.getMainHandItem().getTag();
             if (tag != null && tag.contains(SACRED_KEY)) {
-                event.setAmount(EidolonAttributes.getSpellDamage(caster, event.getAmount() * 1.5f));
+                event.setAmount(event.getAmount() * 1.5f);
                 tag.putInt(SACRED_KEY, tag.getInt(SACRED_KEY) - 1);
                 if (tag.getInt(SACRED_KEY) <= 0) tag.remove(SACRED_KEY);
             }

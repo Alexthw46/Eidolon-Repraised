@@ -12,9 +12,6 @@ public class Config {
     public static ConfigValue<Integer> SOUL_ENCHANTER_MAXIMUM_USES;
     public static ConfigValue<Integer> SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS;
 
-    // Mod Compatibility
-    public static ConfigValue<Double> IRONS_SPELLBOOKS_ATTRIBUTE_USAGE;
-
     public Config(ForgeConfigSpec.Builder builder) {
         builder.comment("Generic settings").push("generic");
         CRUCIBLE_STEP_DURATION = builder.comment("Duration in ticks of each step of a crucible recipe.")
@@ -28,11 +25,6 @@ public class Config {
                 .define("soulEnchanterMaximumUses", -1);
         SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS = builder.comment("How many enchantments the item is allowed to have to be applicable for soul enchanting (a value below 0 means unlimited)")
                         .define("soulEnchanterMaximumEnchantments", -1);
-        builder.pop();
-
-        builder.comment("Mod Compatibility").push("modCompat");
-        IRONS_SPELLBOOKS_ATTRIBUTE_USAGE = builder.comment("By how much (percentage) the attribute values of this mod should apply to Eidolon")
-                        .defineInRange("ironsSpellbooksAttributeUsage", 1.0, 0, 1);
         builder.pop();
     }
 

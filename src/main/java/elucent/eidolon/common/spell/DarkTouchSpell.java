@@ -7,7 +7,6 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import net.minecraft.core.BlockPos;
@@ -45,7 +44,7 @@ public class DarkTouchSpell extends StaticSpell {
         if (event.getSource().getEntity() instanceof LivingEntity caster && !event.getSource().getMsgId().equals(DamageSource.WITHER.getMsgId())) {
             var tag = caster.getMainHandItem().getTag();
             if (tag != null && tag.contains(NECROTIC_KEY)) {
-                float amount = EidolonAttributes.getSpellDamage(caster, Math.min(1, event.getAmount()));
+                float amount = Math.min(1, event.getAmount());
                 event.setAmount(event.getAmount() - amount);
                 if (event.getAmount() <= 0) event.setCanceled(true);
                 int prevHurtResist = event.getEntity().invulnerableTime;

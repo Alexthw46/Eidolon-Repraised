@@ -5,7 +5,6 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.tile.IBurner;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
@@ -67,7 +66,7 @@ public class FireTouchSpell extends StaticSpell {
                 }
                 world.playSound(player, blockPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
             } else if (ray instanceof EntityHitResult entityHitResult) {
-                entityHitResult.getEntity().setSecondsOnFire(EidolonAttributes.getSpellEffectDuration(player, 10));
+                entityHitResult.getEntity().setSecondsOnFire(10);
             } else return;
             ISoul.expendMana(player, getCost());
         }
