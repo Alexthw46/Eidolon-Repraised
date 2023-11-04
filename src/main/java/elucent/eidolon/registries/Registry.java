@@ -440,11 +440,9 @@ public class Registry {
 
     public static DecoBlockPack.WoodDecoBlock
             POLISHED_PLANKS = new DecoBlockPack.WoodDecoBlock(BLOCKS, "polished_planks", POLISHED, blockProps(Material.WOOD, MaterialColor.WOOD)
-            .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-            .addFence().addButton().addSign().addPressurePlate(),
+            .sound(SoundType.WOOD).strength(1.6f, 3.0f)).addSign(),//.addDoors(),
             ILLWOOD_PLANKS = new DecoBlockPack.WoodDecoBlock(BLOCKS, "illwood_planks", ILLWOOD, blockProps(Material.WOOD, MaterialColor.WOOD)
-                    .sound(SoundType.WOOD).strength(1.6f, 3.0f))
-                    .addFence().addButton().addSign().addPressurePlate();
+                    .sound(SoundType.WOOD).strength(1.6f, 3.0f)).addSign();//.addDoors();
 
     public static final RegistryObject<Block>
             POLISHED_WOOD_PILLAR = addBlock("polished_wood_pillar", () -> new RotatedPillarBlock(blockProps(Material.WOOD, MaterialColor.WOOD)

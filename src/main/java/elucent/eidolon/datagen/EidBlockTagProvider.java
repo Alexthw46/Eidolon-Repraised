@@ -31,6 +31,7 @@ public class EidBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.WALL_SIGNS).add(Registry.ILLWOOD_PLANKS.getWallSign(), Registry.POLISHED_PLANKS.getWallSign());
         tag(BlockTags.STANDING_SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign(), Registry.POLISHED_PLANKS.getStandingSign());
         tag(BlockTags.WOODEN_PRESSURE_PLATES).add(Registry.ILLWOOD_PLANKS.getPressurePlate(), Registry.POLISHED_PLANKS.getPressurePlate());
+        //tag(BlockTags.WOODEN_DOORS).add(Registry.ILLWOOD_PLANKS.getDoor(), Registry.POLISHED_PLANKS.getDoor());
         //tag(BlockTags.WOODEN_TRAPDOORS).add(Registry.ILLWOOD_PLANKS.getTrapdoor(), Registry.POLISHED_PLANKS.getTrapdoor());
         tag(Registry.CRUCIBLE_HOT_BLOCKS).add(Blocks.MAGMA_BLOCK,
                 Blocks.FIRE,

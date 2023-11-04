@@ -41,6 +41,10 @@ public class DecoBlockPack {
         return this;
     }
 
+    public DecoBlockPack addPressurePlate() {
+        return addPressurePlate(PressurePlateBlock.Sensitivity.MOBS);
+    }
+
     public Block getBlock() {
         return full.get();
     }
@@ -64,13 +68,18 @@ public class DecoBlockPack {
     public static class WoodDecoBlock extends DecoBlockPack {
 
         final WoodType woodType;
-        String woodName;
-        @Nullable RegistryObject<Block> wSign = null, sSign = null, door = null, trapdoor = null, fence = null, fence_gate = null, button = null;
+        public final String woodName;
+
+        RegistryObject<Block> fence, fence_gate, button;
+        @Nullable RegistryObject<Block> wSign = null, sSign = null, door = null, trapdoor = null;
 
         public WoodDecoBlock(DeferredRegister<Block> blocks, String basename, WoodType type, BlockBehaviour.Properties props) {
             super(blocks, basename, props);
             this.woodName = type.name().split(":")[1]; //strip the namespace
             this.woodType = type;
+            addButton();
+            addPressurePlate();
+            addFence();
         }
 
         public WoodDecoBlock addSign() {
@@ -101,6 +110,7 @@ public class DecoBlockPack {
             return this;
         }
 
+        @Override
         public WoodDecoBlock addPressurePlate() {
             pressure_plate = Registry.addBlock(woodName + "_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, props));
             return this;
@@ -113,15 +123,15 @@ public class DecoBlockPack {
         }
 
         public Block getFence() {
-            return fence == null ? null : fence.get();
+            return fence.get();
         }
 
         public Block getFenceGate() {
-            return fence_gate == null ? null : fence_gate.get();
+            return fence_gate.get();
         }
 
-        public @Nullable ButtonBlock getButton() {
-            return button == null ? null : (ButtonBlock) button.get();
+        public ButtonBlock getButton() {
+            return (ButtonBlock) button.get();
         }
 
         public @Nullable DoorBlock getDoor() {

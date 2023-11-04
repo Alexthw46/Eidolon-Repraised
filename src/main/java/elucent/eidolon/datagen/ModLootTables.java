@@ -65,6 +65,8 @@ public class ModLootTables extends LootTableProvider {
             registerDropSelf(Registry.ELDER_BRICKS_EYE.get());
             registerDropSelf(Registry.SMOOTH_STONE_ARCH.get());
             registerDropSelf(Registry.MOSSY_SMOOTH_STONE_BRICKS.get());
+            //createDoorTable(Registry.POLISHED_PLANKS.getDoor());
+            //createDoorTable(Registry.ILLWOOD_PLANKS.getDoor());
         }
 
         public void registerDropSelf(Block block) {
@@ -86,6 +88,7 @@ public class ModLootTables extends LootTableProvider {
                 blocks.add(woodDecoBlock.getPressurePlate());
                 blocks.add(woodDecoBlock.getStandingSign());
                 blocks.add(woodDecoBlock.getWallSign());
+                //blocks.add(woodDecoBlock.getTrapdoor());
             }
 
             for (var block : blocks) {
