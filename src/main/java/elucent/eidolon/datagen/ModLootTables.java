@@ -1,7 +1,5 @@
 package elucent.eidolon.datagen;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
@@ -64,6 +62,7 @@ public class ModLootTables extends LootTableProvider {
             registerDropSelf(Registry.ILLWOOD_PLANKS);
             registerDropSelf(Registry.ELDER_BRICKS);
             registerDropSelf(Registry.ELDER_MASONRY);
+            registerDropSelf(Registry.SMOOTH_STONE_MASONRY);
             registerDropSelf(Registry.BONE_PILE);
             registerDropSelf(Registry.ELDER_PILLAR.get());
             registerDropSelf(Registry.ELDER_BRICKS_EYE.get());

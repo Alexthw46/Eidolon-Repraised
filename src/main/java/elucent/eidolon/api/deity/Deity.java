@@ -21,6 +21,10 @@ public abstract class Deity implements RGBProvider {
     final int green;
     final int blue;
 
+    public Progression getProgression() {
+        return progression;
+    }
+
     protected final Progression progression;
 
     public Deity(ResourceLocation id, int red, int green, int blue) {

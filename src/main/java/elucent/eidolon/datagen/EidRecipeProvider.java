@@ -11,6 +11,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +28,10 @@ public class EidRecipeProvider extends RecipeProvider {
         buildDecoPack(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS);
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_BRICKS, List.of(Registry.ELDER_BRICKS_EYE.get(), Registry.ELDER_PILLAR.get(), Registry.ELDER_MASONRY.getBlock()));
         buildDecoPack(pFinishedRecipeConsumer, Registry.ELDER_MASONRY);
+
+        makeStonecutter(pFinishedRecipeConsumer, Blocks.SMOOTH_STONE, Registry.SMOOTH_STONE_MASONRY.getBlock(), "smooth_stone_masonry");
+        buildDecoPack(pFinishedRecipeConsumer, Registry.SMOOTH_STONE_MASONRY);
+
         buildDecoPack(pFinishedRecipeConsumer, Registry.BONE_PILE);
         buildDecoPack(pFinishedRecipeConsumer, Registry.POLISHED_PLANKS);
 
