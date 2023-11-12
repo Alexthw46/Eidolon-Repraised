@@ -138,7 +138,7 @@ dependencies {
     ///*implementation*/ runtimeOnly fg.deobf("joefoxe:hexerei:0.3.2.2")
 
     //runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}:${ars_version}")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-81-FORGE")
     //runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
 
     //implementation fg.deobf("curse.maven:embeddium-908741:4800420")

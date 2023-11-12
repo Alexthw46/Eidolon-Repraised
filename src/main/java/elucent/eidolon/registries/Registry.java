@@ -36,9 +36,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
-
 import net.minecraft.world.flag.FeatureFlags;
-
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -50,7 +48,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -344,11 +344,12 @@ public class Registry {
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
 
-    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(blockProps(Blocks.GOLD_BLOCK, DyeColor.YELLOW)
-            .sound(SoundType.METAL).strength(1.4f, 2.0f)
+    public static final Supplier<BlockBehaviour.Properties> GOLD_DUMMY = () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).instrument(NoteBlockInstrument.BELL).strength(3.0F, 6.0F).sound(SoundType.METAL);
+    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(GOLD_DUMMY.get()
+            .strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(blockProps(Blocks.GOLD_BLOCK, DyeColor.YELLOW)
-            .sound(SoundType.METAL).strength(1.4f, 2.0f)
+    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(GOLD_DUMMY.get()
+            .strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
     public static final RegistryObject<Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
@@ -542,7 +543,6 @@ public class Registry {
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
         SIGN_BLOCKENTITY = TILE_ENTITIES.register("sign", () -> BlockEntityType.Builder.of(SignBlockEntityCopy::new, ILLWOOD_PLANKS.getStandingSign(), ILLWOOD_PLANKS.getWallSign(), POLISHED_PLANKS.getStandingSign(), POLISHED_PLANKS.getWallSign()).build(null));
     }
-
 
 
     public static final DamageTypeData SAPPING = DamageTypeData.builder()
