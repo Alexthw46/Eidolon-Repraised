@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "eidolon:smooth_stone_masonry"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "eidolon:blocks/smooth_stone_masonry"
+}
