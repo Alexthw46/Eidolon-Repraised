@@ -29,7 +29,7 @@ public class CodexChapters {
             WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
             INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
             WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
-            MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE;
+            MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, WATER, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE, SUNDER_ARMOR, REINFORCE_ARMOR;
 
     public static void init() {
 
@@ -789,7 +789,9 @@ public class CodexChapters {
         //SPELLS
         {
             MANA = new Chapter("eidolon.codex.chapter.mana",
-                    new TitlePage("eidolon.codex.page.mana"));
+                    new TitlePage("eidolon.codex.page.mana"),
+                    new TextPage("eidolon.codex.page.mana.1")
+            );
 
             LIGHT = new Chapter(
                     "eidolon.codex.chapter.light",
@@ -806,6 +808,12 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.chill_touch", Spells.FROST_CHANT.signs())
             );
 
+            WATER = new Chapter(
+                    "eidolon.codex.chapter.water",
+                    new ChantPage("eidolon.codex.page.water", Spells.WATER_CHANT.signs()),
+                    new TextPage("eidolon.codex.page.water.1")
+            );
+
             ENTHRALL = new Chapter(
                     "eidolon.codex.chapter.enthrall",
                     new ChantPage("eidolon.codex.page.enthrall", Spells.ENTHRALL_UNDEAD.signs()),
@@ -817,18 +825,30 @@ public class CodexChapters {
                     new ChantPage("eidolon.codex.page.smite", Spells.SMITE_CHANT.signs())
             );
 
+            SUNDER_ARMOR = new Chapter(
+                    "eidolon.codex.chapter.sunder_armor",
+                    new ChantPage("eidolon.codex.page.sunder_armor", Spells.SUNDER_ARMOR.signs())
+            );
+
+            REINFORCE_ARMOR = new Chapter(
+                    "eidolon.codex.chapter.reinforce_armor",
+                    new ChantPage("eidolon.codex.page.reinforce_armor", Spells.LIGHT_ARMOR.signs())
+            );
+
             SPELLS_INDEX = new Index(
                     "eidolon.codex.chapter.spells",
                     new TitledIndexPage(
                             "eidolon.codex.page.spells",
+                            new IndexEntry(MANA, new ItemStack(Registry.CODEX.get())),
                             new SignLockedEntry(LIGHT, new ItemStack(Items.LANTERN), Signs.FLAME_SIGN),
                             new ResearchLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Researches.FIRE_SPELL),
                             new ResearchLockedEntry(CHILL_TOUCH, new ItemStack(Items.ICE), Researches.FROST_SPELL),
-
-                            new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
-                            new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE)
+                            new SignLockedEntry(WATER, new ItemStack(Items.WATER_BUCKET), Signs.WINTER_SIGN, Signs.FLAME_SIGN)
                     ), new IndexPage(
-
+                            new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
+                    new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE),
+                    new SignLockedEntry(SUNDER_ARMOR, new ItemStack(Items.FERMENTED_SPIDER_EYE), Signs.WARDING_SIGN),
+                    new SignLockedEntry(REINFORCE_ARMOR, new ItemStack(Items.GOLDEN_CHESTPLATE), Signs.WARDING_SIGN)
             )
             );
 

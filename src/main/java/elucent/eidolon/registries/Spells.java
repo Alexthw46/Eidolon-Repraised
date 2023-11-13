@@ -125,6 +125,11 @@ public class Spells {
             Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN
     ));
 
+    public static final Spell WATER_CHANT = register(new WaterSpell(
+            new ResourceLocation(Eidolon.MODID, "water"),
+            Signs.WINTER_SIGN, Signs.WINTER_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
+    ));
+
     //TODO Undead Lure - neutral
 
 }
