@@ -30,7 +30,7 @@ public class WaterSpell extends StaticSpell {
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (world.dimensionType().ultraWarm() || world.isClientSide())
             return;
 

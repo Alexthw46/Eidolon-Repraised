@@ -17,12 +17,12 @@ public abstract class ApplyPotionSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        return rayTrace(player, player.getReachDistance(), 0, true) instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity;
+        return rayTrace(player, player.getBlockReach(), 0, true) instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity;
     }
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        HitResult raytrace = rayTrace(player, player.getReachDistance(), 0, true);
+        HitResult raytrace = rayTrace(player, player.getBlockReach(), 0, true);
         if (isSelf(raytrace)) {
             player.addEffect(getPotionEffect(player));
         } else if (raytrace instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity entity) {
