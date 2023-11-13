@@ -33,7 +33,7 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
 
     @Override
     public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND && level != null) {
+        if (hand == InteractionHand.MAIN_HAND && level != null && !level.isClientSide) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (itemInHand.isEmpty() && !stack.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, stack);
@@ -45,8 +45,9 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
                 if (!level.isClientSide) sync();
                 return InteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && !stack.isEmpty()) {
-                ItemHandlerHelper.giveItemToPlayer(player, stack);
+                ItemStack oldstack = stack.copy();
                 stack = itemInHand.split(1);
+                ItemHandlerHelper.giveItemToPlayer(player, oldstack);
                 if (!level.isClientSide) sync();
                 return InteractionResult.SUCCESS;
             }
