@@ -106,7 +106,7 @@ public class Events {
     public void onTarget(LivingChangeTargetEvent event) {
         if (event.getEntity() == null || !EntityUtil.isEnthralled(event.getEntity())) return;
         UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
-        if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player){
+        if (event.getEntity().getLevel().getPlayerByUUID(master) instanceof ServerPlayer player) {
             var lastHurt = player.getLastHurtMob();
             var lastHurtBy = player.getLastHurtByMob();
             handleEnthralledTargeting(event, lastHurt, lastHurtBy);
