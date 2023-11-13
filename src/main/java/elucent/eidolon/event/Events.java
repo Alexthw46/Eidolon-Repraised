@@ -62,6 +62,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import static elucent.eidolon.util.EntityUtil.THRALL_KEY;
+
 public class Events {
     @SubscribeEvent
     public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
@@ -102,15 +104,26 @@ public class Events {
 
     @SubscribeEvent
     public void onTarget(LivingChangeTargetEvent event) {
+        if (event.getEntity() == null || !EntityUtil.isEnthralled(event.getEntity())) return;
+        UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
+        if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player){
+            var lastHurt = player.getLastHurtMob();
+            var lastHurtBy = player.getLastHurtByMob();
+            handleEnthralledTargeting(event, lastHurt, lastHurtBy);
+        }
         if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
             var lastHurt = event.getOriginalTarget().getLastHurtMob();
             var lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
-            if (lastHurtBy != null && lastHurtBy != event.getEntity() && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(event.getEntity(), lastHurtBy))) {
-                event.setNewTarget(lastHurtBy);
-            } else if (lastHurt != null && lastHurt != event.getEntity() && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(event.getEntity(), lastHurt))) {
-                event.setNewTarget(lastHurt);
-            } else event.setNewTarget(null);
+            handleEnthralledTargeting(event, lastHurt, lastHurtBy);
         }
+    }
+
+    private void handleEnthralledTargeting(LivingChangeTargetEvent event, LivingEntity lastHurt, LivingEntity lastHurtBy) {
+        if (lastHurtBy != null && lastHurtBy != event.getEntity() && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(event.getEntity(), lastHurtBy))) {
+            event.setNewTarget(lastHurtBy);
+        } else if (lastHurt != null && lastHurt != event.getEntity() && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(event.getEntity(), lastHurt))) {
+            event.setNewTarget(lastHurt);
+        } else event.setNewTarget(null);
     }
 
     @SubscribeEvent
