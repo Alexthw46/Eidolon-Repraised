@@ -106,7 +106,7 @@ public class Events {
     public void onTarget(LivingChangeTargetEvent event) {
         if (event.getEntity() == null || !EntityUtil.isEnthralled(event.getEntity())) return;
         UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
-        if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player){
+        if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player) {
             var lastHurt = player.getLastHurtMob();
             var lastHurtBy = player.getLastHurtByMob();
             handleEnthralledTargeting(event, lastHurt, lastHurtBy);
@@ -158,6 +158,7 @@ public class Events {
             }
         }
 
+        //Drop candies on Halloween
         if (event.getSource().getEntity() instanceof Player && !entity.level.isClientSide()) {
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH) + 1;
@@ -177,11 +178,7 @@ public class Events {
                 event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), entity.getMainHandItem().copy()));
         }
 
-        if (EntityUtil.isEnthralled(entity)) {
-            event.getDrops().clear();
-            return;
-        }
-
+        //TODO Replace with GLM
         if (entity instanceof ZombieBruteEntity && (entity.hasEffect(MobEffects.WITHER) || event.getSource().is(DamageTypes.WITHER)) && !entity.level.isClientSide) {
             for (ItemEntity item : event.getDrops())
                 if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
@@ -376,7 +373,7 @@ public class Events {
         if (event.getEntity() instanceof ServerPlayer player) {
             AttributeInstance attr = player.getAttribute(EidolonAttributes.MAX_SOUL_HEARTS.get());
             if (attr != null && attr.getModifier(etherealHealthUUID) == null)
-                attr.addPermanentModifier(new AttributeModifier(etherealHealthUUID, "eidolon:configured_max_ethereal" ,Config.MAX_ETHEREAL_HEALTH.get(), AttributeModifier.Operation.ADDITION));
+                attr.addPermanentModifier(new AttributeModifier(etherealHealthUUID, "eidolon:configured_max_ethereal", Config.MAX_ETHEREAL_HEALTH.get(), AttributeModifier.Operation.ADDITION));
         }
     }
 
