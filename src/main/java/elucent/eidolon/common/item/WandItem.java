@@ -1,6 +1,6 @@
 package elucent.eidolon.common.item;
 
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import elucent.eidolon.common.entity.SpellProjectileEntity;
 import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.compat.apotheosis.Apotheosis;
@@ -52,8 +52,8 @@ public class WandItem extends ItemBase implements IRechargeableWand {
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
 
             Pair<Integer, Integer> affixData = CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS) ? Apotheosis.handleWandAffix(stack) : Pair.of(1, 0);
-            int projectileAmount = affixData.first;
-            int trackingAmount = affixData.second;
+            int projectileAmount = affixData.getFirst();
+            int trackingAmount = affixData.getSecond();
 
             for (int i = 0; i < projectileAmount; i++) {
                 SpellProjectileEntity spellProjectileEntity = spellProjectile.create(world);

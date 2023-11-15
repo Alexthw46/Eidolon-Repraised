@@ -1,7 +1,7 @@
 package elucent.eidolon.compat.apotheosis;
 
 
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.common.item.WandItem;
 import net.minecraft.resources.ResourceLocation;
