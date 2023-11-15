@@ -19,13 +19,14 @@ jobs:
 
     steps:
       - name: checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: setup jdk 17
-        uses: actions/setup-java@v1
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
         with:
-          java-version: "17"
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
@@ -40,9 +41,9 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files-primary: build/libs/!(*-@(dev|sources)).jar
           files-secondary: build/libs/*-@(dev|sources).jar
-          version-type: release
+          version-type: beta
           loaders: forge
-          name: Eidolon_Repraised ${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
+          name: Eidolon:Repraised ${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           version:  eidolon_repraised-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           game-versions: |
             ${{ env.MINECRAFT_VERSION }}
