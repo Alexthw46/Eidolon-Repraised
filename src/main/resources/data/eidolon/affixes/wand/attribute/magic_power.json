@@ -36,6 +36,7 @@
   },
   "types": [
     "wand",
-    "armor"
+    "helmet",
+    "chestplate"
   ]
 }

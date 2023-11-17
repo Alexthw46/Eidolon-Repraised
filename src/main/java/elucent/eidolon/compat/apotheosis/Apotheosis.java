@@ -41,8 +41,8 @@ public class Apotheosis {
     }
 
     public static void initialize() {
-        AffixRegistry.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "tracking"), TrackingAffix.SERIALIZER);
-        AffixRegistry.INSTANCE.registerSerializer(new ResourceLocation(Eidolon.MODID, "hailing"), HailingAffix.SERIALIZER);
+        AffixRegistry.INSTANCE.registerCodec(new ResourceLocation(Eidolon.MODID, "tracking"), TrackingAffix.CODEC);
+        AffixRegistry.INSTANCE.registerCodec(new ResourceLocation(Eidolon.MODID, "hailing"), HailingAffix.CODEC);
     }
 
     public static Pair<Integer, Integer> handleWandAffix(final ItemStack stack) {
