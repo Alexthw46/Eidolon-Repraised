@@ -26,3 +26,13 @@ mandatory = true
 versionRange = "[1.19-5.0.7.1,)"
 ordering = "AFTER"
 side = "BOTH"
+
+# apotheosis dependency
+[[dependencies.eidolon]]
+modId = "apotheosis"
+mandatory = false
+versionRange = "[1.20.1-7.1,)"
+ordering = "AFTER"
+side = "BOTH"
+
+
