@@ -36,6 +36,9 @@
   },
   "types": [
     "wand",
-    "armor"
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots"
   ]
 }

@@ -7,7 +7,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixType;
 import dev.shadowsoffire.apotheosis.adventure.affix.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import dev.shadowsoffire.placebo.json.PSerializer;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +25,6 @@ public class TrackingAffix extends Affix implements Apotheosis.StepScalingAffix 
 
     protected final Map<LootRarity, StepFunction> values;
 
-
-    public static final PSerializer<TrackingAffix> SERIALIZER = PSerializer.fromCodec("Tracking Affix", CODEC);
-
     public TrackingAffix(Map<LootRarity, StepFunction> values) {
         super(AffixType.ABILITY);
         this.values = values;
@@ -46,7 +42,8 @@ public class TrackingAffix extends Affix implements Apotheosis.StepScalingAffix 
     }
 
     @Override
-    public PSerializer<? extends Affix> getSerializer() {
-        return SERIALIZER;
+    public Codec<? extends Affix> getCodec() {
+        return CODEC;
     }
+
 }
