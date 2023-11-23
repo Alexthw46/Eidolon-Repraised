@@ -194,8 +194,8 @@ public class Registry {
     public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
     public static final RegistryObject<Item> TALLOW = addItem("tallow");
     public static final RegistryObject<Item> LESSER_SOUL_GEM = addItem("lesser_soul_gem");
-    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
-    public static final RegistryObject<Item> HOLY_SYMBOL = addItem("holy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.unholy_symbol"));
+    public static final RegistryObject<Item> HOLY_SYMBOL = addItem("holy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.holy_symbol"));
 
     public static final RegistryObject<Item> REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
             .setLore("lore.eidolon.reaper_scythe"));
