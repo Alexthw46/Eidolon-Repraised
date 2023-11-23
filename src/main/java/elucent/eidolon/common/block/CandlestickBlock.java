@@ -3,6 +3,7 @@ package elucent.eidolon.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,8 +22,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
 
 public class CandlestickBlock extends BlockBase {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", (d) -> d != Direction.DOWN);
@@ -78,7 +77,7 @@ public class CandlestickBlock extends BlockBase {
         BlockPos blockpos = context.getClickedPos();
         Direction[] adirection = context.getNearestLookingDirections();
 
-        for(Direction direction : adirection) {
+        for (Direction direction : adirection) {
             if (direction != Direction.UP) {
                 Direction direction1 = direction.getOpposite();
                 blockstate = blockstate.setValue(FACING, direction1);
@@ -92,7 +91,7 @@ public class CandlestickBlock extends BlockBase {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, @NotNull Level worldIn, BlockPos pos, @NotNull RandomSource rand) {
         Direction direction = state.getValue(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.925D;
