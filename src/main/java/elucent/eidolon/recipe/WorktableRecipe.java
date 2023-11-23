@@ -68,11 +68,13 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     public boolean matches(Container coreInv, Container extraInv) {
-        if (coreInv.getContainerSize() < 9 || extraInv.getContainerSize() < 4) return false;
+        if (coreInv.getContainerSize() < 9 || extraInv.getContainerSize() < 4 || core == null) return false;
         for (int i = 0; i < core.length; i ++) {
+            if (core[i] == null) continue;
             if (!core[i].test(coreInv.getItem(i))) return false;
         }
         for (int i = 0; i < extras.length; i ++) {
+            if (extras[i] == null) continue;
             if (!extras[i].test(extraInv.getItem(i))) return false;
         }
         return true;
