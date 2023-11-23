@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -56,6 +57,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -106,24 +108,27 @@ public class Events {
     public void onTarget(LivingChangeTargetEvent event) {
         if (event.getEntity() == null || !EntityUtil.isEnthralled(event.getEntity())) return;
         UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
-        if (event.getEntity().getLevel().getPlayerByUUID(master) instanceof ServerPlayer player) {
-            var lastHurt = player.getLastHurtMob();
-            var lastHurtBy = player.getLastHurtByMob();
-            handleEnthralledTargeting(event, lastHurt, lastHurtBy);
-        }
+
+        LivingEntity newTarget = null;
+
         if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
-            var lastHurt = event.getOriginalTarget().getLastHurtMob();
-            var lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
-            handleEnthralledTargeting(event, lastHurt, lastHurtBy);
+            LivingEntity lastHurt = event.getOriginalTarget().getLastHurtMob();
+            LivingEntity lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
+            newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
+        } else if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player) {
+            LivingEntity lastHurt = player.getLastHurtMob();
+            LivingEntity lastHurtBy = player.getLastHurtByMob();
+            newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
         }
+        if (!(event.getEntity() instanceof HoglinBase && newTarget == null)) event.setNewTarget(newTarget);
     }
 
-    private void handleEnthralledTargeting(LivingChangeTargetEvent event, LivingEntity lastHurt, LivingEntity lastHurtBy) {
-        if (lastHurtBy != null && lastHurtBy != event.getEntity() && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(event.getEntity(), lastHurtBy))) {
-            event.setNewTarget(lastHurtBy);
-        } else if (lastHurt != null && lastHurt != event.getEntity() && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(event.getEntity(), lastHurt))) {
-            event.setNewTarget(lastHurt);
-        } else event.setNewTarget(null);
+    private @Nullable LivingEntity handleEnthralledTargeting(LivingEntity lastHurt, LivingEntity lastHurtBy, LivingEntity thrall) {
+        if (lastHurtBy != null && lastHurtBy != thrall && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(thrall, lastHurtBy))) {
+            return lastHurtBy;
+        } else if (lastHurt != null && lastHurt != thrall && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(thrall, lastHurt))) {
+            return lastHurt;
+        } else return null;
     }
 
     @SubscribeEvent
@@ -346,7 +351,7 @@ public class Events {
 
         event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
             if (s.hasEtherealHealth()) {
-                var reduced = s.hurtEtherealHealth(event.getAmount(), ISoul.getPersistentHealth(event.getEntity()));
+                float reduced = s.hurtEtherealHealth(event.getAmount(), ISoul.getPersistentHealth(event.getEntity()));
                 event.setAmount(reduced);
                 Networking.sendToTracking(event.getEntity().level, event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
             }
