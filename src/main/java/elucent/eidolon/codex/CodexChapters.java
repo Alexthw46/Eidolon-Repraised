@@ -458,7 +458,8 @@ public class CodexChapters {
             );
 
             NECROMANCER_STAFF = new Chapter("eidolon.codex.chapter.summoning_staff",
-                    new TitlePage("eidolon.codex.page.summoning_staff")
+                    new TitlePage("eidolon.codex.page.summoning_staff"),
+                    new TextPage("eidolon.codex.page.summoning_staff.1")
             );
 
             ARROW_RING = new Chapter("eidolon.codex.chapter.angel_sight",
