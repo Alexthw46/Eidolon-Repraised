@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class HerbBlockBase extends BushBlock implements BonemealableBlock {
-    public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
     private static final VoxelShape[] SHAPES = new VoxelShape[]{Block.box(5, 0, 5, 11, 4, 11), Block.box(4, 0, 4, 12, 8, 12)};
 
     public HerbBlockBase(BlockBehaviour.Properties builder) {
@@ -53,7 +53,7 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
 
     @Override
     public boolean isRandomlyTicking(BlockState state) {
-        return state.getValue(AGE) < 1;
+        return state.getValue(AGE) < 2;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     }
 
     private int getMaxAge() {
-        return 1;
+        return 2;
     }
 
     private boolean isMaxAge(BlockState pState) {
@@ -102,7 +102,7 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     }
 
     public boolean isBonemealSuccess(@NotNull Level pLevel, @NotNull RandomSource pRandom, @NotNull BlockPos pPos, @NotNull BlockState pState) {
-        return pRandom.nextFloat() < 0.45D;
+        return pRandom.nextFloat() < 0.35D;
     }
 
     public void performBonemeal(@NotNull ServerLevel pLevel, @NotNull RandomSource pRandom, @NotNull BlockPos pPos, @NotNull BlockState pState) {

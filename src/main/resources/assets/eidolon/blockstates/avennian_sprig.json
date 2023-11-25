@@ -5,6 +5,9 @@
     },
     "age=1": {
       "model": "eidolon:block/avennian_sprig_1"
+    },
+    "age=2": {
+      "model": "eidolon:block/avennian_sprig_2"
     }
   }
 }
