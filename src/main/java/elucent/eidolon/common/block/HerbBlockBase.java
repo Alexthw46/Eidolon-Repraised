@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("deprecation")
 public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
-    private static final VoxelShape[] SHAPES = new VoxelShape[]{Block.box(5, 0, 5, 11, 4, 11), Block.box(4, 0, 4, 12, 8, 12)};
+    private static final VoxelShape[] SHAPES = new VoxelShape[]{Block.box(5, 0, 5, 11, 4, 11), Block.box(5, 0, 5, 11, 4, 11), Block.box(4, 0, 4, 12, 8, 12)};
 
     public HerbBlockBase(BlockBehaviour.Properties builder) {
         super(builder);
