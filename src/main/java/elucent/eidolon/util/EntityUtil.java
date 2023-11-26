@@ -30,6 +30,7 @@ public class EntityUtil {
     }
 
     public static boolean sameMaster(@NotNull LivingEntity entity, @NotNull LivingEntity source) {
+        if (!isEnthralled(entity) || !isEnthralled(source)) return false;
         return entity.getPersistentData().getUUID(THRALL_KEY).equals(source.getPersistentData().getUUID(THRALL_KEY));
     }
 
