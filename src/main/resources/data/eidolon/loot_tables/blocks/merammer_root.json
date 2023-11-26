@@ -29,7 +29,7 @@
           "condition": "minecraft:block_state_property",
           "block": "eidolon:merammer_root",
           "properties": {
-            "age": "1"
+            "age": "2"
           }
         }
       ]

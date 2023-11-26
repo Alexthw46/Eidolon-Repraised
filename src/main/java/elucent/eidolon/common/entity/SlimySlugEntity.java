@@ -8,10 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -27,7 +24,6 @@ import net.minecraftforge.common.extensions.IForgeEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
     private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(Items.PUMPKIN_SEEDS);
@@ -66,8 +62,8 @@ public class SlimySlugEntity extends PathfinderMob implements IForgeEntity {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
-                (e) -> ((Player) e).getGameProfile().getId().equals(UUID.fromString("0ca54301-6170-4c44-b3e0-b8afa6b81ed2"))));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false,
+                (e) -> e.getItemBySlot(EquipmentSlot.HEAD).getItem().equals(Items.CARVED_PUMPKIN)));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, TEMPTATION_ITEMS, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
