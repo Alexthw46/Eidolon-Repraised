@@ -6,6 +6,7 @@ import elucent.eidolon.common.entity.SpellProjectileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,9 @@ public class EntityUtil {
 
     public static void enthrall(LivingEntity caster, LivingEntity thrall) {
         thrall.getPersistentData().putUUID(THRALL_KEY, caster.getUUID());
+        if (thrall instanceof Mob mob) {
+            mob.setPersistenceRequired();
+        }
     }
 
     public static boolean isEnthralled(LivingEntity entity) {
