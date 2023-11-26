@@ -26,7 +26,7 @@ public class LivingEntityMixin {
     public void eidolonrepraised$canAttack(LivingEntity pTarget, CallbackInfoReturnable<Boolean> cir) {
         if (((Entity) (Object) this) instanceof LivingEntity living && pTarget != null) {
             if (EntityUtil.isEnthralled(living)) {
-                if (EntityUtil.isEnthralledBy(living, pTarget)) cir.setReturnValue(false);
+                if (living.isAlliedTo(pTarget)) cir.setReturnValue(false);
                 UUID master = living.getPersistentData().getUUID(THRALL_KEY);
                 if (living.level().getPlayerByUUID(master) instanceof ServerPlayer player) {
                     LivingEntity lastHurt = player.getLastHurtMob();

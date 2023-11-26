@@ -82,6 +82,7 @@ public class Events {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void onClone(PlayerEvent.Clone event) {
         Capability<IKnowledge> KNOWLEDGE = IKnowledge.INSTANCE;
@@ -124,11 +125,9 @@ public class Events {
     }
 
     private @Nullable LivingEntity handleEnthralledTargeting(LivingEntity lastHurt, LivingEntity lastHurtBy, LivingEntity thrall) {
-        if (lastHurtBy != null && lastHurtBy != thrall && !(EntityUtil.isEnthralled(lastHurtBy) && EntityUtil.sameMaster(thrall, lastHurtBy))) {
-            return lastHurtBy;
-        } else if (lastHurt != null && lastHurt != thrall && !(EntityUtil.isEnthralled(lastHurt) && EntityUtil.sameMaster(thrall, lastHurt))) {
-            return lastHurt;
-        } else return null;
+        if (lastHurtBy != null && lastHurtBy != thrall && !thrall.isAlliedTo(lastHurtBy)) return lastHurtBy;
+        if (lastHurt != null && lastHurt != thrall && !thrall.isAlliedTo(lastHurt)) return lastHurt;
+        return null;
     }
 
     @SubscribeEvent
@@ -208,35 +207,39 @@ public class Events {
             }
             if (!entity.level.isClientSide && held.getItem() instanceof CleavingAxeItem) {
                 int looting = ForgeHooks.getLootingLevel(entity, source, event.getSource());
-                ItemStack head = ItemStack.EMPTY;
-                if (entity instanceof WitherSkeleton) head = new ItemStack(Items.WITHER_SKELETON_SKULL);
-                else if (entity instanceof Skeleton) head = new ItemStack(Items.SKELETON_SKULL);
-                else if (entity instanceof Zombie) head = new ItemStack(Items.ZOMBIE_HEAD);
-                else if (entity instanceof Creeper) head = new ItemStack(Items.CREEPER_HEAD);
-                else if (entity instanceof EnderDragon) head = new ItemStack(Items.DRAGON_HEAD);
-                else if (entity instanceof Player) {
-                    head = new ItemStack(Items.PLAYER_HEAD);
-                    GameProfile gameprofile = ((Player) entity).getGameProfile();
-                    head.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), gameprofile));
+                beheading(event, source, entity, looting);
+            }
+        }
+    }
+
+    private static void beheading(LivingDropsEvent event, LivingEntity source, LivingEntity entity, int looting) {
+        ItemStack head = ItemStack.EMPTY;
+        if (entity instanceof WitherSkeleton) head = new ItemStack(Items.WITHER_SKELETON_SKULL);
+        else if (entity instanceof Skeleton) head = new ItemStack(Items.SKELETON_SKULL);
+        else if (entity instanceof Zombie) head = new ItemStack(Items.ZOMBIE_HEAD);
+        else if (entity instanceof Creeper) head = new ItemStack(Items.CREEPER_HEAD);
+        else if (entity instanceof EnderDragon) head = new ItemStack(Items.DRAGON_HEAD);
+        else if (entity instanceof Player) {
+            head = new ItemStack(Items.PLAYER_HEAD);
+            GameProfile gameprofile = ((Player) entity).getGameProfile();
+            head.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), gameprofile));
+        }
+        if (!head.isEmpty()) {
+            boolean doDrop = false;
+            if (entity.level.random.nextInt(20) == 0) doDrop = true;
+            else for (int i = 0; i < looting; i++) {
+                if (entity.level.random.nextInt(40) == 0) {
+                    doDrop = true;
+                    break;
                 }
-                if (!head.isEmpty()) {
-                    boolean doDrop = false;
-                    if (entity.level.random.nextInt(20) == 0) doDrop = true;
-                    else for (int i = 0; i < looting; i++) {
-                        if (entity.level.random.nextInt(40) == 0) {
-                            doDrop = true;
-                            break;
-                        }
-                    }
-                    for (ItemEntity e : event.getDrops()) {
-                        if (e.getItem().is(head.getItem())) doDrop = false; // No duplicate heads.
-                    }
-                    if (doDrop) {
-                        ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(), head);
-                        drop.setDefaultPickUpDelay();
-                        event.getDrops().add(drop);
-                    }
-                }
+            }
+            for (ItemEntity e : event.getDrops()) {
+                if (e.getItem().is(head.getItem())) doDrop = false; // No duplicate heads.
+            }
+            if (doDrop) {
+                ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(), head);
+                drop.setDefaultPickUpDelay();
+                event.getDrops().add(drop);
             }
         }
     }
@@ -370,9 +373,7 @@ public class Events {
                 }
             } else if (EntityUtil.isEnthralledBy(source, event.getEntity())) {
                 event.setCanceled(true);
-            } else if (EntityUtil.isEnthralled(event.getEntity()) && EntityUtil.isEnthralled(source)) {
-                if (EntityUtil.sameMaster(event.getEntity(), source)) event.setCanceled(true);
-            }
+            } else if (EntityUtil.sameMaster(event.getEntity(), source)) event.setCanceled(true);
         }
     }
 

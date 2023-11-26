@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractArrowMixin",
     "AbstractContainerMenuMixin",
+    "EntityMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
     "PlayerRendererMixin",
