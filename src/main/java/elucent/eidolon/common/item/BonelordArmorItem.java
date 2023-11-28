@@ -81,25 +81,20 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
 
         public static final Material INSTANCE = new Material();
     }
-    
-    Multimap<Attribute, AttributeModifier> modifiers = null;
-    
-    private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
 
     public BonelordArmorItem(EquipmentSlot slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
     }    
     
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        if (modifiers == null) {
-            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[this.slot.getIndex()];
-            modifiers = ImmutableMultimap.<Attribute, AttributeModifier>builder()
-                    .putAll(getDefaultAttributeModifiers(this.slot))
-                    .put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, "Persistent hearts", this.slot == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION))
-                    .build();
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
+        attributes.putAll(super.getDefaultAttributeModifiers(pEquipmentSlot));
+        if (this.slot == pEquipmentSlot) {
+            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT.get(this.slot);
+            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
         }
-        return slot == this.slot ? modifiers : super.getAttributeModifiers(slot, stack);
+        return attributes.build();
     }
 
     @OnlyIn(Dist.CLIENT)
