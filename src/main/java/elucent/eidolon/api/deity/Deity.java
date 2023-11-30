@@ -160,9 +160,9 @@ public abstract class Deity implements RGBProvider {
         }
     }
 
-    public void onReputationChange(Player player, IReputation rep, double prev, double current) {
+    public void onReputationChange(Player player, IReputation rep, double prev, double updated) {
 
-        Stage nextStage = progression.tryProgress(rep, player, prev, current);
+        Stage nextStage = progression.tryProgress(rep, player, prev, updated);
         Stage currStage = progression.next(prev);
         //we maxed out
         if (nextStage == null) {
@@ -174,8 +174,9 @@ public abstract class Deity implements RGBProvider {
             onReputationUnlock(player, rep, currStage.id());
         }
         double curr = rep.getReputation(player, getId()); //update after we may have changed it
+
         //we didn't advance a stage, if the cap was reached then we need to grant the next step
-        if (curr == nextStage.rep() && current != curr) {
+        if (curr == nextStage.rep() && updated != curr) {
             onReputationLock(player, rep, currStage.id());
         }
     }
