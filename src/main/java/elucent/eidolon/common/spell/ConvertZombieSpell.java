@@ -44,7 +44,7 @@ public class ConvertZombieSpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager villager)) return;
 
-        if (world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {

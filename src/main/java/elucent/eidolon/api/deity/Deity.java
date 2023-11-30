@@ -96,7 +96,10 @@ public abstract class Deity implements RGBProvider {
         boolean satisfiedBy(Player player) {
             boolean satisfied = true;
             for (StageRequirement req : reqs) {
-                satisfied = satisfied && req.isMet(player);
+                if (!req.isMet(player)) {
+                    satisfied = false;
+                    break;
+                }
             }
             return satisfied;
         }

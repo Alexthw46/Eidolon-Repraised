@@ -15,9 +15,9 @@ public class LightDeity extends Deity {
                 .requirement(new ResearchRequirement(DeityLocks.BASIC_INCENSE_PRAYER))
         ).add(new Stage(DeityLocks.HEAL_VILLAGER, 15, true)
                 .requirement(new ResearchRequirement(DeityLocks.HEAL_VILLAGER))
-        ).add(new Stage(DeityLocks.CURE_ZOMBIE, 25, true)
+        ).add(new Stage(DeityLocks.CURE_ZOMBIE, 35, true)
                 .requirement(new ResearchRequirement(DeityLocks.CURE_ZOMBIE))
-        ).add(new Stage(DeityLocks.SMITE_UNDEAD, 35, true)
+        ).add(new Stage(DeityLocks.SMITE_UNDEAD, 50, true)
                 .requirement(new ResearchRequirement(DeityLocks.SMITE_UNDEAD))
         ).setMax(100);
     }
