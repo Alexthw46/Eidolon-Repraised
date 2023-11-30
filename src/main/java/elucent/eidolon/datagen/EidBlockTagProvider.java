@@ -37,6 +37,7 @@ public class EidBlockTagProvider extends BlockTagsProvider {
                 Blocks.FIRE,
                 Blocks.SOUL_FIRE,
                 Blocks.LAVA);
+        tag(BlockTags.CANDLES).add(Registry.CANDLE.get(), Registry.CANDLESTICK.get(), Registry.MAGIC_CANDLE.get(), Registry.MAGIC_CANDLESTICK.get());
     }
 
     void logsTag(Block... blocks) {
