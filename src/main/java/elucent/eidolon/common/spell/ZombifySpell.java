@@ -44,6 +44,7 @@ public class ZombifySpell extends PrayerSpell {
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
+
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) return;
 
@@ -68,6 +69,7 @@ public class ZombifySpell extends PrayerSpell {
 
     private void zombify(Villager villager, ServerLevel level) {
         ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
+        if (zombievillager == null) return;
         zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
         zombievillager.setVillagerData(villager.getVillagerData());
         zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));

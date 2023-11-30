@@ -95,7 +95,6 @@ public class PrayerSpell extends StaticSpell {
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, getRegistryName(), world.getGameTime());
-                double prev = rep.getReputation(player, deity.getId());
                 rep.addReputation(player, deity.getId(), 1.0 + 0.25 * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });

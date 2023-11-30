@@ -15,9 +15,9 @@ public class DarkDeity extends Deity {
                 .requirement(new ResearchRequirement(DeityLocks.SACRIFICE_MOB))
         ).add(new Stage(DeityLocks.SACRIFICE_VILLAGER, 15, true)
                 .requirement(new ResearchRequirement(DeityLocks.SACRIFICE_VILLAGER))
-        ).add(new Stage(DeityLocks.ZOMBIFY_VILLAGER, 25, true)
+        ).add(new Stage(DeityLocks.ZOMBIFY_VILLAGER, 35, true)
                 .requirement(new ResearchRequirement(DeityLocks.ZOMBIFY_VILLAGER))
-        ).add(new Stage(DeityLocks.ENTHRALL_UNDEAD, 35, true)
+        ).add(new Stage(DeityLocks.ENTHRALL_UNDEAD, 50, true)
                 .requirement(new ResearchRequirement(DeityLocks.ENTHRALL_UNDEAD))
         ).setMax(100);
     }
