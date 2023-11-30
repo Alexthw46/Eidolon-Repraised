@@ -9,6 +9,7 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.block.HorizontalBlockBase;
 import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.util.RGBProvider;
@@ -22,7 +23,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,15 +46,9 @@ public class PrayerSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime())) {
-            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
-            return false;
-        }
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty()) return false;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
-        return effigy.ready();
+        if (reputationCheck(world, player, 0)) return false;
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        return effigy != null && effigy.ready();
     }
 
     public static void updateMagic(AltarInfo altarInfo, Player player, Level world, double reputation) {
@@ -64,11 +61,35 @@ public class PrayerSpell extends StaticSpell {
         });
     }
 
+    protected boolean reputationCheck(Level world, Player player, double minDevotion) {
+        LazyOptional<IReputation> iReputationLazyOptional = world.getCapability(IReputation.INSTANCE);
+        if (iReputationLazyOptional.resolve().isEmpty()) return true;
+        IReputation iReputation = iReputationLazyOptional.resolve().get();
+        if (!iReputation.canPray(player, getRegistryName(), world.getGameTime())) {
+            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
+            return true;
+        }
+        return iReputation.getReputation(player.getUUID(), deity.getId()) < minDevotion;
+    }
+
+    @Nullable
+    protected static GobletTileEntity getGoblet(Level world, BlockPos pos) {
+        List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        if (goblets.isEmpty()) return null;
+        return goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+    }
+
+    @Nullable
+    protected static EffigyTileEntity getEffigy(Level world, BlockPos pos) {
+        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        if (effigies.isEmpty()) return null;
+        return effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+    }
+
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty()) return;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        if (effigy == null) return;
         if (!world.isClientSide) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
@@ -107,4 +128,5 @@ public class PrayerSpell extends StaticSpell {
                 .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
                 .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
     }
+
 }

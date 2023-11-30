@@ -1,7 +1,6 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
-import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
@@ -23,13 +22,9 @@ import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.ForgeEventFactory;
-
-import java.util.Comparator;
-import java.util.List;
 
 public class ZombifySpell extends PrayerSpell {
     public ZombifySpell(ResourceLocation resourceLocation, Sign... signs) {
@@ -40,9 +35,8 @@ public class ZombifySpell extends PrayerSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof Villager;
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty()) return false;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        if (effigy == null) return false;
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
         if (info.getAltar() != Registry.STONE_ALTAR.get() || info.getIcon() != Registry.ELDER_EFFIGY.get())
             return false;
@@ -51,9 +45,8 @@ public class ZombifySpell extends PrayerSpell {
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty()) return;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        if (effigy == null) return;
 
         HitResult ray = rayTrace(player, player.getReachDistance(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof Villager villager)) return;

@@ -2,7 +2,6 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
-import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.common.deity.DeityLocks;
@@ -11,16 +10,11 @@ import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-
-import java.util.Comparator;
-import java.util.List;
 
 public class AnimalSacrificeSpell extends PrayerSpell {
 
@@ -30,30 +24,18 @@ public class AnimalSacrificeSpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, getRegistryName(), world.getGameTime())) {
-            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
-            return false;
-        }
-        if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player.getUUID(), deity.getId()) < 3.0)
-            return false;
-        List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty() || goblets.isEmpty()) return false;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
-        GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
-        if (goblet.getEntityType() == null) return false;
+        if (reputationCheck(world, player, 3.0)) return false;
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        GobletTileEntity goblet = getGoblet(world, pos);
+        if (effigy == null || goblet == null) return false;
         Entity test = goblet.getEntityType().create(world);
         return test instanceof Animal && effigy.ready();
     }
-
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
-        if (effigies.isEmpty() || goblets.isEmpty()) return;
-        EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
-        GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
+        EffigyTileEntity effigy = getEffigy(world, pos);
+        GobletTileEntity goblet = getGoblet(world, pos);
+        if (effigy == null || goblet == null) return;
         if (!world.isClientSide) {
             effigy.pray();
             goblet.setEntityType(null);

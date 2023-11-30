@@ -2,6 +2,7 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.util.EntityUtil;
@@ -45,7 +46,11 @@ public class ThrallSpell extends StaticSpell {
                     if (soul.getMagic() >= actualCost) {
                         soul.takeMagic(actualCost);
                         EntityUtil.enthrall(player, living);
-                        KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ENTHRALL_UNDEAD);
+                        var cap = world.getCapability(IReputation.INSTANCE).resolve().isPresent() ? world.getCapability(IReputation.INSTANCE).resolve().get() : null;
+                        if (cap == null) return;
+                        if (cap.isLocked(player.getUUID(), DeityLocks.ENTHRALL_UNDEAD)) {
+                            KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ENTHRALL_UNDEAD);
+                        }
                     } else
                         sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
                 });

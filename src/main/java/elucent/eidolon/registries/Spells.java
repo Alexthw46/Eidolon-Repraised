@@ -109,7 +109,6 @@ public class Spells {
             Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN
     ));
 
-
     public static final Spell UNDEAD_LURE = register(new UndeadLureSpell(
             new ResourceLocation(Eidolon.MODID, "undead_lure"),
             Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN
