@@ -37,11 +37,12 @@ public class AbsorptionRitual extends Ritual {
 
     @Override
     public RitualResult start(Level world, BlockPos pos) {
+        if (world.isClientSide) return RitualResult.TERMINATE;
         List<IRitualItemFocus> tiles = Ritual.getTilesWithinAABB(IRitualItemFocus.class, world, getSearchBounds(pos));
         BlockPos toRecharge = null;
         if (!tiles.isEmpty()) for (IRitualItemFocus tile : tiles) {
             ItemStack stack = tile.provide();
-            if (stack.getItem() instanceof SummoningStaffItem s) {
+            if (stack.getItem() instanceof SummoningStaffItem) {
                 toRecharge = ((BlockEntity) tile).getBlockPos();
                 break;
             }
@@ -51,12 +52,10 @@ public class AbsorptionRitual extends Ritual {
         ListTag entityTags = new ListTag();
         for (LivingEntity e : entities) {
             e.setHealth(e.getMaxHealth());
-            if (!world.isClientSide) {
-                Networking.sendToTracking(world, e.blockPosition(), new MagicBurstEffectPacket(e.getX(), e.getY() + 0.1, e.getZ(),
-                        ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
-                if (toRecharge != null) {
-                    Networking.sendToTracking(world, toRecharge, new RitualConsumePacket(e.blockPosition().above(), toRecharge, getRed(), getGreen(), getBlue()));
-                }
+            Networking.sendToTracking(world, e.blockPosition(), new MagicBurstEffectPacket(e.getX(), e.getY() + 0.1, e.getZ(),
+                    ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
+            if (toRecharge != null) {
+                Networking.sendToTracking(world, toRecharge, new RitualConsumePacket(e.blockPosition().above(), toRecharge, getRed(), getGreen(), getBlue()));
             }
             CompoundTag eTag = e.serializeNBT();
             entityTags.add(eTag);
