@@ -8,6 +8,10 @@ on:
         description: 'Mod Version'
         required: true
         type: string
+      changelog:
+        description: 'Changes'
+        required: true
+        type: string
 
 env:
   MINECRAFT_VERSION: 1.20.1
@@ -47,5 +51,5 @@ jobs:
           version:  eidolon_repraised-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           game-versions: |
             ${{ env.MINECRAFT_VERSION }}
-          changelog: ""
+          changelog: ${{inputs.changelog}}
           version-resolver: exact
