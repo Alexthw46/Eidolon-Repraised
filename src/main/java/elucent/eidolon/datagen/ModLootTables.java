@@ -1,5 +1,7 @@
 package elucent.eidolon.datagen;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.data.DataGenerator;
