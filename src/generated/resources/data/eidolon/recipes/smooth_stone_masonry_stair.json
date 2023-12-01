@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "building",
   "key": {
     "B": {
       "item": "eidolon:smooth_stone_masonry"
@@ -14,6 +13,5 @@
   "result": {
     "count": 4,
     "item": "eidolon:smooth_stone_masonry_stairs"
-  },
-  "show_notification": true
+  }
 }

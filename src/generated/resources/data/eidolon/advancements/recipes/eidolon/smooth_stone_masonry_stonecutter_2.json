@@ -30,6 +30,5 @@
     "recipes": [
       "eidolon:smooth_stone_masonry_stonecutter_2"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
