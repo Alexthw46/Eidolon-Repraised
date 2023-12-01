@@ -91,8 +91,8 @@ public class BonelordArmorItem extends ArmorItem implements IForgeItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
         attributes.putAll(super.getDefaultAttributeModifiers(pEquipmentSlot));
         if (this.slot == pEquipmentSlot) {
-            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT.get(this.slot);
-            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
+            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[pEquipmentSlot.getIndex()];
+            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", pEquipmentSlot == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
         }
         return attributes.build();
     }

@@ -28,7 +28,7 @@ public class LivingEntityMixin {
             if (EntityUtil.isEnthralled(living)) {
                 if (living.isAlliedTo(pTarget)) cir.setReturnValue(false);
                 UUID master = living.getPersistentData().getUUID(THRALL_KEY);
-                if (living.level().getPlayerByUUID(master) instanceof ServerPlayer player) {
+                if (living.getLevel().getPlayerByUUID(master) instanceof ServerPlayer player) {
                     LivingEntity lastHurt = player.getLastHurtMob();
                     LivingEntity lastHurtBy = player.getLastHurtByMob();
                     // if the target is not one of the player's last hurt mobs, don't attack

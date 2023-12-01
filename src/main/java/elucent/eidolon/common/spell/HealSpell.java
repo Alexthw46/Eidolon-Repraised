@@ -43,7 +43,7 @@ public class HealSpell extends StaticSpell {
 
             heal += (float) (devotion / 20F);
 
-            HitResult ray = rayTrace(player, player.getEntityReach(), 0, false);
+            HitResult ray = rayTrace(player, player.getReachDistance(), 0, false);
             LivingEntity toHeal;
             boolean other = false;
             if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living && living.getMobType() != MobType.UNDEAD) {

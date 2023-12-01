@@ -25,9 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class WarlockRobesItem extends ArmorItem implements IDyeable {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -127,7 +125,7 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot pEquipmentSlot) {
         Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(pEquipmentSlot);
         if (pEquipmentSlot == EquipmentSlot.HEAD && this == Registry.WARLOCK_HAT.get()) {
-            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT.get(slot);
+            UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[pEquipmentSlot.getIndex()];
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
             builder.putAll(map);
             builder.put(EidolonAttributes.MAGIC_POWER.get(), new AttributeModifier(uuid, Eidolon.MODID + ":warlock_hat", 0.5, AttributeModifier.Operation.MULTIPLY_BASE));

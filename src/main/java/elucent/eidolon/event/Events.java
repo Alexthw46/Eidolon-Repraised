@@ -116,7 +116,7 @@ public class Events {
             LivingEntity lastHurt = event.getOriginalTarget().getLastHurtMob();
             LivingEntity lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
-        } else if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player) {
+        } else if (event.getEntity().getLevel().getPlayerByUUID(master) instanceof ServerPlayer player) {
             LivingEntity lastHurt = player.getLastHurtMob();
             LivingEntity lastHurtBy = player.getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());

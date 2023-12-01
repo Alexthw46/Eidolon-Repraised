@@ -1,6 +1,7 @@
-// 1.19.2	2023-11-03T16:17:02.5457531	Tags for minecraft:item
+// 1.19.2	2023-12-01T14:13:39.1939816	Tags for minecraft:item
 899586c41b931b92762c1abc2471518c2eee8f75 data/eidolon/tags/items/patron_symbol.json
 8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/items/scribe_items.json
+e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/items/candles.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/items/leaves.json
 15994e7ba2e0c75652884601c7636ba69c1c0522 data/minecraft/tags/items/music_discs.json
 4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/items/saplings.json
