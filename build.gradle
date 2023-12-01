@@ -141,8 +141,8 @@ dependencies {
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-81-FORGE")
     //runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
 
-    //implementation fg.deobf("curse.maven:embeddium-908741:4800420")
-    //implementation fg.deobf("curse.maven:modernfix-790626:4792389")
+    implementation fg.deobf("curse.maven:embeddium-908741:4800420")
+    implementation fg.deobf("curse.maven:modernfix-790626:4792389")
 
     implementation fg.deobf("curse.maven:placebo-283644:4872439")
     implementation fg.deobf("curse.maven:apothic-attributes-898963:4872467")
