@@ -27,7 +27,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
     public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull RitualRecipe recipe, @NotNull IFocusGroup ingredients) {
 
         List<RitualIngredient> inputs = new ArrayList<>();
-        rearrangeIngredients(recipe, inputs);
+        RitualPage.rearrangeIngredients(recipe, inputs);
 
         float angleStep = Math.min(30, 180 / inputs.size());
         double rootAngle = 90 - (inputs.size() - 1) * angleStep / 2;
@@ -96,24 +95,6 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResultItem(RegistryAccess.EMPTY));
     }
 
-    public static void rearrangeIngredients(@NotNull RitualRecipe recipe, List<RitualIngredient> inputs) {
-        for (Ingredient ingredient : recipe.pedestalItems) {
-            inputs.add(new RitualIngredient(ingredient, false));
-        }
-
-
-        //put foci in the middle
-        int nIngredients = inputs.size();
-        int middle = nIngredients / 2;
-
-        List<Ingredient> focusItems = recipe.focusItems;
-        for (int i = 0; i < focusItems.size(); i++) {
-            Ingredient ingredient = focusItems.get(i);
-            inputs.add(i + middle, new RitualIngredient(ingredient, true));
-        }
-
-    }
-
     @Override
     public void draw(@NotNull RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         var bg = RitualPage.BACKGROUND;
@@ -121,7 +102,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
         guiGraphics.blit(bg, x, y, 0, 0, 128, 160);
 
         List<RitualIngredient> inputs = new ArrayList<>();
-        rearrangeIngredients(recipe, inputs);
+        RitualPage.rearrangeIngredients(recipe, inputs);
 
         Ritual ritual = recipe.getRitualWithRequirements();
         float angleStep = Math.min(30, 180 / inputs.size());

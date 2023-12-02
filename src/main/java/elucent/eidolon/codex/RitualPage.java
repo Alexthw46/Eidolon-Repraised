@@ -7,7 +7,6 @@ import elucent.eidolon.api.ritual.FocusItemPresentRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.ritual.CraftingRitual;
-import elucent.eidolon.gui.jei.RitualCategory;
 import elucent.eidolon.recipe.RitualRecipe;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -25,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
@@ -61,6 +61,24 @@ public class RitualPage extends RecipePage<RitualRecipe> {
         RenderSystem.depthMask(true);
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    }
+
+    public static void rearrangeIngredients(@NotNull RitualRecipe recipe, List<RitualIngredient> inputs) {
+        for (Ingredient ingredient : recipe.pedestalItems) {
+            inputs.add(new RitualIngredient(ingredient, false));
+        }
+
+
+        //put foci in the middle
+        int nIngredients = inputs.size();
+        int middle = nIngredients / 2;
+
+        List<Ingredient> focusItems = recipe.focusItems;
+        for (int i = 0; i < focusItems.size(); i++) {
+            Ingredient ingredient = focusItems.get(i);
+            inputs.add(i + middle, new RitualIngredient(ingredient, true));
+        }
+
     }
 
     @Override
@@ -109,7 +127,7 @@ public class RitualPage extends RecipePage<RitualRecipe> {
             int nIngredients = cachedRecipe.pedestalItems.size() + cachedRecipe.focusItems.size();
             if (nIngredients > 0) {
                 var items = new ArrayList<RitualIngredient>(nIngredients);
-                RitualCategory.rearrangeIngredients(cachedRecipe, items);
+                rearrangeIngredients(cachedRecipe, items);
                 inputs = items.toArray(new RitualIngredient[nIngredients]);
                 center = cachedRecipe.reagent;
             } else return;
