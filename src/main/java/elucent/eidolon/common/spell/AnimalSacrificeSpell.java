@@ -27,7 +27,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
         if (reputationCheck(world, player, 3.0)) return false;
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
-        if (effigy == null || goblet == null) return false;
+        if (effigy == null || goblet == null || goblet.getEntityType() == null) return false;
         Entity test = goblet.getEntityType().create(world);
         return test instanceof Animal && effigy.ready();
     }
