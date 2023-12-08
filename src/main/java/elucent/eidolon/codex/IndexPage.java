@@ -15,11 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class IndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_index_page.png");
-    final IndexEntry[] entries;
+    final List<IndexEntry> entries = new ArrayList<>();
 
     public static class IndexEntry {
         final Chapter chapter;
@@ -38,6 +40,7 @@ public class IndexPage extends Page {
 
     public static class SignLockedEntry extends IndexEntry {
         final Sign[] signs;
+
         public SignLockedEntry(Chapter chapter, ItemStack icon, Sign... signs) {
             super(chapter, icon);
             this.signs = signs;
@@ -52,6 +55,7 @@ public class IndexPage extends Page {
 
     public static class FactLockedEntry extends IndexEntry {
         final ResourceLocation[] facts;
+
         public FactLockedEntry(Chapter chapter, ItemStack icon, ResourceLocation... facts) {
             super(chapter, icon);
             this.facts = facts;
@@ -80,21 +84,20 @@ public class IndexPage extends Page {
 
     public IndexPage(IndexEntry... pages) {
         super(BACKGROUND);
-        this.entries = pages;
+        this.entries.addAll(List.of(pages));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
         for (int i = 0; i < entries.length; i++)
-            if (entries[i].isUnlocked()) {
+            if (entries.get(i).isUnlocked()) {
             if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
-                gui.changeChapter(entries[i].chapter);
+                gui.changeChapter(entries.get(i).chapter);
                 assert Minecraft.getInstance().player != null;
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
-            }
-        }
+
         return false;
     }
 
@@ -102,13 +105,13 @@ public class IndexPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, BACKGROUND);
-        for (int i = 0; i < entries.length; i ++) {
-            gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries[i].isUnlocked() ? 0 : 96, 122, 18);
+        for (int i = 0; i < entries.size(); i++) {
+            gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries.get(i).isUnlocked() ? 0 : 96, 122, 18);
+      
+            if (entries[i].isUnlocked()) {
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries.get(i).icon, x + 2, y + 8 + i * 20);
+            drawText(gui, mStack, I18n.get(entries.get(i).chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
         }
-
-        for (int i = 0; i < entries.length; i ++) if (entries[i].isUnlocked()) {
-            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries[i].icon, x + 2, y + 8 + i * 20);
-            drawText(gui, mStack, I18n.get(entries[i].chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
         }
     }
 }

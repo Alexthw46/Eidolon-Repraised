@@ -26,9 +26,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SignIndexPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
-    final SignEntry[] entries;
+    final List<SignEntry> entries = new ArrayList<>();
 
     public static class SignEntry {
         final Chapter chapter;
@@ -42,7 +45,7 @@ public class SignIndexPage extends Page {
 
     public SignIndexPage(SignEntry... pages) {
         super(BACKGROUND);
-        this.entries = pages;
+        this.entries.addAll(List.of(pages));
     }
 
     @Override
@@ -50,14 +53,14 @@ public class SignIndexPage extends Page {
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
-        for (int i = 0; i < entries.length; i++) {
+        for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
-            if (knowledge.knowsSign(entries[i].sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50) {
-                gui.changeChapter(entries[i].chapter);
+            if (knowledge.knowsSign(entries.get(i).sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50) {
+                gui.changeChapter(entries.get(i).chapter);
                 Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
-            } else if (knowledge.knowsSign(entries[i].sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48) {
-                gui.addToChant(entries[i].sign);
+            } else if (knowledge.knowsSign(entries.get(i).sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48) {
+                gui.addToChant(entries.get(i).sign);
                 entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
@@ -88,13 +91,14 @@ public class SignIndexPage extends Page {
     public void render(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
-        for (int i = 0; i < entries.length; i++) {
+        for (int i = 0; i < entries.size(); i++) {
             RenderSystem.setShaderTexture(0, BACKGROUND);
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
-            Sign sign = entries[i].sign;
+            Sign sign = entries.get(i).sign;
             boolean hover = knowledge.knowsSign(sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48;
             boolean infoHover = knowledge.knowsSign(sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50;
-            gui.blit(mStack, xx, yy, knowledge.knowsSign(entries[i].sign) ? 128 : 176, 0, 48, 48);
+            gui.blit(mStack, xx, yy, knowledge.knowsSign(entries.get(i).sign) ? 128 : 176, 0, 48, 48);
+
 
             if (knowledge.knowsSign(sign)) {
                 MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
