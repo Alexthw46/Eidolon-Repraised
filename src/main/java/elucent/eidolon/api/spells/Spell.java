@@ -27,4 +27,9 @@ public abstract class Spell {
     public int getCost() {
         return 0;
     }
+
+    public int getDelay() {
+        return 10;
+    }
+
 }

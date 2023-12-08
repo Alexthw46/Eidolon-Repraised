@@ -7,14 +7,14 @@ import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.spell.*;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Spells {
-    static final List<Spell> spells = new ArrayList<>();
-    static final Map<ResourceLocation, Spell> spellMap = new HashMap<>();
+    static final List<Spell> spells = new CopyOnWriteArrayList<>();
+    static final Map<ResourceLocation, Spell> spellMap = new ConcurrentHashMap<>();
 
     public static Spell find(ResourceLocation loc) {
         return spellMap.getOrDefault(loc, null);
