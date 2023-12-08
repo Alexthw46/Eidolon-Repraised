@@ -32,6 +32,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -172,7 +173,8 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
             }
             level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
             if (index + 1 >= runes.size()) {
-                timer = 20;
+                Spell match = Spells.find(seq);
+                timer = match != null ? match.getDelay() : 10;
             }
             if (!level.isClientSide) {
                 getEntityData().set(INDEX, index + 1);
