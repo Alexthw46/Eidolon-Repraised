@@ -590,19 +590,19 @@ public class CodexChapters {
 
             DARK_PRAYER = new Chapter(
                     "eidolon.codex.chapter.dark_prayer",
-                    new ChantPage("eidolon.codex.page.dark_prayer.0", Spells.DARK_PRAYER.signs()),
+                    new ChantPage("eidolon.codex.page.dark_prayer.0", Spells.DARK_PRAYER),
                     new TextPage("eidolon.codex.page.dark_prayer.1")
             );
             LIGHT_PRAYER = new Chapter(
                     "eidolon.codex.chapter.light_prayer",
-                    new ChantPage("eidolon.codex.page.light_prayer.0", Spells.LIGHT_PRAYER.signs()),
+                    new ChantPage("eidolon.codex.page.light_prayer.0", Spells.LIGHT_PRAYER),
                     new TextPage("eidolon.codex.page.light_prayer.1")
             );
 
 
             ANIMAL_SACRIFICE = new Chapter(
                     "eidolon.codex.chapter.animal_sacrifice",
-                    new ChantPage("eidolon.codex.page.animal_sacrifice", Spells.DARK_ANIMAL_SACRIFICE.signs())
+                    new ChantPage("eidolon.codex.page.animal_sacrifice", Spells.DARK_ANIMAL_SACRIFICE)
             );
 
             INCENSE_BURN = new Chapter(
@@ -613,13 +613,13 @@ public class CodexChapters {
 
             DARK_TOUCH = new Chapter(
                     "eidolon.codex.chapter.dark_touch",
-                    new ChantPage("eidolon.codex.page.dark_touch.0", Spells.DARK_TOUCH.signs()),
+                    new ChantPage("eidolon.codex.page.dark_touch.0", Spells.DARK_TOUCH),
                     new TextPage("eidolon.codex.page.dark_touch.1")
             );
 
             HOLY_TOUCH = new Chapter(
                     "eidolon.codex.chapter.holy_touch",
-                    new ChantPage("eidolon.codex.page.holy_touch.0", Spells.HOLY_TOUCH.signs()),
+                    new ChantPage("eidolon.codex.page.holy_touch.0", Spells.HOLY_TOUCH),
                     new TextPage("eidolon.codex.page.holy_touch.1")
             );
 
@@ -637,22 +637,22 @@ public class CodexChapters {
 
             VILLAGER_SACRIFICE = new Chapter(
                     "eidolon.codex.chapter.villager_sacrifice",
-                    new ChantPage("eidolon.codex.page.villager_sacrifice", Spells.DARK_VILLAGER_SACRIFICE.signs())
+                    new ChantPage("eidolon.codex.page.villager_sacrifice", Spells.DARK_VILLAGER_SACRIFICE)
             );
 
             HEAL = new Chapter(
                     "eidolon.codex.chapter.lay_on_hands",
-                    new ChantPage("eidolon.codex.page.lay_on_hands", Spells.LAY_ON_HANDS.signs())
+                    new ChantPage("eidolon.codex.page.lay_on_hands", Spells.LAY_ON_HANDS)
             );
 
             ZOMBIFY = new Chapter(
                     "eidolon.codex.chapter.villager_zombie",
-                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY.signs())
+                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY)
             );
 
             CURE_ZOMBIE = new Chapter(
                     "eidolon.codex.chapter.villager_cure",
-                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT.signs())
+                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT)
             );
 
             THEURGY_INDEX = new Index(
@@ -801,44 +801,44 @@ public class CodexChapters {
 
             LIGHT = new Chapter(
                     "eidolon.codex.chapter.light",
-                    new ChantPage("eidolon.codex.page.light", Spells.LIGHT_CHANT.signs())
+                    new ChantPage("eidolon.codex.page.light", Spells.LIGHT_CHANT)
             );
 
             FIRE_TOUCH = new Chapter(
                     "eidolon.codex.chapter.fire_touch",
-                    new ChantPage("eidolon.codex.page.fire_touch", Spells.FIRE_CHANT.signs())
+                    new ChantPage("eidolon.codex.page.fire_touch", Spells.FIRE_CHANT)
             );
 
             CHILL_TOUCH = new Chapter(
                     "eidolon.codex.chapter.chill_touch",
-                    new ChantPage("eidolon.codex.page.chill_touch", Spells.FROST_CHANT.signs())
+                    new ChantPage("eidolon.codex.page.chill_touch", Spells.FROST_CHANT)
             );
 
             WATER = new Chapter(
                     "eidolon.codex.chapter.water",
-                    new ChantPage("eidolon.codex.page.water", Spells.WATER_CHANT.signs()),
+                    new ChantPage("eidolon.codex.page.water", Spells.WATER_CHANT),
                     new TextPage("eidolon.codex.page.water.1")
             );
 
             ENTHRALL = new Chapter(
                     "eidolon.codex.chapter.enthrall",
-                    new ChantPage("eidolon.codex.page.enthrall", Spells.ENTHRALL_UNDEAD.signs()),
+                    new ChantPage("eidolon.codex.page.enthrall", Spells.ENTHRALL_UNDEAD),
                     new TextPage("eidolon.codex.page.enthrall.1")
             );
 
             SMITE = new Chapter(
                     "eidolon.codex.chapter.smite",
-                    new ChantPage("eidolon.codex.page.smite", Spells.SMITE_CHANT.signs())
+                    new ChantPage("eidolon.codex.page.smite", Spells.SMITE_CHANT)
             );
 
             SUNDER_ARMOR = new Chapter(
                     "eidolon.codex.chapter.sunder_armor",
-                    new ChantPage("eidolon.codex.page.sunder_armor", Spells.SUNDER_ARMOR.signs())
+                    new ChantPage("eidolon.codex.page.sunder_armor", Spells.SUNDER_ARMOR)
             );
 
             REINFORCE_ARMOR = new Chapter(
                     "eidolon.codex.chapter.reinforce_armor",
-                    new ChantPage("eidolon.codex.page.reinforce_armor", Spells.LIGHT_ARMOR.signs())
+                    new ChantPage("eidolon.codex.page.reinforce_armor", Spells.BLESS_ARMOR)
             );
 
             SPELLS_INDEX = new Index(

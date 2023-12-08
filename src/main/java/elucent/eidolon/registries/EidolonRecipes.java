@@ -21,7 +21,7 @@ public class EidolonRecipes {
     public static final RegistryObject<RecipeSerializer<SummonRitualRecipe>> SUMMON_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_summoning", SummonRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<CommandRitualRecipe>> COMMAND_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_command", CommandRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<GenericRitualRecipe>> RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier", GenericRitualRecipe.Serializer::new);
-
+    public static final RegistryObject<RecipeSerializer<ChantRecipe>> CHANT_SERIALIZER = RECIPE_SERIALIZERS.register("chant", ChantRecipe.Serializer::new);
 
     static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, Eidolon.MODID);
 
@@ -72,7 +72,12 @@ public class EidolonRecipes {
             return "eidolon:ritual_brazier";
         }
     });
-
+    public static final RegistryObject<RecipeType<ChantRecipe>> CHANT_TYPE = RECIPE_TYPES.register("chant", () -> new RecipeType<>() {
+        @Override
+        public String toString() {
+            return "eidolon:chant";
+        }
+    });
 
     public static List<RecipeType<? extends RitualRecipe>> ritualRecipeTypes = new CopyOnWriteArrayList<>();
 }

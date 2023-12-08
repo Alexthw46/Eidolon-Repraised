@@ -130,7 +130,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                 Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
                 if (!level.isClientSide && optuuid.isPresent()) {
                     SignSequence seq = SignSequence.deserializeNbt(signData);
-                    Spell spell = Spells.find(seq);
+                    Spell spell = Spells.find(seq, level);
                     Player player = level.getPlayerByUUID(optuuid.get());
                     if (spell != null && player != null && spell.canCast(level, blockPosition(), player, seq)) {
                         spell.cast(level, blockPosition(), player, seq);
@@ -173,7 +173,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
             }
             level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
             if (index + 1 >= runes.size()) {
-                Spell match = Spells.find(seq);
+                Spell match = Spells.find(seq, level);
                 timer = match != null ? match.getDelay() : 10;
             }
             if (!level.isClientSide) {

@@ -20,22 +20,22 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class StaticSpell extends Spell {
-    final SignSequence signs;
+    public SignSequence signs;
     private int cost;
 
     public StaticSpell(ResourceLocation name, Sign... signs) {
         super(name);
-        this.signs = new SignSequence(signs);
+        // this.signs = new SignSequence(signs);
+    }
+
+    @Override
+    public void setSigns(SignSequence signs) {
+        this.signs = signs;
     }
 
     public StaticSpell(ResourceLocation name, int cost, Sign... signs) {
         this(name, signs);
         this.cost = cost;
-    }
-
-    @Override
-    public Sign[] signs() {
-        return signs.toArray();
     }
 
     @Override
