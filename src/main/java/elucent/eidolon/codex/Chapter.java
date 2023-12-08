@@ -13,6 +13,10 @@ public class Chapter {
         this.pages = Lists.newArrayList(pages);
     }
 
+    public void addPage(Page page) {
+        pages.add(page);
+    }
+
     public Page get(int i) {
         if (i >= size() || i < 0) return null;
         return pages.get(i);
