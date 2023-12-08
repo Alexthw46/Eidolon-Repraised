@@ -1,0 +1,11 @@
+{
+  "type": "eidolon:chant",
+  "signs": [
+    "eidolon:death",
+    "eidolon:blood",
+    "eidolon:wicked",
+    "eidolon:death",
+    "eidolon:soul",
+    "eidolon:blood"
+  ]
+}

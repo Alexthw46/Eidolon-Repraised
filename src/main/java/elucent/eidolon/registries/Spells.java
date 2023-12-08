@@ -5,7 +5,9 @@ import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.spell.*;
+import elucent.eidolon.recipe.ChantRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Spells {
+
+    // local cache for faster lookup
     static final List<Spell> spells = new CopyOnWriteArrayList<>();
     static final Map<ResourceLocation, Spell> spellMap = new ConcurrentHashMap<>();
 
@@ -20,13 +24,20 @@ public class Spells {
         return spellMap.getOrDefault(loc, null);
     }
 
-    public static Spell find(SignSequence signs) {
+    public static Spell find(SignSequence signs, Level world) {
         for (Spell spell : spells) if (spell.matches(signs)) return spell;
+        for (ChantRecipe chantRecipe : world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_TYPE.get()))
+            if (chantRecipe.matches(signs)) {
+                Spell spell = chantRecipe.getChant();
+                spell.setSigns(signs);
+                spells.add(spell);
+                return spell;
+            }
         return null;
     }
 
     public static Spell register(Spell spell) {
-        spells.add(spell);
+        // spells.add(spell);
         spellMap.put(spell.getRegistryName(), spell);
         return spell;
     }
@@ -41,8 +52,8 @@ public class Spells {
             Signs.WICKED_SIGN, Signs.WICKED_SIGN, Signs.WICKED_SIGN
     ));
 
-    public static Spell ALT_LIGHT_CHANT = register(new LightSpell(
-            new ResourceLocation(Eidolon.MODID, "light_chant"), Deities.DARK_DEITY,
+    public static final Spell DARKLIGHT_CHANT = register(new LightSpell(
+            new ResourceLocation(Eidolon.MODID, "darklight_chant"), Deities.DARK_DEITY,
             Signs.WICKED_SIGN, Signs.FLAME_SIGN, Signs.WICKED_SIGN, Signs.FLAME_SIGN
     ));
 
@@ -109,18 +120,13 @@ public class Spells {
             Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN
     ));
 
-    public static final Spell UNDEAD_LURE = register(new UndeadLureSpell(
-            new ResourceLocation(Eidolon.MODID, "undead_lure"),
-            Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN
-    ));
-
     public static final Spell SUNDER_ARMOR = register(new SunderArmorSpell(
             new ResourceLocation(Eidolon.MODID, "sunder_armor"),
             Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN, Signs.MAGIC_SIGN, Signs.FLAME_SIGN
     ));
 
-    public static final Spell LIGHT_ARMOR = register(new LightArmorSpell(
-            new ResourceLocation(Eidolon.MODID, "light_armor"),
+    public static final Spell BLESS_ARMOR = register(new LightArmorSpell(
+            new ResourceLocation(Eidolon.MODID, "reinforce_armor"),
             Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN, Signs.WARDING_SIGN, Signs.SACRED_SIGN
     ));
 
@@ -130,5 +136,9 @@ public class Spells {
     ));
 
     //TODO Undead Lure - neutral
+    public static final Spell UNDEAD_LURE = register(new UndeadLureSpell(
+            new ResourceLocation(Eidolon.MODID, "undead_lure"),
+            Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN
+    ));
 
 }

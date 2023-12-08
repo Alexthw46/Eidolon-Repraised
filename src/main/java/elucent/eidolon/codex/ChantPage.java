@@ -11,6 +11,10 @@ import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.util.ColorUtil;
+import elucent.eidolon.api.spells.Spell;
+import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.event.ClientEvents;
+import elucent.eidolon.recipe.ChantRecipe;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,17 +25,33 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ChantPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_chant_page.png");
-    final Sign[] chant;
+    protected Sign[] chant;
     final String text;
     final String title;
+    final Spell spell;
 
-    public ChantPage(String textKey, Sign... chant) {
+    public ChantPage(String textKey, Spell spell) {
         super(BACKGROUND);
         this.text = textKey;
         this.title = textKey + ".title";
-        this.chant = chant;
+        this.spell = spell;
+    }
+
+    @Override
+    public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
+        if (spell != null && chant == null) {
+            if (Eidolon.proxy.getWorld().getRecipeManager().byKey(spell.getRegistryName()).orElse(null) instanceof ChantRecipe chantRecipe) {
+                chant = chantRecipe.signs();
+                if (chant == null || chant.length == 0) {
+                    mStack.drawString(gui.getMinecraft().font, "No matching recipe found for " + spell.getRegistryName(), x + 10, y + 10, 0x000000);
+                }
+            }
+        }
+        super.fullRender(gui, mStack, x, y, mouseX, mouseY);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -62,23 +82,23 @@ public class ChantPage extends Page {
         RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
-        int w = chant.length * 24;
+        int w = chant.size() * 24;
         int baseX = x + 64 - w / 2;
         CodexGui.blit(mStack, baseX - 16, y + 28, 256, 208, 16, 32, 512, 512);
-        for (int i = 0; i < chant.length; i ++) {
+        for (int i = 0; i < chant.size(); i ++) {
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 272, 208, 24, 32, 512, 512);
         }
         CodexGui.blit(mStack, baseX + w, y + 28, 296, 208, 16, 32, 512, 512);
         RenderSystem.enableBlend();
 
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        for (int i = 0; i < chant.length; i ++) {
+        for (int i = 0; i < chant.size(); i ++) {
             RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-            Sign sign = chant[i];
+            Sign sign = chant.get(i);
             float flicker = 0.875f + 0.125f * (float)Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks()));
             RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
@@ -87,9 +107,6 @@ public class ChantPage extends Page {
             RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
                     sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(sign.getSprite()));
         }
-        bufferSource.endBatch();
-        RenderSystem.disableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         drawWrappingText(gui, mStack, I18n.get(text), x + 4, y + 72, 120);
     }
