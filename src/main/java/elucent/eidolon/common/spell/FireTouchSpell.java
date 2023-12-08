@@ -73,4 +73,8 @@ public class FireTouchSpell extends StaticSpell {
 
     }
 
+    @Override
+    public int getDelay() {
+        return 5;
+    }
 }

@@ -150,7 +150,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         cacheCaster();
         var castSpeed = caster != null ? caster.getAttribute(EidolonAttributes.CHANTING_SPEED.get()).getValue() : 1.0;
 
-        if (tickCount % Mth.floor(5 / castSpeed) == 0) {
+        if (timer <= 0 && tickCount % Mth.floor(5 / castSpeed) == 0) {
             List<Sign> runes = loadChantTag();
             SignSequence seq = SignSequence.deserializeNbt(getEntityData().get(SIGNS));
             Vector3f initColor = seq.getAverageColor();
