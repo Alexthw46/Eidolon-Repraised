@@ -43,7 +43,7 @@ public class EidChantProvider extends SimpleDataProvider {
 
         addChant(Spells.LIGHT_PRAYER, Signs.SACRED_SIGN, Signs.SACRED_SIGN, Signs.SACRED_SIGN);
         addChant(Spells.LIGHT_CHANT, Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN);
-        addChant(Spells.HOLY_TOUCH, Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN, Signs.FLAME_SIGN);
+        addChant(Spells.HOLY_TOUCH, Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.SACRED_SIGN, Signs.SOUL_SIGN);
         addChant(Spells.LAY_ON_HANDS, Signs.FLAME_SIGN, Signs.SOUL_SIGN, Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.SACRED_SIGN);
         addChant(Spells.CURE_ZOMBIE_CHANT, Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.MIND_SIGN, Signs.HARMONY_SIGN, Signs.FLAME_SIGN, Signs.SOUL_SIGN);
         addChant(Spells.SMITE_CHANT, Signs.FLAME_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN, Signs.DEATH_SIGN, Signs.MAGIC_SIGN, Signs.SACRED_SIGN);

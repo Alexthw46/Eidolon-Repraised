@@ -120,7 +120,7 @@ public class ChantRecipe implements Recipe<Container> {
         @Override
         public void toNetwork(@NotNull FriendlyByteBuf friendlyByteBuf, @NotNull ChantRecipe chantRecipe) {
             //friendlyByteBuf.writeResourceLocation(chantRecipe.chantId);
-            friendlyByteBuf.writeVarInt(chantRecipe.signs.size());
+            friendlyByteBuf.writeInt(chantRecipe.signs.size());
             for (Sign sign : chantRecipe.signs) {
                 friendlyByteBuf.writeResourceLocation(sign.getRegistryName());
             }

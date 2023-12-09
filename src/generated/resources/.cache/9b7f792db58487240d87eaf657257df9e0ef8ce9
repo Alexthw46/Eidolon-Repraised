@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-08T23:16:23.9061864	Eidolon Chants
+// 1.20.1	2023-12-09T12:12:08.9114188	Eidolon Chants
 5fadf6ca54383041acf6de381afe8cbbe317ef82 data/eidolon/recipes/cure_zombie_chant.json
 0bdd511b8b9dbb2ab76220b0f4aa70c01b936785 data/eidolon/recipes/darklight_chant.json
 6b953407884857dedfffd8cc340e6915cdc5c42a data/eidolon/recipes/dark_animal_sacrifice.json
@@ -8,7 +8,7 @@ bb3e5732d8b91d167d86c389cb7604baf0c52cb0 data/eidolon/recipes/dark_villager_sacr
 d0219a878659b0158697622163c2667d2169ed81 data/eidolon/recipes/enthrall_spell.json
 fb685f1517f571a294fc728e5c71cb63d8db0c16 data/eidolon/recipes/fire_chant.json
 a6804ff13d2aac281085af0a5630a7e3511c4b36 data/eidolon/recipes/frost_touch.json
-fd48b3a7ab407fbd437aaca8c81273c4749155f6 data/eidolon/recipes/holy_touch.json
+f6f02391d3541960f10e0b5aa9c0088638b12a68 data/eidolon/recipes/holy_touch.json
 30bcf7e7f2bdc4312ec64e35eebc8d2d8b0ed065 data/eidolon/recipes/lay_on_hands.json
 fd48b3a7ab407fbd437aaca8c81273c4749155f6 data/eidolon/recipes/light_chant.json
 4154d0eb4e14ffdd2b0d0cf4d5d3dc8ee0cd2d33 data/eidolon/recipes/light_prayer.json
