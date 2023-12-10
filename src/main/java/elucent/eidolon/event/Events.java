@@ -8,6 +8,7 @@ import elucent.eidolon.capability.*;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
 import elucent.eidolon.common.entity.ai.FollowOwnerGoal;
 import elucent.eidolon.common.entity.ai.PriestBarterGoal;
+import elucent.eidolon.common.entity.ai.ThrallTargetGoal;
 import elucent.eidolon.common.entity.ai.WitchBarterGoal;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.tile.GobletTileEntity;
@@ -28,6 +29,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -124,7 +127,7 @@ public class Events {
         if (!(event.getEntity() instanceof HoglinBase && newTarget == null)) event.setNewTarget(newTarget);
     }
 
-    private @Nullable LivingEntity handleEnthralledTargeting(LivingEntity lastHurt, LivingEntity lastHurtBy, LivingEntity thrall) {
+    public static @Nullable LivingEntity handleEnthralledTargeting(@Nullable LivingEntity lastHurt, @Nullable LivingEntity lastHurtBy, LivingEntity thrall) {
         if (lastHurtBy != null && lastHurtBy != thrall && !thrall.isAlliedTo(lastHurtBy)) return lastHurtBy;
         if (lastHurt != null && lastHurt != thrall && !thrall.isAlliedTo(lastHurt)) return lastHurt;
         return null;
@@ -269,7 +272,9 @@ public class Events {
                 mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
                 try {
                     mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));
+                    mob.targetSelector.addGoal(1, new ThrallTargetGoal(mob));
                 } catch (IllegalArgumentException ignored) {
+
                 }
             }
         }

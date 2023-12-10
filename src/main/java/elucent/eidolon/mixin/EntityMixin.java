@@ -14,9 +14,7 @@ public class EntityMixin {
     public void eidolonrepraised$isAlliedTo(Entity pEntity, CallbackInfoReturnable<Boolean> cir) {
         if (((Entity) (Object) this) instanceof LivingEntity living && pEntity instanceof LivingEntity target) {
             if (EntityUtil.isEnthralled(living)) {
-                if (EntityUtil.isEnthralledBy(living, target) || EntityUtil.sameMaster(living, target)) {
-                    cir.setReturnValue(true);
-                }
+                cir.setReturnValue(EntityUtil.isEnthralledBy(living, target) || EntityUtil.sameMaster(living, target));
             }
         }
     }
