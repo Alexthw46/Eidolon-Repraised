@@ -1,6 +1,10 @@
 package elucent.eidolon.client.particle;
 
+import elucent.eidolon.network.GenericParticlePacket;
+import elucent.eidolon.network.Networking;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -155,7 +159,11 @@ public class Particles {
             this.dy = Math.sin(pitch2) * yDist;
             this.dz = Math.cos(yaw2) * Math.cos(pitch2) * zDist;
 
-            world.addParticle(data, x + dx, y + dy, z + dz, vx, vy, vz);
+            if (world instanceof ServerLevel level) {
+                Networking.sendToTracking(level, BlockPos.containing(x, y, z), new GenericParticlePacket(x + dx, y + dy, z + dz, vx, vy, vz, data));
+            } else {
+                world.addParticle(data, x + dx, y + dy, z + dz, vx, vy, vz);
+            }
             return this;
         }
 

@@ -20,171 +20,179 @@ public class Networking {
         INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Eidolon.MODID, "network"), () -> "1.0", (s) -> true, (s) -> true);
 
         INSTANCE.registerMessage(
-            ++ id,
-            ChilledEffectPacket.class,
-            ChilledEffectPacket::encode,
-            ChilledEffectPacket::decode,
-            ChilledEffectPacket::consume
+                ++id,
+                GenericParticlePacket.class,
+                GenericParticlePacket::encode,
+                GenericParticlePacket::decode,
+                GenericParticlePacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            TESyncPacket.class,
-            TESyncPacket::encode,
-            TESyncPacket::decode,
-            TESyncPacket::consume
+                ++id,
+                ChilledEffectPacket.class,
+                ChilledEffectPacket::encode,
+                ChilledEffectPacket::decode,
+                ChilledEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            ExtinguishEffectPacket.class,
-            ExtinguishEffectPacket::encode,
-            ExtinguishEffectPacket::decode,
-            ExtinguishEffectPacket::consume
+                ++id,
+                TESyncPacket.class,
+                TESyncPacket::encode,
+                TESyncPacket::decode,
+                TESyncPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            IgniteEffectPacket.class,
-            IgniteEffectPacket::encode,
-            IgniteEffectPacket::decode,
-            IgniteEffectPacket::consume
+                ++id,
+                ExtinguishEffectPacket.class,
+                ExtinguishEffectPacket::encode,
+                ExtinguishEffectPacket::decode,
+                ExtinguishEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            FlameEffectPacket.class,
-            FlameEffectPacket::encode,
-            FlameEffectPacket::decode,
-            FlameEffectPacket::consume
+                ++id,
+                IgniteEffectPacket.class,
+                IgniteEffectPacket::encode,
+                IgniteEffectPacket::decode,
+                IgniteEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            RitualCompletePacket.class,
-            RitualCompletePacket::encode,
-            RitualCompletePacket::decode,
-            RitualCompletePacket::consume
+                ++id,
+                FlameEffectPacket.class,
+                FlameEffectPacket::encode,
+                FlameEffectPacket::decode,
+                FlameEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            RitualConsumePacket.class,
-            RitualConsumePacket::encode,
-            RitualConsumePacket::decode,
-            RitualConsumePacket::consume
+                ++id,
+                RitualCompletePacket.class,
+                RitualCompletePacket::encode,
+                RitualCompletePacket::decode,
+                RitualCompletePacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            CrystallizeEffectPacket.class,
-            CrystallizeEffectPacket::encode,
-            CrystallizeEffectPacket::decode,
-            CrystallizeEffectPacket::consume
+                ++id,
+                RitualConsumePacket.class,
+                RitualConsumePacket::encode,
+                RitualConsumePacket::decode,
+                RitualConsumePacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            CrucibleFailPacket.class,
-            CrucibleFailPacket::encode,
-            CrucibleFailPacket::decode,
-            CrucibleFailPacket::consume
+                ++id,
+                CrystallizeEffectPacket.class,
+                CrystallizeEffectPacket::encode,
+                CrystallizeEffectPacket::decode,
+                CrystallizeEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            CrucibleSuccessPacket.class,
-            CrucibleSuccessPacket::encode,
-            CrucibleSuccessPacket::decode,
-            CrucibleSuccessPacket::consume
+                ++id,
+                CrucibleFailPacket.class,
+                CrucibleFailPacket::encode,
+                CrucibleFailPacket::decode,
+                CrucibleFailPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            LifestealEffectPacket.class,
-            LifestealEffectPacket::encode,
-            LifestealEffectPacket::decode,
-            LifestealEffectPacket::consume
+                ++id,
+                CrucibleSuccessPacket.class,
+                CrucibleSuccessPacket::encode,
+                CrucibleSuccessPacket::decode,
+                CrucibleSuccessPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            MagicBurstEffectPacket.class,
-            MagicBurstEffectPacket::encode,
-            MagicBurstEffectPacket::decode,
-            MagicBurstEffectPacket::consume
+                ++id,
+                LifestealEffectPacket.class,
+                LifestealEffectPacket::encode,
+                LifestealEffectPacket::decode,
+                LifestealEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            KnowledgeUpdatePacket.class,
-            KnowledgeUpdatePacket::encode,
-            KnowledgeUpdatePacket::decode,
-            KnowledgeUpdatePacket::consume
+                ++id,
+                MagicBurstEffectPacket.class,
+                MagicBurstEffectPacket::encode,
+                MagicBurstEffectPacket::decode,
+                MagicBurstEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            AttemptCastPacket.class,
-            AttemptCastPacket::encode,
-            AttemptCastPacket::decode,
-            AttemptCastPacket::consume
+                ++id,
+                KnowledgeUpdatePacket.class,
+                KnowledgeUpdatePacket::encode,
+                KnowledgeUpdatePacket::decode,
+                KnowledgeUpdatePacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            SpellCastPacket.class,
-            SpellCastPacket::encode,
-            SpellCastPacket::decode,
-            SpellCastPacket::consume
+                ++id,
+                AttemptCastPacket.class,
+                AttemptCastPacket::encode,
+                AttemptCastPacket::decode,
+                AttemptCastPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            ResearchActionPacket.class,
-            ResearchActionPacket::encode,
-            ResearchActionPacket::decode,
-            ResearchActionPacket::consume
+                ++id,
+                SpellCastPacket.class,
+                SpellCastPacket::encode,
+                SpellCastPacket::decode,
+                SpellCastPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            DeathbringerSlashEffectPacket.class,
-            DeathbringerSlashEffectPacket::encode,
-            DeathbringerSlashEffectPacket::decode,
-            DeathbringerSlashEffectPacket::consume
+                ++id,
+                ResearchActionPacket.class,
+                ResearchActionPacket::encode,
+                ResearchActionPacket::decode,
+                ResearchActionPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            SoulUpdatePacket.class,
-            SoulUpdatePacket::encode,
-            SoulUpdatePacket::decode,
-            SoulUpdatePacket::consume
+                ++id,
+                DeathbringerSlashEffectPacket.class,
+                DeathbringerSlashEffectPacket::encode,
+                DeathbringerSlashEffectPacket::decode,
+                DeathbringerSlashEffectPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            WingsFlapPacket.class,
-            WingsFlapPacket::encode,
-            WingsFlapPacket::decode,
-            WingsFlapPacket::consume
+                ++id,
+                SoulUpdatePacket.class,
+                SoulUpdatePacket::encode,
+                SoulUpdatePacket::decode,
+                SoulUpdatePacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            WingsDashPacket.class,
-            WingsDashPacket::encode,
-            WingsDashPacket::decode,
-            WingsDashPacket::consume
+                ++id,
+                WingsFlapPacket.class,
+                WingsFlapPacket::encode,
+                WingsFlapPacket::decode,
+                WingsFlapPacket::consume
         );
 
         INSTANCE.registerMessage(
-            ++ id,
-            WingsDataUpdatePacket.class,
-            WingsDataUpdatePacket::encode,
-            WingsDataUpdatePacket::decode,
-            WingsDataUpdatePacket::consume
+                ++id,
+                WingsDashPacket.class,
+                WingsDashPacket::encode,
+                WingsDashPacket::decode,
+                WingsDashPacket::consume
+        );
+
+        INSTANCE.registerMessage(
+                ++id,
+                WingsDataUpdatePacket.class,
+                WingsDataUpdatePacket::encode,
+                WingsDataUpdatePacket::decode,
+                WingsDataUpdatePacket::consume
         );
 
         INSTANCE.registerMessage(
@@ -205,7 +213,7 @@ public class Networking {
     }
 
     public static <MSG> void sendTo(Player entity, MSG msg) {
-        Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)entity), msg);
+        Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) entity), msg);
     }
 
     public static <MSG> void sendToServer(MSG msg) {
