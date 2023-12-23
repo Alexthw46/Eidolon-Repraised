@@ -159,9 +159,7 @@ public class EnchantedAshBlock extends BlockBase {
     private BlockState getUpdatedState(BlockGetter reader, BlockState state, BlockPos pos) {
         boolean flag = areAllSidesInvalid(state);
         state = this.recalculateFacingState(reader, this.defaultBlockState(), pos);
-        if (flag && areAllSidesInvalid(state)) {
-            return state;
-        } else {
+        if (!flag || !areAllSidesInvalid(state)) {
             boolean flag1 = state.getValue(NORTH).isConnected();
             boolean flag2 = state.getValue(SOUTH).isConnected();
             boolean flag3 = state.getValue(EAST).isConnected();
@@ -184,8 +182,8 @@ public class EnchantedAshBlock extends BlockBase {
                 state = state.setValue(SOUTH, RedstoneSide.SIDE);
             }
 
-            return state;
         }
+        return state;
     }
 
     @Override
@@ -250,6 +248,7 @@ public class EnchantedAshBlock extends BlockBase {
         }
     }
 
+
     private void updateChangedConnections(Level world, BlockPos pos, BlockState prevState, BlockState newState) {
         for(Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos blockpos = pos.relative(direction);
@@ -303,11 +302,6 @@ public class EnchantedAshBlock extends BlockBase {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         return InteractionResult.PASS;
-    }
-
-    @Override
-    public boolean isSignalSource(@NotNull BlockState state) {
-        return false;
     }
 
     @Override
