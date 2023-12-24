@@ -455,10 +455,10 @@ public class CodexChapters {
             SOULBONE = new Chapter(
                     "eidolon.codex.chapter.soulbone_amulet",
                     new TitlePage("eidolon.codex.page.soulbone_amulet"),
-                    new TitlePage("eidolon.codex.page.soulbone_amulet.1"),
                     new WorktablePage(Registry.SOULBONE_AMULET.get()),
-                    new TitlePage("eidolon.codex.bonelord_armor"),
-                    new TextPage("eidolon.codex.bonelord_armor.1"),
+                    new TitlePage("eidolon.codex.page.soulbone_amulet.1"),
+                    new TitlePage("eidolon.codex.page.bonelord_armor"),
+                    new TextPage("eidolon.codex.page.bonelord_armor.1"),
                     new WorktablePage(Registry.BONELORD_HELM.get()),
                     new WorktablePage(Registry.BONELORD_CHESTPLATE.get()),
                     new WorktablePage(Registry.BONELORD_GREAVES.get())

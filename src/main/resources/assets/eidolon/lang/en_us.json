@@ -452,6 +452,7 @@
   "eidolon.codex.chapter.capture_ritual": "Ritual of Capturing",
   "eidolon.codex.page.capture_ritual.title": "Ritual of Capturing",
   "eidolon.codex.page.capture_ritual": "The ritual of enthralling allows the user to capture the soul of undead creatures around the brazier, enthralling and binding them to the Summoning Staff. The staff will need to stay on a necrotic focus, while the mobs will need to be weakened to a third of their total health for the ritual to work.",
+  "eidolon.codex.chapter.locate_ritual": "Ritual of Locating",
   "eidolon.codex.page.locate_ritual.title": "Ritual of Locating",
   "eidolon.codex.page.locate_ritual": "The ritual of locating allows the user to fill a map with the position of the nearest structure of a specific type. This specific ritual recipe will locate one of the fabled catacombs taken over by necromancers.",
   "eidolon.codex.category.rituals": "Rituals",

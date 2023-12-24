@@ -29,8 +29,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -329,6 +327,9 @@ public class Events {
     @SubscribeEvent
     public void onPotionApplicable(Applicable event) {
         if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
+            event.setResult(Result.DENY);
+        }
+        if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BonelordArmorItem && (event.getEffectInstance().getEffect() == MobEffects.WITHER || event.getEffectInstance().getEffect() == MobEffects.POISON)) {
             event.setResult(Result.DENY);
         }
     }
