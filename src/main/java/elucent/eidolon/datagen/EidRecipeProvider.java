@@ -81,6 +81,10 @@ public class EidRecipeProvider extends RecipeProvider {
                 makeSign(consumer, decoBlockPack, woodDecoBlock, block);
             }
 
+            if (woodDecoBlock.getHangingSign() != null) {
+                makeHSign(consumer, decoBlockPack, woodDecoBlock, block);
+            }
+
         }
 
         for (Block extra : extras) {
@@ -93,6 +97,15 @@ public class EidRecipeProvider extends RecipeProvider {
     private static void makeSign(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack, DecoBlockPack.WoodDecoBlock woodDecoBlock, Block block) {
         signBuilder(woodDecoBlock.getStandingSign(), Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, decoBlockPack.baseBlockName + "_sign"));
     }
+
+    private static void makeHSign(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack, DecoBlockPack.WoodDecoBlock woodDecoBlock, Block block) {
+        hSignBuilder(woodDecoBlock.getHangingSign(), Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, decoBlockPack.baseBlockName + "_hanging_sign"));
+    }
+
+    protected static RecipeBuilder hSignBuilder(ItemLike pSign, Ingredient pMaterial) {
+        return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pSign, 6).group("hanging_sign").define('#', pMaterial).define('X', Items.CHAIN).pattern("X X").pattern("###").pattern("###");
+    }
+
 
     private void makeButton(Consumer<FinishedRecipe> consumer, Block block, ButtonBlock button, String baseBlockName) {
         buttonBuilder(button, Ingredient.of(block)).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(block)).save(consumer, new ResourceLocation(Eidolon.MODID, baseBlockName + "_button"));

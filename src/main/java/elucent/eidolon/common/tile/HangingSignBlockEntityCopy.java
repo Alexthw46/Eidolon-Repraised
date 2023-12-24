@@ -7,13 +7,22 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class SignBlockEntityCopy extends SignBlockEntity {
-    public SignBlockEntityCopy(BlockPos pPos, BlockState pBlockState) {
-        super(pPos, pBlockState);
+public class HangingSignBlockEntityCopy extends SignBlockEntity {
+
+    public HangingSignBlockEntityCopy(BlockPos p_250603_, BlockState p_251674_) {
+        super(p_250603_, p_251674_);
+    }
+
+    public int getTextLineHeight() {
+        return 9;
+    }
+
+    public int getMaxTextLineWidth() {
+        return 60;
     }
 
     @Override
     public @NotNull BlockEntityType<?> getType() {
-        return Registry.SIGN_BLOCKENTITY.get();
+        return Registry.H_SIGN_BLOCKENTITY.get();
     }
 }

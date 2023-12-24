@@ -89,6 +89,8 @@ public class ModLootTables extends LootTableProvider {
                 blocks.add(woodDecoBlock.getPressurePlate());
                 blocks.add(woodDecoBlock.getStandingSign());
                 blocks.add(woodDecoBlock.getWallSign());
+                blocks.add(woodDecoBlock.getHangingSign());
+                blocks.add(woodDecoBlock.getHangingWallSign());
             }
 
             for (var block : blocks) {

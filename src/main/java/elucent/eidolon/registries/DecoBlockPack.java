@@ -1,7 +1,9 @@
 package elucent.eidolon.registries;
 
+import elucent.eidolon.common.tile.HangingSignBlockEntityCopy;
 import elucent.eidolon.common.tile.SignBlockEntityCopy;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -66,7 +68,7 @@ public class DecoBlockPack {
 
         final WoodType woodType;
         String woodName;
-        @Nullable RegistryObject<Block> wSign = null, sSign = null, door = null, trapdoor = null, fence = null, fence_gate = null, button = null;
+        @Nullable RegistryObject<Block> hSign = null, hwSign = null, wSign = null, sSign = null, door = null, trapdoor = null, fence = null, fence_gate = null, button = null;
 
         public WoodDecoBlock(DeferredRegister<Block> blocks, String basename, WoodType type, BlockBehaviour.Properties props) {
             super(blocks, basename, props);
@@ -87,7 +89,22 @@ public class DecoBlockPack {
                     return new SignBlockEntityCopy(pPos, pState);
                 }
             });
+            hSign = BLOCKS.register(woodName + "_hanging_sign", () -> new CeilingHangingSignBlock(props, this.woodType) {
+                @Override
+                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
+                    return new HangingSignBlockEntityCopy(pPos, pState);
+                }
+
+            });
+            hwSign = BLOCKS.register(woodName + "_hanging_wall_sign", () -> new WallHangingSignBlock(props, this.woodType) {
+                @Override
+                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
+                    return new HangingSignBlockEntityCopy(pPos, pState);
+                }
+            });
             ITEMS.register(woodName + "_sign", () -> new SignItem(itemProps(), sSign.get(), wSign.get()));
+            ITEMS.register(woodName + "_hanging_sign", () -> new HangingSignItem(hSign.get(), hwSign.get(), itemProps()));
+
             return this;
         }
 
@@ -140,6 +157,15 @@ public class DecoBlockPack {
         public @Nullable WallSignBlock getWallSign() {
             return wSign == null ? null : (WallSignBlock) wSign.get();
         }
+
+        public @Nullable CeilingHangingSignBlock getHangingSign() {
+            return hSign == null ? null : (CeilingHangingSignBlock) hSign.get();
+        }
+
+        public @Nullable WallHangingSignBlock getHangingWallSign() {
+            return hwSign == null ? null : (WallHangingSignBlock) hwSign.get();
+        }
+
     }
 
 }
