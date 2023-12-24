@@ -24,9 +24,9 @@ public class CodexChapters {
     public static Category NATURE, RITUALS, ARTIFICE, THEURGY, SIGNS, SPELLS;
 
     public static Index NATURE_INDEX, RITUALS_INDEX, ARTIFICE_INDEX, THEURGY_INDEX, SIGNS_INDEX, SPELLS_INDEX;
-    static Chapter MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHES, DECORATIONS,
-            BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL,
-            WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
+    public static Chapter MONSTERS, CRITTERS, ORES, PEWTER, ENCHANTED_ASH, PLANTS, RESEARCHES, DECORATIONS,
+            BRAZIER, ITEM_PROVIDERS, CRYSTAL_RITUAL, SUMMON_RITUAL, ALLURE_RITUAL, REPELLING_RITUAL, DECEIT_RITUAL, TIME_RITUALS, PURIFY_RITUAL, SANGUINE_RITUAL, RECHARGE_RITUAL, CAPTURE_RITUAL, LOCATE_RITUAL,
+            WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, BONE_PALADIN, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
             INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
             WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
             MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, WATER, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE, SUNDER_ARMOR, REINFORCE_ARMOR;
@@ -211,16 +211,24 @@ public class CodexChapters {
                     new TitledRitualPage("eidolon.codex.page.sanguine_ritual.1", Registry.SANGUINE_AMULET.get().getDefaultInstance()),
                     new TextPage("eidolon.codex.page.sanguine_ritual.1")
             );
+
             RECHARGE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.recharge_ritual",
                     new TitledRitualPage("eidolon.codex.page.recharge_ritual.soulfire", RitualRegistry.RECHARGE_SOULFIRE_RITUAL),
                     new TitledRitualPage("eidolon.codex.page.recharge_ritual.bonechill", RitualRegistry.RECHARGE_BONECHILL_RITUAL),
                     new TextPage("eidolon.codex.page.recharge_ritual")
             );
+
             CAPTURE_RITUAL = new Chapter(
                     "eidolon.codex.chapter.capture_ritual",
                     new TitledRitualPage("eidolon.codex.page.capture_ritual", RitualRegistry.ABSORB_RITUAL),
                     new TextPage("eidolon.codex.page.capture_ritual")
+            );
+
+            LOCATE_RITUAL = new Chapter(
+                    "eidolon.codex.chapter.locate_ritual",
+                    new TitledRitualPage("eidolon.codex.page.locate_ritual", prefix("ritual_catacomb_locator")),
+                    new TextPage("eidolon.codex.page.locate_ritual")
             );
 
             RITUALS_INDEX = new Index(
@@ -239,7 +247,8 @@ public class CodexChapters {
                             new IndexEntry(PURIFY_RITUAL, new ItemStack(Items.GOLDEN_APPLE)),
                             new IndexEntry(SANGUINE_RITUAL, new ItemStack(Registry.SANGUINE_AMULET.get())),
                             new IndexEntry(RECHARGE_RITUAL, new ItemStack(Registry.SOULFIRE_WAND.get())),
-                            new IndexEntry(CAPTURE_RITUAL, new ItemStack(Registry.SUMMONING_STAFF.get()))
+                            new IndexEntry(CAPTURE_RITUAL, new ItemStack(Registry.SUMMONING_STAFF.get())),
+                            new IndexEntry(LOCATE_RITUAL, new ItemStack(Items.COMPASS))
                     )
             );
 
@@ -452,10 +461,13 @@ public class CodexChapters {
                     "eidolon.codex.chapter.soulbone_amulet",
                     new TitlePage("eidolon.codex.page.soulbone_amulet"),
                     new TitlePage("eidolon.codex.page.soulbone_amulet.1"),
-                    new WorktablePage(Registry.SOULBONE_AMULET.get())
+                    new WorktablePage(Registry.SOULBONE_AMULET.get()),
+                    new TitlePage("eidolon.codex.bonelord_armor"),
+                    new TextPage("eidolon.codex.bonelord_armor.1"),
+                    new WorktablePage(Registry.BONELORD_HELM.get()),
+                    new WorktablePage(Registry.BONELORD_CHESTPLATE.get()),
+                    new WorktablePage(Registry.BONELORD_GREAVES.get())
             );
-
-            //WIPS
 
             RAVEN_CLOAK = new Chapter("eidolon.codex.chapter.raven_cloak",
                     new TitlePage("eidolon.codex.page.raven_cloak"),
@@ -851,7 +863,7 @@ public class CodexChapters {
                             new ResearchLockedEntry(CHILL_TOUCH, new ItemStack(Items.ICE), Researches.FROST_SPELL),
                             new SignLockedEntry(WATER, new ItemStack(Items.WATER_BUCKET), Signs.WINTER_SIGN, Signs.FLAME_SIGN)
                     ), new IndexPage(
-                            new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
+                    new FactLockedEntry(ENTHRALL, new ItemStack(Registry.SUMMONING_STAFF.get()), Facts.ENTHRALL),
                     new FactLockedEntry(SMITE, new ItemStack(Registry.SILVER_SWORD.get()), Facts.SMITE),
                     new SignLockedEntry(SUNDER_ARMOR, new ItemStack(Items.FERMENTED_SPIDER_EYE), Signs.WARDING_SIGN),
                     new SignLockedEntry(REINFORCE_ARMOR, new ItemStack(Items.GOLDEN_CHESTPLATE), Signs.WARDING_SIGN)

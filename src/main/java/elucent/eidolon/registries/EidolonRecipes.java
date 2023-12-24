@@ -21,6 +21,7 @@ public class EidolonRecipes {
     public static final RegistryObject<RecipeSerializer<SummonRitualRecipe>> SUMMON_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_summoning", SummonRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<CommandRitualRecipe>> COMMAND_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_command", CommandRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<GenericRitualRecipe>> RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier", GenericRitualRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<LocationRitualRecipe>> LOCATION_RITUAL_SERIALIZER = RECIPE_SERIALIZERS.register("ritual_brazier_location", LocationRitualRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<ChantRecipe>> CHANT_SERIALIZER = RECIPE_SERIALIZERS.register("chant", ChantRecipe.Serializer::new);
 
     static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, Eidolon.MODID);
@@ -64,6 +65,12 @@ public class EidolonRecipes {
         @Override
         public String toString() {
             return "eidolon:ritual_brazier_command";
+        }
+    });
+    public static final RegistryObject<RecipeType<LocationRitualRecipe>> LOCATION_RITUAL_TYPE = RECIPE_TYPES.register("ritual_brazier_location", () -> new RecipeType<>() {
+        @Override
+        public String toString() {
+            return "eidolon:ritual_brazier_location";
         }
     });
     public static final RegistryObject<RecipeType<GenericRitualRecipe>> RITUAL_TYPE = RECIPE_TYPES.register("ritual_brazier", () -> new RecipeType<>() {

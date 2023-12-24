@@ -1,0 +1,26 @@
+{
+  "type": "eidolon:ritual_brazier_location",
+  "focusItems": [],
+  "output": {
+    "structure": "eidolon:catacombs"
+  },
+  "pedestalItems": [
+    {
+      "item": "minecraft:compass"
+    },
+    {
+      "item": "eidolon:shadow_gem"
+    },
+    {
+      "item": "eidolon:magic_ink"
+    },
+    {
+      "item": "eidolon:raven_feather"
+    }
+  ],
+  "reagent": [
+    {
+      "item": "minecraft:map"
+    }
+  ]
+}
