@@ -101,22 +101,22 @@
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:chainmail_helmet"
+          "name": "eidolon:silver_helmet"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:chainmail_chestplate"
+          "name": "eidolon:silver_chestplate"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:chainmail_leggings"
+          "name": "eidolon:silver_leggings"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:chainmail_boots"
+          "name": "eidolon:silver_boots"
         },
         {
           "type": "minecraft:item",

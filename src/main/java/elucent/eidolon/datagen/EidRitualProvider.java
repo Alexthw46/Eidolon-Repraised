@@ -3,12 +3,10 @@ package elucent.eidolon.datagen;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.common.ritual.*;
-import elucent.eidolon.recipe.GenericRitualRecipe;
-import elucent.eidolon.recipe.ItemRitualRecipe;
-import elucent.eidolon.recipe.RitualRecipe;
-import elucent.eidolon.recipe.SummonRitualRecipe;
+import elucent.eidolon.recipe.*;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Worldgen;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -23,6 +21,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import org.jetbrains.annotations.NotNull;
@@ -183,6 +182,8 @@ public class EidRitualProvider implements DataProvider {
                 .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get()))
         );
 
+        location(Worldgen.CATACOMBS, prefix("ritual_catacomb_locator"), Ingredient.of(Items.MAP), ingredientsFromObjects(List.of(Items.COMPASS, Registry.SHADOW_GEM.get(), Registry.MAGIC_INK.get(), Registry.RAVEN_FEATHER.get())), List.of(), 0);
+
         // tester for command ritual
         // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
     }
@@ -190,6 +191,11 @@ public class EidRitualProvider implements DataProvider {
     public void crafting(ItemStack result, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
         rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, reagent, result, true, healthCost));
     }
+
+    public void location(TagKey<Structure> structureTagKey, ResourceLocation location, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
+        rituals.add(new LocationRitualRecipe(location, structureTagKey.location(), reagent, pedestal, foci, healthCost));
+    }
+
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
         rituals.add(new SummonRitualRecipe(id, getRegistryName(type), Ingredient.of(item), pedestal, foci));

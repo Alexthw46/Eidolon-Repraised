@@ -5,12 +5,14 @@ import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -185,15 +187,21 @@ public class NecromancerEntity extends SpellcasterIllager {
         protected void performSpellCasting() {
             if (!level.isClientSide) {
                 EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
+                if (NecromancerEntity.this.getHealth() < NecromancerEntity.this.getMaxHealth() / 2) {
+                    type = random.nextBoolean() ? EidolonEntities.GIANT_SKEL.get() : EidolonEntities.ZOMBIE_BRUTE.get();
+                }
                 Holder<Biome> biomeKey = level.getBiome(blockPosition());
-                if (type == EntityType.SKELETON && biomeKey.is(Tags.Biomes.IS_COLD))
-                    type = EntityType.STRAY;
-                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_SANDY))
-                    type = EntityType.HUSK;
-                if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
-                    type = EntityType.DROWNED;
 
-                for (int i = 0; i < 3; i++) {
+                for (int i = -1; i < random.nextInt(4); i++) {
+                    if (type == EntityType.SKELETON && biomeKey.is(Tags.Biomes.IS_COLD))
+                        type = EntityType.STRAY;
+                    if (type == EntityType.SKELETON && biomeKey.is(BiomeTags.IS_NETHER))
+                        type = EntityType.WITHER_SKELETON;
+                    if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_SANDY))
+                        type = EntityType.HUSK;
+                    if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
+                        type = EntityType.DROWNED;
+
                     var entity = type.create(level);
                     if (!(entity instanceof Monster thrall)) return;
                     thrall.setPos(getX(), getY(), getZ());
