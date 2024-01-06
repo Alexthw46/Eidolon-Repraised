@@ -309,10 +309,10 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onLivingUse(LivingEntityUseItemEvent event) {
+    public void onLivingUse(LivingEntityUseItemEvent.Start event) {
         if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get())) {
-            if (!event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
-                event.setCanceled(true);
+            if (event.getItem().isEdible() && !event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
+                event.setResult(Event.Result.DENY);
         }
     }
 
