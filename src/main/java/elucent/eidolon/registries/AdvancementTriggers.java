@@ -54,8 +54,8 @@ public class AdvancementTriggers {
 
     public static void triggerResearch(String research, ServerPlayer player) {
         switch (research) {
-            case "frost" -> FROST.trigger(player);
-            case "flames" -> FLAME.trigger(player);
+            case "eidolon:frost" -> FROST.trigger(player);
+            case "eidolon:flames" -> FLAME.trigger(player);
             case "sacrifice_mob" -> SACRIFICE.trigger(player);
             case "basic_incense" -> INCENSE.trigger(player);
             case "sacrifice_villager" -> VSACRIFICE.trigger(player);
