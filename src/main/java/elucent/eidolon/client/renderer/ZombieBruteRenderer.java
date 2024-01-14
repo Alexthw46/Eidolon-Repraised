@@ -5,13 +5,15 @@ import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.client.model.ZombieBruteModel;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class ZombieBruteRenderer extends MobRenderer<ZombieBruteEntity, ZombieBruteModel> {
+public class ZombieBruteRenderer extends HumanoidMobRenderer<ZombieBruteEntity, ZombieBruteModel> {
     public ZombieBruteRenderer(Context erm) {
         super(erm, new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), 0.6f);
+        this.addLayer(new HumanoidArmorLayer<>(this, new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), erm.getModelManager()));
     }
 
     @Override
