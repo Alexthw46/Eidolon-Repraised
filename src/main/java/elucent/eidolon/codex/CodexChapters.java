@@ -659,12 +659,14 @@ public class CodexChapters {
 
             ZOMBIFY = new Chapter(
                     "eidolon.codex.chapter.villager_zombie",
-                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY)
+                    new ChantPage("eidolon.codex.page.villager_zombie", Spells.ZOMBIFY),
+                    new TextPage("eidolon.codex.page.villager_zombie.1")
             );
 
             CURE_ZOMBIE = new Chapter(
                     "eidolon.codex.chapter.villager_cure",
-                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT)
+                    new ChantPage("eidolon.codex.page.villager_cure", Spells.CURE_ZOMBIE_CHANT),
+                    new TextPage("eidolon.codex.page.villager_cure.1")
             );
 
             THEURGY_INDEX = new Index(

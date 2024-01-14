@@ -139,7 +139,10 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             Deity deity = Deities.LIGHT_DEITY;
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                if (rep.getReputation(player, deity.getId()) < 3) return;
+                if (rep.getReputation(player, deity.getId()) < 3) {
+                    player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+                    return;
+                }
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.BASIC_INCENSE_PRAYER);
                 rep.pray(player, prefix("basic_incense"), world.getGameTime());
                 rep.addReputation(player, deity.getId(), 2.0 + 0.5 * info.getPower());

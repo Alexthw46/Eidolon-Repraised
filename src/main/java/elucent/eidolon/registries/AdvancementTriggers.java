@@ -23,11 +23,15 @@ public class AdvancementTriggers {
         ZOMBIFY = register(new PlayerTrigger(prefix("zombify")));
         CURE_ZOMBIE = register(new PlayerTrigger(prefix("cure_zombie")));
 
+        ENTHRALL = register(new PlayerTrigger(prefix("enthrall_undead")));
+        SMITE = register(new PlayerTrigger(prefix("smite_undead")));
+
         FLAME = register(new PlayerTrigger(prefix("flame_spell")));
         FROST = register(new PlayerTrigger(prefix("frost_spell")));
+
     }
 
-    public static PlayerTrigger WICKED, SACRED, SACRIFICE, INCENSE, VSACRIFICE, LAY_ON_HANDS, ZOMBIFY, CURE_ZOMBIE;
+    public static PlayerTrigger WICKED, SACRED, SACRIFICE, INCENSE, VSACRIFICE, LAY_ON_HANDS, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE;
     public static PlayerTrigger FLAME, FROST;
 
     public static void rewardNearbyPlayers(PlayerTrigger criteria, ServerLevel level, BlockPos pos, int radius) {
@@ -62,6 +66,8 @@ public class AdvancementTriggers {
             case "heal_villager" -> LAY_ON_HANDS.trigger(player);
             case "zombify_villager" -> ZOMBIFY.trigger(player);
             case "cure_zombie" -> CURE_ZOMBIE.trigger(player);
+            case "enthrall" -> ENTHRALL.trigger(player);
+            case "smite" -> SMITE.trigger(player);
         }
     }
 

@@ -81,6 +81,8 @@ public class Registry {
     public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
 
     public static TagKey<Block> CRUCIBLE_HOT_BLOCKS = BlockTags.create(new ResourceLocation(Eidolon.MODID, "crucible_hot_blocks"));
+    public static TagKey<Block> PLANTER_PLANTS = BlockTags.create(new ResourceLocation(Eidolon.MODID, "planter_plants"));
+
     public static TagKey<DamageType> FORGE_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_magic"));
     public static TagKey<DamageType> FORGE_WITHER = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_wither"));
 

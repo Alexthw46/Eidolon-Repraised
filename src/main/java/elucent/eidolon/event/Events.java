@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -115,9 +116,9 @@ public class Events {
             LivingEntity lastHurt = event.getOriginalTarget().getLastHurtMob();
             LivingEntity lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
-        } else if (event.getEntity().level().getPlayerByUUID(master) instanceof ServerPlayer player) {
-            LivingEntity lastHurt = player.getLastHurtMob();
-            LivingEntity lastHurtBy = player.getLastHurtByMob();
+        } else if (event.getEntity().level() instanceof ServerLevel server && server.getEntity(master) instanceof LivingEntity living) {
+            LivingEntity lastHurt = living.getLastHurtMob();
+            LivingEntity lastHurtBy = living.getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
         }
         if (!(event.getEntity() instanceof HoglinBase && newTarget == null)) event.setNewTarget(newTarget);
@@ -126,6 +127,8 @@ public class Events {
     public static @Nullable LivingEntity handleEnthralledTargeting(@Nullable LivingEntity lastHurt, @Nullable LivingEntity lastHurtBy, LivingEntity thrall) {
         if (lastHurtBy != null && lastHurtBy != thrall && !thrall.isAlliedTo(lastHurtBy)) return lastHurtBy;
         if (lastHurt != null && lastHurt != thrall && !thrall.isAlliedTo(lastHurt)) return lastHurt;
+        if (thrall.getLastHurtByMob() != null && !thrall.isAlliedTo(thrall.getLastHurtByMob()))
+            return thrall.getLastHurtByMob();
         return null;
     }
 
