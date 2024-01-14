@@ -25,25 +25,27 @@ public class SoulfireProjectileEntity extends SpellProjectileEntity {
     public void tick() {
         super.tick();
 
-        Vec3 motion = getDeltaMovement();
-        Vec3 pos = position();
-        Vec3 norm = motion.normalize().scale(0.025f);
-        for (int i = 0; i < 8; i ++) {
-            double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
-            double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
-            double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
-            Particles.create(EidolonParticles.SPARKLE_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.375f, 0).setScale(0.375f, 0)
-                .setColor(1, 0.875f, 0.5f, 0.5f, 0.25f, 1)
-                .setLifetime(5)
-                .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(EidolonParticles.WISP_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
-                .setColor(1, 0.5f, 0.625f, 0.5f, 0.25f, 1)
-                .setLifetime(20)
-                .spawn(level, lerpX, lerpY, lerpZ);
+        if (level.isClientSide) {
+            Vec3 motion = getDeltaMovement();
+            Vec3 pos = position();
+            Vec3 norm = motion.normalize().scale(0.025f);
+            for (int i = 0; i < 8; i++) {
+                double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
+                double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
+                double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
+                Particles.create(EidolonParticles.SPARKLE_PARTICLE)
+                        .addVelocity(-norm.x, -norm.y, -norm.z)
+                        .setAlpha(0.375f, 0).setScale(0.375f, 0)
+                        .setColor(1, 0.875f, 0.5f, 0.5f, 0.25f, 1)
+                        .setLifetime(5)
+                        .spawn(level, lerpX, lerpY, lerpZ);
+                Particles.create(EidolonParticles.WISP_PARTICLE)
+                        .addVelocity(-norm.x, -norm.y, -norm.z)
+                        .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
+                        .setColor(1, 0.5f, 0.625f, 0.5f, 0.25f, 1)
+                        .setLifetime(20)
+                        .spawn(level, lerpX, lerpY, lerpZ);
+            }
         }
     }
 

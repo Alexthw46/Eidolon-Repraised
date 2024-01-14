@@ -58,7 +58,7 @@ public class AdvancementTriggers {
             case "flames" -> FLAME.trigger(player);
             case "sacrifice_mob" -> SACRIFICE.trigger(player);
             case "basic_incense" -> INCENSE.trigger(player);
-            case "villager_sacrifice" -> VSACRIFICE.trigger(player);
+            case "sacrifice_villager" -> VSACRIFICE.trigger(player);
             case "heal_villager" -> LAY_ON_HANDS.trigger(player);
             case "zombify_villager" -> ZOMBIFY.trigger(player);
             case "cure_zombie" -> CURE_ZOMBIE.trigger(player);
