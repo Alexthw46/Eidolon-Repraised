@@ -6,7 +6,6 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.EidolonSounds;
-import elucent.eidolon.registries.*;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -27,26 +26,27 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-
-        Vec3 motion = getDeltaMovement();
-        Vec3 pos = position();
-        Vec3 norm = motion.normalize().scale(0.025f);
-        for (int i = 0; i < 8; i ++) {
-            double lerpX = Mth.lerp(i / 8.0f, xOld, pos.x);
-            double lerpY = Mth.lerp(i / 8.0f, yOld, pos.y);
-            double lerpZ = Mth.lerp(i / 8.0f, zOld, pos.z);
-            Particles.create(EidolonParticles.WISP_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.0625f, 0).setScale(0.625f, 0)
-                .setColor(0.875f, 1, 1, 0.375f, 0.5f, 0.75f)
-                .setLifetime(5)
-                .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(EidolonParticles.WISP_PARTICLE)
-                .addVelocity(-norm.x, -norm.y, -norm.z)
-                .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
-                .setColor(1, 0.75f, 0.875f, 0.375f, 0.5f, 0.75f)
-                .setLifetime(20)
-                .spawn(level, lerpX, lerpY, lerpZ);
+        if (level().isClientSide) {
+            Vec3 motion = getDeltaMovement();
+            Vec3 pos = position();
+            Vec3 norm = motion.normalize().scale(0.025f);
+            for (int i = 0; i < 8; i++) {
+                double lerpX = Mth.lerp(i / 8.0f, xOld, pos.x);
+                double lerpY = Mth.lerp(i / 8.0f, yOld, pos.y);
+                double lerpZ = Mth.lerp(i / 8.0f, zOld, pos.z);
+                Particles.create(EidolonParticles.WISP_PARTICLE)
+                        .addVelocity(-norm.x, -norm.y, -norm.z)
+                        .setAlpha(0.0625f, 0).setScale(0.625f, 0)
+                        .setColor(0.875f, 1, 1, 0.375f, 0.5f, 0.75f)
+                        .setLifetime(5)
+                        .spawn(level, lerpX, lerpY, lerpZ);
+                Particles.create(EidolonParticles.WISP_PARTICLE)
+                        .addVelocity(-norm.x, -norm.y, -norm.z)
+                        .setAlpha(0.125f, 0).setScale(0.25f, 0.125f)
+                        .setColor(1, 0.75f, 0.875f, 0.375f, 0.5f, 0.75f)
+                        .setLifetime(20)
+                        .spawn(level, lerpX, lerpY, lerpZ);
+            }
         }
     }
 

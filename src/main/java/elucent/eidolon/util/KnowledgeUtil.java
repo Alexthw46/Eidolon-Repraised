@@ -56,9 +56,9 @@ public class KnowledgeUtil {
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsResearch(research)) return;
             k.addResearch(research);
-            AdvancementTriggers.triggerResearch(research.getPath(), serverPlayer);
             Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
+        AdvancementTriggers.triggerResearch(research.getPath(), serverPlayer);
     }
 
     public static void grantRune(Entity entity, Rune rune) {
