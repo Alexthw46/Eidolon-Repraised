@@ -1,5 +1,6 @@
-// 1.19.2	2023-12-01T14:13:39.1999846	Eidolon Block Tags
+// 1.20.1	2024-01-14T16:44:34.9405085	Eidolon Block Tags
 f1334275f873c9074739aeb3e8c48b14ce3746b5 data/eidolon/tags/blocks/crucible_hot_blocks.json
+c8caa1a0a2479984de01e070736089863a11ac9e data/eidolon/tags/blocks/planter_plants.json
 e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/blocks/candles.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/blocks/leaves.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/blocks/mineable/hoe.json

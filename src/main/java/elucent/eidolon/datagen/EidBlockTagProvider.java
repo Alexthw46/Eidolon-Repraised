@@ -38,6 +38,11 @@ public class EidBlockTagProvider extends BlockTagsProvider {
                 Blocks.SOUL_FIRE,
                 Blocks.LAVA);
         tag(BlockTags.CANDLES).add(Registry.CANDLE.get(), Registry.CANDLESTICK.get(), Registry.MAGIC_CANDLE.get(), Registry.MAGIC_CANDLESTICK.get());
+        tag(Registry.PLANTER_PLANTS).add(Registry.MERAMMER_ROOT.get(),
+                Registry.OANNA_BLOOM.get(),
+                Registry.AVENNIAN_SPRIG.get(),
+                Registry.SILDRIAN_SEED.get()
+        );
     }
 
     void logsTag(Block... blocks) {

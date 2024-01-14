@@ -1,5 +1,6 @@
 package elucent.eidolon.common.item;
 
+import elucent.eidolon.common.block.HerbBlockBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -92,17 +93,31 @@ public class AthameItem extends SwordItem {
                 ((ServerLevel) ctx.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), hit.x, hit.y, hit.z, 3, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, 0.05F);
                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                 if (random.nextInt(5) == 0) {
-                    if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
-                        ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
-                    else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
-                    if (random.nextInt(6) == 0) {
+
+                    if (state.is(Registry.PLANTER_PLANTS) && state.getValue(HerbBlockBase.AGE) == 3) {
+                        ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
                         ItemStack drop = getHarvestable(state);
                         if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                             ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
-                            ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
+                            for (int i = 0; i < random.nextInt(3); i++)
+                                ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                         }
                         if (!ctx.getPlayer().isCreative())
                             ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
+
+                    } else {
+                        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
+                            ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
+                        else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
+                        if (random.nextInt(6) == 0) {
+                            ItemStack drop = getHarvestable(state);
+                            if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
+                                ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
+                                ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
+                            }
+                            if (!ctx.getPlayer().isCreative())
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
+                        }
                     }
                 }
             }
@@ -123,6 +138,12 @@ public class AthameItem extends SwordItem {
 
 
         harvestables.put(getRegistryName(Blocks.FERN), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
+
+        // planter plants drop themselves
+        harvestables.put(getRegistryName(Registry.MERAMMER_ROOT.get()), new ItemStack(Registry.MERAMMER_ROOT.get()));
+        harvestables.put(getRegistryName(Registry.OANNA_BLOOM.get()), new ItemStack(Registry.OANNA_BLOOM.get()));
+        harvestables.put(getRegistryName(Registry.SILDRIAN_SEED.get()), new ItemStack(Registry.SILDRIAN_SEED.get()));
+        harvestables.put(getRegistryName(Registry.AVENNIAN_SPRIG.get()), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
     }
 
 

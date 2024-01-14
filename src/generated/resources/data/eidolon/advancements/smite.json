@@ -1,0 +1,31 @@
+{
+  "parent": "eidolon:cure_zombie",
+  "criteria": {
+    "smite": {
+      "conditions": {},
+      "trigger": "eidolon:smite"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.smite"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:golden_sword",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.smite"
+    }
+  },
+  "requirements": [
+    [
+      "smite"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

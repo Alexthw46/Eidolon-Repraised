@@ -1,6 +1,7 @@
 package elucent.eidolon.common.entity.ai;
 
 import elucent.eidolon.util.EntityUtil;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -45,8 +46,9 @@ public class FollowOwnerGoal extends Goal {
      */
     @Override
     public boolean canUse() {
-        if (!EntityUtil.isEnthralled(mob) || mob.getTarget() != null) return false;
-        Entity ownerEntity = mob.level.getPlayerByUUID(mob.getPersistentData().getUUID(THRALL_KEY));
+        if (!EntityUtil.isEnthralled(mob) || mob.getTarget() != null || !(mob.level instanceof ServerLevel server))
+            return false;
+        Entity ownerEntity = server.getEntity(mob.getPersistentData().getUUID(THRALL_KEY));
         if (ownerEntity instanceof LivingEntity living) {
             followingMob = living;
             return true;

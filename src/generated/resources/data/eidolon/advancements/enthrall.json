@@ -1,0 +1,30 @@
+{
+  "parent": "eidolon:zombify",
+  "criteria": {
+    "enthrall": {
+      "conditions": {},
+      "trigger": "eidolon:enthrall"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "eidolon.advancement.desc.enthrall"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "eidolon:summoning_staff"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "eidolon.advancement.title.enthrall"
+    }
+  },
+  "requirements": [
+    [
+      "enthrall"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

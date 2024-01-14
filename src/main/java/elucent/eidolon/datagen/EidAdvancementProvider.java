@@ -68,11 +68,13 @@ public class EidAdvancementProvider extends AdvancementProvider {
 
             Advancement layHands = saveWithTrigger(symbol, Items.GLISTERING_MELON_SLICE, AdvancementTriggers.LAY_ON_HANDS);
             Advancement cureZombie = saveWithTrigger(layHands, Items.GOLDEN_APPLE, AdvancementTriggers.CURE_ZOMBIE);
+            Advancement smite = saveWithTrigger(cureZombie, Items.GOLDEN_SWORD, AdvancementTriggers.SMITE);
 
             symbol = saveBasicItem(Registry.UNHOLY_SYMBOL.get(), goblet);
 
             Advancement v_sacrifice = saveWithTrigger(symbol, Items.IRON_SWORD, AdvancementTriggers.VSACRIFICE);
             Advancement zombify = saveWithTrigger(v_sacrifice, Registry.ZOMBIE_HEART.get(), AdvancementTriggers.ZOMBIFY);
+            Advancement enthrall = saveWithTrigger(zombify, Registry.SUMMONING_STAFF.get(), AdvancementTriggers.ENTHRALL);
 
             Advancement artificeRoot = saveBasicItem(Registry.PEWTER_INGOT.get(), root);
 

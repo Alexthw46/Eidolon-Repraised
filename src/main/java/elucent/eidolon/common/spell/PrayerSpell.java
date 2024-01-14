@@ -69,7 +69,11 @@ public class PrayerSpell extends StaticSpell {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return true;
         }
-        return iReputation.getReputation(player.getUUID(), deity.getId()) < minDevotion;
+        if (iReputation.getReputation(player.getUUID(), deity.getId()) < minDevotion) {
+            player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+            return true;
+        };
+        return false;
     }
 
     @Nullable
