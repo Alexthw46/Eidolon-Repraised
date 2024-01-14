@@ -1,30 +1,29 @@
 {
-  "parent": "eidolon:cure_zombie",
+  "parent": "eidolon:zombify",
   "criteria": {
-    "smite": {
+    "enthrall_undead": {
       "conditions": {},
-      "trigger": "eidolon:smite"
+      "trigger": "eidolon:enthrall_undead"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "eidolon.advancement.desc.smite"
+      "translate": "eidolon.advancement.desc.enthrall_undead"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:golden_sword",
-      "nbt": "{Damage:0}"
+      "item": "eidolon:summoning_staff"
     },
     "show_toast": true,
     "title": {
-      "translate": "eidolon.advancement.title.smite"
+      "translate": "eidolon.advancement.title.enthrall_undead"
     }
   },
   "requirements": [
     [
-      "smite"
+      "enthrall_undead"
     ]
   ],
   "sends_telemetry_event": false
