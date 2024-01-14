@@ -1,7 +1,7 @@
-// 1.20.1	2023-12-24T15:52:27.6990228	Eidolon Rituals
+// 1.20.1	2024-01-15T00:27:25.1570626	Eidolon Rituals
 c85794f40cf066e7d22adb72a76edf72d06ea02d data/eidolon/recipes/rituals/ritual_absorption.json
 d25f6c3dfe22c8054c60ce2299c8f0d524c4dce6 data/eidolon/recipes/rituals/ritual_allure.json
-49e4ad95799160ecb53a1a04751bb61aa2ba94fd data/eidolon/recipes/rituals/ritual_catacomb_locator.json
+d096d163f4a5da3f6d5cad42c462bfbc7dd64311 data/eidolon/recipes/rituals/ritual_catacomb_locator.json
 72d8cc7c6780d50332710e814a238b5ad1c3ed11 data/eidolon/recipes/rituals/ritual_crystal.json
 7e1fbbe518028f318ce399bd48ba4af7b7f0eae2 data/eidolon/recipes/rituals/ritual_daylight.json
 12b80d7ae28da39cc263aa3076c071d4e74f5571 data/eidolon/recipes/rituals/ritual_deceit.json

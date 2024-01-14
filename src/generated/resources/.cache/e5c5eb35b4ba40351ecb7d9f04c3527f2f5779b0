@@ -1,9 +1,9 @@
-// 1.20.1	2024-01-14T17:24:16.3206567	Advancements
+// 1.20.1	2024-01-15T00:27:25.1620593	Advancements
 195b7b963e4c9b002e6e13f16615cfd0ef3cec38 data/eidolon/advancements/athame.json
 42ebe08d5c0ec5b5b7e73923d11fdf6f14d2e4f7 data/eidolon/advancements/brazier.json
 b626ee7b0992cfa3d9d487ab66952aa1e982b977 data/eidolon/advancements/crucible.json
 9ca58ebf17016f360fceece2f451d17a420a3608 data/eidolon/advancements/cure_zombie.json
-8bc06a2522028c6a47db7104d9eb01e22e68b17f data/eidolon/advancements/enthrall.json
+e7107648c70652d53bc2967d9f9b8733310068fc data/eidolon/advancements/enthrall_undead.json
 616b8f432240c4eda711f9387a7e2bfab8a2daca data/eidolon/advancements/flame_spell.json
 6f5676149de4bc2ba3daf634b99d9cca555a3c3b data/eidolon/advancements/frost_spell.json
 ccbf6c9b843d52d9fc31469247b530d440c215c2 data/eidolon/advancements/holy_symbol.json
@@ -15,7 +15,7 @@ eb41df92752fa495b6d8e329621cd077cae2581b data/eidolon/advancements/research_note
 68cf0e8c166c97a8f7b61e981bed760e8da9ae09 data/eidolon/advancements/root.json
 7f63600a33b4637f795196f3bef4ba8aa3fb39d5 data/eidolon/advancements/sacred_path.json
 1c4d327c95f9aec92a19ac7a246cb90b8930425e data/eidolon/advancements/sacrifice.json
-e4bc035f01f4b34fc7497fb492c3d1f019db4dd0 data/eidolon/advancements/smite.json
+93c5cccc7c9d6942aed79ebaa5786edbed84d374 data/eidolon/advancements/smite_undead.json
 f23c05bea775e22e9b36447e3a16465de73702df data/eidolon/advancements/soul_shard.json
 38f7fc1d57ad3d89ac4f43a8b4b8b6f62c239b24 data/eidolon/advancements/stone_altar.json
 fb92f65bc7570300ba01e07bc25fbb1656bc46b8 data/eidolon/advancements/straw_effigy.json

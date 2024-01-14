@@ -182,7 +182,7 @@ public class EidRitualProvider implements DataProvider {
                 .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get()))
         );
 
-        location(Worldgen.CATACOMBS, prefix("ritual_catacomb_locator"), Ingredient.of(Items.MAP), ingredientsFromObjects(List.of(Items.COMPASS, Registry.SHADOW_GEM.get(), Registry.MAGIC_INK.get(), Registry.RAVEN_FEATHER.get())), List.of(), 0);
+        location(Worldgen.CATACOMBS, prefix("ritual_catacomb_locator"), Ingredient.of(Items.MAP), ingredientsFromObjects(List.of(Items.COMPASS, Registry.MAGIC_INK.get(), Registry.RAVEN_FEATHER.get())), List.of(), 0);
 
         // tester for command ritual
         // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
