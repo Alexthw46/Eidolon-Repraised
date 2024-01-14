@@ -48,7 +48,6 @@ public class BruteSkeletonModel extends HumanoidModel<GiantSkeletonEntity> {
     @Override
     public void setupAnim(@NotNull GiantSkeletonEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 
-
         boolean flag = pEntity.getFallFlyingTicks() > 4;
         boolean flag1 = pEntity.isVisuallySwimming();
         this.head.yRot = pNetHeadYaw * ((float) Math.PI / 180F);
@@ -105,30 +104,6 @@ public class BruteSkeletonModel extends HumanoidModel<GiantSkeletonEntity> {
         this.leftArm.yRot = 0.0F;
 
         this.setupAttackAnimation(pEntity, pAgeInTicks);
-        /*
-        if (this.crouching) {
-            this.body.xRot = 0.5F;
-            this.rightArm.xRot += 0.4F;
-            this.leftArm.xRot += 0.4F;
-            this.rightLeg.z = 4.0F;
-            this.leftLeg.z = 4.0F;
-            this.rightLeg.y = 12.2F;
-            this.leftLeg.y = 12.2F;
-            this.head.y = 4.2F;
-            this.body.y = 3.2F;
-            this.leftArm.y = 5.2F;
-            this.rightArm.y = 5.2F;
-        } else {
-            this.body.xRot = 0.0F;
-            this.rightLeg.z = 0.0F;
-            this.leftLeg.z = 0.0F;
-            this.rightLeg.y = 12.0F;
-            this.leftLeg.y = 12.0F;
-            this.head.y = 0.0F;
-            this.body.y = 0.0F;
-            this.leftArm.y = 2.0F;
-            this.rightArm.y = 2.0F;
-        }*/
 
         if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS) {
             AnimationUtils.bobModelPart(this.rightArm, pAgeInTicks, 1.0F);
@@ -195,11 +170,14 @@ public class BruteSkeletonModel extends HumanoidModel<GiantSkeletonEntity> {
     }
 
     public void translateToHand(@NotNull HumanoidArm pSide, @NotNull PoseStack pPoseStack) {
-        float f = pSide == HumanoidArm.RIGHT ? 1.0F : -1.0F;
+        float f = pSide == HumanoidArm.RIGHT ? -2.0F : -5.0F;
+        float y = 4.0F;
         ModelPart modelpart = this.getArm(pSide);
         modelpart.x += f;
+        modelpart.y += y;
         modelpart.translateAndRotate(pPoseStack);
         modelpart.x -= f;
+        modelpart.y -= y;
     }
 
 }

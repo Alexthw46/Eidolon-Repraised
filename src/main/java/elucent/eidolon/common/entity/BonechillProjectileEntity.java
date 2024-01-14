@@ -54,7 +54,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
     protected void onImpact(HitResult ray, Entity target) {
 
         Player caster = getCaster();
-        handleSpellDamage(caster, target, target.damageSources().indirectMagic(this, level.getPlayerByUUID(casterId)), 4.0f);
+        handleSpellDamage(caster, target, target.damageSources().indirectMagic(this, caster), 4.0f);
 
         if (target instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 300, 0));
