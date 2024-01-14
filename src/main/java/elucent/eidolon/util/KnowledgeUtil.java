@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class KnowledgeUtil {
@@ -39,19 +40,19 @@ public class KnowledgeUtil {
         });
     }
 
-    public static void grantResearch(Entity entity, Research research) {
+    public static void grantResearch(Entity entity, @NotNull Research research) {
         if (!(entity instanceof ServerPlayer serverPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsResearch(research)) return;
             k.addResearch(research.getRegistryName());
             research.onLearned(serverPlayer);
-            AdvancementTriggers.triggerResearch(research.getName(), serverPlayer);
             serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_research", ChatFormatting.GOLD + research.getName())));
             Networking.sendTo(serverPlayer, new KnowledgeUpdatePacket(serverPlayer, true));
         });
+        AdvancementTriggers.triggerResearch(research.getRegistryName().toString(), serverPlayer);
     }
 
-    public static void grantResearchNoToast(Entity entity, ResourceLocation research) {
+    public static void grantResearchNoToast(Entity entity, @NotNull ResourceLocation research) {
         if (!(entity instanceof ServerPlayer serverPlayer)) return;
         entity.getCapability(IKnowledge.INSTANCE, null).ifPresent((k) -> {
             if (k.knowsResearch(research)) return;
