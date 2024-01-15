@@ -108,7 +108,8 @@ public class IndexPage extends Page {
         RenderSystem.setShaderTexture(0, BACKGROUND);
         for (int i = 0; i < entries.size(); i++) {
             gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries.get(i).isUnlocked() ? 0 : 96, 122, 18);
-
+        }
+        for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i).isUnlocked()) {
                 Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries.get(i).icon, x + 2, y + 8 + i * 20);
                 drawText(gui, mStack, I18n.get(entries.get(i).chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
