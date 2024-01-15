@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class ZombieBruteRenderer extends HumanoidMobRenderer<ZombieBruteEntity, ZombieBruteModel> {
     public ZombieBruteRenderer(Context erm) {
         super(erm, new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), 0.6f);
-        this.addLayer(new HumanoidArmorLayer<>(this, new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), erm.getModelManager()));
+        this.addLayer(new HumanoidArmorLayer<>(this, new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER)), new ZombieBruteModel(erm.bakeLayer(ClientRegistry.ZOMBIE_BRUTE_LAYER))));
     }
 
     @Override

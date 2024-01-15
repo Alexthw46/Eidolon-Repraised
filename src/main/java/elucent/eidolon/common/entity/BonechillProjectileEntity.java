@@ -3,10 +3,10 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.*;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.EidolonSounds;
+import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -28,7 +28,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level.isClientSide) {
             Vec3 motion = getDeltaMovement();
             Vec3 pos = position();
             Vec3 norm = motion.normalize().scale(0.025f);

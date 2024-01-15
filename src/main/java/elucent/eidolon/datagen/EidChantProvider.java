@@ -7,27 +7,32 @@ import elucent.eidolon.registries.Signs;
 import elucent.eidolon.registries.Spells;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EidChantProvider extends SimpleDataProvider {
+public class EidChantProvider implements DataProvider {
 
+    private final DataGenerator generator;
 
     public EidChantProvider(DataGenerator dataGenerator) {
-        super(dataGenerator);
+        this.generator = (dataGenerator);
     }
 
     List<ChantRecipe> chants = new ArrayList<>();
 
     @Override
-    public void collectJsons(CachedOutput pOutput) {
+    public void run(@NotNull CachedOutput pOutput) throws IOException {
+        Path output = this.generator.getOutputFolder();
+
         addChants();
         for (ChantRecipe recipe : chants) {
             Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.toJson(), path);
+            DataProvider.saveStable(pOutput, recipe.toJson(), path);
         }
     }
 

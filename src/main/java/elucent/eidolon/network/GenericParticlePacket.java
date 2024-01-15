@@ -1,9 +1,9 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
@@ -32,7 +32,7 @@ public class GenericParticlePacket {
     }
 
     public static GenericParticlePacket decode(FriendlyByteBuf pBuffer) {
-        ParticleType<?> particletype = pBuffer.readById(BuiltInRegistries.PARTICLE_TYPE);
+        ParticleType<?> particletype = pBuffer.readById(Registry.PARTICLE_TYPE);
         double x = pBuffer.readDouble();
         double y = pBuffer.readDouble();
         double z = pBuffer.readDouble();
@@ -48,7 +48,7 @@ public class GenericParticlePacket {
     }
 
     public void encode(FriendlyByteBuf pBuffer) {
-        pBuffer.writeId(BuiltInRegistries.PARTICLE_TYPE, this.particle.getType());
+        pBuffer.writeId(Registry.PARTICLE_TYPE, this.particle.getType());
         pBuffer.writeDouble(this.x);
         pBuffer.writeDouble(this.y);
         pBuffer.writeDouble(this.z);

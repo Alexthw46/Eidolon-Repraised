@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.LocationRitual;
 import elucent.eidolon.registries.EidolonRecipes;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -33,7 +33,7 @@ public class LocationRitualRecipe extends RitualRecipe {
 
     @Override
     public Ritual getRitual() {
-        return new LocationRitual(TagKey.create(Registries.STRUCTURE, structureTagKey)).setRegistryName(id);
+        return new LocationRitual(TagKey.create(Registry.STRUCTURE_REGISTRY, structureTagKey)).setRegistryName(id);
     }
 
     @Override

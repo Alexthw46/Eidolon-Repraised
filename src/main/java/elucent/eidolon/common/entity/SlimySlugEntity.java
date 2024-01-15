@@ -122,7 +122,7 @@ public class SlimySlugEntity extends TamableAnimal {
                 }
             }
             return InteractionResult.sidedSuccess(this.level.isClientSide);
-        } else if (onGround() && this.isTame() && this.isOwnedBy(player)) {
+        } else if (isOnGround() && this.isTame() && this.isOwnedBy(player)) {
             if (!this.level.isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
             }

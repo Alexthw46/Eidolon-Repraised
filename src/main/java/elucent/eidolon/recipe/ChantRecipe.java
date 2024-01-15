@@ -8,7 +8,6 @@ import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.registries.Spells;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -40,7 +39,7 @@ public class ChantRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container container, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull Container container) {
         return ItemStack.EMPTY;
     }
 
@@ -50,7 +49,7 @@ public class ChantRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 

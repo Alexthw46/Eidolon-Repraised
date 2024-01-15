@@ -7,14 +7,12 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.math.Matrix4f;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.capability.IKnowledge;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.event.ClientEvents;
-import elucent.eidolon.util.ColorUtil;
-import elucent.eidolon.api.spells.Spell;
-import elucent.eidolon.client.ClientRegistry;
-import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.recipe.ChantRecipe;
+import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,8 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import org.jetbrains.annotations.NotNull;
 
 public class ChantPage extends Page {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_chant_page.png");
@@ -41,13 +37,14 @@ public class ChantPage extends Page {
         this.spell = spell;
     }
 
+
     @Override
-    public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
+    public void fullRender(CodexGui gui, PoseStack mStack, int x, int y, int mouseX, int mouseY) {
         if (spell != null && chant == null) {
             if (Eidolon.proxy.getWorld().getRecipeManager().byKey(spell.getRegistryName()).orElse(null) instanceof ChantRecipe chantRecipe) {
                 chant = chantRecipe.signs();
                 if (chant == null || chant.length == 0) {
-                    mStack.drawString(gui.getMinecraft().font, "No matching recipe found for " + spell.getRegistryName(), x + 10, y + 10, 0x000000);
+                    drawText(gui, mStack, "No matching recipe found for " + spell.getRegistryName(), x + 10, y + 10);
                 }
             }
         }
@@ -82,23 +79,23 @@ public class ChantPage extends Page {
         RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
         Player entity = Minecraft.getInstance().player;
         IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
-        int w = chant.size() * 24;
+        int w = chant.length * 24;
         int baseX = x + 64 - w / 2;
         CodexGui.blit(mStack, baseX - 16, y + 28, 256, 208, 16, 32, 512, 512);
-        for (int i = 0; i < chant.size(); i ++) {
+        for (int i = 0; i < chant.length; i++) {
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 272, 208, 24, 32, 512, 512);
         }
         CodexGui.blit(mStack, baseX + w, y + 28, 296, 208, 16, 32, 512, 512);
         RenderSystem.enableBlend();
 
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        for (int i = 0; i < chant.size(); i ++) {
+        for (int i = 0; i < chant.length; i++) {
             RenderSystem.setShaderTexture(0, CodexGui.CODEX_BACKGROUND);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             CodexGui.blit(mStack, baseX + i * 24, y + 28, 312, 208, 24, 24, 512, 512);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-            Sign sign = chant.get(i);
+            Sign sign = chant[i];
             float flicker = 0.875f + 0.125f * (float)Math.sin(Math.toRadians(12 * ClientEvents.getClientTicks()));
             RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);

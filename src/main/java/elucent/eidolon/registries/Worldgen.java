@@ -1,15 +1,11 @@
 package elucent.eidolon.registries;
 
-import elucent.eidolon.Eidolon;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -23,24 +19,22 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.DarkOakFoliageP
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.DarkOakTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.*;
-
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
+import static elucent.eidolon.Eidolon.MODID;
+
 public class Worldgen {
 
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Eidolon.MODID);
-    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFG_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.CONFIGURED_FEATURE_REGISTRY, Eidolon.MODID);
-    public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.PLACED_FEATURE_REGISTRY, Eidolon.MODID);
-    
-    public static final TagKey<Structure> CATACOMBS = TagKey.create(Registries.STRUCTURE, new ResourceLocation(MODID, "catacombs"));
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, MODID);
+    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFG_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.CONFIGURED_FEATURE_REGISTRY, MODID);
+    public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(net.minecraft.core.Registry.PLACED_FEATURE_REGISTRY, MODID);
+
+    public static final TagKey<Structure> CATACOMBS = TagKey.create(net.minecraft.core.Registry.STRUCTURE_REGISTRY, new ResourceLocation(MODID, "catacombs"));
 
     static final RegistryObject<PlacedFeature> LEAD_ORE_GEN;
     static final RegistryObject<PlacedFeature> SILVER_ORE_GEN;

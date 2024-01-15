@@ -90,14 +90,15 @@ public class IndexPage extends Page {
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
-        for (int i = 0; i < entries.length; i++)
+        for (int i = 0; i < entries.size(); i++)
             if (entries.get(i).isUnlocked()) {
-            if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
-                gui.changeChapter(entries.get(i).chapter);
-                assert Minecraft.getInstance().player != null;
-                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                return true;
-
+                if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
+                    gui.changeChapter(entries.get(i).chapter);
+                    assert Minecraft.getInstance().player != null;
+                    Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    return true;
+                }
+            }
         return false;
     }
 
@@ -107,11 +108,11 @@ public class IndexPage extends Page {
         RenderSystem.setShaderTexture(0, BACKGROUND);
         for (int i = 0; i < entries.size(); i++) {
             gui.blit(mStack, x + 1, y + 7 + i * 20, 128, entries.get(i).isUnlocked() ? 0 : 96, 122, 18);
-      
-            if (entries[i].isUnlocked()) {
-            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries.get(i).icon, x + 2, y + 8 + i * 20);
-            drawText(gui, mStack, I18n.get(entries.get(i).chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
-        }
+
+            if (entries.get(i).isUnlocked()) {
+                Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(entries.get(i).icon, x + 2, y + 8 + i * 20);
+                drawText(gui, mStack, I18n.get(entries.get(i).chapter.titleKey), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
+            }
         }
     }
 }
