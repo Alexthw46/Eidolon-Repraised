@@ -22,12 +22,12 @@ public abstract class PlayerMixin {
         if ((Object) this instanceof Player player) {
             CompoundTag leftShoulder = getShoulderEntityLeft(), rightShoulder = getShoulderEntityRight();
             if (leftShoulder != null) {
-                if (leftShoulder.getString("id").equals("eidolon:raven") && player.isShiftKeyDown()) {
+                if (leftShoulder.getString("id").equals("eidolon:raven") && !player.isShiftKeyDown()) {
                     ci.cancel();
                 }
             }
             if (rightShoulder != null) {
-                if (rightShoulder.getString("id").equals("eidolon:raven") && player.isShiftKeyDown()) {
+                if (rightShoulder.getString("id").equals("eidolon:raven") && !player.isShiftKeyDown()) {
                     ci.cancel();
                 }
             }
