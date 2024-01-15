@@ -27,6 +27,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
@@ -132,7 +133,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
                 itemstack.shrink(1);
             }
             if (!this.level.isClientSide) {
-                if (this.random.nextInt(10) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
                     this.level.broadcastEntityEvent(this, (byte) 7);
                 } else {

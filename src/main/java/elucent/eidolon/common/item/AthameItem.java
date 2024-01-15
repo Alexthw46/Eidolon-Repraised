@@ -94,18 +94,22 @@ public class AthameItem extends SwordItem {
                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                 if (random.nextInt(5) == 0) {
 
-                    if (state.is(Registry.PLANTER_PLANTS) && state.getValue(HerbBlockBase.AGE) == 3) {
-                        ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
-                        ItemStack drop = getHarvestable(state);
-                        if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
-                            ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
-                            for (int i = 0; i < random.nextInt(3); i++)
-                                ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
-                        }
-                        if (!ctx.getPlayer().isCreative())
-                            ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
+                    // special case for planter plants, only do something if they're fully grown
+                    if (state.is(Registry.PLANTER_PLANTS)) {
+                        if (state.getValue(HerbBlockBase.AGE) == 2) {
+                            ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
+                            ItemStack drop = getHarvestable(state);
+                            if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
+                                ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
+                                for (int i = -1; i < random.nextInt(3); i++)
+                                    ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
+                            }
+                            if (!ctx.getPlayer().isCreative())
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
 
+                        }
                     } else {
+                        // for anything else, chance to break it without dropping anything
                         if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
                             ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
                         else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);

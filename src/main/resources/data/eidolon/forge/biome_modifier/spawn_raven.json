@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_forest",
   "spawners": {
     "type": "eidolon:raven",
-    "weight": 6,
+    "weight": 10,
     "minCount": 2,
     "maxCount": 4
   }
