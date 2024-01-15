@@ -4,7 +4,7 @@
   "step": "underground_structures",
   "biomes": "#minecraft:is_overworld",
   "terrain_adaptation": "bury",
-  "size": 7,
+  "size": 6,
   "start_height": {
     "absolute": 0
   },
@@ -13,7 +13,6 @@
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
-      // Use the bounding box of individual pieces instead of the entire structure's bounds.
       "spawns": [
         {
           "type": "eidolon:giant_skeleton",
