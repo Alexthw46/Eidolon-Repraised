@@ -7,12 +7,14 @@
     "AbstractArrowMixin",
     "AbstractContainerMenuMixin",
     "EntityMixin",
-    "LevelRendererMixin",
     "LivingEntityMixin",
     "PlayerMixin",
-    "PlayerRendererMixin",
     "PotionBrewingMixin",
     "ProjectileMixin"
+  ],
+  "client": [
+    "LevelRendererMixin",
+    "PlayerRendererMixin"
   ],
   "minVersion": "0.8"
 }
