@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "eidolon:raw_lead"
+    "tag": "forge:raw_materials/lead"
   },
   "result": "eidolon:lead_ingot",
   "experience": 0.5,
