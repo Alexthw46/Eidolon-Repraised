@@ -40,7 +40,7 @@ public class ExecCommandRitual extends Ritual {
                 try {
 
                     EidolonFakePlayer fakePlayer = EidolonFakePlayer.getPlayer(serverWorld);
-                    fakePlayer.setPos(pos.getCenter());
+                    fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
                     CommandSourceStack commandSource = fakePlayer.createCommandSourceStack().withPermission(2).withSuppressedOutput();
                     server.getCommands().performPrefixedCommand(commandSource, this.command);
 
