@@ -17,7 +17,7 @@ public class Config {
         CRUCIBLE_STEP_DURATION = builder.comment("Duration in ticks of each step of a crucible recipe.")
         		.defineInRange("crucibleStepDuration", 100, 20, 1200);
         MAX_ETHEREAL_HEALTH = builder.comment("Maximum amount of ethereal health (soul half-hearts) an entity can have at once.")
-        		.defineInRange("maxEtherealHealth", 80, 0, 1000);
+                .defineInRange("maxEtherealHealth", 60, 0, 1000);
         builder.pop();
 
         builder.comment("Soul Enchanter").push("soulEnchanter");
