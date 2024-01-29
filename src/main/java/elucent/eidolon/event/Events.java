@@ -1,7 +1,6 @@
 package elucent.eidolon.event;
 
 import com.mojang.authlib.GameProfile;
-import elucent.eidolon.Config;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.*;
@@ -23,12 +22,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -148,7 +146,11 @@ public class Events {
             if (s.getItem() instanceof BonelordArmorItem) hasBoneArmor = true;
         }
         if (hasBoneArmor && event.getEntity().getHealth() >= event.getEntity().getMaxHealth() * 0.999 && event.getEntity().tickCount % 80 == 0)
-            event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> s.healEtherealHealth(1, ISoul.getPersistentHealth(event.getEntity())));
+            event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
+                if (s.getEtherealHealth() < ISoul.getPersistentHealth(e)) //only update ethereal health max if it's lower than the persistent health
+                    s.setMaxEtherealHealth(Math.max(Math.min(ISoul.getPersistentHealth(e), s.getMaxEtherealHealth()), 2 * Mth.floor((s.getEtherealHealth() + 2) / 2)));
+                s.healEtherealHealth(1, ISoul.getPersistentHealth(event.getEntity()));
+            });
     }
 
     @SubscribeEvent
@@ -380,16 +382,5 @@ public class Events {
             } else if (EntityUtil.sameMaster(event.getEntity(), source)) event.setCanceled(true);
         }
     }
-
-    @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            AttributeInstance attr = player.getAttribute(EidolonAttributes.MAX_SOUL_HEARTS.get());
-            if (attr != null && attr.getModifier(etherealHealthUUID) == null)
-                attr.addPermanentModifier(new AttributeModifier(etherealHealthUUID, "eidolon:configured_max_ethereal", Config.MAX_ETHEREAL_HEALTH.get(), AttributeModifier.Operation.ADDITION));
-        }
-    }
-
-    UUID etherealHealthUUID = UUID.fromString("e7d7b2d0-4b8a-11eb-ae93-0242ac130002");
 
 }

@@ -5,6 +5,7 @@ import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,7 +31,7 @@ public class SoulboneAmuletItem extends ItemBase implements ICurioItem {
         if (event.getSource().getEntity() instanceof LivingEntity e) {
             if (CuriosApi.getCuriosHelper().findFirstCurio(e, Registry.SOULBONE_AMULET.get()).isPresent()) {
                 e.getCapability(ISoul.INSTANCE).ifPresent((cap) -> {
-                    cap.setMaxEtherealHealth(Math.max(Math.min(ISoul.getPersistentHealth(e), cap.getMaxEtherealHealth()), 2 * (int) Math.floor((cap.getEtherealHealth() + 3) / 2)));
+                    cap.setMaxEtherealHealth(Math.max(Math.min(ISoul.getPersistentHealth(e), cap.getMaxEtherealHealth()), 2 * Mth.floor((cap.getEtherealHealth() + 3) / 2)));
                     cap.setEtherealHealth(cap.getEtherealHealth() + 2);
                     if (!e.level.isClientSide)
                         Networking.sendToTracking(e.level, e.getOnPos(), new SoulUpdatePacket(e));
