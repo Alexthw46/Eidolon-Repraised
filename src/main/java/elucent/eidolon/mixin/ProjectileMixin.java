@@ -36,7 +36,7 @@ public abstract class ProjectileMixin extends Entity implements TargetMode {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void moveTowardsTarget(CallbackInfo ci) {
-        if (!isOnGround()) {
+        if (eidolon$targetMode != null && !isOnGround()) {
             EntityUtil.moveTowardsTarget(this);
         }
     }

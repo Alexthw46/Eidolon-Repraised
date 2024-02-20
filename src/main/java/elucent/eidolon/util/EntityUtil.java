@@ -17,6 +17,8 @@ import java.util.function.Predicate;
 public class EntityUtil {
     public static final String THRALL_KEY = Eidolon.MODID + ":thrall";
 
+    private static final Predicate<Entity> FALLBACK = entity -> true;
+
     public static void enthrall(LivingEntity caster, LivingEntity thrall) {
         thrall.getPersistentData().putUUID(THRALL_KEY, caster.getUUID());
         if (thrall instanceof Mob mob) {
@@ -55,15 +57,11 @@ public class EntityUtil {
             targetPredicate = spellProjectile.trackingPredicate;
         } else if (entity instanceof Projectile projectile) {
             owner = projectile.getOwner();
-            targetPredicate = projectile instanceof TargetMode mode ? mode.eidolon$getMode() : null;
-
-            if (targetPredicate == null) {
-                // Was not shot with the ring present
-                return;
-            }
+            Predicate<Entity> targetMode = projectile instanceof TargetMode mode ? mode.eidolon$getMode() : null;
+            targetPredicate = targetMode != null ? targetMode : /* Should not happen */ FALLBACK;
         } else {
             owner = null;
-            targetPredicate = target -> true;
+            targetPredicate = FALLBACK;
         }
 
         List<LivingEntity> entities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), target -> targetPredicate.test(target) && target != owner && target.isAlive() && !(owner != null && target.isAlliedTo(owner)) && (!entity.level.isClientSide() || target != Minecraft.getInstance().player));
