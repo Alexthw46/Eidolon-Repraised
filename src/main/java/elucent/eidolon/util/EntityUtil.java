@@ -1,13 +1,12 @@
 package elucent.eidolon.util;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.common.entity.AngelArrowEntity;
 import elucent.eidolon.common.entity.SpellProjectileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,13 +45,7 @@ public class EntityUtil {
         Entity owner;
         Predicate<Entity> targetPredicate;
 
-        if (entity instanceof AngelArrowEntity angelArrow) {
-            owner = angelArrow.getOwner();
-            targetPredicate = angelArrow.mode;
-        } else if (entity instanceof AbstractArrow arrow) {
-            owner = arrow.getOwner();
-            targetPredicate = target -> true;
-        } else if (entity instanceof SpellProjectileEntity spellProjectile) {
+        if (entity instanceof SpellProjectileEntity spellProjectile) {
             if (spellProjectile.getCasterId() != null) {
                 owner = spellProjectile.getCaster();
             } else {
@@ -60,6 +53,14 @@ public class EntityUtil {
             }
 
             targetPredicate = spellProjectile.trackingPredicate;
+        } else if (entity instanceof Projectile projectile) {
+            owner = projectile.getOwner();
+            targetPredicate = projectile instanceof TargetMode mode ? mode.eidolon$getMode() : null;
+
+            if (targetPredicate == null) {
+                // Was not shot with the ring present
+                return;
+            }
         } else {
             owner = null;
             targetPredicate = target -> true;
