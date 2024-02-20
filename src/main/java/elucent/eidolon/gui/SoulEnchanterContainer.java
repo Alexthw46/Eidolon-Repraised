@@ -2,11 +2,11 @@ package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
 import elucent.eidolon.Config;
-import elucent.eidolon.compat.apotheosis.Apotheosis;
 import elucent.eidolon.compat.CompatHandler;
+import elucent.eidolon.compat.apotheosis.Apotheosis;
+import elucent.eidolon.datagen.EidEnchantmentTagProvider;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -29,10 +29,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -90,46 +90,26 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         this.addDataSlot(DataSlot.shared(this.worldClue, 2));
     }
 
-    private float getPower(Level world, BlockPos pos) {
-        return world.getBlockState(pos).getEnchantPowerBonus(world, pos);
-    }
-
     /**
      * Callback for when the crafting matrix is changed.
      */
     public void slotsChanged(@NotNull Container inventoryIn) {
         if (inventoryIn == this.tableInventory) {
             ItemStack itemstack = inventoryIn.getItem(0);
+
             if (isValidItem(itemstack)) {
                 this.worldPosCallable.execute((world, pos) -> {
-                    int power = 0;
-
-                    for (int k = -1; k <= 1; ++k) {
-                        for (int l = -1; l <= 1; ++l) {
-                            if ((k != 0 || l != 0) && world.isEmptyBlock(pos.offset(l, 0, k)) && world.isEmptyBlock(pos.offset(l, 1, k))) {
-                                power += (int) getPower(world, pos.offset(l * 2, 0, k * 2));
-                                power += (int) getPower(world, pos.offset(l * 2, 1, k * 2));
-
-                                if (l != 0 && k != 0) {
-                                    power += (int) getPower(world, pos.offset(l * 2, 0, k));
-                                    power += (int) getPower(world, pos.offset(l * 2, 1, k));
-                                    power += (int) getPower(world, pos.offset(l, 0, k * 2));
-                                    power += (int) getPower(world, pos.offset(l, 1, k * 2));
-                                }
-                            }
-                        }
-                    }
-
                     this.rand.setSeed(xpSeed.get());
 
-                    for(int i1 = 0; i1 < 3; ++i1) {
+                    for (int i1 = 0; i1 < 3; ++i1) {
                         enchantClue[i1] = -1;
                         worldClue[i1] = -1;
                     }
 
-                    for(int j1 = 0; j1 < 3; ++j1) {
+                    for (int j1 = 0; j1 < 3; ++j1) {
                         List<EnchantmentInstance> list = getEnchantmentList(itemstack, j1);
-                        if (list != null && !list.isEmpty()) {
+
+                        if (!list.isEmpty()) {
                             EnchantmentInstance enchantmentdata = list.get(rand.nextInt(list.size()));
                             enchantClue[j1] = net.minecraft.core.Registry.ENCHANTMENT.getId(enchantmentdata.enchantment);
                             worldClue[j1] = enchantmentdata.level;
@@ -139,7 +119,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     this.broadcastChanges();
                 });
             } else {
-                for(int i = 0; i < 3; ++i) {
+                for (int i = 0; i < 3; ++i) {
                     this.enchantClue[i] = -1;
                     this.worldClue[i] = -1;
                 }
@@ -285,23 +265,27 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
         Map<Enchantment, Integer> existing = EnchantmentHelper.getEnchantments(stack);
         List<Enchantment> valid = Lists.newArrayList(ForgeRegistries.ENCHANTMENTS.getValues());
-        valid.removeIf((ench) -> {
-            boolean canApply = ench.canEnchant(finalTest) ||
-                finalTest.getItem() == Items.BOOK && ench.isAllowedOnBooks();
+        ITag<Enchantment> blacklist = Objects.requireNonNull(ForgeRegistries.ENCHANTMENTS.tags()).getTag(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST);
 
-            if (!canApply || ench.isCurse()) {
+        valid.removeIf(enchantment -> {
+            if (blacklist.contains(enchantment)) {
+                return true;
+            }
+
+            boolean canApply = enchantment.canEnchant(finalTest) || finalTest.getItem() == Items.BOOK && enchantment.isAllowedOnBooks();
+
+            if (!canApply || enchantment.isCurse()) {
                 return true;
             }
 
             if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                return Apotheosis.isTreasureOnly(ench) || existing.containsKey(ench) && existing.get(ench) >= Apotheosis.getMaxLevel(ench);
+                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
             }
 
-            return ench.isTreasureOnly() || existing.containsKey(ench) && existing.get(ench) >= ench.getMaxLevel();
+            return enchantment.isTreasureOnly() || existing.containsKey(enchantment) && existing.get(enchantment) >= enchantment.getMaxLevel();
         });
 
         for (Map.Entry<Enchantment, Integer> e : existing.entrySet()) {
-
             valid.removeIf(next -> !e.getKey().isCompatibleWith(next) && e.getKey() != next);
         }
 
