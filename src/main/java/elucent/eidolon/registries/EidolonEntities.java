@@ -32,8 +32,6 @@ public class EidolonEntities {
             NECROMANCER_SPELL = addEntity("necromancer_spell", 0.4f, 0.4f, NecromancerSpellEntity::new, MobCategory.MISC);
     public static final RegistryObject<EntityType<ChantCasterEntity>>
             CHANT_CASTER = addEntity("chant_caster", 0.1f, 0.1f, ChantCasterEntity::new, MobCategory.MISC);
-    public static final RegistryObject<EntityType<AngelArrowEntity>>
-            ANGEL_ARROW = addEntity("angel_arrow", 0.5f, 0.5f, AngelArrowEntity::new, MobCategory.MISC);
 
     public static final RegistryObject<EntityType<NecromancerEntity>>
             NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 2.2f, NecromancerEntity::new, MobCategory.MONSTER);
