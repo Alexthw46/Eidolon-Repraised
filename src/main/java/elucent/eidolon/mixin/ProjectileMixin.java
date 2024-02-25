@@ -22,21 +22,21 @@ public abstract class ProjectileMixin extends Entity implements TargetMode {
     }
 
     @Unique
-    private Predicate<Entity> eidolon$targetMode;
+    private Predicate<Entity> eidolonrepraised$targetMode = null;
 
     @Override
-    public void eidolon$setMode(final Predicate<Entity> targetMode) {
-        this.eidolon$targetMode = targetMode;
+    public void eidolonrepraised$setMode(final Predicate<Entity> targetMode) {
+        this.eidolonrepraised$targetMode = targetMode;
     }
 
     @Override
-    public @Nullable Predicate<Entity> eidolon$getMode() {
-        return eidolon$targetMode;
+    public @Nullable Predicate<Entity> eidolonrepraised$getMode() {
+        return eidolonrepraised$targetMode;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void moveTowardsTarget(CallbackInfo ci) {
-        if (eidolon$targetMode != null && !isOnGround()) {
+    private void eidolonrepraised$moveTowardsTarget(CallbackInfo ci) {
+        if (eidolonrepraised$targetMode != null && !onGround()) {
             EntityUtil.moveTowardsTarget(this);
         }
     }

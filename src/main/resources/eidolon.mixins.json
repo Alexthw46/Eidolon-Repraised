@@ -4,17 +4,18 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "eidolon.refmap.json",
   "mixins": [
-    "AbstractArrowMixin",
     "AbstractContainerMenuMixin",
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerMixin",
     "PotionBrewingMixin",
-    "ProjectileMixin"
+    "ProjectileMixin",
+    "compat.SpellArrowMixin"
   ],
   "client": [
     "LevelRendererMixin",
     "PlayerRendererMixin"
   ],
+  "plugin": "elucent.eidolon.mixin.MixinPlugin",
   "minVersion": "0.8"
 }

@@ -57,7 +57,7 @@ public class EntityUtil {
             targetPredicate = spellProjectile.trackingPredicate;
         } else if (entity instanceof Projectile projectile) {
             owner = projectile.getOwner();
-            Predicate<Entity> targetMode = projectile instanceof TargetMode mode ? mode.eidolon$getMode() : null;
+            Predicate<Entity> targetMode = projectile instanceof TargetMode mode ? mode.eidolonrepraised$getMode() : null;
             targetPredicate = targetMode != null ? targetMode : /* Should not happen */ FALLBACK_TARGET_PREDICATE;
         } else {
             owner = null;

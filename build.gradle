@@ -119,6 +119,11 @@ repositories {
         }
     }
 
+
+    maven { url 'https://jitpack.io' }
+
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+
 }
 
 dependencies {
@@ -137,7 +142,9 @@ dependencies {
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:5.2.0-beta.3+1.20.1")
     ///*implementation*/ runtimeOnly fg.deobf("joefoxe:hexerei:0.3.2.2")
 
-    //runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}:${ars_version}")
+    runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
+
+    implementation fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}:${ars_version}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-81-FORGE")
     //runtimeOnly fg.deobf("curse.maven:cyanide-541676:3832812") // Cyanide
 
@@ -147,6 +154,9 @@ dependencies {
     implementation fg.deobf("curse.maven:placebo-283644:4872439")
     implementation fg.deobf("curse.maven:apothic-attributes-898963:4872467")
     implementation fg.deobf("curse.maven:apotheosis-313970:4874713")
+
+    implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))
+    implementation("com.github.llamalad7.mixinextras:mixinextras-forge:0.2.0-beta.8")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

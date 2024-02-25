@@ -126,7 +126,6 @@ public class ClientRegistry {
         EntityRenderers.register(EidolonEntities.NECROMANCER_SPELL.get(), NoopRenderer::new);
         EntityRenderers.register(EidolonEntities.CHANT_CASTER.get(), ChantCasterRenderer::new);
         EntityRenderers.register(EidolonEntities.RAVEN.get(), RavenRenderer::new);
-        EntityRenderers.register(EidolonEntities.ANGEL_ARROW.get(), AngelArrowRenderer::new);
         EntityRenderers.register(EidolonEntities.SLIMY_SLUG.get(), SlimySlugRenderer::new);
     }
 

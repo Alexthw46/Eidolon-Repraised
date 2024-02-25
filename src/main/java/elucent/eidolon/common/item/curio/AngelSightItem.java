@@ -75,7 +75,7 @@ public class AngelSightItem extends EidolonCurio {
                 };
 
                 if (projectile instanceof TargetMode mode) {
-                    mode.eidolon$setMode(targetMode);
+                    mode.eidolonrepraised$setMode(targetMode);
                 }
             });
         }

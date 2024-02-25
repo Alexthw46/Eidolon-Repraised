@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public interface TargetMode {
-    @Nullable Predicate<Entity> eidolon$getMode();
-    void eidolon$setMode(final Predicate<Entity> targetMode);
+    @Nullable Predicate<Entity> eidolonrepraised$getMode();
+
+    void eidolonrepraised$setMode(final Predicate<Entity> targetMode);
 }
