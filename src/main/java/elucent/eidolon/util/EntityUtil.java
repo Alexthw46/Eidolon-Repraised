@@ -1,13 +1,12 @@
 package elucent.eidolon.util;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.common.entity.AngelArrowEntity;
 import elucent.eidolon.common.entity.SpellProjectileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +16,8 @@ import java.util.function.Predicate;
 
 public class EntityUtil {
     public static final String THRALL_KEY = Eidolon.MODID + ":thrall";
+
+    private static final Predicate<Entity> FALLBACK_TARGET_PREDICATE = entity -> true;
 
     public static void enthrall(LivingEntity caster, LivingEntity thrall) {
         thrall.getPersistentData().putUUID(THRALL_KEY, caster.getUUID());
@@ -46,13 +47,7 @@ public class EntityUtil {
         Entity owner;
         Predicate<Entity> targetPredicate;
 
-        if (entity instanceof AngelArrowEntity angelArrow) {
-            owner = angelArrow.getOwner();
-            targetPredicate = angelArrow.mode;
-        } else if (entity instanceof AbstractArrow arrow) {
-            owner = arrow.getOwner();
-            targetPredicate = target -> true;
-        } else if (entity instanceof SpellProjectileEntity spellProjectile) {
+        if (entity instanceof SpellProjectileEntity spellProjectile) {
             if (spellProjectile.getCasterId() != null) {
                 owner = spellProjectile.getCaster();
             } else {
@@ -60,9 +55,13 @@ public class EntityUtil {
             }
 
             targetPredicate = spellProjectile.trackingPredicate;
+        } else if (entity instanceof Projectile projectile) {
+            owner = projectile.getOwner();
+            Predicate<Entity> targetMode = projectile instanceof TargetMode mode ? mode.eidolon$getMode() : null;
+            targetPredicate = targetMode != null ? targetMode : /* Should not happen */ FALLBACK_TARGET_PREDICATE;
         } else {
             owner = null;
-            targetPredicate = target -> true;
+            targetPredicate = FALLBACK_TARGET_PREDICATE;
         }
 
         List<LivingEntity> entities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), target -> targetPredicate.test(target) && target != owner && target.isAlive() && !(owner != null && target.isAlliedTo(owner)) && (!entity.level.isClientSide() || target != Minecraft.getInstance().player));
