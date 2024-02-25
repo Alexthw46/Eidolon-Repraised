@@ -10,7 +10,8 @@
           "type": "forge:or",
           "values": [
             "minecraft:deep_dark",
-            "#forge:is_mushroom"
+            "#forge:is_mushroom",
+            "#forge:no_default_monsters"
           ]
         }
       }
