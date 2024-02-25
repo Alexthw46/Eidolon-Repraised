@@ -251,7 +251,7 @@ public class Registry {
     public static final RegistryObject<Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(EquipmentSlot.CHEST, itemProps().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(EquipmentSlot.LEGS, itemProps().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new RecordItem(9, EidolonSounds.PAROUSIA,
-            itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 20));
+            itemProps().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.RARE), 3680));
     public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
     public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
