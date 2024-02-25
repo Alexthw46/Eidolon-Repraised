@@ -27,6 +27,6 @@ public class Datagen {
         gen.addProvider(event.includeServer(), new EidEntityTagProvider(gen, fileHelper));
         gen.addProvider(event.includeClient(), new EidBiomeTagProvider(gen, fileHelper));
         gen.addProvider(event.includeServer(), new EidAdvancementProvider(gen, fileHelper));
+        gen.addProvider(event.includeServer(), new EidEnchantmentTagProvider(gen, fileHelper));
     }
-
 }
