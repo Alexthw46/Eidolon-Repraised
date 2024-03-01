@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "eidolon:item/scriptorium",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "eidolon:item/scriptorium"
+    },
+    "facing=south": {
+      "model": "eidolon:item/scriptorium",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "eidolon:item/scriptorium",
+      "y": 270
+    }
+  }
+}

@@ -5,6 +5,7 @@
     "2": "eidolon:block/scriptorium_top",
     "particle": "eidolon:block/scriptorium_detail"
   },
+  "render_type": "cutout",
   "elements": [
     {
       "from": [

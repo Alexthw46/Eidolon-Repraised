@@ -1,4 +1,4 @@
-// 1.20.1	2023-11-03T16:14:45.5567072	Block States: eidolon
+// 1.20.1	2024-02-25T17:49:03.0992711	Block States: eidolon
 65559ed371ab70f2304e73e518223be9f2a9b853 assets/eidolon/blockstates/illwood_button.json
 74959112a8ff93fcdb47ecbfb472c23a94a3c40d assets/eidolon/blockstates/illwood_pressure_plate.json
 08ba89cd6f5d6474007aebdfb57a1915b4b56dd3 assets/eidolon/blockstates/illwood_standing_sign.json
@@ -7,6 +7,7 @@ bfd71cd34360f3e46fdd66e5c0be689d0340acd9 assets/eidolon/blockstates/polished_but
 3aa7a500ad18632bf113fe66a1139e9f8fae0b71 assets/eidolon/blockstates/polished_pressure_plate.json
 4c3b6aad780ac2d857958c56b3f88d33a475f696 assets/eidolon/blockstates/polished_standing_sign.json
 4c3b6aad780ac2d857958c56b3f88d33a475f696 assets/eidolon/blockstates/polished_wall_sign.json
+edae4d6fd8ae8b1d457e91d57704c2617f7b0bf1 assets/eidolon/blockstates/scriptorium.json
 bcd48762739da26a28cf301cd1fd24f3def84f92 assets/eidolon/models/block/illwood_button.json
 1fa5089e6c996c741f10193b8508288def6af0de assets/eidolon/models/block/illwood_button_pressed.json
 8e6550c7de2480bef0a9598b19f9f9f6c6e965f7 assets/eidolon/models/block/illwood_pressure_plate.json

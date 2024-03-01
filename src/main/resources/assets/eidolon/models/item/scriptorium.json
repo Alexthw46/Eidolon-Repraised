@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
+  "render_type": "cutout",
 	"textures": {
 		"0": "eidolon:block/scriptorium_detail",
 		"1": "eidolon:block/scriptorium_top",

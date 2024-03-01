@@ -485,6 +485,9 @@ public class Registry {
                     .sound(SoundType.STONE).strength(3.0f, 3.0f)
                     .requiresCorrectToolForDrops()));
 
+    public static final RegistryObject<Block> SCRIPTORIUM = addBlock("scriptorium", () -> new Scriptorium(blockProps(Blocks.CRAFTING_TABLE)));
+
+
     public static final RegistryObject<MenuType<WorktableContainer>>
             WORKTABLE_CONTAINER = addContainer("worktable", WorktableContainer::new);
     public static final RegistryObject<MenuType<SoulEnchanterContainer>>

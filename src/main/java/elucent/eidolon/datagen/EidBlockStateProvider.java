@@ -15,8 +15,11 @@ import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class EidBlockStateProvider extends BlockStateProvider {
+    private final ExistingFileHelper fileHelper;
+
     public EidBlockStateProvider(DataGenerator gen, ExistingFileHelper fileHelper) {
         super(gen.getPackOutput(), Eidolon.MODID, fileHelper);
+        this.fileHelper = fileHelper;
     }
 
     @Override
@@ -30,6 +33,8 @@ public class EidBlockStateProvider extends BlockStateProvider {
             signBlock(pack.getStandingSign(), pack.getWallSign(), baseTex);
             pressurePlateBlock(pack.getPressurePlate(), baseTex);
         }
+
+        horizontalBlock(Registry.SCRIPTORIUM.get(), (state) -> new ModelFile.ExistingModelFile(prefix("item/scriptorium"), fileHelper));
     }
 
     @Override

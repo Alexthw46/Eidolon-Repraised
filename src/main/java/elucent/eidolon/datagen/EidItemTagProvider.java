@@ -40,7 +40,8 @@ public class EidItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
         this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
         this.copy(BlockTags.CANDLES, ItemTags.CANDLES);
-
+        tag(ItemTags.BOOKSHELF_BOOKS).add(Registry.CODEX.get());
+        tag(ItemTags.LECTERN_BOOKS).add(Registry.CODEX.get());
         //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
