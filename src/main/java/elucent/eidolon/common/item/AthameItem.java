@@ -1,6 +1,7 @@
 package elucent.eidolon.common.item;
 
 import elucent.eidolon.common.block.HerbBlockBase;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -98,7 +99,7 @@ public class AthameItem extends SwordItem {
                     if (state.is(Registry.PLANTER_PLANTS)) {
                         if (state.getValue(HerbBlockBase.AGE) == 2) {
                             ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
-                            ItemStack drop = getHarvestable(state);
+                            ItemStack drop = getHarvestable(state, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                                 for (int i = -1; i < random.nextInt(3); i++)
@@ -114,7 +115,7 @@ public class AthameItem extends SwordItem {
                             ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
                         else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
                         if (random.nextInt(6) == 0) {
-                            ItemStack drop = getHarvestable(state);
+                            ItemStack drop = getHarvestable(state, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                                 ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
@@ -134,6 +135,7 @@ public class AthameItem extends SwordItem {
 
 
     public static void initHarvestables() {
+        /* deprecated
         harvestables.put(getRegistryName(Blocks.JUNGLE_LEAVES), new ItemStack(Registry.SILDRIAN_SEED.get()));
         harvestables.put(getRegistryName(Blocks.LILY_PAD), new ItemStack(Registry.OANNA_BLOOM.get()));
         harvestables.put(getRegistryName(Blocks.OXEYE_DAISY), new ItemStack(Registry.MERAMMER_ROOT.get()));
@@ -142,6 +144,7 @@ public class AthameItem extends SwordItem {
 
 
         harvestables.put(getRegistryName(Blocks.FERN), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
+         */
 
         // planter plants drop themselves
         harvestables.put(getRegistryName(Registry.MERAMMER_ROOT.get()), new ItemStack(Registry.MERAMMER_ROOT.get()));
@@ -150,8 +153,12 @@ public class AthameItem extends SwordItem {
         harvestables.put(getRegistryName(Registry.AVENNIAN_SPRIG.get()), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
     }
 
-
-    public static ItemStack getHarvestable(BlockState state) {
+    public static ItemStack getHarvestable(BlockState state, Level level) {
+        ItemStack harvest = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.FORAGING_TYPE.get()).stream().filter(
+                foragingRecipe -> foragingRecipe.block.test(new ItemStack(state.getBlock()))
+        ).map(f -> f.getResultItem(level.registryAccess())).findFirst().orElse(ItemStack.EMPTY);
+        if (!harvest.isEmpty()) return harvest;
         return harvestables.getOrDefault(getRegistryName(state.getBlock()), ItemStack.EMPTY);
     }
+
 }

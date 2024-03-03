@@ -1,0 +1,9 @@
+{
+  "type": "eidolon:athame_foraging",
+  "block": {
+    "item": "minecraft:jungle_leaves"
+  },
+  "output": {
+    "item": "eidolon:sildrian_seed"
+  }
+}
