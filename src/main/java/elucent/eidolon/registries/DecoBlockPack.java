@@ -1,19 +1,13 @@
 package elucent.eidolon.registries;
 
-import elucent.eidolon.common.tile.HangingSignBlockEntityCopy;
-import elucent.eidolon.common.tile.SignBlockEntityCopy;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static elucent.eidolon.registries.Registry.*;
@@ -77,31 +71,10 @@ public class DecoBlockPack {
         }
 
         public WoodDecoBlock addSign() {
-            sSign = BLOCKS.register(woodName + "_standing_sign", () -> new StandingSignBlock(props, this.woodType) {
-                @Override
-                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-                    return new SignBlockEntityCopy(pPos, pState);
-                }
-            });
-            wSign = BLOCKS.register(woodName + "_wall_sign", () -> new WallSignBlock(props, this.woodType) {
-                @Override
-                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-                    return new SignBlockEntityCopy(pPos, pState);
-                }
-            });
-            hSign = BLOCKS.register(woodName + "_hanging_sign", () -> new CeilingHangingSignBlock(props, this.woodType) {
-                @Override
-                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-                    return new HangingSignBlockEntityCopy(pPos, pState);
-                }
-
-            });
-            hwSign = BLOCKS.register(woodName + "_hanging_wall_sign", () -> new WallHangingSignBlock(props, this.woodType) {
-                @Override
-                public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-                    return new HangingSignBlockEntityCopy(pPos, pState);
-                }
-            });
+            sSign = BLOCKS.register(woodName + "_standing_sign", () -> new StandingSignBlock(props, this.woodType));
+            wSign = BLOCKS.register(woodName + "_wall_sign", () -> new WallSignBlock(props, this.woodType));
+            hSign = BLOCKS.register(woodName + "_hanging_sign", () -> new CeilingHangingSignBlock(props, this.woodType));
+            hwSign = BLOCKS.register(woodName + "_hanging_wall_sign", () -> new WallHangingSignBlock(props, this.woodType));
             ITEMS.register(woodName + "_sign", () -> new SignItem(itemProps(), sSign.get(), wSign.get()));
             ITEMS.register(woodName + "_hanging_sign", () -> new HangingSignItem(hSign.get(), hwSign.get(), itemProps()));
 

@@ -823,5 +823,6 @@
   "lime": "Lime",
   "magenta": "Magenta",
   "light_blue": "Light Blue",
-  "light_gray": "Light Gray"
+  "light_gray": "Light Gray",
+  "eidolon.gui.scriptorium": "Scriptorium"
 }

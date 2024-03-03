@@ -5,6 +5,7 @@
   "refmap": "eidolon.refmap.json",
   "mixins": [
     "AbstractContainerMenuMixin",
+    "BlockEntityTypeAccessor",
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerMixin",

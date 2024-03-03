@@ -532,8 +532,8 @@ public class Registry {
     public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<SignBlockEntityCopy>> SIGN_BLOCKENTITY;
-    public static RegistryObject<BlockEntityType<SignBlockEntityCopy>> H_SIGN_BLOCKENTITY;
+
+    public static RegistryObject<BlockEntityType<ScriptoriumTile>> SCRIPTORIUM_TILE;
 
 
 
@@ -548,8 +548,7 @@ public class Registry {
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
         CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
-        SIGN_BLOCKENTITY = TILE_ENTITIES.register("sign", () -> BlockEntityType.Builder.of(SignBlockEntityCopy::new, ILLWOOD_PLANKS.getStandingSign(), ILLWOOD_PLANKS.getWallSign(), POLISHED_PLANKS.getStandingSign(), POLISHED_PLANKS.getWallSign()).build(null));
-        H_SIGN_BLOCKENTITY = TILE_ENTITIES.register("hanging_sign", () -> BlockEntityType.Builder.of(SignBlockEntityCopy::new, ILLWOOD_PLANKS.getHangingSign(), ILLWOOD_PLANKS.getHangingWallSign(), POLISHED_PLANKS.getHangingSign(), POLISHED_PLANKS.getHangingWallSign()).build(null));
+        SCRIPTORIUM_TILE = TILE_ENTITIES.register("scriptorium", () -> BlockEntityType.Builder.of(ScriptoriumTile::new, SCRIPTORIUM.get()).build(null));
     }
 
 

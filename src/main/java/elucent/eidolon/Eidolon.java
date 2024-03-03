@@ -1,5 +1,6 @@
 package elucent.eidolon;
 
+import com.google.common.collect.ImmutableSet;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.codex.CodexChapters;
@@ -11,6 +12,7 @@ import elucent.eidolon.gui.ResearchTableScreen;
 import elucent.eidolon.gui.SoulEnchanterScreen;
 import elucent.eidolon.gui.WoodenBrewingStandScreen;
 import elucent.eidolon.gui.WorktableScreen;
+import elucent.eidolon.mixin.BlockEntityTypeAccessor;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
@@ -19,8 +21,6 @@ import elucent.eidolon.registries.*;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +29,8 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,7 +51,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
@@ -100,7 +105,20 @@ public class Eidolon {
             Runes.init();
             AthameItem.initHarvestables();
             Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
+            addBlocksToTile(BlockEntityType.SIGN, Registry.ILLWOOD_PLANKS.getStandingSign(), Registry.ILLWOOD_PLANKS.getWallSign(), Registry.POLISHED_PLANKS.getStandingSign(), Registry.POLISHED_PLANKS.getWallSign());
+            addBlocksToTile(BlockEntityType.HANGING_SIGN, Registry.ILLWOOD_PLANKS.getHangingSign(), Registry.ILLWOOD_PLANKS.getHangingWallSign(), Registry.POLISHED_PLANKS.getHangingSign(), Registry.POLISHED_PLANKS.getHangingWallSign());
         });
+    }
+
+    public static void addBlocksToTile(BlockEntityType<?> bet, Block... blocksToAdd) {
+        Set<Block> oldSet = ((BlockEntityTypeAccessor) bet).getValidBlocks();
+        if (oldSet instanceof ImmutableSet<Block>) {
+            Set<Block> newSet = new HashSet<>();
+            Collections.addAll(newSet, blocksToAdd);
+            ((BlockEntityTypeAccessor) bet).setValidBlocks(newSet);
+        } else {
+            Collections.addAll(oldSet, blocksToAdd);
+        }
     }
 
 
@@ -126,8 +144,6 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.SOUL_ENCHANTER_TILE_ENTITY.get(), (trd) -> new SoulEnchanterTileRenderer());
         BlockEntityRenderers.register(Registry.GOBLET_TILE_ENTITY.get(), (trd) -> new GobletTileRenderer());
         BlockEntityRenderers.register(Registry.CENSER_TILE_ENTITY.get(), (trd) -> new CenserRenderer());
-        BlockEntityRenderers.register(Registry.SIGN_BLOCKENTITY.get(), SignRenderer::new);
-        BlockEntityRenderers.register(Registry.H_SIGN_BLOCKENTITY.get(), HangingSignRenderer::new);
 
         event.enqueueWork(() -> {
             CodexChapters.init();
