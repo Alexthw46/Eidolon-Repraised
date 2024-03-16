@@ -533,8 +533,6 @@ public class Registry {
     public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
     public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
 
-    public static RegistryObject<BlockEntityType<ScriptoriumTile>> SCRIPTORIUM_TILE;
-
 
 
     static {
@@ -548,7 +546,6 @@ public class Registry {
         GOBLET_TILE_ENTITY = TILE_ENTITIES.register("goblet", () -> BlockEntityType.Builder.of(GobletTileEntity::new, GOBLET.get()).build(null));
         CENSER_TILE_ENTITY = TILE_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserTileEntity::new, CENSER.get()).build(null));
         RESEARCH_TABLE_TILE_ENTITY = TILE_ENTITIES.register("research_table", () -> BlockEntityType.Builder.of(ResearchTableTileEntity::new, RESEARCH_TABLE.get()).build(null));
-        SCRIPTORIUM_TILE = TILE_ENTITIES.register("scriptorium", () -> BlockEntityType.Builder.of(ScriptoriumTile::new, SCRIPTORIUM.get()).build(null));
     }
 
 
