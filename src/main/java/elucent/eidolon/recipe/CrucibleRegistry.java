@@ -1,6 +1,5 @@
 package elucent.eidolon.recipe;
 
-import elucent.eidolon.codex.Page;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CrucibleRegistry {
-    static final Map<ResourceLocation, Page> linkedPages = new HashMap<>();
     static final Map<ResourceLocation, CrucibleRecipe> recipes = new HashMap<>();
 
     public static CrucibleRecipe register(CrucibleRecipe recipe) {
@@ -19,10 +17,6 @@ public class CrucibleRegistry {
         assert loc != null;
         recipes.put(loc, recipe);
         return recipe;
-    }
-
-    public static void linkPage(ResourceLocation recipe, Page page) {
-        linkedPages.put(recipe, page);
     }
 
     public static CrucibleRecipe find(ResourceLocation loc) {

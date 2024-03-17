@@ -6,7 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Config {
     // Generic Settings
-    public static ConfigValue<Integer> CRUCIBLE_STEP_DURATION, MAX_ETHEREAL_HEALTH;
+    public static ConfigValue<Integer> CRUCIBLE_STEP_DURATION, CRUCIBLE_STEP_BACKOFF, MAX_ETHEREAL_HEALTH;
     public static ConfigValue<Boolean> TURN_BASED_CRUCIBLE;
 
     // Soul Enchanter
@@ -17,6 +17,7 @@ public class Config {
         builder.comment("Generic settings").push("generic");
         CRUCIBLE_STEP_DURATION = builder.comment("Duration in ticks of each step of a crucible recipe.").defineInRange("crucibleStepDuration", 100, 20, 1200);
         TURN_BASED_CRUCIBLE = builder.comment("Makes it so that the Crucible will not fizzle out unless the recipe has failed, giving players more time to organize and plan their next step and behave more like a turn-based recipe.").define("turnBasedCrucible", false);
+        CRUCIBLE_STEP_BACKOFF = builder.comment("For turn-based Crucible, duration in ticks between each recipe check once the step duration expired.").define("crucibleBackoff", 40);
         MAX_ETHEREAL_HEALTH = builder.comment("Maximum amount of ethereal health (soul half-hearts) an entity can have at once.").defineInRange("maxEtherealHealth", 60, 0, 1000);
         builder.pop();
 

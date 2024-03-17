@@ -254,14 +254,12 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
 
         if (!level.isClientSide && stepCounter > 0) {
-            --stepCounter;
-
-            if (Config.TURN_BASED_CRUCIBLE.get()) {
-                handleTurnBasedUpdate(steamR, steamG, steamB);
-            } else {
-                handleTimedUpdate(steamR, steamG, steamB);
-            }
-
+            if (--stepCounter == 0)
+                if (Config.TURN_BASED_CRUCIBLE.get()) {
+                    handleTurnBasedUpdate(steamR, steamG, steamB);
+                } else {
+                    handleTimedUpdate(steamR, steamG, steamB);
+                }
         }
 
         if (stepCounter == 0 && (!stepSize || Config.TURN_BASED_CRUCIBLE.get()) && hasWater && boiling && level.getGameTime() % 100 == 0) {
@@ -272,26 +270,20 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
     }
 
+    // TODO: Optionally cache the valid recipes for the current steps (after the first) to speedup the lookup,
+    //  when only one is left it's possible to hint the player about the rest of the recipe
     private void handleTurnBasedUpdate(float steamR, float steamG, float steamB) {
-        // Not currently at a point where we need to process yet.
-        if (stepCounter != 0) return;
 
-        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
-        List<ItemStack> contents = new ArrayList<>();
-        for (ItemEntity item : items) {
-            for (int i = 0; i < item.getItem().getCount(); i++) {
-                ItemStack stack = item.getItem().copy();
-                stack.setCount(1);
-                contents.add(stack);
-            }
-            item.remove(RemovalReason.DISCARDED);
+        List<ItemStack> contents = tryConsumeItems();
+
+        // Nothing at all to do here, no stirs and no content changes means we can just sleep for a bit
+        if (stirs == 0 && contents.isEmpty()) {
+            stepCounter = Config.CRUCIBLE_STEP_BACKOFF.get(); // checking every tick is overkill, and the player wouldn't have the time to drop and stir once the step timer is over
+            return;
         }
 
-        // Nothing at all to do here, no stirs and no content changes means we can just sleep
-        if (stirs == 0 && contents.isEmpty()) return;
-
         CrucibleStep step = new CrucibleStep(stirs, contents);
-        steps.add(step);
+
         // Reset stir state
         stirs = 0;
 
@@ -302,21 +294,14 @@ public class CrucibleTileEntity extends TileEntityBase {
             boiling = false;
             drain(); //sync();
             return;
+        } else {
+            steps.add(step);
         }
 
         CrucibleRecipe recipe = CrucibleRegistry.find(steps);
         // Recipe has been completed, let's go!!
         if (recipe != null) {
-            Networking.sendToTracking(level, worldPosition, new CrucibleSuccessPacket(worldPosition, steamR, steamG, steamB));
-            double angle = level.random.nextDouble() * Math.PI * 2;
-            ItemEntity entity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.75, worldPosition.getZ() + 0.5, recipe.getResult().copy());
-            entity.setDeltaMovement(Math.sin(angle) * 0.125, 0.25, Math.cos(angle) * 0.125);
-            entity.setPickUpDelay(10);
-            level.addFreshEntity(entity);
-            contents.clear();
-            steps.clear();
-            boiling = false;
-            drain();
+            completeCraft(steamR, steamG, steamB, contents, recipe);
         } else { // Recipe hasn't been found, but this item is definitely at least part of the recipe so do the whole shabang
             level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
             stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
@@ -324,11 +309,9 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
     }
 
-    private void handleTimedUpdate(float steamR, float steamG, float steamB) {
-        if (stepCounter != 0) return;
-
-        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
+    private List<ItemStack> tryConsumeItems() {
         List<ItemStack> contents = new ArrayList<>();
+        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
         for (ItemEntity item : items) {
             for (int i = 0; i < item.getItem().getCount(); i++) {
                 ItemStack stack = item.getItem().copy();
@@ -337,6 +320,11 @@ public class CrucibleTileEntity extends TileEntityBase {
             }
             item.remove(RemovalReason.DISCARDED);
         }
+        return contents;
+    }
+
+    private void handleTimedUpdate(float steamR, float steamG, float steamB) {
+        List<ItemStack> contents = tryConsumeItems();
         if (stirs == 0 && contents.isEmpty()) { // no action done; end recipe
             Networking.sendToTracking(level, worldPosition, new CrucibleFailPacket(worldPosition));
             steps.clear();
@@ -346,25 +334,30 @@ public class CrucibleTileEntity extends TileEntityBase {
         } else {
             CrucibleStep step = new CrucibleStep(stirs, contents);
             steps.add(step);
+            stirs = 0;
 
             CrucibleRecipe recipe = CrucibleRegistry.find(steps);
             if (recipe != null) { // if recipe found
-                Networking.sendToTracking(level, worldPosition, new CrucibleSuccessPacket(worldPosition, steamR, steamG, steamB));
-                double angle = level.random.nextDouble() * Math.PI * 2;
-                ItemEntity entity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.75, worldPosition.getZ() + 0.5, recipe.getResult().copy());
-                entity.setDeltaMovement(Math.sin(angle) * 0.125, 0.25, Math.cos(angle) * 0.125);
-                entity.setPickUpDelay(10);
-                level.addFreshEntity(entity);
-                contents.clear();
-                steps.clear();
-                boiling = false;
-                drain();
+                completeCraft(steamR, steamG, steamB, contents, recipe);
             } else {
                 level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
                 stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
+                sync();
             }
-            stirs = 0;
-            sync();
         }
+    }
+
+
+    private void completeCraft(float steamR, float steamG, float steamB, List<ItemStack> contents, CrucibleRecipe recipe) {
+        Networking.sendToTracking(level, worldPosition, new CrucibleSuccessPacket(worldPosition, steamR, steamG, steamB));
+        double angle = level.random.nextDouble() * Math.PI * 2;
+        ItemEntity entity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.75, worldPosition.getZ() + 0.5, recipe.getResult().copy());
+        entity.setDeltaMovement(Math.sin(angle) * 0.125, 0.25, Math.cos(angle) * 0.125);
+        entity.setPickUpDelay(10);
+        level.addFreshEntity(entity);
+        contents.clear();
+        steps.clear();
+        boiling = false;
+        drain();
     }
 }
