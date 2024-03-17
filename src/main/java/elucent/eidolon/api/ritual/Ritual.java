@@ -63,6 +63,10 @@ public abstract class Ritual implements Cloneable {
         return this;
     }
 
+    public void sortRequirements() {
+        stepRequirements.sort((a, b) -> b.getPriority() - a.getPriority());
+    }
+
     public Ritual addInvariant(IRequirement requirement) {
         continuousRequirements.add(requirement);
         return this;

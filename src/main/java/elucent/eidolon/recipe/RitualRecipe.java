@@ -152,6 +152,8 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
         if (!focusItems.isEmpty())
             ritual.addRequirements(focusItems.stream().map(FocusItemRequirement::new).collect(Collectors.toList()));
         if (healthRequirement > 0) ritual.addRequirement(new HealthRequirement(healthRequirement));
+        // use IRequirement's getPriority method to sort the step requirements so foci are checked first
+        ritual.sortRequirements();
         return ritual;
     }
 

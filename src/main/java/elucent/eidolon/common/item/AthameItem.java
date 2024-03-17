@@ -8,7 +8,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -40,8 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class AthameItem extends SwordItem {
 
@@ -99,29 +96,29 @@ public class AthameItem extends SwordItem {
                     if (state.is(Registry.PLANTER_PLANTS)) {
                         if (state.getValue(HerbBlockBase.AGE) == 2) {
                             ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
-                            ItemStack drop = getHarvestable(state, ctx.getLevel());
+                            ItemStack drop = getHarvestable(block, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                                 for (int i = -1; i < random.nextInt(3); i++)
                                     ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                             }
                             if (!ctx.getPlayer().isCreative())
-                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), player -> player.broadcastBreakEvent(ctx.getHand()));
 
                         }
                     } else {
                         // for anything else, chance to break it without dropping anything
-                        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
+                        if (block instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
                             ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
                         else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
                         if (random.nextInt(6) == 0) {
-                            ItemStack drop = getHarvestable(state, ctx.getLevel());
+                            ItemStack drop = getHarvestable(block, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                                 ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                             }
                             if (!ctx.getPlayer().isCreative())
-                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), (player) -> player.broadcastBreakEvent(ctx.getHand()));
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), player -> player.broadcastBreakEvent(ctx.getHand()));
                         }
                     }
                 }
@@ -131,7 +128,7 @@ public class AthameItem extends SwordItem {
         return super.useOn(ctx);
     }
 
-    public static final Map<ResourceLocation, ItemStack> harvestables = new HashMap<>();
+    public static final Map<Block, ItemStack> harvestables = new HashMap<>();
 
 
     public static void initHarvestables() {
@@ -147,18 +144,18 @@ public class AthameItem extends SwordItem {
          */
 
         // planter plants drop themselves
-        harvestables.put(getRegistryName(Registry.MERAMMER_ROOT.get()), new ItemStack(Registry.MERAMMER_ROOT.get()));
-        harvestables.put(getRegistryName(Registry.OANNA_BLOOM.get()), new ItemStack(Registry.OANNA_BLOOM.get()));
-        harvestables.put(getRegistryName(Registry.SILDRIAN_SEED.get()), new ItemStack(Registry.SILDRIAN_SEED.get()));
-        harvestables.put(getRegistryName(Registry.AVENNIAN_SPRIG.get()), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
+        harvestables.put(Registry.MERAMMER_ROOT.get(), new ItemStack(Registry.MERAMMER_ROOT.get()));
+        harvestables.put(Registry.OANNA_BLOOM.get(), new ItemStack(Registry.OANNA_BLOOM.get()));
+        harvestables.put(Registry.SILDRIAN_SEED.get(), new ItemStack(Registry.SILDRIAN_SEED.get()));
+        harvestables.put(Registry.AVENNIAN_SPRIG.get(), new ItemStack(Registry.AVENNIAN_SPRIG.get()));
     }
 
-    public static ItemStack getHarvestable(BlockState state, Level level) {
+    public static ItemStack getHarvestable(Block block, Level level) {
         ItemStack harvest = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.FORAGING_TYPE.get()).stream().filter(
-                foragingRecipe -> foragingRecipe.block.test(new ItemStack(state.getBlock()))
+                foragingRecipe -> foragingRecipe.block.test(new ItemStack(block))
         ).map(f -> f.getResultItem(level.registryAccess())).findFirst().orElse(ItemStack.EMPTY);
         if (!harvest.isEmpty()) return harvest;
-        return harvestables.getOrDefault(getRegistryName(state.getBlock()), ItemStack.EMPTY);
+        return harvestables.getOrDefault(block, ItemStack.EMPTY);
     }
 
 }
