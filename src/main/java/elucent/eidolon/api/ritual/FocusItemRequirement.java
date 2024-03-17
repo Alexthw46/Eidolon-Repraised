@@ -54,4 +54,8 @@ public class FocusItemRequirement implements IRequirement {
             Networking.sendToTracking(world, pos.above(2), new RitualConsumePacket(info.getPos(), pos.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
         }
     }
+
+    public int getPriority() {
+        return 10;
+    }
 }

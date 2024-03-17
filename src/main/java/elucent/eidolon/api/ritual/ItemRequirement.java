@@ -62,6 +62,11 @@ public class ItemRequirement implements IRequirement {
         }
     }
 
+    @Override
+    public int getPriority() {
+        return 5;
+    }
+
     public Ingredient getMatch() {
         return match;
     }

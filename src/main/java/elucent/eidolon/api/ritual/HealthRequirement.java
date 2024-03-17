@@ -57,4 +57,9 @@ public class HealthRequirement implements IRequirement {
             if (acc >= this.health) return;
         }
     }
+
+    @Override
+    public int getPriority() {
+        return 1;
+    }
 }

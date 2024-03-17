@@ -8,4 +8,6 @@ public interface IRequirement {
     default void whenMet(Ritual ritual, Level world, BlockPos pos, RequirementInfo info) {
         //
     }
+
+    int getPriority();
 }
