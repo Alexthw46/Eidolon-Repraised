@@ -22,6 +22,8 @@ public class AltarEntries {
         entries.put(Blocks.LANTERN.defaultBlockState(), new AltarEntry(AltarKeys.LIGHT_KEY).setPower(1).setCapacity(1));
         entries.put(Registry.CANDLE.get().defaultBlockState(), new AltarEntry(AltarKeys.LIGHT_KEY).setPower(2));
         entries.put(Registry.CANDLESTICK.get().defaultBlockState(), new AltarEntry(AltarKeys.LIGHT_KEY).setPower(2));
+        entries.put(Registry.MAGIC_CANDLE.get().defaultBlockState(), new AltarEntry(AltarKeys.LIGHT_KEY).setPower(2));
+        entries.put(Registry.MAGIC_CANDLESTICK.get().defaultBlockState(), new AltarEntry(AltarKeys.LIGHT_KEY).setPower(3));
 
         for (int i : BlockStateProperties.ROTATION_16.getPossibleValues()) {
             entries.put(Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, i), new AltarEntry(AltarKeys.SKULL_KEY).setCapacity(2));
