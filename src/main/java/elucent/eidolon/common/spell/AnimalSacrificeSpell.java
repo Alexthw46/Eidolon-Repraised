@@ -41,7 +41,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
+                rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_MOB);
                 rep.addReputation(player, deity.getId(), 3.0 + 0.5 * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));

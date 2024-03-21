@@ -2,6 +2,7 @@ package elucent.eidolon.capability;
 
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.common.spell.PrayerSpell;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -50,8 +51,10 @@ public interface IReputation {
     boolean hasLock(UUID player, ResourceLocation deity, ResourceLocation lock);
     void lock(UUID player, ResourceLocation deity, ResourceLocation key);
     boolean unlock(UUID player, ResourceLocation deity, ResourceLocation key);
-    void pray(UUID player, ResourceLocation spell, long time);
-    boolean canPray(UUID player, ResourceLocation spell, long time);
+
+    void pray(UUID player, PrayerSpell spell, long time);
+
+    boolean canPray(UUID player, PrayerSpell spell, long time);
 
     default double getReputation(Player player, ResourceLocation deity) {
         return getReputation(player.getUUID(), deity);
@@ -81,11 +84,11 @@ public interface IReputation {
         considerChange(player, deity, prev);
     }
 
-    default void pray(Player player, ResourceLocation spell, long time) {
+    default void pray(Player player, PrayerSpell spell, long time) {
         pray(player.getUUID(), spell, time);
     }
 
-    default boolean canPray(Player player, ResourceLocation spell, long time) {
+    default boolean canPray(Player player, PrayerSpell spell, long time) {
         return player.isCreative() || canPray(player.getUUID(), spell, time);
     }
 

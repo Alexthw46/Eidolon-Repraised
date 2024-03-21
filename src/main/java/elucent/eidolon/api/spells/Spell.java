@@ -4,9 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Spell {
     final ResourceLocation registryName;
+    public @Nullable ForgeConfigSpec CONFIG;
+    public @Nullable ForgeConfigSpec.ConfigValue<Integer> DELAY;
 
     public Spell(ResourceLocation registryName) {
         this.registryName = registryName;
@@ -24,12 +28,13 @@ public abstract class Spell {
 
     public abstract void setSigns(SignSequence signs);
 
-    public int getCost() {
-        return 0;
-    }
+    public abstract int getCost();
 
     public int getDelay() {
-        return 10;
+        return DELAY == null ? 10 : DELAY.get();
+    }
+
+    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
     }
 
 }

@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
@@ -33,6 +34,7 @@ import static elucent.eidolon.registries.EidolonParticles.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;
+    public @Nullable ForgeConfigSpec.IntValue COOLDOWN;
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);
@@ -65,7 +67,7 @@ public class PrayerSpell extends StaticSpell {
         LazyOptional<IReputation> iReputationLazyOptional = world.getCapability(IReputation.INSTANCE);
         if (iReputationLazyOptional.resolve().isEmpty()) return true;
         IReputation iReputation = iReputationLazyOptional.resolve().get();
-        if (!iReputation.canPray(player, getRegistryName(), world.getGameTime())) {
+        if (!iReputation.canPray(player, this, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return true;
         }
@@ -99,7 +101,7 @@ public class PrayerSpell extends StaticSpell {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
+                rep.pray(player, this, world.getGameTime());
                 rep.addReputation(player, deity.getId(), 1.0 + 0.25 * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
@@ -133,4 +135,13 @@ public class PrayerSpell extends StaticSpell {
                 .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
     }
 
+    @Override
+    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+        super.buildConfig(spellBuilder);
+        COOLDOWN = spellBuilder.comment("Cooldown for this prayer spell").defineInRange("cooldown", 0, 21000, Integer.MAX_VALUE);
+    }
+
+    public int getCooldown() {
+        return COOLDOWN == null ? 21000 : COOLDOWN.get();
+    }
 }

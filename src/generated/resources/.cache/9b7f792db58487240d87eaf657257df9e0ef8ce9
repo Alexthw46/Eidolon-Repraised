@@ -1,5 +1,6 @@
-// 1.20.1	2023-12-09T12:12:08.9114188	Eidolon Chants
-5fadf6ca54383041acf6de381afe8cbbe317ef82 data/eidolon/recipes/cure_zombie_chant.json
+// 1.20.1	2024-03-21T10:29:47.4060722	Eidolon Chants
+4e375e3d6fcf0d1578778929e2b279f232221597 data/eidolon/recipes/create_water.json
+5fadf6ca54383041acf6de381afe8cbbe317ef82 data/eidolon/recipes/cure_zombie.json
 0bdd511b8b9dbb2ab76220b0f4aa70c01b936785 data/eidolon/recipes/darklight_chant.json
 6b953407884857dedfffd8cc340e6915cdc5c42a data/eidolon/recipes/dark_animal_sacrifice.json
 0e5d5a8f3f4337af15ef91af334017ab97227269 data/eidolon/recipes/dark_prayer.json
@@ -15,5 +16,4 @@ fd48b3a7ab407fbd437aaca8c81273c4749155f6 data/eidolon/recipes/light_chant.json
 c35ad14f60b9822dcaf0b4594d64ec81e8dcccc3 data/eidolon/recipes/reinforce_armor.json
 b1588482acdb70717eab67a6f0dd79c647dcd849 data/eidolon/recipes/smite_chant.json
 fef34144fccbd82604f3ff8b8093c383a4f19f5f data/eidolon/recipes/sunder_armor.json
-4e375e3d6fcf0d1578778929e2b279f232221597 data/eidolon/recipes/water.json
 c8f2c22e530ea2e2bfcdfb6dd9f93d5448f97011 data/eidolon/recipes/zombify_villager.json

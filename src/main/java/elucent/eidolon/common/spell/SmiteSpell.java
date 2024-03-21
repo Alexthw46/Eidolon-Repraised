@@ -13,6 +13,8 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.Nullable;
 
 public class SmiteSpell extends StaticSpell {
     public SmiteSpell(ResourceLocation name, Sign... signs) {
@@ -38,7 +40,7 @@ public class SmiteSpell extends StaticSpell {
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
                 if (world instanceof ServerLevel) {
-                    if (livingEntity.hurt(livingEntity.damageSources().magic(), 10)) {
+                    if (livingEntity.hurt(livingEntity.damageSources().magic(), DAMAGE == null ? 10.0f : DAMAGE.get())) {
                         livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 2));
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
                     }
@@ -48,5 +50,13 @@ public class SmiteSpell extends StaticSpell {
             }
         }
 
+    }
+
+    public @Nullable ForgeConfigSpec.ConfigValue<Float> DAMAGE;
+
+    @Override
+    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+        super.buildConfig(spellBuilder);
+        DAMAGE = spellBuilder.comment("The amount of damage dealt by the spell").define("damage", 10.0F);
     }
 }

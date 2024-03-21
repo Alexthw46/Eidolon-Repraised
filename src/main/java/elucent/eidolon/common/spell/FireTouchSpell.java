@@ -26,7 +26,7 @@ import static net.minecraft.world.level.block.AbstractCandleBlock.LIT;
 public class FireTouchSpell extends StaticSpell {
 
     public FireTouchSpell(ResourceLocation name, Sign... signs) {
-        super(name, 10, signs);
+        super(name, 10, 5, signs);
     }
 
     @Override
@@ -73,8 +73,4 @@ public class FireTouchSpell extends StaticSpell {
 
     }
 
-    @Override
-    public int getDelay() {
-        return 5;
-    }
 }

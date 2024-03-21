@@ -55,7 +55,7 @@ public class ZombifySpell extends PrayerSpell {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
+                rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ZOMBIFY_VILLAGER);
                 rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
