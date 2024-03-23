@@ -20,8 +20,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class ConvertZombieSpell extends PrayerSpell {
-    public ConvertZombieSpell(ResourceLocation resourceLocation, Sign... signs) {
-        super(resourceLocation, Deities.LIGHT_DEITY, 20, signs);
+    public ConvertZombieSpell(ResourceLocation resourceLocation, int baseRep, double powerMult, Sign... signs) {
+        super(resourceLocation, Deities.LIGHT_DEITY, 20, baseRep, powerMult, signs);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ConvertZombieSpell extends PrayerSpell {
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.CURE_ZOMBIE);
-                rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
+                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             villager.startConverting(player.getUUID(), 20);

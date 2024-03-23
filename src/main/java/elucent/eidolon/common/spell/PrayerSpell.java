@@ -34,17 +34,32 @@ import static elucent.eidolon.registries.EidolonParticles.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;
+    int baseRep = 10;
+    double powerMultiplier = 0.25;
     public @Nullable ForgeConfigSpec.IntValue COOLDOWN;
+    public @Nullable ForgeConfigSpec.IntValue BASE_REP;
+    public @Nullable ForgeConfigSpec.DoubleValue POWER_MULTIPLIER;
+
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);
         this.deity = deity;
     }
 
-    public PrayerSpell(ResourceLocation name, Deity deity, int cost, Sign... signs) {
+    public PrayerSpell(ResourceLocation name, Deity deity, int reputation, double powerMult, Sign... signs) {
+        super(name, signs);
+        this.deity = deity;
+        this.baseRep = reputation;
+        this.powerMultiplier = powerMult;
+    }
+
+    public PrayerSpell(ResourceLocation name, Deity deity, int cost, int reputation, double powerMult, Sign... signs) {
         super(name, cost, signs);
         this.deity = deity;
+        this.baseRep = reputation;
+        this.powerMultiplier = powerMult;
     }
+
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
@@ -102,7 +117,7 @@ public class PrayerSpell extends StaticSpell {
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
-                rep.addReputation(player, deity.getId(), 1.0 + 0.25 * info.getPower());
+                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
         } else {
@@ -139,9 +154,20 @@ public class PrayerSpell extends StaticSpell {
     public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
         COOLDOWN = spellBuilder.comment("Cooldown for this prayer spell").defineInRange("cooldown", 0, 21000, Integer.MAX_VALUE);
+        BASE_REP = spellBuilder.comment("Base reputation gained from this prayer spell").defineInRange("base_rep", 10, 0, Integer.MAX_VALUE);
+        POWER_MULTIPLIER = spellBuilder.comment("Altar Power multiplier for reputation gained with this prayer spell").defineInRange("power_multiplier", 0.25, 0, Double.MAX_VALUE);
     }
 
     public int getCooldown() {
         return COOLDOWN == null ? 21000 : COOLDOWN.get();
     }
+
+    public int getBaseRep() {
+        return BASE_REP == null ? baseRep : BASE_REP.get();
+    }
+
+    public double getPowerMultiplier() {
+        return POWER_MULTIPLIER == null ? powerMultiplier : POWER_MULTIPLIER.get();
+    }
+
 }

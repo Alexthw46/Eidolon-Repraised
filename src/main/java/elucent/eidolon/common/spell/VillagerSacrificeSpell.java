@@ -18,8 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class VillagerSacrificeSpell extends PrayerSpell {
-    public VillagerSacrificeSpell(ResourceLocation name, Deity deity, Sign... signs) {
-        super(name, deity, signs);
+    public VillagerSacrificeSpell(ResourceLocation name, Deity deity, int baseRep, double powerMult, Sign... signs) {
+        super(name, deity, baseRep, powerMult, signs);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class VillagerSacrificeSpell extends PrayerSpell {
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_VILLAGER);
-                rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
+                rep.addReputation(player, deity.getId(), 6.0 + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
         } else {

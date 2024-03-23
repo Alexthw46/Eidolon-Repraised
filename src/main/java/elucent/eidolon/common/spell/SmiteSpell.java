@@ -40,7 +40,7 @@ public class SmiteSpell extends StaticSpell {
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             if (livingEntity.getMobType() == MobType.UNDEAD) {
                 if (world instanceof ServerLevel) {
-                    if (livingEntity.hurt(livingEntity.damageSources().magic(), DAMAGE == null ? 10.0f : DAMAGE.get())) {
+                    if (livingEntity.hurt(livingEntity.damageSources().magic(), DAMAGE == null ? 10.0f : DAMAGE.get().floatValue())) {
                         livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 2));
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SMITE_UNDEAD);
                     }
@@ -52,11 +52,11 @@ public class SmiteSpell extends StaticSpell {
 
     }
 
-    public @Nullable ForgeConfigSpec.ConfigValue<Float> DAMAGE;
+    public @Nullable ForgeConfigSpec.DoubleValue DAMAGE;
 
     @Override
     public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
-        DAMAGE = spellBuilder.comment("The amount of damage dealt by the spell").define("damage", 10.0F);
+        DAMAGE = spellBuilder.comment("The amount of damage dealt by the spell").defineInRange("damage", 10.0, 1, Integer.MAX_VALUE);
     }
 }
