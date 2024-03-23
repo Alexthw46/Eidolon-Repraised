@@ -17,9 +17,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class AnimalSacrificeSpell extends PrayerSpell {
-
-    public AnimalSacrificeSpell(ResourceLocation name, Deity deity, Sign... signs) {
-        super(name, deity, signs);
+    public AnimalSacrificeSpell(ResourceLocation name, Deity deity, int rep, double powerMult, Sign... signs) {
+        super(name, deity, rep, powerMult, signs);
     }
 
     @Override
@@ -31,6 +30,7 @@ public class AnimalSacrificeSpell extends PrayerSpell {
         Entity test = goblet.getEntityType().create(world);
         return test instanceof Animal && effigy.ready();
     }
+
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         EffigyTileEntity effigy = getEffigy(world, pos);
@@ -41,9 +41,9 @@ public class AnimalSacrificeSpell extends PrayerSpell {
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
+                rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_MOB);
-                rep.addReputation(player, deity.getId(), 3.0 + 0.5 * info.getPower());
+                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
         } else playSuccessSound(world, player, effigy, Signs.BLOOD_SIGN);

@@ -17,11 +17,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeConfigSpec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class StaticSpell extends Spell {
     public SignSequence signs;
     private int cost;
+    private int delay = 10;
+    public @Nullable ForgeConfigSpec.ConfigValue<Integer> COST;
+
 
     public StaticSpell(ResourceLocation name, Sign... signs) {
         super(name);
@@ -38,9 +43,14 @@ public abstract class StaticSpell extends Spell {
         this.cost = cost;
     }
 
-    @Override
+    public StaticSpell(ResourceLocation name, int cost, int delay, Sign... signs) {
+        this(name, signs);
+        this.cost = cost;
+        this.delay = delay;
+    }
+
     public int getCost() {
-        return cost;
+        return COST == null ? cost : COST.get();
     }
 
     @NotNull
@@ -84,4 +94,9 @@ public abstract class StaticSpell extends Spell {
         cast(world, pos, player);
     }
 
+    @Override
+    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+        DELAY = spellBuilder.comment("The delay in ticks before the spell is cast").defineInRange("delay", delay, 0, Integer.MAX_VALUE);
+        COST = spellBuilder.comment("The cost of casting this spell").defineInRange("cost", cost, 0, Integer.MAX_VALUE);
+    }
 }

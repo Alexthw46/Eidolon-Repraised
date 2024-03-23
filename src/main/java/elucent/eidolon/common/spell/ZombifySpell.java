@@ -26,8 +26,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class ZombifySpell extends PrayerSpell {
-    public ZombifySpell(ResourceLocation resourceLocation, Sign... signs) {
-        super(resourceLocation, Deities.DARK_DEITY, 20, signs);
+    public ZombifySpell(ResourceLocation resourceLocation, int baseRep, double powerMult, Sign... signs) {
+        super(resourceLocation, Deities.DARK_DEITY, 20, baseRep, powerMult, signs);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class ZombifySpell extends PrayerSpell {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
+                rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ZOMBIFY_VILLAGER);
-                rep.addReputation(player, deity.getId(), 6.0 + info.getPower());
+                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             zombify(villager, level);

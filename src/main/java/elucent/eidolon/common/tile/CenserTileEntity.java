@@ -11,6 +11,7 @@ import elucent.eidolon.network.ExtinguishEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Spells;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.List;
 
-import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.common.spell.PrayerSpell.updateMagic;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
 
@@ -128,7 +128,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
 
     public void startBurning(Player player, @NotNull Level world, BlockPos pos) {
         if (!world.getCapability(IReputation.INSTANCE).isPresent()) return;
-        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, prefix("basic_incense"), world.getGameTime())) {
+        if (!world.getCapability(IReputation.INSTANCE).resolve().get().canPray(player, Spells.CENSER, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return;
         }
@@ -144,7 +144,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
                     return;
                 }
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.BASIC_INCENSE_PRAYER);
-                rep.pray(player, prefix("basic_incense"), world.getGameTime());
+                rep.pray(player, Spells.CENSER, world.getGameTime());
                 rep.addReputation(player, deity.getId(), 2.0 + 0.5 * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });

@@ -1,8 +1,17 @@
 package elucent.eidolon;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.config.ConfigFileTypeHandler;
+import net.minecraftforge.fml.config.IConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.nio.file.Path;
+import java.util.function.Function;
 
 public class Config {
     // Generic Settings
@@ -35,4 +44,43 @@ public class Config {
         SPEC = specPair.getRight();
         INSTANCE = specPair.getLeft();
     }
+
+    // Variant of server config that is relocated to main config folder
+    static public class SpellConfig extends ModConfig {
+
+        private static final SpellConfigFileTypeHandler TOML_HANDLER = new SpellConfigFileTypeHandler();
+
+        public SpellConfig(ModConfig.Type type, IConfigSpec<?> iConfigSpec, ModContainer container, String fileName) {
+            super(type, iConfigSpec, container, fileName + ".toml");
+
+        }
+
+        @Override
+        public ConfigFileTypeHandler getHandler() {
+            return TOML_HANDLER;
+        }
+
+
+        private static class SpellConfigFileTypeHandler extends ConfigFileTypeHandler {
+
+            private static Path getPath(Path configBasePath) {
+                //Intercept server config path reading for ArsNouveau configs and reroute it to the normal config directory
+                if (configBasePath.endsWith("serverconfig")) {
+                    return FMLPaths.CONFIGDIR.get();
+                }
+                return configBasePath;
+            }
+
+            @Override
+            public Function<ModConfig, CommentedFileConfig> reader(Path configBasePath) {
+                return super.reader(getPath(configBasePath));
+            }
+
+            @Override
+            public void unload(Path configBasePath, ModConfig config) {
+                super.unload(getPath(configBasePath), config);
+            }
+        }
+    }
+
 }

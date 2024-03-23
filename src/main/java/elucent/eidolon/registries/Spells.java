@@ -1,5 +1,6 @@
 package elucent.eidolon.registries;
 
+import elucent.eidolon.Config;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
@@ -8,6 +9,9 @@ import elucent.eidolon.common.spell.*;
 import elucent.eidolon.recipe.ChantRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -37,10 +41,17 @@ public class Spells {
     }
 
     public static Spell register(Spell spell) {
-        // spells.add(spell);
         spellMap.put(spell.getRegistryName(), spell);
+        ForgeConfigSpec spec;
+        ForgeConfigSpec.Builder spellBuilder = new ForgeConfigSpec.Builder();
+        spell.buildConfig(spellBuilder);
+        spec = spellBuilder.build();
+        spell.CONFIG = spec;
+        Config.SpellConfig anModConfig = new Config.SpellConfig(ModConfig.Type.SERVER, spell.CONFIG, ModLoadingContext.get().getActiveContainer(), spell.getRegistryName().getNamespace() + "/" + spell.getRegistryName().getPath());
+        ModLoadingContext.get().getActiveContainer().addConfig(anModConfig);
         return spell;
     }
+
 
     public static List<Spell> getSpells() {
         return spells;
@@ -59,7 +70,7 @@ public class Spells {
 
     public static final Spell DARK_ANIMAL_SACRIFICE = register(new AnimalSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_animal_sacrifice"),
-            Deities.DARK_DEITY,
+            Deities.DARK_DEITY, 3, 0.5,
             Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.WICKED_SIGN
     ));
     public static final Spell DARK_TOUCH = register(new DarkTouchSpell(
@@ -72,12 +83,12 @@ public class Spells {
     );
     public static final Spell DARK_VILLAGER_SACRIFICE = register(new VillagerSacrificeSpell(
             new ResourceLocation(Eidolon.MODID, "dark_villager_sacrifice"),
-            Deities.DARK_DEITY,
+            Deities.DARK_DEITY, 6, 1,
             Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.BLOOD_SIGN, Signs.SOUL_SIGN
     ));
 
     public static final Spell ZOMBIFY = register(new ZombifySpell(
-            new ResourceLocation(Eidolon.MODID, "zombify_villager"),
+            new ResourceLocation(Eidolon.MODID, "zombify_villager"), 8, 1.25,
             Signs.DEATH_SIGN, Signs.BLOOD_SIGN, Signs.WICKED_SIGN, Signs.DEATH_SIGN, Signs.SOUL_SIGN, Signs.BLOOD_SIGN
     ));
 
@@ -111,7 +122,7 @@ public class Spells {
     ));
 
     public static final Spell CURE_ZOMBIE_CHANT = register(new ConvertZombieSpell(
-            new ResourceLocation(Eidolon.MODID, "cure_zombie_chant"),
+            new ResourceLocation(Eidolon.MODID, "cure_zombie"), 8, 1.25,
             Signs.SACRED_SIGN, Signs.SOUL_SIGN, Signs.MIND_SIGN, Signs.HARMONY_SIGN, Signs.FLAME_SIGN, Signs.SOUL_SIGN
     ));
 
@@ -131,7 +142,7 @@ public class Spells {
     ));
 
     public static final Spell WATER_CHANT = register(new WaterSpell(
-            new ResourceLocation(Eidolon.MODID, "water"),
+            new ResourceLocation(Eidolon.MODID, "create_water"),
             Signs.WINTER_SIGN, Signs.WINTER_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN
     ));
 
@@ -141,4 +152,6 @@ public class Spells {
             Signs.MIND_SIGN, Signs.MAGIC_SIGN, Signs.WICKED_SIGN
     ));
 
+    // dummy
+    public static final PrayerSpell CENSER = new PrayerSpell(new ResourceLocation(Eidolon.MODID, "censer"), Deities.LIGHT_DEITY);
 }

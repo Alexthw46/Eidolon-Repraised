@@ -1,5 +1,7 @@
 package elucent.eidolon.capability;
 
+import elucent.eidolon.common.spell.PrayerSpell;
+import elucent.eidolon.registries.Spells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -66,14 +68,14 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
     }
 
     @Override
-    public void pray(UUID player, ResourceLocation spell, long time) {
-        getPrayerTimes().computeIfAbsent(player, (p) -> new HashMap<>()).put(spell, time);
+    public void pray(UUID player, PrayerSpell spell, long time) {
+        getPrayerTimes().computeIfAbsent(player, (p) -> new HashMap<>()).put(spell.getRegistryName(), time);
     }
 
     @Override
-    public boolean canPray(UUID player, ResourceLocation spell, long time) {
+    public boolean canPray(UUID player, PrayerSpell spell, long time) {
         Map<ResourceLocation, Long> times = getPrayerTimes().computeIfAbsent(player, (p) -> new HashMap<>());
-        return !times.containsKey(spell) || times.get(spell) < time - 21000;
+        return !times.containsKey(spell.getRegistryName()) || times.get(spell.getRegistryName()) < time - spell.getCooldown();
     }
 
     @Override
@@ -134,8 +136,9 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                 UUID uuid = UUID.fromString(uuidString);
                 CompoundTag spelltimes = times.getCompound(uuidString);
                 for (String rl : spelltimes.getAllKeys())
-                    pray(uuid, new ResourceLocation(rl), spelltimes.getLong(rl));
+                    pray(uuid, (PrayerSpell) Spells.find(new ResourceLocation(rl)), spelltimes.getLong(rl));
             }
         }
     }
+
 }

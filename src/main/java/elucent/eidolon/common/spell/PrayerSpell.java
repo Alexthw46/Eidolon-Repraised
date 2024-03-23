@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
@@ -33,16 +34,32 @@ import static elucent.eidolon.registries.EidolonParticles.FLAME_PARTICLE;
 
 public class PrayerSpell extends StaticSpell {
     final Deity deity;
+    int baseRep = 10;
+    double powerMultiplier = 0.25;
+    public @Nullable ForgeConfigSpec.IntValue COOLDOWN;
+    public @Nullable ForgeConfigSpec.IntValue BASE_REP;
+    public @Nullable ForgeConfigSpec.DoubleValue POWER_MULTIPLIER;
+
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
         super(name, signs);
         this.deity = deity;
     }
 
-    public PrayerSpell(ResourceLocation name, Deity deity, int cost, Sign... signs) {
+    public PrayerSpell(ResourceLocation name, Deity deity, int reputation, double powerMult, Sign... signs) {
+        super(name, signs);
+        this.deity = deity;
+        this.baseRep = reputation;
+        this.powerMultiplier = powerMult;
+    }
+
+    public PrayerSpell(ResourceLocation name, Deity deity, int cost, int reputation, double powerMult, Sign... signs) {
         super(name, cost, signs);
         this.deity = deity;
+        this.baseRep = reputation;
+        this.powerMultiplier = powerMult;
     }
+
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
@@ -65,7 +82,7 @@ public class PrayerSpell extends StaticSpell {
         LazyOptional<IReputation> iReputationLazyOptional = world.getCapability(IReputation.INSTANCE);
         if (iReputationLazyOptional.resolve().isEmpty()) return true;
         IReputation iReputation = iReputationLazyOptional.resolve().get();
-        if (!iReputation.canPray(player, getRegistryName(), world.getGameTime())) {
+        if (!iReputation.canPray(player, this, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return true;
         }
@@ -99,8 +116,8 @@ public class PrayerSpell extends StaticSpell {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, getRegistryName(), world.getGameTime());
-                rep.addReputation(player, deity.getId(), 1.0 + 0.25 * info.getPower());
+                rep.pray(player, this, world.getGameTime());
+                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
         } else {
@@ -131,6 +148,26 @@ public class PrayerSpell extends StaticSpell {
                 .randomOffset(0.01f)
                 .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
                 .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
+    }
+
+    @Override
+    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+        super.buildConfig(spellBuilder);
+        COOLDOWN = spellBuilder.comment("Cooldown for this prayer spell").defineInRange("cooldown", 0, 21000, Integer.MAX_VALUE);
+        BASE_REP = spellBuilder.comment("Base reputation gained from this prayer spell").defineInRange("base_rep", 10, 0, Integer.MAX_VALUE);
+        POWER_MULTIPLIER = spellBuilder.comment("Altar Power multiplier for reputation gained with this prayer spell").defineInRange("power_multiplier", 0.25, 0, Double.MAX_VALUE);
+    }
+
+    public int getCooldown() {
+        return COOLDOWN == null ? 21000 : COOLDOWN.get();
+    }
+
+    public int getBaseRep() {
+        return BASE_REP == null ? baseRep : BASE_REP.get();
+    }
+
+    public double getPowerMultiplier() {
+        return POWER_MULTIPLIER == null ? powerMultiplier : POWER_MULTIPLIER.get();
     }
 
 }
