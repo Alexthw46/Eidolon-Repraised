@@ -1,15 +1,15 @@
 package elucent.eidolon.recipe;
 
-import elucent.eidolon.codex.Page;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CrucibleRegistry {
-    static final Map<ResourceLocation, Page> linkedPages = new HashMap<>();
     static final Map<ResourceLocation, CrucibleRecipe> recipes = new HashMap<>();
 
     public static CrucibleRecipe register(CrucibleRecipe recipe) {
@@ -19,10 +19,6 @@ public class CrucibleRegistry {
         return recipe;
     }
 
-    public static void linkPage(ResourceLocation recipe, Page page) {
-        linkedPages.put(recipe, page);
-    }
-
     public static CrucibleRecipe find(ResourceLocation loc) {
         return recipes.get(loc);
     }
@@ -30,6 +26,44 @@ public class CrucibleRegistry {
     public static CrucibleRecipe find(List<CrucibleStep> steps) {
         for (CrucibleRecipe recipe : recipes.values()) if (recipe.matches(steps)) return recipe;
         return null;
+    }
+
+    public static boolean doStepsHaveSomeResult(List<CrucibleStep> steps) {
+        for (CrucibleRecipe recipe : recipes.values()) {
+            // we have more steps currently than the testFor recipe, there's no way it matches.
+            if (steps.size() > recipe.getSteps().size()) continue;
+            if (doStepsMatch(steps, recipe.getSteps())) return true;
+        }
+
+        return false;
+    }
+
+    private static boolean doStepsMatch(List<CrucibleStep> steps, List<CrucibleRecipe.Step> otherSteps) {
+        for (int i = 0; i < steps.size(); i++) {
+            CrucibleStep step = steps.get(i);
+            CrucibleRecipe.Step otherStep = otherSteps.get(i);
+            if (step.getStirs() != otherStep.stirs) return false;
+            if (!doContentsMatch(step, otherStep)) return false;
+        }
+
+        return true;
+    }
+
+    private static boolean doContentsMatch(CrucibleStep step, CrucibleRecipe.Step otherStep) {
+        for (ItemStack input : step.getContents()) {
+            boolean doesInputHaveMatch = false;
+            for (Ingredient ingredient : otherStep.matches) {
+                if (ingredient.test(input)) {
+                    doesInputHaveMatch = true;
+                    break;
+                }
+            }
+            // This input doesn't match this recipe, no way it's compatible.
+            if (!doesInputHaveMatch) return false;
+        }
+
+        // Everything in the current set of inputs matched this recipe's step
+        return true;
     }
 
     public static void init() {
