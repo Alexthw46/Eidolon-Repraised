@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -54,7 +55,9 @@ public class CodexChapters {
                     new TitlePage("eidolon.codex.page.critters.raven"),
                     new EntityPage(EidolonEntities.RAVEN.get()),
                     new TitlePage("eidolon.codex.page.critters.slimy_slug"),
-                    new EntityPage(EidolonEntities.SLIMY_SLUG.get())
+                    new EntityPage(EidolonEntities.SLIMY_SLUG.get()),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual_c.1", prefix("summon_ravens")),
+                    new TitledRitualPage("eidolon.codex.page.summon_ritual_c.2", prefix("summon_slugs"))
             );
 
             ORES = new Chapter(
@@ -566,9 +569,13 @@ public class CodexChapters {
                     new TitlePage("eidolon.codex.page.altar_lights.0"),
                     new ListPage("eidolon.codex.page.altar_lights.1",
                             new ListEntry("torch", new ItemStack(Items.TORCH)),
+                            new ListEntry("soultorch", new ItemStack(Items.SOUL_TORCH)),
                             new ListEntry("lantern", new ItemStack(Items.LANTERN)),
                             new ListEntry("candle", new ItemStack(Registry.CANDLE.get())),
-                            new ListEntry("candlestick", new ItemStack(Registry.CANDLESTICK.get())))
+                            new ListEntry("candlestick", new ItemStack(Registry.CANDLESTICK.get())),
+                            new ListEntry("magic_candle", new ItemStack(Registry.MAGIC_CANDLE.get())),
+                            new ListEntry("magic_candlestick", new ItemStack(Registry.MAGIC_CANDLESTICK.get()))
+                    )
             );
 
             ALTAR_SKULLS = new Chapter(
@@ -584,9 +591,9 @@ public class CodexChapters {
                     "eidolon.codex.chapter.altar_herbs",
                     new TitlePage("eidolon.codex.page.altar_herbs.0"),
                     new ListPage("eidolon.codex.page.altar_herbs.1",
-                            new ListEntry("crimson_fungus", new ItemStack(Items.CRIMSON_FUNGUS)),
-                            new ListEntry("warped_fungus", new ItemStack(Items.WARPED_FUNGUS)),
-                            new ListEntry("wither_rose", new ItemStack(Items.WITHER_ROSE)))
+                            new ListEntry("crimson_fungus", new ItemStack(Items.CRIMSON_FUNGUS), Blocks.POTTED_CRIMSON_FUNGUS),
+                            new ListEntry("warped_fungus", new ItemStack(Items.WARPED_FUNGUS), Blocks.POTTED_WARPED_FUNGUS),
+                            new ListEntry("wither_rose", new ItemStack(Items.WITHER_ROSE), Blocks.POTTED_WITHER_ROSE))
             );
 
             GOBLET = new Chapter(

@@ -48,7 +48,7 @@ public class AltarInfo {
         for (BlockPos p : altarPositions) {
             if (info.altar == null) info.altar = world.getBlockState(p).getBlock();
             BlockState state = world.getBlockState(p.above());
-            AltarEntry entry = AltarEntries.find(state);
+            AltarEntry entry = AltarEntries.find(state.getBlock());
             if (entry != null) {
                 entry.apply(info);
             }

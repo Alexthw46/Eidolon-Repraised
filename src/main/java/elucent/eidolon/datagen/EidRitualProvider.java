@@ -98,6 +98,17 @@ public class EidRitualProvider extends SimpleDataProvider {
                 List.of(Registry.SOUL_SHARD.get(), Registry.TATTERED_CLOTH.get()),
                 List.of(Registry.TATTERED_CLOTH.get()));
 
+        makeSummon(prefix("summon_slugs"), EidolonEntities.SLIMY_SLUG.get(), 3,
+                Items.PUMPKIN_SEEDS,
+                ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.SLIME_BALL)),
+                List.of());
+
+        makeSummon(prefix("summon_raven"), EidolonEntities.RAVEN.get(), 3,
+                Items.BEETROOT_SEEDS,
+                ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.FEATHER)),
+                List.of());
+
+
         ItemStack HarmingPotion = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING);
         var harmingIngredient = PartialNBTIngredient.of(HarmingPotion.getItem(), HarmingPotion.getOrCreateTag());
 
@@ -194,6 +205,10 @@ public class EidRitualProvider extends SimpleDataProvider {
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
         rituals.add(new SummonRitualRecipe(id, getRegistryName(type), Ingredient.of(item), pedestal, foci));
+    }
+
+    public void makeSummon(ResourceLocation id, EntityType<?> type, int count, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
+        rituals.add(new SummonRitualRecipe(id, getRegistryName(type), Ingredient.of(item), pedestal, foci, count, 0));
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, List<ItemLike> pedestal, List<ItemLike> foci) {

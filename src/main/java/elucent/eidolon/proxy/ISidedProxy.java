@@ -8,5 +8,5 @@ public interface ISidedProxy {
     Level getWorld();
     void init();
 
-    void openCodexGui();
+    void openCodexGui(Player player);
 }

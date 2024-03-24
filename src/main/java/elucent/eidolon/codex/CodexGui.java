@@ -44,8 +44,7 @@ public class CodexGui extends Screen {
 
     public static CodexGui getInstance() {
         for (Category cat : CodexChapters.categories) cat.reset();
-        if (INSTANCE != null) return INSTANCE;
-        return INSTANCE = new CodexGui();
+        return INSTANCE != null ? INSTANCE : (INSTANCE = new CodexGui());
     }
 
     protected CodexGui() {
@@ -136,8 +135,9 @@ public class CodexGui extends Screen {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         hasTooltip = false;
+        this.minecraft = Minecraft.getInstance();
         renderBackground(guiGraphics);
-        Minecraft mc = Minecraft.getInstance();
+        Minecraft mc = minecraft;
         RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
 
         this.width = mc.getWindow().getGuiScaledWidth();

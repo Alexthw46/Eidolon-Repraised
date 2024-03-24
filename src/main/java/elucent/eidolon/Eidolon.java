@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -38,6 +39,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -157,6 +159,13 @@ public class Eidolon {
 
             Sheets.addWoodType(Registry.ILLWOOD);
             Sheets.addWoodType(Registry.POLISHED);
+        });
+        MinecraftForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
+            InteractionResult result = Events.rightClickLectern(e.getEntity(), e.getLevel(), e.getHitVec());
+            if (result.consumesAction()) {
+                e.setCanceled(true);
+                e.setCancellationResult(result);
+            }
         });
     }
 

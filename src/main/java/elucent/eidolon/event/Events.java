@@ -22,7 +22,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -40,7 +43,11 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LecternBlock;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -67,6 +74,20 @@ import java.util.UUID;
 import static elucent.eidolon.util.EntityUtil.THRALL_KEY;
 
 public class Events {
+    public static InteractionResult rightClickLectern(Player player, Level world, BlockHitResult hit) {
+        BlockPos pos = hit.getBlockPos();
+        BlockState state = world.getBlockState(pos);
+        if (world.getBlockEntity(pos) instanceof LecternBlockEntity lectern && !world.isClientSide) {
+            if (state.getValue(LecternBlock.HAS_BOOK))
+                if (lectern.getBook().getItem() instanceof CodexItem) {
+                    player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 1.0f);
+                    Networking.sendTo(player, new OpenCodexPacket());
+                    return InteractionResult.SUCCESS;
+                }
+        }
+        return InteractionResult.PASS;
+    }
+
     @SubscribeEvent
     public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
         if (event.getObject() != null)
@@ -81,6 +102,7 @@ public class Events {
             event.addCapability(new ResourceLocation(Eidolon.MODID, "soul"), new ISoul.Provider());
         }
     }
+
 
     @SuppressWarnings("unchecked")
     @SubscribeEvent

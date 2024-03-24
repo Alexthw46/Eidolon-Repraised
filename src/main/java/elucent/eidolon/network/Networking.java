@@ -202,6 +202,14 @@ public class Networking {
                 FeatherEffectPacket::decode,
                 FeatherEffectPacket::consume
         );
+
+        INSTANCE.registerMessage(
+                ++id,
+                OpenCodexPacket.class,
+                OpenCodexPacket::encode,
+                OpenCodexPacket::decode,
+                OpenCodexPacket::consume
+        );
     }
 
     public static <MSG> void sendToDimension(Level world, MSG msg, ResourceKey<Level> dimension) {

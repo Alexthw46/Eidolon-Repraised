@@ -5,6 +5,14 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Consumer;
 
 public class AltarEntry {
+    public double getCapacity() {
+        return capacity;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
     double capacity = 0, power = 0;
     ResourceLocation key;
     Consumer<AltarInfo> callback = null;

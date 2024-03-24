@@ -2,11 +2,14 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.altar.AltarEntry;
+import elucent.eidolon.registries.AltarEntries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +21,18 @@ public class ListPage extends Page {
     public static class ListEntry {
         final String key;
         final ItemStack icon;
+        private final AltarEntry entry;
 
         public ListEntry(String key, ItemStack icon) {
             this.key = key;
             this.icon = icon;
+            this.entry = AltarEntries.find(icon.getItem());
+        }
+
+        public ListEntry(String key, ItemStack icon, Block entry) {
+            this.key = key;
+            this.icon = icon;
+            this.entry = AltarEntries.find(entry);
         }
     }
 
@@ -42,8 +53,21 @@ public class ListPage extends Page {
         }
 
         for (int i = 0; i < entries.length; i++) {
-            drawItem(mStack, entries[i].icon, x + 2, y + 8 + i * 20, mouseX, mouseY);
-            drawText(mStack, I18n.get(key + "." + entries[i].key), x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
+            ItemStack icon = entries[i].icon;
+            AltarEntry entry = entries[i].entry;
+            drawItem(mStack, icon, x + 2, y + 8 + i * 20, mouseX, mouseY);
+            String text = "";
+            if (entry.getPower() > 0) {
+                text += (int) entry.getPower() + " " + I18n.get("eidolon.codex.altar_power");
+            }
+            if (entry.getCapacity() > 0) {
+                if (!text.isEmpty()) {
+                    text += ", ";
+                }
+                text += (int) entry.getCapacity() + " " + I18n.get("eidolon.codex.altar_capacity");
+            }
+            drawText(mStack, text, x + 24, y + 20 + i * 20 - Minecraft.getInstance().font.lineHeight);
         }
+
     }
 }
