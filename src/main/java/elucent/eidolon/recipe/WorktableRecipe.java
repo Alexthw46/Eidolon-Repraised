@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +94,14 @@ public class WorktableRecipe implements Recipe<Container> {
         }
 
         return items;
+    }
+
+    @Override
+    public @NotNull NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        Collections.addAll(ingredients, core);
+        Collections.addAll(ingredients, extras);
+        return ingredients;
     }
 
     public ItemStack getResult() {

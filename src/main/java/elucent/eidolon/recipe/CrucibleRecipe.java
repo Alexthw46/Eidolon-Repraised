@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.registries.EidolonRecipes;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,15 @@ public class CrucibleRecipe implements Recipe<Container> {
 
     public ItemStack getResult() {
         return result;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        for (Step step : steps) {
+            ingredients.addAll(step.matches);
+        }
+        return ingredients;
     }
 
     public static class Step {
