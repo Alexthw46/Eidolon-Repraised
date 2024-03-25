@@ -155,6 +155,9 @@ dependencies {
     implementation fg.deobf("curse.maven:apothic-attributes-898963:4872467")
     implementation fg.deobf("curse.maven:apotheosis-313970:4874713")
 
+    implementation fg.deobf("curse.maven:amendments-896746:5200593")
+    implementation fg.deobf("curse.maven:selene-499980:5201144")
+
     implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))
     implementation("com.github.llamalad7.mixinextras:mixinextras-forge:0.2.0-beta.8")
 

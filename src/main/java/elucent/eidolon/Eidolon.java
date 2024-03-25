@@ -117,6 +117,7 @@ public class Eidolon {
         if (oldSet instanceof ImmutableSet<Block>) {
             Set<Block> newSet = new HashSet<>();
             Collections.addAll(newSet, blocksToAdd);
+            newSet.addAll(oldSet);
             ((BlockEntityTypeAccessor) bet).setValidBlocks(newSet);
         } else {
             Collections.addAll(oldSet, blocksToAdd);
