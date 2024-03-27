@@ -262,7 +262,7 @@ public class CrucibleTileEntity extends TileEntityBase {
                 }
         }
 
-        if (stepCounter == 0 && (!stepSize || Config.TURN_BASED_CRUCIBLE.get()) && hasWater && boiling && level.getGameTime() % 100 == 0) {
+        if (stepCounter == 0 && (stepSize || Config.TURN_BASED_CRUCIBLE.get()) && hasWater && boiling && level.getGameTime() % 100 == 0) {
             List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(worldPosition).deflate(0.125));
             if (!items.isEmpty()) {
                 stepCounter = Config.CRUCIBLE_STEP_DURATION.get() / 2;
