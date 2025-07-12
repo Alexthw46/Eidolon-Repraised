@@ -3,6 +3,7 @@ package elucent.eidolon;
 import com.google.common.collect.ImmutableSet;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.client.EidolonOverlays;
 import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;
 import elucent.eidolon.compat.CompatHandler;
@@ -18,10 +19,10 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
@@ -29,24 +30,21 @@ import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,43 +52,56 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
 @Mod(Eidolon.MODID)
 public class Eidolon {
-    public static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    public static ISidedProxy proxy;
 
     public static final String MODID = "eidolon";
     public static final Logger LOG = LogManager.getLogger("Eidolon Repraised");
 
     public static ResourceLocation prefix(String path) {
-        return new ResourceLocation("eidolon", path);
+        return ResourceLocation.fromNamespaceAndPath("eidolon", path);
     }
 
     public static boolean trueMobType = false;
 
-    public static MobType getTrueMobType(LivingEntity e) {
+    public static boolean isValidUndead(LivingEntity e) {
         trueMobType = true;
-        MobType type = e.getMobType();
+        boolean type = e.getType().getTags().toList().contains(EntityTypeTags.UNDEAD);
         trueMobType = false;
         return type;
     }
 
-    public Eidolon() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public Eidolon(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::sendImc);
         modEventBus.addListener(this::spawnPlacements);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.register(new Registry());
-        Registry.init();
-        proxy.init();
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new Events());
+        Registry.init(modEventBus);
+        NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(new Events());
 
         CompatHandler.initialize();
+
+        if (FMLEnvironment.dist.isClient()) {
+            //noinspection Convert2Lambda, avoids classloading
+            proxy = new Supplier<ISidedProxy>() {
+                @Override
+                public ISidedProxy get() {
+                    return new ClientProxy();
+                }
+            }.get();
+        } else {
+            proxy = new ServerProxy();
+        }
+        proxy.init(modEventBus);
+
     }
 
     public void setup(final FMLCommonSetupEvent event) {
@@ -159,21 +170,21 @@ public class Eidolon {
             Sheets.addWoodType(Registry.ILLWOOD);
             Sheets.addWoodType(Registry.POLISHED);
         });
-        MinecraftForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
+        NeoForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
             InteractionResult result = Events.rightClickLectern(e.getEntity(), e.getLevel(), e.getHitVec());
             if (result.consumesAction()) {
                 e.setCanceled(true);
                 e.setCancellationResult(result);
             }
         });
-        MinecraftForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
-        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new ClientRegistry.EidolonHearts());
-        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new ClientRegistry.EidolonManaBar());
-        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new ClientRegistry.EidolonRavenCharge());
+        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new EidolonOverlays.EidolonHearts());
+        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new EidolonOverlays.EidolonManaBar());
+        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new EidolonOverlays.EidolonRavenCharge());
     }
 
     public void sendImc(InterModEnqueueEvent evt) {

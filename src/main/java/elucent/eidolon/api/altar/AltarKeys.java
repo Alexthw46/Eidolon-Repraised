@@ -10,8 +10,8 @@ public class AltarKeys {
     Set<ResourceLocation> keys = new HashSet<>();
 
     public static final ResourceLocation
-        LIGHT_KEY = new ResourceLocation(Eidolon.MODID, "light"),
-        SKULL_KEY = new ResourceLocation(Eidolon.MODID, "skull"),
-        PLANT_KEY = new ResourceLocation(Eidolon.MODID, "plant"),
-        OFFERS_KEY = new ResourceLocation(Eidolon.MODID, "goblet");
+        LIGHT_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"light" ),
+        SKULL_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"skull" ),
+        PLANT_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"plant" ),
+        OFFERS_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"goblet" );
 }

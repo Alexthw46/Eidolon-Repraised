@@ -8,9 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
+import record;
 
 public class Networking {
     public static SimpleChannel INSTANCE;
@@ -18,7 +19,7 @@ public class Networking {
     static int id = 0;
 
     public static void init() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Eidolon.MODID, "network"), () -> "1.0", (s) -> true, (s) -> true);
+        INSTANCE = NetworkRegistry.newSimpleChannel(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"network" ), () -> "1.0", (s) -> true, (s) -> true);
 
         INSTANCE.registerMessage(
                 ++id,

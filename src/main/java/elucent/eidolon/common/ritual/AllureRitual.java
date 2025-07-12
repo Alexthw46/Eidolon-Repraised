@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AllureRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/allure_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/allure_ritual" );
 
     public AllureRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 255, 43, 75));

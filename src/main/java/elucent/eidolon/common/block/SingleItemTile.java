@@ -3,23 +3,19 @@ package elucent.eidolon.common.block;
 import elucent.eidolon.common.tile.TileEntityBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public class SingleItemTile extends TileEntityBase implements Container {
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
     protected ItemStack stack = ItemStack.EMPTY;
 
     public SingleItemTile(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
@@ -93,34 +89,32 @@ public class SingleItemTile extends TileEntityBase implements Container {
         sync();
     }
 
-    @NotNull
+//    @NotNull
+//    @Override
+//    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, final @Nullable Direction side) {
+//        if (cap == Capabilities.ITEM_HANDLER) {
+//            return itemHandler.cast();
+//        }
+//        return super.getCapability(cap, side);
+//    }
+//
+//    @Override
+//    public void invalidateCaps() {
+//        itemHandler.invalidate();
+//        super.invalidateCaps();
+//    }
+
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, final @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return itemHandler.cast();
-        }
-        return super.getCapability(cap, side);
+    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        stack = ItemStack.parseOptional(registries,tag);
     }
 
     @Override
-    public void invalidateCaps() {
-        itemHandler.invalidate();
-        super.invalidateCaps();
-    }
-
-    @Override
-    public void load(@NotNull CompoundTag compound) {
-        super.load(compound);
-        stack = ItemStack.of(compound.getCompound("stack"));
-    }
-
-    @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag, registries);
         if (stack != null) {
-            CompoundTag stackTag = new CompoundTag();
-            stack.save(stackTag);
-            tag.put("stack", stackTag);
+            tag.put("stack", stack.saveOptional(registries));
         }
     }
 }

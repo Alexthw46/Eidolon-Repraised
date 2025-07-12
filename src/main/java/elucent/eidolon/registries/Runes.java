@@ -25,14 +25,14 @@ public class Runes {
     }
 
     public static void init() {
-        register(new Rune(new ResourceLocation(Eidolon.MODID, "sin")) {
+        register(new Rune(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"sin" )) {
             @Override
             public RuneResult doEffect(SignSequence seq) {
                 seq.addRight(Signs.WICKED_SIGN);
                 return RuneResult.PASS;
             }
         });
-        register(new Rune(new ResourceLocation(Eidolon.MODID, "crimson_rose")) {
+        register(new Rune(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"crimson_rose" )) {
             @Override
             public RuneResult doEffect(SignSequence seq) {
                 if (seq.removeRightmostN(Signs.WICKED_SIGN, 2)) {
@@ -42,13 +42,13 @@ public class Runes {
                 return RuneResult.FAIL;
             }
         });
-        register(new Rune(new ResourceLocation(Eidolon.MODID, "wing")) {
+        register(new Rune(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"wing" )) {
             @Override
             public RuneResult doEffect(SignSequence seq) {
                 return RuneResult.PASS;
             }
         });
-        register(new Rune(new ResourceLocation(Eidolon.MODID, "purity")) {
+        register(new Rune(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"purity" )) {
             @Override
             public RuneResult doEffect(SignSequence seq) {
                 return RuneResult.PASS;

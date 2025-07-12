@@ -1,6 +1,6 @@
 package elucent.eidolon.api.spells;
 
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public class SpellCastEvent extends Event {
 }

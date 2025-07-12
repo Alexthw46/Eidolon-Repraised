@@ -4,13 +4,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class Spell {
     final ResourceLocation registryName;
-    public @Nullable ForgeConfigSpec CONFIG;
-    public @Nullable ForgeConfigSpec.ConfigValue<Integer> DELAY;
+    public @Nullable ModConfigSpec CONFIG;
+    public @Nullable ModConfigSpec.ConfigValue<Integer> DELAY;
 
     public Spell(ResourceLocation registryName) {
         this.registryName = registryName;
@@ -34,12 +36,14 @@ public abstract class Spell {
         return DELAY == null ? 10 : DELAY.get();
     }
 
-    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(ModConfigSpec.Builder spellBuilder) {
     }
 
     @Override
     public boolean equals(Object obj) {
-
-        return registryName.equals(((Spell) obj).registryName);
+        if (obj instanceof Spell spell) {
+            return registryName.equals(spell.registryName);
+        }
+        return false;
     }
 }

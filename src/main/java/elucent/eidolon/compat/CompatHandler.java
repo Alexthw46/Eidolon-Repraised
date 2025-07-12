@@ -2,9 +2,8 @@ package elucent.eidolon.compat;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.compat.apotheosis.Apotheosis;
-import net.minecraftforge.fml.ModList;
-
 import java.util.Map;
+import net.neoforged.fml.ModList;
 
 public class CompatHandler {
     public final static String APOTHEOSIS = "apotheosis";

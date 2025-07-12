@@ -1,5 +1,6 @@
 package elucent.eidolon.capability;
 
+import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.WingsDashPacket;
@@ -9,9 +10,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.util.INBTSerializable;
-
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import java.util.UUID;
 
 public class PlayerDataImpl implements IPlayerData, INBTSerializable<CompoundTag> {
@@ -127,7 +127,7 @@ public class PlayerDataImpl implements IPlayerData, INBTSerializable<CompoundTag
 		if (!isFlying) {
 			this.flightStartTime = player.level.getGameTime();
 			isFlying = true;
-			AttributeInstance attr = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
+			AttributeInstance attr = player.getAttribute(NeoForgeMod.ENTITY_GRAVITY.get());
 			if (attr != null && !attr.hasModifier(WINGS_SLOWFALL)) attr.addTransientModifier(WINGS_SLOWFALL);
 		}
 	}
@@ -144,7 +144,7 @@ public class PlayerDataImpl implements IPlayerData, INBTSerializable<CompoundTag
 				}
 			}
 			this.flightStartTime = player.level.getGameTime();
-			AttributeInstance attr = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
+			AttributeInstance attr = player.getAttribute(NeoForgeMod.ENTITY_GRAVITY.get());
 			if (attr != null && attr.hasModifier(WINGS_SLOWFALL)) attr.removeModifier(WINGS_SLOWFALL);
 		}
 	}

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RepellingRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/repelling_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/repelling_ritual" );
 
     public RepellingRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 190, 212, 184));

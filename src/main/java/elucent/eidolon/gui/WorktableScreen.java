@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class WorktableScreen extends AbstractContainerScreen<WorktableContainer> {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID,"textures/gui/worktable.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/worktable.png" );
 
     public WorktableScreen(WorktableContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);

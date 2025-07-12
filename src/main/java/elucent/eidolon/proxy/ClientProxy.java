@@ -6,7 +6,7 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
 
 public class ClientProxy implements ISidedProxy {
     @Override
@@ -20,10 +20,10 @@ public class ClientProxy implements ISidedProxy {
     }
 
     @Override
-    public void init() {
+    public void init(IEventBus modEventBus) {
         Registry.clientInit();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Eidolon::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Eidolon::registerOverlays);
+        modEventBus.addListener(Eidolon::clientSetup);
+        modEventBus.addListener(Eidolon::registerOverlays);
     }
 
     @Override

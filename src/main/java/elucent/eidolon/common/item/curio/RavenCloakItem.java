@@ -1,14 +1,14 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.capability.IPlayerData;
+import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.UUID;
@@ -18,7 +18,7 @@ public class RavenCloakItem extends EidolonCurio implements IWingsItem {
 
     public RavenCloakItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(RavenCloakItem::onFall);
+        NeoForge.EVENT_BUS.addListener(RavenCloakItem::onFall);
     }
 
     @SubscribeEvent

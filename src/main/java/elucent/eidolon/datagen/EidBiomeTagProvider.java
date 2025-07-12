@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +32,6 @@ public class EidBiomeTagProvider extends BiomeTagsProvider {
         tag(BANANA_SLUG_TAG).addTag(BiomeTags.IS_JUNGLE).addTag(Tags.Biomes.IS_LUSH);
         tag(BROWN_SLUG_TAG).addTag(BiomeTags.IS_TAIGA).addTag(Tags.Biomes.IS_COLD_OVERWORLD);
         tag(SLIMY_SLUG_TAG).addTag(BiomeTags.IS_FOREST).addTag(Tags.Biomes.IS_WET_OVERWORLD);
-        tag(TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation("forge", "no_default_monsters")));
+        tag(TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("forge","no_default_monsters" )));
     }
 }

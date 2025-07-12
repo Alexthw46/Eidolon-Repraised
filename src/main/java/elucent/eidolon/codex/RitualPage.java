@@ -18,11 +18,11 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+import var;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
 
 public class RitualPage extends RecipePage<RitualRecipe> {
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_ritual_page.png" );
     Ritual ritual;
     Ingredient center;
 

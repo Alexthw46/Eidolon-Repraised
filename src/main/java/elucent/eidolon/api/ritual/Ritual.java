@@ -45,7 +45,7 @@ public abstract class Ritual implements Cloneable {
     }
 
     public Ritual setRegistryName(String domain, String path) {
-        this.name = new ResourceLocation(domain, path);
+        this.name = ResourceLocation.fromNamespaceAndPath(domain,path );
         return this;
     }
 

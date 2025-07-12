@@ -58,7 +58,7 @@ public class EntityUtil {
             targetPredicate = FALLBACK_TARGET_PREDICATE;
         }
 
-        List<LivingEntity> entities = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), target -> targetPredicate.test(target) && target != owner && target.isAlive() && !(owner != null && target.isAlliedTo(owner)) && (!entity.level.isClientSide() || target != Minecraft.getInstance().player));
+        List<LivingEntity> entities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), target -> targetPredicate.test(target) && target != owner && target.isAlive() && !(owner != null && target.isAlliedTo(owner)) && (!entity.level().isClientSide() || target != Minecraft.getInstance().player));
 
         if (!entities.isEmpty()) {
             //for (Entity e : entities) System.out.println(e);

@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class PurifyRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/purify_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/purify_ritual" );
 
     public PurifyRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 163, 252, 255));

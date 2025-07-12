@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
@@ -25,19 +25,19 @@ import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import var;
 import java.util.List;
 
 public class DarkTouchSpell extends StaticSpell {
-    public static final String NECROTIC_KEY = new ResourceLocation(Eidolon.MODID, "necrotic").toString();
+    public static final String NECROTIC_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"necrotic" ).toString();
 
     public DarkTouchSpell(ResourceLocation name, Sign... signs) {
         super(name, 20, signs);
 
-        MinecraftForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
+        NeoForge.EVENT_BUS.addListener(DarkTouchSpell::onHurt);
     }
 
     @SubscribeEvent
@@ -92,7 +92,7 @@ public class DarkTouchSpell extends StaticSpell {
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
         else {
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
             stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
             return stack;
         }

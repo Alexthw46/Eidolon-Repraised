@@ -5,6 +5,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.AABB;
@@ -19,20 +20,20 @@ public class AdvancementTriggers {
     static final HashMap<String, CriterionTrigger<?>> triggers = new HashMap<>();
 
     public static void init() {
-        WICKED = register(new PlayerTrigger(prefix("wicked_path")));
-        SACRED = register(new PlayerTrigger(prefix("sacred_path")));
-        SACRIFICE = register(new PlayerTrigger(prefix("sacrifice")));
-        INCENSE = register(new PlayerTrigger(prefix("incense")));
-        VSACRIFICE = register(new PlayerTrigger(prefix("villager_sacrifice")));
-        LAY_ON_HANDS = register(new PlayerTrigger(prefix("lay_on_hands")));
-        ZOMBIFY = register(new PlayerTrigger(prefix("zombify")));
-        CURE_ZOMBIE = register(new PlayerTrigger(prefix("cure_zombie")));
+        WICKED = register(new PlayerTrigger(), prefix("wicked_path"));
+        SACRED = register(new PlayerTrigger(), prefix("sacred_path"));
+        SACRIFICE = register(new PlayerTrigger(), prefix("sacrifice"));
+        INCENSE = register(new PlayerTrigger(), prefix("incense"));
+        VSACRIFICE = register(new PlayerTrigger(), prefix("villager_sacrifice"));
+        LAY_ON_HANDS = register(new PlayerTrigger(), prefix("lay_on_hands"));
+        ZOMBIFY = register(new PlayerTrigger(), prefix("zombify"));
+        CURE_ZOMBIE = register(new PlayerTrigger(), prefix("cure_zombie"));
 
-        ENTHRALL = register(new PlayerTrigger(prefix("enthrall_undead")));
-        SMITE = register(new PlayerTrigger(prefix("smite_undead")));
+        ENTHRALL = register(new PlayerTrigger(), prefix("enthrall_undead"));
+        SMITE = register(new PlayerTrigger(), prefix("smite_undead"));
 
-        FLAME = register(new PlayerTrigger(prefix("flame_spell")));
-        FROST = register(new PlayerTrigger(prefix("frost_spell")));
+        FLAME = register(new PlayerTrigger(), prefix("flame_spell"));
+        FROST = register(new PlayerTrigger(), prefix("frost_spell"));
 
     }
 
@@ -48,9 +49,9 @@ public class AdvancementTriggers {
         }
     }
 
-    public static <T extends CriterionTrigger<?>> T register(T trigger) {
-        T cTrigger = CriteriaTriggers.register(trigger);
-        triggers.put(trigger.getId().toString(), cTrigger);
+    public static <T extends CriterionTrigger<?>> T register(T trigger, ResourceLocation id) {
+        T cTrigger = CriteriaTriggers.register(id.toString(),trigger);
+        triggers.put(id.toString(), cTrigger);
         return cTrigger;
     }
 

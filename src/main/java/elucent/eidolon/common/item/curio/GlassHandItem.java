@@ -3,15 +3,15 @@ package elucent.eidolon.common.item.curio;
 import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class GlassHandItem extends ItemBase {
     public GlassHandItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(GlassHandItem::onHurt);
+        NeoForge.EVENT_BUS.addListener(GlassHandItem::onHurt);
     }
 
     @SubscribeEvent

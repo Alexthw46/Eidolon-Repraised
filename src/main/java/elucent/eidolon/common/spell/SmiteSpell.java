@@ -13,8 +13,9 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.NeoForgeConfigSpec;
 import org.jetbrains.annotations.Nullable;
+import var;
 
 public class SmiteSpell extends StaticSpell {
     public SmiteSpell(ResourceLocation name, Sign... signs) {
@@ -52,10 +53,10 @@ public class SmiteSpell extends StaticSpell {
 
     }
 
-    public @Nullable ForgeConfigSpec.DoubleValue DAMAGE;
+    public @Nullable NeoForgeConfigSpec.DoubleValue DAMAGE;
 
     @Override
-    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(NeoForgeConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
         DAMAGE = spellBuilder.comment("The amount of damage dealt by the spell").defineInRange("damage", 10.0, 1, Integer.MAX_VALUE);
     }

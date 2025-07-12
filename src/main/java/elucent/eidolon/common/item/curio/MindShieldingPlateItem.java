@@ -4,20 +4,20 @@ import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class MindShieldingPlateItem extends ItemBase {
     public MindShieldingPlateItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(MindShieldingPlateItem::onPotion);
-        MinecraftForge.EVENT_BUS.addListener(MindShieldingPlateItem::onClone);
-        MinecraftForge.EVENT_BUS.addListener(MindShieldingPlateItem::onDropXP);
+        NeoForge.EVENT_BUS.addListener(MindShieldingPlateItem::onPotion);
+        NeoForge.EVENT_BUS.addListener(MindShieldingPlateItem::onClone);
+        NeoForge.EVENT_BUS.addListener(MindShieldingPlateItem::onDropXP);
     }
 
     @SubscribeEvent

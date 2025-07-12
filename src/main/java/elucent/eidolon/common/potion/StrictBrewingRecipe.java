@@ -2,8 +2,7 @@ package elucent.eidolon.common.potion;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.brewing.BrewingRecipe;
-
+import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import javax.annotation.Nonnull;
 
 public class StrictBrewingRecipe extends BrewingRecipe {
@@ -17,6 +16,6 @@ public class StrictBrewingRecipe extends BrewingRecipe {
     @Override
     public boolean isInput(@Nonnull ItemStack stack) {
         return ItemStack.isSameItem(inputStack, stack)
-               && ItemStack.isSameItemSameTags(inputStack, stack);
+               && ItemStack.isSameItemSameComponents(inputStack, stack);
     }
 }

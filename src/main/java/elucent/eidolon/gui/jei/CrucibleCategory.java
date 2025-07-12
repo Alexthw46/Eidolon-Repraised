@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
-
+import var;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -32,11 +32,11 @@ import static elucent.eidolon.codex.CruciblePage.BACKGROUND;
 import static elucent.eidolon.codex.Page.drawText;
 
 public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
-    static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "crucible");
+    static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"crucible" );
     private final IDrawable background, icon;
 
     public CrucibleCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(new ResourceLocation(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
+        this.background = guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/jei_page_bg.png" ), 0, 0, 138, 172);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.CRUCIBLE.get()));
     }
 
@@ -79,7 +79,7 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
         StackIngredient last = new StackIngredient(ItemStack.EMPTY, Ingredient.EMPTY);
         while (iter.hasNext()) {
             StackIngredient i = iter.next();
-            if (!ItemStack.isSameItem(i.stack, last.stack) || !ItemStack.isSameItemSameTags(i.stack, last.stack) || last.stack.getCount() + i.stack.getCount() > last.stack.getMaxStackSize()) {
+            if (!ItemStack.isSameItem(i.stack, last.stack) || !ItemStack.isSameItemSameComponents(i.stack, last.stack) || last.stack.getCount() + i.stack.getCount() > last.stack.getMaxStackSize()) {
                 last = i;
             } else {
                 last.stack.grow(i.stack.getCount());

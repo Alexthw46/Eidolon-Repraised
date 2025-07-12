@@ -1,8 +1,8 @@
 package elucent.eidolon.common.spell;
 
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -17,7 +17,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.NeoForgeConfigSpec;
+import var;
 
 public class HealSpell extends StaticSpell {
 
@@ -31,9 +32,9 @@ public class HealSpell extends StaticSpell {
         return true;
     }
 
-    ForgeConfigSpec.IntValue BASE_HEAL;
-    ForgeConfigSpec.IntValue REP_FROM_HEAL;
-    ForgeConfigSpec.DoubleValue DEVOTION_TO_HEAL;
+    NeoForgeConfigSpec.IntValue BASE_HEAL;
+    NeoForgeConfigSpec.IntValue REP_FROM_HEAL;
+    NeoForgeConfigSpec.DoubleValue DEVOTION_TO_HEAL;
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
@@ -68,7 +69,7 @@ public class HealSpell extends StaticSpell {
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);
                 world.getCapability(IReputation.INSTANCE).ifPresent(rep -> rep.addReputation(player, Deities.LIGHT_DEITY.getId(), getRepFromHealOther()));
             }
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         }
 
     }
@@ -86,7 +87,7 @@ public class HealSpell extends StaticSpell {
     }
 
     @Override
-    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(NeoForgeConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
         BASE_HEAL = spellBuilder.comment("Base healing amount").defineInRange("base_heal", 5, 1, 100);
         REP_FROM_HEAL = spellBuilder.comment("Reputation gained from healing other entities").defineInRange("rep_from_heal", 3, 1, 100);

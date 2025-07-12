@@ -5,13 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class RuneDescPage extends Page {
-    public static final ResourceLocation BLANK = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_blank_page.png");
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_title_page.png");
+    public static final ResourceLocation BLANK = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_blank_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_title_page.png" );
 
     public RuneDescPage() {
         super(BACKGROUND);

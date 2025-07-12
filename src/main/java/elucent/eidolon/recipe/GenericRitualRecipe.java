@@ -81,7 +81,7 @@ public class GenericRitualRecipe extends RitualRecipe {
             JsonArray focusItems = GsonHelper.getAsJsonArray(json, "focusItems");
             List<Ingredient> foci = getPedestalItems(focusItems);
 
-            ResourceLocation ritualRL = new ResourceLocation(GsonHelper.getAsString(json, "ritual"));
+            ResourceLocation ritualRL = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json,"ritual" ));
             List<Ingredient> invariants = json.has("invariantItems") ? getPedestalItems(GsonHelper.getAsJsonArray(json, "invariantItems")) : new ArrayList<>(0);
 
             return new GenericRitualRecipe(recipeId, ritualRL, reagent, stacks, foci, invariants, healthRequirement);

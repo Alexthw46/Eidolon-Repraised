@@ -6,6 +6,7 @@ import elucent.eidolon.gui.WoodenBrewingStandContainer;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,14 +25,14 @@ import net.minecraft.world.level.block.BrewingStandBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -82,7 +83,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
 
     @Override
     public boolean isEmpty() {
-        for(ItemStack itemstack : this.brewingItemStacks) {
+        for (ItemStack itemstack : this.brewingItemStacks) {
             if (!itemstack.isEmpty()) {
                 return false;
             }
@@ -131,7 +132,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
                     return;
                 }
 
-                for(int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; ++i) {
+                for (int i = 0; i < BrewingStandBlock.HAS_BOTTLE.length; ++i) {
                     blockstate = blockstate.setValue(BrewingStandBlock.HAS_BOTTLE[i], aboolean[i]);
                 }
 
@@ -143,7 +144,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     public boolean[] createFilledSlotsArray() {
         boolean[] aboolean = new boolean[3];
 
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             if (!this.brewingItemStacks.get(i).isEmpty()) {
                 aboolean[i] = true;
             }
@@ -154,13 +155,14 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
 
     private boolean canBrew() {
         ItemStack itemstack = this.brewingItemStacks.get(3);
-        if (!itemstack.isEmpty()) return BrewingRecipeRegistry.canBrew(brewingItemStacks, itemstack, OUTPUT_SLOTS); // divert to VanillaBrewingRegistry
+        if (!itemstack.isEmpty())
+            return BrewingRecipeRegistry.canBrew(brewingItemStacks, itemstack, OUTPUT_SLOTS); // divert to VanillaBrewingRegistry
         if (itemstack.isEmpty()) {
             return false;
         } else if (!PotionBrewing.isIngredient(itemstack)) {
             return false;
         } else {
-            for(int i = 0; i < 3; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 ItemStack itemstack1 = this.brewingItemStacks.get(i);
                 if (!itemstack1.isEmpty() && PotionBrewing.hasMix(itemstack1, itemstack)) {
                     return true;
@@ -172,11 +174,11 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     }
 
     private void brewPotions() {
-        if (level == null || ForgeEventFactory.onPotionAttemptBrew(brewingItemStacks)) return;
+        if (level == null || EventHooks.onPotionAttemptBrew(brewingItemStacks)) return;
         ItemStack itemstack = this.brewingItemStacks.get(3);
 
         BrewingRecipeRegistry.brewPotions(brewingItemStacks, itemstack, OUTPUT_SLOTS);
-        ForgeEventFactory.onPotionBrewed(brewingItemStacks);
+        EventHooks.onPotionBrewed(brewingItemStacks);
         BlockPos blockpos = this.getBlockPos();
         if (itemstack.hasCraftingRemainingItem()) {
             ItemStack itemstack1 = itemstack.getCraftingRemainingItem();
@@ -193,18 +195,28 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(nbt, provider);
         this.brewingItemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(nbt, this.brewingItemStacks);
+        ContainerHelper.loadAllItems(nbt, this.brewingItemStacks, provider);
         this.brewTime = nbt.getShort("BrewTime");
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compound) {
-        super.saveAdditional(compound);
+    public void saveAdditional(@NotNull CompoundTag compound, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(compound, provider);
         compound.putShort("BrewTime", (short) this.brewTime);
-        ContainerHelper.saveAllItems(compound, this.brewingItemStacks);
+        ContainerHelper.saveAllItems(compound, this.brewingItemStacks, provider);
+    }
+
+    @Override
+    protected @NotNull NonNullList<ItemStack> getItems() {
+        return this.brewingItemStacks;
+    }
+
+    @Override
+    protected void setItems(@NotNull NonNullList<ItemStack> items) {
+        this.brewingItemStacks = items;
     }
 
     @Override
@@ -243,8 +255,8 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
         if (index == 3) {
             return BrewingRecipeRegistry.isValidIngredient(stack)
-                   && !stack.is(Tags.Items.DUSTS_REDSTONE)
-                   && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
+                    && !stack.is(Tags.Items.DUSTS_REDSTONE)
+                    && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
         } else {
             return BrewingRecipeRegistry.isValidInput(stack) && this.getItem(index).isEmpty();
         }
@@ -283,26 +295,4 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         return new WoodenBrewingStandContainer(id, player, this, this.dataAccess);
     }
 
-    final LazyOptional<? extends IItemHandler>[] handlers =
-            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void setRemoved() {
-        super.setRemoved();
-        for (LazyOptional<? extends IItemHandler> handler : handlers)
-            handler.invalidate();
-    }
 }

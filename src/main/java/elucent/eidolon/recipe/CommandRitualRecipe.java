@@ -93,7 +93,7 @@ public class CommandRitualRecipe extends RitualRecipe {
                 commands.add(GsonHelper.getAsString(json, "command"));
             }
 
-            ResourceLocation symbol = json.has("symbol") ? new ResourceLocation(GsonHelper.getAsString(json, "symbol")) : Signs.HARMONY_SIGN.getSprite();
+            ResourceLocation symbol = json.has("symbol") ? ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json,"symbol" )) : Signs.HARMONY_SIGN.getSprite();
             int color = GsonHelper.getAsInt(json, "color");
 
             return new CommandRitualRecipe(pRecipeId, commands, reagent, stacks, foci, healthRequirement).setSymbol(symbol).setColor(color);

@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class WorktableRecipe implements Recipe<Container> {
     }
 
     public WorktableRecipe setRegistryName(String domain, String path) {
-        this.registryName = new ResourceLocation(domain, path);
+        this.registryName = ResourceLocation.fromNamespaceAndPath(domain,path );
         return this;
     }
 

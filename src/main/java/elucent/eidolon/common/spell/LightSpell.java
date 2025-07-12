@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.block.GhostLight;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.registries.Registry;
@@ -50,11 +50,11 @@ public class LightSpell extends StaticSpell {
                 }
                 world.setBlockAndUpdate(blockPos, lightBlockState);
                 world.sendBlockUpdated(blockPos, world.getBlockState(blockPos), world.getBlockState(blockPos), 2);
-                ISoul.expendMana(player, getCost());
+                IMana.expendMana(player, getCost());
             }
         } else if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         }
     }
 

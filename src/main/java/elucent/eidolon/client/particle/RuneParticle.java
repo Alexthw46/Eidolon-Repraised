@@ -122,7 +122,7 @@ public class RuneParticle extends TextureSheetParticle {
         offY.sub(avector3f[3]);
         offY.mul(0.5f);
 
-        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/aura"));
+        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/aura" ));
 
         for (int i = 0; i < 1; i++) {
 //        	float a = Mth.PI * i + Mth.PI * 2 * (age + pticks) / lifetime;

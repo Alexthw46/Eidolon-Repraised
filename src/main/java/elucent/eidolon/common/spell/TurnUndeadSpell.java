@@ -1,7 +1,7 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

@@ -1,7 +1,7 @@
 package elucent.eidolon.mixin;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.capability.IPlayerData;
+import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.server.level.ServerPlayer;

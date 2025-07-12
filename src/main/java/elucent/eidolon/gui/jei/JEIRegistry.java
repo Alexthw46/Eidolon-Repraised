@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
+import var;
 
 @JeiPlugin
 public class JEIRegistry implements IModPlugin {
@@ -29,7 +30,7 @@ public class JEIRegistry implements IModPlugin {
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return new ResourceLocation(Eidolon.MODID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"jei_plugin" );
     }
 
     @Override

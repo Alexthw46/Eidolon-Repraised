@@ -15,14 +15,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
-
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class SpellProjectileEntity extends Projectile {
-    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(Eidolon.MODID, "trackable"));
-    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), new ResourceLocation(Eidolon.MODID, "trackable_blacklist"));
+    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"trackable" ));
+    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"trackable_blacklist" ));
 
     public Predicate<Entity> trackingPredicate = this::shouldTrack;
     public Predicate<Entity> compulsoryTrackingPredicate = this::mustTrack;

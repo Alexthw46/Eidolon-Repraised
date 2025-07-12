@@ -26,7 +26,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -125,21 +125,21 @@ public class SlimySlugEntity extends TamableAnimal {
                 if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                 }
-                if (!this.level.isClientSide) {
-                    if (this.random.nextInt(10) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                if (!this.level().isClientSide) {
+                    if (this.random.nextInt(10) == 0 && !EventHooks.onAnimalTame(this, player)) {
                         this.tame(player);
-                        this.level.broadcastEntityEvent(this, (byte) 7);
+                        this.level().broadcastEntityEvent(this, (byte) 7);
                     } else {
-                        this.level.broadcastEntityEvent(this, (byte) 6);
+                        this.level().broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
             } else return super.mobInteract(player, hand);
         } else if (onGround() && this.isTame() && this.isOwnedBy(player)) {
             if (!this.level.isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             return super.mobInteract(player, hand);
         }
@@ -149,7 +149,7 @@ public class SlimySlugEntity extends TamableAnimal {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!this.level.isClientSide && this.isAlive() && !this.isBaby() && --this.slimeTime <= 0) {
+        if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.slimeTime <= 0) {
             this.playSound(SoundEvents.SLIME_SQUISH, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.spawnAtLocation(Items.SLIME_BALL);
             this.slimeTime = this.random.nextInt(12000) + 12000;

@@ -2,6 +2,7 @@ package elucent.eidolon.common.tile;
 
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -25,13 +26,13 @@ public class EffigyTileEntity extends TileEntityBase {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
         previous = tag.getLong("previous");
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         tag.putLong("previous", previous);
     }
 }

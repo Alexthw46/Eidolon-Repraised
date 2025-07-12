@@ -13,15 +13,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SappingSwordItem extends SwordItem {
     public SappingSwordItem(Properties builderIn) {
-        super(Tiers.SanguineTier.INSTANCE, 1, -2.4f, builderIn);
+        super(Tiers.SanguineTier.INSTANCE, builderIn.attributes(createAttributes(Tiers.SanguineTier.INSTANCE, 1, -2.4f)));
     }
 
     String loreTag = null;
@@ -32,8 +32,7 @@ public class SappingSwordItem extends SwordItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag tooltipFlag) {
         if (this.loreTag != null) {
             tooltip.add(Component.literal(""));
             tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
@@ -45,12 +44,12 @@ public class SappingSwordItem extends SwordItem {
         if (target.invulnerableTime > 0) {
             target.invulnerableTime = 0;
             float before = target.getHealth();
-            target.hurt(DamageTypeData.source(target.level, DamageTypes.WITHER, attacker, null), 2.0f);
+            target.hurt(DamageTypeData.source(target.level(), DamageTypes.WITHER, attacker, null), 2.0f);
             float healing = before - target.getHealth();
             if (healing > 0) {
                 attacker.heal(healing);
-                if (!attacker.level.isClientSide)
-                    Networking.sendToTracking(attacker.level, attacker.blockPosition(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
+                if (!attacker.level().isClientSide)
+                    Networking.sendToTracking(attacker.level(), attacker.blockPosition(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
             }
         }
         return super.hurtEnemy(stack, target, attacker);

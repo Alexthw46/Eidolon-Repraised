@@ -4,6 +4,7 @@ import elucent.eidolon.api.ritual.IncenseRitual;
 import elucent.eidolon.registries.IncenseRegistry;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
@@ -100,10 +101,10 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    public void load(@NotNull CompoundTag pTag) {
-        super.load(pTag);
+    public void loadAdditional(@NotNull CompoundTag pTag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(pTag, provider);
         if (pTag.contains("incense")) {
-            incense = ItemStack.of(pTag.getCompound("incense"));
+            incense = ItemStack.parseOptional(provider, pTag.getCompound("incense"));
         } else incense = ItemStack.EMPTY;
         if (pTag.contains("incenseContext") && incense.isEmpty()) {
             incenseRitual = IncenseRitual.read(pTag);
@@ -114,10 +115,10 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag pTag) {
-        super.saveAdditional(pTag);
+    protected void saveAdditional(@NotNull CompoundTag pTag, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(pTag, provider);
         if (!incense.isEmpty()) {
-            pTag.put("incense", incense.save(new CompoundTag()));
+            pTag.put("incense", incense.saveOptional(provider));
         }
         if (incenseRitual != null) {
             incenseRitual.write(pTag);

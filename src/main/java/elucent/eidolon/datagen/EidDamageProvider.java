@@ -11,13 +11,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -30,7 +30,7 @@ public class EidDamageProvider {
                 .add(Registries.DAMAGE_TYPE, DamageTypeDataProvider::bootstrap);
 
 
-        public static void bootstrap(BootstapContext<DamageType> ctx) {
+        public static void bootstrap(BootstrapContext<DamageType> ctx) {
             DamageTypeData.allInNamespace(Eidolon.MODID).forEach(data -> data.register(ctx));
         }
 

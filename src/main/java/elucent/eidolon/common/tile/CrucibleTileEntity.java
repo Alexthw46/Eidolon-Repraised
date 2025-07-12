@@ -10,7 +10,7 @@ import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -27,15 +27,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +47,6 @@ public class CrucibleTileEntity extends TileEntityBase {
     final List<CrucibleStep> steps = new ArrayList<>();
     long seed = 0;
     final Random random = new Random();
-
-    private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> this.tank);
 
     //internal tank that can hold one water bucket
     public FluidTank tank = new FluidTank(1000) {
@@ -72,11 +66,6 @@ public class CrucibleTileEntity extends TileEntityBase {
         }
 
     };
-
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
-        return capability == ForgeCapabilities.FLUID_HANDLER ? this.holder.cast() : super.getCapability(capability, facing);
-    }
 
     public float getRed() {
         random.setSeed(seed);
@@ -178,13 +167,13 @@ public class CrucibleTileEntity extends TileEntityBase {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
         this.steps.clear();
         ListTag steps = tag.getList("steps", Tag.TAG_COMPOUND);
         for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step));
         boiling = tag.getBoolean("boiling");
-        tank.readFromNBT(tag);
+        tank.readFromNBT(provider, tag);
         hasWater = tank.getFluidAmount() == 1000;
         stirs = tag.getInt("stirs");
         stirTicks = tag.getInt("stirTicks");
@@ -192,7 +181,7 @@ public class CrucibleTileEntity extends TileEntityBase {
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         ListTag steps = new ListTag();
         for (CrucibleStep step : this.steps) steps.add(step.write());
         tag.put("steps", steps);
@@ -200,7 +189,7 @@ public class CrucibleTileEntity extends TileEntityBase {
         tag.putInt("stirs", stirs);
         tag.putInt("stirTicks", stirTicks);
         if (!tank.isEmpty()) {
-            tank.writeToNBT(tag);
+            tank.writeToNBT(provider, tag);
         }
     }
 
@@ -233,14 +222,14 @@ public class CrucibleTileEntity extends TileEntityBase {
         float steamB = !stepSize ? Math.min(1.0f, 1 - (float) Math.pow(1 - getBlue(), 2)) : 1.0f;
 
         if (level.isClientSide && hasWater && boiling) for (int i = 0; i < 2; i++) {
-            Particles.create(EidolonParticles.BUBBLE_PARTICLE)
+            Particles.create(EidolonParticles.BUBBLE_PARTICLE.get())
                     .setScale(0.05f)
                     .setLifetime(10)
                     .addVelocity(0, 0.015625, 0)
                     .setColor(bubbleR, bubbleG, bubbleB)
                     .setAlpha(1.0f, 0.75f)
                     .spawn(level, worldPosition.getX() + 0.125 + 0.75 * level.random.nextFloat(), worldPosition.getY() + 0.6875, worldPosition.getZ() + 0.125 + 0.75 * level.random.nextFloat());
-            if (level.random.nextInt(8) == 0) Particles.create(EidolonParticles.STEAM_PARTICLE)
+            if (level.random.nextInt(8) == 0) Particles.create(EidolonParticles.STEAM_PARTICLE.get())
                     .setAlpha(0.0625f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(0.375, 0.125).randomVelocity(0.0125f, 0.025f)
                     .addVelocity(0, 0.05f, 0)

@@ -4,14 +4,15 @@ import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.block.HorizontalBlockBase;
 import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,8 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -36,9 +36,9 @@ public class PrayerSpell extends StaticSpell {
     final Deity deity;
     int baseRep = 1;
     double powerMultiplier = 0.25;
-    public @Nullable ForgeConfigSpec.IntValue COOLDOWN;
-    public @Nullable ForgeConfigSpec.IntValue BASE_REP;
-    public @Nullable ForgeConfigSpec.DoubleValue POWER_MULTIPLIER;
+    public @Nullable ModConfigSpec.IntValue COOLDOWN;
+    public @Nullable ModConfigSpec.IntValue BASE_REP;
+    public @Nullable ModConfigSpec.DoubleValue POWER_MULTIPLIER;
 
 
     public PrayerSpell(ResourceLocation name, Deity deity, Sign... signs) {
@@ -69,13 +69,14 @@ public class PrayerSpell extends StaticSpell {
     }
 
     public static void updateMagic(AltarInfo altarInfo, Player player, Level world, double reputation) {
-        player.getCapability(ISoul.INSTANCE).ifPresent((soul) -> {
+        var patronMana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
+        if (patronMana != null) {
             var capacity = altarInfo.getCapacity();
             var power = altarInfo.getPower();
-            soul.setMaxMagic((float) Math.max(soul.getMaxMagic(), 20 + reputation * (1 + capacity / 2)));
-            soul.setMagic((float) Math.max(soul.getMagic(), soul.getMagic() + reputation + power * 2));
+            patronMana.setMaxMagic((float) Math.max(patronMana.getMaxMagic(), 20 + reputation * (1 + capacity / 2)));
+            patronMana.setMagic((float) Math.max(patronMana.getMagic(), patronMana.getMagic() + reputation + power * 2));
             if (!world.isClientSide) Networking.sendToTracking(world, player.getOnPos(), new SoulUpdatePacket(player));
-        });
+        }
     }
 
     protected boolean reputationCheck(Level world, Player player, double minDevotion) {
@@ -133,14 +134,14 @@ public class PrayerSpell extends StaticSpell {
         float x = effigy.getBlockPos().getX() + 0.5f + dir.getStepX() * 0.21875f;
         float y = effigy.getBlockPos().getY() + 0.8125f;
         float z = effigy.getBlockPos().getZ() + 0.5f + dir.getStepZ() * 0.21875f;
-        Particles.create(FLAME_PARTICLE)
+        Particles.create(FLAME_PARTICLE.get())
                 .setColor(color.getRed(), color.getGreen(), color.getBlue())
                 .setAlpha(0.5f, 0)
                 .setScale(0.125f, 0.0625f)
                 .randomOffset(0.01f)
                 .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
                 .repeat(world, x + 0.09375f * tangent.getStepX(), y, z + 0.09375f * tangent.getStepZ(), 8);
-        Particles.create(FLAME_PARTICLE)
+        Particles.create(FLAME_PARTICLE.get())
                 .setColor(color.getRed(), color.getGreen(), color.getBlue())
                 .setAlpha(0.5f, 0)
                 .setScale(0.1875f, 0.125f)
@@ -150,7 +151,7 @@ public class PrayerSpell extends StaticSpell {
     }
 
     @Override
-    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(ModConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
         COOLDOWN = spellBuilder.comment("Cooldown for this prayer spell").defineInRange("cooldown", 0, 21000, Integer.MAX_VALUE);
         BASE_REP = spellBuilder.comment("Base reputation gained from this prayer spell").defineInRange("base_reputation", baseRep, 0, Integer.MAX_VALUE);

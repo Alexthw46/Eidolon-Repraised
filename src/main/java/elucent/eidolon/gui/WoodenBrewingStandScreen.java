@@ -6,13 +6,13 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class WoodenBrewingStandScreen extends AbstractContainerScreen<WoodenBrewingStandContainer> {
-    private static final ResourceLocation BREWING_STAND_GUI_TEXTURES = new ResourceLocation(Eidolon.MODID, "textures/gui/wooden_brewing_stand.png");
+    private static final ResourceLocation BREWING_STAND_GUI_TEXTURES = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/wooden_brewing_stand.png" );
     private static final int[] BUBBLELENGTHS = new int[]{29, 24, 20, 16, 11, 6, 0};
 
     public WoodenBrewingStandScreen(WoodenBrewingStandContainer p_i51097_1_, Inventory p_i51097_2_, Component p_i51097_3_) {

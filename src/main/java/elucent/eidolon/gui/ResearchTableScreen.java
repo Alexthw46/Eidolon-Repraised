@@ -18,8 +18,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableContainer> {
-    private static final ResourceLocation RESEARCH_TABLE_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/gui/research_table.png");
+    private static final ResourceLocation RESEARCH_TABLE_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/research_table.png" );
 
     public ResearchTableScreen(ResearchTableContainer table, Inventory inv, Component p_i51097_3_) {
         super(table, inv, p_i51097_3_);

@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
@@ -24,7 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class ZombifySpell extends PrayerSpell {
     public ZombifySpell(ResourceLocation resourceLocation, int baseRep, double powerMult, Sign... signs) {
@@ -65,7 +65,7 @@ public class ZombifySpell extends PrayerSpell {
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             zombify(villager, level);
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         } else {
             playSuccessSound(world, player, effigy, Signs.DEATH_SIGN);
         }
@@ -79,7 +79,7 @@ public class ZombifySpell extends PrayerSpell {
         zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
         zombievillager.setTradeOffers(villager.getOffers().createTag());
         zombievillager.setVillagerXp(villager.getVillagerXp());
-        ForgeEventFactory.onLivingConvert(villager, zombievillager);
+        EventHooks.onLivingConvert(villager, zombievillager);
     }
 
 }

@@ -3,7 +3,7 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.util.MathUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -17,8 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.ModConfigSpec;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ public abstract class StaticSpell extends Spell {
     public SignSequence signs;
     private int cost;
     private int delay = 10;
-    public @Nullable ForgeConfigSpec.ConfigValue<Integer> COST;
+    public @Nullable ModConfigSpec.ConfigValue<Integer> COST;
 
 
     public StaticSpell(ResourceLocation name, Sign... signs) {
@@ -97,7 +97,7 @@ public abstract class StaticSpell extends Spell {
     }
 
     @Override
-    public void buildConfig(ForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(ModConfigSpec.Builder spellBuilder) {
         DELAY = spellBuilder.comment("The delay in ticks before the spell is cast").defineInRange("delay", delay, 0, Integer.MAX_VALUE);
         COST = spellBuilder.comment("The cost of casting this spell").defineInRange("cost", cost, 0, Integer.MAX_VALUE);
     }

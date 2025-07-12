@@ -78,8 +78,8 @@ public class Researches {
         addTask(ResearchTask.XP::new);
 
 
-        register(new Research(new ResourceLocation(Eidolon.MODID, "gluttony"), 3), EntityType.PIG);
-        FIRE_SPELL = register(new Research(new ResourceLocation(Eidolon.MODID, "flames"), 5) {
+        register(new Research(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"gluttony" ), 3), EntityType.PIG);
+        FIRE_SPELL = register(new Research(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"flames" ), 5) {
             @Override
             public void onLearned(ServerPlayer serverPlayer) {
                 KnowledgeUtil.grantSign(serverPlayer, Signs.FLAME_SIGN);
@@ -89,7 +89,7 @@ public class Researches {
                 new ResearchTask.XP(6)
         ), EntityType.BLAZE);
 
-        FROST_SPELL = register(new Research(new ResourceLocation(Eidolon.MODID, "frost"), 5) {
+        FROST_SPELL = register(new Research(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"frost" ), 5) {
             @Override
             public void onLearned(ServerPlayer serverPlayer) {
                 KnowledgeUtil.grantSign(serverPlayer, Signs.WINTER_SIGN);

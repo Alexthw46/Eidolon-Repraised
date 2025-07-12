@@ -18,6 +18,6 @@ public class ZombieBruteRenderer extends HumanoidMobRenderer<ZombieBruteEntity, 
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull ZombieBruteEntity entity) {
-        return new ResourceLocation(Eidolon.MODID, "textures/entity/zombie_brute.png");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/zombie_brute.png" );
     }
 }

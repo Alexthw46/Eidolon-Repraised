@@ -7,16 +7,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
+import var;
 
 public class VoidAmuletItem extends EidolonCurio {
     public VoidAmuletItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(VoidAmuletItem::onDamage);
+        NeoForge.EVENT_BUS.addListener(VoidAmuletItem::onDamage);
     }
 
     static int getCooldown(ItemStack stack) {

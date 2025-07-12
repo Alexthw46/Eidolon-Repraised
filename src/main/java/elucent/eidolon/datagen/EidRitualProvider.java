@@ -7,6 +7,7 @@ import elucent.eidolon.recipe.*;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Worldgen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -15,14 +16,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -83,12 +84,12 @@ public class EidRitualProvider extends SimpleDataProvider {
                 EntityType.STRAY,
                 Items.CHARCOAL,
                 ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
-                List.of(Ingredient.of(Tags.Items.SAND)));
+                List.of(Ingredient.of(Tags.Items.SANDS)));
 
         makeSummon(prefix("summon_drowned"), EntityType.DROWNED,
                 Items.CHARCOAL,
                 ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
-                List.of(Ingredient.of(Tags.Items.DUSTS_PRISMARINE)));
+                List.of(Ingredient.of(Tags.Items.GEMS_PRISMARINE)));
 
         makeSummon(prefix("summon_stray"), EntityType.STRAY,
                 List.of(Registry.SOUL_SHARD.get(), Items.BONE),
@@ -109,8 +110,7 @@ public class EidRitualProvider extends SimpleDataProvider {
                 List.of());
 
 
-        ItemStack HarmingPotion = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING);
-        var harmingIngredient = PartialNBTIngredient.of(HarmingPotion.getItem(), HarmingPotion.getOrCreateTag());
+        var harmingIngredient = DataComponentIngredient.of(true, DataComponents.POTION_CONTENTS, new PotionContents(Potions.HARMING), Items.POTION);
 
         crafting(Registry.SAPPING_SWORD.get().getDefaultInstance(), Ingredient.of(Items.IRON_SWORD),
                 ingredientsFromObjects(List.of(Registry.SHADOW_GEM.get(), Registry.SOUL_SHARD.get(), Registry.SOUL_SHARD.get(),
@@ -163,7 +163,7 @@ public class EidRitualProvider extends SimpleDataProvider {
         generic(Items.GLISTERING_MELON_SLICE, new PurifyRitual().setRegistryName(Eidolon.MODID, "purify")
                 .addRequirement(new ItemRequirement(Registry.ENCHANTED_ASH.get()))
                 .addRequirement(new ItemRequirement(Registry.ENCHANTED_ASH.get()))
-                .addRequirement(new ItemRequirement(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING)))
+                .addRequirement(new ItemRequirement(PotionContents.createItemStack(Items.POTION, Potions.HEALING)))
                 .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get()))
                 .addRequirement(new ItemRequirement(Registry.SOUL_SHARD.get())));
 

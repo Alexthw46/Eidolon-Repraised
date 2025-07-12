@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IKnowledge;
+import elucent.eidolon.api.capability.IKnowledge;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ClientInfo;
@@ -20,15 +20,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
+import var;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SignIndexPage extends Page {
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_sign_index_page.png" );
     final List<SignEntry> entries = new ArrayList<>();
 
     public static class SignEntry {
@@ -50,7 +50,7 @@ public class SignIndexPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
-        IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
+        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null).resolve().get();
         for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             if (knowledge.knowsSign(entries.get(i).sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50) {
@@ -73,7 +73,7 @@ public class SignIndexPage extends Page {
         if (entity == null) {
             return;
         }
-        IKnowledge knowledge = entity.getCapability(IKnowledge.INSTANCE, null).resolve().get();
+        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null).resolve().get();
         var mStack = guiGraphics.pose();
         for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;

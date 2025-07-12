@@ -1,7 +1,7 @@
 package elucent.eidolon.util;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class ClientInfo {
     public static float partialTicks = 0.0f;

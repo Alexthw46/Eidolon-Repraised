@@ -13,20 +13,22 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
+import record;
 import top.theillusivec4.curios.api.SlotContext;
+import var;
 
 public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            MinecraftForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
+            NeoForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
             return null;
         });
     }
@@ -124,9 +126,9 @@ public class SanguineAmuletItem extends EidolonCurio {
             for (int i = 0; i < charge; i += 20) {
                 for (int j = 0; j < Mth.clamp(charge - i, 0, 20); j += 2) {
                     if (charge - (i + j) == 1) {
-                        pGuiGraphics.blit(new ResourceLocation("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft","textures/gui/icons.png" ), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
                     } else
-                        pGuiGraphics.blit(new ResourceLocation("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft","textures/gui/icons.png" ), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
                 }
             }
         }

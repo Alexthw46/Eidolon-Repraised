@@ -17,9 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeAdvancementProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ForgeAdvancementProvider;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -45,8 +45,7 @@ public class EidAdvancementProvider extends ForgeAdvancementProvider {
             this.advCon = con;
             Advancement root = builder(Eidolon.MODID).display(Registry.CODEX.get(), Component.translatable("eidolon.advancement.title.root"),
                     Component.translatable("eidolon.advancement.desc.root"),
-                    new ResourceLocation("eidolon:textures/block/bone_pile.png"),
-                    FrameType.TASK, false, false, false).addCriterion("eidolon:ars_ecclesia",
+                    ResourceLocation.fromNamespaceAndPath("eidolon:textures/block/bone_pile.png"),FrameType.TASK, false, false, false ).addCriterion("eidolon:ars_ecclesia",
                     InventoryChangeTrigger.TriggerInstance.hasItems(Registry.CODEX.get())).save(con, "eidolon:root");
             Advancement theurgy = saveBasicItem(Registry.STRAW_EFFIGY.get(), root);
             Advancement altar = saveBasicItem(Registry.WOODEN_ALTAR.get(), theurgy);
@@ -106,7 +105,7 @@ public class EidAdvancementProvider extends ForgeAdvancementProvider {
     }
 
 
-    static class AdvancementBuilder implements net.minecraftforge.common.extensions.IForgeAdvancementBuilder {
+    static class AdvancementBuilder implements net.neoforged.neoforge.common.extensions.IAdvancementBuilderExtension {
         @Nullable
         private ResourceLocation parentId;
         @Nullable
@@ -264,7 +263,7 @@ public class EidAdvancementProvider extends ForgeAdvancementProvider {
         }
 
         public Advancement save(Consumer<Advancement> pConsumer) {
-            return this.save(pConsumer, new ResourceLocation(modid, fileKey).toString());
+            return this.save(pConsumer, ResourceLocation.fromNamespaceAndPath(modid,fileKey ).toString());
         }
 
         public String toString() {

@@ -28,18 +28,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
+import var;
 import java.util.ArrayList;
 import java.util.List;
 
 import static elucent.eidolon.codex.RitualPage.renderRitualSymbol;
 
 public class RitualCategory implements IRecipeCategory<RitualRecipe> {
-    static final ResourceLocation UUID = new ResourceLocation(Eidolon.MODID, "ritual");
+    static final ResourceLocation UUID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"ritual" );
     private final IDrawable background, icon;
 
     public RitualCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(new ResourceLocation(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
+        this.background = guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/jei_page_bg.png" ), 0, 0, 138, 172);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.BRAZIER.get()));
     }
 

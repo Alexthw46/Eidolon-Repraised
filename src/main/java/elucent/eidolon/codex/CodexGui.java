@@ -25,13 +25,13 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
-
+import var;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CodexGui extends Screen {
     public static final CodexGui DUMMY = new CodexGui();
-    public static final ResourceLocation CODEX_BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_bg.png");
+    public static final ResourceLocation CODEX_BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_bg.png" );
     static final int xSize = 312;
     static final int ySize = 208;
     final List<Sign> chant = new ArrayList<>();

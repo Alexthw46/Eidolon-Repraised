@@ -2,13 +2,12 @@ package elucent.eidolon.api.deity;
 
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;

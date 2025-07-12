@@ -2,7 +2,7 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.util.EntityUtil;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import var;
 
 import static elucent.eidolon.Eidolon.prefix;
 
@@ -38,7 +39,7 @@ public class ThrallSpell extends StaticSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getBlockReach() + 3, 0, false);
         if (ray instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity living) {
-            var type = Eidolon.getTrueMobType(living);
+            var type = Eidolon.isValidUndead(living);
             return (!living.getType().is(ENTHRALL_BLACKLIST) && type == MobType.UNDEAD) || living.getType().is(ENTHRALL_WHITELIST);
         }
         return false;

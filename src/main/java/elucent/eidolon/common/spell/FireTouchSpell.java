@@ -1,7 +1,7 @@
 package elucent.eidolon.common.spell;
 
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.tile.IBurner;
 import elucent.eidolon.network.IgniteEffectPacket;
 import elucent.eidolon.network.Networking;
@@ -68,7 +68,7 @@ public class FireTouchSpell extends StaticSpell {
             } else if (ray instanceof EntityHitResult entityHitResult) {
                 entityHitResult.getEntity().setSecondsOnFire(10);
             } else return;
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         }
 
     }

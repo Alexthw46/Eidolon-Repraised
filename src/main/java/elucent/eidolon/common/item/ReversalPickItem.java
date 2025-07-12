@@ -9,11 +9,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ReversalPickItem extends PickaxeItem {
     public ReversalPickItem(Properties builderIn) {
         super(Tiers.MagicToolTier.INSTANCE, 1, -2.8F, builderIn);
-        MinecraftForge.EVENT_BUS.addListener(ReversalPickItem::onStartBreak);
+        NeoForge.EVENT_BUS.addListener(ReversalPickItem::onStartBreak);
     }
 
     String loreTag = null;

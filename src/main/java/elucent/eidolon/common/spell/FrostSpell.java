@@ -1,7 +1,7 @@
 package elucent.eidolon.common.spell;
 
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import var;
 
 public class FrostSpell extends StaticSpell {
 
@@ -51,7 +52,7 @@ public class FrostSpell extends StaticSpell {
             } else if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living) {
                 living.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 200));
             } else return;
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         }
     }
 }

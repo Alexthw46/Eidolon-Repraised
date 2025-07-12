@@ -3,7 +3,7 @@ package elucent.eidolon.common.item.model;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import elucent.eidolon.capability.IPlayerData;
+import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.common.item.IWingsItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;

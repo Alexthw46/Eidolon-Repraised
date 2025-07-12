@@ -42,8 +42,8 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
         double pz = Mth.lerp(pticks, mc.player.zOld, mc.player.getZ());
 //        mStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 //        mStack.translate(-px, -py, -pz);
-        TextureAtlasSprite beam = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/beam"));
-        TextureAtlasSprite ring = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(Eidolon.MODID, "particle/ring"));
+        TextureAtlasSprite beam = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/beam" ));
+        TextureAtlasSprite ring = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/ring" ));
 
         Vec3 look = entity.look;
         yaw = (float) Mth.atan2(look.x, look.z);
@@ -183,6 +183,6 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull ChantCasterEntity entity) {
-        return new ResourceLocation(Eidolon.MODID, "textures/particle/beam.png");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/particle/beam.png" );
     }
 }

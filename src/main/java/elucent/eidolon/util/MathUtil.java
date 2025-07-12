@@ -24,7 +24,7 @@ public class MathUtil {
     }
 
     public static @Nullable EntityHitResult traceEntities(Entity shooter, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, double distance) {
-        Level world = shooter.level;
+        Level world = shooter.level();
         double d0 = distance;
         Entity entity = null;
         Vec3 vec3d = null;

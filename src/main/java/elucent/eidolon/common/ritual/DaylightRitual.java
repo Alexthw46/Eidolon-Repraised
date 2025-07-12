@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 
 public class DaylightRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/daylight_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/daylight_ritual" );
 
     public DaylightRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 255, 245, 130));

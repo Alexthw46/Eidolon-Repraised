@@ -4,7 +4,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
@@ -15,9 +15,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IndexPage extends Page {
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_index_page.png");
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_index_page.png" );
     final List<IndexEntry> entries = new ArrayList<>();
 
     public static class IndexEntry {

@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
@@ -20,19 +20,19 @@ import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import var;
 import java.util.List;
 
 public class LightTouchSpell extends DarkTouchSpell {
 
-    public static final String SACRED_KEY = new ResourceLocation(Eidolon.MODID, "sacred").toString();
+    public static final String SACRED_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"sacred" ).toString();
 
     public LightTouchSpell(ResourceLocation name, Sign... signs) {
         super(name, signs);
-        MinecraftForge.EVENT_BUS.addListener(LightTouchSpell::onHurt);
+        NeoForge.EVENT_BUS.addListener(LightTouchSpell::onHurt);
     }
 
     @SubscribeEvent
@@ -77,7 +77,7 @@ public class LightTouchSpell extends DarkTouchSpell {
         else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
         else {
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
             stack.getOrCreateTag().putInt(SACRED_KEY, 50);
             return stack;
         }

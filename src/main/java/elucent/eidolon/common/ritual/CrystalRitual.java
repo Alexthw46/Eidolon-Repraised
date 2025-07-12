@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class CrystalRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/crystal_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/crystal_ritual" );
 
     public CrystalRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 247, 156, 220));

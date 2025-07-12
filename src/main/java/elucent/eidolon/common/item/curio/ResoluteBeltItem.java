@@ -11,9 +11,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -25,7 +25,7 @@ public class ResoluteBeltItem extends EidolonCurio {
 
     public ResoluteBeltItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(ResoluteBeltItem::onHurt);
+        NeoForge.EVENT_BUS.addListener(ResoluteBeltItem::onHurt);
     }
 
     static final Random random = new Random();

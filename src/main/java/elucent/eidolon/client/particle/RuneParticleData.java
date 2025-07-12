@@ -31,7 +31,7 @@ public class RuneParticleData implements ParticleOptions {
                 Codec.FLOAT.fieldOf("r2").forGetter((d) -> d.r2),
                 Codec.FLOAT.fieldOf("g2").forGetter((d) -> d.g2),
                 Codec.FLOAT.fieldOf("b2").forGetter((d) -> d.b2)
-        ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> new RuneParticleData(Runes.find(new ResourceLocation(rune)), r1, g1, b1, r2, g2, b2)));
+        ).apply(instance, (rune, r1, g1, b1, r2, g2, b2) -> new RuneParticleData(Runes.find(ResourceLocation.fromNamespaceAndPath(rune)),r1, g1, b1, r2, g2, b2 )));
     }
 
     public RuneParticleData(Rune rune, float r1, float g1, float b1, float r2, float g2, float b2) {
@@ -82,7 +82,7 @@ public class RuneParticleData implements ParticleOptions {
             float g2 = reader.readFloat();
             reader.expect(' ');
             float b2 = reader.readFloat();
-            return new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
+            return new RuneParticleData(Runes.find(ResourceLocation.fromNamespaceAndPath(loc)),r1, g1, b1, r2, g2, b2 );
         }
 
         @Override
@@ -94,7 +94,7 @@ public class RuneParticleData implements ParticleOptions {
             float r2 = buf.readFloat();
             float g2 = buf.readFloat();
             float b2 = buf.readFloat();
-            return new RuneParticleData(Runes.find(new ResourceLocation(loc)), r1, g1, b1, r2, g2, b2);
+            return new RuneParticleData(Runes.find(ResourceLocation.fromNamespaceAndPath(loc)),r1, g1, b1, r2, g2, b2 );
         }
     };
 }

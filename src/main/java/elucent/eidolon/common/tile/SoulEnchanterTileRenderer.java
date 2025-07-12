@@ -18,7 +18,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchanterTileEntity> {
-    public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation(Eidolon.MODID, "entity/enchanter_book");
+    public static final ResourceLocation BOOK_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"entity/enchanter_book" );
     public static final Material BOOK_MATERIAL = new Material(InventoryMenu.BLOCK_ATLAS, BOOK_TEXTURE);
     private final BookModel model;
 
@@ -52,7 +52,7 @@ public class SoulEnchanterTileRenderer implements BlockEntityRenderer<SoulEnchan
         float f6 = Mth.lerp(partialTicks, tileEntityIn.pageTurningSpeed, tileEntityIn.nextPageTurningSpeed);
         this.model.setupAnim(f, Mth.clamp(f4, 0.0F, 1.0F), Mth.clamp(f5, 0.0F, 1.0F), f6);
         VertexConsumer ivertexbuilder = BOOK_MATERIAL.buffer(bufferIn, RenderType::entitySolid);
-        this.model.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, -1);
         matrixStackIn.popPose();
     }
 }

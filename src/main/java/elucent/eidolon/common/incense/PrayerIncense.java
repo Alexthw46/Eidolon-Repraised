@@ -4,7 +4,7 @@ import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.ritual.IncenseRitual;
 import elucent.eidolon.api.ritual.Ritual;
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;

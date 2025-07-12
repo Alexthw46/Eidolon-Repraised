@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Random;
 
 public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterContainer> {
-    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation(Eidolon.MODID,"textures/gui/soul_enchanter.png");
-    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation(Eidolon.MODID,"textures/entity/enchanter_book.png");
+    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/soul_enchanter.png" );
+    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/enchanter_book.png" );
     private static BookModel MODEL_BOOK = null;
     private final Random random = new Random();
     public int ticks;

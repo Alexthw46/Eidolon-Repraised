@@ -36,7 +36,7 @@ public class CraftingRitual extends Ritual {
     }
 
     public static class SanguineRitual extends CraftingRitual {
-        public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/sanguine_ritual");
+        public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/sanguine_ritual" );
 
         public SanguineRitual(ItemStack result) {
             super(SYMBOL, ColorUtil.packColor(255, 255, 51, 85), result);

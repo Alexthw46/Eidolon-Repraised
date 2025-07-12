@@ -12,7 +12,7 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 public class DeceitRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/deceit_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/deceit_ritual" );
 
     public DeceitRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 64, 255, 96));

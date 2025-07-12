@@ -22,11 +22,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
-    static final ResourceLocation UID = new ResourceLocation(Eidolon.MODID, "worktable");
+    static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"worktable" );
     private final IDrawable background, icon;
 
     public WorktableCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(new ResourceLocation(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
+        this.background = guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/jei_page_bg.png" ), 0, 0, 138, 172);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.WORKTABLE.get()));
     }
 
@@ -79,6 +79,6 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
         mStack.blit(BACKGROUND, 5, 4, 0, 0, 128, 160);
     }
 
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(Eidolon.MODID, "textures/gui/codex_worktable_page.png");
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_worktable_page.png" );
 
 }

@@ -9,7 +9,7 @@ public abstract class Rune {
 
     public Rune(ResourceLocation registryName) {
         this.key = registryName;
-        this.sprite = new ResourceLocation(key.getNamespace(), "rune/" + key.getPath());
+        this.sprite = ResourceLocation.fromNamespaceAndPath(key.getNamespace(),"rune/" + key.getPath( ));
     }
 
     public Rune(ResourceLocation registryName, ResourceLocation sprite) {

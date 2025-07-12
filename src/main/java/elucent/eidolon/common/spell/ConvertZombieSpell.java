@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
+import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
-import elucent.eidolon.capability.ISoul;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
@@ -58,7 +58,7 @@ public class ConvertZombieSpell extends PrayerSpell {
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
             });
             villager.startConverting(player.getUUID(), 20);
-            ISoul.expendMana(player, getCost());
+            IMana.expendMana(player, getCost());
         } else {
             playSuccessSound(world, player, effigy, Signs.HARMONY_SIGN);
         }

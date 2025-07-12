@@ -15,9 +15,9 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 public class AngelSightItem extends EidolonCurio {
     public AngelSightItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(AngelSightItem::addMode);
+        NeoForge.EVENT_BUS.addListener(AngelSightItem::addMode);
     }
 
     @Override

@@ -3,6 +3,7 @@ package elucent.eidolon.common.tile;
 import elucent.eidolon.api.ritual.IRitualItemFocus;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +27,8 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
 
     @Override
     public void onDestroyed(BlockState state, BlockPos pos) {
-        if (!stack.isEmpty()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        if (!stack.isEmpty())
+            Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
     }
 
     @Override
@@ -37,8 +39,7 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
                 stack = ItemStack.EMPTY;
                 if (!level.isClientSide) sync();
                 return InteractionResult.SUCCESS;
-            }
-            else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
+            } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
                 stack = player.getItemInHand(hand).copy();
                 stack.setCount(1);
                 player.getItemInHand(hand).shrink(1);
@@ -51,14 +52,14 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        stack = ItemStack.of(tag.getCompound("stack"));
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
+        stack = ItemStack.parseOptional(provider, tag.getCompound("stack"));
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        tag.put("stack", stack.save(new CompoundTag()));
+    public void saveAdditional(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        tag.put("stack", stack.saveOptional(provider));
     }
 
     @Override

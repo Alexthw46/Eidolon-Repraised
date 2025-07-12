@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.List;
 
 public class RechargingRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/recharge_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/recharge_ritual" );
 
     public RechargingRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 220, 180, 701));

@@ -21,8 +21,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -237,7 +237,7 @@ public abstract class ResearchTask {
                 ((AbstractContainerMenuMixin) menu).callAddSlot(new Slot(container, i, x + 11 + 17 * i, y + 7) {
                     @Override
                     public boolean mayPlace(@NotNull ItemStack pStack) {
-                        return ItemStack.isSameItemSameTags(pStack, stack);
+                        return ItemStack.isSameItemSameComponents(pStack, stack);
                     }
                 });
             }
@@ -252,7 +252,7 @@ public abstract class ResearchTask {
                     continue;
                 }
                 ItemStack slot = menu.getSlot(slotStart + i).getItem();
-                if (!ItemStack.isSameItemSameTags(items.get(i), slot)) isMatching = false;
+                if (!ItemStack.isSameItemSameComponents(items.get(i), slot)) isMatching = false;
                 if (slot.getCount() < items.get(i).getCount()) isMatching = false;
             }
             return new CompletenessResult(slotStart + items.size(), isMatching);

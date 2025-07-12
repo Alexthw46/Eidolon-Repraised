@@ -22,10 +22,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 import org.lwjgl.opengl.GL11;
+import var;
 
 import java.util.List;
 import java.util.Map;
@@ -737,7 +739,7 @@ public class CodexChapters {
                             new SignLockedEntry(INCENSE_BURN, new ItemStack(Registry.OFFERING_INCENSE.get()), Signs.FLAME_SIGN),
                             new ReputationLockedEntry(HOLY_TOUCH, new ItemStack(Registry.HOLY_SYMBOL.get()), 10, Deities.LIGHT_DEITY),
                             new SignLockedEntry(HOLY_EFFIGY, new ItemStack(Registry.ELDER_EFFIGY.get()), Signs.SACRED_SIGN, Signs.SOUL_SIGN),
-                            new FactLockedEntry(HEAL, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), Facts.VILLAGER_HEALING),
+                            new FactLockedEntry(HEAL, PotionContents.createItemStack(Items.POTION, Potions.HEALING), Facts.VILLAGER_HEALING),
                             new FactLockedEntry(CURE_ZOMBIE, new ItemStack(Items.GOLDEN_APPLE), Facts.ZOMBIE_CURE)
                     )
             );

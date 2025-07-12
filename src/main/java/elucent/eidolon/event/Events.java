@@ -2,6 +2,10 @@ package elucent.eidolon.event;
 
 import com.mojang.authlib.GameProfile;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IKnowledge;
+import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.*;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
@@ -50,22 +54,29 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent.Added;
-import net.minecraftforge.event.entity.living.MobEffectEvent.Applicable;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.Event.Result;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.Event.Result;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingTickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Added;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
@@ -93,15 +104,15 @@ public class Events {
     @SubscribeEvent
     public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
         if (event.getObject() != null)
-            event.addCapability(new ResourceLocation(Eidolon.MODID, "reputation"), new IReputation.Provider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"reputation" ), new IReputation.Provider());
     }
 
     @SubscribeEvent
     public void attachEntityCaps(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
-            event.addCapability(new ResourceLocation(Eidolon.MODID, "knowledge"), new IKnowledge.Provider());
-            event.addCapability(new ResourceLocation(Eidolon.MODID, "player_data"), new IPlayerData.Provider());
-            event.addCapability(new ResourceLocation(Eidolon.MODID, "soul"), new ISoul.Provider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"knowledge" ), new IKnowledge.Provider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"player_data" ), new IPlayerData.Provider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"soul" ), new ISoul.Provider());
         }
     }
 
@@ -109,7 +120,7 @@ public class Events {
     @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void onClone(PlayerEvent.Clone event) {
-        Capability<IKnowledge> KNOWLEDGE = IKnowledge.INSTANCE;
+        Capability<IKnowledge> KNOWLEDGE = EidolonCapabilities.KNOWLEDGE_CAPABILITY;
         Capability<ISoul> SOUL = ISoul.INSTANCE;
         Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
         event.getOriginal().reviveCaps();
@@ -224,7 +235,7 @@ public class Events {
                     && entity.isInvertedHealAndHarm()) {
                 if (!(entity instanceof Player))
                     event.getDrops().removeIf(i -> !(i.getItem().getItem() instanceof ArmorItem));
-                int looting = ForgeHooks.getLootingLevel(entity, source, event.getSource());
+                int looting = CommonHooks.getLootingLevel(entity, source, event.getSource());
                 if (source.hasEffect(EidolonPotions.SOUL_HARVEST.get())) looting += 2;
                 ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(),
                         new ItemStack(Registry.SOUL_SHARD.get(), source.level.random.nextInt(2 + looting)));
@@ -233,7 +244,7 @@ public class Events {
                 Networking.sendToTracking(entity.level, entity.blockPosition(), new CrystallizeEffectPacket(entity.blockPosition()));
             }
             if (!entity.level.isClientSide && held.getItem() instanceof CleavingAxeItem) {
-                int looting = ForgeHooks.getLootingLevel(entity, source, event.getSource());
+                int looting = CommonHooks.getLootingLevel(entity, source, event.getSource());
                 beheading(event, source, entity, looting);
             }
         }
@@ -292,7 +303,7 @@ public class Events {
                         stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
             }
-            if (event.getEntity() instanceof PathfinderMob mob && ((Eidolon.getTrueMobType(mob) == MobType.UNDEAD && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) || mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
+            if (event.getEntity() instanceof PathfinderMob mob && ((Eidolon.isValidUndead(mob) == MobType.UNDEAD && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) || mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
                 mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
                 try {
                     mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));

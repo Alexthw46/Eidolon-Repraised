@@ -74,7 +74,7 @@ public class LocationRitualRecipe extends RitualRecipe {
             List<Ingredient> foci = getPedestalItems(focusItems);
 
             JsonObject resultObj = GsonHelper.getAsJsonObject(json, "output");
-            ResourceLocation structure = new ResourceLocation(GsonHelper.getAsString(resultObj, "structure"));
+            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(resultObj,"structure" ));
 
             return new LocationRitualRecipe(recipeId, structure, reagent, stacks, foci, healthRequirement);
         }

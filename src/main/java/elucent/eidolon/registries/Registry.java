@@ -1,15 +1,18 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IKnowledge;
+import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.capability.*;
 import elucent.eidolon.client.particle.*;
 import elucent.eidolon.common.block.*;
 import elucent.eidolon.common.block.CandleBlock;
 import elucent.eidolon.common.item.*;
-import elucent.eidolon.common.item.Tiers;
+import elucent.eidolon.common.item.Tiers.SilverTier;
 import elucent.eidolon.common.item.curio.*;
 import elucent.eidolon.common.tile.*;
-import elucent.eidolon.common.world.EidolonAbstractTreeFeature;
 import elucent.eidolon.gui.*;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
@@ -20,6 +23,7 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -27,12 +31,10 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageScaling;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -42,6 +44,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -49,55 +52,53 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
+import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 import static net.minecraft.world.level.block.state.properties.WoodType.register;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class Registry {
 
-    public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(new ResourceLocation(Eidolon.MODID, "illwood_logs"));
+    public static final TagKey<Item> ILLWOOD_LOGS = ItemTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "illwood_logs"));
     public static TagKey<Item>
-            INGOTS_LEAD = ItemTags.create(new ResourceLocation("forge", "ingots/lead"));
-    public static TagKey<Item> INGOTS_PEWTER = ItemTags.create(new ResourceLocation("forge", "ingots/pewter"));
-    public static TagKey<Item> INGOTS_ARCANE_GOLD = ItemTags.create(new ResourceLocation("forge", "ingots/arcane_gold"));
-    public static final TagKey<Item> INGOTS_SILVER = ItemTags.create(new ResourceLocation("forge", "ingots/silver"));
-    public static TagKey<Item> GEMS_SHADOW = ItemTags.create(new ResourceLocation("forge", "gems/shadow_gem"));
-    public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(new ResourceLocation(Eidolon.MODID, "zombie_food"));
+            INGOTS_LEAD = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/lead"));
+    public static TagKey<Item> INGOTS_PEWTER = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/pewter"));
+    public static TagKey<Item> INGOTS_ARCANE_GOLD = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/arcane_gold"));
+    public static final TagKey<Item> INGOTS_SILVER = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/silver"));
+    public static TagKey<Item> GEMS_SHADOW = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "gems/shadow_gem"));
+    public static final TagKey<Item> ZOMBIE_FOOD_TAG = ItemTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "zombie_food"));
 
-    public static TagKey<Block> CRUCIBLE_HOT_BLOCKS = BlockTags.create(new ResourceLocation(Eidolon.MODID, "crucible_hot_blocks"));
-    public static TagKey<Block> PLANTER_PLANTS = BlockTags.create(new ResourceLocation(Eidolon.MODID, "planter_plants"));
-
-    public static TagKey<DamageType> FORGE_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_magic"));
-    public static TagKey<DamageType> FORGE_WITHER = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("forge:is_wither"));
-
+    public static TagKey<Block> CRUCIBLE_HOT_BLOCKS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "crucible_hot_blocks"));
+    public static TagKey<Block> PLANTER_PLANTS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "planter_plants"));
 
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Eidolon.MODID);
 
-    static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Eidolon.MODID);
-    static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Eidolon.MODID);
-    static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Eidolon.MODID);
-    static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Eidolon.MODID);
+    static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, Eidolon.MODID);
+    static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, Eidolon.MODID);
+    static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Eidolon.MODID);
+    static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(Registries.MENU, Eidolon.MODID);
 
-    static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Eidolon.MODID);
+    static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARG_TYPES = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Eidolon.MODID);
 
     static Item.Properties itemProps() {
         return new Item.Properties();
     }
 
-    public static final RegistryObject<CreativeModeTab> TAB = TABS.register("general", () -> CreativeModeTab.builder().icon(Registry.SHADOW_GEM.get()::getDefaultInstance).title(Component.translatable("itemGroup.eidolon"))
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("general", () -> CreativeModeTab.builder().icon(Registry.SHADOW_GEM.get()::getDefaultInstance).title(Component.translatable("itemGroup.eidolon"))
             .displayItems((params, output) -> {
                 for (var entry : ITEMS.getEntries()) {
                     output.accept(entry.get().getDefaultInstance());
@@ -105,11 +106,11 @@ public class Registry {
             }).build());
 
     static BlockBehaviour.Properties blockProps(Block mat, DyeColor color) {
-        return BlockBehaviour.Properties.copy(mat).mapColor(color);
+        return BlockBehaviour.Properties.ofFullCopy(mat).mapColor(color);
     }
 
     static BlockBehaviour.Properties blockProps(Block mat) {
-        return BlockBehaviour.Properties.copy(mat);
+        return BlockBehaviour.Properties.ofFullCopy(mat);
     }
 
     private static Boolean allowsSpawnOnLeaves(BlockState state, BlockGetter reader, BlockPos pos, EntityType<?> entity) {
@@ -120,37 +121,37 @@ public class Registry {
         return false;
     }
 
-    static RegistryObject<Item> addItem(String name) {
+    static DeferredHolder<Item, Item> addItem(String name) {
         return addItem(name, itemProps());
     }
 
-    static RegistryObject<Item> addItem(String name, Item.Properties props) {
+    static DeferredHolder<Item, Item> addItem(String name, Item.Properties props) {
         return addItem(name, () -> new Item(props));
     }
 
-    static RegistryObject<Item> addItem(String name, String lore) {
+    static DeferredHolder<Item, Item> addItem(String name, String lore) {
         return addItem(name, () -> new ItemBase(itemProps()).setLore(lore));
     }
 
 
-    static RegistryObject<Item> addItem(String name, Supplier<Item> item) {
+    static DeferredHolder<Item, Item> addItem(String name, Supplier<Item> item) {
         return ITEMS.register(name, item);
     }
 
-    static RegistryObject<Block> addBlock(String name, Block.Properties props) {
+    static DeferredHolder<Block, Block> addBlock(String name, Block.Properties props) {
         Supplier<Block> b = () -> new Block(props);
         var block = BLOCKS.register(name, b);
         ITEMS.register(name, () -> new BlockItem(block.get(), itemProps()));
         return block;
     }
 
-    static <T extends Block> RegistryObject<T> addBlock(String name, Supplier<T> b) {
+    static <T extends Block> DeferredHolder<Block, T> addBlock(String name, Supplier<T> b) {
         var block = BLOCKS.register(name, b);
         ITEMS.register(name, () -> new BlockItem(block.get(), itemProps()));
         return block;
     }
 
-    static <T extends Block> RegistryObject<T> addBlock(String name, Supplier<T> b, String lore) {
+    static <T extends Block> DeferredHolder<Block, T> addBlock(String name, Supplier<T> b, String lore) {
         var block = BLOCKS.register(name, b);
         ITEMS.register(name, () -> new LoreBlockItem(block.get(), itemProps(), lore));
         return block;
@@ -159,234 +160,235 @@ public class Registry {
     public static final WoodType ILLWOOD = register(new WoodType("eidolon:illwood", BlockSetType.DARK_OAK));
     public static final WoodType POLISHED = register(new WoodType("eidolon:polished", BlockSetType.DARK_OAK));
 
-    static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
+    static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
         return CONTAINERS.register(name, () -> new MenuType<>(factory, FeatureFlags.VANILLA_SET));
     }
 
-    public static final RegistryObject<Item>
+    public static final DeferredHolder<Item, Item>
             LEAD_INGOT = addItem("lead_ingot");
-    public static final RegistryObject<Item> RAW_LEAD = addItem("raw_lead");
-    public static final RegistryObject<Item> LEAD_NUGGET = addItem("lead_nugget");
-    public static final RegistryObject<Item> SILVER_INGOT = addItem("silver_ingot");
-    public static final RegistryObject<Item> RAW_SILVER = addItem("raw_silver");
-    public static final RegistryObject<Item> SILVER_NUGGET = addItem("silver_nugget");
-    public static final RegistryObject<Item> PEWTER_BLEND = addItem("pewter_blend");
-    public static final RegistryObject<Item> PEWTER_INGOT = addItem("pewter_ingot");
-    public static final RegistryObject<Item> PEWTER_NUGGET = addItem("pewter_nugget");
-    public static final RegistryObject<Item> PEWTER_INLAY = addItem("pewter_inlay");
-    public static final RegistryObject<Item> ARCANE_GOLD_INGOT = addItem("arcane_gold_ingot");
-    public static final RegistryObject<Item> ARCANE_GOLD_NUGGET = addItem("arcane_gold_nugget");
-    public static final RegistryObject<Item> ELDER_BRICK = addItem("elder_brick");
-    public static final RegistryObject<Item> OFFERING_INCENSE = addItem("offering_incense", "lore.eidolon.offering_incense");
-    public static final RegistryObject<Item> RESTORATION_INCENSE = addItem("restoration_incense", "lore.eidolon.restoration_incense");
-    public static final RegistryObject<Item> GLOOM_INCENSE = addItem("gloom_incense", "lore.eidolon.gloom_incense");
-    public static final RegistryObject<Item> DEATH_BANE_INCENSE = addItem("deathbane_incense", "lore.eidolon.deathbane_incense");
-    public static final RegistryObject<Item> TOUGH_INCENSE = addItem("tough_incense", "lore.eidolon.tough_incense");
-    public static final RegistryObject<Item> FRAIL_INCENSE = addItem("frail_incense", "lore.eidolon.frail_incense");
-    public static final RegistryObject<Item> FROSTBIND_INCENSE = addItem("frostbind_incense", "lore.eidolon.frostbind_incense");
-    public static final RegistryObject<Item> TETHER_INCENSE = addItem("tether_incense", "lore.eidolon.tether_incense");
-    public static final RegistryObject<Item> PURITY_INCENSE = addItem("purity_incense", "lore.eidolon.purity_incense");
-    public static final RegistryObject<Item> QUICKEN_INCENSE = addItem("quicken_incense", "lore.eidolon.quicken_incense");
-    public static final RegistryObject<Item> BLOODLUST_INCENSE = addItem("bloodlust_incense", "lore.eidolon.bloodlust_incense");
-    public static final RegistryObject<Item> SOUL_HARVEST_INCENSE = addItem("soul_harvest_incense", "lore.eidolon.soul_harvest_incense");
-    public static final RegistryObject<Item> WARDING_INCENSE = addItem("warding_incense", "lore.eidolon.warding_incense");
-    public static final RegistryObject<Item> UNDEATH_INCENSE = addItem("undeath_incense", "lore.eidolon.undeath_incense");
-    public static final RegistryObject<Item> SULFUR = addItem("sulfur");
-    public static final RegistryObject<Item> GOLD_INLAY = addItem("gold_inlay");
-    public static final RegistryObject<Item> ZOMBIE_HEART = addItem("zombie_heart", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON).food(
+    public static final DeferredHolder<Item, Item> RAW_LEAD = addItem("raw_lead");
+    public static final DeferredHolder<Item, Item> LEAD_NUGGET = addItem("lead_nugget");
+    public static final DeferredHolder<Item, Item> SILVER_INGOT = addItem("silver_ingot");
+    public static final DeferredHolder<Item, Item> RAW_SILVER = addItem("raw_silver");
+    public static final DeferredHolder<Item, Item> SILVER_NUGGET = addItem("silver_nugget");
+    public static final DeferredHolder<Item, Item> PEWTER_BLEND = addItem("pewter_blend");
+    public static final DeferredHolder<Item, Item> PEWTER_INGOT = addItem("pewter_ingot");
+    public static final DeferredHolder<Item, Item> PEWTER_NUGGET = addItem("pewter_nugget");
+    public static final DeferredHolder<Item, Item> PEWTER_INLAY = addItem("pewter_inlay");
+    public static final DeferredHolder<Item, Item> ARCANE_GOLD_INGOT = addItem("arcane_gold_ingot");
+    public static final DeferredHolder<Item, Item> ARCANE_GOLD_NUGGET = addItem("arcane_gold_nugget");
+    public static final DeferredHolder<Item, Item> ELDER_BRICK = addItem("elder_brick");
+    public static final DeferredHolder<Item, Item> OFFERING_INCENSE = addItem("offering_incense", "lore.eidolon.offering_incense");
+    public static final DeferredHolder<Item, Item> RESTORATION_INCENSE = addItem("restoration_incense", "lore.eidolon.restoration_incense");
+    public static final DeferredHolder<Item, Item> GLOOM_INCENSE = addItem("gloom_incense", "lore.eidolon.gloom_incense");
+    public static final DeferredHolder<Item, Item> DEATH_BANE_INCENSE = addItem("deathbane_incense", "lore.eidolon.deathbane_incense");
+    public static final DeferredHolder<Item, Item> TOUGH_INCENSE = addItem("tough_incense", "lore.eidolon.tough_incense");
+    public static final DeferredHolder<Item, Item> FRAIL_INCENSE = addItem("frail_incense", "lore.eidolon.frail_incense");
+    public static final DeferredHolder<Item, Item> FROSTBIND_INCENSE = addItem("frostbind_incense", "lore.eidolon.frostbind_incense");
+    public static final DeferredHolder<Item, Item> TETHER_INCENSE = addItem("tether_incense", "lore.eidolon.tether_incense");
+    public static final DeferredHolder<Item, Item> PURITY_INCENSE = addItem("purity_incense", "lore.eidolon.purity_incense");
+    public static final DeferredHolder<Item, Item> QUICKEN_INCENSE = addItem("quicken_incense", "lore.eidolon.quicken_incense");
+    public static final DeferredHolder<Item, Item> BLOODLUST_INCENSE = addItem("bloodlust_incense", "lore.eidolon.bloodlust_incense");
+    public static final DeferredHolder<Item, Item> SOUL_HARVEST_INCENSE = addItem("soul_harvest_incense", "lore.eidolon.soul_harvest_incense");
+    public static final DeferredHolder<Item, Item> WARDING_INCENSE = addItem("warding_incense", "lore.eidolon.warding_incense");
+    public static final DeferredHolder<Item, Item> UNDEATH_INCENSE = addItem("undeath_incense", "lore.eidolon.undeath_incense");
+    public static final DeferredHolder<Item, Item> SULFUR = addItem("sulfur");
+    public static final DeferredHolder<Item, Item> GOLD_INLAY = addItem("gold_inlay");
+    public static final DeferredHolder<Item, Item> ZOMBIE_HEART = addItem("zombie_heart", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON).food(
             new FoodProperties.Builder()
-                    .nutrition(2).saturationMod(1.5f)
+                    .nutrition(2).saturationModifier(1.5f)
                     .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
                     .effect(() -> new MobEffectInstance(MobEffects.POISON, 900, 1), 1.0f)
                     .build())).setLore("lore.eidolon.zombie_heart"));
-    public static final RegistryObject<Item> TATTERED_CLOTH = addItem("tattered_cloth");
-    public static final RegistryObject<Item> WRAITH_HEART = addItem("wraith_heart", () -> new ItemBase(itemProps()
+    public static final DeferredHolder<Item, Item> TATTERED_CLOTH = addItem("tattered_cloth");
+    public static final DeferredHolder<Item, Item> WRAITH_HEART = addItem("wraith_heart", () -> new ItemBase(itemProps()
             .rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.wraith_heart"));
-    public static final RegistryObject<Item> TOP_HAT = addItem("top_hat", () -> new TopHatItem(itemProps().stacksTo(1).rarity(Rarity.EPIC)).setLore("lore.eidolon.top_hat"));
-    public static final RegistryObject<Item> BASIC_RING = addItem("basic_ring", () -> new BasicRingItem(itemProps().stacksTo(1)));
-    public static final RegistryObject<Item> BASIC_AMULET = addItem("basic_amulet", () -> new BasicAmuletItem(itemProps().stacksTo(1)));
-    public static final RegistryObject<Item> BASIC_BELT = addItem("basic_belt", () -> new BasicBeltItem(itemProps().stacksTo(1)));
-    public static final RegistryObject<Item> CODEX = addItem("codex", () -> new CodexItem(itemProps().stacksTo(1).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.codex"));
-    public static final RegistryObject<Item> CHANT_SCROLL = addItem("chant_scroll", () -> new ChantScrollItem(itemProps().stacksTo(64).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.chant_scroll"));
-    public static final RegistryObject<Item> SOUL_SHARD = addItem("soul_shard", "lore.eidolon.soul_shard");
-    public static final RegistryObject<Item> DEATH_ESSENCE = addItem("death_essence");
-    public static final RegistryObject<Item> CRIMSON_ESSENCE = addItem("crimson_essence");
-    public static final RegistryObject<Item> CRIMSON_GEM = addItem("crimson_gem");
+    public static final DeferredHolder<Item, Item> TOP_HAT = addItem("top_hat", () -> new TopHatItem(itemProps().stacksTo(1).rarity(Rarity.EPIC)).setLore("lore.eidolon.top_hat"));
+    public static final DeferredHolder<Item, Item> BASIC_RING = addItem("basic_ring", () -> new BasicRingItem(itemProps().stacksTo(1)));
+    public static final DeferredHolder<Item, Item> BASIC_AMULET = addItem("basic_amulet", () -> new BasicAmuletItem(itemProps().stacksTo(1)));
+    public static final DeferredHolder<Item, Item> BASIC_BELT = addItem("basic_belt", () -> new BasicBeltItem(itemProps().stacksTo(1)));
+    public static final DeferredHolder<Item, Item> CODEX = addItem("codex", () -> new CodexItem(itemProps().stacksTo(1).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.codex"));
+    public static final DeferredHolder<Item, Item> CHANT_SCROLL = addItem("chant_scroll", () -> new ChantScrollItem(itemProps().stacksTo(64).rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.chant_scroll"));
+    public static final DeferredHolder<Item, Item> SOUL_SHARD = addItem("soul_shard", "lore.eidolon.soul_shard");
+    public static final DeferredHolder<Item, Item> DEATH_ESSENCE = addItem("death_essence");
+    public static final DeferredHolder<Item, Item> CRIMSON_ESSENCE = addItem("crimson_essence");
+    public static final DeferredHolder<Item, Item> CRIMSON_GEM = addItem("crimson_gem");
 
-    public static final RegistryObject<Item> FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build()));
-    public static final RegistryObject<Item> WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).effect(() -> new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT.get(), 900), 1).build()));
-    public static final RegistryObject<Item> ENDER_CALX = addItem("ender_calx");
-    public static final RegistryObject<Item> TALLOW = addItem("tallow");
-    public static final RegistryObject<Item> LESSER_SOUL_GEM = addItem("lesser_soul_gem");
-    public static final RegistryObject<Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.unholy_symbol"));
-    public static final RegistryObject<Item> HOLY_SYMBOL = addItem("holy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.holy_symbol"));
+    public static final DeferredHolder<Item, Item> FUNGUS_SPROUTS = addItem("fungus_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build()));
+    public static final DeferredHolder<Item, Item> WARPED_SPROUTS = addItem("warped_sprouts", itemProps().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).effect(() -> new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT, 900), 1).build()));
+    public static final DeferredHolder<Item, Item> ENDER_CALX = addItem("ender_calx");
+    public static final DeferredHolder<Item, Item> TALLOW = addItem("tallow");
+    public static final DeferredHolder<Item, Item> LESSER_SOUL_GEM = addItem("lesser_soul_gem");
+    public static final DeferredHolder<Item, Item> UNHOLY_SYMBOL = addItem("unholy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.unholy_symbol"));
+    public static final DeferredHolder<Item, Item> HOLY_SYMBOL = addItem("holy_symbol", () -> new TheurgySymbolItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.holy_symbol"));
 
-    public static final RegistryObject<Item> REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
+    public static final DeferredHolder<Item, Item> REAPER_SCYTHE = addItem("reaper_scythe", () -> new ReaperScytheItem(itemProps().rarity(Rarity.UNCOMMON))
             .setLore("lore.eidolon.reaper_scythe"));
-    public static final RegistryObject<Item> CLEAVING_AXE = addItem("cleaving_axe", () -> new CleavingAxeItem(itemProps().rarity(Rarity.UNCOMMON))
+    public static final DeferredHolder<Item, Item> CLEAVING_AXE = addItem("cleaving_axe", () -> new CleavingAxeItem(itemProps().rarity(Rarity.UNCOMMON))
             .setLore("lore.eidolon.cleaving_axe"));
-    public static final RegistryObject<Item> SHADOW_GEM = addItem("shadow_gem");
-    public static final RegistryObject<Item> WICKED_WEAVE = addItem("wicked_weave");
-    public static final RegistryObject<Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(Type.HELMET, itemProps()));
-    public static final RegistryObject<Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(Type.CHESTPLATE, itemProps()));
-    public static final RegistryObject<Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(Type.BOOTS, itemProps()));
-    public static final RegistryObject<Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(Type.HELMET, itemProps()));
-    public static final RegistryObject<Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(Type.CHESTPLATE, itemProps()));
-    public static final RegistryObject<Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(Type.LEGGINGS, itemProps()));
-    public static final RegistryObject<Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(Type.BOOTS, itemProps()));
-    public static final RegistryObject<Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(Tiers.SilverTier.INSTANCE, 3, -2.4f, itemProps()) {
+    public static final DeferredHolder<Item, Item> SHADOW_GEM = addItem("shadow_gem");
+    public static final DeferredHolder<Item, Item> WICKED_WEAVE = addItem("wicked_weave");
+    public static final DeferredHolder<Item, Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(Type.HELMET, itemProps()));
+    public static final DeferredHolder<Item, Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(Type.CHESTPLATE, itemProps()));
+    public static final DeferredHolder<Item, Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(Type.BOOTS, itemProps()));
+    public static final DeferredHolder<Item, Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(Type.HELMET, itemProps()));
+    public static final DeferredHolder<Item, Item> SILVER_CHESTPLATE = addItem("silver_chestplate", () -> new SilverArmorItem(Type.CHESTPLATE, itemProps()));
+    public static final DeferredHolder<Item, Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(Type.LEGGINGS, itemProps()));
+    public static final DeferredHolder<Item, Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(Type.BOOTS, itemProps()));
+    public static final DeferredHolder<Item, Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(SilverTier.INSTANCE, itemProps().attributes(SwordItem.createAttributes(SilverTier.INSTANCE, 3, -2.4f))) {
 
                 @Override
                 public boolean hurtEnemy(@NotNull ItemStack pStack, @NotNull LivingEntity pTarget, @NotNull LivingEntity pAttacker) {
-                    if (pTarget.getMobType() == MobType.UNDEAD) {
-                        pTarget.setSecondsOnFire(5);
+                    if (pTarget.getType().is(UNDEAD)) {
+                        pTarget.setRemainingFireTicks(5 * 20);
                     }
                     return super.hurtEnemy(pStack, pTarget, pAttacker);
                 }
             }
     );
-    public static final RegistryObject<Item> SILVER_PICKAXE = addItem("silver_pickaxe", () -> new PickaxeItem(Tiers.SilverTier.INSTANCE, 1, -2.4f, itemProps()));
-    public static final RegistryObject<Item> SILVER_AXE = addItem("silver_axe", () -> new AxeItem(Tiers.SilverTier.INSTANCE, 6, -2.4f, itemProps()));
-    public static final RegistryObject<Item> SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(Tiers.SilverTier.INSTANCE, 1.5f, -2.4f, itemProps()));
-    public static final RegistryObject<Item> SILVER_HOE = addItem("silver_hoe", () -> new HoeItem(Tiers.SilverTier.INSTANCE, 0, -2.4f, itemProps()));
-    public static final RegistryObject<Item> ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1)));
-    public static final RegistryObject<Item> REVERSAL_PICK = addItem("reversal_pick", () -> new ReversalPickItem(itemProps()
+    public static final DeferredHolder<Item, Item> SILVER_PICKAXE = addItem("silver_pickaxe", () -> new PickaxeItem(SilverTier.INSTANCE, itemProps().attributes(PickaxeItem.createAttributes(SilverTier.INSTANCE, 1, -2.4f))));
+    public static final DeferredHolder<Item, Item> SILVER_AXE = addItem("silver_axe", () -> new AxeItem(SilverTier.INSTANCE, itemProps().attributes(AxeItem.createAttributes(SilverTier.INSTANCE, 6, -2.4f))));
+    public static final DeferredHolder<Item, Item> SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(SilverTier.INSTANCE, itemProps().attributes(ShovelItem.createAttributes(SilverTier.INSTANCE, 1.5f, -2.4f))));
+    public static final DeferredHolder<Item, Item> SILVER_HOE = addItem("silver_hoe", () -> new HoeItem(SilverTier.INSTANCE, itemProps().attributes(HoeItem.createAttributes(SilverTier.INSTANCE, 0, -2.4f))));
+    public static final DeferredHolder<Item, Item> ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1)));
+    public static final DeferredHolder<Item, Item> REVERSAL_PICK = addItem("reversal_pick", () -> new ReversalPickItem(itemProps()
             .rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> VOID_AMULET = addItem("void_amulet", () -> new VoidAmuletItem(itemProps()
+    public static final DeferredHolder<Item, Item> VOID_AMULET = addItem("void_amulet", () -> new VoidAmuletItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.void_amulet"));
-    public static final RegistryObject<Item> WARDED_MAIL = addItem("warded_mail", () -> new WardedMailItem(itemProps()
+    public static final DeferredHolder<Item, Item> WARDED_MAIL = addItem("warded_mail", () -> new WardedMailItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.warded_mail"));
-    public static final RegistryObject<Item> SAPPING_SWORD = addItem("sapping_sword", () -> new SappingSwordItem(itemProps()
+    public static final DeferredHolder<Item, Item> SAPPING_SWORD = addItem("sapping_sword", () -> new SappingSwordItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sapping_sword"));
-    public static final RegistryObject<Item> SANGUINE_AMULET = addItem("sanguine_amulet", () -> new SanguineAmuletItem(itemProps()
+    public static final DeferredHolder<Item, Item> SANGUINE_AMULET = addItem("sanguine_amulet", () -> new SanguineAmuletItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.sanguine_amulet"));
-    public static final RegistryObject<Item> ENERVATING_RING = addItem("enervating_ring", () -> new EnervatingRingItem(itemProps()
+    public static final DeferredHolder<Item, Item> ENERVATING_RING = addItem("enervating_ring", () -> new EnervatingRingItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.enervating_ring"));
-    public static final RegistryObject<Item> SOULFIRE_WAND = addItem("soulfire_wand", () -> new SoulfireWandItem(itemProps()
+    public static final DeferredHolder<Item, Item> SOULFIRE_WAND = addItem("soulfire_wand", () -> new SoulfireWandItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
             .setLore("lore.eidolon.soulfire_wand"));
-    public static final RegistryObject<Item> BONECHILL_WAND = addItem("bonechill_wand", () -> new BonechillWandItem(itemProps()
+    public static final DeferredHolder<Item, Item> BONECHILL_WAND = addItem("bonechill_wand", () -> new BonechillWandItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1).durability(253).setNoRepair())
             .setLore("lore.eidolon.bonechill_wand"));
-    public static final RegistryObject<Item> GRAVITY_BELT = addItem("gravity_belt", () -> new GravityBeltItem(itemProps()
+    public static final DeferredHolder<Item, Item> GRAVITY_BELT = addItem("gravity_belt", () -> new GravityBeltItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.gravity_belt"));
-    public static final RegistryObject<Item> RESOLUTE_BELT = addItem("resolute_belt", () -> new ResoluteBeltItem(itemProps()
+    public static final DeferredHolder<Item, Item> RESOLUTE_BELT = addItem("resolute_belt", () -> new ResoluteBeltItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.resolute_belt"));
-    public static final RegistryObject<Item> PRESTIGIOUS_PALM = addItem("prestigious_palm", () -> new PrestigiousPalmItem(itemProps()
+    public static final DeferredHolder<Item, Item> PRESTIGIOUS_PALM = addItem("prestigious_palm", () -> new PrestigiousPalmItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.prestigious_palm"));
-    public static final RegistryObject<Item> MIND_SHIELDING_PLATE = addItem("mind_shielding_plate", () -> new MindShieldingPlateItem(itemProps()
+    public static final DeferredHolder<Item, Item> MIND_SHIELDING_PLATE = addItem("mind_shielding_plate", () -> new MindShieldingPlateItem(itemProps()
             .rarity(Rarity.UNCOMMON).stacksTo(1)).setLore("lore.eidolon.mind_shielding_plate"));
-    public static final RegistryObject<Item> GLASS_HAND = addItem("glass_hand", () -> new GlassHandItem(itemProps()
+    public static final DeferredHolder<Item, Item> GLASS_HAND = addItem("glass_hand", () -> new GlassHandItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.glass_hand"));
-    public static final RegistryObject<Item> TERMINUS_MIRROR = addItem("terminus_mirror", () -> new TerminusMirrorItem(itemProps()
+    public static final DeferredHolder<Item, Item> TERMINUS_MIRROR = addItem("terminus_mirror", () -> new TerminusMirrorItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.terminus_mirror"));
-    public static final RegistryObject<Item> ANGELS_SIGHT = addItem("angels_sight", () -> new AngelSightItem(itemProps()
+    public static final DeferredHolder<Item, Item> ANGELS_SIGHT = addItem("angels_sight", () -> new AngelSightItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.angels_sight"));
-    public static final RegistryObject<Item> WITHERED_HEART = addItem("withered_heart", () -> new ItemBase(itemProps().rarity(Rarity.RARE).food(
+    public static final DeferredHolder<Item, Item> WITHERED_HEART = addItem("withered_heart", () -> new ItemBase(itemProps().rarity(Rarity.RARE).food(
             new FoodProperties.Builder()
-                    .nutrition(2).saturationMod(1.5f)
+                    .nutrition(2).saturationModifier(1.5f)
                     .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 1800), 0.875f)
                     .effect(() -> new MobEffectInstance(MobEffects.WITHER, 900, 1), 1.0f)
                     .build())).setLore("lore.eidolon.withered_heart"));
-    public static final RegistryObject<Item> IMBUED_BONES = addItem("imbued_bones", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.imbued_bones"));
-    public static final RegistryObject<Item> SUMMONING_STAFF = addItem("summoning_staff", () -> new SummoningStaffItem(itemProps().rarity(Rarity.RARE).stacksTo(1)));
-    public static final RegistryObject<Item> DEATHBRINGER_SCYTHE = addItem("deathbringer_scythe", () -> new DeathbringerScytheItem(itemProps().rarity(Rarity.RARE).stacksTo(1))
+    public static final DeferredHolder<Item, Item> IMBUED_BONES = addItem("imbued_bones", () -> new ItemBase(itemProps().rarity(Rarity.UNCOMMON)).setLore("lore.eidolon.imbued_bones"));
+    public static final DeferredHolder<Item, Item> SUMMONING_STAFF = addItem("summoning_staff", () -> new SummoningStaffItem(itemProps().rarity(Rarity.RARE).stacksTo(1)));
+    public static final DeferredHolder<Item, Item> DEATHBRINGER_SCYTHE = addItem("deathbringer_scythe", () -> new DeathbringerScytheItem(itemProps().rarity(Rarity.RARE).stacksTo(1))
             .setLore("lore.eidolon.deathbringer_scythe"));
-    public static final RegistryObject<Item> SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
+    public static final DeferredHolder<Item, Item> SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.soulbone_amulet"));
-    public static final RegistryObject<Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new RecordItem(9, EidolonSounds.PAROUSIA,
-            itemProps().stacksTo(1).rarity(Rarity.RARE), 3680));
-    public static final RegistryObject<Item> RAVEN_FEATHER = addItem("raven_feather");
-    public static final RegistryObject<Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.raven_cloak"));
-    public static final RegistryObject<Item> MERAMMER_RESIN = addItem("merammer_resin");
-    public static final RegistryObject<Item> MAGIC_INK = addItem("magic_ink");
-    public static final RegistryObject<Item> MAGICIANS_WAX = addItem("magicians_wax");
-    public static final RegistryObject<Item> ARCANE_SEAL = addItem("arcane_seal");
-    public static final RegistryObject<Item> PARCHMENT = addItem("parchment");
-    public static final RegistryObject<Item> NOTETAKING_TOOLS = addItem("notetaking_tools", () -> new NotetakingToolsItem(itemProps().stacksTo(16)));
-    public static final RegistryObject<Item> RESEARCH_NOTES = addItem("research_notes", () -> new ResearchNotesItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
-    public static final RegistryObject<Item> COMPLETED_RESEARCH = addItem("completed_research", () -> new CompletedResearchItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
-    public static final RegistryObject<Item> RED_CANDY = addItem("red_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
+    public static final DeferredHolder<Item, Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE)));
+    //TODO: Datagen Disc data
+    static ResourceKey<JukeboxSong> PAROUSIA = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath("eidolon", "parousia"));
+    public static final DeferredHolder<Item, Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new Item(itemProps().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(PAROUSIA))); // 3680
+    public static final DeferredHolder<Item, Item> RAVEN_FEATHER = addItem("raven_feather");
+    public static final DeferredHolder<Item, Item> RAVEN_CLOAK = addItem("raven_cloak", () -> new RavenCloakItem(itemProps().rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon.raven_cloak"));
+    public static final DeferredHolder<Item, Item> MERAMMER_RESIN = addItem("merammer_resin");
+    public static final DeferredHolder<Item, Item> MAGIC_INK = addItem("magic_ink");
+    public static final DeferredHolder<Item, Item> MAGICIANS_WAX = addItem("magicians_wax");
+    public static final DeferredHolder<Item, Item> ARCANE_SEAL = addItem("arcane_seal");
+    public static final DeferredHolder<Item, Item> PARCHMENT = addItem("parchment");
+    public static final DeferredHolder<Item, Item> NOTETAKING_TOOLS = addItem("notetaking_tools", () -> new NotetakingToolsItem(itemProps().stacksTo(16)));
+    public static final DeferredHolder<Item, Item> RESEARCH_NOTES = addItem("research_notes", () -> new ResearchNotesItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final DeferredHolder<Item, Item> COMPLETED_RESEARCH = addItem("completed_research", () -> new CompletedResearchItem(itemProps().rarity(Rarity.UNCOMMON).stacksTo(1)));
+    public static final DeferredHolder<Item, Item> RED_CANDY = addItem("red_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
             new FoodProperties.Builder()
-                    .nutrition(2).saturationMod(2)
-                    .effect(() -> new MobEffectInstance(EidolonPotions.SOUL_HARVEST.get(), 20 * 60, 0), 0.5f)
+                    .nutrition(2).saturationModifier(2)
+                    .effect(() -> new MobEffectInstance(EidolonPotions.SOUL_HARVEST, 20 * 60, 0), 0.5f)
                     .build())).setLore(ChatFormatting.RED, "lore.eidolon.red_candy"));
-    public static final RegistryObject<Item> GRAPE_CANDY = addItem("grape_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
+    public static final DeferredHolder<Item, Item> GRAPE_CANDY = addItem("grape_candy", () -> new ItemBase(itemProps().rarity(Rarity.COMMON).food(
             new FoodProperties.Builder()
-                    .nutrition(2).saturationMod(2)
-                    .effect(() -> new MobEffectInstance(EidolonPotions.SOUL_HARVEST.get(), 20 * 60, 0), 0.5f)
+                    .nutrition(2).saturationModifier(2)
+                    .effect(() -> new MobEffectInstance(EidolonPotions.SOUL_HARVEST, 20 * 60, 0), 0.5f)
                     .build())).setLore(ChatFormatting.LIGHT_PURPLE, "lore.eidolon.grape_candy"));
 
-    public static final RegistryObject<Block>
+    public static final DeferredHolder<Block, Block>
             LEAD_ORE = addBlock("lead_ore", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> DEEP_LEAD_ORE = addBlock("deep_lead_ore", blockProps(Blocks.STONE)
             .sound(SoundType.DEEPSLATE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> LEAD_BLOCK = addBlock("lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
+    public static final DeferredHolder<Block, Block> LEAD_BLOCK = addBlock("lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
+    public static final DeferredHolder<Block, Block> RAW_LEAD_BLOCK = addBlock("raw_lead_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.DEEPSLATE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SILVER_ORE = addBlock("silver_ore", blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> SILVER_ORE = addBlock("silver_ore", blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(3.2f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> DEEP_SILVER_ORE = addBlock("deep_silver_ore", blockProps(Blocks.STONE)
             .sound(SoundType.DEEPSLATE).strength(3.6f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SILVER_BLOCK = addBlock("silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
+    public static final DeferredHolder<Block, Block> SILVER_BLOCK = addBlock("silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
             .sound(SoundType.METAL).strength(3.0f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
+    public static final DeferredHolder<Block, Block> RAW_SILVER_BLOCK = addBlock("raw_silver_block", blockProps(Blocks.STONE, DyeColor.LIGHT_BLUE)
             .sound(SoundType.STONE).strength(2.4f, 3.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> PEWTER_BLOCK = addBlock("pewter_block", blockProps(Blocks.STONE, DyeColor.LIGHT_GRAY)
+    public static final DeferredHolder<Block, Block> PEWTER_BLOCK = addBlock("pewter_block", blockProps(Blocks.STONE, DyeColor.LIGHT_GRAY)
             .sound(SoundType.METAL).strength(4.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Blocks.STONE, DyeColor.YELLOW)
+    public static final DeferredHolder<Block, Block> ARCANE_GOLD_BLOCK = addBlock("arcane_gold_block", blockProps(Blocks.STONE, DyeColor.YELLOW)
             .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
+    public static final DeferredHolder<Block, Block> SHADOW_GEM_BLOCK = addBlock("shadow_gem_block", blockProps(Blocks.STONE, DyeColor.PURPLE)
             .sound(SoundType.METAL).strength(3.0f, 4.0f).requiresCorrectToolForDrops());
-    public static final RegistryObject<Block> WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> WOODEN_ALTAR = addBlock("wooden_altar", () -> new TableBlockBase(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)));
-    public static final RegistryObject<Block> STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> STONE_ALTAR = addBlock("stone_altar", () -> new TableBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setMainShape(Shapes.or(
                     Shapes.box(0, 0.375, 0, 1, 1, 1),
                     Shapes.box(0.0625, 0.125, 0.0625, 0.9375, 0.375, 0.9375)
             )));
-    public static final RegistryObject<Block> CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.WHITE)
+    public static final DeferredHolder<Block, Block> CANDLE = addBlock("candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.WHITE)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(0.6f, 0.8f).noOcclusion()));
-    public static final RegistryObject<Block> CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
+    public static final DeferredHolder<Block, Block> CANDLESTICK = addBlock("candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(1.2f, 2.0f).noOcclusion()));
-    public static final RegistryObject<Block> MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.RED)
+    public static final DeferredHolder<Block, Block> MAGIC_CANDLE = addBlock("magic_candle", () -> new CandleBlock(blockProps(Blocks.CANDLE, DyeColor.RED)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(0.6f, 0.8f).noOcclusion()));
-    public static final RegistryObject<Block> MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
+    public static final DeferredHolder<Block, Block> MAGIC_CANDLESTICK = addBlock("magic_candlestick", () -> new CandlestickBlock(blockProps(Blocks.CANDLE, DyeColor.YELLOW)
             .sound(SoundType.STONE).lightLevel(state -> 15).strength(1.2f, 2.0f).noOcclusion()));
-    public static final RegistryObject<Block> STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Blocks.HAY_BLOCK, DyeColor.YELLOW)
+    public static final DeferredHolder<Block, Block> STRAW_EFFIGY = addBlock("straw_effigy", () -> new EffigyBlock(blockProps(Blocks.HAY_BLOCK, DyeColor.YELLOW)
             .sound(SoundType.WOOD).strength(1.4f, 2.0f)
             .noOcclusion()).setShape(
             Shapes.box(0.28125, 0, 0.28125, 0.71875, 1, 0.71875)
     ));
 
     public static final Supplier<BlockBehaviour.Properties> GOLD_DUMMY = () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).instrument(NoteBlockInstrument.BELL).strength(3.0F, 6.0F).sound(SoundType.METAL);
-    public static final RegistryObject<Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(GOLD_DUMMY.get()
+    public static final DeferredHolder<Block, Block> CENSER = addBlock("censer", () -> new IncenseBurnerBlock(GOLD_DUMMY.get()
             .strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> GOBLET = addBlock("goblet", () -> new GobletBlock(GOLD_DUMMY.get()
+    public static final DeferredHolder<Block, Block> GOBLET = addBlock("goblet", () -> new GobletBlock(GOLD_DUMMY.get()
             .strength(1.4f, 2.0f)
             .noOcclusion()).setShape(Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.5, 0.6875)));
-    public static final RegistryObject<Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> ELDER_EFFIGY = addBlock("unholy_effigy", () -> new EffigyBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops()
             .noOcclusion()).setShape(
             Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)
     ));
-    public static final RegistryObject<Block> WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> WORKTABLE = addBlock("worktable", () -> new WorktableBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)
             .noOcclusion()).setShape(Shapes.or(
             Shapes.box(0, 0, 0, 1, 0.25, 1),
             Shapes.box(0.125, 0.25, 0.125, 0.875, 0.625, 0.875),
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
-    public static final RegistryObject<Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> RESEARCH_TABLE = addBlock("research_table", () -> new ResearchTableBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f)
             .noOcclusion()).setShape(Shapes.or(
             Shapes.box(0, 0, 0, 1, 0.25, 1),
@@ -394,21 +396,21 @@ public class Registry {
             Shapes.box(0, 0.625, 0, 1, 1, 1)
     )));
 
-    public static final RegistryObject<Block> SCRIPTORIUM = addBlock("scriptorium", () -> new Scriptorium(blockProps(Blocks.CRAFTING_TABLE)));
+    public static final DeferredHolder<Block, Block> SCRIPTORIUM = addBlock("scriptorium", () -> new Scriptorium(blockProps(Blocks.CRAFTING_TABLE)));
 
-    public static final RegistryObject<Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> PLINTH = addBlock("plinth", () -> new PillarBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75)));
-    public static final RegistryObject<Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> OBELISK = addBlock("obelisk", () -> new PillarBlockBase(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.125, 0, 0.125, 0.875, 1, 0.875)));
-    public static final RegistryObject<Block> BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Blocks.OAK_WOOD, DyeColor.GRAY)
+    public static final DeferredHolder<Block, Block> BRAZIER = addBlock("brazier", () -> new BrazierBlock(blockProps(Blocks.OAK_WOOD, DyeColor.GRAY)
             .sound(SoundType.METAL).strength(2.5f, 3.0f)
             .noOcclusion())
             .setShape(Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.75, 0.8125)));
-    public static final RegistryObject<Block> CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Blocks.IRON_BLOCK, DyeColor.GRAY)
+    public static final DeferredHolder<Block, Block> CRUCIBLE = addBlock("crucible", () -> new CrucibleBlock(blockProps(Blocks.IRON_BLOCK, DyeColor.GRAY)
             .sound(SoundType.METAL).strength(4.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.or(
@@ -422,55 +424,55 @@ public class Registry {
                     Shapes.box(0, 0.125, 0.875, 1, 0.875, 1),
                     Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.125, 0.9375)
             )));
-    public static final RegistryObject<Block> STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> STONE_HAND = addBlock("stone_hand", () -> new HandBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
-    public static final RegistryObject<Block> ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Blocks.REDSTONE_WIRE, DyeColor.WHITE)
+    public static final DeferredHolder<Block, Block> ENCHANTED_ASH = addBlock("enchanted_ash", () -> new EnchantedAshBlock(blockProps(Blocks.REDSTONE_WIRE, DyeColor.WHITE)
             .sound(SoundType.STONE).strength(0.0f, 0.75f).noOcclusion())
             .setShape(Shapes.empty()));
-    public static final RegistryObject<Block> NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Blocks.STONE)
+    public static final DeferredHolder<Block, Block> NECROTIC_FOCUS = addBlock("necrotic_focus", () -> new NecroticFocusBlock(blockProps(Blocks.STONE)
             .sound(SoundType.STONE).strength(2.8f, 3.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0.25, 0, 0.25, 0.75, 0.75, 0.75)));
-    public static final RegistryObject<Block> PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> PLANTER = addBlock("planter", () -> new BlockBase(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(2.0f, 3.0f)
             .noOcclusion())
             .setShape(Shapes.or(
                     Shapes.box(0, 0.25, 0, 1, 1, 1),
                     Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.75))));
-    public static final RegistryObject<Block> MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
+    public static final DeferredHolder<Block, Block> MERAMMER_ROOT = addBlock("merammer_root", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
             .sound(SoundType.GRASS).noOcclusion()), "lore.eidolon.merammer_root");
-    public static final RegistryObject<Block> AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
+    public static final DeferredHolder<Block, Block> AVENNIAN_SPRIG = addBlock("avennian_sprig", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
             .sound(SoundType.GRASS).noOcclusion()), "lore.eidolon.avennian_sprig");
-    public static final RegistryObject<Block> OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
+    public static final DeferredHolder<Block, Block> OANNA_BLOOM = addBlock("oanna_bloom", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
             .sound(SoundType.GRASS).noOcclusion()), "lore.eidolon.oanna_bloom");
-    public static final RegistryObject<Block> SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
+    public static final DeferredHolder<Block, Block> SILDRIAN_SEED = addBlock("sildrian_seed", () -> new HerbBlockBase(blockProps(Blocks.WHEAT)
             .sound(SoundType.GRASS).noOcclusion()), "lore.eidolon.sildrian_seed");
-    public static final RegistryObject<Block> MIRECAP = addBlock("mirecap", () -> new HerbBlockBase(blockProps(Blocks.BROWN_MUSHROOM)
+    public static final DeferredHolder<Block, Block> MIRECAP = addBlock("mirecap", () -> new HerbBlockBase(blockProps(Blocks.BROWN_MUSHROOM)
             .sound(SoundType.NETHER_WART).noOcclusion()), "lore.eidolon.mirecap");
-    public static final RegistryObject<Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new EidolonAbstractTreeFeature.TreeGrower(), blockProps(Blocks.OAK_SAPLING)
+    public static final DeferredHolder<Block, Block> ILLWOOD_SAPLING = addBlock("illwood_sapling", () -> new SaplingBlock(new TreeGrower("illwood", Optional.empty(), Optional.of(Worldgen.ILLWOOD_TREE_CFG), Optional.empty()), blockProps(Blocks.OAK_SAPLING)
             .sound(SoundType.GRASS).noOcclusion().noCollission()));
-    public static final RegistryObject<Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Blocks.MANGROVE_LEAVES)
+    public static final DeferredHolder<Block, Block> ILLWOOD_LEAVES = addBlock("illwood_leaves", () -> new LeavesBlock(blockProps(Blocks.MANGROVE_LEAVES)
             .randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Registry::allowsSpawnOnLeaves)
             .isSuffocating(Registry::isntSolid).isViewBlocking(Registry::isntSolid)));
-    public static final RegistryObject<Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> STRIPPED_ILLWOOD_LOG = addBlock("stripped_illwood_log", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
-    public static final RegistryObject<Block> STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> STRIPPED_ILLWOOD_BARK = addBlock("stripped_illwood_bark", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.4f, 3.0f)));
-    public static final RegistryObject<Block> ILLWOOD_LOG = addBlock("illwood_log", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> ILLWOOD_LOG = addBlock("illwood_log", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f), STRIPPED_ILLWOOD_LOG));
-    public static final RegistryObject<Block> ILLWOOD_BARK = addBlock("illwood_bark", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
+    public static final DeferredHolder<Block, Block> ILLWOOD_BARK = addBlock("illwood_bark", () -> new StrippableLog(blockProps(Blocks.OAK_WOOD)
             .sound(SoundType.WOOD).strength(1.6f, 3.0f), STRIPPED_ILLWOOD_BARK));
 
-    public static final RegistryObject<Block> SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Blocks.ENCHANTING_TABLE)
+    public static final DeferredHolder<Block, Block> SOUL_ENCHANTER = addBlock("soul_enchanter", () -> new SoulEnchanterBlock(blockProps(Blocks.ENCHANTING_TABLE)
             .sound(SoundType.STONE).strength(5.0f, 1200.0f)
             .requiresCorrectToolForDrops().noOcclusion())
             .setShape(Shapes.box(0, 0, 0, 1, 0.75, 1)));
-    public static final RegistryObject<Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Blocks.BREWING_STAND)
+    public static final DeferredHolder<Block, Block> WOODEN_STAND = addBlock("wooden_brewing_stand", () -> new WoodenStandBlock(blockProps(Blocks.BREWING_STAND)
             .sound(SoundType.STONE).strength(2.0f, 3.0f)
             .noOcclusion()));
-    public static final RegistryObject<Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(BlockBehaviour.Properties.of().noCollission().noOcclusion().noLootTable().noParticlesOnBreak().dynamicShape().strength(0f, 0f)
+    public static final DeferredHolder<Block, Block> GHOST_LIGHT = BLOCKS.register("ghost_light", () -> new GhostLight(BlockBehaviour.Properties.of().noCollission().noOcclusion().noLootTable().noTerrainParticles().dynamicShape().strength(0f, 0f)
             .sound(SoundType.FROGLIGHT).lightLevel(p -> p.getValue(GhostLight.DEITY) ? 12 : 8)));
 
     public static DecoBlockPack
@@ -497,7 +499,7 @@ public class Registry {
                     .sound(SoundType.WOOD).strength(1.6f, 3.0f))
                     .addFence().addButton().addSign().addPressurePlate();
 
-    public static final RegistryObject<Block>
+    public static final DeferredHolder<Block, Block>
             POLISHED_WOOD_PILLAR = addBlock("polished_wood_pillar", () -> new RotatedPillarBlock(blockProps(Blocks.OAK_WOOD)
             .strength(1.6f, 3.0f))),
             SMOOTH_STONE_ARCH = addBlock("smooth_stone_arch", () -> new PillarBlockBase(blockProps(Blocks.STONE)
@@ -510,19 +512,18 @@ public class Registry {
                     .sound(SoundType.STONE).strength(3.0f, 3.0f)
                     .requiresCorrectToolForDrops()));
 
-    public static final RegistryObject<MenuType<WorktableContainer>>
+    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
             WORKTABLE_CONTAINER = addContainer("worktable", WorktableContainer::new);
-    public static final RegistryObject<MenuType<SoulEnchanterContainer>>
+    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
             SOUL_ENCHANTER_CONTAINER = addContainer("soul_enchanter", SoulEnchanterContainer::new);
-    public static final RegistryObject<MenuType<WoodenBrewingStandContainer>>
+    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
             WOODEN_STAND_CONTAINER = addContainer("wooden_brewing_stand", WoodenBrewingStandContainer::new);
-    public static final RegistryObject<MenuType<ResearchTableContainer>>
+    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
             RESEARCH_TABLE_CONTAINER = addContainer("research_table", ResearchTableContainer::new);
-    public static final RegistryObject<MenuType<ScriptoriumContainer>>
+    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
             SCRIPTORIUM_CONTAINER = addContainer("scriptorium", ScriptoriumContainer::new);
 
-    public static void init() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static void init(IEventBus modEventBus) {
         EidolonAttributes.ATTRIBUTES.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
@@ -545,17 +546,17 @@ public class Registry {
     public static void clientInit() {
     }
 
-    public static RegistryObject<BlockEntityType<HandTileEntity>> HAND_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<BrazierTileEntity>> BRAZIER_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<NecroticFocusTileEntity>> NECROTIC_FOCUS_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<CrucibleTileEntity>> CRUCIBLE_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<EffigyTileEntity>> EFFIGY_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<SoulEnchanterTileEntity>> SOUL_ENCHANTER_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<WoodenStandTileEntity>> WOODEN_STAND_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
-    public static RegistryObject<BlockEntityType<ScriptoriumTile>> SCRIPTORIUM_TILE;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<HandTileEntity>> HAND_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<BrazierTileEntity>> BRAZIER_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<NecroticFocusTileEntity>> NECROTIC_FOCUS_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleTileEntity>> CRUCIBLE_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<EffigyTileEntity>> EFFIGY_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<SoulEnchanterTileEntity>> SOUL_ENCHANTER_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<WoodenStandTileEntity>> WOODEN_STAND_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<GobletTileEntity>> GOBLET_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<CenserTileEntity>> CENSER_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableTileEntity>> RESEARCH_TABLE_TILE_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ScriptoriumTile>> SCRIPTORIUM_TILE;
 
 
     static {
@@ -576,7 +577,7 @@ public class Registry {
     public static final DamageTypeData SAPPING = DamageTypeData.builder()
             .simpleId("sap")
             .scaling(DamageScaling.ALWAYS)
-            .tag(FORGE_WITHER)
+            .tag(Tags.DamageTypes.IS_WITHER)
             .build();
 
     public static final DamageTypeData RITUAL_DAMAGE = DamageTypeData.builder()
@@ -588,7 +589,7 @@ public class Registry {
     public static final DamageTypeData FROST_DAMAGE = DamageTypeData.builder()
             .simpleId("frost")
             .effects(DamageEffects.FREEZING)
-            .tag(FORGE_MAGIC)
+            .tag(Tags.DamageTypes.IS_MAGIC)
             .build();
 
     public void registerCaps(RegisterCapabilitiesEvent event) {
@@ -616,9 +617,9 @@ public class Registry {
         Minecraft.getInstance().particleEngine.register(EidolonParticles.RUNE_PARTICLE.get(), sprite -> new RuneParticleType.Factory());
     }
 
-    public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));
-    public static final RegistryObject<ArgumentTypeInfo<?, ?>> RUNE_ARG = ARG_TYPES.register("rune", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.RuneArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.RuneArgument::runes)));
-    public static final RegistryObject<ArgumentTypeInfo<?, ?>> RESEARCH_ARG = ARG_TYPES.register("research", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.ResearchArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.ResearchArgument::researches)));
-    public static final RegistryObject<ArgumentTypeInfo<?, ?>> DEITY_ARG = ARG_TYPES.register("deity", () -> ArgumentTypeInfos.registerByClass(ReputationCommand.DeityArgument.class, SingletonArgumentInfo.contextFree(ReputationCommand.DeityArgument::deities)));
+    public static final DeferredHolder<ArgumentTypeInfo<?, ?>, SingletonArgumentInfo<KnowledgeCommand.SignArgument>> SIGN_ARG = ARG_TYPES.register("sign", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.SignArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.SignArgument::signs)));
+    public static final DeferredHolder<ArgumentTypeInfo<?, ?>, SingletonArgumentInfo<KnowledgeCommand.RuneArgument>> RUNE_ARG = ARG_TYPES.register("rune", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.RuneArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.RuneArgument::runes)));
+    public static final DeferredHolder<ArgumentTypeInfo<?, ?>, SingletonArgumentInfo<KnowledgeCommand.ResearchArgument>> RESEARCH_ARG = ARG_TYPES.register("research", () -> ArgumentTypeInfos.registerByClass(KnowledgeCommand.ResearchArgument.class, SingletonArgumentInfo.contextFree(KnowledgeCommand.ResearchArgument::researches)));
+    public static final DeferredHolder<ArgumentTypeInfo<?, ?>, SingletonArgumentInfo<ReputationCommand.DeityArgument>> DEITY_ARG = ARG_TYPES.register("deity", () -> ArgumentTypeInfos.registerByClass(ReputationCommand.DeityArgument.class, SingletonArgumentInfo.contextFree(ReputationCommand.DeityArgument::deities)));
 
 }

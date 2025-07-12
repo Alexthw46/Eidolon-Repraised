@@ -53,38 +53,38 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
             double lerpX = Mth.lerp(i / 8.0f, xo, pos.x);
             double lerpY = Mth.lerp(i / 8.0f, yo, pos.y);
             double lerpZ = Mth.lerp(i / 8.0f, zo, pos.z);
-            Particles.create(EidolonParticles.WISP_PARTICLE)
+            Particles.create(EidolonParticles.WISP_PARTICLE.get())
                     .addVelocity(-norm.x, -norm.y, -norm.z)
                     .setAlpha(0.375f, 0).setScale(0.25f, 0)
                     .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
                     .setLifetime(5)
-                    .spawn(level, lerpX, lerpY, lerpZ);
-            Particles.create(EidolonParticles.SMOKE_PARTICLE)
+                    .spawn(level(), lerpX, lerpY, lerpZ);
+            Particles.create(EidolonParticles.SMOKE_PARTICLE.get())
                     .addVelocity(-norm.x, -norm.y, -norm.z)
                     .setAlpha(0.0625f, 0).setScale(0.3125f, 0.125f)
                     .setColor(0.625f, 0.375f, 1, 0.25f, 0.25f, 0.75f)
                     .randomVelocity(0.025f, 0.025f)
                     .setLifetime(20)
-                    .spawn(level, lerpX, lerpY, lerpZ);
+                    .spawn(level(), lerpX, lerpY, lerpZ);
         }
     }
 
     @Override
     protected void onImpact(HitResult ray, Entity target) {
         if (target instanceof LivingEntity living)
-            living.addEffect(new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT.get(), 100));
+            living.addEffect(new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT, 100));
         Entity caster = getOwner();
-        handleSpellDamage(caster, target, DamageTypeData.source(target.level(),DamageTypes.WITHER, this, caster), 3 + level.getDifficulty().getId());
+        handleSpellDamage(caster, target, DamageTypeData.source(target.level(),DamageTypes.WITHER, this, caster), 3 + level().getDifficulty().getId());
         onImpact(ray);
     }
 
     @Override
     protected void onImpact(HitResult ray) {
         removeAfterChangingDimensions();
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             Vec3 pos = ray.getLocation();
-            level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.WITHER_SHOOT, SoundSource.HOSTILE, 0.5f, random.nextFloat() * 0.2f + 0.9f);
-            Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 158, 92, 255), ColorUtil.packColor(255, 60, 62, 186)));
+            level().playSound(null, pos.x, pos.y, pos.z, SoundEvents.WITHER_SHOOT, SoundSource.HOSTILE, 0.5f, random.nextFloat() * 0.2f + 0.9f);
+            Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 158, 92, 255), ColorUtil.packColor(255, 60, 62, 186)));
         }
     }
 

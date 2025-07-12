@@ -14,10 +14,10 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class SummonRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/summon_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/summon_ritual" );
 
     public EntityType<?> getEntityType() {
         return entity;
@@ -61,7 +61,7 @@ public class SummonRitual extends Ritual {
                 Entity e = entity.create(world);
                 if (e == null) continue;
                 if (e instanceof Mob m && world instanceof ServerLevelAccessor l) {
-                    ForgeEventFactory.onFinalizeSpawn(m, l, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
+                    EventHooks.onFinalizeSpawn(m, l, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
                     m.setCanPickUpLoot(true);
                 }
                 e.setPos(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);

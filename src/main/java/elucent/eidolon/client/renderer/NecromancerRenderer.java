@@ -39,7 +39,7 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
                 .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
                 .setLightmapState(new RenderStateShard.LightmapStateShard(false))
                 .setTransparencyState(RenderUtil.ADDITIVE_TRANSPARENCY)
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation(Eidolon.MODID,"textures/entity/necromancer_eyes.png"), false, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/necromancer_eyes.png" ), false, false))
                 .createCompositeState(false)
         );
 
@@ -62,6 +62,6 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull NecromancerEntity entity) {
-        return new ResourceLocation(Eidolon.MODID, "textures/entity/necromancer.png");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/necromancer.png" );
     }
 }

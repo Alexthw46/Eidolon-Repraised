@@ -3,7 +3,7 @@ package elucent.eidolon.registries;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
@@ -25,8 +25,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
 
@@ -34,20 +33,20 @@ import static elucent.eidolon.Eidolon.MODID;
 
 public class Worldgen {
 
-    public static final TagKey<Structure> CATACOMBS = TagKey.create(Registries.STRUCTURE, new ResourceLocation(MODID, "catacombs"));
+    public static final TagKey<Structure> CATACOMBS = TagKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(MODID,"catacombs" ));
 
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, MODID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, MODID);
 
     public static ResourceKey<Feature<?>> registerFeatureKey(String name) {
-        return ResourceKey.create(Registries.FEATURE, new ResourceLocation(MODID, name));
+        return ResourceKey.create(Registries.FEATURE, ResourceLocation.fromNamespaceAndPath(MODID,name ));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(MODID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(MODID,name ));
     }
 
     public static ResourceKey<PlacedFeature> registerPlacedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MODID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(MODID,name ));
     }
 
     static final ResourceKey<PlacedFeature> LEAD_ORE_GEN = registerPlacedKey("lead_ore_placed");
@@ -60,7 +59,7 @@ public class Worldgen {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ILLWOOD_TREE_CFG = registerConfKey("illwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ILLWOOD_SPAWN = registerConfKey("illwood_spawn");
 
-    public static void bootstrapConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest ruletest1 = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest ruletest2 = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
@@ -86,7 +85,7 @@ public class Worldgen {
 
     }
 
-    public static void bootstrapPlacedFeatures(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlacedFeatures(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
 
         context.register(LEAD_ORE_GEN, new PlacedFeature(configured.get(LEAD_ORE_CFG).get(),

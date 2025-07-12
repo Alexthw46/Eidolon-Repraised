@@ -28,6 +28,6 @@ public class LightArmorSpell extends ApplyPotionSpell {
 
     @Override
     protected MobEffectInstance getPotionEffect(Player player) {
-        return new MobEffectInstance(EidolonPotions.REINFORCED_EFFECT.get(), 1800, 0);
+        return new MobEffectInstance(EidolonPotions.REINFORCED_EFFECT, 1800, 0);
     }
 }

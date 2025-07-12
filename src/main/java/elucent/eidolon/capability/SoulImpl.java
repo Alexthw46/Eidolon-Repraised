@@ -1,81 +1,71 @@
 package elucent.eidolon.capability;
 
 import elucent.eidolon.Config;
+import elucent.eidolon.api.capability.ISoul;
+import elucent.eidolon.registries.EidolonAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
 
-public class SoulImpl implements ISoul, INBTSerializable<CompoundTag> {
-    float maxMagic, magic;
-    float maxEtherealHealth, etherealHealth;
+public class SoulImpl implements ISoul {
 
-	@Override
-	public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
-        tag.putFloat("maxEtherealHealth", maxEtherealHealth);
-        tag.putFloat("etherealHealth", etherealHealth);
-        tag.putFloat("maxMagic", maxMagic);
-        tag.putFloat("magic", magic);
-        return tag;
-	}
+    SoulHeartData soulHeartData;
+    LivingEntity entity;
 
-	@Override
-	public void deserializeNBT(CompoundTag nbt) {
-        maxEtherealHealth = nbt.contains("maxEtherealHealth") ? nbt.getFloat("maxEtherealHealth") : 0;
-        etherealHealth = nbt.contains("etherealHealth") ? nbt.getFloat("etherealHealth") : 0;
-        maxMagic = nbt.contains("maxMagic") ? nbt.getFloat("maxMagic") : 0;
-        magic = nbt.contains("magic") ? nbt.getFloat("magic") : 0;
-	}
+    public SoulImpl(LivingEntity entity) {
+        this.entity = entity;
+        this.soulHeartData = entity.getData(EidolonAttachments.SOUL_ATTACHMENT.get());
+    }
 
-	@Override
-	public boolean hasEtherealHealth() {
-		return maxEtherealHealth > 0;
-	}
+    @Override
+    public boolean hasEtherealHealth() {
+        return soulHeartData.maxEtherealHealth > 0;
+    }
 
-	@Override
-	public float getMaxEtherealHealth() {
-		return maxEtherealHealth;
-	}
+    @Override
+    public float getMaxEtherealHealth() {
+        return soulHeartData.maxEtherealHealth;
+    }
 
-	@Override
-	public float getEtherealHealth() {
-		return etherealHealth;
-	}
+    @Override
+    public float getEtherealHealth() {
+        return soulHeartData.etherealHealth;
+    }
 
-	@Override
-	public boolean hasMagic() {
-		return maxMagic > 0;
-	}
+    @Override
+    public void setEtherealHealth(float health) {
+        this.soulHeartData.etherealHealth = Mth.clamp(health, 0, soulHeartData.maxEtherealHealth);
+        entity.setData(EidolonAttachments.SOUL_ATTACHMENT, soulHeartData);
+    }
 
-	@Override
-	public float getMaxMagic() {
-		return maxMagic;
-	}
+    @Override
+    public void setMaxEtherealHealth(float max) {
+        this.soulHeartData.maxEtherealHealth = Mth.clamp(max, 0, Config.MAX_ETHEREAL_HEALTH.get());
+        this.soulHeartData.etherealHealth = Math.min(soulHeartData.maxEtherealHealth, soulHeartData.etherealHealth);
+        entity.setData(EidolonAttachments.SOUL_ATTACHMENT, soulHeartData);
 
-	@Override
-	public float getMagic() {
-		return magic;
-	}
+    }
 
-	@Override
-	public void setEtherealHealth(float health) {
-		this.etherealHealth = Mth.clamp(health, 0, maxEtherealHealth);
-	}
+    public static class SoulHeartData implements INBTSerializable<CompoundTag> {
+        float maxEtherealHealth, etherealHealth;
 
-	@Override
-	public void setMagic(float magic) {
-		this.magic = Mth.clamp(magic, 0, maxMagic);
-	}
+        @Override
+        public CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {
+            CompoundTag tag = new CompoundTag();
+            tag.putFloat("maxEtherealHealth", maxEtherealHealth);
+            tag.putFloat("etherealHealth", etherealHealth);
+            return tag;
+        }
 
-	@Override
-	public void setMaxEtherealHealth(float max) {
-		this.maxEtherealHealth = Mth.clamp(max, 0, Config.MAX_ETHEREAL_HEALTH.get());
-		this.etherealHealth = Math.min(maxEtherealHealth, etherealHealth);
-	}
+        @Override
+        public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
+            maxEtherealHealth = nbt.contains("maxEtherealHealth") ? nbt.getFloat("maxEtherealHealth") : 0;
+            etherealHealth = nbt.contains("etherealHealth") ? nbt.getFloat("etherealHealth") : 0;
+        }
 
-	@Override
-	public void setMaxMagic(float max) {
-		this.maxMagic = Math.max(0, max);
-		this.magic = Math.min(maxMagic, magic);
-	}
+    }
+
 }

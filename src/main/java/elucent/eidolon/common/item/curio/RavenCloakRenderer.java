@@ -17,7 +17,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class RavenCloakRenderer implements ICurioRenderer {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/raven_cloak.png");
+	public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/raven_cloak.png" );
 	
 	RavenCloakModel model = null;
 

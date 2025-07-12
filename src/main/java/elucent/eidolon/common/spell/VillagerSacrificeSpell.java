@@ -3,7 +3,7 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.common.tile.GobletTileEntity;

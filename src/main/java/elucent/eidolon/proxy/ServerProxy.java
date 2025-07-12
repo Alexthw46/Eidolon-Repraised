@@ -4,7 +4,8 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.OpenCodexPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class ServerProxy implements ISidedProxy {
     @Override
@@ -18,7 +19,7 @@ public class ServerProxy implements ISidedProxy {
     }
 
     @Override
-    public void init() {
+    public void init(IEventBus modEventBus) {
         //
     }
 

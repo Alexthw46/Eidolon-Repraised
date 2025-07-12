@@ -1,9 +1,7 @@
 package elucent.eidolon.common.world;
 
 import com.mojang.serialization.Codec;
-import elucent.eidolon.registries.Worldgen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -12,8 +10,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -21,13 +17,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockRotProce
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import org.jetbrains.annotations.NotNull;
 
 public class EidolonAbstractTreeFeature extends Feature<TreeConfiguration> {
 
-    private static final ResourceLocation ILLWOOD_TREE1 = new ResourceLocation("eidolon:illwood_tree1");
-    private static final ResourceLocation ILLWOOD_TREE2 = new ResourceLocation("eidolon:illwood_tree2");
-    private static final ResourceLocation ILLWOOD_TREE3 = new ResourceLocation("eidolon:illwood_tree3");
+    private static final ResourceLocation ILLWOOD_TREE1 = ResourceLocation.parse("eidolon:illwood_tree1");
+    private static final ResourceLocation ILLWOOD_TREE2 = ResourceLocation.parse("eidolon:illwood_tree2");
+    private static final ResourceLocation ILLWOOD_TREE3 = ResourceLocation.parse("eidolon:illwood_tree3");
     private static final ResourceLocation[] ILLWOOD_TREE = new ResourceLocation[]{ILLWOOD_TREE1, ILLWOOD_TREE2, ILLWOOD_TREE3};
 
     public EidolonAbstractTreeFeature(Codec<TreeConfiguration> codec) {
@@ -130,13 +125,6 @@ public class EidolonAbstractTreeFeature extends Feature<TreeConfiguration> {
         template.placeInWorld(reader, pos1, pos1, placementsettings, rand, 2);
 
         return true;
-    }
-
-    public static class TreeGrower extends AbstractTreeGrower {
-        @Override
-        protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(@NotNull RandomSource p_60014_, boolean p_60015_) {
-            return Worldgen.ILLWOOD_TREE_CFG;
-        }
     }
 
 }

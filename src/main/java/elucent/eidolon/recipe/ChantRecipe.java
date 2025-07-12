@@ -8,12 +8,14 @@ import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.registries.Spells;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChantRecipe implements Recipe<Container> {
+public class ChantRecipe implements Recipe<RecipeInput> {
 
     ResourceLocation id;
     List<Sign> signs;
@@ -35,12 +37,13 @@ public class ChantRecipe implements Recipe<Container> {
 
 
     @Override
-    public boolean matches(@NotNull Container container, @NotNull Level level) {
+    public boolean matches(@NotNull RecipeInput container, @NotNull Level level) {
         return false;
     }
 
+
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container container, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull RecipeInput container, @NotNull HolderLookup.Provider registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -49,12 +52,12 @@ public class ChantRecipe implements Recipe<Container> {
         return false;
     }
 
+
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(@NotNull HolderLookup.Provider registryAccess) {
         return ItemStack.EMPTY;
     }
 
-    @Override
     public @NotNull ResourceLocation getId() {
         return id;
     }

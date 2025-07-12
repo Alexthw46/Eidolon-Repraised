@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class WorktableResultSlot extends Slot {
     protected void checkTakeAchievements(@NotNull ItemStack stack) {
         if (this.amountCrafted > 0) {
             stack.onCraftedBy(this.player.level, this.player, this.amountCrafted);
-            ForgeEventFactory.firePlayerCraftingEvent(this.player, stack, core);
+            EventHooks.firePlayerCraftingEvent(this.player, stack, core);
         }
 
         if (this.container instanceof RecipeHolder) {
@@ -71,7 +71,7 @@ public class WorktableResultSlot extends Slot {
     @Override
     public void onTake(@NotNull Player thePlayer, @NotNull ItemStack stack) {
         this.checkTakeAchievements(stack);
-        net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
+        net.neoforged.neoforge.common.CommonHooks.setCraftingPlayer(thePlayer);
         WorktableRecipe recipe = WorktableRegistry.find(core, extras);
         NonNullList<ItemStack> items = null;
         if (recipe != null) {
@@ -81,7 +81,7 @@ public class WorktableResultSlot extends Slot {
             items.addAll(thePlayer.level.getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core, thePlayer.level));
             for (int i = 0; i < 4; i ++) items.add(extras.getItem(i));
         }
-        net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
+        net.neoforged.neoforge.common.CommonHooks.setCraftingPlayer(null);
         assert items != null;
 
         int n = recipe == null ? Math.min(9, items.size()) : items.size();
@@ -98,7 +98,7 @@ public class WorktableResultSlot extends Slot {
             if (!remaining.isEmpty()) {
                 if (item.isEmpty()) {
                     inv.setItem(index, remaining);
-                } else if (ItemStack.isSameItem(item, remaining) && ItemStack.isSameItemSameTags(item, remaining)) {
+                } else if (ItemStack.isSameItem(item, remaining) && ItemStack.isSameItemSameComponents(item, remaining)) {
                     remaining.grow(item.getCount());
                     inv.setItem(index, remaining);
                 } else if (!this.player.getInventory().add(remaining)) {

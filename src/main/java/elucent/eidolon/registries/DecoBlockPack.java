@@ -6,8 +6,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 
 import static elucent.eidolon.registries.Registry.*;
@@ -16,8 +16,8 @@ public class DecoBlockPack {
     final DeferredRegister<Block> mainBlock;
     public final String baseBlockName;
     final BlockBehaviour.Properties props;
-    RegistryObject<Block> full, slab, stair;
-    @Nullable RegistryObject<Block> wall = null, pressure_plate = null;
+    DeferredHolder<Block, Block> full, slab, stair;
+    @Nullable DeferredHolder<Block, Block> wall = null, pressure_plate = null;
 
     public DecoBlockPack(DeferredRegister<Block> blocks, String baseBlockName, BlockBehaviour.Properties props) {
         this.mainBlock = blocks;
@@ -25,7 +25,7 @@ public class DecoBlockPack {
         this.props = props;
         full = Registry.addBlock(baseBlockName, () -> new Block(props));
         slab = Registry.addBlock(baseBlockName + "_slab", () -> new SlabBlock(props));
-        stair = Registry.addBlock(baseBlockName + "_stairs", () -> new StairBlock(() -> full.get().defaultBlockState(), props));
+        stair = Registry.addBlock(baseBlockName + "_stairs", () -> new StairBlock(full.get().defaultBlockState(), props));
     }
 
     public DecoBlockPack addWall() {
@@ -33,8 +33,8 @@ public class DecoBlockPack {
         return this;
     }
 
-    public DecoBlockPack addPressurePlate(PressurePlateBlock.Sensitivity sensitivity) {
-        pressure_plate = Registry.addBlock(baseBlockName + "_pressure_plate", () -> new PressurePlateBlock(sensitivity, props, BlockSetType.DARK_OAK));
+    public DecoBlockPack addPressurePlate() {
+        pressure_plate = Registry.addBlock(baseBlockName + "_pressure_plate", () -> new PressurePlateBlock(BlockSetType.DARK_OAK, props));
         return this;
     }
 
@@ -62,7 +62,7 @@ public class DecoBlockPack {
 
         final WoodType woodType;
         String woodName;
-        @Nullable RegistryObject<Block> hSign = null, hwSign = null, wSign = null, sSign = null, door = null, trapdoor = null, fence = null, fence_gate = null, button = null;
+        @Nullable DeferredHolder<Block, Block> hSign = null, hwSign = null, wSign = null, sSign = null, door = null, trapdoor = null, fence = null, fence_gate = null, button = null;
 
         public WoodDecoBlock(DeferredRegister<Block> blocks, String basename, WoodType type, BlockBehaviour.Properties props) {
             super(blocks, basename, props);
@@ -71,10 +71,10 @@ public class DecoBlockPack {
         }
 
         public WoodDecoBlock addSign() {
-            sSign = BLOCKS.register(woodName + "_standing_sign", () -> new StandingSignBlock(props, this.woodType));
-            wSign = BLOCKS.register(woodName + "_wall_sign", () -> new WallSignBlock(props, this.woodType));
-            hSign = BLOCKS.register(woodName + "_hanging_sign", () -> new CeilingHangingSignBlock(props, this.woodType));
-            hwSign = BLOCKS.register(woodName + "_hanging_wall_sign", () -> new WallHangingSignBlock(props, this.woodType));
+            sSign = BLOCKS.register(woodName + "_standing_sign", () -> new StandingSignBlock(this.woodType, props));
+            wSign = BLOCKS.register(woodName + "_wall_sign", () -> new WallSignBlock(this.woodType, props));
+            hSign = BLOCKS.register(woodName + "_hanging_sign", () -> new CeilingHangingSignBlock(this.woodType, props));
+            hwSign = BLOCKS.register(woodName + "_hanging_wall_sign", () -> new WallHangingSignBlock(this.woodType, props));
             ITEMS.register(woodName + "_sign", () -> new SignItem(itemProps(), sSign.get(), wSign.get()));
             ITEMS.register(woodName + "_hanging_sign", () -> new HangingSignItem(hSign.get(), hwSign.get(), itemProps()));
 
@@ -82,24 +82,24 @@ public class DecoBlockPack {
         }
 
         public WoodDecoBlock addButton() {
-            button = Registry.addBlock(woodName + "_button", () -> new ButtonBlock(props, BlockSetType.DARK_OAK, 30, true));
+            button = Registry.addBlock(woodName + "_button", () -> new ButtonBlock(BlockSetType.DARK_OAK, 30, props));
             return this;
         }
 
         public WoodDecoBlock addFence() {
             fence = Registry.addBlock(baseBlockName + "_fence", () -> new FenceBlock(props));
-            fence_gate = Registry.addBlock(baseBlockName + "_fence_gate", () -> new FenceGateBlock(props, WoodType.DARK_OAK));
+            fence_gate = Registry.addBlock(baseBlockName + "_fence_gate", () -> new FenceGateBlock(WoodType.DARK_OAK, props));
             return this;
         }
 
         public WoodDecoBlock addPressurePlate() {
-            pressure_plate = Registry.addBlock(woodName + "_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, props, BlockSetType.DARK_OAK));
+            pressure_plate = Registry.addBlock(woodName + "_pressure_plate", () -> new PressurePlateBlock(BlockSetType.DARK_OAK, props));
             return this;
         }
 
         public WoodDecoBlock addDoors() {
-            door = Registry.addBlock(woodName + "_door", () -> new DoorBlock(props, BlockSetType.DARK_OAK));
-            trapdoor = Registry.addBlock(woodName + "_trapdoor", () -> new TrapDoorBlock(props, BlockSetType.DARK_OAK));
+            door = Registry.addBlock(woodName + "_door", () -> new DoorBlock(BlockSetType.DARK_OAK, props));
+            trapdoor = Registry.addBlock(woodName + "_trapdoor", () -> new TrapDoorBlock(BlockSetType.DARK_OAK, props));
             return this;
         }
 

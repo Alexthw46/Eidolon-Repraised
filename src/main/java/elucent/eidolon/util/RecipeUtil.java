@@ -12,10 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import java.util.List;
 import java.util.stream.Collectors;
 

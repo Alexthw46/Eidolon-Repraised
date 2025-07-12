@@ -4,15 +4,15 @@ import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class WardedMailItem extends ItemBase {
     public WardedMailItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(WardedMailItem::onDamage);
+        NeoForge.EVENT_BUS.addListener(WardedMailItem::onDamage);
     }
 
     @SubscribeEvent

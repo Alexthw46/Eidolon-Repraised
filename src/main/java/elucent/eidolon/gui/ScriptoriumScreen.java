@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
-
+import var;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
 
     public int FULL_WIDTH = 256;
     public int FULL_HEIGHT = 256;
-    public static ResourceLocation background = new ResourceLocation(Eidolon.MODID, "textures/gui/inscription_table.png");
+    public static ResourceLocation background = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/inscription_table.png" );
 
     public List<Sign> currentChant;
     public List<SignButton> signButtons = new ArrayList<>();

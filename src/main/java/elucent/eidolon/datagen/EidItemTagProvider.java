@@ -11,8 +11,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
 
     @NotNull
     private static TagKey<Item> eidolonItemTag(String name) {
-        return ItemTags.create(new ResourceLocation("eidolon", name));
+        return ItemTags.create(ResourceLocation.fromNamespaceAndPath("eidolon",name ));
     }
 
     @Override

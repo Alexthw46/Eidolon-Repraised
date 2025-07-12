@@ -11,9 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class SlimySlugRenderer extends MobRenderer<SlimySlugEntity, SlimySlugModel> {
-    protected static final ResourceLocation SLIMY_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/slimy_slug.png");
-    protected static final ResourceLocation BANANA_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/banana_slug.png");
-    protected static final ResourceLocation BROWN_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/brown_slug.png");
+    protected static final ResourceLocation SLIMY_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/slimy_slug.png" );
+    protected static final ResourceLocation BANANA_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/banana_slug.png" );
+    protected static final ResourceLocation BROWN_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/brown_slug.png" );
     public SlimySlugRenderer(Context erm) {
         super(erm, new SlimySlugModel(erm.bakeLayer(ClientRegistry.SLUG_LAYER)), 0.4f);
     }

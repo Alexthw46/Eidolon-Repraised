@@ -1,11 +1,11 @@
 package elucent.eidolon.capability;
 
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.spell.PrayerSpell;
 import elucent.eidolon.registries.Spells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.INBTSerializable;
-
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -124,9 +124,9 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                 CompoundTag tag = reps.getCompound(uuidString);
                 for (String deity : tag.getAllKeys()) {
                     CompoundTag entry = tag.getCompound(deity);
-                    setReputation(uuid, new ResourceLocation(deity), entry.getDouble("rep"));
+                    setReputation(uuid, ResourceLocation.fromNamespaceAndPath(deity),entry.getDouble("rep" ));
                     if (entry.contains("lock"))
-                        lock(uuid, new ResourceLocation(deity), new ResourceLocation(entry.getString("lock")));
+                        lock(uuid, ResourceLocation.fromNamespaceAndPath(deity),new ResourceLocation(entry.getString("lock" )));
                 }
             }
         }

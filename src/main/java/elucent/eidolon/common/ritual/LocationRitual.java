@@ -22,7 +22,7 @@ public class LocationRitual extends Ritual {
 
     TagKey<Structure> structureTagKey;
 
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/summon_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/summon_ritual" );
 
 
     public LocationRitual(TagKey<Structure> structureTagKey) {

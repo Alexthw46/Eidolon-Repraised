@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.Level;
-
+import var;
 import java.util.List;
 
 public class ExecCommandRitual extends Ritual {

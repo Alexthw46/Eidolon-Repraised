@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import elucent.eidolon.Eidolon;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkDirection;
+import net.neoforged.neoforge.network.NetworkEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.BlockParticleOption;

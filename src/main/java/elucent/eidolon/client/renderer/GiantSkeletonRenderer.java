@@ -21,6 +21,6 @@ public class GiantSkeletonRenderer extends HumanoidMobRenderer<GiantSkeletonEnti
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull GiantSkeletonEntity pEntity) {
-        return new ResourceLocation(Eidolon.MODID, "textures/entity/giant_skeleton.png");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/giant_skeleton.png" );
     }
 }

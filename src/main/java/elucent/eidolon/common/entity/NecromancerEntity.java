@@ -1,6 +1,6 @@
 package elucent.eidolon.common.entity;
 
-import elucent.eidolon.capability.IReputation;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
@@ -33,8 +33,9 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
+import var;
 
 public class NecromancerEntity extends SpellcasterIllager {
     public NecromancerEntity(EntityType<? extends SpellcasterIllager> type, Level worldIn) {

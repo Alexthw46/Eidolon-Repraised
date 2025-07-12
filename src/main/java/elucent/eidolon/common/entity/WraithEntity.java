@@ -9,7 +9,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -32,11 +31,6 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
-    }
-
-    @Override
     public boolean isInvertedHealAndHarm() {
         return true;
     }
@@ -45,8 +39,8 @@ public class WraithEntity extends Monster {
     public boolean doHurtTarget(@NotNull Entity entityIn) {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {
-            float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            ((LivingEntity) entityIn).addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 100 + (100 * level.getDifficulty().getId())));
+            float f = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+            ((LivingEntity) entityIn).addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT, 100 + (100 * level().getDifficulty().getId())));
         }
         return flag;
     }
@@ -60,9 +54,9 @@ public class WraithEntity extends Monster {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2F)
-            .add(Attributes.ATTACK_DAMAGE, 4.0D)
-            .add(Attributes.ARMOR, 0.0D)
-            .build();
+                .add(Attributes.ATTACK_DAMAGE, 4.0D)
+                .add(Attributes.ARMOR, 0.0D)
+                .build();
     }
 
     protected void applyEntityAI() {
@@ -73,22 +67,22 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public int getExperienceReward() {
+    public int getBaseExperienceReward() {
         return 5;
     }
 
     @Override
     public void aiStep() {
-        if (this.level.isDay() && !this.level.isClientSide) {
+        if (this.level().isDay() && !this.level().isClientSide) {
             float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ());
-            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
-                this.setSecondsOnFire(8);
+            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level().canSeeSky(blockpos)) {
+                this.setRemainingFireTicks(8 * 20);
             }
         }
 
         // hover over water
-        FluidState below = level.getBlockState(getBlockPosBelowThatAffectsMyMovement()).getFluidState();
+        FluidState below = level().getBlockState(getBlockPosBelowThatAffectsMyMovement()).getFluidState();
         if (!below.isEmpty()) {
             Vec3 motion = getDeltaMovement();
             this.setOnGround(true);
@@ -97,8 +91,7 @@ public class WraithEntity extends Monster {
                 if (motion.y < 0) setDeltaMovement(motion.multiply(1, 0, 1));
                 setPos(getX(), getBlockPosBelowThatAffectsMyMovement().getY() + below.getOwnHeight(), getZ());
             }
-        }
-        else setNoGravity(false);
+        } else setNoGravity(false);
 
         // slow fall
         this.fallDistance = 0;
@@ -111,7 +104,7 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public SoundEvent getDeathSound() {
+    public @NotNull SoundEvent getDeathSound() {
         return EidolonSounds.WRAITH_DEATH.get();
     }
 
@@ -121,7 +114,7 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public SoundEvent getHurtSound(@NotNull DamageSource source) {
+    public @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
         return EidolonSounds.WRAITH_HURT.get();
     }
 }

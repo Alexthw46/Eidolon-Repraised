@@ -25,7 +25,8 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-
+import record;
+import var;
 import java.util.ArrayList;
 import java.util.List;
 

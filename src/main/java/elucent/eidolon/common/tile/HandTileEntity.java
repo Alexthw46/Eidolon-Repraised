@@ -3,6 +3,7 @@ package elucent.eidolon.common.tile;
 import elucent.eidolon.api.ritual.IRitualItemProvider;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -11,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class HandTileEntity extends TileEntityBase implements IRitualItemProvider {
@@ -56,14 +57,14 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        stack = ItemStack.of(tag.getCompound("stack"));
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
+        stack = ItemStack.parseOptional(provider, tag.getCompound("stack"));
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        tag.put("stack", stack.save(new CompoundTag()));
+    public void saveAdditional(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        tag.put("stack", stack.saveOptional(provider));
     }
 
     @Override

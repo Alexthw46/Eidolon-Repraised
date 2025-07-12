@@ -24,7 +24,7 @@ import org.joml.Matrix4f;
 
 public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEntity> {
     private final ModelPart stirrer;
-    public static final ResourceLocation STIRRER_TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/block/crucible_stirrer.png");
+    public static final ResourceLocation STIRRER_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/block/crucible_stirrer.png" );
     
     public static LayerDefinition createModelLayer() {
     	MeshDefinition mesh = new MeshDefinition();
@@ -57,7 +57,7 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
         }
         if (tile.hasWater) {
             TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(new ResourceLocation("minecraft", "block/water_still"));
+                    .apply(ResourceLocation.fromNamespaceAndPath("minecraft","block/water_still" ));
             VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
             Matrix4f mat = matrixStackIn.last().pose();
             int color = BiomeColors.getAverageWaterColor(tile.getLevel(), tile.getBlockPos());

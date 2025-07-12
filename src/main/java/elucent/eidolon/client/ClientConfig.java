@@ -1,16 +1,16 @@
 package elucent.eidolon.client;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
 public class ClientConfig {
     // graphics
-    public static ForgeConfigSpec.ConfigValue<Boolean> BETTER_LAYERING;
+    public static ModConfigSpec.ConfigValue<Boolean> BETTER_LAYERING;
     // ui
-    public static ForgeConfigSpec.ConfigValue<String> MANA_BAR_POSITION, MANA_BAR_ORIENTATION;
+    public static ModConfigSpec.ConfigValue<String> MANA_BAR_POSITION, MANA_BAR_ORIENTATION;
     
     public static class Positions {
         public static final String BOTTOM_LEFT = "bottomLeft",
@@ -31,7 +31,7 @@ public class ClientConfig {
         public static final List<String> VALUES = ImmutableList.of(HORIZONTAL, VERTICAL, DEFAULT);
     }
 
-    public ClientConfig(ForgeConfigSpec.Builder builder) {
+    public ClientConfig(ModConfigSpec.Builder builder) {
         builder.comment("Graphics settings").push("graphics");
         BETTER_LAYERING = builder.comment("Enable better particle/effect layering.",
                         "Fixes particles and effects rendering behind clouds and weather.",
@@ -47,10 +47,10 @@ public class ClientConfig {
     }
 
     public static final ClientConfig INSTANCE;
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
 
     static {
-        final Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        final Pair<ClientConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ClientConfig::new);
         SPEC = specPair.getRight();
         INSTANCE = specPair.getLeft();
     }

@@ -14,11 +14,11 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class WoodenBrewingStandContainer extends AbstractContainerMenu {
@@ -149,7 +149,7 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
         public void onTake(@NotNull Player thePlayer, @NotNull ItemStack stack) {
             Potion potion = PotionUtils.getPotion(stack);
             if (thePlayer instanceof ServerPlayer) {
-                ForgeEventFactory.onPlayerBrewedPotion(thePlayer, stack);
+                EventHooks.onPlayerBrewedPotion(thePlayer, stack);
                 CriteriaTriggers.BREWED_POTION.trigger((ServerPlayer) thePlayer, potion);
             }
 

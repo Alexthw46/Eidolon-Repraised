@@ -34,11 +34,6 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
-    }
-
-    @Override
     public boolean isInvertedHealAndHarm() {
         return true;
     }
@@ -69,7 +64,7 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public int getExperienceReward() {
+    public int getBaseExperienceReward() {
         return 8;
     }
 
@@ -79,7 +74,7 @@ public class ZombieBruteEntity extends Monster {
             float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
-                this.setSecondsOnFire(8);
+                this.setRemainingFireTicks(8 * 20);
             }
         }
 
@@ -88,7 +83,7 @@ public class ZombieBruteEntity extends Monster {
 
     public boolean killedEntity(@NotNull ServerLevel pLevel, @NotNull LivingEntity pEntity) {
         boolean flag = super.killedEntity(pLevel, pEntity);
-        if ((pLevel.getDifficulty() == Difficulty.NORMAL || pLevel.getDifficulty() == Difficulty.HARD) && pEntity instanceof Villager villager && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(pEntity, EntityType.ZOMBIE_VILLAGER, (timer) -> {
+        if ((pLevel.getDifficulty() == Difficulty.NORMAL || pLevel.getDifficulty() == Difficulty.HARD) && pEntity instanceof Villager villager && net.neoforged.neoforge.event.EventHooks.canLivingConvert(pEntity, EntityType.ZOMBIE_VILLAGER, (timer) -> {
         })) {
             if (pLevel.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
                 return flag;
@@ -101,7 +96,7 @@ public class ZombieBruteEntity extends Monster {
                 zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
                 zombievillager.setTradeOffers(villager.getOffers().createTag());
                 zombievillager.setVillagerXp(villager.getVillagerXp());
-                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(pEntity, zombievillager);
+                net.neoforged.neoforge.event.EventHooks.onLivingConvert(pEntity, zombievillager);
                 if (!this.isSilent()) {
                     pLevel.levelEvent(null, 1026, this.blockPosition(), 0);
                 }
@@ -114,7 +109,7 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public SoundEvent getDeathSound() {
+    public @NotNull SoundEvent getDeathSound() {
         return SoundEvents.ZOMBIE_DEATH;
     }
 
@@ -124,7 +119,7 @@ public class ZombieBruteEntity extends Monster {
     }
 
     @Override
-    public SoundEvent getHurtSound(@NotNull DamageSource source) {
+    public @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.ZOMBIE_HURT;
     }
 }

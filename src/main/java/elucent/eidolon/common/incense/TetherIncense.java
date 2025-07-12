@@ -36,13 +36,13 @@ public class TetherIncense extends GenericPotionIncense {
                         range(), 0, range());
             }
 
-            Particles.create(EidolonParticles.SMOKE_PARTICLE)
+            Particles.create(EidolonParticles.SMOKE_PARTICLE.get())
                     .setAlpha(0.35f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(range() * 0.75, 0.1).randomVelocity(0.025f, 0.025f)
                     .addVelocity(0, -0.0125f, 0)
                     .setColor(0.15F, 0.85F, 0.75F, 0.005f, 0.005f, 0.005f)
                     .repeat(level, x, y + 0.125, z, 2);
-            Particles.create(EidolonParticles.SMOKE_PARTICLE)
+            Particles.create(EidolonParticles.SMOKE_PARTICLE.get())
                     .setAlpha(0.35f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(range() * 0.75, 0.1).randomVelocity(0.025f, 0.025f)
                     .addVelocity(0, -0.0125f, 0)
@@ -53,7 +53,7 @@ public class TetherIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT.get(), 40);
+        return new MobEffectInstance(EidolonPotions.ANCHORED_EFFECT, 40);
     }
 
 }

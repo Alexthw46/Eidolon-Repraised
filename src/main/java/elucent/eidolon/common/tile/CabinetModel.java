@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CabinetModel extends EntityModel<Entity> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Eidolon.MODID, "cabinet"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"cabinet" ), "main");
 	private final ModelPart left_door;
 	private final ModelPart right_door;
 
@@ -43,8 +43,9 @@ public class CabinetModel extends EntityModel<Entity> {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         left_door.render(poseStack, buffer, packedLight, packedOverlay);
         right_door.render(poseStack, buffer, packedLight, packedOverlay);
     }
+
 }

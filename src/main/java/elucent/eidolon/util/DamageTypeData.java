@@ -3,7 +3,7 @@ package elucent.eidolon.util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -92,7 +92,7 @@ public class DamageTypeData {
         return this.type.equals(type);
     }
 
-    public void register(BootstapContext<DamageType> ctx) {
+    public void register(BootstrapContext<DamageType> ctx) {
         ctx.register(this.key, this.type);
     }
 

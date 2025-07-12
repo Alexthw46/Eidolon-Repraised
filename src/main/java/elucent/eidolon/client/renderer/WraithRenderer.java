@@ -16,6 +16,6 @@ public class WraithRenderer extends MobRenderer<WraithEntity, WraithModel> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull WraithEntity entity) {
-        return new ResourceLocation(Eidolon.MODID, "textures/entity/wraith.png");
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/wraith.png" );
     }
 }

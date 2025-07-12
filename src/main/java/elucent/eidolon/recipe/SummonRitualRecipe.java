@@ -12,7 +12,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +31,7 @@ public class SummonRitualRecipe extends RitualRecipe {
     }
 
     public SummonRitualRecipe(ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, int count, float healthRequirement) {
-        this(new ResourceLocation(result.getNamespace(), "summon_" + result.getPath()), result, reagent, pedestalItems, focusItems, count, healthRequirement);
+        this(ResourceLocation.fromNamespaceAndPath(result.getNamespace(),"summon_" + result.getPath( )), result, reagent, pedestalItems, focusItems, count, healthRequirement);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SummonRitualRecipe extends RitualRecipe {
             List<Ingredient> foci = getPedestalItems(focusItems);
 
             JsonObject resultObj = GsonHelper.getAsJsonObject(json, "output");
-            ResourceLocation entity = new ResourceLocation(GsonHelper.getAsString(resultObj, "entity"));
+            ResourceLocation entity = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(resultObj,"entity" ));
             int count = resultObj.has("count") ? GsonHelper.getAsInt(resultObj, "count") : 1;
 
             return new SummonRitualRecipe(recipeId, entity, reagent, stacks, foci, count, healthRequirement);

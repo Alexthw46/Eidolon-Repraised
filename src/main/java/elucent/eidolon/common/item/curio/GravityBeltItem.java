@@ -6,10 +6,10 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -20,7 +20,7 @@ public class GravityBeltItem extends BasicBeltItem {
 
     public GravityBeltItem(Properties properties) {
         super(properties);
-        MinecraftForge.EVENT_BUS.addListener(GravityBeltItem::onFall);
+        NeoForge.EVENT_BUS.addListener(GravityBeltItem::onFall);
     }
 
     @SubscribeEvent
@@ -33,7 +33,7 @@ public class GravityBeltItem extends BasicBeltItem {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
-        map.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":gravity_belt", -0.60f, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        map.put(NeoForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":gravity_belt", -0.60f, AttributeModifier.Operation.MULTIPLY_TOTAL));
         return map;
     }
 

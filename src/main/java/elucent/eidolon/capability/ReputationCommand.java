@@ -9,6 +9,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import elucent.eidolon.api.capability.IKnowledge;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -18,7 +20,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-
+import var;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -49,7 +51,7 @@ public class ReputationCommand {
                                 )
                         )
                         .then(Commands.literal("tryfix")
-                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.tryFix(player))))
+                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.tryFix(player))))
                         )
                 )
         );

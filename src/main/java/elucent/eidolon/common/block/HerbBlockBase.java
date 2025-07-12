@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.IPlantable;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
@@ -61,9 +61,9 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource random) {
         int i = this.getAge(pState);
         if (i < this.getMaxAge() && mayPlaceOn(worldIn.getBlockState(pos.below()), worldIn, pos.below())
-                && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, pState, random.nextInt(20) == 0)) {
+                && net.neoforged.neoforge.common.CommonHooks.onCropsGrowPre(worldIn, pos, pState, random.nextInt(20) == 0)) {
             growCrops(worldIn, pos, pState);
-            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, pState);
+            net.neoforged.neoforge.common.CommonHooks.onCropsGrowPost(worldIn, pos, pState);
         }
     }
 

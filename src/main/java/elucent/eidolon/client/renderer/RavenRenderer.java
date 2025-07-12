@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class RavenRenderer extends MobRenderer<RavenEntity, RavenModel> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Eidolon.MODID, "textures/entity/raven.png");
+    protected static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/raven.png" );
     public RavenRenderer(Context erm) {
         super(erm, new RavenModel(erm.bakeLayer(ClientRegistry.RAVEN_LAYER)), 0.25f);
     }

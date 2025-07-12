@@ -22,7 +22,7 @@ public class GobletTileRenderer implements BlockEntityRenderer<GobletTileEntity>
 
         if (tile.getEntityType() != null) {
             TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(new ResourceLocation("minecraft", "block/water_still"));
+                    .apply(ResourceLocation.fromNamespaceAndPath("minecraft","block/water_still" ));
             VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
             Matrix4f mat = matrixStackIn.last().pose();
             builder.vertex(mat, 0.375f, 0.46875f, 0.375f).color(192, 16, 32, 224).uv(water.getU(6), water.getV(6)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();

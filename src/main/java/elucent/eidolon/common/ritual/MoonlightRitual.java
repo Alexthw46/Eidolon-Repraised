@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 
 public class MoonlightRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = new ResourceLocation(Eidolon.MODID, "particle/moonlight_ritual");
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/moonlight_ritual" );
 
     public MoonlightRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 111, 75, 189));
