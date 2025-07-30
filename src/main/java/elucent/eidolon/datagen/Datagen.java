@@ -5,13 +5,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import var;
+
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = Eidolon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Eidolon.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Datagen {
 
     //use runData configuration to generate stuff, event.includeServer() for data, event.includeClient() for assets
@@ -21,13 +21,13 @@ public class Datagen {
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
         PackOutput output = gen.getPackOutput();
-
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         gen.addProvider(event.includeClient(), new EidBlockStateProvider(gen, fileHelper));
         var blockGen = new EidBlockTagProvider(gen, provider, fileHelper);
         gen.addProvider(event.includeServer(), blockGen);
         gen.addProvider(event.includeServer(), new EidItemTagProvider(gen, provider, blockGen, fileHelper));
         gen.addProvider(event.includeServer(), new ModLootTables(gen));
-        gen.addProvider(event.includeServer(), new EidRecipeProvider(gen));
+        gen.addProvider(event.includeServer(), new EidRecipeProvider(gen, lookupProvider));
         gen.addProvider(event.includeServer(), new EidBiomeTagProvider(gen, provider, fileHelper));
         gen.addProvider(event.includeServer(), new EidWorldgenProvider(output, provider));
         gen.addProvider(event.includeServer(), new EidDamageProvider.DamageTypeDataProvider(output, provider));

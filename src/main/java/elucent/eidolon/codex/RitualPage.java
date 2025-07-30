@@ -17,14 +17,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import var;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static elucent.eidolon.Eidolon.prefix;
 import static elucent.eidolon.util.RegistryUtil.getRegistryName;
@@ -83,7 +85,8 @@ public class RitualPage extends RecipePage<RitualRecipe> {
 
     @Override
     public @Nullable RitualRecipe getRecipe(ResourceLocation id) {
-        return (RitualRecipe) Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+        Optional<RecipeHolder<?>> recipeHolder = Eidolon.proxy.getWorld().getRecipeManager().byKey(id);
+        return recipeHolder.isEmpty() || !(recipeHolder.get().value() instanceof RitualRecipe recipe) ? null : recipe;
     }
 
     public static class RitualIngredient {

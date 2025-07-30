@@ -61,13 +61,13 @@ public class SummoningStaffItem extends ItemBase {
                 Vec3 pos = hit.getLocation();
                 time = 72000 - time;
                 float alpha = Mth.clamp(time / 40.0f, 0, 1);
-                float a = Mth.DEG_TO_RAD * (entity.level.getGameTime() % 360 + 12 * time);
+                float a = Mth.DEG_TO_RAD * (entity.level().getGameTime() % 360 + 12 * time);
                 float r = 0.3f + 0.3f * alpha;
                 float sa = r * Mth.sin(a), ca = r * Mth.cos(a);
                 if (time == 40) {
-                    entity.playSound(SoundEvents.CROSSBOW_QUICK_CHARGE_3, 1, 1);
+                    entity.playSound(SoundEvents.CROSSBOW_QUICK_CHARGE_3.value(), 1, 1);
                 }
-                Particles.create(EidolonParticles.SMOKE_PARTICLE)
+                Particles.create(EidolonParticles.SMOKE_PARTICLE.get())
                         .randomVelocity(0.025f * alpha, 0.0125f * alpha)
                         .setColor(33.0f / 255, 26.0f / 255, 23.0f / 255, 0.125f, 10.0f / 255, 10.0f / 255, 12.0f / 255, 0)
                         .setAlpha(0.25f * alpha, 0)
@@ -96,7 +96,7 @@ public class SummoningStaffItem extends ItemBase {
                         e.get().setPos(pos);
                         EntityUtil.enthrall(entity, (LivingEntity) e.get());
                         level.addFreshEntity(e.get());
-                        Networking.sendToTracking(entity.level, e.get().blockPosition(), new MagicBurstEffectPacket(e.get().getX(), e.get().getY() + e.get().getBbHeight() / 2, e.get().getZ(),
+                        Networking.sendToTracking(entity.level(), e.get().blockPosition(), new MagicBurstEffectPacket(e.get().getX(), e.get().getY() + e.get().getBbHeight() / 2, e.get().getZ(),
                                 ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
                         level.playSound(null, e.get().blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.75f, 0.1f);
                     }
@@ -171,14 +171,14 @@ public class SummoningStaffItem extends ItemBase {
             if (player.isShiftKeyDown()) {
                 int sel = changeSelection(stack, 1);
                 CompoundTag tag = getCharges(stack).getCompound(sel);
-                ResourceLocation id = new ResourceLocation(tag.getString("id"));
+                ResourceLocation id = ResourceLocation.parse(tag.getString("id"));
                 String summonKey = "entity." + id.getNamespace() + "." + id.getPath();
                 player.setItemInHand(hand, stack);
                 if (!world.isClientSide) {
                     ((ServerPlayer) player).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.tooltip.active_summon").append(
                             Component.translatable(summonKey).withStyle(ChatFormatting.LIGHT_PURPLE)
                     )));
-                    player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+                    player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5f, 1.0f);
                 }
                 return InteractionResultHolder.fail(stack);
             }
@@ -189,14 +189,14 @@ public class SummoningStaffItem extends ItemBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext tooltipContext, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         boolean charge = hasCharges(stack);
         int selected = getSelected(stack);
         String summonKey = "eidolon.tooltip.no_selected_summon";
         if (charge) {
             CompoundTag tag = getCharges(stack).getCompound(selected);
             String ids = tag.getString("id");
-            ResourceLocation id = new ResourceLocation(tag.getString("id"));
+            ResourceLocation id = ResourceLocation.parse(tag.getString("id"));
             summonKey = "entity." + id.getNamespace() + "." + id.getPath();
         }
         tooltip.add(Component.translatable("eidolon.tooltip.active_summon").append(

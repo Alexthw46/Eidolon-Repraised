@@ -5,10 +5,10 @@ import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonPotions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
 
 public class DeathBaneIncense extends GenericPotionIncense {
@@ -20,8 +20,8 @@ public class DeathBaneIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return livingEntity.getMobType() != MobType.UNDEAD ?
-                new MobEffectInstance(EidolonPotions.LIGHT_BLESSED.get(), 20 * 60 * 10) :
+        return livingEntity.getType().is(EntityTypeTags.UNDEAD) ?
+                new MobEffectInstance(EidolonPotions.LIGHT_BLESSED, 20 * 60 * 10) :
                 new MobEffectInstance(MobEffects.CONFUSION, 20 * 60 * 2);
     }
 
@@ -32,7 +32,7 @@ public class DeathBaneIncense extends GenericPotionIncense {
         double y = blockPos.getY() + 1;
         double z = blockPos.getZ();
         if (level.random.nextInt(4) == 0) {
-            Particles.create(EidolonParticles.FLAME_PARTICLE)
+            Particles.create(EidolonParticles.FLAME_PARTICLE.get())
                     .setAlpha(0.5f, 0).setScale(0.175f, 0.125f).setLifetime(80)
                     .randomOffset(range() * 0.75, 0.1).randomVelocity(0.025f, 0.025f)
                     .addVelocity(0, -0.0125f, 0)

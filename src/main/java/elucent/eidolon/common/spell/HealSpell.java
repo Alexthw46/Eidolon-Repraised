@@ -1,8 +1,8 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -11,14 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.common.NeoForgeConfigSpec;
-import var;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class HealSpell extends StaticSpell {
 
@@ -32,9 +30,9 @@ public class HealSpell extends StaticSpell {
         return true;
     }
 
-    NeoForgeConfigSpec.IntValue BASE_HEAL;
-    NeoForgeConfigSpec.IntValue REP_FROM_HEAL;
-    NeoForgeConfigSpec.DoubleValue DEVOTION_TO_HEAL;
+    ModConfigSpec.IntValue BASE_HEAL;
+    ModConfigSpec.IntValue REP_FROM_HEAL;
+    ModConfigSpec.DoubleValue DEVOTION_TO_HEAL;
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
@@ -87,7 +85,7 @@ public class HealSpell extends StaticSpell {
     }
 
     @Override
-    public void buildConfig(NeoForgeConfigSpec.Builder spellBuilder) {
+    public void buildConfig(ModConfigSpec.Builder spellBuilder) {
         super.buildConfig(spellBuilder);
         BASE_HEAL = spellBuilder.comment("Base healing amount").defineInRange("base_heal", 5, 1, 100);
         REP_FROM_HEAL = spellBuilder.comment("Reputation gained from healing other entities").defineInRange("rep_from_heal", 3, 1, 100);

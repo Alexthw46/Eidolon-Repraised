@@ -1,8 +1,9 @@
 package elucent.eidolon.common.item.curio;
 
 import com.google.common.collect.Multimap;
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -42,9 +42,9 @@ public class ResoluteBeltItem extends EidolonCurio {
 
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
-        map.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTR_ID, Eidolon.MODID + ":resolute_belt", 1.0f, AttributeModifier.Operation.ADDITION));
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation uuid, ItemStack stack) {
+        Multimap<Holder<Attribute>, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
+        map.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, 1.0f, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 

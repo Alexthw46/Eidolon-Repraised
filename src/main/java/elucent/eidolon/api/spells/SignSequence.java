@@ -128,7 +128,7 @@ public class SignSequence {
     public CompoundTag serializeNbt() {
         CompoundTag tag = new CompoundTag();
         ListTag list = new ListTag();
-        for (Sign s : seq) list.add(StringTag.valueOf(s.key.toString()));
+        for (Sign s : seq) list.add(StringTag.valueOf(s.key().toString()));
         tag.put("seq", list);
         if (last != null) tag.putString("last", last.getRegistryName().toString());
         return tag;

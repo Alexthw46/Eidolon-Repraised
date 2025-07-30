@@ -9,10 +9,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -27,16 +26,16 @@ public class WandItem extends ItemBase implements IRechargeableWand {
     }
 
     @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    public int getEnchantmentValue(@NotNull ItemStack stack) {
         return 20;
     }
 
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant) {
-        return super.canApplyAtEnchantingTable(stack, enchant)
-                || enchant == Enchantments.UNBREAKING
-                || enchant == Enchantments.MENDING;
-    }
+//    @Override
+//    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant) {
+//        return super.canApplyAtEnchantingTable(stack, enchant)
+//                || enchant == Enchantments.UNBREAKING
+//                || enchant == Enchantments.MENDING;
+//    }
 
     @Override
     public ItemStack recharge(ItemStack stack) {
@@ -78,8 +77,8 @@ public class WandItem extends ItemBase implements IRechargeableWand {
             }
 
             world.playSound(null, pos.x, pos.y, pos.z, soundEvent, SoundSource.NEUTRAL, 0.75f, random.nextFloat() * 0.2f + 0.9f);
-            stack.hurtAndBreak(1, entity, player -> player.broadcastBreakEvent(hand));
-            entity.getCooldowns().addCooldown(this,  15);
+            stack.hurtAndBreak(1, entity, LivingEntity.getSlotForHand(hand));
+            entity.getCooldowns().addCooldown(this, 15);
         }
 
         if (!entity.swinging) {

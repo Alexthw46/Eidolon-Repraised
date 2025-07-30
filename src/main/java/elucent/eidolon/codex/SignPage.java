@@ -40,12 +40,12 @@ public class SignPage extends Page {
         mStack.translate(x + 64, y + 80, 0);
         // mStack.scale(0.9f, 0.9f, 0.9f);
         mStack.mulPose(Axis.ZP.rotationDegrees(ClientInfo.getClientPartialTicks() * 1.5f));
-        colorBlit(mStack, -40, -40, 128, 96, 80, 80, 256, 256, sign.getColor());
+        colorBlit(mStack, -40, -40, 128, 96, 80, 80, 256, 256, sign.color());
         mStack.popPose();
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         for (int i = 0; i < 2; i ++) {
             RenderUtil.litQuad(mStack, bufferSource, x + 44, y + 60, 40, 40,
-                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             bufferSource.endBatch();
         }
         RenderSystem.disableBlend();

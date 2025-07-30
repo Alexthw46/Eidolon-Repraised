@@ -78,7 +78,7 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
                 Vector3f dx = new Vector3f((float)dxd.x, (float)dxd.y, (float)dxd.z);
                 Vector3f dy = new Vector3f((float)dyd.x, (float)dyd.y, (float)dyd.z);
 
-                TextureAtlasSprite spr = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(s.getSprite());
+                TextureAtlasSprite spr = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(s.sprite());
 
                 float brightMod = Mth.clamp(Mth.sin(a + Mth.TWO_PI * entity.tickCount / 20), 0, 1);
                 brightMod *= brightMod;

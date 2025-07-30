@@ -3,7 +3,6 @@ package elucent.eidolon;
 import com.google.common.collect.ImmutableSet;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.client.ClientRegistry;
-import elucent.eidolon.client.EidolonOverlays;
 import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;
 import elucent.eidolon.compat.CompatHandler;
@@ -20,16 +19,11 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
@@ -40,7 +34,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -53,8 +46,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-
-import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
 @Mod(Eidolon.MODID)
 public class Eidolon {
@@ -135,18 +126,18 @@ public class Eidolon {
     }
 
 
-    public void spawnPlacements(final SpawnPlacementRegisterEvent event) {
-        event.register(EidolonEntities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(EidolonEntities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(EidolonEntities.GIANT_SKEL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (pType, pLevel, pSpawnType, pPos, pRandom) -> (pLevel.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(pType, pLevel, pSpawnType, pPos, pRandom)), SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(EidolonEntities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-        event.register(EidolonEntities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (e, w, t, pos, rand) -> true, SpawnPlacementRegisterEvent.Operation.AND);
-    }
+//    public void spawnPlacements(final SpawnPlacementRegisterEvent event) {
+//        event.register(EidolonEntities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+//        event.register(EidolonEntities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+//        event.register(EidolonEntities.GIANT_SKEL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                (pType, pLevel, pSpawnType, pPos, pRandom) -> (pLevel.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(pType, pLevel, pSpawnType, pPos, pRandom)), SpawnPlacementRegisterEvent.Operation.AND);
+//        event.register(EidolonEntities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+//        event.register(EidolonEntities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                (e, w, t, pos, rand) -> true, SpawnPlacementRegisterEvent.Operation.AND);
+//    }
 
     @OnlyIn(Dist.CLIENT)
     public static void clientSetup(final FMLClientSetupEvent event) {
@@ -180,12 +171,12 @@ public class Eidolon {
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
-        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new EidolonOverlays.EidolonHearts());
-        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new EidolonOverlays.EidolonManaBar());
-        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new EidolonOverlays.EidolonRavenCharge());
-    }
+//    @OnlyIn(Dist.CLIENT)
+//    public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
+//        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new EidolonOverlays.EidolonHearts());
+//        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new EidolonOverlays.EidolonManaBar());
+//        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new EidolonOverlays.EidolonRavenCharge());
+//    }
 
     public void sendImc(InterModEnqueueEvent evt) {
         InterModComms.sendTo("consecration", "holy_material", () -> "silver");

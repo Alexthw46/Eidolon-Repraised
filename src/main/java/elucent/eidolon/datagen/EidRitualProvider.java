@@ -1,5 +1,6 @@
 package elucent.eidolon.datagen;
 
+import com.mojang.serialization.JsonOps;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.ritual.*;
 import elucent.eidolon.common.ritual.*;
@@ -49,7 +50,7 @@ public class EidRitualProvider extends SimpleDataProvider {
         addRituals();
         for (RitualRecipe recipe : rituals) {
             Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            saveStable(pOutput, RitualRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).getOrThrow(), path);
         }
     }
 
@@ -203,8 +204,8 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
 
-    public void makeSummon(ResourceLocation id, EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
-        rituals.add(new SummonRitualRecipe(id, getRegistryName(type), Ingredient.of(item), pedestal, foci));
+    public void makeSummon(EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
+        rituals.add(new SummonRitualRecipe(getRegistryName(type), Ingredient.of(item), pedestal, foci));
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, int count, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
@@ -212,7 +213,7 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, List<ItemLike> pedestal, List<ItemLike> foci) {
-        makeSummon(id, type, Items.CHARCOAL, pedestal.stream().map(Ingredient::of).toList(), foci.stream().map(Ingredient::of).toList());
+        makeSummon(type, Items.CHARCOAL, pedestal.stream().map(Ingredient::of).toList(), foci.stream().map(Ingredient::of).toList());
     }
 
     public void generic(ItemLike item, Ritual ritual) {
@@ -229,7 +230,7 @@ public class EidRitualProvider extends SimpleDataProvider {
         List<Ingredient> foci = keys instanceof MultiItemSacrifice mis ? mis.items : List.of();
         List<Ingredient> invariants = ritual.getInvariants().stream().filter(iRequirement -> iRequirement instanceof FocusItemPresentRequirement).map(iRequirement -> (FocusItemPresentRequirement) iRequirement).map(FocusItemPresentRequirement::getMatch).collect(Collectors.toList());
         float health = ritual.getRequirements().stream().filter(req -> req instanceof HealthRequirement).map(req -> (HealthRequirement) req).map(HealthRequirement::getHealth).findFirst().orElse(0f);
-        rituals.add(new GenericRitualRecipe(prefix("ritual_" + ritual.getRegistryName().getPath()), ritual.getRegistryName(), reagent, pedestal, foci, invariants, health));
+        rituals.add(new GenericRitualRecipe(ritual.getRegistryName(), reagent, pedestal, foci, invariants, health));
     }
 
     /**

@@ -7,14 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import var;
 
 public class CruciblePage extends RecipePage<CrucibleRecipe> {
     public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_crucible_page.png" );
@@ -29,11 +28,11 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
     }
 
     public CruciblePage(ItemStack result) {
-        this(result, ForgeRegistries.ITEMS.getKey(result.getItem()));
+        this(result, BuiltInRegistries.ITEM.getKey(result.getItem()));
     }
 
     public CruciblePage(Item result) {
-        this(result.getDefaultInstance(), ForgeRegistries.ITEMS.getKey(result));
+        this(result.getDefaultInstance(), BuiltInRegistries.ITEM.getKey(result));
     }
 
 
@@ -48,13 +47,13 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
             int tx = x, ty = y + yoff + i * 20;
             guiGraphics.blit(bg, tx, ty, 128, 0, 128, 20);
             tx += 24;
-            for (int j = 0; j < steps.get(i).matches.size(); j++) {
-                if (!steps.get(i).matches.get(j).isEmpty()) {
+            for (int j = 0; j < steps.get(i).matches().size(); j++) {
+                if (!steps.get(i).matches().get(j).isEmpty()) {
                     guiGraphics.blit(bg, tx, ty + 1, 176, 32, 16, 17);
                     tx += 17;
                 }
             }
-            for (int j = 0; j < steps.get(i).stirs; j++) {
+            for (int j = 0; j < steps.get(i).stirs(); j++) {
                 guiGraphics.blit(bg, tx, ty + 1, 192, 32, 16, 17);
                 tx += 17;
             }
@@ -80,9 +79,9 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
         for (int i = 0; i < steps.size(); i++) {
             int tx = x, ty = y + yoff + i * 20;
             tx += 24;
-            for (int j = 0; j < steps.get(i).matches.size(); j++) {
-                if (!steps.get(i).matches.get(j).isEmpty()) {
-                    drawItems(mStack, steps.get(i).matches.get(j), tx, ty + 1, mouseX, mouseY);
+            for (int j = 0; j < steps.get(i).matches().size(); j++) {
+                if (!steps.get(i).matches().get(j).isEmpty()) {
+                    drawItems(mStack, steps.get(i).matches().get(j), tx, ty + 1, mouseX, mouseY);
                     tx += 17;
                 }
             }

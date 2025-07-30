@@ -7,7 +7,8 @@ import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.api.ritual.Ritual;
-import elucent.eidolon.capability.*;
+import elucent.eidolon.capability.KnowledgeCommand;
+import elucent.eidolon.capability.ReputationCommand;
 import elucent.eidolon.common.entity.ZombieBruteEntity;
 import elucent.eidolon.common.entity.ai.FollowOwnerGoal;
 import elucent.eidolon.common.entity.ai.PriestBarterGoal;
@@ -17,10 +18,7 @@ import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.spell.ThrallSpell;
 import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.*;
-import elucent.eidolon.registries.EidolonAttributes;
-import elucent.eidolon.registries.EidolonPotions;
-import elucent.eidolon.registries.Registry;
-import elucent.eidolon.registries.Signs;
+import elucent.eidolon.registries.*;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +31,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -54,26 +55,14 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.event.entity.living.*;
 import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.Event.Result;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.INBTSerializable;
-import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
-import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingTickEvent;
-import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Added;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -142,7 +131,7 @@ public class Events {
 
     @SubscribeEvent
     public void onTarget(LivingChangeTargetEvent event) {
-        if (event.getEntity() == null || !EntityUtil.isEnthralled(event.getEntity())) return;
+        if (!EntityUtil.isEnthralled(event.getEntity())) return;
         UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
         LivingEntity newTarget = null;
         if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
@@ -192,7 +181,7 @@ public class Events {
     public void onDeath(LivingDropsEvent event) {
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Monster)) {
-            Level world = entity.level;
+            Level world = entity.level();
             BlockPos pos = entity.blockPosition();
             List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2), pos.offset(3, 3, 3)));
             if (!goblets.isEmpty()) {
@@ -236,7 +225,7 @@ public class Events {
                 if (!(entity instanceof Player))
                     event.getDrops().removeIf(i -> !(i.getItem().getItem() instanceof ArmorItem));
                 int looting = CommonHooks.getLootingLevel(entity, source, event.getSource());
-                if (source.hasEffect(EidolonPotions.SOUL_HARVEST.get())) looting += 2;
+                if (source.hasEffect(EidolonPotions.SOUL_HARVEST)) looting += 2;
                 ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(),
                         new ItemStack(Registry.SOUL_SHARD.get(), source.level.random.nextInt(2 + looting)));
                 drop.setDefaultPickUpDelay();
@@ -363,22 +352,22 @@ public class Events {
 
     @SubscribeEvent
     public void onPotionApplicable(Applicable event) {
-        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
-            event.setResult(Result.DENY);
+        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
+            event.setResult(Applicable.Result.DO_NOT_APPLY);
         }
         if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BonelordArmorItem && (event.getEffectInstance().getEffect() == MobEffects.WITHER || event.getEffectInstance().getEffect() == MobEffects.POISON)) {
-            event.setResult(Result.DENY);
+            event.setResult(Applicable.Result.DO_NOT_APPLY);
         }
     }
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
 
-        boolean isMagic = event.getSource().is(Registry.FORGE_MAGIC);
+        boolean isMagic = event.getSource().is(Tags.DamageTypes.IS_MAGIC);
         boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId()); //TODO .is(Registry.FORGE_WITHER);
 
         if (isMagic && event.getSource().getEntity() instanceof LivingEntity living) {
-            AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGIC_POWER.get());
+            AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGIC_POWER);
             if (attribute != null) {
                 event.setAmount(event.getAmount() * (float) attribute.getValue());
             }
@@ -422,7 +411,7 @@ public class Events {
 
     @SubscribeEvent
     public void onExpDrop(LivingExperienceDropEvent event) {
-        if (event.getAttackingPlayer() != null && event.getAttackingPlayer().hasEffect(EidolonPotions.SOUL_HARVEST.get())) {
+        if (event.getAttackingPlayer() != null && event.getAttackingPlayer().hasEffect(EidolonPotions.SOUL_HARVEST)) {
             event.setDroppedExperience(Mth.ceil(event.getDroppedExperience() * 1.25));
         }
     }

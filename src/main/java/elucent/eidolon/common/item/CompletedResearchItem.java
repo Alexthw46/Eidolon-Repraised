@@ -25,7 +25,7 @@ public class CompletedResearchItem extends ItemBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext tooltipContext, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!stack.hasTag() || !stack.getOrCreateTag().contains("research")) return;
         Research r = Researches.find(new ResourceLocation(stack.getOrCreateTag().getString("research")));
         if (r == null) return;

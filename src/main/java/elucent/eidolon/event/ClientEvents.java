@@ -23,21 +23,20 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
-import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
-import var;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static elucent.eidolon.common.spell.DarkTouchSpell.NECROTIC_KEY;
 import static elucent.eidolon.common.spell.LightTouchSpell.SACRED_KEY;
 
-@Mod.EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)

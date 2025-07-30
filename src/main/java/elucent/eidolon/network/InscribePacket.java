@@ -6,8 +6,7 @@ import elucent.eidolon.registries.Signs;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.NetworkDirection;
-import net.neoforged.neoforge.network.NetworkEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,7 +30,7 @@ public class InscribePacket {
     public static InscribePacket decode(FriendlyByteBuf buffer) {
         int n = buffer.readInt();
         List<Sign> runes = new ArrayList<>();
-        for (int i = 0; i < n; i++) runes.add(Signs.find(new ResourceLocation(buffer.readUtf(255))));
+        for (int i = 0; i < n; i++) runes.add(Signs.find(ResourceLocation.tryParse(buffer.readUtf(255))));
         return new InscribePacket(buffer.readInt(), runes);
     }
 

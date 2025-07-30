@@ -21,7 +21,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class ChantPage extends Page {
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_chant_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/codex_chant_page.png");
     protected Sign[] chant;
     final String text;
     final String title;
@@ -37,9 +37,10 @@ public class ChantPage extends Page {
     @Override
     public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
         if (spell != null && chant == null) {
-            if (Eidolon.proxy.getWorld().getRecipeManager().byKey(spell.getRegistryName()).orElse(null) instanceof ChantRecipe chantRecipe) {
-                chant = chantRecipe.signs();
-                if (chant == null || chant.length == 0) {
+            var spellHolder = Eidolon.proxy.getWorld().getRecipeManager().byKey(spell.getRegistryName());
+            if (spellHolder.isPresent() && spellHolder.get().value() instanceof ChantRecipe chantRecipe) {
+                chant = chantRecipe.signs().toArray(new Sign[0]);
+                if (chant.length == 0) {
                     mStack.drawString(gui.getMinecraft().font, "No matching recipe found for " + spell.getRegistryName(), x + 10, y + 10, 0x000000);
                 }
             }
@@ -75,9 +76,9 @@ public class ChantPage extends Page {
                 RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
                 RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
-                        sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                        sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
                 RenderUtil.litQuad(mStack, bufferSource, baseX + i * 24 + 4, y + 32, 16, 16,
-                        sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                        sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             }
 
             bufferSource.endBatch();

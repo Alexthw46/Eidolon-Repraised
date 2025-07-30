@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.MenuProvider;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -28,14 +29,9 @@ public class EidolonFakePlayer extends FakePlayer {
     public static final GameProfile PROFILE =
             new GameProfile(UUID.fromString("edaa2c36-64e2-11ee-8c99-0242ac120002"), "Eidolon");
 
-    @Override
-    public double getBlockReach() {
-        return 4.5; //Forge default
-    }
-
     private EidolonFakePlayer(ServerLevel world) {
         super(world, PROFILE);
-        connection = new FakePlayNetHandler(world.getServer(), this);
+        connection = new FakePlayNetHandler(world.getServer(), this, CommonListenerCookie.createInitial(PROFILE, false));
     }
 
     private static WeakReference<EidolonFakePlayer> FAKE_PLAYER = null;
@@ -46,7 +42,7 @@ public class EidolonFakePlayer extends FakePlayer {
             ret = new EidolonFakePlayer(world);
             FAKE_PLAYER = new WeakReference<>(ret);
         }
-        FAKE_PLAYER.get().level = world;
+        ret.setLevel(world);
         return FAKE_PLAYER.get();
     }
 
@@ -62,8 +58,8 @@ public class EidolonFakePlayer extends FakePlayer {
     }
 
     private static class FakePlayNetHandler extends ServerGamePacketListenerImpl {
-        public FakePlayNetHandler(MinecraftServer server, ServerPlayer playerIn) {
-            super(server, NETWORK_MANAGER, playerIn);
+        public FakePlayNetHandler(MinecraftServer server, ServerPlayer playerIn, CommonListenerCookie pCookie) {
+            super(server, NETWORK_MANAGER, playerIn, pCookie);
         }
 
         @Override

@@ -33,7 +33,7 @@ public abstract class Rune {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Sign && ((Sign)other).key.equals(key);
+        return other instanceof Sign && ((Sign) other).key().equals(key);
     }
 
     @Override

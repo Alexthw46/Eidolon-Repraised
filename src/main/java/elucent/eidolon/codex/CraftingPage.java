@@ -3,25 +3,28 @@ package elucent.eidolon.codex;
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+
+import java.util.Optional;
 
 public class CraftingPage extends RecipePage<CraftingRecipe> {
     public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_crafting_page.png" );
 
     public CraftingPage(ItemStack result) {
-        super(BACKGROUND, ForgeRegistries.ITEMS.getKey(result.getItem()), result);
+        super(BACKGROUND, BuiltInRegistries.ITEM.getKey(result.getItem()), result);
     }
 
     public CraftingPage(Item result) {
-        super(BACKGROUND, ForgeRegistries.ITEMS.getKey(result), result.getDefaultInstance());
+        super(BACKGROUND, BuiltInRegistries.ITEM.getKey(result), result.getDefaultInstance());
     }
 
     public CraftingPage(ItemStack result, ResourceLocation recipeId) {
@@ -54,6 +57,7 @@ public class CraftingPage extends RecipePage<CraftingRecipe> {
 
     @Override
     public CraftingRecipe getRecipe(ResourceLocation id) {
-        return (CraftingRecipe) Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+        Optional<RecipeHolder<?>> recipeHolder = Eidolon.proxy.getWorld().getRecipeManager().byKey(id);
+        return recipeHolder.isEmpty() || !(recipeHolder.get().value() instanceof CraftingRecipe recipe) ? null : recipe;
     }
 }

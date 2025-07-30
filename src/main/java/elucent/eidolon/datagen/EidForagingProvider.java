@@ -31,7 +31,7 @@ public class EidForagingProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addRecipes();
         for (ForagingRecipe recipe : recipes) {
-            Path path = getRecipePath(output, recipe.getId().getPath());
+            Path path = getRecipePath(output, recipe.id.getPath());
             saveStable(pOutput, recipe.toJson(), path);
         }
     }

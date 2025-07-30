@@ -10,7 +10,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -70,10 +69,10 @@ public class ZombieBruteEntity extends Monster {
 
     @Override
     public void aiStep() {
-        if (this.level.isDay() && !this.level.isClientSide) {
+        if (this.level().isDay() && !this.level().isClientSide) {
             float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ());
-            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos)) {
+            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level().canSeeSky(blockpos)) {
                 this.setRemainingFireTicks(8 * 20);
             }
         }
@@ -91,10 +90,10 @@ public class ZombieBruteEntity extends Monster {
 
             ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
             if (zombievillager != null) {
-                zombievillager.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
+                zombievillager.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true));
                 zombievillager.setVillagerData(villager.getVillagerData());
                 zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
-                zombievillager.setTradeOffers(villager.getOffers().createTag());
+                zombievillager.setTradeOffers(villager.getOffers().copy());
                 zombievillager.setVillagerXp(villager.getVillagerXp());
                 net.neoforged.neoforge.event.EventHooks.onLivingConvert(pEntity, zombievillager);
                 if (!this.isSilent()) {

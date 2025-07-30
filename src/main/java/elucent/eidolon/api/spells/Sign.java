@@ -1,30 +1,36 @@
 package elucent.eidolon.api.spells;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.RGBProvider;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
-public class Sign implements RGBProvider {
-    final ResourceLocation key;
-    final ResourceLocation sprite;
-    final int color;
+public record Sign(ResourceLocation key, ResourceLocation sprite, int color) implements RGBProvider {
 
-    public Sign(ResourceLocation key, ResourceLocation sprite, int color) {
-        this.key = key;
-        this.sprite = sprite;
-        this.color = color;
-    }
+    public static Codec<Sign> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("key").forGetter(Sign::getRegistryName),
+                    ResourceLocation.CODEC.fieldOf("sprite").forGetter(Sign::sprite),
+                    Codec.INT.fieldOf("color").forGetter(Sign::color)
+            ).apply(instance, Sign::new)
+    );
+
+    public static StreamCodec<RegistryFriendlyByteBuf, Sign> STREAM_CODEC = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC,
+            Sign::key,
+            ResourceLocation.STREAM_CODEC,
+            Sign::sprite,
+            ByteBufCodecs.INT,
+            Sign::color,
+            Sign::new
+    );
 
     public ResourceLocation getRegistryName() {
         return key;
-    }
-
-    public ResourceLocation getSprite() {
-        return sprite;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     public float getRed() {
@@ -41,7 +47,7 @@ public class Sign implements RGBProvider {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Sign && ((Sign)other).key.equals(key);
+        return other instanceof Sign && ((Sign) other).key.equals(key);
     }
 
     @Override

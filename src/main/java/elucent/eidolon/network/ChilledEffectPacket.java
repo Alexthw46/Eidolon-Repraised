@@ -1,18 +1,16 @@
 package elucent.eidolon.network;
 
-import java.util.function.Supplier;
-
 import elucent.eidolon.Eidolon;
-import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.network.NetworkDirection;
-import net.neoforged.neoforge.network.NetworkEvent;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+
+import java.util.function.Supplier;
 
 public class ChilledEffectPacket {
     final double x;

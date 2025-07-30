@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class EidolonRecipes {
 
     static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Eidolon.MODID);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DyeRecipe>> DYE_RECIPE = RECIPE_SERIALIZERS.register("dye", DyeRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DyeRecipe>> DYE_RECIPE = RECIPE_SERIALIZERS.register("dye", () -> ExtendableShapelessSerializer.create(DyeRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrucibleRecipe>> CRUCIBLE_RECIPE = RECIPE_SERIALIZERS.register("crucible", CrucibleRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<WorktableRecipe>> WORKTABLE_RECIPE = RECIPE_SERIALIZERS.register("worktable", WorktableRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ItemRitualRecipe>> CRAFTING_RITUAL_RECIPE = RECIPE_SERIALIZERS.register("ritual_brazier_crafting", ItemRitualRecipe.SerializerCrafting::new);

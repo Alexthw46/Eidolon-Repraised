@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
-import var;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +148,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
         // render the signs over the red cloth
         for (Sign sign : chant) {
             RenderUtil.litQuad(mStack.pose(), buffersource, bgx + 4, y + 4, 16, 16,
-                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             buffersource.endBatch();
             bgx += 24;
         }
@@ -159,7 +159,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
             float flicker = 0.75f + 0.05f * (float) Math.sin(Math.toRadians(12 * pticks - 360.0f * i / chant.size()));
             Sign sign = chant.get(i);
             RenderUtil.litQuad(mStack.pose(), buffersource, bgx + 4, y + 4, 16, 16,
-                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             buffersource.endBatch();
             bgx += 24;
         }

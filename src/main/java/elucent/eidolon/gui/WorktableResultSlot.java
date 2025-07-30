@@ -7,14 +7,17 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+
+import static net.neoforged.neoforge.common.CommonHooks.setCraftingPlayer;
 
 public class WorktableResultSlot extends Slot {
     private final CraftingContainer core, extras;
@@ -55,12 +58,12 @@ public class WorktableResultSlot extends Slot {
     @Override
     protected void checkTakeAchievements(@NotNull ItemStack stack) {
         if (this.amountCrafted > 0) {
-            stack.onCraftedBy(this.player.level, this.player, this.amountCrafted);
+            stack.onCraftedBy(this.player.level(), this.player, this.amountCrafted);
             EventHooks.firePlayerCraftingEvent(this.player, stack, core);
         }
 
-        if (this.container instanceof RecipeHolder) {
-            ((RecipeHolder) this.container).awardUsedRecipes(this.player, Collections.singletonList(stack));
+        if (this.container instanceof ResultContainer resultContainer) {
+            resultContainer.awardUsedRecipes(this.player, Collections.singletonList(stack));
         }
 
         player.playSound(SoundEvents.SMITHING_TABLE_USE, 1.0f, 1.0f);
@@ -71,17 +74,17 @@ public class WorktableResultSlot extends Slot {
     @Override
     public void onTake(@NotNull Player thePlayer, @NotNull ItemStack stack) {
         this.checkTakeAchievements(stack);
-        net.neoforged.neoforge.common.CommonHooks.setCraftingPlayer(thePlayer);
+        CommonHooks.setCraftingPlayer(thePlayer);
         WorktableRecipe recipe = WorktableRegistry.find(core, extras);
         NonNullList<ItemStack> items = null;
         if (recipe != null) {
             items = recipe.getRemainingItems(core, extras);
         } else {
             items = NonNullList.create();
-            items.addAll(thePlayer.level.getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core, thePlayer.level));
+            items.addAll(thePlayer.level().getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core.asCraftInput(), thePlayer.level()));
             for (int i = 0; i < 4; i ++) items.add(extras.getItem(i));
         }
-        net.neoforged.neoforge.common.CommonHooks.setCraftingPlayer(null);
+        setCraftingPlayer(null);
         assert items != null;
 
         int n = recipe == null ? Math.min(9, items.size()) : items.size();

@@ -1,22 +1,20 @@
 package elucent.eidolon.common.item.curio;
 
 import com.google.common.collect.Multimap;
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
-import java.util.UUID;
-
 public class GravityBeltItem extends BasicBeltItem {
-    final UUID ATTR_ID = new UUID(6937061617091731127L, 7120126291930051139L);
 
     public GravityBeltItem(Properties properties) {
         super(properties);
@@ -31,9 +29,9 @@ public class GravityBeltItem extends BasicBeltItem {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slotContext, uuid, stack);
-        map.put(NeoForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(ATTR_ID, Eidolon.MODID + ":gravity_belt", -0.60f, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+        Multimap<Holder<Attribute>, AttributeModifier> map = super.getAttributeModifiers(slotContext, id, stack);
+        map.put(Attributes.GRAVITY, new AttributeModifier(id, -0.60f, AttributeModifier.Operation.ADD_VALUE));
         return map;
     }
 

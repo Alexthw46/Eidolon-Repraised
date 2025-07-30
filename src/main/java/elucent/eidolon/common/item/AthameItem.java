@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -33,10 +34,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import net.neoforged.neoforge.event.entity.living.LootingLevelEvent;
 import org.jetbrains.annotations.NotNull;
-import var;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ import java.util.Map;
 public class AthameItem extends SwordItem {
 
     public AthameItem(Properties builderIn) {
-        super(Tiers.PewterTier.INSTANCE, 1, -1.6f, builderIn);
+        super(Tiers.PewterTier.INSTANCE, builderIn);
         NeoForge.EVENT_BUS.register(this);
     }
 
@@ -153,7 +152,7 @@ public class AthameItem extends SwordItem {
     }
 
     public static ItemStack getHarvestable(Block block, Level level) {
-        ItemStack harvest = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.FORAGING_TYPE.get()).stream().filter(
+        ItemStack harvest = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.FORAGING_TYPE.get()).stream().map(RecipeHolder::value).filter(
                 foragingRecipe -> foragingRecipe.block.test(new ItemStack(block))
         ).map(f -> f.getResultItem(level.registryAccess())).findFirst().orElse(ItemStack.EMPTY);
         if (!harvest.isEmpty()) return harvest;

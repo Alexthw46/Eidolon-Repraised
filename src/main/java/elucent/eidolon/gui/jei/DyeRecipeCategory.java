@@ -11,13 +11,14 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
-import var;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DyeRecipeCategory implements ICraftingCategoryExtension {
+public class DyeRecipeCategory implements ICraftingCategoryExtension<DyeRecipe> {
     private final DyeRecipe recipe;
 
     public DyeRecipeCategory(DyeRecipe recipe) {
@@ -25,7 +26,7 @@ public class DyeRecipeCategory implements ICraftingCategoryExtension {
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull ICraftingGridHelper craftingGridHelper, @NotNull IFocusGroup focuses) {
+    public void setRecipe(@NotNull RecipeHolder holder, @NotNull IRecipeLayoutBuilder builder, @NotNull ICraftingGridHelper craftingGridHelper, @NotNull IFocusGroup focuses) {
         List<List<ItemStack>> inputs = recipe.getIngredients().stream()
                 .map(ingredient -> List.of(ingredient.getItems()))
                 .toList();
@@ -37,7 +38,7 @@ public class DyeRecipeCategory implements ICraftingCategoryExtension {
                     .filter(f -> f.getItem() instanceof DyeItem)
                     .toList();
 
-            List<DyeColor> colors = focus.isEmpty() ? Arrays.stream(recipe.getIngredients().get(0).getItems()).map(DyeColor::getColor).toList() : focus.stream().map(DyeColor::getColor).toList();
+            List<DyeColor> colors = focus.isEmpty() ? Arrays.stream(recipe.getIngredients().getFirst().getItems()).map(DyeColor::getColor).toList() : focus.stream().map(DyeColor::getColor).toList();
 
             for (DyeColor color : colors) {
                 if (color == null) continue;

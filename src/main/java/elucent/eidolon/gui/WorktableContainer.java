@@ -11,12 +11,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import var;
+
+import java.util.List;
 import java.util.Optional;
 
 public class WorktableContainer extends AbstractContainerMenu {
@@ -60,21 +62,21 @@ public class WorktableContainer extends AbstractContainerMenu {
     protected void updateCraftingResult(int id, Level world, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
         if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
             ItemStack itemstack = ItemStack.EMPTY;
-            var worktableRecipeOptional = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get());
+            List<RecipeHolder<WorktableRecipe>> worktableRecipeOptional = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get());
             if (!extras.isEmpty()) {
-                for (WorktableRecipe worktableRecipe : worktableRecipeOptional) {
-                    if (worktableRecipe.matches(core, extras)) {
-                        itemstack = worktableRecipe.getResult();
+                for (RecipeHolder<WorktableRecipe> worktableRecipe : worktableRecipeOptional) {
+                    if (worktableRecipe.value().matches(core, extras)) {
+                        itemstack = worktableRecipe.value().getResult();
                         break;
                     }
                 }
             }
             if (itemstack.isEmpty()) {
-                Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
+                Optional<RecipeHolder<CraftingRecipe>> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory.asCraftInput(), world);
                 if (optional.isPresent()) {
-                    CraftingRecipe icraftingrecipe = optional.get();
+                    RecipeHolder<CraftingRecipe> icraftingrecipe = optional.get();
                     if (inventoryResult.setRecipeUsed(world, serverPlayer, icraftingrecipe)) {
-                        itemstack = icraftingrecipe.assemble(inventory, world.registryAccess());
+                        itemstack = icraftingrecipe.value().assemble(inventory.asCraftInput(), world.registryAccess());
                     }
                 }
             }

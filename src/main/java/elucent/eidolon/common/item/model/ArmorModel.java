@@ -4,8 +4,6 @@ package elucent.eidolon.common.item.model;// Made with Blockbench 3.7.4
 
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -74,11 +72,6 @@ public abstract class ArmorModel extends HumanoidModel<LivingEntity> {
         } else if (slot == FEET) {
             return ImmutableList.of(leftFoot, rightFoot);
         } else return ImmutableList.of();
-    }
-
-    @Override
-    public void renderToBuffer(@NotNull PoseStack matrixStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        super.renderToBuffer(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     public void copyFromDefault(HumanoidModel<?> model) {

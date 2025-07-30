@@ -1,54 +1,47 @@
 package elucent.eidolon.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.LocationRitual;
 import elucent.eidolon.registries.EidolonRecipes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LocationRitualRecipe extends RitualRecipe {
 
+    public ResourceLocation getStructureTagKey() {
+        return structureTagKey;
+    }
+
     ResourceLocation structureTagKey;
 
 
-    public LocationRitualRecipe(ResourceLocation id, ResourceLocation structure, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
-        super(id, reagent, pedestalItems, focusItems, healthRequirement);
+    public LocationRitualRecipe(ResourceLocation structure, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
+        super(reagent, pedestalItems, focusItems, healthRequirement);
         this.structureTagKey = structure;
     }
 
 
     @Override
     public Ritual getRitual() {
-        return new LocationRitual(TagKey.create(Registries.STRUCTURE, structureTagKey)).setRegistryName(id);
+        return new LocationRitual(TagKey.create(Registries.STRUCTURE, structureTagKey)).setRegistryName(getId());
     }
 
     @Override
-    public JsonElement asRecipe() {
-        JsonObject jsonobject = new JsonObject();
-        jsonobject.addProperty("type", "eidolon:ritual_brazier_location");
-
-        addRitualElements(this, jsonobject);
-
-        JsonObject resultObj = new JsonObject();
-        resultObj.addProperty("structure", structureTagKey.toString());
-
-        jsonobject.add("output", resultObj);
-
-        return jsonobject;
+    public @NotNull ResourceLocation getId() {
+        return ResourceLocation.fromNamespaceAndPath(structureTagKey.getNamespace(), "ritual_locate_" + structureTagKey.getPath());
     }
 
     @Override
@@ -64,58 +57,37 @@ public class LocationRitualRecipe extends RitualRecipe {
 
     public static class Serializer extends RitualRecipe.Serializer<LocationRitualRecipe> {
 
+        public static final MapCodec<LocationRitualRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ResourceLocation.CODEC.fieldOf("structure").forGetter(recipe -> recipe.structureTagKey),
+                Ingredient.CODEC.fieldOf("reagent").forGetter(LocationRitualRecipe::getReagent),
+                Ingredient.CODEC.listOf().fieldOf("pedestal_items").forGetter(LocationRitualRecipe::getPedestalItems),
+                Ingredient.CODEC.listOf().fieldOf("focus_items").forGetter(LocationRitualRecipe::getFocusItems),
+                Codec.FLOAT.fieldOf("health_requirement").orElse(0f).forGetter(LocationRitualRecipe::getHealthRequirement)
+        ).apply(instance, LocationRitualRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, LocationRitualRecipe> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC,
+                LocationRitualRecipe::getStructureTagKey,
+                Ingredient.CONTENTS_STREAM_CODEC,
+                LocationRitualRecipe::getReagent,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                LocationRitualRecipe::getPedestalItems,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                LocationRitualRecipe::getFocusItems,
+                ByteBufCodecs.FLOAT,
+                LocationRitualRecipe::getHealthRequirement,
+                LocationRitualRecipe::new
+        );
+
+
         @Override
-        public @NotNull LocationRitualRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-            Ingredient reagent = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "reagent"));
-            float healthRequirement = json.has("healthRequirement") ? GsonHelper.getAsFloat(json, "healthRequirement") : 0;
-            JsonArray pedestalItems = GsonHelper.getAsJsonArray(json, "pedestalItems");
-            List<Ingredient> stacks = getPedestalItems(pedestalItems);
-            JsonArray focusItems = GsonHelper.getAsJsonArray(json, "focusItems");
-            List<Ingredient> foci = getPedestalItems(focusItems);
-
-            JsonObject resultObj = GsonHelper.getAsJsonObject(json, "output");
-            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(resultObj,"structure" ));
-
-            return new LocationRitualRecipe(recipeId, structure, reagent, stacks, foci, healthRequirement);
+        public @NotNull MapCodec<LocationRitualRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public @Nullable LocationRitualRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
-            int length = pBuffer.readInt();
-            int length2 = pBuffer.readInt();
-            Ingredient reagent = Ingredient.fromNetwork(pBuffer);
-            List<Ingredient> stacks = new ArrayList<>();
-
-            for (int i = 0; i < length; i++) {
-                try {
-                    stacks.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-            List<Ingredient> foci = new ArrayList<>();
-            for (int i = 0; i < length2; i++) {
-                try {
-                    foci.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-
-            float healthRequirement = pBuffer.readFloat();
-
-            ResourceLocation structure = pBuffer.readResourceLocation();
-
-            return new LocationRitualRecipe(pRecipeId, structure, reagent, stacks, foci, healthRequirement);
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, LocationRitualRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
-
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, @NotNull LocationRitualRecipe pRecipe) {
-            super.toNetwork(pBuffer, pRecipe);
-            pBuffer.writeResourceLocation(pRecipe.structureTagKey);
-        }
-
     }
 }

@@ -10,13 +10,18 @@ import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -35,16 +40,10 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
-import var;
 
 public class NecromancerEntity extends SpellcasterIllager {
     public NecromancerEntity(EntityType<? extends SpellcasterIllager> type, Level worldIn) {
         super(type, worldIn);
-    }
-
-    @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class NecromancerEntity extends SpellcasterIllager {
 
     @Override
     public boolean isCastingSpell() {
-        return (!level.isClientSide || !hack) && super.isCastingSpell();
+        return (!level().isClientSide || !hack) && super.isCastingSpell();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class NecromancerEntity extends SpellcasterIllager {
             return true;
         } else if (super.isAlliedTo(pEntity)) {
             return true;
-        } else if (pEntity instanceof LivingEntity && ((LivingEntity) pEntity).getMobType() == MobType.ILLAGER) {
+        } else if (pEntity instanceof LivingEntity && pEntity.getType().is(EntityTypeTags.ILLAGER)) {
             return this.getTeam() == null && pEntity.getTeam() == null;
         } else {
             return false;
@@ -77,26 +76,26 @@ public class NecromancerEntity extends SpellcasterIllager {
         hack = true; // Used to avoid the default spell particles from SpellcastingIllagerEntity
         super.tick();
         hack = false;
-        if (this.level.isClientSide && this.isCastingSpell()) {
+        if (level().isClientSide && this.isCastingSpell()) {
             IllagerSpell spelltype = getCurrentSpell();
             float f = this.yBodyRot * ((float) Math.PI / 180F) + Mth.cos((float) this.tickCount * 0.6662F) * 0.25F;
             float f1 = Mth.cos(f);
             float f2 = Mth.sin(f);
             if (spelltype == IllagerSpell.FANGS) {
-                Particles.create(EidolonParticles.SPARKLE_PARTICLE)
+                Particles.create(EidolonParticles.SPARKLE_PARTICLE.get())
                         .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
                         .randomVelocity(0.05f).randomOffset(0.025f)
                         .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
                         .setSpin(0.4f)
-                        .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
-                        .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
+                        .spawn(level(), getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
+                        .spawn(level(), getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
             } else if (spelltype == IllagerSpell.SUMMON_VEX) {
-                Particles.create(EidolonParticles.WISP_PARTICLE)
+                Particles.create(EidolonParticles.WISP_PARTICLE.get())
                         .setColor(0.75f, 1, 1, 0.125f, 0.125f, 0.875f)
                         .randomVelocity(0.05f).randomOffset(0.025f)
                         .setScale(0.25f, 0.125f).setAlpha(0.25f, 0)
-                        .spawn(level, getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
-                        .spawn(level, getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
+                        .spawn(level(), getX() + f1 * 0.875, getY() + 2.0, getZ() + f2 * 0.875)
+                        .spawn(level(), getX() - f1 * 0.875, getY() + 2.0, getZ() - f2 * 0.875);
             }
         }
     }
@@ -147,11 +146,11 @@ public class NecromancerEntity extends SpellcasterIllager {
             LivingEntity target = NecromancerEntity.this.getTarget();
             Vec3 diff = target.position().subtract(NecromancerEntity.this.position());
             Vec3 norm = diff.normalize();
-            if (!level.isClientSide) {
+            if (!level().isClientSide) {
                 for (int i = 0; i < 3; i++) {
-                    NecromancerSpellEntity spell = new NecromancerSpellEntity(level, getX(), getEyeY(), getZ(), norm.x + random.nextFloat() * 0.1 - 0.05, norm.y + 0.04 * diff.length() / 2 + random.nextFloat() * 0.1 - 0.05, norm.z + random.nextFloat() * 0.1 - 0.05, i * 5);
+                    NecromancerSpellEntity spell = new NecromancerSpellEntity(level(), getX(), getEyeY(), getZ(), norm.x + random.nextFloat() * 0.1 - 0.05, norm.y + 0.04 * diff.length() / 2 + random.nextFloat() * 0.1 - 0.05, norm.z + random.nextFloat() * 0.1 - 0.05, i * 5);
                     spell.setOwner(NecromancerEntity.this);
-                    level.addFreshEntity(spell);
+                    level().addFreshEntity(spell);
                 }
             }
         }
@@ -183,12 +182,12 @@ public class NecromancerEntity extends SpellcasterIllager {
 
         @Override
         protected void performSpellCasting() {
-            if (!level.isClientSide) {
+            if (!level().isClientSide) {
                 EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
                 if (NecromancerEntity.this.getHealth() < NecromancerEntity.this.getMaxHealth() / 2) {
                     type = random.nextBoolean() ? EidolonEntities.GIANT_SKEL.get() : EidolonEntities.ZOMBIE_BRUTE.get();
                 }
-                Holder<Biome> biomeKey = level.getBiome(blockPosition());
+                Holder<Biome> biomeKey = level().getBiome(blockPosition());
                 for (int i = 0; i < random.nextInt(5); i++) {
                     if (type == EntityType.SKELETON && biomeKey.is(Tags.Biomes.IS_COLD))
                         type = EntityType.STRAY;
@@ -199,14 +198,14 @@ public class NecromancerEntity extends SpellcasterIllager {
                     if (type == EntityType.ZOMBIE && biomeKey.is(Tags.Biomes.IS_WET))
                         type = EntityType.DROWNED;
 
-                    var entity = type.create(level);
+                    var entity = type.create(level());
                     if (!(entity instanceof Monster thrall)) return;
                     thrall.setPos(getX(), getY(), getZ());
-                    level.addFreshEntity(entity);
+                    level().addFreshEntity(entity);
                     thrall.setTarget(getTarget());
                     EntityUtil.enthrall(NecromancerEntity.this, thrall);
                     thrall.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 999999, 0, false, false));
-                    Networking.sendToTracking(level, blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
+                    Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
                 }
             }
         }
@@ -239,6 +238,11 @@ public class NecromancerEntity extends SpellcasterIllager {
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
     }
 
+    @Override
+    public void applyRaidBuffs(@NotNull ServerLevel level, int wave, boolean unused) {
+
+    }
+
     protected @NotNull SoundEvent getCastingSoundEvent() {
         return SoundEvents.EVOKER_CAST_SPELL;
     }
@@ -249,10 +253,6 @@ public class NecromancerEntity extends SpellcasterIllager {
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 12.0D)
                 .build();
-    }
-
-    @Override
-    public void applyRaidBuffs(int wave, boolean p_213660_2_) {
     }
 
     @Override

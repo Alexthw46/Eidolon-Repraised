@@ -2,8 +2,8 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
@@ -21,14 +21,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import var;
+
 import java.util.List;
 
 public class DarkTouchSpell extends StaticSpell {
@@ -110,7 +108,7 @@ public class DarkTouchSpell extends StaticSpell {
                     items.get(0).setItem(touchResult(stack, player));
                     Vec3 p = items.get(0).position();
                     items.get(0).setDefaultPickUpDelay();
-                    Networking.sendToTracking(world, items.get(0).blockPosition(), new MagicBurstEffectPacket(p.x, p.y, p.z, Signs.WICKED_SIGN.getColor(), Signs.BLOOD_SIGN.getColor()));
+                    Networking.sendToTracking(world, items.get(0).blockPosition(), new MagicBurstEffectPacket(p.x, p.y, p.z, Signs.WICKED_SIGN.color(), Signs.BLOOD_SIGN.color()));
                 }
             } else {
                 world.playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.NEUTRAL, 1.0F, 0.6F + world.random.nextFloat() * 0.2F);

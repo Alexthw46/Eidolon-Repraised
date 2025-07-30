@@ -4,8 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IKnowledge;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ClientInfo;
@@ -23,7 +23,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import var;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,13 +91,13 @@ public class SignIndexPage extends Page {
                     mStack.pushPose();
                     mStack.translate(xx + 24, yy + 24, 0);
                     mStack.mulPose(Axis.ZP.rotationDegrees(ClientInfo.getClientPartialTicks() * 1.5f));
-                    colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.getColor());
+                    colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.color());
                     mStack.popPose();
                 }
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 for (int j = 0; j < (hover && !infoHover ? 2 : 1); j++) {
                     RenderUtil.litQuad(mStack, bufferSource, xx + 12, yy + 12, 24, 24,
-                            sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                            sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
                     bufferSource.endBatch();
                 }
                 RenderSystem.disableBlend();

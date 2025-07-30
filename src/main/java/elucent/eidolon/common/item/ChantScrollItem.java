@@ -25,8 +25,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import record;
-import var;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class ChantScrollItem extends ItemBase {
                 float flicker = 0.75f + 0.05f * (float) Math.sin(Math.toRadians(12 * ClientInfo.getClientPartialTicks() - 360.0f * i / spell.size()));
                 for (int j = 0; j < 2; j++) {
                     RenderUtil.litQuad(mStack, bufferSource, 2 + pX + 17 * (i % 7), pY + 16 * (int) (i / 7F), 16, 16,
-                            sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                            sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
                     bufferSource.endBatch();
                 }
                 RenderSystem.disableBlend();

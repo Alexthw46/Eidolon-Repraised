@@ -52,7 +52,7 @@ public class AngelSightItem extends EidolonCurio {
     }
 
     @Override
-    public void appendHoverText(@NotNull final ItemStack stack, final Level level, @NotNull final List<Component> tooltip, @NotNull final TooltipFlag flag) {
+    public void appendHoverText(@NotNull final ItemStack stack, final @NotNull TooltipContext level, @NotNull final List<Component> tooltip, @NotNull final TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
         String modeTooltip = switch (stack.getOrCreateTag().getInt("mode")) {

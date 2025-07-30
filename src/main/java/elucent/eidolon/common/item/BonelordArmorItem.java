@@ -1,11 +1,8 @@
 package elucent.eidolon.common.item;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.BonelordArmorModel;
-import elucent.eidolon.registries.EidolonAttributes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,9 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
@@ -27,8 +21,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.common.extensions.IItemExtension;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 public class BonelordArmorItem extends ArmorItem implements IItemExtension {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -84,18 +76,17 @@ public class BonelordArmorItem extends ArmorItem implements IItemExtension {
 
     public BonelordArmorItem(Type slot, Properties builderIn) {
         super(Material.INSTANCE, slot, builderIn);
-    }    
-    
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
-        attributes.putAll(super.getDefaultAttributeModifiers(pEquipmentSlot));
-        if (this.type.getSlot() == pEquipmentSlot) {
-            UUID uuid = ARMOR_MODIFIER_UUID_PER_TYPE.get(type);
-            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
-        }
-        return attributes.build();
     }
+//
+//    @Override
+//    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
+//        ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
+//        attributes.putAll(super.getDefaultAttributeModifiers(stack));
+//        if (this.type.getSlot() == pEquipmentSlot) {
+//            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
+//        }
+//        return attributes.build();
+//    }
 
     @OnlyIn(Dist.CLIENT)
     @Override

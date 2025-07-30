@@ -1,16 +1,17 @@
 package elucent.eidolon.network;
 
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.capability.WingsDataImpl;
+import elucent.eidolon.registries.EidolonCapabilities;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IPlayerData;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkDirection;
-import net.neoforged.neoforge.network.NetworkEvent;
 
 public class WingsDataUpdatePacket {
     final UUID uuid;
@@ -20,11 +21,12 @@ public class WingsDataUpdatePacket {
 
     public WingsDataUpdatePacket(Player player) {
         this.uuid = player.getUUID();
-        player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
-            lastFlapTime = d.getLastFlapTime(player);
-            dashTicks = d.getDashTicks(player);
-            isFlying = d.isFlying(player);
-        });
+        WingsDataImpl wingsData = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+        if (wingsData != null) {
+            lastFlapTime = wingsData.getLastFlapTime(player);
+            dashTicks = wingsData.getDashTicks(player);
+            isFlying = wingsData.isFlying(player);
+        }
     }
 
     public WingsDataUpdatePacket(UUID uuid, long lastFlapTime, int dashTicks, boolean isFlying) {

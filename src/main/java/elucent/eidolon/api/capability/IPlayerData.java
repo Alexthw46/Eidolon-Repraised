@@ -1,43 +1,11 @@
 package elucent.eidolon.api.capability;
 
-import elucent.eidolon.capability.PlayerDataImpl;
 import elucent.eidolon.common.item.IWingsItem;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.CapabilityManager;
-import net.neoforged.neoforge.common.capabilities.CapabilityToken;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.util.INBTSerializable;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public interface IPlayerData {
-    Capability<IPlayerData> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
-    });
-
-    class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-        final PlayerDataImpl impl = new PlayerDataImpl();
-
-        @Override
-        public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-            if (cap == INSTANCE) return (LazyOptional<T>) LazyOptional.of(() -> impl);
-            else return LazyOptional.empty();
-        }
-
-        @Override
-        public CompoundTag serializeNBT() {
-            return impl.serializeNBT();
-        }
-
-        @Override
-        public void deserializeNBT(CompoundTag nbt) {
-            impl.deserializeNBT(nbt);
-        }
-    }
 
     default ItemStack getWingsItem(Player player) {
         ItemStack[] result = new ItemStack[]{ItemStack.EMPTY};

@@ -4,7 +4,6 @@ import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
@@ -23,7 +22,7 @@ public class MindShieldingPlateItem extends ItemBase {
     @SubscribeEvent
     public static void onPotion(MobEffectEvent.Applicable event) {
         if (event.getEffectInstance().getEffect() == MobEffects.CONFUSION && CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.MIND_SHIELDING_PLATE.get()).isPresent()) {
-            event.setResult(Event.Result.DENY);
+            event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
         }
     }
 

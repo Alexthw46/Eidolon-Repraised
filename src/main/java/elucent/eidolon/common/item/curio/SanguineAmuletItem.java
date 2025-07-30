@@ -16,13 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
-import record;
 import top.theillusivec4.curios.api.SlotContext;
-import var;
 
 public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {

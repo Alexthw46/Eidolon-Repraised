@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
-import var;
 
 import static elucent.eidolon.codex.Page.colorBlit;
 
@@ -34,7 +33,7 @@ public class SignButton extends Button {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         boolean infoHover = isMouseOver(pMouseX, pMouseY);
         var mStack = pGuiGraphics.pose();
         //render the translucent sign
@@ -46,13 +45,13 @@ public class SignButton extends Button {
         mStack.pushPose();
         mStack.translate(getX() + 24, getY() + 24, 0);
         mStack.mulPose(Axis.ZP.rotationDegrees(ClientInfo.getClientPartialTicks() * 1.5f));
-        colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.getColor());
+        colorBlit(mStack, -18, -18, 128, 48, 36, 36, 256, 256, sign.color());
         mStack.popPose();
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         float flicker = 0.75f + 0.05f * (float) Math.sin(Math.toRadians(12 * ClientInfo.getClientPartialTicks()));
         for (int j = 0; j < (!infoHover ? 1 : 2); j++) {
             RenderUtil.litQuad(mStack, bufferSource, getX() + 12, getY() + 12, 24, 24,
-                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             bufferSource.endBatch();
         }
         RenderSystem.disableBlend();

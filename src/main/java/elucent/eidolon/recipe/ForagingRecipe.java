@@ -1,19 +1,20 @@
 package elucent.eidolon.recipe;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.util.RegistryUtil;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class ForagingRecipe implements Recipe<Container> {
+public class ForagingRecipe implements Recipe<CraftingInput> {
 
     public ResourceLocation id;
     public ItemStack result;
@@ -25,14 +26,18 @@ public class ForagingRecipe implements Recipe<Container> {
         this.block = block;
     }
 
+    public ForagingRecipe(ItemStack output, Ingredient block) {
+        this.result = output;
+        this.block = block;
+    }
 
     @Override
-    public boolean matches(@NotNull Container pContainer, @NotNull Level pLevel) {
+    public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
         return false;
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container pContainer, @NotNull RegistryAccess pRegistryAccess) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInput input, HolderLookup.@NotNull Provider registries) {
         return this.result.copy();
     }
 
@@ -42,13 +47,8 @@ public class ForagingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess pRegistryAccess) {
+    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider registries) {
         return result.copy();
-    }
-
-    @Override
-    public @NotNull ResourceLocation getId() {
-        return id;
     }
 
     @Override
@@ -64,7 +64,8 @@ public class ForagingRecipe implements Recipe<Container> {
     public JsonObject toJson() {
         JsonObject jsonobject = new JsonObject();
         jsonobject.addProperty("type", "eidolon:athame_foraging");
-        jsonobject.add("block", block.toJson());
+        //TODO: restore block serialization
+        //jsonobject.add("block", block.toJson());
         JsonObject resultObj = new JsonObject();
         resultObj.addProperty("item", RegistryUtil.getRegistryName(result.getItem()).toString());
         int count = result.getCount();
@@ -77,24 +78,26 @@ public class ForagingRecipe implements Recipe<Container> {
 
     public static class Serializer implements RecipeSerializer<ForagingRecipe> {
 
+        public static final MapCodec<ForagingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ItemStack.CODEC.fieldOf("output").forGetter(r -> r.result),
+                Ingredient.CODEC.fieldOf("block").forGetter(r -> r.block)
+        ).apply(instance, ForagingRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, ForagingRecipe> STREAM_CODEC = StreamCodec.composite(
+                ItemStack.STREAM_CODEC, r -> r.result,
+                Ingredient.CONTENTS_STREAM_CODEC, r -> r.block,
+                ForagingRecipe::new
+        );
+
         @Override
-        public @NotNull ForagingRecipe fromJson(@NotNull ResourceLocation pId, @NotNull JsonObject pJson) {
-
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pJson, "output"));
-            Ingredient block = Ingredient.fromJson(pJson.get("block"));
-
-            return new ForagingRecipe(pId, output, block);
+        public @NotNull MapCodec<ForagingRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public ForagingRecipe fromNetwork(@NotNull ResourceLocation pId, @NotNull FriendlyByteBuf pBuffer) {
-            return new ForagingRecipe(pId, pBuffer.readItem(), Ingredient.fromNetwork(pBuffer));
-        }
-
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, @NotNull ForagingRecipe pRecipe) {
-            pBuffer.writeItem(pRecipe.result);
-            pRecipe.block.toNetwork(pBuffer);
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, ForagingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
+
 }

@@ -29,8 +29,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -100,7 +98,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         List<Sign> runes = new ArrayList<>();
         ListTag runesTag = getEntityData().get(RUNES).getList("runes", Tag.TAG_STRING);
         for (int i = 0; i < runesTag.size(); i++) {
-            Sign r = Signs.find(new ResourceLocation(runesTag.getString(i)));
+            Sign r = Signs.find(ResourceLocation.tryParse(runesTag.getString(i)));
             if (r != null) runes.add(r);
         }
         return runes;
@@ -138,16 +136,16 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
             if (timer <= 0) {
                 CompoundTag signData = getEntityData().get(SIGNS);
                 Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
-                if (!level.isClientSide && optuuid.isPresent()) {
+                if (!level().isClientSide && optuuid.isPresent()) {
                     SignSequence seq = SignSequence.deserializeNbt(signData);
-                    Spell spell = Spells.find(seq, level);
-                    Player player = level.getPlayerByUUID(optuuid.get());
-                    if (spell != null && player != null && spell.canCast(level, blockPosition(), player, seq)) {
-                        spell.cast(level, blockPosition(), player, seq);
-                        Networking.sendToTracking(level, blockPosition(), new SpellCastPacket(player, blockPosition(), spell, seq));
+                    Spell spell = Spells.find(seq, level());
+                    Player player = level().getPlayerByUUID(optuuid.get());
+                    if (spell != null && player != null && spell.canCast(level(), blockPosition(), player, seq)) {
+                        spell.cast(level(), blockPosition(), player, seq);
+                        Networking.sendToTracking(level(), blockPosition(), new SpellCastPacket(player, blockPosition(), spell, seq));
                         getEntityData().set(SUCCEEDED, true);
                     } else {
-                        level.playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                        level().playSound(null, blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         getEntityData().set(SUCCEEDED, false);
                     }
                 }
@@ -181,18 +179,18 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
                     y = getY() + 0.1 * random.nextGaussian(),
                     z = getZ() + 0.1 * random.nextGaussian();
             for (int i = 0; i < 2; i++) {
-                level.addParticle(new RuneParticleData(
+                level().addParticle(new RuneParticleData(
                         Runes.find(ResourceLocation.tryParse("eidolon:sin")),
                         initColor.x(), initColor.y(), initColor.z(),
                         afterColor.x(), afterColor.y(), afterColor.z()
                 ), x, y, z, look.x * 0.03, look.y * 0.03, look.z * 0.03);
             }
-            level.playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
+            level().playSound(null, blockPosition(), EidolonSounds.CHANT_WORD.get(), SoundSource.NEUTRAL, 0.7f, random.nextFloat() * 0.375f + 0.625f);
             if (index + 1 >= runes.size()) {
-                Spell match = Spells.find(seq, level);
+                Spell match = Spells.find(seq, level());
                 timer = match != null ? match.getDelay() : 10;
             }
-            if (!level.isClientSide) {
+            if (!level().isClientSide) {
                 getEntityData().set(INDEX, index + 1);
                 getEntityData().set(SIGNS, seq.serializeNbt());
             }
@@ -209,7 +207,7 @@ public class ChantCasterEntity extends Entity implements IEntityAdditionalSpawnD
         if (caster == null) {
             Optional<UUID> optuuid = getEntityData().get(CASTER_ID);
             if (optuuid.isPresent()) {
-                Player e = level.getPlayerByUUID(optuuid.get());
+                Player e = level().getPlayerByUUID(optuuid.get());
                 if (e != null) caster = e;
             }
         }

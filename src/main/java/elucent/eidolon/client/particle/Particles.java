@@ -11,8 +11,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.registries.RegistryObject;
-import var;
+
 import java.util.Random;
 
 public class Particles {
@@ -205,10 +204,6 @@ public class Particles {
 
     public static ParticleBuilder create(ParticleType<?> type) {
         return new ParticleBuilder(type);
-    }
-
-    public static ParticleBuilder create(RegistryObject<?> type) {
-        return new ParticleBuilder((ParticleType<?>) type.get());
     }
 
     public static ParticleBuilder createRune(ResourceLocation id) {

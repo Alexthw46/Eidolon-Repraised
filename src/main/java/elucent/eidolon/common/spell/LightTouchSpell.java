@@ -2,8 +2,8 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
@@ -11,19 +11,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import var;
+
 import java.util.List;
 
 public class LightTouchSpell extends DarkTouchSpell {

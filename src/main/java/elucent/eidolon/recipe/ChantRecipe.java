@@ -2,6 +2,8 @@ package elucent.eidolon.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
@@ -9,10 +11,10 @@ import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.registries.Spells;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -20,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,8 @@ public class ChantRecipe implements Recipe<RecipeInput> {
         return signs.equals(new SignSequence(this.signs));
     }
 
-    public Sign[] signs() {
-        return signs.toArray(new Sign[0]);
+    public List<Sign> signs() {
+        return signs;
     }
 
     public JsonObject toJson() {
@@ -98,35 +99,39 @@ public class ChantRecipe implements Recipe<RecipeInput> {
 
     public static class Serializer implements RecipeSerializer<ChantRecipe> {
 
-        @Override
+        public static final MapCodec<ChantRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ResourceLocation.CODEC.fieldOf("id").forGetter(ChantRecipe::getId),
+                Sign.CODEC.listOf().fieldOf("signs").forGetter(recipe -> recipe.signs)
+        ).apply(instance, ChantRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, ChantRecipe> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC,
+                ChantRecipe::getId,
+                Sign.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                ChantRecipe::signs,
+                ChantRecipe::new
+        );
+
+
         public @NotNull ChantRecipe fromJson(@NotNull ResourceLocation resourceLocation, @NotNull JsonObject jsonObject) {
             //ResourceLocation chant = new ResourceLocation(jsonObject.get("chant").getAsString());
             JsonArray signsArray = jsonObject.getAsJsonArray("signs");
             List<Sign> signs = new ArrayList<>();
             for (var sign : signsArray) {
-                signs.add(Signs.find(new ResourceLocation(sign.getAsString())));
+                signs.add(Signs.find(ResourceLocation.parse(sign.getAsString())));
             }
             return new ChantRecipe(resourceLocation, signs);
         }
 
         @Override
-        public @Nullable ChantRecipe fromNetwork(@NotNull ResourceLocation resourceLocation, @NotNull FriendlyByteBuf friendlyByteBuf) {
-            //ResourceLocation chant = friendlyByteBuf.readResourceLocation();
-            int n = friendlyByteBuf.readInt();
-            List<Sign> signs = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                signs.add(Signs.find(friendlyByteBuf.readResourceLocation()));
-            }
-            return new ChantRecipe(resourceLocation, signs);
+        public @NotNull MapCodec<ChantRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public void toNetwork(@NotNull FriendlyByteBuf friendlyByteBuf, @NotNull ChantRecipe chantRecipe) {
-            //friendlyByteBuf.writeResourceLocation(chantRecipe.chantId);
-            friendlyByteBuf.writeInt(chantRecipe.signs.size());
-            for (Sign sign : chantRecipe.signs) {
-                friendlyByteBuf.writeResourceLocation(sign.getRegistryName());
-            }
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, ChantRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
+
     }
 }

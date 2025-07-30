@@ -1,22 +1,21 @@
 package elucent.eidolon.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.SummonRitual;
 import elucent.eidolon.registries.EidolonRecipes;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SummonRitualRecipe extends RitualRecipe {
@@ -24,36 +23,14 @@ public class SummonRitualRecipe extends RitualRecipe {
     ResourceLocation entity;
     int count;
 
-    public SummonRitualRecipe(ResourceLocation id, ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, int count, float healthRequirement) {
-        super(id, reagent, pedestalItems, focusItems, healthRequirement);
+    public SummonRitualRecipe(ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, int count, float healthRequirement) {
+        super(reagent, pedestalItems, focusItems, healthRequirement);
         this.entity = result;
         this.count = count;
     }
 
-    public SummonRitualRecipe(ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, int count, float healthRequirement) {
-        this(ResourceLocation.fromNamespaceAndPath(result.getNamespace(),"summon_" + result.getPath( )), result, reagent, pedestalItems, focusItems, count, healthRequirement);
-    }
-
-    @Override
-    public JsonElement asRecipe() {
-        JsonObject jsonobject = new JsonObject();
-        jsonobject.addProperty("type", "eidolon:ritual_brazier_summoning");
-
-        addRitualElements(this, jsonobject);
-
-        JsonObject resultObj = new JsonObject();
-        resultObj.addProperty("entity", entity.toString());
-        if (count > 1) {
-            resultObj.addProperty("count", count);
-        }
-
-        jsonobject.add("output", resultObj);
-
-        return jsonobject;
-    }
-
-    public SummonRitualRecipe(ResourceLocation id, ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems) {
-        super(id, reagent, pedestalItems, focusItems);
+    public SummonRitualRecipe(ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems) {
+        super(reagent, pedestalItems, focusItems);
         this.entity = result;
     }
 
@@ -68,67 +45,60 @@ public class SummonRitualRecipe extends RitualRecipe {
     }
 
     @Override
+    public @NotNull ResourceLocation getId() {
+        return ResourceLocation.fromNamespaceAndPath(entity.getNamespace(), "summon_" + entity.getPath());
+    }
+
+    @Override
     public Ritual getRitual() {
-        return new SummonRitual(ForgeRegistries.ENTITY_TYPES.getValue(entity), count).setRegistryName(id);
+        return new SummonRitual(BuiltInRegistries.ENTITY_TYPE.get(entity), count).setRegistryName(getId());
+    }
+
+    public ResourceLocation getEntityRL() {
+        return entity;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     public static class Serializer extends RitualRecipe.Serializer<SummonRitualRecipe> {
 
+        public static final MapCodec<SummonRitualRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                        ResourceLocation.CODEC.fieldOf("output").forGetter(r -> r.entity),
+                        Ingredient.CODEC.fieldOf("reagent").forGetter(r -> r.reagent),
+                        Ingredient.CODEC.listOf().fieldOf("pedestal_items").forGetter(r -> r.pedestalItems),
+                        Ingredient.CODEC.listOf().fieldOf("focus_items").forGetter(r -> r.focusItems),
+                        Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.count),
+                        Codec.FLOAT.optionalFieldOf("healthRequirement", 0.0f).forGetter(r -> r.healthRequirement)
+                ).apply(instance, SummonRitualRecipe::new)
+        );
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, SummonRitualRecipe> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC,
+                SummonRitualRecipe::getEntityRL,
+                Ingredient.CONTENTS_STREAM_CODEC,
+                SummonRitualRecipe::getReagent,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                SummonRitualRecipe::getPedestalItems,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                SummonRitualRecipe::getFocusItems,
+                ByteBufCodecs.INT,
+                SummonRitualRecipe::getCount,
+                ByteBufCodecs.FLOAT,
+                SummonRitualRecipe::getHealthRequirement,
+                SummonRitualRecipe::new
+        );
+
         @Override
-        public @NotNull SummonRitualRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-            Ingredient reagent = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "reagent"));
-            float healthRequirement = json.has("healthRequirement") ? GsonHelper.getAsFloat(json, "healthRequirement") : 0;
-            JsonArray pedestalItems = GsonHelper.getAsJsonArray(json, "pedestalItems");
-            List<Ingredient> stacks = getPedestalItems(pedestalItems);
-            JsonArray focusItems = GsonHelper.getAsJsonArray(json, "focusItems");
-            List<Ingredient> foci = getPedestalItems(focusItems);
-
-            JsonObject resultObj = GsonHelper.getAsJsonObject(json, "output");
-            ResourceLocation entity = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(resultObj,"entity" ));
-            int count = resultObj.has("count") ? GsonHelper.getAsInt(resultObj, "count") : 1;
-
-            return new SummonRitualRecipe(recipeId, entity, reagent, stacks, foci, count, healthRequirement);
+        public @NotNull MapCodec<SummonRitualRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public @Nullable SummonRitualRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
-            int length = pBuffer.readInt();
-            int length2 = pBuffer.readInt();
-            Ingredient reagent = Ingredient.fromNetwork(pBuffer);
-            List<Ingredient> stacks = new ArrayList<>();
-
-            for (int i = 0; i < length; i++) {
-                try {
-                    stacks.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-            List<Ingredient> foci = new ArrayList<>();
-            for (int i = 0; i < length2; i++) {
-                try {
-                    foci.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-
-            float healthRequirement = pBuffer.readFloat();
-
-            ResourceLocation entity = pBuffer.readResourceLocation();
-            int count = pBuffer.readInt();
-
-            return new SummonRitualRecipe(pRecipeId, entity, reagent, stacks, foci, count, healthRequirement);
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, SummonRitualRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
-
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, @NotNull SummonRitualRecipe pRecipe) {
-            super.toNetwork(pBuffer, pRecipe);
-            pBuffer.writeResourceLocation(pRecipe.entity);
-            pBuffer.writeInt(pRecipe.count);
-        }
-
     }
 }

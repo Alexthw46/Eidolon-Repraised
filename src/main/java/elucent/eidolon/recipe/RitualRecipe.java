@@ -1,15 +1,11 @@
 package elucent.eidolon.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import elucent.eidolon.api.ritual.FocusItemRequirement;
 import elucent.eidolon.api.ritual.HealthRequirement;
 import elucent.eidolon.api.ritual.ItemRequirement;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.tile.BrazierTileEntity;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
@@ -24,35 +20,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static elucent.eidolon.Eidolon.prefix;
 
 public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
 
     public Ingredient reagent; // Item on the brazier
     public List<Ingredient> pedestalItems; // Items part of the recipe, on stone hands
+
+    public List<Ingredient> getFocusItems() {
+        return focusItems;
+    }
+
+    public List<Ingredient> getInvariantItems() {
+        return invariantItems;
+    }
+
+    public List<Ingredient> getPedestalItems() {
+        return pedestalItems;
+    }
+
+    public Ingredient getReagent() {
+        return reagent;
+    }
+
+    public float getHealthRequirement() {
+        return healthRequirement;
+    }
+
     public List<Ingredient> focusItems; // Items part of the recipe, on necrotic focus
     public List<Ingredient> invariantItems = new ArrayList<>(2); // Items part of the recipe, on necrotic focus
 
-    public ResourceLocation id;
-
     float healthRequirement = 0;
 
-    public RitualRecipe(ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, List<Ingredient> invariantItems, float healthRequirement) {
-        this(id, reagent, pedestalItems, focusItems, healthRequirement);
+    public RitualRecipe(Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, List<Ingredient> invariantItems, float healthRequirement) {
+        this(reagent, pedestalItems, focusItems, healthRequirement);
         this.invariantItems = invariantItems;
     }
 
-    public RitualRecipe(ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems) {
+    public RitualRecipe(Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems) {
         this.reagent = reagent;
         this.pedestalItems = pedestalItems;
         this.focusItems = focusItems;
-        this.id = id;
     }
 
-    public RitualRecipe(ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
-        this(id, reagent, pedestalItems, focusItems);
+    public RitualRecipe(Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
+        this(reagent, pedestalItems, focusItems);
         this.healthRequirement = healthRequirement;
     }
 
@@ -60,40 +71,6 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
         reagent = Ingredient.EMPTY;
         pedestalItems = new ArrayList<>();
         focusItems = new ArrayList<>();
-        this.id = prefix("empty");
-    }
-
-    static List<Ingredient> getPedestalItems(JsonArray pedestalJson) {
-        return StreamSupport.stream(pedestalJson.spliterator(), true).map(Ingredient::fromJson).collect(Collectors.toList());
-    }
-
-    public static void addRitualElements(RitualRecipe RitualRecipe, JsonObject jsonobject) {
-        JsonArray reagent = new JsonArray();
-        reagent.add(RitualRecipe.reagent.toJson());
-        jsonobject.add("reagent", reagent);
-        if (RitualRecipe.healthRequirement > 0)
-            jsonobject.addProperty("healthRequirement", RitualRecipe.healthRequirement);
-
-        JsonArray pedestalArr = new JsonArray();
-        for (Ingredient i : RitualRecipe.pedestalItems) {
-            pedestalArr.add(i.toJson());
-        }
-        jsonobject.add("pedestalItems", pedestalArr);
-
-
-        JsonArray focusArr = new JsonArray();
-        for (Ingredient i : RitualRecipe.focusItems) {
-            focusArr.add(i.toJson());
-        }
-        jsonobject.add("focusItems", focusArr);
-
-        if (!RitualRecipe.invariantItems.isEmpty()) {
-            JsonArray invariantArr = new JsonArray();
-            for (Ingredient i : RitualRecipe.invariantItems) {
-                invariantArr.add(i.toJson());
-            }
-            jsonobject.add("invariantItems", invariantArr);
-        }
     }
 
     public boolean excludeJei() {
@@ -102,8 +79,8 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
 
     public boolean isMatch(List<ItemStack> pedestalItems, List<ItemStack> focusItems, ItemStack reagent) {
         return doesReagentMatch(reagent) &&
-               this.pedestalItems.size() == pedestalItems.size() && doItemsMatch(pedestalItems, this.pedestalItems) &&
-               this.focusItems.size() == focusItems.size() && doItemsMatch(focusItems, this.focusItems);
+                this.pedestalItems.size() == pedestalItems.size() && doItemsMatch(pedestalItems, this.pedestalItems) &&
+                this.focusItems.size() == focusItems.size() && doItemsMatch(focusItems, this.focusItems);
     }
 
     public boolean doesReagentMatch(ItemStack reag) {
@@ -126,8 +103,8 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
         if (o == null || getClass() != o.getClass()) return false;
         RitualRecipe that = (RitualRecipe) o;
         return Objects.equals(reagent, that.reagent) &&
-               Objects.equals(pedestalItems, that.pedestalItems) &&
-               Objects.equals(focusItems, that.focusItems);
+                Objects.equals(pedestalItems, that.pedestalItems) &&
+                Objects.equals(focusItems, that.focusItems);
     }
 
 
@@ -138,11 +115,11 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
 
     @Override
     public String toString() {
-        return "RitualBrazierRecipe{" + id +
-               "catalyst=" + reagent +
-               ", pedestalItems=" + pedestalItems +
-               ", focusItems=" + focusItems +
-               '}';
+        return "RitualBrazierRecipe{" +
+                "catalyst=" + reagent +
+                ", pedestalItems=" + pedestalItems +
+                ", focusItems=" + focusItems +
+                '}';
     }
 
     public abstract Ritual getRitual();
@@ -157,8 +134,6 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
         return ritual;
     }
 
-    public abstract JsonElement asRecipe();
-
     @Override
     public boolean matches(@NotNull BrazierTileEntity tile, @NotNull Level worldIn) {
         List<ItemStack> pedestalItems = new ArrayList<>(), focusItems = new ArrayList<>();
@@ -167,7 +142,7 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull BrazierTileEntity inv, @NotNull HolderLookup.Provider registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -177,29 +152,13 @@ public abstract class RitualRecipe implements Recipe<BrazierTileEntity> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
+    public @NotNull ItemStack getResultItem(@NotNull HolderLookup.Provider access) {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public @NotNull ResourceLocation getId() {
-        return id;
-    }
+    public abstract @NotNull ResourceLocation getId();
 
     public abstract static class Serializer<T extends RitualRecipe> implements RecipeSerializer<T> {
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, T recipe) {
-            buf.writeInt(recipe.pedestalItems.size());
-            buf.writeInt(recipe.focusItems.size());
-            recipe.reagent.toNetwork(buf);
-            for (Ingredient i : recipe.pedestalItems) {
-                i.toNetwork(buf);
-            }
-            for (Ingredient i : recipe.focusItems) {
-                i.toNetwork(buf);
-            }
-            buf.writeFloat(recipe.healthRequirement);
-        }
     }
 }

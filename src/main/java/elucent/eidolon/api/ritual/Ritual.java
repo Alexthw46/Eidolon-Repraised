@@ -109,7 +109,6 @@ public abstract class Ritual implements Cloneable {
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Ritual clone() {
-
         return cloneRitual().addInvariants(this.getInvariants()).setRegistryName(getRegistryName());
     }
 

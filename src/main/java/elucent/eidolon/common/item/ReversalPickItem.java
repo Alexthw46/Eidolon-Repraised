@@ -8,7 +8,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class ReversalPickItem extends PickaxeItem {
     public ReversalPickItem(Properties builderIn) {
-        super(Tiers.MagicToolTier.INSTANCE, 1, -2.8F, builderIn);
+        super(Tiers.MagicToolTier.INSTANCE, builderIn.attributes(PickaxeItem.createAttributes(Tiers.MagicToolTier.INSTANCE, 1, -2.8F)));
         NeoForge.EVENT_BUS.addListener(ReversalPickItem::onStartBreak);
     }
 
@@ -33,7 +32,7 @@ public class ReversalPickItem extends PickaxeItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this.loreTag != null) {
             tooltip.add(Component.literal(""));
             tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
@@ -43,7 +42,7 @@ public class ReversalPickItem extends PickaxeItem {
     @SubscribeEvent
     public static void onStartBreak(PlayerEvent.BreakSpeed event) {
         if (event.getEntity().getMainHandItem().getItem() instanceof ReversalPickItem && event.getPosition().isPresent()) {
-            float hardness = event.getState().getDestroySpeed(event.getEntity().level, event.getPosition().get());
+            float hardness = event.getState().getDestroySpeed(event.getEntity().level(), event.getPosition().get());
             float adjHardness = 1 / (hardness / 2.0f);
             float newSpeed = Mth.sqrt(event.getOriginalSpeed() * 0.25f) * Mth.sqrt(hardness / adjHardness);
             event.setNewSpeed(newSpeed);

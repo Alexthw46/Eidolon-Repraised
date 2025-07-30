@@ -167,9 +167,11 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:embeddium-908741:4800420")
     //runtimeOnly fg.deobf("curse.maven:modernfix-790626:4792389")
 
-    //compileOnly fg.deobf("curse.maven:placebo-283644:5414631")
-    //compileOnly fg.deobf("curse.maven:apothic-attributes-898963:5340012")
-    //compileOnly fg.deobf("curse.maven:apotheosis-313970:5486368")
+    compileOnly "curse.maven:placebo-283644:6751290"
+    compileOnly "curse.maven:apothic-attributes-898963:6751650"
+    compileOnly "curse.maven:apothic-enchanting-1063926:6751658"
+    compileOnly "curse.maven:apotheosis-313970:6545942"
+    compileOnly "curse.maven:apothic-spawners-986583:6751589"
 
     //runtimeOnly fg.deobf("curse.maven:amendments-896746:5200593")
     //runtimeOnly fg.deobf("curse.maven:selene-499980:5201144")

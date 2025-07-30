@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
-import var;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,7 +121,7 @@ public class CodexGui extends Screen {
 
         for (Sign sign : chant) {
             RenderUtil.litQuad(mStack.pose(), buffersource, bgx + 4, baseY + 4, 16, 16,
-                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             buffersource.endBatch();
             bgx += 24;
         }
@@ -131,7 +131,7 @@ public class CodexGui extends Screen {
             float flicker = 0.75f + 0.25f * (float) Math.sin(Math.toRadians(12 * ClientInfo.getClientPartialTicks() - 360.0f * i / chant.size()));
             Sign sign = chant.get(i);
             RenderUtil.litQuad(mStack.pose(), buffersource, bgx + 4, baseY + 4, 16, 16,
-                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.getSprite()));
+                    sign.getRed() * flicker, sign.getGreen() * flicker, sign.getBlue() * flicker, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
             buffersource.endBatch();
             bgx += 24;
         }

@@ -2,6 +2,7 @@ package elucent.eidolon.common.entity;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.util.EntityUtil;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,13 +16,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+
 import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class SpellProjectileEntity extends Projectile {
-    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"trackable" ));
-    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"trackable_blacklist" ));
+    public static final TagKey<EntityType<?>> TRACKABLE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "trackable"));
+    public static final TagKey<EntityType<?>> TRACKABLE_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "trackable_blacklist"));
 
     public Predicate<Entity> trackingPredicate = this::shouldTrack;
     public Predicate<Entity> compulsoryTrackingPredicate = this::mustTrack;
@@ -69,7 +70,7 @@ public abstract class SpellProjectileEntity extends Projectile {
 
         super.tick();
 
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             HitResult ray = ProjectileUtil.getHitResultOnMoveVector(this, impactPredicate);
             if (ray.getType() == HitResult.Type.ENTITY) {
                 onImpact(ray, ((EntityHitResult)ray).getEntity());
@@ -106,11 +107,6 @@ public abstract class SpellProjectileEntity extends Projectile {
         if (noImmunityFrame) {
             target.invulnerableTime = prevHurtResist;
         }
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        //
     }
 
 }

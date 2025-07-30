@@ -1,10 +1,8 @@
 package elucent.eidolon.common.item.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.common.item.IWingsItem;
+import elucent.eidolon.registries.EidolonCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -69,10 +67,10 @@ public class RavenCloakModel extends HumanoidModel<LivingEntity> {
     @Override
     public void setupAnim(@NotNull LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity instanceof Player p) {
-            float pticks = Minecraft.getInstance().getFrameTime();
-            IPlayerData data = p.getCapability(IPlayerData.INSTANCE).resolve().get();
-            float timeSinceFlying = Mth.clamp(p.level.getGameTime() - data.getFlightStartTime(p) + pticks, 0, 10);
-            float timeSinceFlapping = Mth.clamp(p.level.getGameTime() - data.getLastFlapTime(p) + pticks, 0.01F, 20);
+            float pticks = Minecraft.getInstance().getFrameTimeNs();
+            var data = p.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            float timeSinceFlying = Mth.clamp(p.level().getGameTime() - data.getFlightStartTime(p) + pticks, 0, 10);
+            float timeSinceFlapping = Mth.clamp(p.level().getGameTime() - data.getLastFlapTime(p) + pticks, 0.01F, 20);
 
             ModelPart leftMid = leftWing.getChild("left_wing_mid");
             ModelPart leftTip = leftMid.getChild("left_wing_tip");
@@ -187,8 +185,4 @@ public class RavenCloakModel extends HumanoidModel<LivingEntity> {
         return ImmutableList.of(root.getChild("body"));
     }
 
-    @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-    }
 }

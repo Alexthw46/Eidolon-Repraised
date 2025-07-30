@@ -2,13 +2,14 @@ package elucent.eidolon.codex;
 
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class SmeltingPage extends RecipePage<AbstractCookingRecipe> {
@@ -21,7 +22,7 @@ public class SmeltingPage extends RecipePage<AbstractCookingRecipe> {
     }
 
     public SmeltingPage(ItemStack result, ItemStack defaultinput) {
-        super(BACKGROUND, ForgeRegistries.ITEMS.getKey(result.getItem()), result);
+        super(BACKGROUND, BuiltInRegistries.ITEM.getKey(result.getItem()), result);
         this.input = defaultinput;
     }
 
@@ -34,6 +35,10 @@ public class SmeltingPage extends RecipePage<AbstractCookingRecipe> {
 
     @Override
     public @Nullable AbstractCookingRecipe getRecipe(ResourceLocation id) {
-        return (AbstractCookingRecipe) Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+        RecipeHolder<?> recipeHolder = Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+        if (recipeHolder == null || !(recipeHolder.value() instanceof AbstractCookingRecipe recipe)) {
+            return null;
+        }
+        return recipe;
     }
 }

@@ -16,8 +16,7 @@ import static elucent.eidolon.Eidolon.prefix;
 
 public class AdvancementTriggers {
 
-    //TODO Change to resource locations in 1.21
-    static final HashMap<String, CriterionTrigger<?>> triggers = new HashMap<>();
+    static final HashMap<ResourceLocation, CriterionTrigger<?>> triggers = new HashMap<>();
 
     public static void init() {
         WICKED = register(new PlayerTrigger(), prefix("wicked_path"));
@@ -51,33 +50,33 @@ public class AdvancementTriggers {
 
     public static <T extends CriterionTrigger<?>> T register(T trigger, ResourceLocation id) {
         T cTrigger = CriteriaTriggers.register(id.toString(),trigger);
-        triggers.put(id.toString(), cTrigger);
+        triggers.put(id, cTrigger);
         return cTrigger;
     }
 
 
     public static void triggerSign(Sign sign, ServerPlayer player) {
-        switch (sign.getRegistryName().getPath()) {
-            case "wicked" -> WICKED.trigger(player);
-            case "sacred" -> SACRED.trigger(player);
+        switch (sign.getRegistryName().toString()) {
+            case "eidolon:wicked" -> WICKED.trigger(player);
+            case "eidolon:sacred" -> SACRED.trigger(player);
         }
     }
 
-    public static void triggerResearch(String research, ServerPlayer player) {
+    public static void triggerResearch(ResourceLocation research, ServerPlayer player) {
         var trigger = triggers.get(research);
         if (trigger instanceof PlayerTrigger playerTrigger) {
             playerTrigger.trigger(player);
-        } else switch (research) {
+        } else switch (research.toString()) {
             case "eidolon:frost" -> FROST.trigger(player);
             case "eidolon:flames" -> FLAME.trigger(player);
-            case "sacrifice_mob" -> SACRIFICE.trigger(player);
-            case "basic_incense" -> INCENSE.trigger(player);
-            case "sacrifice_villager" -> VSACRIFICE.trigger(player);
-            case "heal_villager" -> LAY_ON_HANDS.trigger(player);
-            case "zombify_villager" -> ZOMBIFY.trigger(player);
-            case "cure_zombie" -> CURE_ZOMBIE.trigger(player);
-            case "enthrall_undead" -> ENTHRALL.trigger(player);
-            case "smite_undead" -> SMITE.trigger(player);
+            case "eidolon:sacrifice_mob" -> SACRIFICE.trigger(player);
+            case "eidolon:basic_incense" -> INCENSE.trigger(player);
+            case "eidolon:sacrifice_villager" -> VSACRIFICE.trigger(player);
+            case "eidolon:heal_villager" -> LAY_ON_HANDS.trigger(player);
+            case "eidolon:zombify_villager" -> ZOMBIFY.trigger(player);
+            case "eidolon:cure_zombie" -> CURE_ZOMBIE.trigger(player);
+            case "eidolon:enthrall_undead" -> ENTHRALL.trigger(player);
+            case "eidolon:smite_undead" -> SMITE.trigger(player);
         }
     }
 

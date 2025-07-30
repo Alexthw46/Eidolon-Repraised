@@ -2,22 +2,17 @@ package elucent.eidolon.gui;
 
 import com.google.common.collect.Lists;
 import elucent.eidolon.Config;
-import elucent.eidolon.compat.CompatHandler;
-import elucent.eidolon.compat.apotheosis.Apotheosis;
 import elucent.eidolon.datagen.EidEnchantmentTagProvider;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.Mth;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,7 +21,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -34,11 +28,12 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.tags.ITag;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+
+import static net.neoforged.neoforge.common.CommonHooks.onPlayerEnchantItem;
 
 public class SoulEnchanterContainer extends AbstractContainerMenu {
     private static final String SOUL_ENCHANT_USES_TAG = "soul_enchant_uses";
@@ -51,7 +46,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     };
 
     private final ContainerLevelAccess worldPosCallable;
-    private final Random rand = new Random();
+    private final RandomSource rand = RandomSource.create();
     private final DataSlot xpSeed = DataSlot.standalone();
     public final int[] enchantClue = new int[]{-1, -1, -1};
     public final int[] worldClue = new int[]{-1, -1, -1};
@@ -74,13 +69,13 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
             }
         });
 
-        for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for(int k = 0; k < 9; ++k) {
+        for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
 
@@ -100,69 +95,75 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         if (inventoryIn == this.tableInventory) {
             ItemStack itemstack = inventoryIn.getItem(0);
 
-            if (isValidItem(itemstack)) {
-                this.worldPosCallable.execute((world, pos) -> {
-                    this.rand.setSeed(xpSeed.get());
+            this.worldPosCallable.execute((world, pos) -> {
+                        if (isValidItem(itemstack, world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT))) {
 
-                    for (int i1 = 0; i1 < 3; ++i1) {
-                        enchantClue[i1] = -1;
-                        worldClue[i1] = -1;
-                    }
+                            IdMap<Holder<Enchantment>> idmap = world.registryAccess().registryOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
 
-                    for (int j1 = 0; j1 < 3; ++j1) {
-                        List<EnchantmentInstance> list = getEnchantmentList(itemstack, j1);
+                            this.rand.setSeed(xpSeed.get());
 
-                        if (!list.isEmpty()) {
-                            EnchantmentInstance enchantmentdata = list.get(rand.nextInt(list.size()));
-                            enchantClue[j1] = BuiltInRegistries.ENCHANTMENT.getId(enchantmentdata.enchantment);
-                            worldClue[j1] = enchantmentdata.level;
+                            for (int i1 = 0; i1 < 3; ++i1) {
+                                enchantClue[i1] = -1;
+                                worldClue[i1] = -1;
+                            }
+
+                            for (int j1 = 0; j1 < 3; ++j1) {
+                                List<EnchantmentInstance> list = getEnchantmentList(world.registryAccess(), itemstack, j1);
+
+                                if (!list.isEmpty()) {
+                                    EnchantmentInstance enchantmentinstance = list.get(rand.nextInt(list.size()));
+                                    enchantClue[j1] = idmap.getId(enchantmentinstance.enchantment);
+                                    worldClue[j1] = enchantmentinstance.level;
+                                }
+                            }
+
+                            this.broadcastChanges();
+                        } else {
+                            for (int i = 0; i < 3; ++i) {
+                                this.enchantClue[i] = -1;
+                                this.worldClue[i] = -1;
+                            }
                         }
                     }
-
-                    this.broadcastChanges();
-                });
-            } else {
-                for (int i = 0; i < 3; ++i) {
-                    this.enchantClue[i] = -1;
-                    this.worldClue[i] = -1;
-                }
-            }
+            );
         }
-
     }
 
-    private boolean isValidItem(final ItemStack itemStack) {
-        return !itemStack.isEmpty() && canSoulEnchant(itemStack) && hasValidEnchantmentAmount(itemStack) && (itemStack.isEnchantable() || itemStack.isEnchanted() || itemStack.getItem() == Items.ENCHANTED_BOOK);
+    private boolean isValidItem(final ItemStack itemStack, HolderLookup.RegistryLookup<Enchantment> tHolderLookup) {
+        return !itemStack.isEmpty() && canSoulEnchant(itemStack) && hasValidEnchantmentAmount(itemStack, tHolderLookup) && (itemStack.isEnchantable() || itemStack.isEnchanted() || itemStack.getItem() == Items.ENCHANTED_BOOK);
     }
 
-    private boolean hasValidEnchantmentAmount(final ItemStack itemStack) {
+    private boolean hasValidEnchantmentAmount(final ItemStack itemStack, HolderLookup.
+            RegistryLookup<Enchantment> tHolderLookup) {
         if (Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get() < 0) {
             return true;
         }
 
-        return itemStack.getAllEnchantments().size() <= Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get();
+        return itemStack.getAllEnchantments(tHolderLookup).size() <= Config.SOUL_ENCHANTER_MAXIMUM_ENCHANTMENTS.get();
     }
 
     private void incrementSoulEnchant(final ItemStack enchantedItem) {
         if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return;
         }
-
-        CompoundTag tag = enchantedItem.getOrCreateTag();
-        tag.putInt(SOUL_ENCHANT_USES_TAG, tag.getInt(SOUL_ENCHANT_USES_TAG) + 1);
+        // TODO: Re-enable this when we have item components
+//
+//        CompoundTag tag = enchantedItem.getOrCreateTag();
+//        tag.putInt(SOUL_ENCHANT_USES_TAG, tag.getInt(SOUL_ENCHANT_USES_TAG) + 1);
     }
 
     private boolean canSoulEnchant(final ItemStack itemstack) {
         if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return true;
         }
-
-        CompoundTag tag = itemstack.getTag();
-
-        if (tag != null) {
-            int soulEnchantUses = tag.getInt(SOUL_ENCHANT_USES_TAG);
-            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
-        }
+        // TODO: Re-enable this when we have item components
+//
+//        CompoundTag tag = itemstack.getTag();
+//
+//        if (tag != null) {
+//            int soulEnchantUses = tag.getInt(SOUL_ENCHANT_USES_TAG);
+//            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
+//        }
 
         return true;
     }
@@ -173,7 +174,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     public boolean clickMenuButton(@NotNull Player playerIn, int id) {
         ItemStack itemstack = this.tableInventory.getItem(0);
 
-        if (!isValidItem(itemstack)) {
+        if (!isValidItem(itemstack, playerIn.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT))) {
             return false;
         }
 
@@ -188,34 +189,15 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         } else {
             this.worldPosCallable.execute((p_217003_6_, p_217003_7_) -> {
                 ItemStack itemstack2 = itemstack;
-                List<EnchantmentInstance> list = this.getEnchantmentList(itemstack, id);
+                RegistryAccess registryAccess = p_217003_6_.registryAccess();
+                List<EnchantmentInstance> list = this.getEnchantmentList(registryAccess, itemstack, id);
                 if (!list.isEmpty()) {
                     playerIn.onEnchantmentPerformed(itemstack, experienceLevelCost);
-                    boolean flag = itemstack.getItem() == Items.BOOK;
-                    if (flag) {
-                        itemstack2 = new ItemStack(Items.ENCHANTED_BOOK);
-                        CompoundTag compoundnbt = itemstack.getTag();
-                        if (compoundnbt != null) {
-                            itemstack2.setTag(compoundnbt.copy());
-                        }
+                    itemstack2 = itemstack.getItem().applyEnchantments(itemstack, list);
 
-                        this.tableInventory.setItem(0, itemstack2);
-                    }
+                    this.tableInventory.setItem(0, itemstack2);
 
-                    Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(itemstack2);
-                    if (enchants.size() > 0) {
-                        for (EnchantmentInstance data : list) {
-                            if (enchants.containsKey(data.enchantment)) enchants.replace(data.enchantment, data.level);
-                            else enchants.put(data.enchantment, data.level);
-                        }
-                        EnchantmentHelper.setEnchantments(enchants, itemstack2);
-                    } else for (EnchantmentInstance data : list) {
-                        if (flag) {
-                            EnchantedBookItem.addEnchantment(itemstack2, data);
-                        } else {
-                            itemstack2.enchant(data.enchantment, data.level);
-                        }
-                    }
+                    onPlayerEnchantItem(playerIn, itemstack2, list);
 
                     if (!playerIn.getAbilities().instabuild) {
                         incrementSoulEnchant(itemstack2);
@@ -227,7 +209,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
                     playerIn.awardStat(Stats.ENCHANT_ITEM);
                     if (playerIn instanceof ServerPlayer) {
-                        CriteriaTriggers.ENCHANTED_ITEM.trigger((ServerPlayer)playerIn, itemstack2, i);
+                        CriteriaTriggers.ENCHANTED_ITEM.trigger((ServerPlayer) playerIn, itemstack2, i);
                     }
 
                     this.tableInventory.setChanged();
@@ -240,68 +222,29 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         }
     }
 
-    public static int getEnchantmentLevel(Enchantment enchID, ItemStack stack) {
-        if (stack.isEmpty()) {
-            return 0;
-        } else {
-            ResourceLocation resourcelocation = BuiltInRegistries.ENCHANTMENT.getKey(enchID);
-            ListTag listnbt = stack.getItem() == Items.ENCHANTED_BOOK ? EnchantedBookItem.getEnchantments(stack) : stack.getEnchantmentTags();
-
-            for(int i = 0; i < listnbt.size(); ++i) {
-                CompoundTag compoundnbt = listnbt.getCompound(i);
-                ResourceLocation resourcelocation1 = ResourceLocation.tryParse(compoundnbt.getString("id"));
-                if (resourcelocation1 != null && resourcelocation1.equals(resourcelocation)) {
-                    return Mth.clamp(compoundnbt.getInt("lvl"), 0, 255);
-                }
-            }
-
-            return 0;
-        }
-    }
-
-    private List<EnchantmentInstance> getEnchantmentList(ItemStack stack, int enchantSlot) {
+    private List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack,
+                                                         int enchantSlot) {
         this.rand.setSeed(this.xpSeed.get() + enchantSlot);
-        ItemStack test = stack.copy();
-        EnchantmentHelper.setEnchantments(new HashMap<>(), test);
-        if (test.getItem() == Items.ENCHANTED_BOOK) test = new ItemStack(Items.BOOK);
-        final ItemStack finalTest = test;
 
-        Map<Enchantment, Integer> existing = EnchantmentHelper.getEnchantments(stack);
-        List<Enchantment> valid = Lists.newArrayList(ForgeRegistries.ENCHANTMENTS.getValues());
-        ITag<Enchantment> blacklist = Objects.requireNonNull(ForgeRegistries.ENCHANTMENTS.tags()).getTag(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST);
+        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
+        if (optional.isEmpty()) {
+            return List.of();
+        } else {
+            var valid = Lists.newArrayList(optional.get());
+            valid.removeIf(
+                    enchantment -> enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST)
 
-        valid.removeIf(enchantment -> {
-            if (blacklist.contains(enchantment)) {
-                return true;
+                    //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
+                    //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
+                    //            }
+            );
+            List<EnchantmentInstance> list = EnchantmentHelper.selectEnchantment(this.rand, stack, 0, valid.stream());
+            if (stack.is(Items.BOOK) && list.size() > 1) {
+                list.remove(this.rand.nextInt(list.size()));
             }
 
-            boolean canApply = enchantment.canEnchant(finalTest) || finalTest.getItem() == Items.BOOK && enchantment.isAllowedOnBooks();
-
-            if (!canApply || enchantment.isCurse()) {
-                return true;
-            }
-
-            if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
-            }
-
-            return enchantment.isTreasureOnly() || existing.containsKey(enchantment) && existing.get(enchantment) >= enchantment.getMaxLevel();
-        });
-
-        for (Map.Entry<Enchantment, Integer> e : existing.entrySet()) {
-            valid.removeIf(next -> !e.getKey().isCompatibleWith(next) && e.getKey() != next);
+            return list;
         }
-
-        List<EnchantmentInstance> enchants = new ArrayList<>();
-        if (valid.isEmpty()) return enchants;
-        // System.out.println("" + enchantSlot + ": " + valid.stream().reduce("", (a, b) -> "" + a + ", " + b, (a, b) -> "" + a + ", " + b));
-        for (int i = 0; i < enchantSlot; i ++) rand.nextInt(valid.size());
-        Enchantment enchant = valid.get(this.rand.nextInt(valid.size()));
-        int level = getEnchantmentLevel(enchant, stack);
-        if (level > 0) enchants.add(new EnchantmentInstance(enchant, level + 1));
-        else enchants.add(new EnchantmentInstance(enchant, 1));
-
-        return enchants;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -337,7 +280,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
     public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 0) {

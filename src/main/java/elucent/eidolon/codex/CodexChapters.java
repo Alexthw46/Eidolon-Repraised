@@ -23,11 +23,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 import org.lwjgl.opengl.GL11;
-import var;
 
 import java.util.List;
 import java.util.Map;
@@ -985,26 +983,24 @@ public class CodexChapters {
             float time = 20F;
             float angles = lexiconLookupTime / time * 360F;
             float a = 0.5F + 0.2F * ((float) Math.cos(ClientInfo.totalTicks / 10.0) * 0.5F + 0.5F);
-
             RenderSystem.enableBlend();
+            RenderSystem.disableDepthTest();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            Tesselator tesselator = Tesselator.getInstance();
-            BufferBuilder buf = tesselator.getBuilder();
+            BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
-            buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-
-            buf.vertex(cx, cy, 0).color(0.5F, 0.0F, 0.6F, a).endVertex();
+            buf.addVertex(cx, cy, 0).setColor(0.5F, 0.0F, 0.6F, a);
 
             for (float i = angles; i > 0; i--) {
                 double rad = Math.toRadians(i - 90);
-                buf.vertex((float) (cx + Math.cos(rad) * r), (float) (cy + Math.sin(rad) * r), 0).color(0.75F, 0F, 1.0F, 1F).endVertex();
+                buf.addVertex((float) (cx + Math.cos(rad) * r), (float) (cy + Math.sin(rad) * r), 0).setColor(0.75F, 0F, 1.0F, 1F);
             }
 
-            buf.vertex(cx, cy, 0).color(.75F, 0F, 1.0F, 0F).endVertex();
+            buf.addVertex(cx, cy, 0).setColor(.75F, 0F, 1.0F, 0F);
 
-            tesselator.end();
+            BufferUploader.drawWithShader(buf.build());
             RenderSystem.disableBlend();
+            RenderSystem.enableDepthTest();
 
             if (lexiconLookupTime >= time) {
                 CodexGui.openToEntry(docEntry.chapter, 0);

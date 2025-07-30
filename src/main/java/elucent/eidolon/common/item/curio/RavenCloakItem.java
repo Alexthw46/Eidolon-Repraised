@@ -1,7 +1,8 @@
 package elucent.eidolon.common.item.curio;
 
-import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.capability.WingsDataImpl;
 import elucent.eidolon.common.item.IWingsItem;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -52,7 +53,7 @@ public class RavenCloakItem extends EidolonCurio implements IWingsItem {
 
     @Override
     public void onDashTick(Player player, Level level, ItemStack stack, int remainingTicks) {
-        float coeff = remainingTicks / (float)getDashTicks(stack);
+        float coeff = remainingTicks / (float) getDashTicks(stack);
         coeff = 1 - (1 - coeff) * (1 - coeff) + 0.25f;
         player.setDeltaMovement(player.getDeltaMovement().scale(0.8).add(player.getLookAngle().scale(coeff * 0.2)));
     }
@@ -64,6 +65,8 @@ public class RavenCloakItem extends EidolonCurio implements IWingsItem {
 
     @Override
     public void onDashFlap(Player player, Level level, ItemStack stack, int dashTicks) {
-        player.getCapability(IPlayerData.INSTANCE).ifPresent(d -> d.setDashTicks(getDashTicks(stack)));
+        WingsDataImpl cap = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+        if (cap != null)
+            cap.setDashTicks(getDashTicks(stack));
     }
 }

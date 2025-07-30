@@ -1,5 +1,6 @@
 package elucent.eidolon.common.block;
 
+import com.mojang.serialization.MapCodec;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
@@ -30,6 +31,13 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     public HerbBlockBase(BlockBehaviour.Properties builder) {
         super(builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
+    }
+
+    public static MapCodec<HerbBlockBase> CODEC = simpleCodec(HerbBlockBase::new);
+
+    @Override
+    protected @NotNull MapCodec<? extends BushBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -43,8 +51,11 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull Direction facing, @NotNull IPlantable plantable) {
-        return state.is(Registry.PLANTER.get());
+    public @NotNull TriState canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos soilPosition, @NotNull Direction facing, BlockState plant) {
+        if (plant.getBlock() instanceof HerbBlockBase && state.is(Registry.PLANTER.get())) {
+            return TriState.TRUE;
+        }
+        return TriState.DEFAULT;
     }
 
     @Override
@@ -98,8 +109,9 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
         return this.defaultBlockState().setValue(AGE, pAge);
     }
 
-    public boolean isValidBonemealTarget(@NotNull LevelReader pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, boolean pIsClient) {
-        return this.canGrow(pState);
+    @Override
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
+        return this.canGrow(state);
     }
 
     public boolean isBonemealSuccess(@NotNull Level pLevel, @NotNull RandomSource pRandom, @NotNull BlockPos pPos, @NotNull BlockState pState) {

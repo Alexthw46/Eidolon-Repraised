@@ -1,15 +1,13 @@
 package elucent.eidolon.registries;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IKnowledge;
-import elucent.eidolon.api.capability.IPlayerData;
-import elucent.eidolon.api.capability.IReputation;
-import elucent.eidolon.api.capability.ISoul;
-import elucent.eidolon.capability.*;
+import elucent.eidolon.capability.KnowledgeCommand;
+import elucent.eidolon.capability.ReputationCommand;
 import elucent.eidolon.client.particle.*;
 import elucent.eidolon.common.block.*;
 import elucent.eidolon.common.block.CandleBlock;
 import elucent.eidolon.common.item.*;
+import elucent.eidolon.common.item.Tiers;
 import elucent.eidolon.common.item.Tiers.SilverTier;
 import elucent.eidolon.common.item.curio.*;
 import elucent.eidolon.common.tile.*;
@@ -61,7 +59,6 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -250,7 +247,7 @@ public class Registry {
     public static final DeferredHolder<Item, Item> SILVER_AXE = addItem("silver_axe", () -> new AxeItem(SilverTier.INSTANCE, itemProps().attributes(AxeItem.createAttributes(SilverTier.INSTANCE, 6, -2.4f))));
     public static final DeferredHolder<Item, Item> SILVER_SHOVEL = addItem("silver_shovel", () -> new ShovelItem(SilverTier.INSTANCE, itemProps().attributes(ShovelItem.createAttributes(SilverTier.INSTANCE, 1.5f, -2.4f))));
     public static final DeferredHolder<Item, Item> SILVER_HOE = addItem("silver_hoe", () -> new HoeItem(SilverTier.INSTANCE, itemProps().attributes(HoeItem.createAttributes(SilverTier.INSTANCE, 0, -2.4f))));
-    public static final DeferredHolder<Item, Item> ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1)));
+    public static final DeferredHolder<Item, Item> ATHAME = addItem("athame", () -> new AthameItem(itemProps().stacksTo(1).attributes(SwordItem.createAttributes(Tiers.PewterTier.INSTANCE, 1, -1.6f))));
     public static final DeferredHolder<Item, Item> REVERSAL_PICK = addItem("reversal_pick", () -> new ReversalPickItem(itemProps()
             .rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, Item> VOID_AMULET = addItem("void_amulet", () -> new VoidAmuletItem(itemProps()
@@ -593,10 +590,10 @@ public class Registry {
             .build();
 
     public void registerCaps(RegisterCapabilitiesEvent event) {
-        event.register(IReputation.class);
-        event.register(IKnowledge.class);
-        event.register(ISoul.class);
-        event.register(IPlayerData.class);
+//        event.register(IReputation.class);
+//        event.register(IKnowledge.class);
+//        event.register(ISoul.class);
+//        event.register(IPlayerData.class);
     }
 
     @SuppressWarnings("deprecation")

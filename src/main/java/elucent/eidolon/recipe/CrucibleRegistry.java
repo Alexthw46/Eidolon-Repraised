@@ -42,7 +42,7 @@ public class CrucibleRegistry {
         for (int i = 0; i < steps.size(); i++) {
             CrucibleStep step = steps.get(i);
             CrucibleRecipe.Step otherStep = otherSteps.get(i);
-            if (step.getStirs() != otherStep.stirs) return false;
+            if (step.getStirs() != otherStep.stirs()) return false;
             if (!doContentsMatch(step, otherStep)) return false;
         }
 
@@ -52,7 +52,7 @@ public class CrucibleRegistry {
     private static boolean doContentsMatch(CrucibleStep step, CrucibleRecipe.Step otherStep) {
         for (ItemStack input : step.getContents()) {
             boolean doesInputHaveMatch = false;
-            for (Ingredient ingredient : otherStep.matches) {
+            for (Ingredient ingredient : otherStep.matches()) {
                 if (ingredient.test(input)) {
                     doesInputHaveMatch = true;
                     break;

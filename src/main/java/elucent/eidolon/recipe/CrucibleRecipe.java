@@ -1,29 +1,27 @@
 package elucent.eidolon.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.common.tile.CrucibleTileEntity.CrucibleStep;
 import elucent.eidolon.registries.EidolonRecipes;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrucibleRecipe implements Recipe<Container> {
+import static elucent.eidolon.recipe.CrucibleRecipe.Step.STEP_CODEC;
+
+public class CrucibleRecipe implements Recipe<CraftingInput> {
     List<Step> steps;
     ResourceLocation registryName;
     final ItemStack result;
@@ -33,7 +31,7 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public @NotNull NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
         for (Step step : steps) {
             ingredients.addAll(step.matches);
@@ -41,14 +39,28 @@ public class CrucibleRecipe implements Recipe<Container> {
         return ingredients;
     }
 
-    public static class Step {
-        public final List<Ingredient> matches = new ArrayList<>();
-        public final int stirs;
+    public record Step(
+            int stirs,
+            List<Ingredient> matches) {
 
         public Step(int stirs, List<Ingredient> matches) {
             this.stirs = stirs;
-            this.matches.addAll(matches);
+            this.matches = new ArrayList<>(matches);
         }
+
+        public static final Codec<Step> STEP_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.INT.optionalFieldOf("stirs", 0).forGetter(s -> s.stirs),
+                Ingredient.CODEC.listOf().fieldOf("items").forGetter(s -> s.matches)
+        ).apply(instance, Step::new));
+
+        public static StreamCodec<RegistryFriendlyByteBuf, Step> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.INT,
+                Step::stirs,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Step::matches,
+                Step::new
+        );
+
     }
 
     public CrucibleRecipe(List<Step> steps, ItemStack result) {
@@ -102,12 +114,12 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(@NotNull Container inv, @NotNull Level worldIn) {
+    public boolean matches(@NotNull CraftingInput inv, @NotNull Level worldIn) {
         return false; // we don't use a single inventory, so we ignore this one
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inv, @NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInput inv, @NotNull HolderLookup.Provider registryAccess) {
         return getResultItem();
     }
 
@@ -117,7 +129,7 @@ public class CrucibleRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(@NotNull HolderLookup.Provider registryAccess) {
         return result;
     }
 
@@ -125,56 +137,36 @@ public class CrucibleRecipe implements Recipe<Container> {
         return result;
     }
 
-    @Override
     public @NotNull ResourceLocation getId() {
         return registryName;
     }
 
     public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
+
+        public static final MapCodec<CrucibleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                STEP_CODEC.listOf().fieldOf("steps").forGetter(r -> r.steps),
+                ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
+        ).apply(instance, CrucibleRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, CrucibleRecipe> STREAM_CODEC = StreamCodec.composite(
+                Step.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                CrucibleRecipe::getSteps,
+                ItemStack.STREAM_CODEC,
+                CrucibleRecipe::getResultItem,
+                CrucibleRecipe::new
+        );
+
+
         @Override
-        public @NotNull CrucibleRecipe fromJson(@NotNull ResourceLocation recipeId, JsonObject json) {
-            List<Step> steps = new ArrayList<>();
-            JsonArray stepArray = json.getAsJsonArray("steps");
-            for (JsonElement elt : stepArray) {
-                if (!elt.isJsonObject()) throw new JsonSyntaxException("Expected JSON object for crucible step.");
-                JsonObject step = elt.getAsJsonObject();
-                int stirs = step.has("stirs") ? step.get("stirs").getAsInt() : 0;
-                List<Ingredient> matches = new ArrayList<>();
-                if (step.has("items")) {
-                    JsonArray items = step.get("items").getAsJsonArray();
-                    for (JsonElement item : items) matches.add(Ingredient.fromJson(item));
-                }
-                steps.add(new Step(stirs, matches));
-            }
-            ItemStack result = CraftingHelper.getItemStack(json.getAsJsonObject("result"), true);
-            return CrucibleRegistry.register(new CrucibleRecipe(steps, result).setRegistryName(recipeId));
+        public @NotNull MapCodec<CrucibleRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public CrucibleRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int count = buffer.readInt();
-            List<Step> steps = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
-                int stirs = buffer.readInt();
-                int ingredients = buffer.readInt();
-                List<Ingredient> matches = new ArrayList<>();
-                for (int j = 0; j < ingredients; j++) matches.add(Ingredient.fromNetwork(buffer));
-                steps.add(new Step(stirs, matches));
-            }
-            ItemStack result = buffer.readItem();
-            return CrucibleRegistry.register(new CrucibleRecipe(steps, result).setRegistryName(recipeId));
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, CrucibleRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrucibleRecipe recipe) {
-            buffer.writeInt(recipe.steps.size());
-            for (Step step : recipe.steps) {
-                buffer.writeInt(step.stirs);
-                buffer.writeInt(step.matches.size());
-                for (Ingredient i : step.matches) i.toNetwork(buffer);
-            }
-            buffer.writeItem(recipe.result);
-        }
     }
 
     @Override

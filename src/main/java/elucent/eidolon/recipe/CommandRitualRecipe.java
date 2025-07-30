@@ -1,28 +1,27 @@
 package elucent.eidolon.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.common.ritual.ExecCommandRitual;
 import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Signs;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommandRitualRecipe extends RitualRecipe {
 
     List<String> commands;
-    ResourceLocation symbol = Signs.HARMONY_SIGN.getSprite();
+    ResourceLocation symbol = Signs.HARMONY_SIGN.sprite();
     int color = 0;
 
     private CommandRitualRecipe setSymbol(ResourceLocation symbol) {
@@ -35,31 +34,24 @@ public class CommandRitualRecipe extends RitualRecipe {
         return this;
     }
 
-    public CommandRitualRecipe(ResourceLocation recipeId, List<String> commands, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
-        super(recipeId, reagent, pedestalItems, focusItems, healthRequirement);
+    public List<String> getCommands() {
+        return commands;
+    }
+
+    public CommandRitualRecipe(List<String> commands, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
+        super(reagent, pedestalItems, focusItems, healthRequirement);
         this.commands = commands;
     }
 
 
     @Override
     public Ritual getRitual() {
-        return new ExecCommandRitual(symbol, color, commands).setRegistryName(id);
+        return new ExecCommandRitual(symbol, color, commands).setRegistryName(getId());
     }
 
     @Override
-    public JsonElement asRecipe() {
-        JsonObject jsonobject = new JsonObject();
-        jsonobject.addProperty("type", "eidolon:ritual_brazier_command");
-        JsonArray commandsJson = new JsonArray();
-        for (String command : this.commands) {
-            commandsJson.add(command);
-        }
-        jsonobject.add("commands", commandsJson);
-        jsonobject.addProperty("symbol", this.symbol.toString());
-        jsonobject.addProperty("color", this.color);
-        addRitualElements(this, jsonobject);
-
-        return jsonobject;
+    public @NotNull ResourceLocation getId() {
+        return ResourceLocation.fromNamespaceAndPath("eidolon", "ritual_exec_command_" + commands.hashCode());
     }
 
     @Override
@@ -74,82 +66,39 @@ public class CommandRitualRecipe extends RitualRecipe {
 
     public static class Serializer extends RitualRecipe.Serializer<CommandRitualRecipe> {
 
+        public static final MapCodec<CommandRitualRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                        Codec.STRING.listOf().fieldOf("commands").forGetter(CommandRitualRecipe::getCommands),
+                        Ingredient.CODEC.fieldOf("reagent").forGetter(CommandRitualRecipe::getReagent),
+                        Ingredient.CODEC.listOf().fieldOf("pedestal_items").forGetter(CommandRitualRecipe::getPedestalItems),
+                        Ingredient.CODEC.listOf().fieldOf("focus_items").forGetter(CommandRitualRecipe::getFocusItems),
+                        Codec.FLOAT.fieldOf("health_requirement").orElse(0.0f).forGetter(CommandRitualRecipe::getHealthRequirement)
+                ).apply(instance, CommandRitualRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, CommandRitualRecipe> STREAM_CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()),
+                        CommandRitualRecipe::getCommands,
+                        Ingredient.CONTENTS_STREAM_CODEC,
+                        CommandRitualRecipe::getReagent,
+                        Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                        CommandRitualRecipe::getPedestalItems,
+                        Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                        CommandRitualRecipe::getFocusItems,
+                        ByteBufCodecs.FLOAT,
+                        CommandRitualRecipe::getHealthRequirement,
+                        CommandRitualRecipe::new
+                );
+
         @Override
-        public @NotNull CommandRitualRecipe fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject json) {
-            Ingredient reagent = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "reagent"));
-            float healthRequirement = json.has("healthRequirement") ? GsonHelper.getAsFloat(json, "healthRequirement") : 0;
-            JsonArray pedestalItems = GsonHelper.getAsJsonArray(json, "pedestalItems");
-            List<Ingredient> stacks = getPedestalItems(pedestalItems);
-            JsonArray focusItems = GsonHelper.getAsJsonArray(json, "focusItems");
-            List<Ingredient> foci = getPedestalItems(focusItems);
-
-            List<String> commands = new ArrayList<>();
-            if (json.has("commands")) {
-                JsonArray commandsJson = GsonHelper.getAsJsonArray(json, "commands");
-                for (JsonElement element : commandsJson) {
-                    commands.add(element.getAsString());
-                }
-            } else if (json.has("command")) {
-                commands.add(GsonHelper.getAsString(json, "command"));
-            }
-
-            ResourceLocation symbol = json.has("symbol") ? ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json,"symbol" )) : Signs.HARMONY_SIGN.getSprite();
-            int color = GsonHelper.getAsInt(json, "color");
-
-            return new CommandRitualRecipe(pRecipeId, commands, reagent, stacks, foci, healthRequirement).setSymbol(symbol).setColor(color);
+        public @NotNull MapCodec<CommandRitualRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public @Nullable CommandRitualRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
-            int length = pBuffer.readInt();
-            int length2 = pBuffer.readInt();
-            Ingredient reagent = Ingredient.fromNetwork(pBuffer);
-            List<Ingredient> stacks = new ArrayList<>();
-
-            for (int i = 0; i < length; i++) {
-                try {
-                    stacks.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-            List<Ingredient> foci = new ArrayList<>();
-            for (int i = 0; i < length2; i++) {
-                try {
-                    foci.add(Ingredient.fromNetwork(pBuffer));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-
-            float healthRequirement = pBuffer.readFloat();
-
-            int commandsLength = pBuffer.readInt();
-            List<String> commands = new ArrayList<>();
-            for (int i = 0; i < commandsLength; i++) {
-                commands.add(pBuffer.readUtf());
-            }
-
-            ResourceLocation symbol = pBuffer.readResourceLocation();
-            int color = pBuffer.readInt();
-
-            return new CommandRitualRecipe(pRecipeId, commands, reagent, stacks, foci, healthRequirement).setSymbol(symbol).setColor(color);
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, CommandRitualRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
-
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf buf, @NotNull CommandRitualRecipe recipe) {
-            super.toNetwork(buf, recipe);
-            buf.writeInt(recipe.commands.size());
-            for (String command : recipe.commands) {
-                buf.writeUtf(command);
-            }
-            buf.writeResourceLocation(recipe.symbol);
-            buf.writeInt(recipe.color);
-        }
-
-
     }
 
 }

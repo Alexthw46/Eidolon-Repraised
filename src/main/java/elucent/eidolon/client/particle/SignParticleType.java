@@ -33,12 +33,12 @@ public class SignParticleType extends ParticleType<SignParticleData> {
             ret.pickSprite(new SpriteSet() {
                 @Override
                 public @NotNull TextureAtlasSprite get(int particleAge, int particleMaxAge) {
-                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.getSprite());
+                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.sprite());
                 }
 
                 @Override
                 public @NotNull TextureAtlasSprite get(@NotNull RandomSource rand) {
-                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.getSprite());
+                    return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ret.sign.sprite());
                 }
             });
             return ret;

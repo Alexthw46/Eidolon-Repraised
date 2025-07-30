@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.library.util.RecipeUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -56,8 +57,8 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull WorktableRecipe recipe, @NotNull IFocusGroup ingredients) {
-        Ingredient[] inputs = recipe.getCore();
-        Ingredient[] outers = recipe.getOuter();
+        Ingredient[] inputs = recipe.getCoreA();
+        Ingredient[] outers = recipe.getOuterA();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -71,7 +72,7 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
         layout.addSlot(RecipeIngredientRole.INPUT, 61, 93).addIngredients(outers[2]);
         layout.addSlot(RecipeIngredientRole.INPUT, 22, 54).addIngredients(outers[3]);
 
-        layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(recipe.getResultItem());
+        layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(RecipeUtil.getResultItem(recipe));
     }
 
     @Override

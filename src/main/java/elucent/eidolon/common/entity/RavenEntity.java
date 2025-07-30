@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
@@ -38,16 +38,16 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
         super(type, worldIn);
         registerGoals();
         this.moveControl = new FlyingMoveControl(this, 10, false);
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.LEAVES, 4.0F);
+        this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
+        this.setPathfindingMalus(PathType.LEAVES, 4.0F);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, TEMPTATION_ITEMS, false));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1D));
@@ -84,7 +84,7 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
             this.setDeltaMovement(motion.multiply(1.0D, 0.6D, 1.0D));
         }
 
-        if (!this.level.isClientSide && this.isAlive() && !this.isBaby() && --this.featherTime <= 0) {
+        if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.featherTime <= 0) {
             this.playSound(SoundEvents.CHICKEN_EGG, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.spawnAtLocation(Registry.RAVEN_FEATHER.get());
             this.featherTime = this.random.nextInt(12000) + 12000;
@@ -133,21 +133,21 @@ public class RavenEntity extends ShoulderRidingEntity implements FlyingAnimal {
                 if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                 }
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     if (this.random.nextInt(10) == 0 && !EventHooks.onAnimalTame(this, player)) {
                         this.tame(player);
-                        this.level.broadcastEntityEvent(this, (byte) 7);
+                        this.level().broadcastEntityEvent(this, (byte) 7);
                     } else {
-                        this.level.broadcastEntityEvent(this, (byte) 6);
+                        this.level().broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
             } else return super.mobInteract(player, hand);
         } else if (onGround() && this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             return super.mobInteract(player, hand);
         }
