@@ -9,8 +9,6 @@
 package elucent.eidolon.datagen;
 
 import com.google.common.hash.Hashing;
-import com.mojang.datafixers.DataFixer;
-import com.mojang.datafixers.DataFixerUpper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -67,14 +65,14 @@ public class StructureUpdater implements DataProvider {
     }
 
     private void process(ResourceLocation loc, Resource resource, CachedOutput cache) throws IOException {
-        CompoundTag inputNBT = NbtIo.readCompressed(resource.open());
-        CompoundTag converted = updateNBT(inputNBT);
-        if (!converted.equals(inputNBT)) {
-            Class<? extends DataFixer> fixerClass = DataFixers.getDataFixer().getClass();
-            if (!fixerClass.equals(DataFixerUpper.class))
-                throw new RuntimeException("Structures are not up to date, but unknown data fixer is in use: " + fixerClass.getName());
-            writeNBTTo(loc, converted, cache);
-        }
+//        CompoundTag inputNBT = NbtIo.readCompressed(resource.open());
+//        CompoundTag converted = updateNBT(inputNBT);
+//        if (!converted.equals(inputNBT)) {
+//            Class<? extends DataFixer> fixerClass = DataFixers.getDataFixer().getClass();
+//            if (!fixerClass.equals(DataFixerUpper.class))
+//                throw new RuntimeException("Structures are not up to date, but unknown data fixer is in use: " + fixerClass.getName());
+//            writeNBTTo(loc, converted, cache);
+//        }
     }
 
     private void writeNBTTo(ResourceLocation loc, CompoundTag data, CachedOutput cache) throws IOException {

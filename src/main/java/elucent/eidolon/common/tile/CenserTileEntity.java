@@ -54,11 +54,11 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
         if (!level.isClientSide && isBurning && incense() != null) {
             burnCounter++;
             this.incense().tick(burnCounter);
-            sync();
+            sync(level.registryAccess());
         }
         if (burnCounter == 80) {
             incense = ItemStack.EMPTY;
-            sync();
+            sync(level.registryAccess());
         }
         if (level.isClientSide && isBurning && incense() != null) {
             incenseRitual.animateParticles(this, burnCounter);
@@ -66,18 +66,18 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
+    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
         if (hand == InteractionHand.MAIN_HAND && level instanceof ServerLevel && !isBurning) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (itemInHand.isEmpty() && !incense.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, incense);
                 incense = ItemStack.EMPTY;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && incense.isEmpty()) {
                 if (IncenseRegistry.getIncenseRitual(itemInHand.getItem()) != null) {
                     incense = itemInHand.split(1);
-                    if (!level.isClientSide) sync();
+                    if (!level.isClientSide) sync(level.registryAccess());
                     return InteractionResult.SUCCESS;
                 }
             } else if (!itemInHand.isEmpty() && !incense.isEmpty()) {
@@ -96,7 +96,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             isBurning = true;
             world.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
             burnCounter = 0;
-            sync();
+            sync(level.registryAccess());
         }
     }
 
@@ -133,7 +133,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
             burnCounter = 0;
             incenseRitual = null;
-            sync();
+            sync(level.registryAccess());
         }
     }
 

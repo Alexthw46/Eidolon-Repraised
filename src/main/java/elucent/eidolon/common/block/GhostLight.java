@@ -60,7 +60,7 @@ public class GhostLight extends BlockBase {
             g = 0.25f;
             b = 1.0f;
         }
-        Particles.create(FLAME_PARTICLE)
+        Particles.create(FLAME_PARTICLE.get())
                 .setColor(r, g, b)
                 .setAlpha(0.5f, 0)
                 .setScale(0.25f, 0.125f)

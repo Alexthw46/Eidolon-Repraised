@@ -1,9 +1,12 @@
 package elucent.eidolon.common.item;
 
 import elucent.eidolon.registries.Registry;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class Tiers {
@@ -24,8 +27,8 @@ public class Tiers {
         }
 
         @Override
-        public int getLevel() {
-            return 2;
+        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_IRON_TOOL;
         }
 
         @Override
@@ -58,8 +61,8 @@ public class Tiers {
         }
 
         @Override
-        public int getLevel() {
-            return 3;
+        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
         }
 
         @Override
@@ -92,8 +95,8 @@ public class Tiers {
         }
 
         @Override
-        public int getLevel() {
-            return 2;
+        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_IRON_TOOL;
         }
 
         @Override
@@ -126,8 +129,8 @@ public class Tiers {
         }
 
         @Override
-        public int getLevel() {
-            return 3;
+        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
         }
 
         @Override
@@ -160,8 +163,8 @@ public class Tiers {
         }
 
         @Override
-        public int getLevel() {
-            return 3;
+        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_IRON_TOOL;
         }
 
         @Override

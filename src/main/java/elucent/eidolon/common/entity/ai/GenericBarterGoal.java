@@ -48,21 +48,21 @@ public class GenericBarterGoal<E extends PathfinderMob> extends Goal {
             progress --;
             entity.getNavigation().stop();
             if (progress == 0) {
-                if (!entity.level.isClientSide) {
-                    entity.level.addFreshEntity(new ItemEntity(entity.level, entity.getX(), entity.getY() + 0.1, entity.getZ(), result.apply(entity.getMainHandItem().copy())));
+                if (!entity.level().isClientSide) {
+                    entity.level().addFreshEntity(new ItemEntity(entity.level(), entity.getX(), entity.getY() + 0.1, entity.getZ(), result.apply(entity.getMainHandItem().copy())));
                 }
                 entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                 cooldown = 600;
             }
         }
         else {
-            List<ItemEntity> items = entity.level.getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8), entity.blockPosition().offset(8, 8, 8)), (item) -> valid.test(item.getItem()));
+            List<ItemEntity> items = entity.level().getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8).getBottomCenter(), entity.blockPosition().offset(8, 8, 8).getCenter()), (item) -> valid.test(item.getItem()));
             ItemEntity nearest = items.stream().min(Comparator.comparingDouble(a -> a.distanceToSqr(entity))).get();
             if (nearest.distanceToSqr(entity) < 2.25) {
                 progress = 100;
                 entity.setItemInHand(InteractionHand.MAIN_HAND, nearest.getItem());
                 nearest.remove(RemovalReason.DISCARDED);
-                entity.level.playSound(null, entity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.HOSTILE, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                entity.level().playSound(null, entity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.HOSTILE, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
             }
             entity.getNavigation().moveTo(nearest.getX(), nearest.getY(), nearest.getZ(), 1.0f);
         }
@@ -76,16 +76,16 @@ public class GenericBarterGoal<E extends PathfinderMob> extends Goal {
         if (-- cooldown > 0) return false;
         if (progress > 0 || entity.tickCount < lastTick + 20) return false;
         lastTick = entity.tickCount;
-        List<ItemEntity> items = entity.level.getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8), entity.blockPosition().offset(8, 8, 8)), (item) -> valid.test(item.getItem()));
-        return items.size() > 0;
+        List<ItemEntity> items = entity.level().getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8).getBottomCenter(), entity.blockPosition().offset(8, 8, 8).getCenter()), (item) -> valid.test(item.getItem()));
+        return !items.isEmpty();
     }
 
     @Override
     public boolean canContinueToUse() {
         if (progress > 0) return true;
         else { // walking towards item
-            List<ItemEntity> items = entity.level.getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8), entity.blockPosition().offset(8, 8, 8)), (item) -> valid.test(item.getItem()));
-            return items.size() > 0;
+            List<ItemEntity> items = entity.level().getEntitiesOfClass(ItemEntity.class, new AABB(entity.blockPosition().offset(-8, -8, -8).getBottomCenter(), entity.blockPosition().offset(8, 8, 8).getCenter()), (item) -> valid.test(item.getItem()));
+            return !items.isEmpty();
         }
     }
 }

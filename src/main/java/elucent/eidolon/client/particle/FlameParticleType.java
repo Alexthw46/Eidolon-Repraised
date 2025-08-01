@@ -1,21 +1,28 @@
 package elucent.eidolon.client.particle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
 public class FlameParticleType extends ParticleType<GenericParticleData> {
     public FlameParticleType() {
-        super(false, GenericParticleData.DESERIALIZER);
+        super(false);
     }
 
     @Override
-    public @NotNull Codec<GenericParticleData> codec() {
+    public @NotNull MapCodec<GenericParticleData> codec() {
         return GenericParticleData.codecFor(this);
+    }
+
+    @Override
+    public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, GenericParticleData> streamCodec() {
+        return GenericParticleData.streamCodecFor(this);
     }
 
     public static class Factory implements ParticleProvider<GenericParticleData> {

@@ -153,7 +153,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
                 list.add(Component.translatable("container.enchant.clue", enchantment == null ? "" : enchantment.getFullname(enchantmentLevel)).withStyle(ChatFormatting.WHITE));
                 if (enchantment == null) {
                     list.add(Component.literal(""));
-                    list.add(Component.translatable("forge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
+                    list.add(Component.translatable("neoforge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
                 } else if (!flag) {
                     list.add(CommonComponents.EMPTY);
                     if (this.minecraft.player.experienceLevel < enchantmentLevel) {

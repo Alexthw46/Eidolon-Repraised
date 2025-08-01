@@ -52,12 +52,12 @@ public class AbsorptionRitual extends Ritual {
         ListTag entityTags = new ListTag();
         for (LivingEntity e : entities) {
             e.setHealth(e.getMaxHealth());
-            Networking.sendToTracking(world, e.blockPosition(), new MagicBurstEffectPacket(e.getX(), e.getY() + 0.1, e.getZ(),
+            Networking.sendToNearbyClient(world, e.blockPosition(), new MagicBurstEffectPacket(e.getX(), e.getY() + 0.1, e.getZ(),
                     ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
             if (toRecharge != null) {
-                Networking.sendToTracking(world, toRecharge, new RitualConsumePacket(e.blockPosition().above(), toRecharge, getRed(), getGreen(), getBlue()));
+                Networking.sendToNearbyClient(world, toRecharge, new RitualConsumePacket(e.blockPosition().above(), toRecharge, getRed(), getGreen(), getBlue()));
             }
-            CompoundTag eTag = e.serializeNBT();
+            CompoundTag eTag = e.serializeNBT(world.registryAccess());
             entityTags.add(eTag);
             e.remove(RemovalReason.KILLED);
         }

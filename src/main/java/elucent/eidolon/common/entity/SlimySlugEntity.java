@@ -3,7 +3,6 @@ package elucent.eidolon.common.entity;
 import elucent.eidolon.datagen.EidBiomeTagProvider;
 import elucent.eidolon.registries.EidolonEntities;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -45,7 +44,7 @@ public class SlimySlugEntity extends TamableAnimal {
         getEntityData().set(TYPE, 0);
     }
 
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+    public @NotNull SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData) {
         Holder<Biome> holder = pLevel.getBiome(this.blockPosition());
         if (holder.is(EidBiomeTagProvider.BROWN_SLUG_TAG)) {
             this.setVariant(2);
@@ -54,7 +53,7 @@ public class SlimySlugEntity extends TamableAnimal {
         } else {
             this.setVariant(0);
         }
-        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
     }
 
     @Nullable
@@ -78,10 +77,10 @@ public class SlimySlugEntity extends TamableAnimal {
         getEntityData().set(TYPE, type);
     }
 
+
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(TYPE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(TYPE, 0);
     }
 
     protected void registerGoals() {
@@ -90,7 +89,7 @@ public class SlimySlugEntity extends TamableAnimal {
                 (e) -> e.getItemBySlot(EquipmentSlot.HEAD).getItem().equals(Items.CARVED_PUMPKIN)));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, TEMPTATION_ITEMS, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -136,7 +135,7 @@ public class SlimySlugEntity extends TamableAnimal {
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             } else return super.mobInteract(player, hand);
         } else if (onGround() && this.isTame() && this.isOwnedBy(player)) {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);

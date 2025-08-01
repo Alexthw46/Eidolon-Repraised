@@ -61,7 +61,7 @@ public class CrucibleTileEntity extends TileEntityBase {
             super.onContentsChanged();
             if (level != null) {
                 hasWater = getFluid().getAmount() == 1000;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
             }
         }
 
@@ -108,17 +108,17 @@ public class CrucibleTileEntity extends TileEntityBase {
             return contents;
         }
 
-        public CrucibleStep(CompoundTag nbt) {
+        public CrucibleStep(CompoundTag nbt, HolderLookup.Provider provider) {
             stirs = nbt.getInt("stirs");
             ListTag list = nbt.getList("contents", Tag.TAG_COMPOUND);
-            for (Tag item : list) contents.add(ItemStack.of((CompoundTag) item));
+            for (Tag item : list) contents.add(ItemStack.parseOptional(provider, (CompoundTag) item));
         }
 
-        public CompoundTag write() {
+        public CompoundTag write(HolderLookup.Provider provider) {
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("stirs", stirs);
             ListTag list = new ListTag();
-            for (ItemStack stack : contents) list.add(stack.save(new CompoundTag()));
+            for (ItemStack stack : contents) list.add(stack.save(provider, new CompoundTag()));
             nbt.put("contents", list);
             return nbt;
         }
@@ -138,7 +138,7 @@ public class CrucibleTileEntity extends TileEntityBase {
 
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
+    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
         if (hand == InteractionHand.MAIN_HAND && level != null) {
             if (FluidUtil.interactWithFluidHandler(player, hand, this.tank))
                 return InteractionResult.SUCCESS;
@@ -157,7 +157,7 @@ public class CrucibleTileEntity extends TileEntityBase {
                 stirTicks = 20;
                 if (!level.isClientSide) {
                     level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 1.0f, 1.0f);
-                    sync();
+                    sync(level.registryAccess());
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -171,7 +171,7 @@ public class CrucibleTileEntity extends TileEntityBase {
         super.loadAdditional(tag, provider);
         this.steps.clear();
         ListTag steps = tag.getList("steps", Tag.TAG_COMPOUND);
-        for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step));
+        for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step, provider));
         boiling = tag.getBoolean("boiling");
         tank.readFromNBT(provider, tag);
         hasWater = tank.getFluidAmount() == 1000;
@@ -183,7 +183,7 @@ public class CrucibleTileEntity extends TileEntityBase {
     @Override
     public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         ListTag steps = new ListTag();
-        for (CrucibleStep step : this.steps) steps.add(step.write());
+        for (CrucibleStep step : this.steps) steps.add(step.write(provider));
         tag.put("steps", steps);
         tag.putBoolean("boiling", boiling);
         tag.putInt("stirs", stirs);
@@ -206,10 +206,10 @@ public class CrucibleTileEntity extends TileEntityBase {
                 }
             if (boiling && !isHeated) {
                 boiling = false;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
             } else if (!boiling && isHeated) {
                 boiling = true;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
             }
         }
 
@@ -278,7 +278,7 @@ public class CrucibleTileEntity extends TileEntityBase {
 
         // Current set of steps don't have any yield, so let's just forget this whole thing ever happened...
         if (!CrucibleRegistry.doStepsHaveSomeResult(steps)) {
-            Networking.sendToTracking(level, worldPosition, new CrucibleFailPacket(worldPosition));
+            Networking.sendToNearbyClient(level, worldPosition, new CrucibleFailPacket(worldPosition));
             steps.clear();
             boiling = false;
             drain(); //sync();
@@ -294,7 +294,7 @@ public class CrucibleTileEntity extends TileEntityBase {
         } else { // Recipe hasn't been found, but this item is definitely at least part of the recipe so do the whole shabang
             level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
             stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
-            sync();
+            sync(level.registryAccess());
         }
     }
 
@@ -315,7 +315,7 @@ public class CrucibleTileEntity extends TileEntityBase {
     private void handleTimedUpdate(float steamR, float steamG, float steamB) {
         List<ItemStack> contents = tryConsumeItems();
         if (stirs == 0 && contents.isEmpty()) { // no action done; end recipe
-            Networking.sendToTracking(level, worldPosition, new CrucibleFailPacket(worldPosition));
+            Networking.sendToNearbyClient(level, worldPosition, new CrucibleFailPacket(worldPosition));
             steps.clear();
             stirs = 0;
             boiling = false;
@@ -331,14 +331,14 @@ public class CrucibleTileEntity extends TileEntityBase {
             } else {
                 level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 1.0f); // try continue
                 stepCounter = Config.CRUCIBLE_STEP_DURATION.get();
-                sync();
+                sync(level.registryAccess());
             }
         }
     }
 
 
     private void completeCraft(float steamR, float steamG, float steamB, List<ItemStack> contents, CrucibleRecipe recipe) {
-        Networking.sendToTracking(level, worldPosition, new CrucibleSuccessPacket(worldPosition, steamR, steamG, steamB));
+        Networking.sendToNearbyClient(level, worldPosition, new CrucibleSuccessPacket(worldPosition, steamR, steamG, steamB));
         double angle = level.random.nextDouble() * Math.PI * 2;
         ItemEntity entity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.75, worldPosition.getZ() + 0.5, recipe.getResult().copy());
         entity.setDeltaMovement(Math.sin(angle) * 0.125, 0.25, Math.cos(angle) * 0.125);

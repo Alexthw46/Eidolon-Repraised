@@ -32,19 +32,19 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
+    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
         if (hand == InteractionHand.MAIN_HAND) {
             if (player.getItemInHand(hand).isEmpty() && !stack.isEmpty()) {
                 player.addItem(stack);
                 stack = ItemStack.EMPTY;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
                 stack = player.getItemInHand(hand).copy();
                 stack.setCount(1);
                 player.getItemInHand(hand).shrink(1);
                 if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             }
         }
@@ -70,12 +70,12 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     @Override
     public void take() {
         stack = ItemStack.EMPTY;
-        if (!level.isClientSide) sync();
+        if (!level.isClientSide) sync(level.registryAccess());
     }
 
     @Override
     public void replace(ItemStack stack) {
         this.stack = stack;
-        if (!level.isClientSide) sync();
+        if (!level.isClientSide) sync(level.registryAccess());
     }
 }

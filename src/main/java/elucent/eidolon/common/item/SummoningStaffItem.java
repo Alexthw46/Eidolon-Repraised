@@ -3,6 +3,7 @@ package elucent.eidolon.common.item;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
 import elucent.eidolon.util.EntityUtil;
@@ -125,16 +126,16 @@ public class SummoningStaffItem extends ItemBase {
     }
 
     public ItemStack addCharges(ItemStack stack, ListTag charges) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("charges")) {
-            while (charges.size() > 100) charges.remove(charges.size() - 1);
-            tag.put("charges", charges);
-        } else {
-            ListTag existing = tag.getList("charges", Tag.TAG_COMPOUND);
-            while (existing.size() + charges.size() > 100) charges.remove(charges.size() - 1);
-            if (!charges.isEmpty()) existing.addAll(charges);
-            tag.put("charges", existing);
+        List<CompoundTag> existing_thralls = stack.get(EidolonDataComponents.THRALLS);
+        if (existing_thralls == null) {
+            return stack;
         }
+
+        while (existing_thralls.size() + charges.size() > 100) charges.removeLast();
+        if (!charges.isEmpty())
+            for (int i = 0; i < charges.size(); i++) existing_thralls.add(charges.getCompound(i));
+
+        stack.set(EidolonDataComponents.THRALLS, existing_thralls);
         return stack;
     }
 

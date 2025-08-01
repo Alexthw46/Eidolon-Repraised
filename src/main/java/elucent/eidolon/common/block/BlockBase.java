@@ -2,7 +2,6 @@ package elucent.eidolon.common.block;
 
 import elucent.eidolon.common.tile.TileEntityBase;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -70,13 +69,13 @@ public class BlockBase extends Block {
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult ray) {
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (this instanceof EntityBlock) {
             BlockEntity te = world.getBlockEntity(pos);
             if (te instanceof TileEntityBase tile) {
-                return tile.onActivated(state, pos, player, hand);
+                return tile.onActivated(state, pos, player);
             }
         }
-        return super.use(state, world, pos, player, hand, ray);
+        return super.useWithoutItem(state, world, pos, player, hitResult);
     }
 }

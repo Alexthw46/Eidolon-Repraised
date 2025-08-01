@@ -1,12 +1,13 @@
 package elucent.eidolon.client.particle;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
 public class GenericParticleData implements ParticleOptions {
@@ -16,8 +17,8 @@ public class GenericParticleData implements ParticleOptions {
     float spin = 0;
     boolean gravity = false;
 
-    public static Codec<GenericParticleData> codecFor(ParticleType<?> type) {
-        return RecordCodecBuilder.create(instance -> instance.group(
+    public static MapCodec<GenericParticleData> codecFor(ParticleType<?> type) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.FLOAT.fieldOf("r1").forGetter(d -> d.r1),
                 Codec.FLOAT.fieldOf("g1").forGetter(d -> d.g1),
                 Codec.FLOAT.fieldOf("b1").forGetter(d -> d.b1),
@@ -57,102 +58,54 @@ public class GenericParticleData implements ParticleOptions {
         this.type = type;
     }
 
+    public static @NotNull StreamCodec<RegistryFriendlyByteBuf, GenericParticleData> streamCodecFor(ParticleType<? extends GenericParticleData> featherParticleType) {
+        return StreamCodec.of(
+                GenericParticleData::writeToNetwork,
+                buf -> {
+                    float r1 = buf.readFloat();
+                    float g1 = buf.readFloat();
+                    float b1 = buf.readFloat();
+                    float a1 = buf.readFloat();
+                    float r2 = buf.readFloat();
+                    float g2 = buf.readFloat();
+                    float b2 = buf.readFloat();
+                    float a2 = buf.readFloat();
+                    float scale1 = buf.readFloat();
+                    float scale2 = buf.readFloat();
+                    int lifetime = buf.readInt();
+                    float spin = buf.readFloat();
+                    boolean gravity = buf.readBoolean();
+                    GenericParticleData data = new GenericParticleData(featherParticleType);
+                    data.r1 = r1;
+                    data.g1 = g1;
+                    data.b1 = b1;
+                    data.a1 = a1;
+                    data.r2 = r2;
+                    data.g2 = g2;
+                    data.b2 = b2;
+                    data.a2 = a2;
+                    data.scale1 = scale1;
+                    data.scale2 = scale2;
+                    data.lifetime = lifetime;
+                    data.spin = spin;
+                    data.gravity = gravity;
+                    return data;
+                }
+
+        );
+    }
+
     @Override
     public @NotNull ParticleType<?> getType() {
         return type;
     }
 
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeFloat(r1).writeFloat(g1).writeFloat(b1).writeFloat(a1);
-        buffer.writeFloat(r2).writeFloat(g2).writeFloat(b2).writeFloat(a2);
-        buffer.writeFloat(scale1).writeFloat(scale2);
-        buffer.writeInt(lifetime);
-        buffer.writeFloat(spin);
-        buffer.writeBoolean(gravity);
+    public static void writeToNetwork(FriendlyByteBuf buffer, GenericParticleData data) {
+        buffer.writeFloat(data.r1).writeFloat(data.g1).writeFloat(data.b1).writeFloat(data.a1);
+        buffer.writeFloat(data.r2).writeFloat(data.g2).writeFloat(data.b2).writeFloat(data.a2);
+        buffer.writeFloat(data.scale1).writeFloat(data.scale2);
+        buffer.writeInt(data.lifetime);
+        buffer.writeFloat(data.spin);
+        buffer.writeBoolean(data.gravity);
     }
-
-    @Override
-    public @NotNull String writeToString() {
-        return getClass().getSimpleName() + ":internal";
-    }
-
-    public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<>() {
-        @Override
-        public @NotNull GenericParticleData fromCommand(@NotNull ParticleType<GenericParticleData> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float r1 = reader.readFloat();
-            reader.expect(' ');
-            float g1 = reader.readFloat();
-            reader.expect(' ');
-            float b1 = reader.readFloat();
-            reader.expect(' ');
-            float a1 = reader.readFloat();
-            reader.expect(' ');
-            float r2 = reader.readFloat();
-            reader.expect(' ');
-            float g2 = reader.readFloat();
-            reader.expect(' ');
-            float b2 = reader.readFloat();
-            reader.expect(' ');
-            float a2 = reader.readFloat();
-            reader.expect(' ');
-            float scale1 = reader.readFloat();
-            reader.expect(' ');
-            float scale2 = reader.readFloat();
-            reader.expect(' ');
-            int lifetime = reader.readInt();
-            reader.expect(' ');
-            float spin = reader.readFloat();
-            reader.expect(' ');
-            boolean gravity = reader.readBoolean();
-            GenericParticleData data = new GenericParticleData(type);
-            data.r1 = r1;
-            data.g1 = g1;
-            data.b1 = b1;
-            data.a1 = a1;
-            data.r2 = r2;
-            data.g2 = g2;
-            data.b2 = b2;
-            data.a2 = a2;
-            data.scale1 = scale1;
-            data.scale2 = scale2;
-            data.lifetime = lifetime;
-            data.spin = spin;
-            data.gravity = gravity;
-            return data;
-        }
-
-        @Override
-        public @NotNull GenericParticleData fromNetwork(@NotNull ParticleType<GenericParticleData> type, FriendlyByteBuf buf) {
-            float r1 = buf.readFloat();
-            float g1 = buf.readFloat();
-            float b1 = buf.readFloat();
-            float a1 = buf.readFloat();
-            float r2 = buf.readFloat();
-            float g2 = buf.readFloat();
-            float b2 = buf.readFloat();
-            float a2 = buf.readFloat();
-            float scale1 = buf.readFloat();
-            float scale2 = buf.readFloat();
-            int lifetime = buf.readInt();
-            float spin = buf.readFloat();
-            boolean gravity = buf.readBoolean();
-            GenericParticleData data = new GenericParticleData(type);
-            data.r1 = r1;
-            data.g1 = g1;
-            data.b1 = b1;
-            data.a1 = a1;
-            data.r2 = r2;
-            data.g2 = g2;
-            data.b2 = b2;
-            data.a2 = a2;
-            data.scale1 = scale1;
-            data.scale2 = scale2;
-            data.lifetime = lifetime;
-            data.spin = spin;
-            data.gravity = gravity;
-            return data;
-        }
-    };
 }

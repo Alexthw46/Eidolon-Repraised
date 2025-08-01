@@ -9,8 +9,8 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class LightTouchSpell extends DarkTouchSpell {
 
-    public static final String SACRED_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"sacred" ).toString();
+    public static final String SACRED_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "sacred").toString();
 
     public LightTouchSpell(ResourceLocation name, Sign... signs) {
         super(name, signs);
@@ -34,7 +34,7 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity() instanceof Mob mob && mob.getMobType() == MobType.UNDEAD) {
+        if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
             var tag = caster.getMainHandItem().getTag();
             if (tag != null && tag.contains(SACRED_KEY)) {
                 event.setAmount(event.getAmount() * 1.5f);
@@ -61,9 +61,9 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     boolean canTouch(ItemStack stack) {
         return stack.getItem() == Registry.GOLD_INLAY.get()
-               || stack.getItem() == Items.BLACK_WOOL
-               || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-               || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+                || stack.getItem() == Items.BLACK_WOOL
+                || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
+                || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true

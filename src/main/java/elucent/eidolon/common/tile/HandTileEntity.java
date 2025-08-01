@@ -33,23 +33,23 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
+    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
         if (hand == InteractionHand.MAIN_HAND && level != null && !level.isClientSide) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (itemInHand.isEmpty() && !stack.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, stack);
                 stack = ItemStack.EMPTY;
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && stack.isEmpty()) {
                 stack = itemInHand.split(1);
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && !stack.isEmpty()) {
                 ItemStack oldstack = stack.copy();
                 stack = itemInHand.split(1);
                 ItemHandlerHelper.giveItemToPlayer(player, oldstack);
-                if (!level.isClientSide) sync();
+                if (!level.isClientSide) sync(level.registryAccess());
                 return InteractionResult.SUCCESS;
             }
         }
@@ -75,6 +75,6 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
     @Override
     public void take() {
         stack = ItemStack.EMPTY;
-        if (!level.isClientSide) sync();
+        if (!level.isClientSide) sync(level.registryAccess());
     }
 }

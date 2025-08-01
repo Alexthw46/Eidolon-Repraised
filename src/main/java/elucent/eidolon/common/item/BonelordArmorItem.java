@@ -3,98 +3,38 @@ package elucent.eidolon.common.item;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.ClientRegistry;
 import elucent.eidolon.common.item.model.BonelordArmorModel;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.EidolonMaterials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.common.extensions.IItemExtension;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BonelordArmorItem extends ArmorItem implements IItemExtension {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
-    public static class Material implements ArmorMaterial {
-        @Override
-        public int getDurabilityForType(Type slot) {
-            return MAX_DAMAGE_ARRAY[slot.getSlot().getIndex()] * 38;
-        }
-
-        @Override
-        public int getDefenseForType(Type slot) {
-            return switch (slot) {
-                case CHESTPLATE -> 9;
-                case HELMET -> 4;
-                case LEGGINGS -> 7;
-                default -> 0;
-            };
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 25;
-        }
-
-        @Override
-        public @NotNull SoundEvent getEquipSound() {
-            return ArmorMaterials.TURTLE.getEquipSound();
-        }
-
-        @Override
-        public @NotNull Ingredient getRepairIngredient() {
-            return Ingredient.of(new ItemStack(Registry.IMBUED_BONES.get()));
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return Eidolon.MODID + ":bonelord";
-        }
-
-        @Override
-        public float getToughness() {
-            return 2;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return 0;
-        }
-
-        public static final Material INSTANCE = new Material();
-    }
-
     public BonelordArmorItem(Type slot, Properties builderIn) {
-        super(Material.INSTANCE, slot, builderIn);
+        super(EidolonMaterials.BONELORD, slot, builderIn);
     }
-//
-//    @Override
-//    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
-//        ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
-//        attributes.putAll(super.getDefaultAttributeModifiers(stack));
-//        if (this.type.getSlot() == pEquipmentSlot) {
-//            attributes.put(EidolonAttributes.PERSISTENT_SOUL_HEARTS.get(), new AttributeModifier(uuid, Eidolon.MODID + ":bonelord_ethereal_hearts", this.getEquipmentSlot() == EquipmentSlot.CHEST ? 20.0 : 10.0, Operation.ADDITION));
-//        }
-//        return attributes.build();
-//    }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             @Override
-            public @NotNull BonelordArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
-                float pticks = Minecraft.getInstance().getFrameTime();
+            public @NotNull BonelordArmorModel getHumanoidArmorModel(@NotNull LivingEntity entity, @NotNull ItemStack itemStack, @NotNull EquipmentSlot armorSlot, @NotNull HumanoidModel _default) {
+                float pticks = Minecraft.getInstance().getFrameTimeNs();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
@@ -105,11 +45,12 @@ public class BonelordArmorItem extends ArmorItem implements IItemExtension {
                 return ClientRegistry.BONELORD_ARMOR_MODEL;
             }
         });
-    } 
+    }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return Eidolon.MODID + ":textures/entity/bonelord_armor.png";
+    public @Nullable ResourceLocation getArmorTexture(@NotNull ItemStack stack, @NotNull Entity entity, @NotNull EquipmentSlot slot, ArmorMaterial.@NotNull Layer layer, boolean innerModel) {
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/entity/bonelord_armor.png");
     }
+
 }

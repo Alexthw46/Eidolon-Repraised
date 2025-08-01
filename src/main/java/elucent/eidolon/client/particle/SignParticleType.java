@@ -1,6 +1,6 @@
 package elucent.eidolon.client.particle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -8,18 +8,25 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SignParticleType extends ParticleType<SignParticleData> {
     public SignParticleType() {
-        super(false, SignParticleData.DESERIALIZER);
+        super(false);
     }
 
     @Override
-    public @NotNull Codec<SignParticleData> codec() {
+    public @NotNull MapCodec<SignParticleData> codec() {
         return SignParticleData.codecFor(this);
+    }
+
+    @Override
+    public @NotNull StreamCodec<RegistryFriendlyByteBuf, SignParticleData> streamCodec() {
+        return SignParticleData.streamCodecFor(this);
     }
 
     public static class Factory implements ParticleProvider<SignParticleData> {

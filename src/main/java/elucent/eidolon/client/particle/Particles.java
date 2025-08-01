@@ -189,7 +189,7 @@ public class Particles {
             this.dz = Math.cos(yaw2) * Math.cos(pitch2) * zDist;
 
             if (world instanceof ServerLevel level) {
-                Networking.sendToTracking(level, BlockPos.containing(x, y, z), new GenericParticlePacket(x + dx, y + dy, z + dz, vx, vy, vz, data));
+                Networking.sendToNearbyClient(level, BlockPos.containing(x, y, z), new GenericParticlePacket(x + dx, y + dy, z + dz, vx, vy, vz, data));
             } else {
                 world.addParticle(data, x + dx, y + dy, z + dz, vx, vy, vz);
             }
@@ -233,7 +233,7 @@ public class Particles {
             this.dz = Math.cos(yaw2) * Math.cos(pitch2) * zDist;
 
             if (world instanceof ServerLevel level) {
-                Networking.sendToTracking(level, BlockPos.containing(x, y, z), new GenericParticlePacket(x + dx, y + dy, z + dz, vx, vy, vz, rData));
+                Networking.sendToNearbyClient(level, BlockPos.containing(x, y, z), new GenericParticlePacket(x + dx, y + dy, z + dz, vx, vy, vz, rData));
             } else {
                 world.addParticle(rData, x + dx, y + dy, z + dz, vx, vy, vz);
             }

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -31,9 +32,9 @@ import java.util.Random;
 import java.util.function.Function;
 
 public abstract class ResearchTask {
-    public abstract CompoundTag write();
+    public abstract CompoundTag write(HolderLookup.Provider registries);
 
-    public abstract void read(CompoundTag tag);
+    public abstract void read(CompoundTag tag, HolderLookup.Provider registries);
 
     public abstract CompletenessResult isComplete(AbstractContainerMenu menu, Player player, int slotStart);
 
@@ -163,20 +164,20 @@ public abstract class ResearchTask {
         }
 
         @Override
-        public CompoundTag write() {
+        public CompoundTag write(HolderLookup.Provider registries) {
             CompoundTag tag = new CompoundTag();
             tag.put("stacks", new ListTag());
-            return items.stream().map(s -> s.save(new CompoundTag())).reduce(tag, (t, s) -> {
+            return items.stream().map(s -> s.save(registries, new CompoundTag())).reduce(tag, (t, s) -> {
                 t.getList("stacks", Tag.TAG_COMPOUND).add(s);
                 return t;
             });
         }
 
         @Override
-        public void read(CompoundTag tag) {
+        public void read(CompoundTag tag, HolderLookup.Provider registries) {
             ListTag list = tag.getList("stacks", Tag.TAG_COMPOUND);
             for (Tag t : list) {
-                items.add(ItemStack.of((CompoundTag) t));
+                items.add(ItemStack.parseOptional(registries, (CompoundTag) t));
             }
         }
 
@@ -278,14 +279,14 @@ public abstract class ResearchTask {
         }
 
         @Override
-        public CompoundTag write() {
+        public CompoundTag write(HolderLookup.Provider registries) {
             CompoundTag tag = new CompoundTag();
             tag.putInt("levels", levels);
             return tag;
         }
 
         @Override
-        public void read(CompoundTag tag) {
+        public void read(CompoundTag tag, HolderLookup.Provider registries) {
             this.levels = tag.getInt("levels");
         }
 

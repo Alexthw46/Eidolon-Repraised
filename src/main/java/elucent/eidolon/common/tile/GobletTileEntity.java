@@ -25,7 +25,7 @@ public class GobletTileEntity extends TileEntityBase {
 
     public void setEntityType(EntityType<?> type) {
         this.type = type;
-        sync();
+        sync(level.registryAccess());
     }
 
     @Override

@@ -138,10 +138,10 @@ public class SignSequence {
         SignSequence s = new SignSequence();
         ListTag list = tag.getList("seq", Tag.TAG_STRING);
         for (int i = 0; i < list.size(); i ++) {
-            Sign t = Signs.find(new ResourceLocation(list.getString(i)));
+            Sign t = Signs.find(ResourceLocation.parse(list.getString(i)));
             if (t != null) s.seq.addLast(t);
         }
-        s.last = tag.contains("last") ? Signs.find(new ResourceLocation(tag.getString("last"))) : null;
+        s.last = tag.contains("last") ? Signs.find(ResourceLocation.parse(tag.getString("last"))) : null;
         return s;
     }
 

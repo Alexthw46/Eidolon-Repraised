@@ -1,15 +1,16 @@
 package elucent.eidolon.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.codex.CodexChapters;
 import elucent.eidolon.common.item.IWingsItem;
+import elucent.eidolon.registries.EidolonCapabilities;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.util.ClientInfo;
 import elucent.eidolon.util.RenderUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectSortedMaps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,20 +22,17 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static elucent.eidolon.common.spell.DarkTouchSpell.NECROTIC_KEY;
-import static elucent.eidolon.common.spell.LightTouchSpell.SACRED_KEY;
+import java.util.SequencedMap;
 
 @EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -45,7 +43,7 @@ public class ClientEvents {
     @OnlyIn(Dist.CLIENT)
     public static MultiBufferSource.BufferSource getDelayedRender() {
         if (DELAYED_RENDER == null) {
-            Map<RenderType, BufferBuilder> buffers = new HashMap<>();
+            SequencedMap<RenderType, ByteBufferBuilder> buffers = Object2ObjectSortedMaps.emptyMap();
             for (RenderType type : new RenderType[]{
                     RenderUtil.VAPOR_TRANSLUCENT,
                     RenderUtil.DELAYED_PARTICLE,
@@ -53,9 +51,9 @@ public class ClientEvents {
                     RenderUtil.GLOWING_BLOCK_PARTICLE,
                     RenderUtil.GLOWING,
                     RenderUtil.GLOWING_SPRITE}) {
-                buffers.put(type, new BufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : type.bufferSize()));
+                buffers.put(type, new ByteBufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : type.bufferSize()));
             }
-            DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new BufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : 256));
+            DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new ByteBufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : 256));
         }
         return DELAYED_RENDER;
     }
@@ -67,17 +65,17 @@ public class ClientEvents {
     public static void onRenderLast() {
         ClientInfo.renderTickEnd();
         if (ClientConfig.BETTER_LAYERING.get()) {
-            PoseStack viewStack = RenderSystem.getModelViewStack();
-            viewStack.pushPose(); // this feels...cheaty
-            viewStack.setIdentity();
-            if (particleMVMatrix != null) viewStack.mulPoseMatrix(particleMVMatrix);
+            Matrix4fStack viewStack = RenderSystem.getModelViewStack();
+            viewStack.pushMatrix(); // this feels...cheaty
+            viewStack.identity();
+            if (particleMVMatrix != null) viewStack.mul(particleMVMatrix);
             RenderSystem.applyModelViewMatrix();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             getDelayedRender().endBatch(RenderUtil.DELAYED_PARTICLE);
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_PARTICLE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_BLOCK_PARTICLE);
-            viewStack.popPose();
+            viewStack.popMatrix();
             RenderSystem.applyModelViewMatrix();
 
             getDelayedRender().endBatch(RenderUtil.GLOWING_SPRITE);
@@ -89,34 +87,34 @@ public class ClientEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRenderStages(final RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY)
-            ClientInfo.renderTickStart(event.getPartialTick());
+            ClientInfo.renderTickStart(event.getPartialTick().getGameTimeDeltaTicks());
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) onRenderLast();
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS)
-            ClientInfo.clientTicks += event.getPartialTick();
+            ClientInfo.clientTicks += event.getPartialTick().getGameTimeDeltaTicks();
     }
 
     public static int jumpTicks = 0;
     public static boolean wasJumping = false;
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent event) {
-        if (event.side != LogicalSide.CLIENT) return;
-        Player p = event.player;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!event.getEntity().level().isClientSide()) return;
+        Player p = event.getEntity();
         if (p instanceof LocalPlayer lp) {
-            p.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> {
-                ItemStack wings = d.getWingsItem(p);
-                if (!d.canFlap(p)) return;
-                if (!(wings.getItem() instanceof IWingsItem)) return;
-                if (lp.input.jumping && (!wasJumping || jumpTicks > 0)) {
-                    jumpTicks++;
-                    if (jumpTicks > 20) jumpTicks = 20;
-                } else if (wasJumping && jumpTicks > 0) {
-                    if (jumpTicks >= 20 && !d.isDashing(p)) {
-                        d.tryDash(p);
-                    } else d.tryFlapWings(p);
-                    jumpTicks = 0;
-                }
-            });
+            var wingsData = lp.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (wingsData == null) return;
+            ItemStack wings = wingsData.getWingsItem(p);
+            if (!wingsData.canFlap(p)) return;
+            if (!(wings.getItem() instanceof IWingsItem)) return;
+            if (lp.input.jumping && (!wasJumping || jumpTicks > 0)) {
+                jumpTicks++;
+                if (jumpTicks > 20) jumpTicks = 20;
+            } else if (wasJumping && jumpTicks > 0) {
+                if (jumpTicks >= 20 && !wingsData.isDashing(p)) {
+                    wingsData.tryDash(p);
+                } else wingsData.tryFlapWings(p);
+                jumpTicks = 0;
+            }
             if (p.onGround()) jumpTicks = 0;
             wasJumping = p.onGround() || lp.input.jumping;
         }
@@ -126,17 +124,20 @@ public class ClientEvents {
     public static void TooltipEvent(RenderTooltipEvent.Pre e) {
         CodexChapters.onTooltip(e.getGraphics(), e.getItemStack(), e.getX(), e.getY());
     }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void tooltip(ItemTooltipEvent event) {
-        var tag = event.getItemStack().getTag();
-        if (tag != null) {
-            if (tag.contains(NECROTIC_KEY)) {
-                event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
-            }
-            if (tag.contains(SACRED_KEY)) {
-                event.getToolTip().add(Component.translatable("eidolon.tooltip.sacred").withStyle(ChatFormatting.GOLD));
-            }
+        ItemStack itemStack = event.getItemStack();
+
+        Integer necro = itemStack.get(EidolonDataComponents.NECROTIC);
+        if (necro != null && necro > 0) {
+            event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
+        }
+
+        Integer sacred = itemStack.get(EidolonDataComponents.CONSACRATED);
+        if (sacred != null && sacred > 0) {
+            event.getToolTip().add(Component.translatable("eidolon.tooltip.sacred").withStyle(ChatFormatting.GOLD));
         }
     }
 }

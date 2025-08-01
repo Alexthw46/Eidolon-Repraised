@@ -54,7 +54,7 @@ public class WraithModel extends EntityModel<WraithEntity> {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         body.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }

@@ -2,9 +2,7 @@ package elucent.eidolon.event;
 
 import com.mojang.authlib.GameProfile;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IKnowledge;
 import elucent.eidolon.api.capability.IPlayerData;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.KnowledgeCommand;
@@ -18,12 +16,14 @@ import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.spell.ThrallSpell;
 import elucent.eidolon.common.tile.GobletTileEntity;
 import elucent.eidolon.network.*;
-import elucent.eidolon.registries.*;
+import elucent.eidolon.registries.EidolonAttributes;
+import elucent.eidolon.registries.EidolonPotions;
+import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -59,13 +59,11 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Added;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
@@ -90,38 +88,38 @@ public class Events {
         return InteractionResult.PASS;
     }
 
-    @SubscribeEvent
-    public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
-        if (event.getObject() != null)
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"reputation" ), new IReputation.Provider());
-    }
-
-    @SubscribeEvent
-    public void attachEntityCaps(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"knowledge" ), new IKnowledge.Provider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"player_data" ), new IPlayerData.Provider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"soul" ), new ISoul.Provider());
-        }
-    }
-
-
-    @SuppressWarnings("unchecked")
-    @SubscribeEvent
-    public void onClone(PlayerEvent.Clone event) {
-        Capability<IKnowledge> KNOWLEDGE = EidolonCapabilities.KNOWLEDGE_CAPABILITY;
-        Capability<ISoul> SOUL = ISoul.INSTANCE;
-        Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
-        event.getOriginal().reviveCaps();
-        event.getEntity().getCapability(KNOWLEDGE).ifPresent(k -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-        event.getEntity().getCapability(SOUL).ifPresent(k -> event.getOriginal().getCapability(SOUL).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-        event.getEntity().getCapability(PDATA).ifPresent(k -> event.getOriginal().getCapability(PDATA).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-        event.getOriginal().invalidateCaps();
-        if (!event.getEntity().level.isClientSide) {
-            Networking.sendTo(event.getEntity(), new KnowledgeUpdatePacket(event.getEntity(), false));
-            Networking.sendTo(event.getEntity(), new SoulUpdatePacket(event.getEntity()));
-        }
-    }
+//    @SubscribeEvent
+//    public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
+//        if (event.getObject() != null)
+//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"reputation" ), new IReputation.Provider());
+//    }
+//
+//    @SubscribeEvent
+//    public void attachEntityCaps(AttachCapabilitiesEvent<Entity> event) {
+//        if (event.getObject() instanceof Player) {
+//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"knowledge" ), new IKnowledge.Provider());
+//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"player_data" ), new IPlayerData.Provider());
+//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"soul" ), new ISoul.Provider());
+//        }
+//    }
+//
+//
+//    @SuppressWarnings("unchecked")
+//    @SubscribeEvent
+//    public void onClone(PlayerEvent.Clone event) {
+//        Capability<IKnowledge> KNOWLEDGE = EidolonCapabilities.KNOWLEDGE_CAPABILITY;
+//        Capability<ISoul> SOUL = ISoul.INSTANCE;
+//        Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
+//        event.getOriginal().reviveCaps();
+//        event.getEntity().getCapability(KNOWLEDGE).ifPresent(k -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+//        event.getEntity().getCapability(SOUL).ifPresent(k -> event.getOriginal().getCapability(SOUL).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+//        event.getEntity().getCapability(PDATA).ifPresent(k -> event.getOriginal().getCapability(PDATA).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
+//        event.getOriginal().invalidateCaps();
+//        if (!event.getEntity().level.isClientSide) {
+//            Networking.sendTo(event.getEntity(), new KnowledgeUpdatePacket(event.getEntity(), false));
+//            Networking.sendTo(event.getEntity(), new SoulUpdatePacket(event.getEntity()));
+//        }
+//    }
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {

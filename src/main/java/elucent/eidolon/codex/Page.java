@@ -137,12 +137,11 @@ public abstract class Page {
         int r = ColorUtil.getRed(color),
                 g = ColorUtil.getGreen(color),
                 b = ColorUtil.getBlue(color);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(matrix, (float) x, (float) maxY, 0).uv(minU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) maxY, 0).uv(maxU, maxV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) maxX, (float) y, 0).uv(maxU, minV).color(r, g, b, 255).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(minU, minV).color(r, g, b, 255).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        bufferbuilder.addVertex(matrix, (float) x, (float) maxY, 0).setUv(minU, maxV).setColor(r, g, b, 255);
+        bufferbuilder.addVertex(matrix, (float) maxX, (float) maxY, 0).setUv(maxU, maxV).setColor(r, g, b, 255);
+        bufferbuilder.addVertex(matrix, (float) maxX, (float) y, 0).setUv(maxU, minV).setColor(r, g, b, 255);
+        bufferbuilder.addVertex(matrix, (float) x, (float) y, 0).setUv(minU, minV).setColor(r, g, b, 255);
+        BufferUploader.drawWithShader(bufferbuilder.build());
     }
 }

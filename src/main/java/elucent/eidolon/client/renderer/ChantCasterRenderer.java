@@ -85,28 +85,28 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
                 brightMod = 0.6f + 0.4f * brightMod;
 
                 for (int j = 0; j < 2; j ++) {
-                    sb.vertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).uv(spr.getU1(), spr.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).uv(spr.getU1(), spr.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).uv(spr.getU0(), spr.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).uv(spr.getU0(), spr.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).setUv(spr.getU1(), spr.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).setUv(spr.getU1(), spr.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).setUv(spr.getU0(), spr.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).setUv(spr.getU0(), spr.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
 
-                    sb.vertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).uv(spr.getU1(), spr.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).uv(spr.getU1(), spr.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).uv(spr.getU0(), spr.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).uv(spr.getU0(), spr.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).setUv(spr.getU1(), spr.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).setUv(spr.getU1(), spr.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).setUv(spr.getU0(), spr.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).setUv(spr.getU0(), spr.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), brightMod * alphaMod).setLight(0);
                 }
 
                 dx.mul(1.75f);
                 dy.mul(1.75f);
-                sb.vertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).uv(ring.getU1(), ring.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).uv(ring.getU1(), ring.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).uv(ring.getU0(), ring.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).uv(ring.getU0(), ring.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
+                sb.addVertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).setUv(ring.getU1(), ring.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).setUv(ring.getU1(), ring.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).setUv(ring.getU0(), ring.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).setUv(ring.getU0(), ring.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
 
-                sb.vertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).uv(ring.getU1(), ring.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).uv(ring.getU1(), ring.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).uv(ring.getU0(), ring.getV0()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
-                sb.vertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).uv(ring.getU0(), ring.getV1()).color(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).uv2(0).endVertex();
+                sb.addVertex(mStack.last().pose(), o.x() + dx.x() + dy.x(), o.y() + dx.y() + dy.y(), o.z() + dx.z() + dy.z()).setUv(ring.getU1(), ring.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() + dx.x() - dy.x(), o.y() + dx.y() - dy.y(), o.z() + dx.z() - dy.z()).setUv(ring.getU1(), ring.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() - dx.x() - dy.x(), o.y() - dx.y() - dy.y(), o.z() - dx.z() - dy.z()).setUv(ring.getU0(), ring.getV0()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
+                sb.addVertex(mStack.last().pose(), o.x() - dx.x() + dy.x(), o.y() - dx.y() + dy.y(), o.z() - dx.z() + dy.z()).setUv(ring.getU0(), ring.getV1()).setColor(s.getRed(), s.getGreen(), s.getBlue(), alphaMod * 0.5f).setLight(0);
 
                 i ++;
             }
@@ -147,15 +147,15 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
                     Vector3f o1 = new Vector3f((float)od1.x, (float)od1.y, (float)od1.z);
                     Vector3f o2 = new Vector3f((float)od2.x, (float)od2.y, (float)od2.z);
 
-                    sb.vertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).uv(beam.getU1(), beam.getV1()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).uv(beam.getU0(), beam.getV1()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).uv(beam.getU0(), beam.getV0()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).uv(beam.getU1(), beam.getV0()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).setUv(beam.getU1(), beam.getV1()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).setUv(beam.getU0(), beam.getV1()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).setUv(beam.getU0(), beam.getV0()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).setUv(beam.getU1(), beam.getV0()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
 
-                    sb.vertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).uv(beam.getU1(), beam.getV1()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).uv(beam.getU0(), beam.getV1()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).uv(beam.getU0(), beam.getV0()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).uv(beam.getU1(), beam.getV0()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).setUv(beam.getU1(), beam.getV1()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).setUv(beam.getU0(), beam.getV1()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).setUv(beam.getU0(), beam.getV0()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).setUv(beam.getU1(), beam.getV0()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
 
                     id1 = center.add(left.scale(rs * ca1)).add(up.scale(rs * sa1));
                     id2 = center.add(left.scale(rs * ca2)).add(up.scale(rs * sa2));
@@ -166,15 +166,15 @@ public class ChantCasterRenderer extends EntityRenderer<ChantCasterEntity> {
                     o1 = new Vector3f((float)od1.x, (float)od1.y, (float)od1.z);
                     o2 = new Vector3f((float)od2.x, (float)od2.y, (float)od2.z);
 
-                    sb.vertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).uv(beam.getU1(), beam.getV1()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).uv(beam.getU0(), beam.getV1()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).uv(beam.getU0(), beam.getV0()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).uv(beam.getU1(), beam.getV0()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).setUv(beam.getU1(), beam.getV1()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).setUv(beam.getU0(), beam.getV1()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).setUv(beam.getU0(), beam.getV0()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).setUv(beam.getU1(), beam.getV0()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
 
-                    sb.vertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).uv(beam.getU1(), beam.getV1()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).uv(beam.getU0(), beam.getV1()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).uv(beam.getU0(), beam.getV0()).color(r1, g1, b1, alphaMod * 0.5f).uv2(0).endVertex();
-                    sb.vertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).uv(beam.getU1(), beam.getV0()).color(r2, g2, b2, alphaMod * 0.5f).uv2(0).endVertex();
+                    sb.addVertex(mStack.last().pose(), o2.x(), o2.y(), o2.z()).setUv(beam.getU1(), beam.getV1()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), o1.x(), o1.y(), o1.z()).setUv(beam.getU0(), beam.getV1()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i1.x(), i1.y(), i1.z()).setUv(beam.getU0(), beam.getV0()).setColor(r1, g1, b1, alphaMod * 0.5f).setLight(0);
+                    sb.addVertex(mStack.last().pose(), i2.x(), i2.y(), i2.z()).setUv(beam.getU1(), beam.getV0()).setColor(r2, g2, b2, alphaMod * 0.5f).setLight(0);
                 }
             }
         }

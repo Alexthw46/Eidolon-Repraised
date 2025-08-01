@@ -2,7 +2,6 @@ package elucent.eidolon.common.block;
 
 import elucent.eidolon.common.tile.TileEntityBase;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -10,10 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
 
 public class SingleItemTile extends TileEntityBase implements Container {
     protected ItemStack stack = ItemStack.EMPTY;
@@ -41,7 +37,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     public @NotNull ItemStack removeItem(int pSlot, int pAmount) {
         ItemStack copyStack = stack.copy().split(pAmount);
         stack.shrink(pAmount);
-        sync();
+        sync(level.registryAccess());
         return copyStack;
     }
 
@@ -49,14 +45,14 @@ public class SingleItemTile extends TileEntityBase implements Container {
     public @NotNull ItemStack removeItemNoUpdate(int pSlot) {
         ItemStack stack = this.stack.copy();
         this.stack = ItemStack.EMPTY;
-        sync();
+        sync(level.registryAccess());
         return stack;
     }
 
     @Override
     public void setItem(int pSlot, @NotNull ItemStack pStack) {
         this.stack = pStack;
-        sync();
+        sync(level.registryAccess());
     }
 
     @Override
@@ -77,7 +73,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     @Override
     public void clearContent() {
         this.stack = ItemStack.EMPTY;
-        sync();
+        sync(level.registryAccess());
     }
 
     public ItemStack getStack() {
@@ -86,7 +82,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
 
     public void setStack(ItemStack otherStack) {
         this.stack = otherStack;
-        sync();
+        sync(level.registryAccess());
     }
 
 //    @NotNull
