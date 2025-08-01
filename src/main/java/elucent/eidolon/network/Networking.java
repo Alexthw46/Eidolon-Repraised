@@ -1,253 +1,96 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.codex.CodexChapters;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 
 public class Networking {
-    public static SimpleChannel INSTANCE;
 
-    static int id = 0;
+    public static void register(final RegisterPayloadHandlersEvent event) {
+        var reg = event.registrar(Eidolon.MODID);
 
-    public static void init() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"network" ), () -> "1.0", (s) -> true, (s) -> true);
-
-        INSTANCE.registerMessage(
-                ++id,
-                GenericParticlePacket.class,
-                GenericParticlePacket::encode,
-                GenericParticlePacket::decode,
-                GenericParticlePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                ChilledEffectPacket.class,
-                ChilledEffectPacket::encode,
-                ChilledEffectPacket::decode,
-                ChilledEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                TESyncPacket.class,
-                TESyncPacket::encode,
-                TESyncPacket::decode,
-                TESyncPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                ExtinguishEffectPacket.class,
-                ExtinguishEffectPacket::encode,
-                ExtinguishEffectPacket::decode,
-                ExtinguishEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                IgniteEffectPacket.class,
-                IgniteEffectPacket::encode,
-                IgniteEffectPacket::decode,
-                IgniteEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                FlameEffectPacket.class,
-                FlameEffectPacket::encode,
-                FlameEffectPacket::decode,
-                FlameEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                RitualCompletePacket.class,
-                RitualCompletePacket::encode,
-                RitualCompletePacket::decode,
-                RitualCompletePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                RitualConsumePacket.class,
-                RitualConsumePacket::encode,
-                RitualConsumePacket::decode,
-                RitualConsumePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                CrystallizeEffectPacket.class,
-                CrystallizeEffectPacket::encode,
-                CrystallizeEffectPacket::decode,
-                CrystallizeEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                CrucibleFailPacket.class,
-                CrucibleFailPacket::encode,
-                CrucibleFailPacket::decode,
-                CrucibleFailPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                CrucibleSuccessPacket.class,
-                CrucibleSuccessPacket::encode,
-                CrucibleSuccessPacket::decode,
-                CrucibleSuccessPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                LifestealEffectPacket.class,
-                LifestealEffectPacket::encode,
-                LifestealEffectPacket::decode,
-                LifestealEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                MagicBurstEffectPacket.class,
-                MagicBurstEffectPacket::encode,
-                MagicBurstEffectPacket::decode,
-                MagicBurstEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                KnowledgeUpdatePacket.class,
-                KnowledgeUpdatePacket::encode,
-                KnowledgeUpdatePacket::decode,
-                KnowledgeUpdatePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                AttemptCastPacket.class,
-                AttemptCastPacket::encode,
-                AttemptCastPacket::decode,
-                AttemptCastPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                SpellCastPacket.class,
-                SpellCastPacket::encode,
-                SpellCastPacket::decode,
-                SpellCastPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                ResearchActionPacket.class,
-                ResearchActionPacket::encode,
-                ResearchActionPacket::decode,
-                ResearchActionPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                DeathbringerSlashEffectPacket.class,
-                DeathbringerSlashEffectPacket::encode,
-                DeathbringerSlashEffectPacket::decode,
-                DeathbringerSlashEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                SoulUpdatePacket.class,
-                SoulUpdatePacket::encode,
-                SoulUpdatePacket::decode,
-                SoulUpdatePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                WingsFlapPacket.class,
-                WingsFlapPacket::encode,
-                WingsFlapPacket::decode,
-                WingsFlapPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                WingsDashPacket.class,
-                WingsDashPacket::encode,
-                WingsDashPacket::decode,
-                WingsDashPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                WingsDataUpdatePacket.class,
-                WingsDataUpdatePacket::encode,
-                WingsDataUpdatePacket::decode,
-                WingsDataUpdatePacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                FeatherEffectPacket.class,
-                FeatherEffectPacket::encode,
-                FeatherEffectPacket::decode,
-                FeatherEffectPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                OpenCodexPacket.class,
-                OpenCodexPacket::encode,
-                OpenCodexPacket::decode,
-                OpenCodexPacket::consume
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                initCodexPacket.class,
-                (obj, buffer) -> {
-                },
-                buffer -> new initCodexPacket(),
-                (obj, ctx) -> {
-                    ctx.get().enqueueWork(CodexChapters::init);
-                    ctx.get().setPacketHandled(true);
-                }
-        );
-
-        INSTANCE.registerMessage(
-                ++id,
-                InscribePacket.class,
-                InscribePacket::encode,
-                InscribePacket::decode,
-                InscribePacket::consume
-        );
-    }
-
-    public static <MSG> void sendToDimension(Level world, MSG msg, ResourceKey<Level> dimension) {
-        Networking.INSTANCE.send(PacketDistributor.DIMENSION.with(() -> dimension), msg);
-    }
-
-    public static <MSG> void sendToTracking(Level world, BlockPos pos, MSG msg) {
-        Networking.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), msg);
-    }
-
-    public static <MSG> void sendTo(Player entity, MSG msg) {
-        Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) entity), msg);
-    }
-
-    public static <MSG> void sendToServer(MSG msg) {
-        Networking.INSTANCE.sendToServer(msg);
+        reg.playToClient(GenericParticlePacket.TYPE, GenericParticlePacket.CODEC, Networking::handle);
+        reg.playToClient(ChilledEffectPacket.TYPE, ChilledEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(TESyncPacket.TYPE, TESyncPacket.CODEC, Networking::handle);
+        reg.playToClient(ExtinguishEffectPacket.TYPE, ExtinguishEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(IgniteEffectPacket.TYPE, IgniteEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(FlameEffectPacket.TYPE, FlameEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(RitualCompletePacket.TYPE, RitualCompletePacket.CODEC, Networking::handle);
+        reg.playToClient(RitualConsumePacket.TYPE, RitualConsumePacket.CODEC, Networking::handle);
+        reg.playToClient(CrystallizeEffectPacket.TYPE, CrystallizeEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(CrucibleFailPacket.TYPE, CrucibleFailPacket.CODEC, Networking::handle);
+        reg.playToClient(CrucibleSuccessPacket.TYPE, CrucibleSuccessPacket.CODEC, Networking::handle);
+        reg.playToClient(LifestealEffectPacket.TYPE, LifestealEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(MagicBurstEffectPacket.TYPE, MagicBurstEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(KnowledgeUpdatePacket.TYPE, KnowledgeUpdatePacket.CODEC, Networking::handle);
+        reg.playToClient(AttemptCastPacket.TYPE, AttemptCastPacket.CODEC, Networking::handle);
+        reg.playToClient(SpellCastPacket.TYPE, SpellCastPacket.CODEC, Networking::handle);
+        reg.playToClient(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
+        reg.playToClient(DeathbringerSlashEffectPacket.TYPE, DeathbringerSlashEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(SoulUpdatePacket.TYPE, SoulUpdatePacket.CODEC, Networking::handle);
+        reg.playToClient(WingsFlapPacket.TYPE, WingsFlapPacket.CODEC, Networking::handle);
+        reg.playToClient(WingsDashPacket.TYPE, WingsDashPacket.CODEC, Networking::handle);
+        reg.playToClient(WingsDataUpdatePacket.TYPE, WingsDataUpdatePacket.CODEC, Networking::handle);
+        reg.playToClient(FeatherEffectPacket.TYPE, FeatherEffectPacket.CODEC, Networking::handle);
+        reg.playToClient(OpenCodexPacket.TYPE, OpenCodexPacket.CODEC, Networking::handle);
+        //reg.playToClient(initCodexPacket.TYPE, initCodexPacket.CODEC, Networking::handle);
+        reg.playToClient(InscribePacket.TYPE, InscribePacket.CODEC, Networking::handle);
     }
 
     public record initCodexPacket() {
+    }
+
+
+    public static <T extends AbstractPacket> void handle(T message, IPayloadContext ctx) {
+        if (ctx.flow().getReceptionSide() == LogicalSide.SERVER) {
+            handleServer(message, ctx);
+        } else {
+            //separate class to avoid loading client code on server.
+            //Using OnlyIn on a method in this class would work too, but is discouraged
+            ClientMessageHandler.handleClient(message, ctx);
+        }
+    }
+
+    private static <T extends AbstractPacket> void handleServer(T message, IPayloadContext ctx) {
+        MinecraftServer server = ctx.player().getServer();
+        message.onServerReceived(server, (ServerPlayer) ctx.player());
+    }
+
+    private static class ClientMessageHandler {
+
+        public static <T extends AbstractPacket> void handleClient(T message, IPayloadContext ctx) {
+            Minecraft minecraft = Minecraft.getInstance();
+            message.onClientReceived(minecraft, minecraft.player);
+        }
+    }
+
+    public static void sendToNearbyClient(Level world, BlockPos pos, CustomPacketPayload toSend) {
+        if (world instanceof ServerLevel ws) {
+            PacketDistributor.sendToPlayersTrackingChunk(ws, new ChunkPos(pos), toSend);
+        }
+    }
+
+    public static void sendToNearbyClient(Level world, Entity e, CustomPacketPayload toSend) {
+        sendToNearbyClient(world, e.blockPosition(), toSend);
+    }
+
+    public static void sendToPlayerClient(CustomPacketPayload msg, ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, msg);
+    }
+
+    public static void sendToServer(CustomPacketPayload msg) {
+        PacketDistributor.sendToServer(msg);
     }
 }

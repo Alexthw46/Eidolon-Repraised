@@ -1,15 +1,29 @@
 package elucent.eidolon.network;
 
+import elucent.eidolon.Eidolon;
 import elucent.eidolon.gui.ResearchTableContainer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
 
+public class ResearchActionPacket extends AbstractPacket {
+    public static final Type<ResearchActionPacket> TYPE = new Type<>(Eidolon.prefix("research_action"));
 
-public class ResearchActionPacket {
+    public static final StreamCodec<RegistryFriendlyByteBuf, ResearchActionPacket> CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            pkt -> pkt.action.ordinal(),
+            ByteBufCodecs.INT,
+            pkt -> pkt.index,
+            (actionOrdinal, index) -> new ResearchActionPacket(Action.values()[actionOrdinal], index)
+    );
+
     public enum Action {
         SUBMIT_GOAL, STAMP
     }
@@ -37,22 +51,20 @@ public class ResearchActionPacket {
         return new ResearchActionPacket(action, index);
     }
 
-    public static void consume(ResearchActionPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
-
-            ServerPlayer player = ctx.get().getSender();
-            AbstractContainerMenu menu = player.containerMenu;
-            Level world = ctx.get().getSender().level;
-            if (world != null && menu instanceof ResearchTableContainer rc) {
-                if (packet.action == Action.SUBMIT_GOAL) {
-                    rc.trySubmitGoal(player, packet.index);
-                }
-                else if (packet.action == Action.STAMP) {
-                    rc.tryStamp(player);
-                }
+    @Override
+    public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
+        AbstractContainerMenu menu = player.containerMenu;
+        Level world = player.level();
+        if (menu instanceof ResearchTableContainer rc) {
+            if (this.action == Action.SUBMIT_GOAL) {
+                rc.trySubmitGoal(player, this.index);
+            } else if (this.action == Action.STAMP) {
+                rc.tryStamp(player);
             }
-        });
-        ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public @NotNull Type<ResearchActionPacket> type() {
+        return TYPE;
     }
 }

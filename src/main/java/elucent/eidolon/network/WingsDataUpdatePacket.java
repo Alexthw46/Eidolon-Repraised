@@ -1,19 +1,34 @@
 package elucent.eidolon.network;
 
-import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.capability.WingsDataImpl;
 import elucent.eidolon.registries.EidolonCapabilities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 
-public class WingsDataUpdatePacket {
+public class WingsDataUpdatePacket extends AbstractPacket {
+    public static final Type<WingsDataUpdatePacket> TYPE = new Type<>(elucent.eidolon.Eidolon.prefix("wings_data_update"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, WingsDataUpdatePacket> CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC,
+            pkt -> pkt.uuid,
+            ByteBufCodecs.VAR_LONG,
+            pkt -> pkt.lastFlapTime,
+            ByteBufCodecs.INT,
+            pkt -> pkt.dashTicks,
+            ByteBufCodecs.BOOL,
+            pkt -> pkt.isFlying,
+            WingsDataUpdatePacket::new
+    );
+
     final UUID uuid;
     long lastFlapTime;
     int dashTicks;
@@ -47,21 +62,23 @@ public class WingsDataUpdatePacket {
         return new WingsDataUpdatePacket(buffer.readUUID(), buffer.readLong(), buffer.readInt(), buffer.readBoolean());
     }
 
-    public static void consume(WingsDataUpdatePacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
-
-            Level world = Eidolon.proxy.getWorld();
-            Player p = world.getPlayerByUUID(packet.uuid);
-            if (p != null && p != Minecraft.getInstance().player) {
-                p.getCapability(IPlayerData.INSTANCE, null).ifPresent((d) -> {
-                    if (packet.isFlying && !d.isFlying(p)) d.startFlying(p);
-                    else if (!packet.isFlying && d.isFlying(p)) d.stopFlying(p);
-                    d.setLastFlapTime(packet.lastFlapTime);
-                    d.setDashTicks(packet.dashTicks);
-                });
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        if (player.getUUID().equals(this.uuid)) {
+            var wingsData = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (wingsData != null) {
+                if (this.isFlying && !wingsData.isFlying(player)) {
+                    wingsData.startFlying(player);
+                } else if (!this.isFlying && wingsData.isFlying(player)) {
+                    wingsData.stopFlying(player);
+                }
             }
-        });
-        ctx.get().setPacketHandled(true);
+        }
+
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

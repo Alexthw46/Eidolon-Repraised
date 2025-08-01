@@ -1,17 +1,32 @@
 package elucent.eidolon.network;
 
+import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.gui.ScriptoriumContainer;
 import elucent.eidolon.registries.Signs;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-public class InscribePacket {
+public class InscribePacket extends AbstractPacket {
+    public static final Type<InscribePacket> TYPE = new Type<>(Eidolon.prefix("inscribe"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, InscribePacket> CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()),
+            pkt -> pkt.signs.stream().map(s -> s.getRegistryName().toString()).toList(),
+            ByteBufCodecs.INT,
+            pkt -> pkt.id,
+            (runes, id) -> new InscribePacket(id, runes.stream().map(s -> Signs.find(ResourceLocation.tryParse(s))).toList())
+    );
+
     final List<Sign> signs = new ArrayList<>();
     final int id;
 
@@ -34,19 +49,15 @@ public class InscribePacket {
         return new InscribePacket(buffer.readInt(), runes);
     }
 
-    public static void consume(InscribePacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
-
-            Player player = ctx.get().getSender();
-            if (player == null || player.containerMenu.containerId != packet.id) return;
-            if (player.containerMenu instanceof ScriptoriumContainer container) {
-                container.setChant(packet.signs);
-            }
-
-        });
-        ctx.get().setPacketHandled(true);
+    @Override
+    public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
+        if (player == null || player.containerMenu.containerId != this.id) return;
+        if (player.containerMenu instanceof ScriptoriumContainer container) {
+            container.setChant(this.signs);
+        }
     }
 
+    public @NotNull Type<InscribePacket> type() {
+        return TYPE;
+    }
 }
-

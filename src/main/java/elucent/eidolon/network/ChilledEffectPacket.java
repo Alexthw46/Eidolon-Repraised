@@ -1,18 +1,46 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
+public class ChilledEffectPacket extends AbstractPacket {
 
-public class ChilledEffectPacket {
+    public static final Type<ChilledEffectPacket> TYPE = new Type<>(Eidolon.prefix("chilled_effect"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, ChilledEffectPacket> CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE,
+            ChilledEffectPacket::getX,
+            ByteBufCodecs.DOUBLE,
+            ChilledEffectPacket::getY,
+            ByteBufCodecs.DOUBLE,
+            ChilledEffectPacket::getZ,
+            ChilledEffectPacket::new
+    );
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
     final double x;
     final double y;
     final double z;
@@ -23,33 +51,23 @@ public class ChilledEffectPacket {
         this.z = z;
     }
 
-    public static void encode(ChilledEffectPacket object, FriendlyByteBuf buffer) {
-        buffer.writeDouble(object.x);
-        buffer.writeDouble(object.y);
-        buffer.writeDouble(object.z);
-    }
-
-    public static ChilledEffectPacket decode(FriendlyByteBuf buffer) {
-        return new ChilledEffectPacket(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-    }
-
-    public static void consume(ChilledEffectPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
-
-            Player player = Eidolon.proxy.getPlayer();
-            if (player != null) {
-                Level world = player.level;
-                world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
-                for (int i = 0; i < 5; i ++) {
-                    world.addParticle(
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        if (player != null) {
+            Level world = player.level();
+            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+            for (int i = 0; i < 5; i++) {
+                world.addParticle(
                         new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
-                        packet.x, packet.y, packet.z,
+                        this.x, this.y, this.z,
                         0.05f * world.random.nextGaussian(), 0.05f * world.random.nextGaussian(), 0.05f * world.random.nextGaussian()
-                    );
-                }
+                );
             }
-        });
-        ctx.get().setPacketHandled(true);
+        }
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

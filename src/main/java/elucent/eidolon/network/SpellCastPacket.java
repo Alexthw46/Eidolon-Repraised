@@ -4,16 +4,35 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.registries.Spells;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class SpellCastPacket {
+public class SpellCastPacket extends AbstractPacket {
+    public static final Type<SpellCastPacket> TYPE = new Type<>(Eidolon.prefix("spell_cast"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SpellCastPacket> CODEC = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC,
+            pkt -> pkt.spell.getRegistryName(),
+            ByteBufCodecs.COMPOUND_TAG,
+            pkt -> pkt.seq.serializeNbt(),
+            UUIDUtil.STREAM_CODEC,
+            pkt -> pkt.uuid,
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.pos,
+            (spellLoc, seqTag, uuid, pos) -> new SpellCastPacket(uuid, pos, spellLoc, SignSequence.deserializeNbt(seqTag))
+    );
+
     final SignSequence seq;
     final Spell spell;
     final BlockPos pos;
@@ -41,23 +60,21 @@ public class SpellCastPacket {
     }
 
     public static SpellCastPacket decode(FriendlyByteBuf buffer) {
-        ResourceLocation spell = new ResourceLocation(buffer.readUtf());
+        ResourceLocation spell = ResourceLocation.parse(buffer.readUtf());
         SignSequence seq = SignSequence.deserializeNbt(buffer.readNbt());
         return new SpellCastPacket(buffer.readUUID(), buffer.readBlockPos(), spell, seq);
     }
 
-    public static void consume(SpellCastPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
 
-            Level world = Eidolon.proxy.getWorld();
-            if (world != null) {
-                Player player = world.getPlayerByUUID(packet.uuid);
-                if (player != null) {
-                    packet.spell.cast(world, packet.pos, player, packet.seq);
-                }
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        Level world = player.level();
+        this.spell.cast(world, this.pos, player, this.seq);
+
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

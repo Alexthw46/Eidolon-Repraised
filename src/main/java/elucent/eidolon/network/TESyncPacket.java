@@ -1,17 +1,30 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
 
+public class TESyncPacket extends AbstractPacket {
+    public static final Type<TESyncPacket> TYPE = new Type<>(Eidolon.prefix("te_sync"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, TESyncPacket> CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.pos,
+            ByteBufCodecs.COMPOUND_TAG,
+            pkt -> pkt.tag,
+            TESyncPacket::new
+    );
 
-public class TESyncPacket {
     final BlockPos pos;
     final CompoundTag tag;
 
@@ -29,28 +42,18 @@ public class TESyncPacket {
         return new TESyncPacket(buffer.readBlockPos(), buffer.readNbt());
     }
 
-    public static void consume(TESyncPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            Level world;
-            ServerPlayer sender = ctx.get().getSender();
-            if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-                world = Eidolon.proxy.getWorld();
-            else {
-                if (sender == null) return;
-                world = sender.level;
-            }
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        Level world = player.level();
+        BlockEntity t = world.getBlockEntity(this.pos);
+        if (t != null) {
+            t.loadWithComponents(this.tag, world.registryAccess());
+            t.setChanged();
+        }
+    }
 
-            if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
-                System.out.printf("TESyncPacket received from client %s. This is not supposed to happen and has been suppressed.", sender == null ? "" : sender.getUUID());
-                return;
-            }
-
-            BlockEntity t = world.getBlockEntity(packet.pos);
-            if (t != null) {
-                t.load(packet.tag);
-                t.setChanged();
-            }
-        });
-        ctx.get().setPacketHandled(true);
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -1,14 +1,26 @@
 package elucent.eidolon.network;
 
-import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.registries.EidolonCapabilities;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class WingsDashPacket {
+public class WingsDashPacket extends AbstractPacket {
+    public static final Type<WingsDashPacket> TYPE = new Type<>(elucent.eidolon.Eidolon.prefix("wings_dash"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, WingsDashPacket> CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC,
+            pkt -> pkt.uuid,
+            WingsDashPacket::new
+    );
+
     final UUID uuid;
 
     public WingsDashPacket(Player player) {
@@ -27,18 +39,18 @@ public class WingsDashPacket {
         return new WingsDashPacket(buffer.readUUID());
     }
 
-    public static void consume(WingsDashPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
-
-            Level world = ctx.get().getSender().level;
-            if (world != null) {
-                Player player = world.getPlayerByUUID(packet.uuid);
-                if (player != null) {
-                    player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> d.tryDash(player));
-                }
+    @Override
+    public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
+        if (player.getUUID().equals(this.uuid)) {
+            var wing = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (wing != null) {
+                wing.tryDash(player);
             }
-        });
-        ctx.get().setPacketHandled(true);
+        }
+    }
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

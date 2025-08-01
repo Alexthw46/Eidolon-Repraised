@@ -1,11 +1,19 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.codex.CodexGui;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public class OpenCodexPacket {
+public class OpenCodexPacket extends AbstractPacket {
+    public static final Type<OpenCodexPacket> TYPE = new Type<>(Eidolon.prefix("open_codex"));
+    public static final StreamCodec<FriendlyByteBuf, OpenCodexPacket> CODEC = StreamCodec.ofMember(
+            OpenCodexPacket::encode,
+            OpenCodexPacket::decode
+    );
 
     public OpenCodexPacket() {
     }
@@ -17,12 +25,13 @@ public class OpenCodexPacket {
         return new OpenCodexPacket();
     }
 
-
-    public static void consume(OpenCodexPacket pkt, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            Eidolon.proxy.openCodexGui(context.getSender());
-        });
-        context.setPacketHandled(true);
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        minecraft.setScreen(CodexGui.getInstance());
     }
+
+    public @NotNull Type<OpenCodexPacket> type() {
+        return TYPE;
+    }
+
 }

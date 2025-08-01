@@ -2,17 +2,34 @@ package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.EidolonCapabilities;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class KnowledgeUpdatePacket {
+public class KnowledgeUpdatePacket extends AbstractPacket {
+    public static final Type<KnowledgeUpdatePacket> TYPE = new Type<>(Eidolon.prefix("knowledge_update"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, KnowledgeUpdatePacket> CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC,
+            pkt -> pkt.uuid,
+            ByteBufCodecs.COMPOUND_TAG,
+            pkt -> pkt.tag,
+            ByteBufCodecs.BOOL,
+            pkt -> pkt.playSound,
+            KnowledgeUpdatePacket::new
+    );
+
     final UUID uuid;
     CompoundTag tag;
     final boolean playSound;
@@ -25,8 +42,8 @@ public class KnowledgeUpdatePacket {
 
     public KnowledgeUpdatePacket(Player entity, boolean playSound) {
         this.uuid = entity.getUUID();
-        var k = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY;
-        if (k != null) this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
+        var k = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+        if (k != null) this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT(entity.registryAccess());
         this.playSound = playSound;
     }
 
@@ -40,19 +57,19 @@ public class KnowledgeUpdatePacket {
         return new KnowledgeUpdatePacket(buffer.readUUID(), buffer.readNbt(), buffer.readBoolean());
     }
 
-    public static void consume(KnowledgeUpdatePacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
-
-            Level world = Eidolon.proxy.getWorld();
-            Player player = world.getPlayerByUUID(packet.uuid);
-            if (player != null) {
-                player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null).ifPresent((k) -> {
-                    ((INBTSerializable<CompoundTag>)k).deserializeNBT(packet.tag);
-                    if (packet.playSound) player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.5f);
-                });
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        Level world = player.level();
+        if (player.getUUID().equals(this.uuid)) {
+            var k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+            {
+                //((INBTSerializable<CompoundTag>) k).deserializeNBT(this.tag);
+                if (this.playSound) player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.5f);
             }
-        });
-        ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public @NotNull Type<KnowledgeUpdatePacket> type() {
+        return TYPE;
     }
 }

@@ -1,15 +1,22 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public class GenericParticlePacket {
+public class GenericParticlePacket extends AbstractPacket {
+    public static final Type<GenericParticlePacket> TYPE = new Type<>(Eidolon.prefix("generic_particle"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, GenericParticlePacket> CODEC = StreamCodec.ofMember(
+            GenericParticlePacket::encode,
+            GenericParticlePacket::decode
+    );
 
     private final double x;
     private final double y;
@@ -29,44 +36,35 @@ public class GenericParticlePacket {
         this.particle = particle;
     }
 
-    public static GenericParticlePacket decode(FriendlyByteBuf pBuffer) {
-        ParticleType<?> particletype = pBuffer.readById(BuiltInRegistries.PARTICLE_TYPE);
+    public static GenericParticlePacket decode(RegistryFriendlyByteBuf pBuffer) {
         double x = pBuffer.readDouble();
         double y = pBuffer.readDouble();
         double z = pBuffer.readDouble();
         double xSpeed = pBuffer.readDouble();
         double ySpeed = pBuffer.readDouble();
         double zSpeed = pBuffer.readDouble();
-        var particle = readParticle(pBuffer, particletype);
+        var particle = ParticleTypes.STREAM_CODEC.decode(pBuffer);
         return new GenericParticlePacket(x, y, z, xSpeed, ySpeed, zSpeed, particle);
     }
 
-    private static <T extends ParticleOptions> T readParticle(FriendlyByteBuf pBuffer, ParticleType<T> pParticleType) {
-        return pParticleType.getDeserializer().fromNetwork(pParticleType, pBuffer);
-    }
-
-    public void encode(FriendlyByteBuf pBuffer) {
-        pBuffer.writeId(BuiltInRegistries.PARTICLE_TYPE, this.particle.getType());
+    public void encode(RegistryFriendlyByteBuf pBuffer) {
         pBuffer.writeDouble(this.x);
         pBuffer.writeDouble(this.y);
         pBuffer.writeDouble(this.z);
         pBuffer.writeDouble(this.xSpeed);
         pBuffer.writeDouble(this.ySpeed);
         pBuffer.writeDouble(this.zSpeed);
-        this.particle.writeToNetwork(pBuffer);
+        ParticleTypes.STREAM_CODEC.encode(pBuffer, this.particle);
     }
 
-    public static void consume(GenericParticlePacket packet, Supplier<NetworkEvent.Context> pContext) {
-        pContext.get().enqueueWork(() -> {
-            if (pContext.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-                Level world = Eidolon.proxy.getWorld();
-                if (world != null) {
-                    world.addParticle(packet.particle, packet.x, packet.y, packet.z, packet.xSpeed, packet.ySpeed, packet.zSpeed);
-                }
-            }
-
-        });
-        pContext.get().setPacketHandled(true);
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        Level world = player.level();
+        world.addParticle(this.particle, this.x, this.y, this.z, this.xSpeed, this.ySpeed, this.zSpeed);
     }
 
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 }

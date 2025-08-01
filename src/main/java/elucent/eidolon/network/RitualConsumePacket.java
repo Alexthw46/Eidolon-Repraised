@@ -3,17 +3,35 @@ package elucent.eidolon.network;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-
-import java.util.function.Supplier;
-
+import org.jetbrains.annotations.NotNull;
 
 
-public class RitualConsumePacket {
+public class RitualConsumePacket extends AbstractPacket {
+    public static final Type<RitualConsumePacket> TYPE = new Type<>(Eidolon.prefix("ritual_consume"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, RitualConsumePacket> CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.src,
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.dst,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.r,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.g,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.b,
+            RitualConsumePacket::new
+    );
+
     final BlockPos src;
     final BlockPos dst;
     final float r;
@@ -28,33 +46,24 @@ public class RitualConsumePacket {
         this.b = b;
     }
 
-    public static void encode(RitualConsumePacket object, FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(object.src).writeBlockPos(object.dst);
-        buffer.writeFloat(object.r).writeFloat(object.g).writeFloat(object.b);
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        Level world = player.level();
+
+        BlockPos src = this.src, dst = this.dst;
+        world.playSound(Eidolon.proxy.getPlayer(), src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0f, 1.0f);
+        for (int i = 0; i < 10; i++) {
+            Particles.create(EidolonParticles.LINE_WISP_PARTICLE.get())
+                    .setAlpha(0.75f, 0).setScale(0.25f + 0.125f * world.random.nextFloat(), 0).setLifetime(16 + world.random.nextInt(4))
+                    .randomOffset(0.375, 0.375).randomVelocity(0.125, 0.125)
+                    .addVelocity(dst.getX() + 0.5, dst.getY() + 1, dst.getZ() + 0.5)
+                    .setColor(this.r, this.g, this.b, this.r, this.g * 0.5f, this.b * 1.5f)
+                    .spawn(world, src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5);
+        }
     }
 
-    public static RitualConsumePacket decode(FriendlyByteBuf buffer) {
-        return new RitualConsumePacket(buffer.readBlockPos(), buffer.readBlockPos(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
-    }
-
-    public static void consume(RitualConsumePacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
-
-            Level world = Eidolon.proxy.getWorld();
-            if (world != null) {
-                BlockPos src = packet.src, dst = packet.dst;
-                world.playSound(Eidolon.proxy.getPlayer(), src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0f, 1.0f);
-                for (int i = 0; i < 10; i ++) {
-                    Particles.create(EidolonParticles.LINE_WISP_PARTICLE)
-                        .setAlpha(0.75f, 0).setScale(0.25f + 0.125f * world.random.nextFloat(), 0).setLifetime(16 + world.random.nextInt(4))
-                        .randomOffset(0.375, 0.375).randomVelocity(0.125, 0.125)
-                        .addVelocity(dst.getX() + 0.5, dst.getY() + 1, dst.getZ() + 0.5)
-                        .setColor(packet.r, packet.g, packet.b, packet.r, packet.g * 0.5f, packet.b * 1.5f)
-                        .spawn(world, src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5);
-                }
-            }
-        });
-        ctx.get().setPacketHandled(true);
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

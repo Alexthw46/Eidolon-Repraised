@@ -3,13 +3,33 @@ package elucent.eidolon.network;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.registries.EidolonParticles;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
+public class LifestealEffectPacket extends AbstractPacket {
+    public static final Type<LifestealEffectPacket> TYPE = new Type<>(Eidolon.prefix("lifesteal_effect"));
 
-public class LifestealEffectPacket {
+    public static final StreamCodec<RegistryFriendlyByteBuf, LifestealEffectPacket> CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.src,
+            BlockPos.STREAM_CODEC,
+            pkt -> pkt.dst,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.r,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.g,
+            ByteBufCodecs.FLOAT,
+            pkt -> pkt.b,
+            LifestealEffectPacket::new
+    );
+
     final BlockPos src;
     final BlockPos dst;
     final float r;
@@ -33,23 +53,25 @@ public class LifestealEffectPacket {
         return new LifestealEffectPacket(buffer.readBlockPos(), buffer.readBlockPos(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
     }
 
-    public static void consume(LifestealEffectPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
 
-            Level world = Eidolon.proxy.getWorld();
-            if (world != null) {
-                BlockPos src = packet.src, dst = packet.dst;
-                for (int i = 0; i < 10; i ++) {
-                    Particles.create(EidolonParticles.LINE_WISP_PARTICLE)
-                        .setAlpha(0.75f, 0).setScale(0.25f + 0.125f * world.random.nextFloat(), 0).setLifetime(16 + world.random.nextInt(4))
-                        .randomOffset(0.375, 0.375).randomVelocity(0.125, 0.125)
-                        .addVelocity(dst.getX() + 0.5, dst.getY() + 0.5, dst.getZ() + 0.5)
-                        .setColor(packet.r, packet.g, packet.b, packet.r, packet.g * 0.5f, packet.b * 1.5f)
-                        .spawn(world, src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5);
-                }
-            }
-        });
-        ctx.get().setPacketHandled(true);
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
+        Level world = player.level();
+
+        BlockPos src = this.src, dst = this.dst;
+        for (int i = 0; i < 10; i++) {
+            Particles.create(EidolonParticles.LINE_WISP_PARTICLE.get())
+                    .setAlpha(0.75f, 0).setScale(0.25f + 0.125f * world.random.nextFloat(), 0).setLifetime(16 + world.random.nextInt(4))
+                    .randomOffset(0.375, 0.375).randomVelocity(0.125, 0.125)
+                    .addVelocity(dst.getX() + 0.5, dst.getY() + 0.5, dst.getZ() + 0.5)
+                    .setColor(this.r, this.g, this.b, this.r, this.g * 0.5f, this.b * 1.5f)
+                    .spawn(world, src.getX() + 0.5, src.getY() + 0.5, src.getZ() + 0.5);
+        }
+
+    }
+
+
+    public @NotNull Type<LifestealEffectPacket> type() {
+        return TYPE;
     }
 }

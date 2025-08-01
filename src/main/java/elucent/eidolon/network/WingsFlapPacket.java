@@ -1,15 +1,28 @@
 package elucent.eidolon.network;
 
-import elucent.eidolon.api.capability.IPlayerData;
+import elucent.eidolon.Eidolon;
+import elucent.eidolon.registries.EidolonCapabilities;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class WingsFlapPacket {
+public class WingsFlapPacket extends AbstractPacket {
+    public static final Type<WingsFlapPacket> TYPE = new Type<>(Eidolon.prefix("wings_flap"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, WingsFlapPacket> CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC,
+            pkt -> pkt.uuid,
+            WingsFlapPacket::new
+    );
+
     final UUID uuid;
 
     public WingsFlapPacket(Player player) {
@@ -28,20 +41,21 @@ public class WingsFlapPacket {
         return new WingsFlapPacket(buffer.readUUID());
     }
 
-    public static void consume(WingsFlapPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER;
-
-            ServerPlayer sender = ctx.get().getSender();
-            if (sender == null) return;
-            Level world = sender.level;
-            Player player = world.getPlayerByUUID(packet.uuid);
-            if (player != null) {
-                player.getCapability(IPlayerData.INSTANCE).ifPresent((d) -> d.tryFlapWings(player));
-                var pos = player.getOnPos();
-                Networking.sendToTracking(world, pos, new FeatherEffectPacket(pos));
+    @Override
+    public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
+        Level world = player.level();
+        Player targetPlayer = world.getPlayerByUUID(uuid);
+        if (targetPlayer != null) {
+            var wings = targetPlayer.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (wings != null) {
+                wings.tryFlapWings(player);
             }
-        });
-        ctx.get().setPacketHandled(true);
+            Networking.sendToNearbyClient(world, targetPlayer.getOnPos(), new FeatherEffectPacket(targetPlayer.getOnPos()));
+        }
+
+    }
+
+    public @NotNull Type<WingsFlapPacket> type() {
+        return TYPE;
     }
 }
