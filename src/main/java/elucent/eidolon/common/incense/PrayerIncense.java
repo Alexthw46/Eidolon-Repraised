@@ -42,7 +42,7 @@ public class PrayerIncense extends IncenseRitual {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return false;
         }
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4).getBottomCenter(), pos.offset(5, 5, 5).getCenter()));
         if (effigies.isEmpty()) {
             player.displayClientMessage(Component.translatable("eidolon.message.no_effigy"), true);
             return false;

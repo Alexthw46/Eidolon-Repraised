@@ -7,21 +7,20 @@ import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;
 import elucent.eidolon.compat.CompatHandler;
 import elucent.eidolon.event.Events;
-import elucent.eidolon.gui.*;
 import elucent.eidolon.mixin.BlockEntityTypeAccessor;
+import elucent.eidolon.network.InitCodexPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.proxy.ClientProxy;
 import elucent.eidolon.proxy.ISidedProxy;
 import elucent.eidolon.proxy.ServerProxy;
 import elucent.eidolon.registries.*;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -70,7 +69,7 @@ public class Eidolon {
     public Eidolon(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::sendImc);
-        modEventBus.addListener(this::spawnPlacements);
+        //modEventBus.addListener(this::spawnPlacements);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.register(new Registry());
@@ -96,7 +95,6 @@ public class Eidolon {
     }
 
     public void setup(final FMLCommonSetupEvent event) {
-        Networking.init();
         event.enqueueWork(() -> {
             Spells.init();
             RitualRegistry.init();
@@ -107,7 +105,7 @@ public class Eidolon {
             Researches.init();
             Runes.init();
             AthameItem.initHarvestables();
-            Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
+            //Raid.RaiderType.create("eidolon:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
             addBlocksToTile(BlockEntityType.SIGN, Registry.ILLWOOD_PLANKS.getStandingSign(), Registry.ILLWOOD_PLANKS.getWallSign(), Registry.POLISHED_PLANKS.getStandingSign(), Registry.POLISHED_PLANKS.getWallSign());
             addBlocksToTile(BlockEntityType.HANGING_SIGN, Registry.ILLWOOD_PLANKS.getHangingSign(), Registry.ILLWOOD_PLANKS.getHangingWallSign(), Registry.POLISHED_PLANKS.getHangingSign(), Registry.POLISHED_PLANKS.getHangingWallSign());
         });
@@ -150,11 +148,6 @@ public class Eidolon {
         BlockEntityRenderers.register(Registry.CENSER_TILE_ENTITY.get(), (trd) -> new CenserRenderer());
 
         event.enqueueWork(() -> {
-            MenuScreens.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
-            MenuScreens.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);
-            MenuScreens.register(Registry.WOODEN_STAND_CONTAINER.get(), WoodenBrewingStandScreen::new);
-            MenuScreens.register(Registry.RESEARCH_TABLE_CONTAINER.get(), ResearchTableScreen::new);
-            MenuScreens.register(Registry.SCRIPTORIUM_CONTAINER.get(), ScriptoriumScreen::new);
 
             ClientRegistry.initCurios();
 
@@ -168,7 +161,7 @@ public class Eidolon {
                 e.setCancellationResult(result);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendToPlayerClient(new InitCodexPacket(), (ServerPlayer) e.getEntity()));
     }
 
 //    @OnlyIn(Dist.CLIENT)

@@ -52,7 +52,7 @@ public class PurityIncense extends IncenseRitual {
             BlockPos pos = censer.getBlockPos();
             assert level != null;
             for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range()))) {
-                entity.getActiveEffects().removeIf(effect -> !effect.getEffect().isBeneficial() && !effect.getEffect().getCurativeItems().isEmpty());
+                entity.getActiveEffects().removeIf(effect -> !effect.getEffect().value().isBeneficial() && !effect.getCures().isEmpty());
             }
         }
     }

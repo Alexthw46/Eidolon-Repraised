@@ -56,12 +56,12 @@ public class SummonRitual extends Ritual {
     @Override
     public RitualResult start(Level world, BlockPos pos) {
         if (!world.isClientSide) {
-            Networking.sendToTracking(world, pos, new CrystallizeEffectPacket(pos));
+            Networking.sendToNearbyClient(world, pos, new CrystallizeEffectPacket(pos));
             for (int i = 0; i < count; i++) {
                 Entity e = entity.create(world);
                 if (e == null) continue;
                 if (e instanceof Mob m && world instanceof ServerLevelAccessor l) {
-                    EventHooks.onFinalizeSpawn(m, l, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
+                    EventHooks.finalizeMobSpawn(m, l, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
                     m.setCanPickUpLoot(true);
                 }
                 e.setPos(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);

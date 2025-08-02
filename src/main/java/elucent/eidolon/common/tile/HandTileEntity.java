@@ -7,7 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -33,27 +33,27 @@ public class HandTileEntity extends TileEntityBase implements IRitualItemProvide
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
+    public ItemInteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && level != null && !level.isClientSide) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (itemInHand.isEmpty() && !stack.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, stack);
                 stack = ItemStack.EMPTY;
                 if (!level.isClientSide) sync(level.registryAccess());
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && stack.isEmpty()) {
                 stack = itemInHand.split(1);
                 if (!level.isClientSide) sync(level.registryAccess());
-                return InteractionResult.SUCCESS;
-            } else if (!itemInHand.isEmpty() && !stack.isEmpty()) {
+                return ItemInteractionResult.SUCCESS;
+            } else if (!itemInHand.isEmpty()) {
                 ItemStack oldstack = stack.copy();
                 stack = itemInHand.split(1);
                 ItemHandlerHelper.giveItemToPlayer(player, oldstack);
                 if (!level.isClientSide) sync(level.registryAccess());
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

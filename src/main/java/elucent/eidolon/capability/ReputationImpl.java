@@ -6,6 +6,7 @@ import elucent.eidolon.registries.Spells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -88,7 +89,6 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
         return reputationMap;
     }
 
-    @Override
     public CompoundTag serializeNBT() {
         CompoundTag data = new CompoundTag();
         CompoundTag reps = new CompoundTag();
@@ -114,7 +114,6 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
         return data;
     }
 
-    @Override
     public void deserializeNBT(CompoundTag nbt) {
         getReputationMap().clear();
         if (nbt.contains("reps")) {
@@ -124,9 +123,9 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                 CompoundTag tag = reps.getCompound(uuidString);
                 for (String deity : tag.getAllKeys()) {
                     CompoundTag entry = tag.getCompound(deity);
-                    setReputation(uuid, ResourceLocation.fromNamespaceAndPath(deity),entry.getDouble("rep" ));
+                    setReputation(uuid, ResourceLocation.parse(deity), entry.getDouble("rep"));
                     if (entry.contains("lock"))
-                        lock(uuid, ResourceLocation.fromNamespaceAndPath(deity),new ResourceLocation(entry.getString("lock" )));
+                        lock(uuid, ResourceLocation.parse(deity), ResourceLocation.parse(entry.getString("lock")));
                 }
             }
         }
@@ -136,7 +135,7 @@ public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag
                 UUID uuid = UUID.fromString(uuidString);
                 CompoundTag spelltimes = times.getCompound(uuidString);
                 for (String rl : spelltimes.getAllKeys()) {
-                    if (Spells.find(new ResourceLocation(rl)) instanceof PrayerSpell prayerSpell)
+                    if (Spells.find(ResourceLocation.parse(rl)) instanceof PrayerSpell prayerSpell)
                         pray(uuid, prayerSpell, spelltimes.getLong(rl));
                 }
             }

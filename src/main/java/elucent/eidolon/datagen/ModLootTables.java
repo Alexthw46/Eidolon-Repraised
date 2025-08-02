@@ -2,10 +2,11 @@ package elucent.eidolon.datagen;
 
 import elucent.eidolon.registries.DecoBlockPack;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -13,13 +14,17 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ModLootTables extends LootTableProvider {
 
-    public ModLootTables(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn.getPackOutput(), new HashSet<>(), List.of(new SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)));
+    public ModLootTables(DataGenerator dataGeneratorIn, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(dataGeneratorIn.getPackOutput(), new HashSet<>(), List.of(new SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)), lookupProvider);
     }
 
     private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
@@ -27,18 +32,18 @@ public class ModLootTables extends LootTableProvider {
     public static class BlockLootTable extends BlockLootSubProvider {
         public final List<Block> list = new ArrayList<>();
 
-        protected BlockLootTable() {
-            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), new HashMap<>());
+        protected BlockLootTable(HolderLookup.Provider provider) {
+            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
         }
 
         @Override
-        public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> p_249322_) {
+        public void generate(@NotNull BiConsumer<ResourceKey<LootTable>, LootTable.Builder> p_249322_) {
             this.generate();
-            Set<ResourceLocation> set = new HashSet<>();
+            Set<ResourceKey<LootTable>> set = new HashSet<>();
 
             for (Block block : list) {
                 if (block.isEnabled(this.enabledFeatures)) {
-                    ResourceLocation resourcelocation = block.getLootTable();
+                    ResourceKey<LootTable> resourcelocation = block.getLootTable();
                     if (resourcelocation != BuiltInLootTables.EMPTY && set.add(resourcelocation)) {
                         LootTable.Builder loottable$builder = this.map.remove(resourcelocation);
                         if (loottable$builder == null) {

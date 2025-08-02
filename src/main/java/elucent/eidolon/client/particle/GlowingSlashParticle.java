@@ -75,7 +75,7 @@ public class GlowingSlashParticle extends TextureSheetParticle {
     }
     
     private void decoVert(VertexConsumer vc, float u, float v, float alpha, int lmap) {
-        vc.uv(u, v).color(rCol, gCol, bCol, alpha).uv2(lmap).endVertex();
+        vc.setUv(u, v).setColor(rCol, gCol, bCol, alpha).setLight(lmap);
     }
 
     @Override
@@ -137,15 +137,15 @@ public class GlowingSlashParticle extends TextureSheetParticle {
     }
 
     private void decoVert(VertexConsumer b, float ox, float dx2, float r, float w2, float oy, float dy2, float oz, float dz2, float u1, float v1, float al2, int lmap, float v0, float dx1, float w1, float dy1, float dz1, float u0, float al1) {
-        decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v1, al2, lmap);
-        decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v0, al2, lmap);
-        decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v0, al1, lmap);
-        decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v1, al1, lmap);
+        decoVert(b.addVertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v1, al2, lmap);
+        decoVert(b.addVertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v0, al2, lmap);
+        decoVert(b.addVertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v0, al1, lmap);
+        decoVert(b.addVertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v1, al1, lmap);
 
         // back
-        decoVert(b.vertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v1, al2, lmap);
-        decoVert(b.vertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v0, al2, lmap);
-        decoVert(b.vertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v0, al1, lmap);
-        decoVert(b.vertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v1, al1, lmap);
+        decoVert(b.addVertex(ox + dx2 * r + dx2 * -w2, oy + dy2 * r + dy2 * -w2, oz + dz2 * r + dz2 * -w2), u1, v1, al2, lmap);
+        decoVert(b.addVertex(ox + dx2 * r + dx2 * w2, oy + dy2 * r + dy2 * w2, oz + dz2 * r + dz2 * w2), u1, v0, al2, lmap);
+        decoVert(b.addVertex(ox + dx1 * r + dx1 * w1, oy + dy1 * r + dy1 * w1, oz + dz1 * r + dz1 * w1), u0, v0, al1, lmap);
+        decoVert(b.addVertex(ox + dx1 * r + dx1 * -w1, oy + dy1 * r + dy1 * -w1, oz + dz1 * r + dz1 * -w1), u0, v1, al1, lmap);
     }
 }

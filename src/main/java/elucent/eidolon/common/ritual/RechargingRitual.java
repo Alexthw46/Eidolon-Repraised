@@ -35,7 +35,7 @@ public class RechargingRitual extends Ritual {
             if (stack.getItem() instanceof IRechargeableWand) {
                 tile.replace(((IRechargeableWand) stack.getItem()).recharge(stack));
                 if (!world.isClientSide && tile instanceof BlockEntity b) {
-                    Networking.sendToTracking(world, b.getBlockPos(), new RitualConsumePacket(pos.above(2), b.getBlockPos(), getRed(), getGreen(), getBlue()));
+                    Networking.sendToNearbyClient(world, b.getBlockPos(), new RitualConsumePacket(pos.above(2), b.getBlockPos(), getRed(), getGreen(), getBlue()));
                 }
                 break;
             }

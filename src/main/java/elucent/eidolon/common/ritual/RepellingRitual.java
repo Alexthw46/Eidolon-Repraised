@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RepellingRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/repelling_ritual" );
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/repelling_ritual");
 
     public RepellingRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 190, 212, 184));
@@ -34,17 +34,17 @@ public class RepellingRitual extends Ritual {
         if (world.getGameTime() % 200 == 0) {
             List<Monster> monsters = world.getEntitiesOfClass(Monster.class, new AABB(pos).inflate(96, 16, 96));
             for (Monster a : monsters) {
-                boolean hasGoal = a.goalSelector.getRunningGoals().anyMatch((goal) -> goal.getGoal() instanceof GoToPositionGoal);
+                List<Goal> goals = a.goalSelector.getAvailableGoals().stream().filter((goal) -> goal.isRunning() && goal.getGoal() instanceof GoToPositionGoal)
+                        .collect(Collectors.toList());
+                boolean hasGoal = !goals.isEmpty();
                 if (!hasGoal && a.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) <= 80 * 80) {
                     Vec3i diff = a.blockPosition().subtract(pos);
                     Vec3 diffv = new Vec3(diff.getX(), 0, diff.getZ());
                     diffv = diffv.scale(90 / diffv.length());
-                    int i = pos.getX() + (int)diffv.x, j = pos.getZ() + (int)diffv.z;
+                    int i = pos.getX() + (int) diffv.x, j = pos.getZ() + (int) diffv.z;
                     BlockPos target = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, new BlockPos(i, 0, j));
                     a.goalSelector.addGoal(1, new GoToPositionGoal(a, target, 1.0));
                 } else if (hasGoal && a.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > 88 * 88) {
-                    List<Goal> goals = a.goalSelector.getRunningGoals().filter((goal) -> goal.getGoal() instanceof GoToPositionGoal)
-                        .collect(Collectors.toList());
                     for (Goal g : goals) a.goalSelector.removeGoal(g);
                 }
             }

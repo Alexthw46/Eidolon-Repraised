@@ -2,8 +2,8 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -27,7 +28,7 @@ public class ConvertZombieSpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) {
@@ -45,7 +46,7 @@ public class ConvertZombieSpell extends PrayerSpell {
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) return;
 
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager villager)) return;
 
         if (world instanceof ServerLevel) {

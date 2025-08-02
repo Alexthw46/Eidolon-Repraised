@@ -82,13 +82,13 @@ public class EidRitualProvider extends SimpleDataProvider {
                 List.of(Blocks.SOUL_SAND));
 
         makeSummon(prefix("summon_husk"),
-                EntityType.STRAY,
+                EntityType.STRAY, 3,
                 Items.CHARCOAL,
                 ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
                 List.of(Ingredient.of(Tags.Items.SANDS)));
 
         makeSummon(prefix("summon_drowned"), EntityType.DROWNED,
-                Items.CHARCOAL,
+                3, Items.CHARCOAL,
                 ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
                 List.of(Ingredient.of(Tags.Items.GEMS_PRISMARINE)));
 
@@ -196,11 +196,11 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     public void crafting(ItemStack result, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new ItemRitualRecipe(getRegistryName(result.getItem()), pedestal, foci, reagent, result, true, healthCost));
+        rituals.add(new ItemRitualRecipe(reagent, foci, pedestal, result, true, healthCost));
     }
 
     public void location(TagKey<Structure> structureTagKey, ResourceLocation location, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new LocationRitualRecipe(location, structureTagKey.location(), reagent, pedestal, foci, healthCost));
+        rituals.add(new LocationRitualRecipe(structureTagKey.location(), reagent, pedestal, foci, healthCost));
     }
 
 
@@ -209,7 +209,7 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, int count, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
-        rituals.add(new SummonRitualRecipe(id, getRegistryName(type), Ingredient.of(item), pedestal, foci, count, 0));
+        rituals.add(new SummonRitualRecipe(getRegistryName(type), Ingredient.of(item), pedestal, foci, count, 0));
     }
 
     public void makeSummon(ResourceLocation id, EntityType<?> type, List<ItemLike> pedestal, List<ItemLike> foci) {

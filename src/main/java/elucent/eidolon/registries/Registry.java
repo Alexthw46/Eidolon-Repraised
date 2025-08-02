@@ -58,6 +58,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -160,7 +161,7 @@ public class Registry {
     public static final WoodType POLISHED = register(new WoodType("eidolon:polished", BlockSetType.DARK_OAK));
 
     static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> addContainer(String name, MenuType.MenuSupplier<T> factory) {
-        return CONTAINERS.register(name, () -> new MenuType<>(factory, FeatureFlags.VANILLA_SET));
+        return CONTAINERS.register(name, () -> new MenuType<>(factory, FeatureFlags.DEFAULT_FLAGS));
     }
 
     public static final DeferredHolder<Item, Item>
@@ -511,16 +512,25 @@ public class Registry {
                     .sound(SoundType.STONE).strength(3.0f, 3.0f)
                     .requiresCorrectToolForDrops()));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
+    public static final DeferredHolder<MenuType<?>, MenuType<WorktableContainer>>
             WORKTABLE_CONTAINER = addContainer("worktable", WorktableContainer::new);
-    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
+    public static final DeferredHolder<MenuType<?>, MenuType<SoulEnchanterContainer>>
             SOUL_ENCHANTER_CONTAINER = addContainer("soul_enchanter", SoulEnchanterContainer::new);
-    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
+    public static final DeferredHolder<MenuType<?>, MenuType<WoodenBrewingStandContainer>>
             WOODEN_STAND_CONTAINER = addContainer("wooden_brewing_stand", WoodenBrewingStandContainer::new);
-    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
+    public static final DeferredHolder<MenuType<?>, MenuType<ResearchTableContainer>>
             RESEARCH_TABLE_CONTAINER = addContainer("research_table", ResearchTableContainer::new);
-    public static final DeferredHolder<MenuType<?>, MenuType<AbstractContainerMenu>>
+    public static final DeferredHolder<MenuType<?>, MenuType<ScriptoriumContainer>>
             SCRIPTORIUM_CONTAINER = addContainer("scriptorium", ScriptoriumContainer::new);
+
+    @SubscribeEvent // on the mod event bus only on the physical client
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
+        event.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);
+        event.register(Registry.WOODEN_STAND_CONTAINER.get(), WoodenBrewingStandScreen::new);
+        event.register(Registry.RESEARCH_TABLE_CONTAINER.get(), ResearchTableScreen::new);
+        event.register(Registry.SCRIPTORIUM_CONTAINER.get(), ScriptoriumScreen::new);
+    }
 
     public static void init(IEventBus modEventBus) {
         EidolonAttributes.ATTRIBUTES.register(modEventBus);

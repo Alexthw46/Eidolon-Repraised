@@ -5,6 +5,7 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class GlassHandItem extends ItemBase {
@@ -14,13 +15,13 @@ public class GlassHandItem extends ItemBase {
     }
 
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event) {
-        if (CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.GLASS_HAND.get()).isPresent()) {
-            event.setAmount(event.getAmount() * 5);
+    public static void onHurt(LivingDamageEvent.Pre event) {
+        if (CuriosApi.getCuriosInventory(event.getEntity()).flatMap(i -> i.findFirstCurio(Registry.GLASS_HAND.get())).isPresent()) {
+            event.setNewDamage(event.getNewDamage() * 5);
         }
         if (event.getSource().getEntity() instanceof LivingEntity living &&
-            CuriosApi.getCuriosHelper().findFirstCurio(living, Registry.GLASS_HAND.get()).isPresent()) {
-            event.setAmount(event.getAmount() * 2);
+                CuriosApi.getCuriosInventory(living).flatMap(i -> i.findFirstCurio(Registry.GLASS_HAND.get())).isPresent()) {
+            event.setNewDamage(event.getNewDamage() * 2);
         }
     }
 

@@ -41,7 +41,7 @@ public class KnowledgeUtil {
                         Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))
         ));
         AdvancementTriggers.triggerSign(sign, player);
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
     }
 
     public static void grantFact(Entity entity, ResourceLocation fact) {
@@ -54,7 +54,7 @@ public class KnowledgeUtil {
         player.connection.send(new ClientboundSetActionBarTextPacket(
                 Component.translatable("eidolon.title.new_fact")
         ));
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
         AdvancementTriggers.triggerResearch(fact, player);
     }
 
@@ -70,7 +70,7 @@ public class KnowledgeUtil {
                 Component.translatable("eidolon.title.new_research",
                         ChatFormatting.GOLD + research.getName())
         ));
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
         AdvancementTriggers.triggerResearch(research.getRegistryName(), player);
     }
 
@@ -81,7 +81,7 @@ public class KnowledgeUtil {
         if (knowledge == null || knowledge.knowsResearch(research)) return;
 
         knowledge.addResearch(research);
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
         AdvancementTriggers.triggerResearch(research, player);
     }
 
@@ -97,7 +97,7 @@ public class KnowledgeUtil {
                 Component.translatable("eidolon.title.new_rune",
                         Component.translatable(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))
         ));
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
     }
 
     public static List<Sign> getKnownSigns(Player player) {
@@ -166,7 +166,7 @@ public class KnowledgeUtil {
         if (knowledge == null || !check.test(knowledge)) return;
 
         removeAction.accept(knowledge);
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
     }
 
     private static void resetPart(Entity entity, Consumer<IKnowledge> resetAction) {
@@ -176,7 +176,7 @@ public class KnowledgeUtil {
         if (knowledge == null) return;
 
         resetAction.accept(knowledge);
-        Networking.sendTo(player, new KnowledgeUpdatePacket(player, true));
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
     }
 
     public static void tryFix(Player player) {

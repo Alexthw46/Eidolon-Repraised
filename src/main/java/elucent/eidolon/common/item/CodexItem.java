@@ -2,10 +2,9 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.registries.Signs;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -50,17 +49,16 @@ public class CodexItem extends ItemBase implements IManaRelatedItem {
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClientSide && stack.hasTag() && stack.getTag().contains("sign")) {
-            ResourceLocation loc = new ResourceLocation(stack.getTag().getString("sign"));
-            stack.getTag().remove("sign");
-            Sign sign = Signs.find(loc);
+        if (!world.isClientSide && stack.get(EidolonDataComponents.SIGN) != null) {
+            Sign sign = stack.get(EidolonDataComponents.SIGN);
+            stack.remove(EidolonDataComponents.SIGN);
             if (sign != null) KnowledgeUtil.grantSign(entity, sign);
         }
     }
 
     public static ItemStack withSign(ItemStack stack, Sign sign) {
         ItemStack newStack = stack.copy();
-        newStack.getOrCreateTag().putString("sign", sign.getRegistryName().toString());
+        newStack.set(EidolonDataComponents.SIGN, sign);
         return newStack;
     }
 }

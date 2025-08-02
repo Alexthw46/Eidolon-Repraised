@@ -28,14 +28,17 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
 
     public NecromancerSpellEntity(EntityType<? extends SpellProjectileEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
-        getEntityData().define(DELAY, 0);
     }
 
     public NecromancerSpellEntity(Level worldIn, double x, double y, double z, double vx, double vy, double vz, int delay) {
         super(EidolonEntities.NECROMANCER_SPELL.get(), worldIn);
         setPos(x, y, z);
         setDeltaMovement(vx, vy, vz);
-        getEntityData().define(DELAY, delay);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DELAY, 0);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class NecromancerSpellEntity extends SpellProjectileEntity {
         if (!level().isClientSide) {
             Vec3 pos = ray.getLocation();
             level().playSound(null, pos.x, pos.y, pos.z, SoundEvents.WITHER_SHOOT, SoundSource.HOSTILE, 0.5f, random.nextFloat() * 0.2f + 0.9f);
-            Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 158, 92, 255), ColorUtil.packColor(255, 60, 62, 186)));
+            Networking.sendToNearbyClient(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 158, 92, 255), ColorUtil.packColor(255, 60, 62, 186)));
         }
     }
 

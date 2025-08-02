@@ -5,9 +5,7 @@ import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -30,12 +28,12 @@ public class Scriptorium extends HorizontalBlockBase implements EntityBlock {
     @Override
     protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack pStack, @NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         if (worldIn.isClientSide) {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else {
             if (worldIn.getBlockEntity(pos) instanceof ScriptoriumTile tile && player.getItemInHand(handIn).getItem() == Registry.PARCHMENT.get()) {
-                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(tile, Component.translatable("eidolon.gui.scriptorium")), pos);
+                player.openMenu(new SimpleMenuProvider(tile, Component.translatable("eidolon.gui.scriptorium")), pos);
             }
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
     }
 

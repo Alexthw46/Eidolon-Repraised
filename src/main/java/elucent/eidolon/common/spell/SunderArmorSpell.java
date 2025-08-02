@@ -13,7 +13,7 @@ public class SunderArmorSpell extends ApplyPotionSpell {
 
     @Override
     protected MobEffectInstance getPotionEffect(Player player) {
-        return new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT.get(), 1200, 0);
+        return new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT, 1200, 0);
     }
 
 }

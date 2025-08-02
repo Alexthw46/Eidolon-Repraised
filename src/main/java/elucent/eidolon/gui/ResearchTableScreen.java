@@ -5,8 +5,10 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
 import elucent.eidolon.api.research.ResearchTask.CompletenessResult;
+import elucent.eidolon.common.item.ResearchNotesItem;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.ResearchActionPacket;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import net.minecraft.client.Minecraft;
@@ -36,7 +38,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
     }
 
 	public void render(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
+		this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
@@ -52,17 +54,18 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 		mouseX = mouseX * (double) Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double) Minecraft.getInstance().getWindow().getScreenWidth();
 		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
 
-		if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
+		if (menu.slots.getFirst().getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
         	ItemStack notes = menu.slots.get(0).getItem();
-        	if (!notes.hasTag() || !notes.getTag().contains("research")) return;
-        	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+			ResearchNotesItem.ResearchData researchData = notes.get(EidolonDataComponents.RESEARCH);
+			if (researchData == null) return;
+			Research r = Researches.find(researchData.research());
         	if (r == null) return;
 
         	int nstars = r.getStars();
-        	int done = notes.getTag().getInt("stepsDone");
-        	
+			int done = researchData.stepsDone();
+
         	if (done < nstars) {
-                List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+				List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), done);
                 int slotStart = 38;
 	        	for (int k = 0; k < tasks.size(); k ++) {
 	        		ResearchTask task = tasks.get(k);
@@ -80,11 +83,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
     	if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get() && menu.getProgress() == 0) {
         	ItemStack notes = menu.slots.get(0).getItem();
-        	if (!notes.hasTag() || !notes.getTag().contains("research")) return false;
-        	Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+			ResearchNotesItem.ResearchData researchData = notes.get(EidolonDataComponents.RESEARCH);
+			if (researchData == null) return false;
+			Research r = Researches.find(researchData.research());
         	if (r == null) return false;
 
-            List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+			List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), researchData.stepsDone());
             int slotStart = 38;
         	for (int k = 0; k < tasks.size(); k ++) {
         		ResearchTask task = tasks.get(k);
@@ -99,8 +103,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
         	}
         	
         	int nstars = r.getStars();
-        	int done = notes.getTag().getInt("stepsDone");
-        	
+			int done = researchData.stepsDone();
+
         	if (done >= nstars && isHovering(75, 51, 17, 14, mouseX, mouseY) && !menu.getSlot(1).getItem().isEmpty()) {
         		Networking.sendToServer(new ResearchActionPacket(ResearchActionPacket.Action.STAMP));
         		return true;
@@ -126,10 +130,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 		mouseX = mouseX * (double) Minecraft.getInstance().getWindow().getGuiScaledWidth() / (double) Minecraft.getInstance().getWindow().getScreenWidth();
 		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
 
-		if (menu.slots.get(0).getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
+		if (menu.slots.getFirst().getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
 			ItemStack notes = menu.slots.get(0).getItem();
-			if (!notes.hasTag() || !notes.getTag().contains("research")) return;
-			Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+			ResearchNotesItem.ResearchData researchData = notes.get(EidolonDataComponents.RESEARCH);
+			if (researchData == null) return;
+			Research r = Researches.find(researchData.research());
 			if (r == null) return;
 
 			int progress = menu.getProgress();
@@ -138,10 +143,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 				matrixStack.blit(RESEARCH_TABLE_TEXTURE, i + 137, j + 17 + amt, 192, 92 + amt, 9, 104 - amt);
 
 			int nstars = r.getStars();
-			int done = notes.getTag().getInt("stepsDone");
+			int done = researchData.stepsDone();
 
 			if (done < nstars && progress == 0) {
-				List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), notes.getTag().getInt("stepsDone"));
+				List<ResearchTask> tasks = r.getTasks(menu.getSeed(notes), done);
 				int slotStart = 38;
 				for (int k = 0; k < tasks.size(); k++) {
 					ResearchTask task = tasks.get(k);

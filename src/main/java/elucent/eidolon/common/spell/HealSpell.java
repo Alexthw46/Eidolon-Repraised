@@ -7,15 +7,18 @@ import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class HealSpell extends StaticSpell {
@@ -47,18 +50,18 @@ public class HealSpell extends StaticSpell {
 
             heal += (float) (devotion * getDevotionToHeal());
 
-            HitResult ray = rayTrace(player, player.getEntityReach(), 0, false);
+            HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE), 0, false);
             LivingEntity toHeal;
             boolean other = false;
-            if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living && living.getMobType() != MobType.UNDEAD) {
+            if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living && living.getType().is(EntityTypeTags.UNDEAD)) {
                 toHeal = living;
                 other = living.getHealth() < living.getMaxHealth();
             } else toHeal = player;
 
             toHeal.heal(heal);
             for (MobEffectInstance effectInstance : toHeal.getActiveEffects()) {
-                MobEffect effect = effectInstance.getEffect();
-                if (!effect.isBeneficial() && effect.getCurativeItems().contains(Items.MILK_BUCKET.getDefaultInstance())) {
+                Holder<MobEffect> effect = effectInstance.getEffect();
+                if (!effect.value().isBeneficial() && effectInstance.getCures().contains(EffectCures.MILK)) {
                     toHeal.removeEffect(effect);
                 }
             }

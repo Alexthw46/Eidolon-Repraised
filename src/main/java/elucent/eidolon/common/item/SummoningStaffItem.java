@@ -1,5 +1,7 @@
 package elucent.eidolon.common.item;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
@@ -10,7 +12,6 @@ import elucent.eidolon.util.EntityUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +36,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,20 +45,32 @@ public class SummoningStaffItem extends ItemBase {
         super(builderIn);
     }
 
+    public record ThrallData(List<CompoundTag> thralls, int selected) {
+        public ThrallData(List<CompoundTag> thralls) {
+            this(thralls, 0);
+        }
+
+        public static final Codec<ThrallData> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        Codec.list(CompoundTag.CODEC).fieldOf("thralls").forGetter(ThrallData::thralls),
+                        Codec.INT.optionalFieldOf("selected", 0).forGetter(ThrallData::selected)
+                ).apply(instance, ThrallData::new)
+        );
+    }
+
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.BOW;
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity entity) {
         return 72000;
     }
 
-
     @Override
     public void onUseTick(@NotNull Level pLevel, LivingEntity entity, @NotNull ItemStack stack, int time) {
-        if (entity.level.isClientSide) {
+        if (entity.level().isClientSide) {
             HitResult hit = entity.pick(16, 0, false);
             if (hit.getType() != Type.MISS) {
                 Vec3 pos = hit.getLocation();
@@ -74,8 +88,8 @@ public class SummoningStaffItem extends ItemBase {
                         .setAlpha(0.25f * alpha, 0)
                         .randomOffset(0.05f + 0.05f * alpha)
                         .setScale(0.25f + 0.25f * alpha, alpha * 0.125f)
-                        .repeat(entity.level, pos.x + sa, pos.y, pos.z + ca, 2)
-                        .repeat(entity.level, pos.x - sa, pos.y, pos.z - ca, 2);
+                        .repeat(entity.level(), pos.x + sa, pos.y, pos.z + ca, 2)
+                        .repeat(entity.level(), pos.x - sa, pos.y, pos.z - ca, 2);
             }
         }
     }
@@ -83,9 +97,10 @@ public class SummoningStaffItem extends ItemBase {
     @Override
     public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity entity, int time) {
         if ((72000 - time) >= 20 && hasCharges(stack)) {
-            ListTag charges = getCharges(stack);
-            int selected = getSelected(stack);
-            CompoundTag tag = charges.getCompound(selected);
+            ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+            if (thrallData == null || thrallData.thralls().isEmpty()) return;
+            int selected = thrallData.selected();
+            CompoundTag tag = thrallData.thralls().get(selected);
             HitResult hit = entity.pick(16, 0, false);
             if (hit.getType() != Type.MISS) {
                 Vec3 pos = hit.getLocation();
@@ -97,7 +112,7 @@ public class SummoningStaffItem extends ItemBase {
                         e.get().setPos(pos);
                         EntityUtil.enthrall(entity, (LivingEntity) e.get());
                         level.addFreshEntity(e.get());
-                        Networking.sendToTracking(entity.level(), e.get().blockPosition(), new MagicBurstEffectPacket(e.get().getX(), e.get().getY() + e.get().getBbHeight() / 2, e.get().getZ(),
+                        Networking.sendToNearbyClient(entity.level(), e.get().blockPosition(), new MagicBurstEffectPacket(e.get().getX(), e.get().getY() + e.get().getBbHeight() / 2, e.get().getZ(),
                                 ColorUtil.packColor(255, 61, 70, 35), ColorUtil.packColor(255, 36, 24, 41)));
                         level.playSound(null, e.get().blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.75f, 0.1f);
                     }
@@ -111,56 +126,59 @@ public class SummoningStaffItem extends ItemBase {
     }
 
     public int getSelected(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("selected")) tag.putInt("selected", 0);
-        else if (tag.getInt("selected") >= getCharges(stack).size()) tag.putInt("selected", 0);
-        return tag.getInt("selected");
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        if (thrallData == null) return 0;
+        int selected = thrallData.selected();
+        if (selected >= thrallData.thralls().size()) selected = 0;
+        return selected;
     }
 
     public int changeSelection(ItemStack stack, int diff) {
-        if (!hasCharges(stack)) return 0;
-        CompoundTag tag = stack.getOrCreateTag();
-        int selected = getSelected(stack) + diff % getCharges(stack).size();
-        tag.putInt("selected", selected);
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        if (thrallData == null || thrallData.thralls().isEmpty()) return 0;
+        int size = thrallData.thralls().size();
+        int selected = (thrallData.selected() + diff) % size;
+        if (selected < 0) selected += size;
+        ThrallData newData = new ThrallData(thrallData.thralls(), selected);
+        stack.set(EidolonDataComponents.THRALLS, newData);
         return selected;
     }
 
     public ItemStack addCharges(ItemStack stack, ListTag charges) {
-        List<CompoundTag> existing_thralls = stack.get(EidolonDataComponents.THRALLS);
-        if (existing_thralls == null) {
-            return stack;
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        if (thrallData == null) {
+            thrallData = new ThrallData(new ArrayList<>(), 0);
         }
-
-        while (existing_thralls.size() + charges.size() > 100) charges.removeLast();
-        if (!charges.isEmpty())
-            for (int i = 0; i < charges.size(); i++) existing_thralls.add(charges.getCompound(i));
-
-        stack.set(EidolonDataComponents.THRALLS, existing_thralls);
+        List<CompoundTag> thralls = thrallData.thralls();
+        while (thralls.size() + charges.size() > 100) charges.removeLast();
+        for (int i = 0; i < charges.size(); i++) thralls.add(charges.getCompound(i));
+        stack.set(EidolonDataComponents.THRALLS, new ThrallData(thralls, thrallData.selected()));
         return stack;
     }
 
-    public ItemStack addCharge(ItemStack stack, CompoundTag tag) {
-        ListTag list = getCharges(stack);
-        if (list.size() < 100) list.add(tag);
-        stack.getOrCreateTag().put("charges", list);
-        return stack;
+    public void addCharge(ItemStack stack, CompoundTag tag) {
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        if (thrallData == null) {
+            thrallData = new ThrallData(new ArrayList<>(), 0);
+        }
+        List<CompoundTag> thralls = thrallData.thralls();
+        if (thralls.size() < 100) thralls.add(tag);
+        stack.set(EidolonDataComponents.THRALLS, new ThrallData(thralls, thrallData.selected()));
     }
 
     public boolean hasCharges(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        ListTag list = tag.getList("charges", Tag.TAG_COMPOUND);
-        return tag.contains("charges") && !list.isEmpty();
-    }
-
-    public ListTag getCharges(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        return tag.contains("charges") ? tag.getList("charges", Tag.TAG_COMPOUND) : new ListTag();
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        return thrallData != null && !thrallData.thralls().isEmpty();
     }
 
     public ItemStack consumeCharge(ItemStack stack, int index) {
-        ListTag list = getCharges(stack);
-        if (list.size() > index) list.remove(index);
-        stack.getOrCreateTag().put("charges", list);
+        ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+        if (thrallData == null) return stack;
+        List<CompoundTag> thralls = new ArrayList<>(thrallData.thralls());
+        if (index < thralls.size()) thralls.remove(index);
+        int selected = thrallData.selected();
+        if (selected >= thralls.size()) selected = 0;
+        stack.set(EidolonDataComponents.THRALLS, new ThrallData(thralls, selected));
         return stack;
     }
 
@@ -171,7 +189,9 @@ public class SummoningStaffItem extends ItemBase {
         if (hasCharges(stack)) {
             if (player.isShiftKeyDown()) {
                 int sel = changeSelection(stack, 1);
-                CompoundTag tag = getCharges(stack).getCompound(sel);
+                ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+                if (thrallData == null || thrallData.thralls().isEmpty()) return InteractionResultHolder.fail(stack);
+                CompoundTag tag = thrallData.thralls().get(sel);
                 ResourceLocation id = ResourceLocation.parse(tag.getString("id"));
                 String summonKey = "entity." + id.getNamespace() + "." + id.getPath();
                 player.setItemInHand(hand, stack);
@@ -195,7 +215,9 @@ public class SummoningStaffItem extends ItemBase {
         int selected = getSelected(stack);
         String summonKey = "eidolon.tooltip.no_selected_summon";
         if (charge) {
-            CompoundTag tag = getCharges(stack).getCompound(selected);
+            ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
+            if (thrallData == null || thrallData.thralls().isEmpty()) return;
+            CompoundTag tag = thrallData.thralls().get(selected);
             String ids = tag.getString("id");
             ResourceLocation id = ResourceLocation.parse(tag.getString("id"));
             summonKey = "entity." + id.getNamespace() + "." + id.getPath();

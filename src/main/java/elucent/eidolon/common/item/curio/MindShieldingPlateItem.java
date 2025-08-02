@@ -21,7 +21,7 @@ public class MindShieldingPlateItem extends ItemBase {
 
     @SubscribeEvent
     public static void onPotion(MobEffectEvent.Applicable event) {
-        if (event.getEffectInstance().getEffect() == MobEffects.CONFUSION && CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.MIND_SHIELDING_PLATE.get()).isPresent()) {
+        if (event.getEffectInstance().getEffect() == MobEffects.CONFUSION && CuriosApi.getCuriosInventory(event.getEntity()).flatMap(i -> i.findFirstCurio(Registry.MIND_SHIELDING_PLATE.get())).isPresent()) {
             event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
         }
     }
@@ -38,7 +38,7 @@ public class MindShieldingPlateItem extends ItemBase {
 
     @SubscribeEvent
     public static void onDropXP(LivingExperienceDropEvent event) {
-        if (event.getEntity() instanceof Player player && CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.MIND_SHIELDING_PLATE.get()).isPresent()) {
+        if (event.getEntity() instanceof Player player && CuriosApi.getCuriosInventory(event.getEntity()).flatMap(i -> i.findFirstCurio(Registry.MIND_SHIELDING_PLATE.get())).isPresent()) {
             player.experienceLevel |= LEVEL_FLAG;
             event.setCanceled(true);
         }

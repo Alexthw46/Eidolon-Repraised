@@ -1,7 +1,8 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.ISoul;
+import elucent.eidolon.registries.EidolonCapabilities;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,12 +12,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class SoulUpdatePacket extends AbstractPacket {
     public static final Type<SoulUpdatePacket> TYPE = new Type<>(Eidolon.prefix("soul_update"));
@@ -55,13 +53,13 @@ public class SoulUpdatePacket extends AbstractPacket {
         this.isPlayer = entity instanceof Player;
         if (isPlayer) this.uuid = entity.getUUID();
         else this.id = entity.getId();
-        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
+        this.tag = entity.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY).serializeNBT();
     }
 
     public SoulUpdatePacket(Player entity) {
         this.isPlayer = true;
         this.uuid = entity.getUUID();
-        entity.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT());
+        this.tag = entity.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY).serializeNBT();
     }
 
     public static void encode(SoulUpdatePacket object, FriendlyByteBuf buffer) {
@@ -77,17 +75,11 @@ public class SoulUpdatePacket extends AbstractPacket {
         } else return new SoulUpdatePacket(buffer.readInt(), buffer.readNbt());
     }
 
-    public static void consume(SoulUpdatePacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
+    @Override
+    public void onClientReceived(Minecraft minecraft, Player player) {
 
-            Level world = Eidolon.proxy.getWorld();
-            LivingEntity e = packet.isPlayer ? world.getPlayerByUUID(packet.uuid) : (LivingEntity)world.getEntity(packet.id);
-            if (e != null) {
-                e.getCapability(ISoul.INSTANCE, null).ifPresent((k) -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(packet.tag));
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        player.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY).deserializeNBT(this.tag);
+
     }
 
     @Override

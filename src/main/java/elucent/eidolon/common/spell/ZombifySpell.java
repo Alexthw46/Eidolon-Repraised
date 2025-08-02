@@ -2,8 +2,8 @@ package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.capability.IReputation;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -33,7 +34,7 @@ public class ZombifySpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof Villager;
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) {
@@ -52,7 +53,7 @@ public class ZombifySpell extends PrayerSpell {
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) return;
 
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof Villager villager)) return;
 
         if (world instanceof ServerLevel level) {
@@ -74,10 +75,10 @@ public class ZombifySpell extends PrayerSpell {
     private void zombify(Villager villager, ServerLevel level) {
         ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
         if (zombievillager == null) return;
-        zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
+        zombievillager.finalizeSpawn(level, level.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true));
         zombievillager.setVillagerData(villager.getVillagerData());
         zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
-        zombievillager.setTradeOffers(villager.getOffers().createTag());
+        zombievillager.setTradeOffers(villager.getOffers());
         zombievillager.setVillagerXp(villager.getVillagerXp());
         EventHooks.onLivingConvert(villager, zombievillager);
     }

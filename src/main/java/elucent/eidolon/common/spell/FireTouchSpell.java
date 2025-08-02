@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -35,7 +36,7 @@ public class FireTouchSpell extends StaticSpell {
         //List<BrazierTileEntity> braziers = getTilesWithinAABB(BrazierTileEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         //List<CampfireBlockEntity> campfires = getTilesWithinAABB(CampfireBlockEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (!KnowledgeUtil.knowsResearch(player, Researches.FIRE_SPELL.getRegistryName())) return false;
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (ray instanceof BlockHitResult rayTraceResult) {
             BlockState hitState = world.getBlockState(rayTraceResult.getBlockPos());
             if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
@@ -55,18 +56,18 @@ public class FireTouchSpell extends StaticSpell {
             //List<BrazierTileEntity> braziers = getTilesWithinAABB(BrazierTileEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
             //List<CampfireBlockEntity> campfires = getTilesWithinAABB(CampfireBlockEntity.class, world, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
 
-            HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+            HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
             if (ray instanceof BlockHitResult blockHitResult) {
                 BlockState hitState = world.getBlockState(blockHitResult.getBlockPos());
                 if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
                     world.setBlock(blockHitResult.getBlockPos(), hitState.setValue(LIT, Boolean.TRUE), 11);
-                    Networking.sendToTracking(world, blockHitResult.getBlockPos(), new IgniteEffectPacket(blockHitResult.getBlockPos(), 1.0F, 0.5F, 0.25F));
+                    Networking.sendToNearbyClient(world, blockHitResult.getBlockPos(), new IgniteEffectPacket(blockHitResult.getBlockPos(), 1.0F, 0.5F, 0.25F));
                 } else if (world.getBlockEntity(blockHitResult.getBlockPos()) instanceof IBurner brazier) {
                     brazier.startBurning(player, world, blockHitResult.getBlockPos());
                 }
                 world.playSound(player, blockPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
             } else if (ray instanceof EntityHitResult entityHitResult) {
-                entityHitResult.getEntity().setSecondsOnFire(10);
+                entityHitResult.getEntity().setRemainingFireTicks(200);
             } else return;
             IMana.expendMana(player, getCost());
         }

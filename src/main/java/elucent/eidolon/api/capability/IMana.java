@@ -1,12 +1,10 @@
 package elucent.eidolon.api.capability;
 
-import com.hollingsworth.arsnouveau.common.capability.ManaData;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.registries.EidolonCapabilities;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public interface IMana {
 
@@ -17,8 +15,8 @@ public interface IMana {
         if (mana == null) return;
         if (mana.getMagic() >= amount) {
             mana.takeMagic(amount);
-            if (!player.level().isClientSide)
-                Networking.sendToTracking(player.level(), player.getOnPos(), new SoulUpdatePacket(player));
+            if (player instanceof ServerPlayer serverPlayer)
+                Networking.sendToPlayerClient(new SoulUpdatePacket(player), serverPlayer);
         }
     }
 

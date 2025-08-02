@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
 
@@ -39,21 +40,17 @@ public class DarkTouchSpell extends StaticSpell {
     }
 
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event) {
+    public static void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().is(DamageTypes.WITHER)) {
             ItemStack itemStack = living.getMainHandItem();
             if (itemStack.has(EidolonDataComponents.NECROTIC)) {
-                float amount = Math.min(1, event.getAmount());
-                event.setAmount(event.getAmount() - amount);
-                if (event.getAmount() <= 0) event.setCanceled(true);
+                float amount = Math.min(1, event.getNewDamage());
+                event.setNewDamage(event.getNewDamage() - amount);
                 int prevHurtResist = event.getEntity().invulnerableTime;
                 event.getEntity().invulnerableTime = 0;
                 if (event.getEntity().hurt(DamageTypeData.source(living.level(), DamageTypes.WITHER, living, null), amount)) {
-
-                    itemStack.set(EidolonDataComponents.NECROTIC, itemStack.get(EidolonDataComponents.NECROTIC) - 1);
-
-                    if (living.getHealth() <= 0) event.setCanceled(true);
-                    else living.invulnerableTime = prevHurtResist;
+                    itemStack.set(EidolonDataComponents.NECROTIC, itemStack.getOrDefault(EidolonDataComponents.NECROTIC, 1) - 1);
+                    living.invulnerableTime = prevHurtResist;
                 }
             }
         }

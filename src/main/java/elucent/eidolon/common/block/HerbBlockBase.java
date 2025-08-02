@@ -72,9 +72,9 @@ public class HerbBlockBase extends BushBlock implements BonemealableBlock {
     public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource random) {
         int i = this.getAge(pState);
         if (i < this.getMaxAge() && mayPlaceOn(worldIn.getBlockState(pos.below()), worldIn, pos.below())
-                && net.neoforged.neoforge.common.CommonHooks.onCropsGrowPre(worldIn, pos, pState, random.nextInt(20) == 0)) {
+                && net.neoforged.neoforge.common.CommonHooks.canCropGrow(worldIn, pos, pState, random.nextInt(20) == 0)) {
             growCrops(worldIn, pos, pState);
-            net.neoforged.neoforge.common.CommonHooks.onCropsGrowPost(worldIn, pos, pState);
+            net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(worldIn, pos, pState);
         }
     }
 

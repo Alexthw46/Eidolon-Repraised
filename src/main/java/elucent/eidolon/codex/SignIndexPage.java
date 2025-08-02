@@ -7,6 +7,7 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.capability.IKnowledge;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ClientInfo;
 import elucent.eidolon.util.RenderUtil;
@@ -50,16 +51,22 @@ public class SignIndexPage extends Page {
     @OnlyIn(Dist.CLIENT)
     public boolean click(CodexGui gui, int x, int y, int mouseX, int mouseY) {
         Player entity = Minecraft.getInstance().player;
-        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null).resolve().get();
+        if (entity == null) {
+            return false;
+        }
+        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+        if (knowledge == null) {
+            return false;
+        }
         for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             if (knowledge.knowsSign(entries.get(i).sign) && mouseX >= xx + 38 && mouseY >= yy + 38 && mouseX <= xx + 50 && mouseY <= yy + 50) {
                 gui.changeChapter(entries.get(i).chapter);
-                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                 return true;
             } else if (knowledge.knowsSign(entries.get(i).sign) && mouseX >= xx && mouseX <= xx + 48 && mouseY >= yy && mouseY <= yy + 48) {
                 gui.addToChant(entries.get(i).sign);
-                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level.random.nextFloat() * 0.25f + 0.75f);
+                entity.playNotifySound(EidolonSounds.SELECT_RUNE.get(), SoundSource.NEUTRAL, 0.5f, entity.level().random.nextFloat() * 0.25f + 0.75f);
                 return true;
             }
         }
@@ -73,7 +80,7 @@ public class SignIndexPage extends Page {
         if (entity == null) {
             return;
         }
-        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null).resolve().get();
+        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null);
         var mStack = guiGraphics.pose();
         for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;

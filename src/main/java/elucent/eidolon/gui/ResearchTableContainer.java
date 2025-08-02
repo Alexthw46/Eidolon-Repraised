@@ -2,12 +2,12 @@ package elucent.eidolon.gui;
 
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
+import elucent.eidolon.common.item.ResearchNotesItem;
 import elucent.eidolon.common.tile.ResearchTableTileEntity;
 import elucent.eidolon.mixin.AbstractContainerMenuMixin;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -38,30 +38,30 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         this.addSlot(new SealSlot(inventory, 1, 58, 32));
         this.addDataSlots(data);
         this.tasks = new ArrayList<>();
-        
-        for(int k = 0; k < 3; ++k) {
-            for(int i1 = 0; i1 < 9; ++i1) {
+
+        for (int k = 0; k < 3; ++k) {
+            for (int i1 = 0; i1 < 9; ++i1) {
                 this.addSlot(new Slot(playerInventory, i1 + k * 9 + 9, 16 + i1 * 18, 142 + k * 18));
             }
         }
 
-        for(int l = 0; l < 9; ++l) {
+        for (int l = 0; l < 9; ++l) {
             this.addSlot(new Slot(playerInventory, l, 16 + l * 18, 200));
         }
-        
+
         if (inventory instanceof ResearchTableTileEntity t) {
             t.addListener(this);
         }
-        
+
         if (tile instanceof ResearchTableTileEntity) updateSlots();
     }
 
     protected void popSlot() {
-        slots.remove(slots.size() - 1);
+        slots.removeLast();
         List<ItemStack> lastSlots = ((AbstractContainerMenuMixin) this).getLastSlots();
         List<ItemStack> remoteSlots = ((AbstractContainerMenuMixin) this).getRemoteSlots();
-        lastSlots.remove(lastSlots.size() - 1);
-        remoteSlots.remove(remoteSlots.size() - 1);
+        lastSlots.removeLast();
+        remoteSlots.removeLast();
     }
 
     @Override
@@ -69,15 +69,16 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
         if (pSlotId >= slots.size()) return;
         super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
-    
+
     public void updateSlots() {
         if (tile instanceof ResearchTableTileEntity t) {
-            for (int i = 38; i < slots.size(); i ++) if (!slots.get(i).getItem().isEmpty()) {
-                double d0 = t.getBlockPos().getY() + 1.3F;
-                ItemEntity itementity = new ItemEntity(t.getLevel(), t.getBlockPos().getX() + 0.5, d0, t.getBlockPos().getZ() + 0.5, slots.get(i).getItem());
-                itementity.setPickUpDelay(40);
-                t.getLevel().addFreshEntity(itementity);
-            }
+            for (int i = 38; i < slots.size(); i++)
+                if (!slots.get(i).getItem().isEmpty()) {
+                    double d0 = t.getBlockPos().getY() + 1.3F;
+                    ItemEntity itementity = new ItemEntity(t.getLevel(), t.getBlockPos().getX() + 0.5, d0, t.getBlockPos().getZ() + 0.5, slots.get(i).getItem());
+                    itementity.setPickUpDelay(40);
+                    t.getLevel().addFreshEntity(itementity);
+                }
         }
         while (slots.size() > 38) popSlot(); // Pare down to just the base 2 slots + player inventory.
         checkTask();
@@ -85,14 +86,14 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
 
     private void checkTask() {
-        if (!slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get()) || getProgress() > 0) return;
+        if (!slots.getFirst().getItem().is(Registry.RESEARCH_NOTES.get()) || getProgress() > 0) return;
         // Slots don't appear when research is in progress.
-        ItemStack stack = slots.get(0).getItem();
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains("research")) return;
-        Research r = Researches.find(new ResourceLocation(tag.getString("research")));
-        if (r == null || tag.getInt("stepsDone") >= r.getStars()) return;
-        List<ResearchTask> tasks = r.getTasks(getSeed(stack), tag.getInt("stepsDone"));
+        ItemStack stack = slots.getFirst().getItem();
+        var tag = stack.get(EidolonDataComponents.RESEARCH);
+        if (tag == null || tag.research() == null) return;
+        Research r = Researches.find(tag.research());
+        if (r == null || tag.stepsDone() >= r.getStars()) return;
+        List<ResearchTask> tasks = r.getTasks(getSeed(stack), tag.stepsDone());
         for (int i = 0; i < tasks.size(); i++) {
             int x = 189, y = 17 + 36 * i;
             tasks.get(i).modifyContainer(this, x, y);
@@ -184,13 +185,14 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
 
     public int getSeed(ItemStack stack) {
-        if (!stack.hasTag() || !stack.getTag().contains("seed")) return 0;
-        return stack.getTag().getInt("seed");
+        var researchTag = stack.get(EidolonDataComponents.RESEARCH);
+        if (researchTag == null) return 0;
+        return (int) researchTag.seed();
     }
 
     @Override
     public void initializeContents(int id, List<ItemStack> items, @NotNull ItemStack carried) {
-        this.slots.get(0).set(items.get(0).copy());
+        this.slots.getFirst().set(items.getFirst().copy());
         updateSlots();
 
         try {
@@ -243,16 +245,17 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
     }
 
     public void trySubmitGoal(Player player, int index) {
-        if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get())) {
-            ItemStack stack = slots.get(0).getItem();
-            if (!stack.hasTag() || !stack.getTag().contains("research")) return;
-            Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
+        if (slots.getFirst().getItem().is(Registry.RESEARCH_NOTES.get())) {
+            ItemStack stack = slots.getFirst().getItem();
+            var researchTag = stack.get(EidolonDataComponents.RESEARCH);
+            if (researchTag == null || researchTag.research() == null) return;
+            Research r = Researches.find(researchTag.research());
             if (r == null) return;
-            List<ResearchTask> tasks = r.getTasks(getSeed(stack), stack.getTag().getInt("stepsDone"));
+            List<ResearchTask> tasks = r.getTasks(getSeed(stack), researchTag.stepsDone());
             if (tasks.size() < index) return;
             ResearchTask toComplete = tasks.get(index);
             int startingSlot = 38;
-            for (int i = 0; i < index; i ++) startingSlot += tasks.get(i).getSlotCount();
+            for (int i = 0; i < index; i++) startingSlot += tasks.get(i).getSlotCount();
             if (!toComplete.isComplete(this, player, startingSlot).complete()) return;
             toComplete.onComplete(this, player, startingSlot);
             this.setData(0, 200); // start progress countdown.
@@ -263,16 +266,17 @@ public class ResearchTableContainer extends AbstractContainerMenu implements Con
 
     public void tryStamp(Player player) {
         if (slots.get(0).getItem().is(Registry.RESEARCH_NOTES.get()) && slots.get(1).getItem().is(Registry.ARCANE_SEAL.get())) {
-            ItemStack notes = slots.get(0).getItem();
-            if (!notes.hasTag() || !notes.getTag().contains("research")) return;
-            Research r = Researches.find(new ResourceLocation(notes.getTag().getString("research")));
+            ItemStack notes = slots.getFirst().getItem();
+            ResearchNotesItem.ResearchData researchTag = notes.get(EidolonDataComponents.RESEARCH);
+            if (researchTag == null || researchTag.research() == null) return;
+            Research r = Researches.find(researchTag.research());
             if (r == null) return;
-            if (notes.getTag().getInt("stepsDone") < r.getStars()) return;
+            if (researchTag.stepsDone() < r.getStars()) return;
 
             slots.get(1).remove(1);
             ItemStack completed = new ItemStack(Registry.COMPLETED_RESEARCH.get());
-            completed.getOrCreateTag().putString("research", r.getRegistryName().toString());
-            slots.get(0).set(completed);
+            completed.set(EidolonDataComponents.RESEARCH, researchTag);
+            slots.getFirst().set(completed);
             this.updateSlots();
         }
     }

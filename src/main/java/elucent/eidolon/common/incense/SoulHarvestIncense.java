@@ -44,7 +44,7 @@ public class SoulHarvestIncense extends GenericPotionIncense {
                         x, y + .5, z,
                         0, -0.01, 0,
                         range(), 0, range());
-            Particles.create(EidolonParticles.WISP_PARTICLE)
+            Particles.create(EidolonParticles.WISP_PARTICLE.get())
                     .setAlpha(0.75f, 0.2f).setScale(0.175f, 0.125f).setLifetime(80)
                     .randomOffset(range() * 0.75, 0.1).randomVelocity(0.15f, 0.15f)
                     .addVelocity(0, 0.0125f, 0)
@@ -56,7 +56,7 @@ public class SoulHarvestIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return new MobEffectInstance(EidolonPotions.SOUL_HARVEST.get(), 100, 0, true, false);
+        return new MobEffectInstance(EidolonPotions.SOUL_HARVEST, 100, 0, true, false);
     }
 
 }

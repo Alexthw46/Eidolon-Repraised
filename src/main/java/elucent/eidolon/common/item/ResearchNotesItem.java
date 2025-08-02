@@ -1,6 +1,9 @@
 package elucent.eidolon.common.item;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import elucent.eidolon.api.research.Research;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.ChatFormatting;
@@ -17,19 +20,36 @@ import java.util.List;
 import java.util.Random;
 
 public class ResearchNotesItem extends ItemBase {
-    private final Random random = new Random();
+    private static final Random random = new Random();
 
     public ResearchNotesItem(Properties builderIn) {
-        super(builderIn);
+        super(builderIn.component(EidolonDataComponents.RESEARCH, ResearchNotesItem.ResearchData.EMPTY));
+    }
+
+    public record ResearchData(ResourceLocation research, int stepsDone, long seed) {
+
+        public ResearchData(ResourceLocation research, int stepsDone) {
+            this(research, stepsDone, random.nextLong());
+        }
+
+        public static final Codec<ResearchData> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        ResourceLocation.CODEC.fieldOf("research").forGetter(ResearchData::research),
+                        Codec.INT.fieldOf("stepsDone").forGetter(ResearchData::stepsDone),
+                        Codec.LONG.optionalFieldOf("seed", random.nextLong()).forGetter(ResearchData::seed)
+                ).apply(instance, ResearchData::new)
+        );
+        public static final ResearchData EMPTY = new ResearchData(ResourceLocation.parse("eidolon:dummy"), 0);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext tooltipContext, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        if (!stack.hasTag() || !stack.getTag().contains("research")) return;
-        Research r = Researches.find(new ResourceLocation(stack.getTag().getString("research")));
+        ResearchData researchData = stack.get(EidolonDataComponents.RESEARCH);
+        if (researchData == null) return;
+        Research r = Researches.find(researchData.research());
         if (r == null) return;
-        int done = stack.getTag().getInt("stepsDone");
+        int done = researchData.stepsDone();
         StringBuilder stars = new StringBuilder();
         stars.append(ChatFormatting.GOLD);
         for (int i = 0; i < r.getStars(); i++) {

@@ -46,7 +46,7 @@ public class FrailIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT.get(), 20 * 10);
+        return new MobEffectInstance(EidolonPotions.VULNERABLE_EFFECT, 20 * 10);
     }
 
 }

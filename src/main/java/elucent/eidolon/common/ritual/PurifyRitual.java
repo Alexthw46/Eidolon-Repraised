@@ -46,14 +46,14 @@ public class PurifyRitual extends Ritual {
                 entity.remove(RemovalReason.KILLED);
                 Piglin piglin = new Piglin(EntityType.PIGLIN, world);
                 piglin.copyPosition(entity);
-                piglin.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
+                piglin.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
                 world.addFreshEntity(piglin);
             }
             if (entity instanceof Zoglin) {
                 entity.remove(RemovalReason.KILLED);
                 Hoglin hoglin = new Hoglin(EntityType.HOGLIN, world);
                 hoglin.copyPosition(entity);
-                hoglin.finalizeSpawn((ServerLevel)world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
+                hoglin.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
                 world.addFreshEntity(hoglin);
             }
         }

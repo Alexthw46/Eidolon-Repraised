@@ -12,9 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -49,7 +46,7 @@ public class SappingSwordItem extends SwordItem {
             if (healing > 0) {
                 attacker.heal(healing);
                 if (!attacker.level().isClientSide)
-                    Networking.sendToTracking(attacker.level(), attacker.blockPosition(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
+                    Networking.sendToNearbyClient(attacker.level(), attacker.blockPosition(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
             }
         }
         return super.hurtEnemy(stack, target, attacker);

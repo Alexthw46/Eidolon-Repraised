@@ -21,7 +21,7 @@ import java.util.List;
 public class SummonRitualRecipe extends RitualRecipe {
 
     ResourceLocation entity;
-    int count;
+    int count = 1;
 
     public SummonRitualRecipe(ResourceLocation result, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, int count, float healthRequirement) {
         super(reagent, pedestalItems, focusItems, healthRequirement);

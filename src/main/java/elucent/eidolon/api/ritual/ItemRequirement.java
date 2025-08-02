@@ -58,7 +58,7 @@ public class ItemRequirement implements IRequirement {
     public void whenMet(Ritual ritual, Level world, BlockPos pos, RequirementInfo info) {
         ((IRitualItemProvider) world.getBlockEntity(info.getPos())).take();
         if (!world.isClientSide) {
-            Networking.sendToTracking(world, pos.above(2), new RitualConsumePacket(info.getPos(), pos.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
+            Networking.sendToNearbyClient(world, pos.above(2), new RitualConsumePacket(info.getPos(), pos.above(2), ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
         }
     }
 

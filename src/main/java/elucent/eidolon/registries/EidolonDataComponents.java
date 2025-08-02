@@ -1,9 +1,11 @@
 package elucent.eidolon.registries;
 
 import com.mojang.serialization.Codec;
+import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.common.item.ResearchNotesItem;
+import elucent.eidolon.common.item.SummoningStaffItem;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -15,17 +17,31 @@ public class EidolonDataComponents {
 
     public static final DeferredRegister<DataComponentType<?>> DATA = DeferredRegister.create(BuiltInRegistries.DATA_COMPONENT_TYPE, MODID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CONSACRATED = DATA.register("consecrated",
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CONSECRATED = DATA.register("consecrated",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> NECROTIC = DATA.register("necrotic",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SOUL = DATA.register("soul",
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> COOLDOWN = DATA.register("cooldown",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<CompoundTag>>>
-            THRALLS = DATA.register("thralls",
-            () -> DataComponentType.<List<CompoundTag>>builder().persistent(Codec.list(CompoundTag.CODEC)).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SANGUINE_CHARGES = DATA.register("sanguine_charges",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> TARGET_MODE = DATA.register("target_mode",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SummoningStaffItem.ThrallData>>
+            THRALLS = DATA.register("thralls",
+            () -> DataComponentType.<SummoningStaffItem.ThrallData>builder().persistent(SummoningStaffItem.ThrallData.CODEC).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Sign>>> SPELL = DATA.register("spell",
+            () -> DataComponentType.<List<Sign>>builder().persistent(Codec.list(Sign.CODEC)).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNotesItem.ResearchData>> RESEARCH = DATA.register("research",
+            () -> DataComponentType.<ResearchNotesItem.ResearchData>builder().persistent(ResearchNotesItem.ResearchData.CODEC).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Sign>> SIGN = DATA.register("sign",
+            () -> DataComponentType.<Sign>builder().persistent(Sign.CODEC).build());
 }

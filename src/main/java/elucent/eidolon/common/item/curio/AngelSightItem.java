@@ -1,9 +1,9 @@
 package elucent.eidolon.common.item.curio;
 
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.TargetMode;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -40,11 +40,9 @@ public class AngelSightItem extends EidolonCurio {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, @NotNull Player pPlayer, @NotNull InteractionHand pUsedHand) {
         if (pPlayer.isShiftKeyDown() && !pLevel.isClientSide) {
             ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-            CompoundTag tag = stack.getOrCreateTag();
-            int mode = tag.getInt("mode");
+            int mode = stack.getOrDefault(EidolonDataComponents.TARGET_MODE, 0);
             mode = (mode + 1) % 3;
-            tag.putInt("mode", mode);
-            stack.setTag(tag);
+            stack.set(EidolonDataComponents.TARGET_MODE, mode);
             pPlayer.sendSystemMessage(Component.translatable("eidolon.angels_sight.mode." + mode));
             return InteractionResultHolder.success(stack);
         }
@@ -55,7 +53,7 @@ public class AngelSightItem extends EidolonCurio {
     public void appendHoverText(@NotNull final ItemStack stack, final @NotNull TooltipContext level, @NotNull final List<Component> tooltip, @NotNull final TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        String modeTooltip = switch (stack.getOrCreateTag().getInt("mode")) {
+        String modeTooltip = switch (stack.getOrDefault(EidolonDataComponents.TARGET_MODE, 0)) {
             case 1 -> "lore.eidolon.angels_sight.mode.1";
             case 2 -> "lore.eidolon.angels_sight.mode.2";
             default -> "lore.eidolon.angels_sight.mode.3";
@@ -67,17 +65,19 @@ public class AngelSightItem extends EidolonCurio {
     @SubscribeEvent
     public static void addMode(final EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Projectile projectile && projectile.getOwner() instanceof Player player) {
-            CuriosApi.getCuriosHelper().findFirstCurio(player, Registry.ANGELS_SIGHT.get()).ifPresent(ring -> {
-                Predicate<Entity> targetMode = switch (ring.stack().getOrCreateTag().getInt("mode")) {
-                    case 1 -> target -> target instanceof LivingEntity && !(target instanceof Player);
-                    case 2 -> target -> target instanceof Enemy;
-                    default -> target -> target instanceof LivingEntity;
-                };
+            CuriosApi.getCuriosInventory(player).flatMap(inventory -> inventory.findFirstCurio(Registry.ANGELS_SIGHT.get()))
+                    .ifPresent(ring -> {
+                                Predicate<Entity> targetMode = switch (ring.stack().getOrDefault(EidolonDataComponents.TARGET_MODE, 0)) {
+                                    case 1 -> target -> target instanceof LivingEntity && !(target instanceof Player);
+                                    case 2 -> target -> target instanceof Enemy;
+                                    default -> target -> target instanceof LivingEntity;
+                                };
 
-                if (projectile instanceof TargetMode mode) {
-                    mode.eidolonrepraised$setMode(targetMode);
-                }
-            });
+                                if (projectile instanceof TargetMode mode) {
+                                    mode.eidolonrepraised$setMode(targetMode);
+                                }
+                            }
+                    );
         }
     }
 }

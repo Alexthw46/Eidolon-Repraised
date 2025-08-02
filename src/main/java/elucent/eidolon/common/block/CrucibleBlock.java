@@ -4,6 +4,7 @@ import elucent.eidolon.common.tile.CrucibleTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -37,7 +38,7 @@ public class CrucibleBlock extends BlockBase implements EntityBlock, LiquidBlock
     }
 
     @Override
-    public boolean canPlaceLiquid(@NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Fluid pFluid) {
+    public boolean canPlaceLiquid(@Nullable Player player, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Fluid pFluid) {
         if (pLevel.getBlockEntity(pPos) instanceof CrucibleTileEntity crucibleTileEntity) {
             return !crucibleTileEntity.hasWater && pFluid.isSame(Fluids.WATER);
         }
@@ -48,7 +49,7 @@ public class CrucibleBlock extends BlockBase implements EntityBlock, LiquidBlock
     public boolean placeLiquid(@NotNull LevelAccessor pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull FluidState pFluidState) {
         if (!pLevel.isClientSide() && pLevel.getBlockEntity(pPos) instanceof CrucibleTileEntity crucibleTileEntity && pFluidState.isSource() && pFluidState.is(Fluids.WATER)) {
             crucibleTileEntity.fill();
-            crucibleTileEntity.sync(level.registryAccess());
+            crucibleTileEntity.sync(pLevel.registryAccess());
             pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
             return true;
         }

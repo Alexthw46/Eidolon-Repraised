@@ -1,10 +1,10 @@
 package elucent.eidolon.common.spell;
 
-import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.capability.IMana;
 import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,12 +20,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
 
 public class LightTouchSpell extends DarkTouchSpell {
-
-    public static final String SACRED_KEY = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "sacred").toString();
 
     public LightTouchSpell(ResourceLocation name, Sign... signs) {
         super(name, signs);
@@ -33,13 +33,12 @@ public class LightTouchSpell extends DarkTouchSpell {
     }
 
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event) {
+    public static void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
-            var tag = caster.getMainHandItem().getTag();
-            if (tag != null && tag.contains(SACRED_KEY)) {
-                event.setAmount(event.getAmount() * 1.5f);
-                tag.putInt(SACRED_KEY, tag.getInt(SACRED_KEY) - 1);
-                if (tag.getInt(SACRED_KEY) <= 0) tag.remove(SACRED_KEY);
+            var tag = caster.getMainHandItem();
+            if (tag.isEmpty() && tag.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 0) > 0) {
+                event.setNewDamage(event.getNewDamage() * 1.5f);
+                tag.set(EidolonDataComponents.CONSECRATED, tag.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 1) - 1);
             }
         }
     }
@@ -62,7 +61,7 @@ public class LightTouchSpell extends DarkTouchSpell {
     boolean canTouch(ItemStack stack) {
         return stack.getItem() == Registry.GOLD_INLAY.get()
                 || stack.getItem() == Items.BLACK_WOOL
-                || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
+                || (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
                 || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
     }
 
@@ -71,11 +70,11 @@ public class LightTouchSpell extends DarkTouchSpell {
             return new ItemStack(Registry.HOLY_SYMBOL.get());
         else if (stack.getItem() == Items.BLACK_WOOL)
             return new ItemStack(Registry.TOP_HAT.get());
-        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
+        else if (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
             return new ItemStack(Registry.PAROUSIA_DISC.get());
         else {
             IMana.expendMana(player, getCost());
-            stack.getOrCreateTag().putInt(SACRED_KEY, 50);
+            stack.set(EidolonDataComponents.CONSECRATED, 50);
             return stack;
         }
 

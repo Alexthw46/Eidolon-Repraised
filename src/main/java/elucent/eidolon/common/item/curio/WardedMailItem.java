@@ -4,8 +4,10 @@ import elucent.eidolon.common.item.ItemBase;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class WardedMailItem extends ItemBase {
@@ -15,13 +17,12 @@ public class WardedMailItem extends ItemBase {
     }
 
     @SubscribeEvent
-    public static void onDamage(LivingAttackEvent event) {
-        if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO)) {
-            CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.WARDED_MAIL.get()).ifPresent((slots) -> {
-
+    public static void onDamage(LivingIncomingDamageEvent event) {
+        if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) && event.getEntity() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).flatMap(inventory -> inventory.findFirstCurio(
+                    Registry.WARDED_MAIL.get())).ifPresent((slots) -> {
                 event.setCanceled(true);
                 event.getEntity().hurt(new DamageSource(event.getEntity().damageSources().generic().typeHolder()), event.getAmount());
-
             });
         }
     }

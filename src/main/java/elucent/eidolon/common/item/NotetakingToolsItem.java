@@ -2,6 +2,7 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.common.tile.ResearchTableTileEntity;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -27,12 +28,9 @@ public class NotetakingToolsItem extends ItemBase {
         Collection<Research> researches = Researches.getEntityResearches(entity);
         if (!researches.isEmpty()) {
             Research r = researches.iterator().next();
-            if (player.level instanceof ServerLevel serverLevel && r != null) {
+            if (player.level() instanceof ServerLevel serverLevel && r != null) {
                 ItemStack notes = new ItemStack(Registry.RESEARCH_NOTES.get(), 1);
-                var tag = notes.getOrCreateTag();
-                tag.putString("research", r.getRegistryName().toString());
-                tag.putInt("stepsDone", 0);
-                tag.putLong("worldSeed", ResearchTableTileEntity.SEED + 978060631 * serverLevel.getSeed());
+                notes.set(EidolonDataComponents.RESEARCH, new ResearchNotesItem.ResearchData(r.getRegistryName(), 0, ResearchTableTileEntity.SEED + 978060631 * serverLevel.getSeed()));
                 stack.shrink(1);
                 if (stack.getCount() == 0) player.setItemInHand(hand, notes);
                 else if (!player.getInventory().add(notes)) {
@@ -52,14 +50,13 @@ public class NotetakingToolsItem extends ItemBase {
         if (!researches.isEmpty()) {
             Research r = researches.iterator().next();
             ItemStack notes = new ItemStack(Registry.RESEARCH_NOTES.get(), 1);
-            notes.getOrCreateTag().putString("research", r.getRegistryName().toString());
-            notes.getTag().putInt("stepsDone", 0);
+            notes.set(EidolonDataComponents.RESEARCH, new ResearchNotesItem.ResearchData(r.getRegistryName(), 0, ResearchTableTileEntity.SEED));
             ctx.getItemInHand().shrink(1);
             if (ctx.getItemInHand().getCount() == 0)
                 ctx.getPlayer().setItemInHand(ctx.getHand(), ItemStack.EMPTY);
             if (!ctx.getPlayer().getInventory().add(notes.copy())) {
                 ctx.getPlayer().drop(notes, false);
-             }
+            }
             return InteractionResult.SUCCESS;
         }
         return super.useOn(ctx);

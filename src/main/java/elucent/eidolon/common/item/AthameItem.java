@@ -5,6 +5,7 @@ import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -24,21 +25,22 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class AthameItem extends SwordItem {
 
@@ -47,18 +49,18 @@ public class AthameItem extends SwordItem {
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
-    public void onLooting(LootingLevelEvent event) {
-        if (event.getEntity().getMainHandItem().getItem() instanceof AthameItem)
-            event.setLootingLevel(event.getLootingLevel() * 2 + 1);
-    }
+//    @SubscribeEvent
+//    public void onLooting(LootingLevelEvent event) {
+//        if (event.getEntity().getMainHandItem().getItem() instanceof AthameItem)
+//            event.setLootingLevel(event.getLootingLevel() * 2 + 1);
+//    }
 
     @SubscribeEvent
-    public void onHurt(LivingHurtEvent event) {
+    public void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity living
-            && living.getMainHandItem().getItem() instanceof AthameItem
-            && (event.getEntity() instanceof EnderMan || event.getEntity() instanceof Endermite || event.getEntity() instanceof EnderDragon)) {
-            event.setAmount(event.getAmount() * 4);
+                && living.getMainHandItem().getItem() instanceof AthameItem
+                && (event.getEntity() instanceof EnderMan || event.getEntity() instanceof Endermite || event.getEntity() instanceof EnderDragon)) {
+            event.setNewDamage(event.getNewDamage() * 4);
         }
     }
 
@@ -70,11 +72,10 @@ public class AthameItem extends SwordItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
         if (this.loreTag != null) {
-            tooltip.add(Component.literal(""));
-            tooltip.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
+            tooltipComponents.add(Component.literal(""));
+            tooltipComponents.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
         }
     }
 
@@ -85,7 +86,7 @@ public class AthameItem extends SwordItem {
         float hardness = state.getDestroySpeed(ctx.getLevel(), ctx.getClickedPos());
         Block block = state.getBlock();
         if ((block instanceof BushBlock || block instanceof LeavesBlock || state.is(BlockTags.LEAVES) || state.is(BlockTags.CROPS) || state.is(BlockTags.FLOWERS) || block instanceof GrowingPlantBlock || block instanceof HerbBlockBase)
-            && hardness < 5.0f && hardness >= 0) {
+                && hardness < 5.0f && hardness >= 0) {
             if (!ctx.getLevel().isClientSide) {
                 Vec3 hit = ctx.getClickLocation();
                 ((ServerLevel) ctx.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), hit.x, hit.y, hit.z, 3, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, 0.05F);
@@ -103,7 +104,7 @@ public class AthameItem extends SwordItem {
                                     ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                             }
                             if (!ctx.getPlayer().isCreative())
-                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), player -> player.broadcastBreakEvent(ctx.getHand()));
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), LivingEntity.getSlotForHand(ctx.getHand()));
 
                         }
                     } else {
@@ -111,14 +112,16 @@ public class AthameItem extends SwordItem {
                         if (block instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER)
                             ctx.getLevel().destroyBlock(ctx.getClickedPos().below(), false);
                         else ctx.getLevel().destroyBlock(ctx.getClickedPos(), false);
-                        if (random.nextInt(10) >= 8 - (ctx.getItemInHand().getItem() instanceof AthameItem ? ctx.getItemInHand().getEnchantmentLevel(Enchantments.MOB_LOOTING) : 0)) {
+                        Optional<Holder.Reference<Enchantment>> enchantmentHolder = ctx.getLevel().registryAccess().holder(Enchantments.LOOTING);
+
+                        if (random.nextInt(10) >= 8 - (enchantmentHolder.isPresent() && ctx.getItemInHand().getItem() instanceof AthameItem ? ctx.getItemInHand().getEnchantmentLevel(enchantmentHolder.get()) : 0)) {
                             ItemStack drop = getHarvestable(block, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
                                 ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 0.9f + random.nextFloat() * 0.2f);
                                 ctx.getLevel().addFreshEntity(new ItemEntity(ctx.getLevel(), ctx.getClickedPos().getX() + 0.5, ctx.getClickedPos().getY() + 0.5, ctx.getClickedPos().getZ() + 0.5, drop.copy()));
                             }
                             if (!ctx.getPlayer().isCreative())
-                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), player -> player.broadcastBreakEvent(ctx.getHand()));
+                                ctx.getItemInHand().hurtAndBreak(1, ctx.getPlayer(), LivingEntity.getSlotForHand(ctx.getHand()));
                         }
                     }
                 }

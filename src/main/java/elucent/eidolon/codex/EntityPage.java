@@ -7,7 +7,6 @@ import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +16,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPage extends Page {
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_entity_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/codex_entity_page.png");
 
     final EntityType<?> type;
 
@@ -42,7 +41,7 @@ public class EntityPage extends Page {
         float scale = 112 / e.getBbHeight();
         scale = Math.min(scale, 100);
         mStack.scale(scale, -scale, scale);
-        MultiBufferSource.BufferSource buf = MultiBufferSource.immediate(tess.getBuilder());
+        var buf = Minecraft.getInstance().renderBuffers().bufferSource();
         Lighting.setupForFlatItems();
         renderer.render(e, e.getYRot(), 0, mStack, buf, 0xf000f0);
         buf.endLastBatch();

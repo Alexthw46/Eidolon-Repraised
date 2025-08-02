@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
@@ -62,34 +62,34 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner, Recipe
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
+    public ItemInteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && level != null) {
             if (burning && player.isShiftKeyDown() && player.getItemInHand(hand).isEmpty()) {
                 extinguish();
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             } else if (!burning && player.getItemInHand(hand).isEmpty() && !stack.isEmpty()) {
                 player.addItem(stack);
                 stack = ItemStack.EMPTY;
                 if (!level.isClientSide) sync(level.registryAccess());
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             } else {
                 boolean canBurn = canStartBurning();
                 if (canBurn
                     && player.getItemInHand(hand).getItem() instanceof FlintAndSteelItem) {
                     player.getItemInHand(hand).hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
                     startBurning();
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
                     stack = player.getItemInHand(hand).copy();
                     stack.setCount(1);
                     player.getItemInHand(hand).shrink(1);
                     if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
                     if (!level.isClientSide) sync(level.registryAccess());
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public boolean canStartBurning() {

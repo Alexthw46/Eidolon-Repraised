@@ -205,7 +205,7 @@ public class NecromancerEntity extends SpellcasterIllager {
                     thrall.setTarget(getTarget());
                     EntityUtil.enthrall(NecromancerEntity.this, thrall);
                     thrall.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 999999, 0, false, false));
-                    Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
+                    Networking.sendToNearbyClient(level(), blockPosition(), new MagicBurstEffectPacket(getX(), getY() + 1, getZ(), ColorUtil.packColor(255, 181, 255, 255), ColorUtil.packColor(255, 28, 31, 212)));
                 }
             }
         }

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.capability.IMana;
-import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.common.item.IManaRelatedItem;
 import elucent.eidolon.common.item.IWingsItem;
@@ -26,19 +25,19 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Random;
 
 public class EidolonOverlays {
-    protected static final ResourceLocation ICONS_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/icons.png" );
-    protected static final ResourceLocation MANA_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/mana_bar.png" );
+    protected static final ResourceLocation ICONS_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/icons.png");
+    protected static final ResourceLocation MANA_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/mana_bar.png");
 
     public static class EidolonManaBar implements IGuiOverlay {
         int xPos() {
             String origin = ClientConfig.MANA_BAR_POSITION.get();
             if (origin.equals(ClientConfig.Positions.BOTTOM_LEFT)
-                || origin.equals(ClientConfig.Positions.LEFT)
-                || origin.equals(ClientConfig.Positions.TOP_LEFT))
+                    || origin.equals(ClientConfig.Positions.LEFT)
+                    || origin.equals(ClientConfig.Positions.TOP_LEFT))
                 return -1;
             if (origin.equals(ClientConfig.Positions.BOTTOM_RIGHT)
-                || origin.equals(ClientConfig.Positions.RIGHT)
-                || origin.equals(ClientConfig.Positions.TOP_RIGHT))
+                    || origin.equals(ClientConfig.Positions.RIGHT)
+                    || origin.equals(ClientConfig.Positions.TOP_RIGHT))
                 return 1;
             return 0;
         }
@@ -46,10 +45,10 @@ public class EidolonOverlays {
         int yPos() {
             String origin = ClientConfig.MANA_BAR_POSITION.get();
             if (origin.equals(ClientConfig.Positions.TOP)
-                || origin.equals(ClientConfig.Positions.TOP_LEFT))
+                    || origin.equals(ClientConfig.Positions.TOP_LEFT))
                 return -1;
             if (origin.equals(ClientConfig.Positions.BOTTOM_LEFT)
-                || origin.equals(ClientConfig.Positions.BOTTOM_RIGHT))
+                    || origin.equals(ClientConfig.Positions.BOTTOM_RIGHT))
                 return 1;
             return 0;
         }
@@ -100,7 +99,7 @@ public class EidolonOverlays {
             }
             if (maxMagic == 0) return;
             if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof IManaRelatedItem)
-                && !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof IManaRelatedItem))
+                    && !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof IManaRelatedItem))
                 return;
 
             int length = Mth.ceil(barlength * magic / maxMagic);
@@ -222,12 +221,10 @@ public class EidolonOverlays {
             float healthMax = (float) attrMaxHealth.getValue();
 
             float etherealHealth = 0, etherealMax = 0;
-            try {
-                ISoul cap = player.getCapability(ISoul.INSTANCE).resolve().orElseThrow();
+            ISoul cap = player.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
+            if (cap != null) {
                 etherealHealth = cap.getEtherealHealth();
                 etherealMax = cap.getMaxEtherealHealth();
-            } catch (Exception e) {
-                // ignore empty optional
             }
 
             int ticks = gui.getGuiTicks();
@@ -297,7 +294,7 @@ public class EidolonOverlays {
                 if (i == regen) y -= 2;
 
                 RenderSystem.enableBlend();
-                if (player.hasEffect(EidolonPotions.CHILLED_EFFECT.get()) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
+                if (player.hasEffect(EidolonPotions.CHILLED_EFFECT) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
                     if (i * 2 + 1 < health)
                         guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 0, 9, 9);
                     else if (i * 2 + 1 == health)
@@ -310,7 +307,7 @@ public class EidolonOverlays {
     }
 
     public static class EidolonRavenCharge implements IGuiOverlay {
-        protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+        protected static final ResourceLocation GUI_ICONS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
 
         @Override
         public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
@@ -319,12 +316,12 @@ public class EidolonOverlays {
             LocalPlayer player = mc.player;
 
             if (!gui.shouldDrawSurvivalElements() || player == null || player.onGround()) return;
-            player.getCapability(IPlayerData.INSTANCE).ifPresent(d -> {
-
-                ItemStack wings = d.getWingsItem(player);
+            var wingsCap = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (wingsCap != null) {
+                ItemStack wings = wingsCap.getWingsItem(player);
                 if (!(wings.getItem() instanceof IWingsItem wing)) return;
 
-                int remainingFlaps = d.getWingCharges(player);
+                int remainingFlaps = wingsCap.getWingCharges(player);
 
                 //TODO render an icon
                 //renders the number of remaining flaps
@@ -344,7 +341,7 @@ public class EidolonOverlays {
                     //RenderSystem.disableBlend();
 
                     mc.getProfiler().push("ravenJumpBar");
-                    float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTime()) / 15.0f;
+                    float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTimeNs()) / 15.0f;
                     int i = 182;
                     int j = (int) (f * 183.0F);
                     int k = guiGraphics.guiHeight() - 32 + 3;
@@ -359,7 +356,7 @@ public class EidolonOverlays {
                     gui.getMinecraft().getProfiler().pop();
                     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                 }
-            });
+            }
         }
     }
 }

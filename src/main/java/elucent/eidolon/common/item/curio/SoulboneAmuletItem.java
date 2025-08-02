@@ -6,6 +6,7 @@ import elucent.eidolon.network.Networking;
 import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Registry;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -30,13 +31,13 @@ public class SoulboneAmuletItem extends ItemBase implements ICurioItem {
     @SubscribeEvent
     public static void onKill(LivingDeathEvent event) {
         if (event.getSource().getEntity() instanceof LivingEntity e) {
-            if (CuriosApi.getCuriosHelper().findFirstCurio(e, Registry.SOULBONE_AMULET.get()).isPresent()) {
+            if (CuriosApi.getCuriosInventory(e).flatMap(i -> i.findFirstCurio(Registry.SOULBONE_AMULET.get())).isPresent()) {
                 var cap = e.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
                 if (cap == null) return;
                 cap.setMaxEtherealHealth(Math.max(Math.min(ISoul.getPersistentHealth(e), cap.getMaxEtherealHealth()), 2 * Mth.floor((cap.getEtherealHealth() + 3) / 2)));
                 cap.setEtherealHealth(cap.getEtherealHealth() + 2);
-                if (!e.level().isClientSide)
-                    Networking.sendToTracking(e.level(), e.getOnPos(), new SoulUpdatePacket(e));
+                if (e instanceof ServerPlayer serverPlayer)
+                    Networking.sendToPlayerClient(new SoulUpdatePacket(e), serverPlayer);
             }
         }
     }

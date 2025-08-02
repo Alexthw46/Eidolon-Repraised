@@ -18,6 +18,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +30,7 @@ public class JEIRegistry implements IModPlugin {
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"jei_plugin" );
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "jei_plugin");
     }
 
     @Override
@@ -53,14 +54,14 @@ public class JEIRegistry implements IModPlugin {
 
         RecipeManager manager = Eidolon.proxy.getWorld().getRecipeManager();
 
-        registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get()));
-        registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get()));
+        registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get()).stream().map(RecipeHolder::value).toList());
+        registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registry.addRecipes(RITUAL_CATEGORY, BrazierTileEntity.getRitualRecipes(Eidolon.proxy.getWorld()));
     }
 
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-        registration.getCraftingCategory().addCategoryExtension(DyeRecipe.class, DyeRecipeCategory::new);
+        registration.getCraftingCategory().addExtension(DyeRecipe.class, new DyeRecipeCategory(null));
     }
 
 }

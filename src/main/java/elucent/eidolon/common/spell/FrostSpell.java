@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +29,7 @@ public class FrostSpell extends StaticSpell {
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         if (!KnowledgeUtil.knowsResearch(player, Researches.FROST_SPELL.getRegistryName())) return false;
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (ray instanceof BlockHitResult rayTraceResult) {
             var fluidState = world.getFluidState(rayTraceResult.getBlockPos());
             if (fluidState.is(Fluids.WATER) && fluidState.isSource()) {
@@ -41,7 +42,7 @@ public class FrostSpell extends StaticSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
         if (!world.isClientSide) {
-            HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+            HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
             if (ray instanceof BlockHitResult blockHitResult) {
                 var fluidState = world.getFluidState(blockHitResult.getBlockPos());
                 if (fluidState.is(Fluids.WATER) && fluidState.isSource()) {
@@ -49,7 +50,7 @@ public class FrostSpell extends StaticSpell {
                     world.playSound(player, pos, SoundEvents.PLAYER_HURT_FREEZE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
                 } else return;
             } else if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living) {
-                living.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 200));
+                living.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT, 200));
             } else return;
             IMana.expendMana(player, getCost());
         }

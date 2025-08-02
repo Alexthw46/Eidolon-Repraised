@@ -48,7 +48,7 @@ public class FrostbindIncense extends IncenseRitual {
                         range(), 0, range());
             }
 
-            Particles.create(EidolonParticles.SMOKE_PARTICLE)
+            Particles.create(EidolonParticles.SMOKE_PARTICLE.get())
                     .setAlpha(0.35f, 0).setScale(0.375f, 0.125f).setLifetime(80)
                     .randomOffset(range() * 0.75, 0.1).randomVelocity(0.025f, 0.025f)
                     .addVelocity(0, -0.0125f, 0)
@@ -65,7 +65,7 @@ public class FrostbindIncense extends IncenseRitual {
             assert level != null;
             for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range()))) {
                 if (entity != player && entity.isAlive()) {
-                    entity.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT.get(), 30));
+                    entity.addEffect(new MobEffectInstance(EidolonPotions.CHILLED_EFFECT, 30));
                     if (entity.canFreeze()) entity.setTicksFrozen(entity.getTicksFrozen() + 80);
                 }
             }

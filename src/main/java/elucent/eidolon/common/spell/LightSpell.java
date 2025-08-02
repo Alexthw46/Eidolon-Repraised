@@ -1,9 +1,9 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.capability.IMana;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.block.GhostLight;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.registries.Registry;
@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +41,7 @@ public class LightSpell extends StaticSpell {
 
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (ray instanceof BlockHitResult blockHitResult) {
             BlockPos blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
             if (world.getBlockState(blockPos).canBeReplaced() && world.isUnobstructed(Registry.GHOST_LIGHT.get().defaultBlockState(), blockPos, CollisionContext.of(player))) {

@@ -7,6 +7,7 @@ import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.EidolonSounds;
 import elucent.eidolon.util.ColorUtil;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,10 +17,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class BonechillProjectileEntity extends SpellProjectileEntity {
     public BonechillProjectileEntity(EntityType<? extends SpellProjectileEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
+
     }
 
     @Override
@@ -69,7 +76,7 @@ public class BonechillProjectileEntity extends SpellProjectileEntity {
         if (!level().isClientSide) {
             Vec3 pos = ray.getLocation();
             level().playSound(null, pos.x, pos.y, pos.z, EidolonSounds.SPLASH_BONECHILL_EVENT.get(), SoundSource.NEUTRAL, 0.5f, random.nextFloat() * 0.2f + 0.9f);
-            Networking.sendToTracking(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 192, 224, 255), ColorUtil.packColor(255, 96, 128, 192)));
+            Networking.sendToNearbyClient(level(), blockPosition(), new MagicBurstEffectPacket(pos.x, pos.y, pos.z, ColorUtil.packColor(255, 192, 224, 255), ColorUtil.packColor(255, 96, 128, 192)));
         }
     }
 }

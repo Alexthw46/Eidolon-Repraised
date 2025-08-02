@@ -3,7 +3,6 @@ package elucent.eidolon.datagen;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.registries.Registry;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistrySetBuilder;
@@ -13,7 +12,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
@@ -65,7 +63,6 @@ public class EidDamageProvider {
 
         @Override
         protected void addTags(@NotNull Provider provider) {
-            tag(Registry.FORGE_MAGIC).addTag(DamageTypeTags.WITCH_RESISTANT_TO);
             Multimap<TagKey<DamageType>, ResourceKey<DamageType>> tagsToTypes = HashMultimap.create();
             DamageTypeData.allInNamespace(namespace)
                     .forEach(data -> data.tags.forEach(tag -> tagsToTypes.put(tag, data.key)));

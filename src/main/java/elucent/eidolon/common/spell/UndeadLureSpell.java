@@ -3,6 +3,7 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.api.spells.Sign;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -15,7 +16,7 @@ public class UndeadLureSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         return ray instanceof BlockHitResult;
     }
 

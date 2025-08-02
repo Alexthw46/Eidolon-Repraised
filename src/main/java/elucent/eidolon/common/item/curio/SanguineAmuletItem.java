@@ -2,6 +2,7 @@ package elucent.eidolon.common.item.curio;
 
 import com.mojang.datafixers.util.Either;
 import elucent.eidolon.common.item.ChantScrollItem;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,37 +18,30 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            NeoForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
-            return null;
-        });
+//        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+//            NeoForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
+//            return null;
+//        });
     }
 
     static int getCharge(ItemStack stack) {
-        if (stack.hasTag()) {
-            var tag = stack.getTag();
-            if (tag != null && tag.contains("charge")) {
-                return tag.getInt("charge");
-            }
-        }
-        return 0;
+        return stack.getOrDefault(EidolonDataComponents.SANGUINE_CHARGES, 0);
     }
 
     static void addCharge(ItemStack stack, int diff) {
         int newCharge = Mth.clamp(getCharge(stack) + diff, 0, 40);
-        stack.getOrCreateTag().putInt("charge", newCharge);
+        stack.set(EidolonDataComponents.SANGUINE_CHARGES, newCharge);
     }
 
     static void setCharge(ItemStack stack, int charge) {
         int newCharge = Mth.clamp(charge, 0, 40);
-        stack.getOrCreateTag().putInt("charge", newCharge);
+        stack.set(EidolonDataComponents.SANGUINE_CHARGES, newCharge);
     }
 
 
@@ -123,9 +117,9 @@ public class SanguineAmuletItem extends EidolonCurio {
             for (int i = 0; i < charge; i += 20) {
                 for (int j = 0; j < Mth.clamp(charge - i, 0, 20); j += 2) {
                     if (charge - (i + j) == 1) {
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft","textures/gui/icons.png" ), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
                     } else
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft","textures/gui/icons.png" ), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
                 }
             }
         }

@@ -135,7 +135,7 @@ public class ClientEvents {
             event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
         }
 
-        Integer sacred = itemStack.get(EidolonDataComponents.CONSACRATED);
+        Integer sacred = itemStack.get(EidolonDataComponents.CONSECRATED);
         if (sacred != null && sacred > 0) {
             event.getToolTip().add(Component.translatable("eidolon.tooltip.sacred").withStyle(ChatFormatting.GOLD));
         }

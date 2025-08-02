@@ -23,12 +23,12 @@ public class GobletTileRenderer implements BlockEntityRenderer<GobletTileEntity>
         if (tile.getEntityType() != null) {
             TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                     .apply(ResourceLocation.fromNamespaceAndPath("minecraft","block/water_still" ));
-            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
+            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
             Matrix4f mat = matrixStackIn.last().pose();
-            builder.vertex(mat, 0.375f, 0.46875f, 0.375f).color(192, 16, 32, 224).uv(water.getU(6), water.getV(6)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.375f, 0.46875f, 0.625f).color(192, 16, 32, 224).uv(water.getU(10), water.getV(6)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.625f, 0.46875f, 0.625f).color(192, 16, 32, 224).uv(water.getU(10), water.getV(10)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.625f, 0.46875f, 0.375f).color(192, 16, 32, 224).uv(water.getU(6), water.getV(10)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
+            builder.addVertex(mat, 0.375f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(6), water.getV(6)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.375f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(10), water.getV(6)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.625f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(10), water.getV(10)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.625f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(6), water.getV(10)).setLight(combinedLightIn).setNormal(0, 1, 0);
         }
     }
 }

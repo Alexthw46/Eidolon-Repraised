@@ -99,7 +99,7 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
             tx += 24;
 
             List<StackIngredient> stepInputs = new ArrayList<>();
-            for (Ingredient o : steps.get(i).matches) {
+            for (Ingredient o : steps.get(i).matches()) {
                 ItemStack stack = o.getItems().length > 0 ? o.getItems()[0].copy() : ItemStack.EMPTY.copy();
                 if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, o));
             }
@@ -128,7 +128,7 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
             tx += 24;
 
             List<StackIngredient> stepInputs = new ArrayList<>();
-            for (Ingredient o : steps.get(i).matches) {
+            for (Ingredient o : steps.get(i).matches()) {
                 ItemStack stack = o.getItems().length > 0 ? o.getItems()[0].copy() : ItemStack.EMPTY.copy();
                 if (!stack.isEmpty()) stepInputs.add(new StackIngredient(stack, o));
             }
@@ -140,7 +140,7 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
                     tx += 17;
                 }
             }
-            for (int j = 0; j < steps.get(i).stirs; j++) {
+            for (int j = 0; j < steps.get(i).stirs(); j++) {
                 guiGraphics.blit(BACKGROUND, tx, ty + 1, 192, 32, 16, 17);
                 tx += 17;
             }

@@ -50,7 +50,9 @@ public class ReputationCommand {
                                 )
                         )
                         .then(Commands.literal("tryfix")
-                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.tryFix(player))))
+                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                                    KnowledgeUtil.tryFix(player);
+                                }))
                         )
                 )
         );

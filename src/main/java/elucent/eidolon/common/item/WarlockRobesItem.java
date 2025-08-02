@@ -3,6 +3,7 @@ package elucent.eidolon.common.item;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.IDyeable;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.common.item.model.WarlockArmorModel;
 import elucent.eidolon.registries.EidolonMaterials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -43,8 +44,8 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             @Override
-            public @NotNull WarlockArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
-                float pticks = Minecraft.getInstance().getFrameTime();
+            public @NotNull WarlockArmorModel getHumanoidArmorModel(@NotNull LivingEntity entity, @NotNull ItemStack itemStack, @NotNull EquipmentSlot armorSlot, @NotNull HumanoidModel _default) {
+                float pticks = Minecraft.getInstance().getFrameTimeNs();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;

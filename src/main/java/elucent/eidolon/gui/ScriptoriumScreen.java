@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static elucent.eidolon.codex.CodexGui.CODEX_BACKGROUND;
 import static elucent.eidolon.codex.CodexGui.blit;
 
 public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContainer> {
@@ -85,7 +86,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
     }
 
     public void drawScreenAfterScale(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, partialTicks);
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(bookLeft, bookTop, 0);
@@ -166,7 +167,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
 
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
-        RenderSystem.setShaderTexture(0, BACKGROUND_LOCATION);
+        RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
     }
 
     @Override

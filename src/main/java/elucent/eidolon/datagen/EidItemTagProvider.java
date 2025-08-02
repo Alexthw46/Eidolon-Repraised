@@ -11,6 +11,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        tag(ItemTags.MUSIC_DISCS).add(Registry.PAROUSIA_DISC.get());
+        tag(Tags.Items.MUSIC_DISCS).add(Registry.PAROUSIA_DISC.get());
         tag(SCRIBE_ITEMS).add(Items.CHARCOAL, Items.FEATHER, Items.BOOK, Registry.CANDLE.get().asItem(), Registry.PARCHMENT.get(), Registry.MAGIC_INK.get());
         tag(PATRON_SYMBOL).add(Registry.HOLY_SYMBOL.get(), Registry.UNHOLY_SYMBOL.get());
         this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);

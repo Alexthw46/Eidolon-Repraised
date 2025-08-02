@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,10 +14,10 @@ import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,11 +26,12 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterContainer> {
-    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/soul_enchanter.png" );
-    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/entity/enchanter_book.png" );
+    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/soul_enchanter.png");
+    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/entity/enchanter_book.png");
     private static BookModel MODEL_BOOK = null;
     private final Random random = new Random();
     public int ticks;
@@ -43,7 +45,8 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
 
     public SoulEnchanterScreen(SoulEnchanterContainer container, Inventory playerInventory, Component textComponent) {
         super(container, playerInventory, textComponent);
-        if (MODEL_BOOK == null) MODEL_BOOK = new BookModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.BOOK));
+        if (MODEL_BOOK == null)
+            MODEL_BOOK = new BookModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.BOOK));
     }
 
     public void containerTick() {
@@ -55,9 +58,9 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
 
-        for(int k = 0; k < 3; ++k) {
-            double d0 = mouseX - (double)(i + 60);
-            double d1 = mouseY - (double)(j + 14 + 19 * k);
+        for (int k = 0; k < 3; ++k) {
+            double d0 = mouseX - (double) (i + 60);
+            double d1 = mouseY - (double) (j + 14 + 19 * k);
             if (d0 >= 0.0D && d1 >= 0.0D && d0 < 108.0D && d1 < 19.0D && this.menu.clickMenuButton(this.minecraft.player, k)) {
                 this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, k);
                 return true;
@@ -129,49 +132,36 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         float f5 = Mth.clamp(Mth.frac(f1 + 0.75F) * 1.6F - 0.3F, 0.0F, 1.0F);
         MODEL_BOOK.setupAnim(0.0F, f4, f5, f);
         VertexConsumer vertexconsumer = pGuiGraphics.bufferSource().getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
-        MODEL_BOOK.renderToBuffer(pGuiGraphics.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        MODEL_BOOK.renderToBuffer(pGuiGraphics.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(
+                1, 1, 1, 1));
         pGuiGraphics.flush();
         pGuiGraphics.pose().popPose();
         Lighting.setupFor3DItems();
     }
 
     public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        pPartialTick = this.minecraft.getFrameTime();
-        this.renderBackground(pGuiGraphics);
+        pPartialTick = this.minecraft.getFrameTimeNs();
+        this.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
         boolean flag = this.minecraft.player.getAbilities().instabuild;
         int soulShardAmount = this.menu.getSoulShardAmount();
 
         for (int j = 0; j < 3; ++j) {
-            Enchantment enchantment = Enchantment.byId(this.menu.enchantClue[j]);
+
+            Optional<Holder.Reference<Enchantment>> enchantment = this.minecraft
+                    .level
+                    .registryAccess()
+                    .registryOrThrow(Registries.ENCHANTMENT)
+                    .getHolder(this.menu.enchantClue[j]);
             int enchantmentLevel = this.menu.worldClue[j];
             int experienceLevelCost = Math.min(10, enchantmentLevel);
             int i1 = j + 1;
             if (this.isHovering(60, 14 + 19 * j, 108, 17, pMouseX, pMouseY) && enchantmentLevel > 0) {
                 List<Component> list = Lists.newArrayList();
-                list.add(Component.translatable("container.enchant.clue", enchantment == null ? "" : enchantment.getFullname(enchantmentLevel)).withStyle(ChatFormatting.WHITE));
-                if (enchantment == null) {
-                    list.add(Component.literal(""));
-                    list.add(Component.translatable("neoforge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
-                } else if (!flag) {
-                    list.add(CommonComponents.EMPTY);
-                    if (this.minecraft.player.experienceLevel < enchantmentLevel) {
-                        list.add(Component.translatable("container.enchant.level.requirement", enchantmentLevel).withStyle(ChatFormatting.RED));
-                    } else {
-                        MutableComponent iformattabletextcomponent = Component.translatable("container.eidolon.enchant.shard.one", 1);
-
-                        list.add(iformattabletextcomponent.withStyle(soulShardAmount > 0 ? ChatFormatting.GRAY : ChatFormatting.RED));
-                        MutableComponent iformattabletextcomponent1;
-                        if (experienceLevelCost == 1) {
-                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.one");
-                        } else {
-                            iformattabletextcomponent1 = Component.translatable("container.enchant.level.many", experienceLevelCost);
-                        }
-
-                        list.add(iformattabletextcomponent1.withStyle(ChatFormatting.GRAY));
-                    }
-                }
+                list.add(Component.translatable("container.enchant.clue", enchantment.isEmpty() ? "" : Enchantment.getFullname(enchantment.get(), enchantmentLevel)).withStyle(ChatFormatting.WHITE));
+                list.add(Component.literal(""));
+                list.add(Component.translatable("neoforge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
 
                 pGuiGraphics.renderComponentTooltip(this.font, list, pMouseX, pMouseY);
                 break;
@@ -186,8 +176,8 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             this.last = itemstack;
 
             do {
-                this.flipT += (float)(this.random.nextInt(4) - this.random.nextInt(4));
-            } while(this.flip <= this.flipT + 1.0F && this.flip >= this.flipT - 1.0F);
+                this.flipT += (float) (this.random.nextInt(4) - this.random.nextInt(4));
+            } while (this.flip <= this.flipT + 1.0F && this.flip >= this.flipT - 1.0F);
         }
 
         ++this.ticks;
@@ -195,7 +185,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         this.oOpen = this.open;
         boolean flag = false;
 
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             if (this.menu.worldClue[i] != 0) {
                 flag = true;
                 break;

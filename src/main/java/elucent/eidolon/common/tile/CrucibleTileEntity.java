@@ -139,7 +139,8 @@ public class CrucibleTileEntity extends TileEntityBase {
 
     @Override
     public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
-        if (hand == InteractionHand.MAIN_HAND && level != null) {
+        InteractionHand hand = player.getUsedItemHand();
+        if (level != null) {
             if (FluidUtil.interactWithFluidHandler(player, hand, this.tank))
                 return InteractionResult.SUCCESS;
 

@@ -30,9 +30,9 @@ public class ThrallTargetGoal extends TargetGoal {
     public void start() {
         super.start();
         UUID master = mob.getPersistentData().getUUID(THRALL_KEY);
-        owner = mob.level.getPlayerByUUID(master);
+        owner = mob.level().getPlayerByUUID(master);
         if (owner == null) {
-            if (mob.level instanceof ServerLevel server && server.getEntity(master) instanceof LivingEntity living) {
+            if (mob.level() instanceof ServerLevel server && server.getEntity(master) instanceof LivingEntity living) {
                 owner = living;
             } else return;
         }

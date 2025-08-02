@@ -45,7 +45,7 @@ public class QuickenIncense extends GenericPotionIncense {
                         range() * 0.5, 0, range() * 0.5);
             }
 
-        if (level.random.nextInt(5) == 0) Particles.create(EidolonParticles.FEATHER_PARTICLE)
+        if (level.random.nextInt(5) == 0) Particles.create(EidolonParticles.FEATHER_PARTICLE.get())
                 .setAlpha(0.25f, 0).setScale(0.375f, 0.125f).setLifetime(160)
                 .randomOffset(range() * 0.75, 0.1).randomVelocity(0.025f, 0.025f)
                 .addVelocity(0, 0.0125f, 0)

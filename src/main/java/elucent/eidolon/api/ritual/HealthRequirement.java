@@ -53,7 +53,7 @@ public class HealthRequirement implements IRequirement {
 
             acc += targetHealth;
             if (!world.isClientSide)
-                Networking.sendToTracking(world, pos, new RitualConsumePacket(target.blockPosition(), pos, ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
+                Networking.sendToNearbyClient(world, pos, new RitualConsumePacket(target.blockPosition(), pos, ritual.getRed(), ritual.getGreen(), ritual.getBlue()));
             if (acc >= this.health) return;
         }
     }

@@ -2,6 +2,7 @@ package elucent.eidolon.common.item;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.common.item.model.SilverArmorModel;
 import elucent.eidolon.registries.EidolonMaterials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -31,8 +32,8 @@ public class SilverArmorItem extends ArmorItem {
     public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             @Override
-            public @NotNull SilverArmorModel getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel _default) {
-                float pticks = Minecraft.getInstance().getFrameTime();
+            public @NotNull SilverArmorModel getHumanoidArmorModel(@NotNull LivingEntity entity, @NotNull ItemStack itemStack, @NotNull EquipmentSlot armorSlot, @NotNull HumanoidModel _default) {
+                float pticks = Minecraft.getInstance().getFrameTimeNs();
                 float f = Mth.rotLerp(pticks, entity.yBodyRotO, entity.yBodyRot);
                 float f1 = Mth.rotLerp(pticks, entity.yHeadRotO, entity.yHeadRot);
                 float netHeadYaw = f1 - f;
@@ -46,7 +47,7 @@ public class SilverArmorItem extends ArmorItem {
     }
 
     @Override
-    public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+    public @Nullable ResourceLocation getArmorTexture(@NotNull ItemStack stack, @NotNull Entity entity, @NotNull EquipmentSlot slot, ArmorMaterial.@NotNull Layer layer, boolean innerModel) {
         return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/armor/silver_armor.png");
     }
 

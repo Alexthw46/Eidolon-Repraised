@@ -21,13 +21,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BrewingStandBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -88,7 +87,8 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
     }
 
     public void tick() {
-        boolean flag = this.canBrew();
+        if (this.level == null) return;
+        boolean flag = this.canBrew(level.potionBrewing());
         boolean flag1 = this.brewTime > 0;
         ItemStack itemstack1 = this.brewingItemStacks.get(3);
         if (level != null && level.getGameTime() % 20 == 0) {
@@ -103,7 +103,7 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
             --this.brewTime;
             boolean flag2 = this.brewTime == 0;
             if (flag2 && flag) {
-                this.brewPotions();
+                doBrew(level, getBlockPos(), brewingItemStacks);
                 this.setChanged();
             } else if (!flag || heat == 0) {
                 this.brewTime = 0;
@@ -148,18 +148,16 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         return aboolean;
     }
 
-    private boolean canBrew() {
+    private boolean canBrew(PotionBrewing potionBrewing) {
         ItemStack itemstack = this.brewingItemStacks.get(3);
-        if (!itemstack.isEmpty())
-            return BrewingRecipeRegistry.canBrew(brewingItemStacks, itemstack, OUTPUT_SLOTS); // divert to VanillaBrewingRegistry
         if (itemstack.isEmpty()) {
             return false;
-        } else if (!PotionBrewing.isIngredient(itemstack)) {
+        } else if (!potionBrewing.isIngredient(itemstack)) {
             return false;
         } else {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemstack1 = this.brewingItemStacks.get(i);
-                if (!itemstack1.isEmpty() && PotionBrewing.hasMix(itemstack1, itemstack)) {
+                if (!itemstack1.isEmpty() && potionBrewing.hasMix(itemstack1, itemstack)) {
                     return true;
                 }
             }
@@ -168,25 +166,28 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
         }
     }
 
-    private void brewPotions() {
-        if (level == null || EventHooks.onPotionAttemptBrew(brewingItemStacks)) return;
-        ItemStack itemstack = this.brewingItemStacks.get(3);
+    private static void doBrew(Level level, BlockPos pos, NonNullList<ItemStack> items) {
+        if (net.neoforged.neoforge.event.EventHooks.onPotionAttemptBrew(items)) return;
+        ItemStack itemstack = items.get(3);
+        PotionBrewing potionbrewing = level.potionBrewing();
 
-        BrewingRecipeRegistry.brewPotions(brewingItemStacks, itemstack, OUTPUT_SLOTS);
-        EventHooks.onPotionBrewed(brewingItemStacks);
-        BlockPos blockpos = this.getBlockPos();
+        for (int i = 0; i < 3; i++) {
+            items.set(i, potionbrewing.mix(itemstack, items.get(i)));
+        }
+
+        net.neoforged.neoforge.event.EventHooks.onPotionBrewed(items);
         if (itemstack.hasCraftingRemainingItem()) {
             ItemStack itemstack1 = itemstack.getCraftingRemainingItem();
             itemstack.shrink(1);
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
-            } else if (!this.level.isClientSide) {
-                Containers.dropItemStack(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), itemstack1);
+            } else {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemstack1);
             }
         } else itemstack.shrink(1);
 
-        this.brewingItemStacks.set(3, itemstack);
-        this.level.levelEvent(1035, blockpos, 0);
+        items.set(3, itemstack);
+        level.levelEvent(1035, pos, 0);
     }
 
     @Override
@@ -248,12 +249,13 @@ public class WoodenStandTileEntity extends BaseContainerBlockEntity implements W
 
     @Override
     public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
+        PotionBrewing potionbrewing = this.level != null ? this.level.potionBrewing() : PotionBrewing.EMPTY;
         if (index == 3) {
-            return BrewingRecipeRegistry.isValidIngredient(stack)
+            return potionbrewing.isIngredient(stack)
                     && !stack.is(Tags.Items.DUSTS_REDSTONE)
                     && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
         } else {
-            return BrewingRecipeRegistry.isValidInput(stack) && this.getItem(index).isEmpty();
+            return potionbrewing.isInput(stack) && this.getItem(index).isEmpty();
         }
     }
 

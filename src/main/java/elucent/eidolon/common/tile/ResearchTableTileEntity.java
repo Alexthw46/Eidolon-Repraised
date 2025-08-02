@@ -1,18 +1,17 @@
 package elucent.eidolon.common.tile;
 
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.research.ResearchTask;
+import elucent.eidolon.common.item.ResearchNotesItem;
 import elucent.eidolon.gui.ResearchTableContainer;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
-import elucent.eidolon.registries.Researches;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -131,11 +130,8 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
             progress--;
             if (progress == 0) {
                 ItemStack notes = stacks.getFirst();
-                CompoundTag notesTag = notes.getTag();
-                Research r = Researches.find(ResourceLocation.tryParse(notesTag.getString("research")));
-                int done = notesTag.getInt("stepsDone");
-                done++;
-                notesTag.putInt("stepsDone", done);
+                ResearchNotesItem.ResearchData notesTag = notes.get(EidolonDataComponents.RESEARCH);
+                notes.set(EidolonDataComponents.RESEARCH, new ResearchNotesItem.ResearchData(notesTag.research(), notesTag.stepsDone() + 1));
                 for (ContainerListener listener : listeners)
                     listener.slotChanged((AbstractContainerMenu) listener, 0, stacks.getFirst());
             }

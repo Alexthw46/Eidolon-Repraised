@@ -24,21 +24,21 @@ import org.joml.Matrix4f;
 
 public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEntity> {
     private final ModelPart stirrer;
-    public static final ResourceLocation STIRRER_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/block/crucible_stirrer.png" );
-    
+    public static final ResourceLocation STIRRER_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/block/crucible_stirrer.png");
+
     public static LayerDefinition createModelLayer() {
-    	MeshDefinition mesh = new MeshDefinition();
-    	
-		PartDefinition root = mesh.getRoot();
-		PartDefinition stirrer = root.addOrReplaceChild("stirrer", CubeListBuilder.create()
-				.texOffs(0, 8).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-		
-		return LayerDefinition.create(mesh, 16, 16);
+        MeshDefinition mesh = new MeshDefinition();
+
+        PartDefinition root = mesh.getRoot();
+        PartDefinition stirrer = root.addOrReplaceChild("stirrer", CubeListBuilder.create()
+                .texOffs(0, 8).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        return LayerDefinition.create(mesh, 16, 16);
     }
 
     public CrucibleTileRenderer() {
-    	this.stirrer = Minecraft.getInstance().getEntityModels().bakeLayer(ClientRegistry.CRUCIBLE_STIRRER_LAYER).getChild("stirrer");
+        this.stirrer = Minecraft.getInstance().getEntityModels().bakeLayer(ClientRegistry.CRUCIBLE_STIRRER_LAYER).getChild("stirrer");
     }
 
     @Override
@@ -57,22 +57,22 @@ public class CrucibleTileRenderer implements BlockEntityRenderer<CrucibleTileEnt
         }
         if (tile.hasWater) {
             TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(ResourceLocation.fromNamespaceAndPath("minecraft","block/water_still" ));
-            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
+                    .apply(ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_still"));
+            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
             Matrix4f mat = matrixStackIn.last().pose();
             int color = BiomeColors.getAverageWaterColor(tile.getLevel(), tile.getBlockPos());
             int r = ARGB32.red(color), g = ARGB32.green(color),
-                b = ARGB32.blue(color), a = ARGB32.alpha(color);
+                    b = ARGB32.blue(color), a = ARGB32.alpha(color);
 
-            if (tile.steps.size() > 0) {
-                r = (int)(tile.getRed() * 255);
-                g = (int)(tile.getGreen() * 255);
-                b = (int)(tile.getBlue() * 255);
+            if (!tile.steps.isEmpty()) {
+                r = (int) (tile.getRed() * 255);
+                g = (int) (tile.getGreen() * 255);
+                b = (int) (tile.getBlue() * 255);
             }
-            builder.vertex(mat, 0.125f, 0.75f, 0.125f).color(r, g, b, 192).uv(water.getU(2), water.getV(2)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.125f, 0.75f, 0.875f).color(r, g, b, 192).uv(water.getU(14), water.getV(2)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.875f, 0.75f, 0.875f).color(r, g, b, 192).uv(water.getU(14), water.getV(14)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
-            builder.vertex(mat, 0.875f, 0.75f, 0.125f).color(r, g, b, 192).uv(water.getU(2), water.getV(14)).uv2(combinedLightIn).normal(0, 1, 0).endVertex();
+            builder.addVertex(mat, 0.125f, 0.75f, 0.125f).setColor(r, g, b, 192).setUv(water.getU(2), water.getV(2)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.125f, 0.75f, 0.875f).setColor(r, g, b, 192).setUv(water.getU(14), water.getV(2)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.875f, 0.75f, 0.875f).setColor(r, g, b, 192).setUv(water.getU(14), water.getV(14)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.875f, 0.75f, 0.125f).setColor(r, g, b, 192).setUv(water.getU(2), water.getV(14)).setLight(combinedLightIn).setNormal(0, 1, 0);
         }
     }
 }

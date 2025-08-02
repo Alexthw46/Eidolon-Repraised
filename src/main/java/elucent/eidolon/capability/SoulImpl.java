@@ -49,6 +49,16 @@ public class SoulImpl implements ISoul {
 
     }
 
+    public CompoundTag serializeNBT() {
+        return soulHeartData.serializeNBT(entity.registryAccess());
+    }
+
+    public void deserializeNBT(CompoundTag nbt) {
+        soulHeartData.deserializeNBT(entity.registryAccess(), nbt);
+        entity.setData(EidolonAttachments.SOUL_ATTACHMENT, soulHeartData);
+    }
+
+
     public static class SoulHeartData implements INBTSerializable<CompoundTag> {
         float maxEtherealHealth, etherealHealth;
 

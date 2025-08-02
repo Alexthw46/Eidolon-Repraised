@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
@@ -66,28 +66,28 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    public InteractionResult onActivated(BlockState state, BlockPos pos, Player player) {
+    public ItemInteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && level instanceof ServerLevel && !isBurning) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (itemInHand.isEmpty() && !incense.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, incense);
                 incense = ItemStack.EMPTY;
                 if (!level.isClientSide) sync(level.registryAccess());
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             } else if (!itemInHand.isEmpty() && incense.isEmpty()) {
                 if (IncenseRegistry.getIncenseRitual(itemInHand.getItem()) != null) {
                     incense = itemInHand.split(1);
                     if (!level.isClientSide) sync(level.registryAccess());
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             } else if (!itemInHand.isEmpty() && !incense.isEmpty()) {
                 if (itemInHand.getItem() instanceof FlintAndSteelItem) {
                     if (!level.isClientSide && canStartBurning()) this.startBurning(player, level, pos);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public void startBurning(Player player, @NotNull Level world, BlockPos pos) {

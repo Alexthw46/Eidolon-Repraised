@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -31,12 +32,12 @@ public class ResoluteBeltItem extends EidolonCurio {
     static final Random random = new Random();
 
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof LivingEntity entity && CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.RESOLUTE_BELT.get()).isPresent()) {
+    public static void onHurt(LivingDamageEvent.Post event) {
+        if (event.getSource().getEntity() instanceof LivingEntity entity && CuriosApi.getCuriosInventory(event.getEntity()).flatMap(i -> i.findFirstCurio(Registry.RESOLUTE_BELT.get())).isPresent()) {
             Vec3 diff = event.getEntity().position().subtract(entity.position()).multiply(1, 0, 1).normalize();
             entity.knockback(0.8f, diff.x, diff.z);
-            if (!entity.level.isClientSide)
-                entity.level.playSound(null, entity.blockPosition(), SoundEvents.IRON_GOLEM_HURT, SoundSource.PLAYERS, 1.0f, 1.9f + 0.2f * random.nextFloat());
+            if (!entity.level().isClientSide)
+                entity.level().playSound(null, entity.blockPosition(), SoundEvents.IRON_GOLEM_HURT, SoundSource.PLAYERS, 1.0f, 1.9f + 0.2f * random.nextFloat());
         }
     }
 

@@ -5,9 +5,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class TerminusMirrorItem extends EidolonCurio {
@@ -17,10 +17,10 @@ public class TerminusMirrorItem extends EidolonCurio {
     }
 
     @SubscribeEvent
-    public static void onDamage(LivingAttackEvent event) {
-        if (event.getEntity() instanceof Player) {
-            CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.TERMINUS_MIRROR.get()).ifPresent((slots) -> {
-                ItemStack stack = slots.stack();
+    public static void onDamage(LivingIncomingDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).flatMap(inventory -> inventory.findFirstCurio(
+                    Registry.TERMINUS_MIRROR.get())).ifPresent((slots) -> {
                 if (event.getSource().getDirectEntity() instanceof Projectile) {
                     event.setCanceled(true);
                     if (!event.getEntity().getCommandSenderWorld().isClientSide)

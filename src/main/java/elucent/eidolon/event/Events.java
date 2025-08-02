@@ -1,8 +1,6 @@
 package elucent.eidolon.event;
 
-import com.mojang.authlib.GameProfile;
 import elucent.eidolon.Eidolon;
-import elucent.eidolon.api.capability.IPlayerData;
 import elucent.eidolon.api.capability.ISoul;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.capability.KnowledgeCommand;
@@ -15,16 +13,17 @@ import elucent.eidolon.common.entity.ai.WitchBarterGoal;
 import elucent.eidolon.common.item.*;
 import elucent.eidolon.common.spell.ThrallSpell;
 import elucent.eidolon.common.tile.GobletTileEntity;
-import elucent.eidolon.network.*;
-import elucent.eidolon.registries.EidolonAttributes;
-import elucent.eidolon.registries.EidolonPotions;
-import elucent.eidolon.registries.Registry;
-import elucent.eidolon.registries.Signs;
+import elucent.eidolon.network.CrystallizeEffectPacket;
+import elucent.eidolon.network.Networking;
+import elucent.eidolon.network.OpenCodexPacket;
+import elucent.eidolon.network.WingsDataUpdatePacket;
+import elucent.eidolon.registries.*;
 import elucent.eidolon.util.EntityUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -49,21 +48,24 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Added;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
@@ -77,49 +79,16 @@ public class Events {
     public static InteractionResult rightClickLectern(Player player, Level world, BlockHitResult hit) {
         BlockPos pos = hit.getBlockPos();
         BlockState state = world.getBlockState(pos);
-        if (world.getBlockEntity(pos) instanceof LecternBlockEntity lectern && !world.isClientSide) {
+        if (world.getBlockEntity(pos) instanceof LecternBlockEntity lectern && player instanceof ServerPlayer serverPlayer) {
             if (state.getValue(LecternBlock.HAS_BOOK))
                 if (lectern.getBook().getItem() instanceof CodexItem) {
                     player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 1.0f);
-                    Networking.sendTo(player, new OpenCodexPacket());
+                    Networking.sendToPlayerClient(new OpenCodexPacket(), serverPlayer);
                     return InteractionResult.SUCCESS;
                 }
         }
         return InteractionResult.PASS;
     }
-
-//    @SubscribeEvent
-//    public void attachWorldCaps(AttachCapabilitiesEvent<Level> event) {
-//        if (event.getObject() != null)
-//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"reputation" ), new IReputation.Provider());
-//    }
-//
-//    @SubscribeEvent
-//    public void attachEntityCaps(AttachCapabilitiesEvent<Entity> event) {
-//        if (event.getObject() instanceof Player) {
-//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"knowledge" ), new IKnowledge.Provider());
-//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"player_data" ), new IPlayerData.Provider());
-//            event.addCapability(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"soul" ), new ISoul.Provider());
-//        }
-//    }
-//
-//
-//    @SuppressWarnings("unchecked")
-//    @SubscribeEvent
-//    public void onClone(PlayerEvent.Clone event) {
-//        Capability<IKnowledge> KNOWLEDGE = EidolonCapabilities.KNOWLEDGE_CAPABILITY;
-//        Capability<ISoul> SOUL = ISoul.INSTANCE;
-//        Capability<IPlayerData> PDATA = IPlayerData.INSTANCE;
-//        event.getOriginal().reviveCaps();
-//        event.getEntity().getCapability(KNOWLEDGE).ifPresent(k -> event.getOriginal().getCapability(KNOWLEDGE).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-//        event.getEntity().getCapability(SOUL).ifPresent(k -> event.getOriginal().getCapability(SOUL).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-//        event.getEntity().getCapability(PDATA).ifPresent(k -> event.getOriginal().getCapability(PDATA).ifPresent(o -> ((INBTSerializable<CompoundTag>) k).deserializeNBT(((INBTSerializable<CompoundTag>) o).serializeNBT())));
-//        event.getOriginal().invalidateCaps();
-//        if (!event.getEntity().level.isClientSide) {
-//            Networking.sendTo(event.getEntity(), new KnowledgeUpdatePacket(event.getEntity(), false));
-//            Networking.sendTo(event.getEntity(), new SoulUpdatePacket(event.getEntity()));
-//        }
-//    }
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
@@ -132,16 +101,16 @@ public class Events {
         if (!EntityUtil.isEnthralled(event.getEntity())) return;
         UUID master = event.getEntity().getPersistentData().getUUID(THRALL_KEY);
         LivingEntity newTarget = null;
-        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getOriginalTarget())) {
-            LivingEntity lastHurt = event.getOriginalTarget().getLastHurtMob();
-            LivingEntity lastHurtBy = event.getOriginalTarget().getLastHurtByMob();
+        if (EntityUtil.isEnthralledBy(event.getEntity(), event.getNewAboutToBeSetTarget())) {
+            LivingEntity lastHurt = event.getNewAboutToBeSetTarget().getLastHurtMob();
+            LivingEntity lastHurtBy = event.getNewAboutToBeSetTarget().getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
         } else if (event.getEntity().level() instanceof ServerLevel server && server.getEntity(master) instanceof LivingEntity living) {
             LivingEntity lastHurt = living.getLastHurtMob();
             LivingEntity lastHurtBy = living.getLastHurtByMob();
             newTarget = handleEnthralledTargeting(lastHurt, lastHurtBy, event.getEntity());
         }
-        if (!(event.getEntity() instanceof HoglinBase && newTarget == null)) event.setNewTarget(newTarget);
+        if (!(event.getEntity() instanceof HoglinBase && newTarget == null)) event.setNewAboutToBeSetTarget(newTarget);
     }
 
     public static @Nullable LivingEntity handleEnthralledTargeting(@Nullable LivingEntity lastHurt, @Nullable LivingEntity lastHurtBy, LivingEntity thrall) {
@@ -153,26 +122,31 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onTick(LivingTickEvent event) {
+    public void onTick(EntityTickEvent event) {
         Level level = event.getEntity().level();
-        LivingEntity e = event.getEntity();
-        if (e.hasEffect(EidolonPotions.UNDEATH_EFFECT.get()) && level.isDay() && !level.isClientSide) {
+        if (!(event.getEntity() instanceof LivingEntity e)) return;
+        if (e.hasEffect(EidolonPotions.UNDEATH_EFFECT) && level.isDay() && !level.isClientSide) {
             float f = e.getLightLevelDependentMagicValue();
             BlockPos blockpos = e.getVehicle() instanceof Boat ? BlockPos.containing(e.getX(), (double) Math.round(e.getY()), e.getZ()).above() : BlockPos.containing(e.getX(), (double) Math.round(e.getY()), e.getZ());
             if (f > 0.5F && e.getRandom().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && level.canSeeSky(blockpos)) {
-                e.setSecondsOnFire(8);
+                e.setRemainingFireTicks(20 * 8);
             }
         }
         boolean hasBoneArmor = false;
         for (ItemStack s : e.getArmorSlots()) {
-            if (s.getItem() instanceof BonelordArmorItem) hasBoneArmor = true;
+            if (s.getItem() instanceof BonelordArmorItem) {
+                hasBoneArmor = true;
+                break;
+            }
         }
-        if (hasBoneArmor && event.getEntity().getHealth() >= event.getEntity().getMaxHealth() * 0.999 && event.getEntity().tickCount % 80 == 0)
-            event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
-                if (s.getEtherealHealth() < ISoul.getPersistentHealth(e)) //only update ethereal health max if it's lower than the persistent health
+        if (hasBoneArmor && e.getHealth() >= e.getMaxHealth() * 0.999 && event.getEntity().tickCount % 80 == 0) {
+            var s = e.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
+            if (s != null) {
+                if (s.getEtherealHealth() < ISoul.getPersistentHealth(e)) // update ethereal health if it's lower than the persistent health
                     s.setMaxEtherealHealth(Math.max(Math.min(ISoul.getPersistentHealth(e), s.getMaxEtherealHealth()), 2 * Mth.floor((s.getEtherealHealth() + 2) / 2)));
-                s.healEtherealHealth(1, ISoul.getPersistentHealth(event.getEntity()));
-            });
+                s.healEtherealHealth(1, ISoul.getPersistentHealth(e));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -181,7 +155,7 @@ public class Events {
         if (!(entity instanceof Monster)) {
             Level world = entity.level();
             BlockPos pos = entity.blockPosition();
-            List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2), pos.offset(3, 3, 3)));
+            List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-2, -2, -2).getBottomCenter(), pos.offset(3, 3, 3).getCenter()));
             if (!goblets.isEmpty()) {
                 GobletTileEntity goblet = goblets.stream().min(Comparator.comparingDouble(g -> g.getBlockPos().distSqr(pos))).get();
                 goblet.setEntityType(entity.getType());
@@ -189,27 +163,27 @@ public class Events {
         }
 
         //Drop candies on Halloween
-        if (event.getSource().getEntity() instanceof Player && !entity.level.isClientSide()) {
+        if (event.getSource().getEntity() instanceof Player && !entity.level().isClientSide()) {
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             //if it's Halloween period, add one of the two candies to the loot table with 10% chance
-            if ((month == 10 && day >= 28 || month == 11 && day <= 2) && entity.level.random.nextInt(10) == 0) {
+            if ((month == 10 && day >= 28 || month == 11 && day <= 2) && entity.level().random.nextInt(10) == 0) {
                 if (entity instanceof Zombie) {
-                    event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.RED_CANDY.get())));
+                    event.getDrops().add(new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.RED_CANDY.get())));
                 } else if (entity instanceof AbstractSkeleton) {
-                    event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.GRAPE_CANDY.get())));
+                    event.getDrops().add(new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(Registry.GRAPE_CANDY.get())));
                 }
             }
         }
 
         if (entity instanceof Witch || entity instanceof Villager) {
             if (entity.getMainHandItem().getItem() instanceof CodexItem)
-                event.getDrops().add(new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), entity.getMainHandItem().copy()));
+                event.getDrops().add(new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), entity.getMainHandItem().copy()));
         }
 
         //TODO Replace with GLM
-        if (entity instanceof ZombieBruteEntity && (entity.hasEffect(MobEffects.WITHER) || event.getSource().is(DamageTypes.WITHER)) && !entity.level.isClientSide) {
+        if (entity instanceof ZombieBruteEntity && (entity.hasEffect(MobEffects.WITHER) || event.getSource().is(DamageTypes.WITHER)) && !entity.level().isClientSide) {
             for (ItemEntity item : event.getDrops())
                 if (item.getItem().is(Registry.ZOMBIE_HEART.get())) {
                     item.setItem(new ItemStack(Registry.WITHERED_HEART.get(), item.getItem().getCount()));
@@ -218,20 +192,22 @@ public class Events {
 
         if (event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity source) {
             ItemStack held = source.getMainHandItem();
-            if (!entity.level.isClientSide && (held.getItem() instanceof ReaperScytheItem || event.getSource().is(Registry.RITUAL_DAMAGE.key))
+            var lootingHolder = source.level().registryAccess().holder(Enchantments.LOOTING);
+
+            if (!entity.level().isClientSide && (held.getItem() instanceof ReaperScytheItem || event.getSource().is(Registry.RITUAL_DAMAGE.key))
                     && entity.isInvertedHealAndHarm()) {
                 if (!(entity instanceof Player))
                     event.getDrops().removeIf(i -> !(i.getItem().getItem() instanceof ArmorItem));
-                int looting = CommonHooks.getLootingLevel(entity, source, event.getSource());
+                int looting = lootingHolder.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, source)).orElse(0);
                 if (source.hasEffect(EidolonPotions.SOUL_HARVEST)) looting += 2;
-                ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(),
-                        new ItemStack(Registry.SOUL_SHARD.get(), source.level.random.nextInt(2 + looting)));
+                ItemEntity drop = new ItemEntity(source.level(), entity.getX(), entity.getY(), entity.getZ(),
+                        new ItemStack(Registry.SOUL_SHARD.get(), source.level().random.nextInt(2 + looting)));
                 drop.setDefaultPickUpDelay();
                 event.getDrops().add(drop);
-                Networking.sendToTracking(entity.level, entity.blockPosition(), new CrystallizeEffectPacket(entity.blockPosition()));
+                Networking.sendToNearbyClient(entity.level(), entity.blockPosition(), new CrystallizeEffectPacket(entity.blockPosition()));
             }
-            if (!entity.level.isClientSide && held.getItem() instanceof CleavingAxeItem) {
-                int looting = CommonHooks.getLootingLevel(entity, source, event.getSource());
+            if (!entity.level().isClientSide && held.getItem() instanceof CleavingAxeItem) {
+                int looting = lootingHolder.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, source)).orElse(0);
                 beheading(event, source, entity, looting);
             }
         }
@@ -244,16 +220,15 @@ public class Events {
         else if (entity instanceof Zombie) head = new ItemStack(Items.ZOMBIE_HEAD);
         else if (entity instanceof Creeper) head = new ItemStack(Items.CREEPER_HEAD);
         else if (entity instanceof EnderDragon) head = new ItemStack(Items.DRAGON_HEAD);
-        else if (entity instanceof Player) {
+        else if (entity instanceof Player player) {
             head = new ItemStack(Items.PLAYER_HEAD);
-            GameProfile gameprofile = ((Player) entity).getGameProfile();
-            head.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), gameprofile));
+            head.set(DataComponents.PROFILE, new ResolvableProfile(player.getGameProfile()));
         }
         if (!head.isEmpty()) {
             boolean doDrop = false;
-            if (entity.level.random.nextInt(20) == 0) doDrop = true;
+            if (entity.level().random.nextInt(20) == 0) doDrop = true;
             else for (int i = 0; i < looting; i++) {
-                if (entity.level.random.nextInt(40) == 0) {
+                if (entity.level().random.nextInt(40) == 0) {
                     doDrop = true;
                     break;
                 }
@@ -262,7 +237,7 @@ public class Events {
                 if (e.getItem().is(head.getItem())) doDrop = false; // No duplicate heads.
             }
             if (doDrop) {
-                ItemEntity drop = new ItemEntity(source.level, entity.getX(), entity.getY(), entity.getZ(), head);
+                ItemEntity drop = new ItemEntity(source.level(), entity.getX(), entity.getY(), entity.getZ(), head);
                 drop.setDefaultPickUpDelay();
                 event.getDrops().add(drop);
             }
@@ -272,10 +247,10 @@ public class Events {
     @SubscribeEvent
     public void registerCustomAI(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {
-            if (event.getEntity() instanceof Player player) {
-                Networking.sendTo(player, new KnowledgeUpdatePacket(player, false));
-                Networking.sendTo(player, new SoulUpdatePacket(player));
-            }
+//            if (event.getEntity() instanceof Player player) {
+//                Networking.sendTo(player, new KnowledgeUpdatePacket(player, false));
+//                Networking.sendTo(player, new SoulUpdatePacket(player));
+//            }
             if (event.getEntity() instanceof Witch witch) {
                 witch.goalSelector.addGoal(1, new WitchBarterGoal(
                         witch,
@@ -290,8 +265,8 @@ public class Events {
                         stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
             }
-            if (event.getEntity() instanceof PathfinderMob mob && ((Eidolon.isValidUndead(mob) == MobType.UNDEAD && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) || mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
-                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED.get())));
+            if (event.getEntity() instanceof PathfinderMob mob && ((Eidolon.isValidUndead(mob) && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) || mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
+                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED)));
                 try {
                     mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));
                     mob.targetSelector.addGoal(1, new ThrallTargetGoal(mob));
@@ -303,42 +278,46 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) event.player.getCapability(IPlayerData.INSTANCE).ifPresent(d -> {
-            if (!d.getWingsItem(event.player).isEmpty()) {
-                if (event.player.isCrouching() && event.player.getDeltaMovement().y < -0.1) {
-                    d.startFlying(event.player);
-                    event.player.setDeltaMovement(event.player.getDeltaMovement().x, -0.1, event.player.getDeltaMovement().z);
-                }
-                if (d.isFlying(event.player)) event.player.resetFallDistance();
+    public void onPlayerTick(PlayerTickEvent.Post event) {
 
-                if (d.isDashing(event.player)) d.doDashTick(event.player);
+        var wings = event.getEntity().getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+        if (wings != null) {
 
-                if (event.player.onGround()) {
-                    d.rechargeWings(event.player);
-                    d.stopFlying(event.player);
+            if (!wings.getWingsItem(event.getEntity()).isEmpty()) {
+                if (event.getEntity().isCrouching() && event.getEntity().getDeltaMovement().y < -0.1) {
+                    wings.startFlying(event.getEntity());
+                    event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().x, -0.1, event.getEntity().getDeltaMovement().z);
                 }
-                if (!event.player.level.isClientSide) {
-                    Networking.sendToTracking(event.player.level, event.player.blockPosition(), new WingsDataUpdatePacket(event.player));
+                if (wings.isFlying(event.getEntity())) event.getEntity().resetFallDistance();
+
+                if (wings.isDashing(event.getEntity())) wings.doDashTick(event.getEntity());
+
+                if (event.getEntity().onGround()) {
+                    wings.rechargeWings(event.getEntity());
+                    wings.stopFlying(event.getEntity());
+                }
+                if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+                    Networking.sendToPlayerClient(new WingsDataUpdatePacket(event.getEntity()), serverPlayer);
                 }
             }
-        });
+
+        }
     }
 
     @SubscribeEvent
     public void onApplyPotion(MobEffectEvent.Applicable event) {
         if (event.getEffectInstance().getEffect() == MobEffects.MOVEMENT_SLOWDOWN && event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
-            event.setResult(Event.Result.DENY);
+            event.setResult(Applicable.Result.DO_NOT_APPLY);
         }
     }
 
-    @SubscribeEvent
-    public void onLivingUse(LivingEntityUseItemEvent.Start event) {
-        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT.get())) {
-            if (event.getItem().isEdible() && !event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
-                event.setResult(Event.Result.DENY);
-        }
-    }
+//    @SubscribeEvent
+//    public void onLivingUse(LivingEntityUseItemEvent.Start event) {
+//        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT)) {
+//            if (event.getItem().isEdible() && !event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
+//                event.setResult(Event.Result.DENY);
+//        }
+//    }
 
     @SubscribeEvent
     @Deprecated
@@ -359,7 +338,7 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onLivingHurt(LivingHurtEvent event) {
+    public void onLivingHurt(LivingDamageEvent.Pre event) {
 
         boolean isMagic = event.getSource().is(Tags.DamageTypes.IS_MAGIC);
         boolean isWither = event.getSource().getMsgId().equals(event.getEntity().damageSources().wither().getMsgId()); //TODO .is(Registry.FORGE_WITHER);
@@ -367,32 +346,34 @@ public class Events {
         if (isMagic && event.getSource().getEntity() instanceof LivingEntity living) {
             AttributeInstance attribute = living.getAttribute(EidolonAttributes.MAGIC_POWER);
             if (attribute != null) {
-                event.setAmount(event.getAmount() * (float) attribute.getValue());
+                event.setNewDamage(event.getNewDamage() * (float) attribute.getValue());
             }
         }
 
         if (isWither) {
             if (event.getSource().getEntity() instanceof LivingEntity living
                     && living.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof WarlockRobesItem) {
-                event.setAmount(event.getAmount() * 1.5f);
-                living.heal(event.getAmount() / 2);
+                event.setNewDamage(event.getNewDamage() * 1.5f);
+                living.heal(event.getNewDamage() / 2);
             }
         }
 
         if ((isMagic || isWither) && event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarlockRobesItem)
-            event.setAmount(event.getAmount() / 2);
+            event.setNewDamage(event.getNewDamage() / 2);
 
-        event.getEntity().getCapability(ISoul.INSTANCE).ifPresent(s -> {
-            if (s.hasEtherealHealth()) {
-                float reduced = s.hurtEtherealHealth(event.getAmount(), ISoul.getPersistentHealth(event.getEntity()));
-                event.setAmount(reduced);
-                Networking.sendToTracking(event.getEntity().level, event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
+
+        var soul = event.getEntity().getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
+        if (soul != null) {
+            if (soul.hasEtherealHealth()) {
+                float reduced = soul.hurtEtherealHealth(event.getNewDamage(), ISoul.getPersistentHealth(event.getEntity()));
+                event.setNewDamage(reduced);
+                //Networking.sendToTracking(event.getEntity().level(), event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
             }
-        });
+        }
     }
 
     @SubscribeEvent
-    public void onLivingAttack(LivingAttackEvent event) {
+    public void onLivingAttack(LivingIncomingDamageEvent event) {
         if (event.getSource().getEntity() instanceof LivingEntity source) {
             if (EntityUtil.isEnthralledBy(event.getEntity(), source)) {
                 if (source.getMainHandItem().getItem() instanceof SummoningStaffItem summoningStaffItem) {

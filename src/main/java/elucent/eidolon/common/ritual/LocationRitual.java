@@ -43,7 +43,7 @@ public class LocationRitual extends Ritual {
     @Override
     public RitualResult start(Level level, BlockPos pos) {
         if ((level instanceof ServerLevel world)) {
-            Networking.sendToTracking(world, pos, new CrystallizeEffectPacket(pos));
+            Networking.sendToNearbyClient(world, pos, new CrystallizeEffectPacket(pos));
             BlockPos structure = world.findNearestMapStructure(structureTagKey, pos, 100, true);
             if (structure != null) {
                 ItemStack mapStack = MapItem.create(world, structure.getX(), structure.getZ(), (byte) 2, true, true);

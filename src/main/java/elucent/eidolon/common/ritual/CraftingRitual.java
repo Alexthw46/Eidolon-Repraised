@@ -36,7 +36,7 @@ public class CraftingRitual extends Ritual {
     }
 
     public static class SanguineRitual extends CraftingRitual {
-        public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/sanguine_ritual" );
+        public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/sanguine_ritual");
 
         public SanguineRitual(ItemStack result) {
             super(SYMBOL, ColorUtil.packColor(255, 255, 51, 85), result);
@@ -52,8 +52,8 @@ public class CraftingRitual extends Ritual {
         if (!world.isClientSide) {
             if (world.getBlockEntity(pos) instanceof BrazierTileEntity inv) {
                 ItemStack result = this.getResult().copy();
-                if (keepNbtOfReagent && inv.getStack().hasTag()) {
-                    result.setTag(inv.getStack().getTag());
+                if (keepNbtOfReagent && !inv.getStack().isComponentsPatchEmpty()) {
+                    result.applyComponents(inv.getStack().getComponentsPatch());
                     result.setDamageValue(0);
                 }
                 world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 2.5, pos.getZ() + 0.5, result));

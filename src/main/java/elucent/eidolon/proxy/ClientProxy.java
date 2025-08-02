@@ -23,7 +23,7 @@ public class ClientProxy implements ISidedProxy {
     public void init(IEventBus modEventBus) {
         Registry.clientInit();
         modEventBus.addListener(Eidolon::clientSetup);
-        modEventBus.addListener(Eidolon::registerOverlays);
+        //modEventBus.addListener(Eidolon::registerOverlays);
     }
 
     @Override

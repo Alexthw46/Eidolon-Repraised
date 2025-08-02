@@ -167,8 +167,8 @@ public abstract class ResearchTask {
         public CompoundTag write(HolderLookup.Provider registries) {
             CompoundTag tag = new CompoundTag();
             tag.put("stacks", new ListTag());
-            return items.stream().map(s -> s.save(registries, new CompoundTag())).reduce(tag, (t, s) -> {
-                t.getList("stacks", Tag.TAG_COMPOUND).add(s);
+            return (CompoundTag) items.stream().map(s -> s.save(registries, new CompoundTag())).reduce(tag, (t, s) -> {
+                ((CompoundTag) t).getList("stacks", Tag.TAG_COMPOUND).add(s);
                 return t;
             });
         }
@@ -222,7 +222,7 @@ public abstract class ResearchTask {
 
         @Override
         public void drawTooltip(@NotNull GuiGraphics stack, AbstractContainerScreen<?> gui, double mouseX, double mouseY) {
-            List<Component> tooltip = Screen.getTooltipFromItem(gui.getMinecraft(), items.get(0));
+            List<Component> tooltip = Screen.getTooltipFromItem(gui.getMinecraft(), items.getFirst());
             stack.renderComponentTooltip(Minecraft.getInstance().font, tooltip, (int) mouseX, (int) mouseY);
         }
 

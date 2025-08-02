@@ -16,7 +16,7 @@ public class ToughIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return new MobEffectInstance(EidolonPotions.REINFORCED_EFFECT.get(), 20 * 60 * 2, 1);
+        return new MobEffectInstance(EidolonPotions.REINFORCED_EFFECT, 20 * 60 * 2, 1);
     }
 
     @Override

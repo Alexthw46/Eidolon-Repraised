@@ -53,9 +53,9 @@ public class DeathbringerScytheItem extends SwordItem {
             target.addEffect(new MobEffectInstance(EidolonPotions.UNDEATH_EFFECT, 900));
         }
         if (!attacker.level().isClientSide)
-            Networking.sendToTracking(attacker.level(), attacker.blockPosition(), new DeathbringerSlashEffectPacket(
-                    attacker.getX(), attacker.getY() + target.getBbHeight() / 2, attacker.getZ(),
-                    target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ(),
+            Networking.sendToNearbyClient(attacker.level(), attacker.blockPosition(), new DeathbringerSlashEffectPacket(
+                    (float) attacker.getX(), (float) (attacker.getY() + target.getBbHeight() / 2), (float) attacker.getZ(),
+                    (float) target.getX(), (float) (target.getY() + target.getBbHeight() / 2), (float) target.getZ(),
                     ColorUtil.packColor(255, 33, 26, 23),
                     ColorUtil.packColor(255, 10, 10, 11),
                     ColorUtil.packColor(255, 161, 255, 123),

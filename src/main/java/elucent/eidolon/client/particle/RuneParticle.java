@@ -46,7 +46,7 @@ public class RuneParticle extends TextureSheetParticle {
     }
 
     protected float getCoeff() {
-        float t = ((float) this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
+        float t = ((float) this.age + Minecraft.getInstance().getFrameTimeNs()) / this.lifetime;
         t = Mth.clamp(t, 0.001f, 0.999f);
         float ic = (1 - t) * (1 - t);
         return 1 - (Mth.sin(Mth.PI * 4 * t) * ic * 0.5f - 0.7f * t + 0.7f);
@@ -54,7 +54,7 @@ public class RuneParticle extends TextureSheetParticle {
 
     protected void updateTraits() {
         float coeff = getCoeff();
-        float t = ((float) this.age + Minecraft.getInstance().getDeltaFrameTime()) / this.lifetime;
+        float t = ((float) this.age + Minecraft.getInstance().getFrameTimeNs()) / this.lifetime;
         t = Mth.clamp(t, 0.001f, 0.999f);
         float ic = (1 - t) * (1 - t);
         quadSize = Mth.lerp(coeff, 0.125f, 0.0625f);
@@ -122,7 +122,7 @@ public class RuneParticle extends TextureSheetParticle {
         offY.sub(avector3f[3]);
         offY.mul(0.5f);
 
-        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/aura" ));
+        TextureAtlasSprite aura = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/aura"));
 
         for (int i = 0; i < 1; i++) {
 //        	float a = Mth.PI * i + Mth.PI * 2 * (age + pticks) / lifetime;
@@ -133,16 +133,16 @@ public class RuneParticle extends TextureSheetParticle {
 //        	dx *= 0.25f;
 //        	dy *= 0.25f;
 //        	dz *= 0.25f;
-            b.vertex((double) avector3f[0].x() + offX.x(), (double) avector3f[0].y() + offX.y(), (double) avector3f[0].z() + offX.z()).uv(aura.getU1(), aura.getV1()).color(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).uv2(j).endVertex();
-            b.vertex((double) avector3f[1].x() + offY.x(), (double) avector3f[1].y() + offY.y(), (double) avector3f[1].z() + offY.z()).uv(aura.getU1(), aura.getV0()).color(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).uv2(j).endVertex();
-            b.vertex((double) avector3f[2].x() - offX.x(), (double) avector3f[2].y() - offX.y(), (double) avector3f[2].z() - offX.z()).uv(aura.getU0(), aura.getV0()).color(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).uv2(j).endVertex();
-            b.vertex((double) avector3f[3].x() - offY.x(), (double) avector3f[3].y() - offY.y(), (double) avector3f[3].z() - offY.z()).uv(aura.getU0(), aura.getV1()).color(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).uv2(j).endVertex();
+            b.addVertex(avector3f[0].x() + offX.x(), avector3f[0].y() + offX.y(), avector3f[0].z() + offX.z()).setUv(aura.getU1(), aura.getV1()).setColor(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).setLight(j);
+            b.addVertex(avector3f[1].x() + offY.x(), avector3f[1].y() + offY.y(), avector3f[1].z() + offY.z()).setUv(aura.getU1(), aura.getV0()).setColor(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).setLight(j);
+            b.addVertex(avector3f[2].x() - offX.x(), avector3f[2].y() - offX.y(), avector3f[2].z() - offX.z()).setUv(aura.getU0(), aura.getV0()).setColor(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).setLight(j);
+            b.addVertex(avector3f[3].x() - offY.x(), avector3f[3].y() - offY.y(), avector3f[3].z() - offY.z()).setUv(aura.getU0(), aura.getV1()).setColor(this.rCol, this.gCol, this.bCol, this.alpha * 0.25f).setLight(j);
         }
 
-        b.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        b.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        b.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        b.vertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        b.addVertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).setUv(f8, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        b.addVertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).setUv(f8, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        b.addVertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).setUv(f7, f5).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        b.addVertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).setUv(f7, f6).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
     }
 
     @Override

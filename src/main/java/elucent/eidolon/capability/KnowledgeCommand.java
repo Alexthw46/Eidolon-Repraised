@@ -8,10 +8,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import elucent.eidolon.api.capability.IKnowledge;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Rune;
 import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Researches;
 import elucent.eidolon.registries.Runes;
 import elucent.eidolon.registries.Signs;
@@ -115,24 +115,64 @@ public class KnowledgeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("knowledge").requires((player) -> player.hasPermission(2))
-                .then(Commands.argument("targets", EntityArgument.players())
-                        .then(Commands.literal("reset").then(Commands.literal("signs").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.resetSigns(player)))))
-                                .then(Commands.literal("facts").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.resetFacts(player)))))
-                                .then(Commands.literal("research").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.resetResearch(player)))))
-                                .then(Commands.literal("runes").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.resetRunes(player)))))
-                        )
-                        .then(Commands.literal("grant")
-                                .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.grantSign(player, SignArgument.getSign(ctx, "sign")))))))
-                                .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.grantFact(player, ResourceLocationArgument.getId(ctx, "fact")))))))
-                                .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.grantResearch(player, ResearchArgument.getResearch(ctx, "research")))))))
-                                .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.grantRune(player, RuneArgument.getRune(ctx, "rune")))))))
-                        )
-                        .then(Commands.literal("remove")
-                                .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.removeSign(player, SignArgument.getSign(ctx, "sign")))))))
-                                .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.removeFact(player, ResourceLocationArgument.getId(ctx, "fact")))))))
-                                .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.removeResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName()))))))
-                                .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY).ifPresent((k) -> KnowledgeUtil.removeRune(player, RuneArgument.getRune(ctx, "rune")))))))
-                        )
+                .then(Commands.literal("reset").
+                        then(Commands.literal("signs").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.resetSigns(player);
+                        })))
+                        .then(Commands.literal("facts").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.resetFacts(player);
+                        })))
+                        .then(Commands.literal("research").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.resetResearch(player);
+                        })))
+                        .then(Commands.literal("runes").executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.resetRunes(player);
+                        }))))
+                .then(Commands.literal("grant")
+                        .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.grantSign(player, SignArgument.getSign(ctx, "sign"));
+                        }))))
+                        .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.grantFact(player, ResourceLocationArgument.getId(ctx, "fact"));
+                        }))))
+                        .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.grantResearch(player, ResearchArgument.getResearch(ctx, "research"));
+                        }))))
+                        .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null) KnowledgeUtil.grantRune(player, RuneArgument.getRune(ctx, "rune"));
+                        })))))
+                .then(Commands.literal("remove")
+                        .then(Commands.literal("sign").then(Commands.argument("sign", new SignArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.removeSign(player, SignArgument.getSign(ctx, "sign"));
+                        }))))
+                        .then(Commands.literal("fact").then(Commands.argument("fact", ResourceLocationArgument.id()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.removeFact(player, ResourceLocationArgument.getId(ctx, "fact"));
+                        }))))
+                        .then(Commands.literal("research").then(Commands.argument("research", new ResearchArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.removeResearch(player, ResearchArgument.getResearch(ctx, "research").getRegistryName());
+                        }))))
+                        .then(Commands.literal("rune").then(Commands.argument("rune", new RuneArgument()).executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                            Object k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+                            if (k != null)
+                                KnowledgeUtil.removeRune(player, RuneArgument.getRune(ctx, "rune"));
+                        }))))
+
                 )
         );
     }

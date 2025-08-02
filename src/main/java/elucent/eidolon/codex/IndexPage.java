@@ -1,10 +1,10 @@
 package elucent.eidolon.codex;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
@@ -132,7 +132,7 @@ public class IndexPage extends Page {
                 if (mouseX >= x + 2 && mouseX <= x + 124 && mouseY >= y + 8 + i * 20 && mouseY <= y + 26 + i * 20) {
                     gui.changeChapter(entries.get(i).chapter);
                     assert Minecraft.getInstance().player != null;
-                    Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    Minecraft.getInstance().player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                     return true;
                 }
             }

@@ -1,7 +1,7 @@
 package elucent.eidolon.gui;
 
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.common.item.ChantScrollItem;
+import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -61,7 +61,7 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
 
             // we are in the player inventory
             if ((index < 0 || (index > 1 && index < 38))) {
-                if (this.slots.get(0).mayPlace(itemstack1)) {
+                if (this.slots.getFirst().mayPlace(itemstack1)) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -133,11 +133,11 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
         this.access.execute((p_217003_6_, p_217003_7_) -> {
             ItemStack stack2 = this.slots.get(1).getItem().copy();
             // check if the itemstack is empty or if it is the same as the current chant
-            if (stack2.isEmpty() || (stack2.getCount() < stack2.getMaxStackSize() && ChantScrollItem.getSpell(stack2).equals(currentChant))) {
-                this.slots.get(0).remove(1);
+            if (stack2.isEmpty() || (stack2.getCount() < stack2.getMaxStackSize() && stack2.getOrDefault(EidolonDataComponents.SPELL, List.of()).equals(currentChant))) {
+                this.slots.getFirst().remove(1);
                 ItemStack stack = Registry.CHANT_SCROLL.get().getDefaultInstance();
                 if (stack2.isEmpty()) {
-                    ChantScrollItem.setSpell(stack, currentChant);
+                    stack.set(EidolonDataComponents.SPELL, currentChant);
                     stack2 = stack;
                 } else {
                     stack2.grow(1);

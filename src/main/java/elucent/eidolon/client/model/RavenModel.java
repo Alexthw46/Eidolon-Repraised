@@ -64,7 +64,7 @@ public class RavenModel extends EntityModel<RavenEntity> {
 				wings = body.getChild("wings"), rightLeg = body.getChild("rightLeg"), leftLeg = body.getChild("leftLeg"),
 				head = body.getChild("head");
 		body.y = 24.0f;
-		if (entity.onGround() || !entity.isAddedToWorld()) {
+        if (entity.onGround() || !entity.isAddedToLevel()) {
 			leftWing.visible = false;
 			rightWing.visible = false;
 			wings.visible = true;
@@ -100,8 +100,9 @@ public class RavenModel extends EntityModel<RavenEntity> {
 	}
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack matrixStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        body.render(matrixStack, buffer, packedLight, packedOverlay);
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        body.render(poseStack, buffer, packedLight, packedOverlay);
+
     }
 
 	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
