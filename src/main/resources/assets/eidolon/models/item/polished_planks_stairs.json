@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "eidolon:block/polished_planks",
-    "top": "eidolon:block/polished_planks",
-    "side": "eidolon:block/polished_planks"
-  }
-}

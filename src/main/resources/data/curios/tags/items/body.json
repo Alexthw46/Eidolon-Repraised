@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "eidolon:warded_mail",
-    "eidolon:raven_cloak"
+    "eidolon_repraised:warded_mail",
+    "eidolon_repraised:raven_cloak"
   ]
 }

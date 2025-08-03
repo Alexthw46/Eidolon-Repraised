@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "eidolon:giant_skeleton",
-    "eidolon:wraith",
-    "eidolon:zombie_brute"
+    "eidolon_repraised:giant_skeleton",
+    "eidolon_repraised:wraith",
+    "eidolon_repraised:zombie_brute"
   ]
 }

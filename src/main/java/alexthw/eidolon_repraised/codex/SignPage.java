@@ -1,0 +1,54 @@
+package alexthw.eidolon_repraised.codex;
+
+import alexthw.eidolon_repraised.Eidolon;
+import alexthw.eidolon_repraised.api.spells.Sign;
+import alexthw.eidolon_repraised.client.ClientRegistry;
+import alexthw.eidolon_repraised.util.ClientInfo;
+import alexthw.eidolon_repraised.util.RenderUtil;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
+public class SignPage extends Page {
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_sign_page.png" );
+    final Sign sign;
+
+    public SignPage(Sign sign) {
+        super(BACKGROUND);
+        this.sign = sign;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void render(CodexGui gui, @NotNull GuiGraphics guiGraphics, ResourceLocation bg, int x, int y, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);
+        PoseStack mStack = guiGraphics.pose();
+        mStack.pushPose();
+        mStack.translate(x + 64, y + 80, 0);
+        // mStack.scale(0.9f, 0.9f, 0.9f);
+        mStack.mulPose(Axis.ZP.rotationDegrees(ClientInfo.getClientPartialTicks() * 1.5f));
+        colorBlit(mStack, -40, -40, 128, 96, 80, 80, 256, 256, sign.color());
+        mStack.popPose();
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        for (int i = 0; i < 2; i ++) {
+            RenderUtil.litQuad(mStack, bufferSource, x + 44, y + 60, 40, 40,
+                    sign.getRed(), sign.getGreen(), sign.getBlue(), Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(sign.sprite()));
+            bufferSource.endBatch();
+        }
+        RenderSystem.disableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    }
+}

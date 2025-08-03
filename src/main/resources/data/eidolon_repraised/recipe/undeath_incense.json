@@ -1,0 +1,30 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:zombie_heart"
+        },
+        {
+          "item": "eidolon_repraised:soul_shard"
+        },
+        {
+          "item": "eidolon_repraised:death_essence"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:undeath_incense",
+    "count": 1
+  }
+}

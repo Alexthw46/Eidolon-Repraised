@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "eidolon:block/elder_bricks",
-    "side": "eidolon:block/elder_bricks_eye"
-  }
-}

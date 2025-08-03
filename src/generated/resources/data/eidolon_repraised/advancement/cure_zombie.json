@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon_repraised:lay_on_hands",
+  "criteria": {
+    "cure_zombie": {
+      "trigger": "eidolon_repraised:cure_zombie"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.cure_zombie"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:golden_apple"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.cure_zombie"
+    }
+  },
+  "requirements": [
+    [
+      "cure_zombie"
+    ]
+  ]
+}

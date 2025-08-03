@@ -1,0 +1,7 @@
+{
+  "parent": "eidolon_repraised:block/enchanted_ash_side_alt",
+  "render_type": "cutout_mipped",
+  "textures": {
+    "line": "eidolon_repraised:block/enchanted_ash_line0"
+  }
+}

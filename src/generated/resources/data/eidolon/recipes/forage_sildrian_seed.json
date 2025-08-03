@@ -1,6 +1,6 @@
 {
-  "type": "eidolon:athame_foraging",
+  "type": "eidolon_repraised:athame_foraging",
   "output": {
-    "item": "eidolon:sildrian_seed"
+    "item": "eidolon_repraised:sildrian_seed"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:ritual_brazier_location",
+  "type": "eidolon_repraised:ritual_brazier_location",
   "focus_items": [],
   "health_requirement": 0.0,
   "pedestal_items": [
@@ -7,14 +7,14 @@
       "item": "minecraft:compass"
     },
     {
-      "item": "eidolon:magic_ink"
+      "item": "eidolon_repraised:magic_ink"
     },
     {
-      "item": "eidolon:raven_feather"
+      "item": "eidolon_repraised:raven_feather"
     }
   ],
   "reagent": {
     "item": "minecraft:map"
   },
-  "structure": "eidolon:catacombs"
+  "structure": "eidolon_repraised:catacombs"
 }

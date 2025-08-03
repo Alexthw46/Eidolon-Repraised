@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon_repraised:pewter_ingot",
+  "criteria": {
+    "has_crucible": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon_repraised:crucible"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.crucible"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:crucible"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.crucible"
+    }
+  },
+  "requirements": [
+    [
+      "has_crucible"
+    ]
+  ]
+}

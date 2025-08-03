@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon_repraised:wooden_altar",
+  "criteria": {
+    "has_stone_altar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon_repraised:stone_altar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.stone_altar"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:stone_altar"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.stone_altar"
+    }
+  },
+  "requirements": [
+    [
+      "has_stone_altar"
+    ]
+  ]
+}

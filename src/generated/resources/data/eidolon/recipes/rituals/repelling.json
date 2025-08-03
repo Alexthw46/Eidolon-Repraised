@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:ritual_brazier",
+  "type": "eidolon_repraised:ritual_brazier",
   "focus_items": [],
   "health_requirement": 0.0,
   "invariant_items": [],
@@ -14,14 +14,14 @@
       "tag": "c:gems/quartz"
     },
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     },
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     }
   ],
   "reagent": {
     "item": "minecraft:nautilus_shell"
   },
-  "ritual": "eidolon:repelling"
+  "ritual": "eidolon_repraised:repelling"
 }

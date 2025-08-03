@@ -12,7 +12,7 @@
     },
     {
       "type": "single",
-      "resource": "eidolon:entity/enchanter_book"
+      "resource": "eidolon_repraised:entity/enchanter_book"
     }
   ]
 }

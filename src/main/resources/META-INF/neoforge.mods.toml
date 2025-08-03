@@ -3,24 +3,24 @@ loaderVersion = "[4,)" #mandatory This is typically bumped every Minecraft versi
 license = "All rights reserved"
 issueTrackerURL = "https://github.com/Alexthw46/Eidolon-Repraised/issues" #optional
 [[mods]] #mandatory
-modId = "eidolon" #mandatory
+modId = "eidolon_repraised" #mandatory
 version = "${file.jarVersion}" #mandatory
 displayName = "Eidolon:Repraised" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
 # displayURL="http://example.com/" #optional
 logoFile = "logo.png" #optional
-credits = "elucent as the original creator and maker of most of the assets" #optional
+credits = "elucent as the original creator of Eidolon and maker of most of the assets, porting and features from 1.18 onward to Alexthw" #optional
 authors = "elucent up to 0.3.0, currently maintained by Alexthw" #optional
 description = '''
 A spooky magic mod about necromancy. Now with a touch of opposing light!
 '''
-[[dependencies.eidolon]]
+[[dependencies.eidolon_repraised]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.21.1, 1.21.2)" #mandatory
 ordering = "AFTER"
 side = "BOTH"
-[[dependencies.eidolon]]
+[[dependencies.eidolon_repraised]]
 modId = "curios"
 mandatory = true
 versionRange = "[1.19-5.0.7.1,)"
@@ -28,7 +28,7 @@ ordering = "AFTER"
 side = "BOTH"
 
 # apotheosis dependency
-[[dependencies.eidolon]]
+[[dependencies.eidolon_repraised]]
 modId = "apotheosis"
 mandatory = false
 versionRange = "[1.20.1-7.1,)"
@@ -38,4 +38,4 @@ type = "optional"
 reason = "integration"
 
 [[mixins]]
-config = "eidolon.mixins.json"
+config = "eidolon_repraised.mixins.json"

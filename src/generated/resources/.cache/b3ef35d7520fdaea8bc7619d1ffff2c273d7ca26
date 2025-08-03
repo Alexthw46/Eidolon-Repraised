@@ -1,0 +1,12 @@
+// 1.21.1	2025-08-03T16:49:22.5327493	Tags for minecraft:item mod id eidolon_repraised
+f2ff98b9b431484dc7563ebf0f952928a2c252c3 data/c/tags/item/music_discs.json
+9826769f4e125289c79e3d5438deefc7d4353e0e data/eidolon_repraised/tags/item/patron_symbol.json
+2ab1a299e8c68dfb622595da904d577ac9a1c851 data/eidolon_repraised/tags/item/scribe_items.json
+eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/bookshelf_books.json
+110cc871e07c20892517547549bdbf65974eb817 data/minecraft/tags/item/candles.json
+4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/item/leaves.json
+eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/lectern_books.json
+615cf69149f2473f5c75609451500f2bc3cd8332 data/minecraft/tags/item/saplings.json
+d966907c59e762094767253775b2fea68c9075c6 data/minecraft/tags/item/signs.json
+77200998ef23c825708b8884a08fcc652b5ac259 data/minecraft/tags/item/wooden_buttons.json
+2790b0ba2c560d2a56c48c29e7a4885a88bd9766 data/minecraft/tags/item/wooden_pressure_plates.json

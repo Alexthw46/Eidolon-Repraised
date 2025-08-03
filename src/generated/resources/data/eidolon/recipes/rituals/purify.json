@@ -1,14 +1,14 @@
 {
-  "type": "eidolon:ritual_brazier",
+  "type": "eidolon_repraised:ritual_brazier",
   "focus_items": [],
   "health_requirement": 0.0,
   "invariant_items": [],
   "pedestal_items": [
     {
-      "item": "eidolon:enchanted_ash"
+      "item": "eidolon_repraised:enchanted_ash"
     },
     {
-      "item": "eidolon:enchanted_ash"
+      "item": "eidolon_repraised:enchanted_ash"
     },
     {
       "type": "neoforge:components",
@@ -30,14 +30,14 @@
       "items": "minecraft:potion"
     },
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     },
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     }
   ],
   "reagent": {
     "item": "minecraft:glistering_melon_slice"
   },
-  "ritual": "eidolon:purify"
+  "ritual": "eidolon_repraised:purify"
 }

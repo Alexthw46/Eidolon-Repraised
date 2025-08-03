@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "eidolon_repraised:item/stone_hand"
+    },
+    "facing=west": {
+      "model": "eidolon_repraised:item/stone_hand",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "eidolon_repraised:item/stone_hand",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "eidolon_repraised:item/stone_hand",
+      "y": 90
+    }
+  }
+}

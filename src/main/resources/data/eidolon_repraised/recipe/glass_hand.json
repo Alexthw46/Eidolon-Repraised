@@ -1,0 +1,32 @@
+{
+    "type": "eidolon_repraised:worktable",
+    "pattern": [
+      " d ",
+      " a ",
+      " g "
+    ],
+    "reagents": "hsws",
+    "key": {
+      "d": {
+        "tag": "forge:storage_blocks/diamond"
+      },
+      "a": {
+        "item": "eidolon_repraised:basic_amulet"
+      },
+      "g": {
+        "item": "minecraft:glass"
+      },
+      "h": {
+        "item": "eidolon_repraised:zombie_heart"
+      },
+      "s": {
+        "item": "eidolon_repraised:lesser_soul_gem"
+      },
+      "w": {
+        "item": "eidolon_repraised:wraith_heart"
+      }
+    },
+    "result": {
+      "item": "eidolon_repraised:glass_hand"
+    }
+  }

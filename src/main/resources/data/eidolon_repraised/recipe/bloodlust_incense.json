@@ -1,0 +1,34 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:sildrian_seed"
+        },
+        {
+          "item": "minecraft:rotten_flesh"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:crimson_essence"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:bloodlust_incense",
+    "count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        { "tag": "forge:ender_pearls" },
+        { "item": "eidolon_repraised:enchanted_ash" }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:ender_calx",
+    "count": 2
+  }
+}

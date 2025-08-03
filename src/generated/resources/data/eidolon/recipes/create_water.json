@@ -1,9 +1,9 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:winter",
-    "eidolon:winter",
-    "eidolon:flame",
-    "eidolon:flame"
+    "eidolon_repraised:winter",
+    "eidolon_repraised:winter",
+    "eidolon_repraised:flame",
+    "eidolon_repraised:flame"
   ]
 }

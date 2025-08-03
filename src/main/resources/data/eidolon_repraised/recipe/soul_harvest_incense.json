@@ -1,0 +1,34 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:soul_shard"
+        },
+        {
+          "item": "eidolon_repraised:mirecap"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:lesser_soul_gem"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:soul_harvest_incense",
+    "count": 2
+  }
+}

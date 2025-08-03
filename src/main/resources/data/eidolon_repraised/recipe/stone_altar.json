@@ -1,0 +1,27 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    "sss",
+    "SSS",
+    "SiS"
+  ],
+  "reagents": "u   ",
+  "key": {
+    "s": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "i": {
+      "item": "eidolon_repraised:pewter_inlay"
+    },
+    "u": {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:stone_altar",
+    "count": 3
+  }
+}

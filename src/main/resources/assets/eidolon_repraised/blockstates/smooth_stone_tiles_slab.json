@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "eidolon_repraised:item/smooth_stone_tiles_slab"
+    },
+    "type=double": {
+      "model": "eidolon_repraised:item/smooth_stone_tiles"
+    },
+    "type=top": {
+      "model": "eidolon_repraised:block/smooth_stone_tiles_slab_top"
+    }
+  }
+}

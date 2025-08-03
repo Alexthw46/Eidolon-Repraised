@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "eidolon_repraised:raw_silver"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:raw_silver_block"
+  }
+}

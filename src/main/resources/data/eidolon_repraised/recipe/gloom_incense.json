@@ -1,0 +1,37 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "minecraft:rotten_flesh"
+        },
+        {
+          "item": "minecraft:bone"
+        },
+        {
+          "item": "eidolon_repraised:mirecap"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:death_essence"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:gloom_incense",
+    "count": 2
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "eidolon_repraised:smooth_stone_tiles"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:smooth_stone_tiles_stairs",
+    "count": 4
+  }
+}

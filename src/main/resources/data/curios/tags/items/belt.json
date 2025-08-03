@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "eidolon:basic_belt",
-    "eidolon:gravity_belt",
-    "eidolon:resolute_belt"
+    "eidolon_repraised:basic_belt",
+    "eidolon_repraised:gravity_belt",
+    "eidolon_repraised:resolute_belt"
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "render_type": "cutout_mipped",
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "eidolon_repraised:block/mirecap_3"
+  }
+}

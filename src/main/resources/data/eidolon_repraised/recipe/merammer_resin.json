@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "eidolon_repraised",
+  "ingredients": [
+    {
+      "item": "eidolon_repraised:merammer_root"
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:merammer_resin",
+    "count": 1
+  }
+}

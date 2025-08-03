@@ -1,0 +1,38 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "minecraft:lead"
+        },
+        {
+          "item": "eidolon_repraised:avennian_sprig"
+        },
+        {
+          "item": "eidolon_repraised:soul_shard"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:warped_sprouts"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin",
+          "count": 2
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:tether_incense",
+    "count": 2
+  }
+}

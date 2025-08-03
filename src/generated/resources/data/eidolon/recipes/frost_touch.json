@@ -1,10 +1,10 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:wicked",
-    "eidolon:winter",
-    "eidolon:blood",
-    "eidolon:winter",
-    "eidolon:wicked"
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:winter",
+    "eidolon_repraised:blood",
+    "eidolon_repraised:winter",
+    "eidolon_repraised:wicked"
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "top=false,bottom=false": {
+      "model": "eidolon_repraised:item/cistern"
+    },
+    "top=true,bottom=false": {
+      "model": "eidolon_repraised:block/cistern_lower"
+    },
+    "top=true,bottom=true": {
+      "model": "eidolon_repraised:block/cistern_mid"
+    },
+    "top=false,bottom=true": {
+      "model": "eidolon_repraised:block/cistern_upper"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        { "item": "minecraft:coal" },
+        { "item": "eidolon_repraised:enchanted_ash" }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:sulfur",
+    "count": 2
+  }
+}

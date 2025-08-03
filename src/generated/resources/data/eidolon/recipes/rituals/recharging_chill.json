@@ -1,10 +1,10 @@
 {
-  "type": "eidolon:ritual_brazier",
+  "type": "eidolon_repraised:ritual_brazier",
   "focus_items": [],
   "health_requirement": 0.0,
   "invariant_items": [
     {
-      "item": "eidolon:bonechill_wand"
+      "item": "eidolon_repraised:bonechill_wand"
     }
   ],
   "pedestal_items": [
@@ -19,7 +19,7 @@
     }
   ],
   "reagent": {
-    "item": "eidolon:lesser_soul_gem"
+    "item": "eidolon_repraised:lesser_soul_gem"
   },
-  "ritual": "eidolon:recharging_chill"
+  "ritual": "eidolon_repraised:recharging_chill"
 }

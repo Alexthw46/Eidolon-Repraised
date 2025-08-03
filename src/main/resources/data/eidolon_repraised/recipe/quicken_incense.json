@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "eidolon_repraised:merammer_resin"
+    },
+    {
+      "item": "eidolon_repraised:sildrian_seed"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "eidolon_repraised:sulfur"
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:quicken_incense",
+    "count": 1
+  }
+}

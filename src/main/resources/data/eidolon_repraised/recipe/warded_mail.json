@@ -1,0 +1,26 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    " s ",
+    "aia",
+    " a "
+  ],
+  "reagents": "pppp",
+  "key": {
+    "p": {
+      "item": "eidolon_repraised:pewter_inlay"
+    },
+    "i": {
+      "item": "minecraft:iron_chestplate"
+    },
+    "a": {
+      "item": "eidolon_repraised:enchanted_ash"
+    },
+    "s": {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:warded_mail"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/pressure_plate_up",
+  "textures": {
+    "texture": "eidolon_repraised:block/illwood_planks"
+  }
+}

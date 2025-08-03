@@ -1,0 +1,29 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    " w ",
+    "www",
+    " l "
+  ],
+  "reagents": "sece",
+  "key": {
+    "w": {
+      "item": "eidolon_repraised:wicked_weave"
+    },
+    "l": {
+      "item": "eidolon_repraised:lesser_soul_gem"
+    },
+    "s": {
+      "item": "eidolon_repraised:warped_sprouts"
+    },
+    "e": {
+      "item": "eidolon_repraised:ender_calx"
+    },
+    "c": {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:prestigious_palm"
+  }
+}

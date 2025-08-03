@@ -1,6 +1,6 @@
 {
-  "type": "eidolon:athame_foraging",
+  "type": "eidolon_repraised:athame_foraging",
   "output": {
-    "item": "eidolon:avennian_sprig"
+    "item": "eidolon_repraised:avennian_sprig"
   }
 }

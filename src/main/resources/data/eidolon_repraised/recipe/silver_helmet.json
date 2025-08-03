@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "xxx",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:ingots/silver"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:silver_helmet"
+  }
+}

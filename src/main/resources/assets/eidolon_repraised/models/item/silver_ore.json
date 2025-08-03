@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "eidolon_repraised:block/silver_ore"
+  }
+}

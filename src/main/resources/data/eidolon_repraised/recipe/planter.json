@@ -1,0 +1,32 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    "ywy",
+    "zxz",
+    "z z"
+  ],
+  "reagents": "a s ",
+  "key": {
+    "x": {
+      "item": "eidolon_repraised:pewter_inlay"
+    },
+    "y": {
+      "tag": "forge:ingots/pewter"
+    },
+    "z": {
+      "tag": "minecraft:planks"
+    },
+    "w": {
+      "item": "minecraft:dirt"
+    },
+    "a": {
+      "item": "eidolon_repraised:enchanted_ash"
+    },
+    "s": {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:planter"
+  }
+}

@@ -1,11 +1,11 @@
-// 1.21.1	2025-08-03T15:40:25.1917125	Eidolon Block Tags
-f1334275f873c9074739aeb3e8c48b14ce3746b5 data/eidolon/tags/block/crucible_hot_blocks.json
-c8caa1a0a2479984de01e070736089863a11ac9e data/eidolon/tags/block/planter_plants.json
-e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/block/candles.json
-aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/block/leaves.json
-aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/block/mineable/hoe.json
-4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/block/saplings.json
-b7973e1e84617ba5641a59f0e4183b7df5798856 data/minecraft/tags/block/standing_signs.json
-1a4c1e437abf8c1fd96585261fbf7cbe6c8a1ddd data/minecraft/tags/block/wall_signs.json
-5fec2e225c411afa465b1a3b1229b6710ed83468 data/minecraft/tags/block/wooden_buttons.json
-22f01a78a380c216a6896080ae2dd581417eef0a data/minecraft/tags/block/wooden_pressure_plates.json
+// 1.21.1	2025-08-03T16:49:22.5431346	Eidolon Block Tags
+f1334275f873c9074739aeb3e8c48b14ce3746b5 data/eidolon_repraised/tags/block/crucible_hot_blocks.json
+ede5f55fc5e110219d3ccfa78ee13db98bbbd3ba data/eidolon_repraised/tags/block/planter_plants.json
+110cc871e07c20892517547549bdbf65974eb817 data/minecraft/tags/block/candles.json
+4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/block/leaves.json
+4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/block/mineable/hoe.json
+615cf69149f2473f5c75609451500f2bc3cd8332 data/minecraft/tags/block/saplings.json
+4cf01c504cd95634274e1444eec50afa8a82d03f data/minecraft/tags/block/standing_signs.json
+29d68fb983818cce064ba0bd931763daaa791cde data/minecraft/tags/block/wall_signs.json
+77200998ef23c825708b8884a08fcc652b5ac259 data/minecraft/tags/block/wooden_buttons.json
+2790b0ba2c560d2a56c48c29e7a4885a88bd9766 data/minecraft/tags/block/wooden_pressure_plates.json

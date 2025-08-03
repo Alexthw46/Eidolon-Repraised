@@ -1,16 +1,16 @@
 {
   "replace": false,
   "values": [
-    "eidolon:lead_ore",
-    "eidolon:lead_block",
-    "eidolon:silver_ore",
-    "eidolon:silver_block",
-    "eidolon:deep_lead_ore",
-    "eidolon:raw_lead_block",
-    "eidolon:deep_silver_ore",
-    "eidolon:raw_silver_block",
-    "eidolon:pewter_block",
-    "eidolon:arcane_gold_block",
-    "eidolon:shadow_gem_block"
+    "eidolon_repraised:lead_ore",
+    "eidolon_repraised:lead_block",
+    "eidolon_repraised:silver_ore",
+    "eidolon_repraised:silver_block",
+    "eidolon_repraised:deep_lead_ore",
+    "eidolon_repraised:raw_lead_block",
+    "eidolon_repraised:deep_silver_ore",
+    "eidolon_repraised:raw_silver_block",
+    "eidolon_repraised:pewter_block",
+    "eidolon_repraised:arcane_gold_block",
+    "eidolon_repraised:shadow_gem_block"
   ]
 }

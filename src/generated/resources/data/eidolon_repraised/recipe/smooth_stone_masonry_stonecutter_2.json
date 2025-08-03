@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "eidolon_repraised:smooth_stone_masonry"
+  },
+  "result": {
+    "count": 1,
+    "id": "eidolon_repraised:smooth_stone_masonry_stairs"
+  }
+}

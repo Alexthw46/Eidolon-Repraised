@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "eidolon_repraised:item/silver_shovel"
+  }
+}

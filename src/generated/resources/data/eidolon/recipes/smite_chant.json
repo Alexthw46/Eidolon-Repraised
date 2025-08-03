@@ -1,11 +1,11 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:flame",
-    "eidolon:magic",
-    "eidolon:sacred",
-    "eidolon:death",
-    "eidolon:magic",
-    "eidolon:sacred"
+    "eidolon_repraised:flame",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:death",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:sacred"
   ]
 }

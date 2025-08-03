@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "eidolon_repraised:block/elder_bricks",
+    "top": "eidolon_repraised:block/elder_bricks",
+    "side": "eidolon_repraised:block/elder_bricks"
+  }
+}

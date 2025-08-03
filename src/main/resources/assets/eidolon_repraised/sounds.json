@@ -1,0 +1,66 @@
+{
+  "cast_soulfire": {
+    "category": "neutral",
+    "subtitle": "eidolon.subtitle.cast_soulfire",
+    "sounds": [ "eidolon_repraised:cast_soulfire" ]
+  },
+  "cast_bonechill": {
+    "category": "neutral",
+    "subtitle": "eidolon.subtitle.cast_bonechill",
+    "sounds": [ "eidolon_repraised:cast_bonechill" ]
+  },
+  "splash_soulfire": {
+    "category": "neutral",
+    "subtitle": "eidolon.subtitle.splash_soulfire",
+    "sounds": [ "eidolon_repraised:splash_soulfire" ]
+  },
+  "splash_bonechill": {
+    "category": "neutral",
+    "subtitle": "eidolon.subtitle.splash_bonechill",
+    "sounds": [ "eidolon_repraised:splash_bonechill" ]
+  },
+  "select_rune": {
+    "category": "neutral",
+    "sounds": [ "eidolon_repraised:select_rune" ]
+  },
+  "chant_word": {
+    "category": "neutral",
+    "subtitle": "eidolon.subtitle.chant_word",
+    "sounds": [
+      "eidolon_repraised:chant_word"
+    ]
+  },
+  "parousia": {
+    "category": "record",
+    "stream": true,
+    "sounds": [
+      "eidolon_repraised:parousia"
+    ]
+  },
+  "wraith_ambient": {
+    "sounds": [
+      "eidolon_repraised:wraith/idle1",
+      "eidolon_repraised:wraith/idle2",
+      "eidolon_repraised:wraith/idle3",
+      "eidolon_repraised:wraith/idle4",
+      "eidolon_repraised:wraith/idle5",
+      "eidolon_repraised:wraith/idle6"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.ambient"
+  },
+  "wraith_death": {
+    "sounds": [
+      "eidolon_repraised:wraith/death1",
+      "eidolon_repraised:wraith/death2"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.death"
+  },
+  "wraith_hurt": {
+    "sounds": [
+      "eidolon_repraised:wraith/hurt1",
+      "eidolon_repraised:wraith/hurt2",
+      "eidolon_repraised:wraith/hurt3"
+    ],
+    "subtitle": "eidolon.subtitle.wraith.hurt"
+  }
+}

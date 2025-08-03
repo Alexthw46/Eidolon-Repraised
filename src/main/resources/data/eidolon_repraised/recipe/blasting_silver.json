@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": [
+    {
+      "item": "eidolon_repraised:silver_helmet"
+    },
+    {
+      "item": "eidolon_repraised:silver_chestplate"
+    },
+    {
+      "item": "eidolon_repraised:silver_leggings"
+    },
+    {
+      "item": "eidolon_repraised:silver_boots"
+    },
+    {
+      "item": "eidolon_repraised:silver_sword"
+    },
+    {
+      "item": "eidolon_repraised:silver_pickaxe"
+    },
+    {
+      "item": "eidolon_repraised:silver_axe"
+    },
+    {
+      "item": "eidolon_repraised:silver_shovel"
+    },
+    {
+      "item": "eidolon_repraised:silver_hoe"
+    }
+  ],
+  "result": "eidolon_repraised:silver_nugget"
+}

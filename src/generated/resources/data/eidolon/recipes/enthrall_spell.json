@@ -1,10 +1,10 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:wicked",
-    "eidolon:mind",
-    "eidolon:magic",
-    "eidolon:magic",
-    "eidolon:mind"
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:mind",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:mind"
   ]
 }

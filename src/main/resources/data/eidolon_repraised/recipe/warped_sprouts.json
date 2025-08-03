@@ -1,0 +1,25 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        { "item": "minecraft:warped_fungus" }
+      ]
+    },
+    {
+      "stirs": 2,
+      "items": [
+        { "item": "eidolon_repraised:ender_calx" }
+      ]
+    },
+    {
+      "items": [
+        { "item": "minecraft:nether_wart" }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:warped_sprouts",
+    "count": 2
+  }
+}

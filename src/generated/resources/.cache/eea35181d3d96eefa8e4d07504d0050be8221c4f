@@ -1,0 +1,5 @@
+// 1.21.1	2025-08-03T16:49:22.5358272	Tags for minecraft:damage_type mod id eidolon_repraised
+37417b38b447711be5737527672b15ba68e26c5d data/minecraft/tags/damage_type/bypasses_armor.json
+37417b38b447711be5737527672b15ba68e26c5d data/minecraft/tags/damage_type/bypasses_enchantments.json
+49037030440ccb18735e0e3d2b23cde42e2e06e8 data/neoforge/tags/damage_type/is_magic.json
+f95cc5d557ccd8eb163d23d3ff2d4ce6198483cf data/neoforge/tags/damage_type/is_wither.json

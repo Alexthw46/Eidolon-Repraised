@@ -1,0 +1,37 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "minecraft:packed_ice"
+        },
+        {
+          "item": "eidolon_repraised:avennian_sprig"
+        },
+        {
+          "item": "minecraft:bone_meal"
+        }
+      ]
+    },
+    {
+      "items": [
+        {
+          "item": "eidolon_repraised:wraith_heart"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:merammer_resin"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:frostbind_incense",
+    "count": 2
+  }
+}

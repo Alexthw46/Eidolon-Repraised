@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon_repraised:research_notes",
+  "criteria": {
+    "flame_spell": {
+      "trigger": "eidolon_repraised:flame_spell"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.flame_spell"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:campfire"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.flame_spell"
+    }
+  },
+  "requirements": [
+    [
+      "flame_spell"
+    ]
+  ]
+}

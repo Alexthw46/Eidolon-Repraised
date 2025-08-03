@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "eidolon:polished_planks_stairs",
-    "eidolon:illwood_planks_stairs"
+    "eidolon_repraised:polished_planks_stairs",
+    "eidolon_repraised:illwood_planks_stairs"
   ]
 }

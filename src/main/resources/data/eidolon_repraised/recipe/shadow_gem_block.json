@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:gems/shadow_gem"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:shadow_gem_block"
+  }
+}

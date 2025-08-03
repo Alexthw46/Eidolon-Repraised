@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "eidolon_repraised:illwood_log",
+    "eidolon_repraised:stripped_illwood_log",
+    "eidolon_repraised:illwood_bark",
+    "eidolon_repraised:stripped_illwood_bark"
+  ]
+}

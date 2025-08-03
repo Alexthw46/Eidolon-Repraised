@@ -1,0 +1,20 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    "   ",
+    "w w",
+    "w w"
+  ],
+  "reagents": "s s ",
+  "key": {
+    "w": {
+      "item": "eidolon_repraised:wicked_weave"
+    },
+    "s": {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:warlock_boots"
+  }
+}

@@ -1,0 +1,68 @@
+package alexthw.eidolon_repraised.client.renderer;
+
+import alexthw.eidolon_repraised.Eidolon;
+import alexthw.eidolon_repraised.client.ClientRegistry;
+import alexthw.eidolon_repraised.client.model.NecromancerModel;
+import alexthw.eidolon_repraised.common.entity.NecromancerEntity;
+import alexthw.eidolon_repraised.util.ColorUtil;
+import alexthw.eidolon_repraised.util.RenderUtil;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+
+public class NecromancerRenderer extends MobRenderer<NecromancerEntity, NecromancerModel> {
+    public NecromancerRenderer(Context erm) {
+        super(erm, new NecromancerModel(erm.bakeLayer(ClientRegistry.NECROMANCER_LAYER)), 0.6f);
+        this.addLayer(new NecromancerEyesLayer(this));
+    }
+
+    public static class NecromancerEyesLayer extends RenderLayer<NecromancerEntity, NecromancerModel> {
+        final NecromancerModel model;
+
+        private static final RenderType RENDER_TYPE = RenderType.create(
+                Eidolon.MODID + ":necromancer_eyes",
+                DefaultVertexFormat.NEW_ENTITY,
+                Mode.QUADS, 256, true, false,
+                RenderType.CompositeState.builder()
+                        .setShaderState(new ShaderStateShard(ClientRegistry::getGlowingEntityShader))
+                        .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                        .setLightmapState(new RenderStateShard.LightmapStateShard(false))
+                        .setTransparencyState(RenderUtil.ADDITIVE_TRANSPARENCY)
+                        .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/entity/necromancer_eyes.png"), false, false))
+                        .createCompositeState(false)
+        );
+
+        public NecromancerEyesLayer(RenderLayerParent<NecromancerEntity, NecromancerModel> entityRendererIn) {
+            super(entityRendererIn);
+            this.model = entityRendererIn.getModel();
+        }
+
+        public RenderType getRenderType() {
+            return RENDER_TYPE;
+        }
+
+        @Override
+        public void render(@NotNull PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, @NotNull NecromancerEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.getRenderType());
+            this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            model.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(1, 1, 1, 1));
+        }
+    }
+
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull NecromancerEntity entity) {
+        return ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/entity/necromancer.png");
+    }
+}

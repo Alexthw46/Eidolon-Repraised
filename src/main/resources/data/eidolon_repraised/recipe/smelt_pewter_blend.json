@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "eidolon_repraised:pewter_blend"
+  },
+  "result": "eidolon_repraised:pewter_ingot",
+  "experience": 0.5,
+  "cookingtime": 200
+}

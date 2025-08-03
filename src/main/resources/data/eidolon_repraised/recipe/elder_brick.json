@@ -1,0 +1,36 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        },
+        {
+          "item": "minecraft:packed_mud"
+        }
+      ]
+    },
+    {
+      "stirs": 1,
+      "items": [
+        {
+          "item": "eidolon_repraised:enchanted_ash"
+        },
+        {
+          "item": "eidolon_repraised:soul_shard"
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:elder_brick",
+    "count": 16
+  }
+}

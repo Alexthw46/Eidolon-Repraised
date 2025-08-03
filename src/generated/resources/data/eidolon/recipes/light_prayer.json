@@ -1,8 +1,8 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:sacred",
-    "eidolon:sacred",
-    "eidolon:sacred"
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:sacred"
   ]
 }

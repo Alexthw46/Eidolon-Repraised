@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "eidolon_repraised:silver_ore_placed",
+  "step": "underground_ores"
+}

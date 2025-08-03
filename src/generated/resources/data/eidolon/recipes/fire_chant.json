@@ -1,8 +1,8 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:flame",
-    "eidolon:flame",
-    "eidolon:flame"
+    "eidolon_repraised:flame",
+    "eidolon_repraised:flame",
+    "eidolon_repraised:flame"
   ]
 }

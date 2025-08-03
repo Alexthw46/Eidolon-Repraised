@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "eidolon_repraised:merammer_resin"
+    },
+    {
+      "item": "eidolon_repraised:oanna_bloom"
+    },
+    {
+      "item": "eidolon_repraised:holy_symbol"
+    },
+    {
+      "item": "eidolon_repraised:tattered_cloth"
+    }
+  ],
+  "result": {
+    "item": "eidolon_repraised:deathbane_incense",
+    "count": 1
+  }
+}

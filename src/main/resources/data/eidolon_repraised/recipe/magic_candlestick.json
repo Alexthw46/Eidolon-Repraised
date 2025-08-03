@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "y",
+    "x",
+    "y"
+  ],
+  "key": {
+    "x": {
+      "item": "eidolon_repraised:magic_candle"
+    },
+    "y": {
+      "item": "eidolon_repraised:arcane_gold_nugget"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:magic_candlestick",
+    "count": 1
+  }
+}

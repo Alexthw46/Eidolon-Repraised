@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "eidolon:block/smooth_stone_masonry",
-    "top": "eidolon:block/smooth_stone_masonry",
-    "side": "eidolon:block/smooth_stone_masonry"
-  }
-}

@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:ritual_brazier_summoning",
+  "type": "eidolon_repraised:ritual_brazier_summoning",
   "focus_items": [
     {
       "item": "minecraft:soul_sand"
@@ -8,7 +8,7 @@
   "output": "minecraft:wither_skeleton",
   "pedestal_items": [
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     },
     {
       "item": "minecraft:bone"

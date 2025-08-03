@@ -1,10 +1,10 @@
 {
-  "type": "eidolon:chant",
+  "type": "eidolon_repraised:chant",
   "signs": [
-    "eidolon:sacred",
-    "eidolon:warding",
-    "eidolon:sacred",
-    "eidolon:warding",
-    "eidolon:sacred"
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:warding",
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:warding",
+    "eidolon_repraised:sacred"
   ]
 }

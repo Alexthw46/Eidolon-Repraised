@@ -1,0 +1,20 @@
+{
+  "type": "eidolon_repraised:crucible",
+  "steps": [
+    {
+      "items": [
+        { "item": "eidolon_repraised:enchanted_ash" },
+        { "item": "eidolon_repraised:enchanted_ash" }
+      ]
+    },
+    {
+      "stirs": 2,
+      "items": [
+        { "item": "minecraft:rotten_flesh" }
+      ]
+    }
+  ],
+  "result": {
+    "item": "minecraft:leather"
+  }
+}

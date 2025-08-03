@@ -1,6 +1,6 @@
 {
-  "type": "eidolon:athame_foraging",
+  "type": "eidolon_repraised:athame_foraging",
   "output": {
-    "item": "eidolon:merammer_root"
+    "item": "eidolon_repraised:merammer_root"
   }
 }

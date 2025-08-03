@@ -1,0 +1,32 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    " s ",
+    "prp",
+    " p "
+  ],
+  "reagents": "waua",
+  "key": {
+    "p": {
+      "tag": "forge:ingots/pewter"
+    },
+    "u": {
+      "item": "eidolon_repraised:unholy_symbol"
+    },
+    "r": {
+      "item": "eidolon_repraised:basic_ring"
+    },
+    "s": {
+      "item": "eidolon_repraised:shadow_gem"
+    },
+    "w": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    "a": {
+      "item": "minecraft:arrow"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:angels_sight"
+  }
+}

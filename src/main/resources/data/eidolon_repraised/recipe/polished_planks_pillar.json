@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon_repraised",
+  "pattern": [
+    "x",
+    "x",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "eidolon_repraised:polished_planks"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:polished_wood_pillar",
+    "count": 3
+  }
+}

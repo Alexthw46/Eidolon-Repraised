@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "eidolon:smooth_stone_bricks_wall",
-    "eidolon:elder_bricks_wall"
+    "eidolon_repraised:smooth_stone_bricks_wall",
+    "eidolon_repraised:elder_bricks_wall"
   ]
 }

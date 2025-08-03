@@ -1,0 +1,32 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    "bab",
+    "bhb",
+    " g "
+  ],
+  "reagents": "cece",
+  "key": {
+    "e": {
+      "item": "eidolon_repraised:death_essence"
+    },
+    "b": {
+      "tag": "forge:bones"
+    },
+    "c": {
+      "item": "eidolon_repraised:ender_calx"
+    },
+    "g": {
+    	"item": "eidolon_repraised:shadow_gem"
+    },
+    "a": {
+    	"item": "eidolon_repraised:basic_amulet"
+    },
+    "h": {
+    	"item": "eidolon_repraised:wraith_heart"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:soulbone_amulet"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#eidolon_repraised:brown_slug",
+  "spawners": {
+    "type": "eidolon_repraised:slimy_slug",
+    "weight": 5,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

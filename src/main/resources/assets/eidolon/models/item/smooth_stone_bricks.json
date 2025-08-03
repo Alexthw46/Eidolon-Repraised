@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "eidolon:block/smooth_stone_bricks"
-  }
-}

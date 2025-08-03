@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_side_tall",
+  "textures": {
+    "wall": "eidolon_repraised:block/elder_bricks"
+  }
+}

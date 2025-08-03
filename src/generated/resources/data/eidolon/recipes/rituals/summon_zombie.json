@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:ritual_brazier_summoning",
+  "type": "eidolon_repraised:ritual_brazier_summoning",
   "focus_items": [
     {
       "item": "minecraft:rotten_flesh"
@@ -8,7 +8,7 @@
   "output": "minecraft:zombie",
   "pedestal_items": [
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     },
     {
       "item": "minecraft:rotten_flesh"

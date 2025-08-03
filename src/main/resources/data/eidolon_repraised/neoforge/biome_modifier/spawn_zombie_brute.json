@@ -1,0 +1,26 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": {
+    "type": "neoforge:and",
+    "values": [
+      "#minecraft:is_overworld",
+      {
+        "type": "neoforge:not",
+        "value": {
+          "type": "neoforge:or",
+          "values": [
+            "minecraft:deep_dark",
+            "#c:is_mushroom",
+            "#c:no_default_monsters"
+          ]
+        }
+      }
+    ]
+  },
+  "spawners": {
+    "type": "eidolon_repraised:zombie_brute",
+    "weight": 60,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

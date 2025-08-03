@@ -1,0 +1,26 @@
+{
+  "type": "eidolon_repraised:worktable",
+  "pattern": [
+    " S ",
+    "sss",
+    " s "
+  ],
+  "reagents": "u i ",
+  "key": {
+    "s": {
+      "item": "minecraft:stone"
+    },
+    "S": {
+      "item": "minecraft:smooth_stone"
+    },
+    "u": {
+      "tag": "eidolon_repraised:patron_symbol"
+    },
+    "i": {
+      "item": "eidolon_repraised:gold_inlay"
+    }
+  },
+  "result": {
+    "item": "eidolon_repraised:unholy_effigy"
+  }
+}

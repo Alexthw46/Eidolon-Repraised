@@ -1,17 +1,17 @@
 {
-  "type": "eidolon:ritual_brazier_summoning",
+  "type": "eidolon_repraised:ritual_brazier_summoning",
   "focus_items": [
     {
-      "item": "eidolon:tattered_cloth"
+      "item": "eidolon_repraised:tattered_cloth"
     }
   ],
-  "output": "eidolon:wraith",
+  "output": "eidolon_repraised:wraith",
   "pedestal_items": [
     {
-      "item": "eidolon:soul_shard"
+      "item": "eidolon_repraised:soul_shard"
     },
     {
-      "item": "eidolon:tattered_cloth"
+      "item": "eidolon_repraised:tattered_cloth"
     }
   ],
   "reagent": {

@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "alexthw.eidolon_repraised.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "eidolon_repraised.refmap.json",
+  "mixins": [
+    "AbstractContainerMenuMixin",
+    "BlockEntityTypeAccessor",
+    "EntityMixin",
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "ProjectileMixin",
+    "compat.SpellArrowMixin"
+  ],
+  "client": [
+    "LevelRendererMixin",
+    "PlayerRendererMixin"
+  ],
+  "plugin": "alexthw.eidolon_repraised.mixin.MixinPlugin",
+  "minVersion": "0.8"
+}
