@@ -2,10 +2,20 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:lay_on_hands",
   "signs": [
-    "eidolon_repraised:flame",
-    "eidolon_repraised:soul",
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:soul",
-    "eidolon_repraised:sacred"
+    {
+      "sign": "eidolon_repraised:flame"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    }
   ]
 }

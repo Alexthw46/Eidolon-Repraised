@@ -2,10 +2,20 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:enthrall_spell",
   "signs": [
-    "eidolon_repraised:wicked",
-    "eidolon_repraised:mind",
-    "eidolon_repraised:magic",
-    "eidolon_repraised:magic",
-    "eidolon_repraised:mind"
+    {
+      "sign": "eidolon_repraised:wicked"
+    },
+    {
+      "sign": "eidolon_repraised:mind"
+    },
+    {
+      "sign": "eidolon_repraised:magic"
+    },
+    {
+      "sign": "eidolon_repraised:magic"
+    },
+    {
+      "sign": "eidolon_repraised:mind"
+    }
   ]
 }

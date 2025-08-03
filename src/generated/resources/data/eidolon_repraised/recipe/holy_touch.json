@@ -2,9 +2,17 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:holy_touch",
   "signs": [
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:soul",
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:soul"
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    }
   ]
 }

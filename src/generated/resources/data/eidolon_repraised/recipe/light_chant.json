@@ -2,9 +2,17 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:light_chant",
   "signs": [
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:flame",
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:flame"
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:flame"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:flame"
+    }
   ]
 }

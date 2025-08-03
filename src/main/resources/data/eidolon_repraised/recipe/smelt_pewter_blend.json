@@ -4,7 +4,8 @@
     "item": "eidolon_repraised:pewter_blend"
   },
   "result": {
-    "id": "eidolon_repraised:pewter_ingot",
+    "id": "eidolon_repraised:pewter_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 200
 }

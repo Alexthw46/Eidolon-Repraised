@@ -2,9 +2,17 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:dark_touch",
   "signs": [
-    "eidolon_repraised:wicked",
-    "eidolon_repraised:soul",
-    "eidolon_repraised:wicked",
-    "eidolon_repraised:soul"
+    {
+      "sign": "eidolon_repraised:wicked"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:wicked"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    }
   ]
 }

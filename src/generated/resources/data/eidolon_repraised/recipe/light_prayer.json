@@ -2,8 +2,14 @@
   "type": "eidolon_repraised:chant",
   "id": "eidolon_repraised:light_prayer",
   "signs": [
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:sacred",
-    "eidolon_repraised:sacred"
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    }
   ]
 }
