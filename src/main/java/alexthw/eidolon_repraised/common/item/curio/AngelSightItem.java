@@ -43,7 +43,7 @@ public class AngelSightItem extends EidolonCurio {
             int mode = stack.getOrDefault(EidolonDataComponents.TARGET_MODE, 0);
             mode = (mode + 1) % 3;
             stack.set(EidolonDataComponents.TARGET_MODE, mode);
-            pPlayer.sendSystemMessage(Component.translatable("eidolon.angels_sight.mode." + mode));
+            pPlayer.sendSystemMessage(Component.translatable("eidolon_repraised.angels_sight.mode." + mode));
             return InteractionResultHolder.success(stack);
         }
         return super.use(pLevel, pPlayer, pUsedHand);

@@ -128,7 +128,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
         }
 
         ritual.getRequirements().stream().filter(HealthRequirement.class::isInstance).map(HealthRequirement.class::cast).findFirst().ifPresent(
-                healthRequirement -> guiGraphics.drawString(font, Component.translatable("eidolon.jei.health_sacrifice", healthRequirement.getHealth() / 2), x + 8, y + 150, 0xFF0000, false)
+                healthRequirement -> guiGraphics.drawString(font, Component.translatable("eidolon_repraised.jei.health_sacrifice", healthRequirement.getHealth() / 2), x + 8, y + 150, 0xFF0000, false)
         );
 
         renderRitualSymbol(guiGraphics, x, y, ritual);

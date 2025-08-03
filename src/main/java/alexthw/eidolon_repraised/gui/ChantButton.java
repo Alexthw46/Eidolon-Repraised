@@ -17,6 +17,6 @@ public class ChantButton extends Button {
     protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         blit(pGuiGraphics, getX(), getY() - 4, 336, isHovered ? 240 : 208, 32, 32, 512, 512);
         if (isHovered)
-            pGuiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.chant_hover"), pMouseX, pMouseY);
+            pGuiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon_repraised.codex.chant_hover"), pMouseX, pMouseY);
     }
 }

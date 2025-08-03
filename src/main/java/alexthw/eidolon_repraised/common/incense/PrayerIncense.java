@@ -40,12 +40,12 @@ public class PrayerIncense extends IncenseRitual {
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (reputation == null) return false;
         if (!reputation.canPray(Spells.CENSER, world.getGameTime())) {
-            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.prayer_cooldown"), true);
             return false;
         }
         List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4).getBottomCenter(), pos.offset(5, 5, 5).getCenter()));
         if (effigies.isEmpty()) {
-            player.displayClientMessage(Component.translatable("eidolon.message.no_effigy"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
         EffigyTileEntity effigy = effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
@@ -53,7 +53,7 @@ public class PrayerIncense extends IncenseRitual {
             Deity deity = Deities.LIGHT_DEITY;
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             if (reputation.getReputation(deity.getId()) < 3) {
-                player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+                player.displayClientMessage(Component.translatable("eidolon_repraised.message.not_enough_reputation"), true);
                 return false;
             }
             KnowledgeUtil.grantResearchNoToast(player, DeityLocks.BASIC_INCENSE_PRAYER);

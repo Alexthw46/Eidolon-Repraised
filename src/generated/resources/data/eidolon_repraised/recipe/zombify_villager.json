@@ -1,0 +1,12 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:zombify_villager",
+  "signs": [
+    "eidolon_repraised:death",
+    "eidolon_repraised:blood",
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:death",
+    "eidolon_repraised:soul",
+    "eidolon_repraised:blood"
+  ]
+}

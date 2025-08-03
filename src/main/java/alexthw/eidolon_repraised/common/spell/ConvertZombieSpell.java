@@ -33,7 +33,7 @@ public class ConvertZombieSpell extends PrayerSpell {
         boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) {
-            player.displayClientMessage(Component.translatable("eidolon.message.no_effigy"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());

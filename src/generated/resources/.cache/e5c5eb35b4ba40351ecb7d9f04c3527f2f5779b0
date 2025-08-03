@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-03T16:49:22.5594816	Advancements
+// 1.21.1	2025-08-03T23:48:31.9774307	Advancements
 20824461dc8bbbc104a8b2a518c3f446480ef90a data/eidolon_repraised/advancement/athame.json
 b26febb4969ebb1c2b278555353f223a1ee7e32d data/eidolon_repraised/advancement/brazier.json
 cd434f28545f2bbee16e74218b99ab20a588e76b data/eidolon_repraised/advancement/crucible.json
@@ -12,7 +12,7 @@ ed3d586bc45b70b7ea38e1dc39427877a4863ac8 data/eidolon_repraised/advancement/lay_
 47823a8318977197c31387fa4c4a7fddb97ad881 data/eidolon_repraised/advancement/pewter_ingot.json
 514611fab4d28cba4aca22db7ced001eff698f35 data/eidolon_repraised/advancement/reaper_scythe.json
 7d4ec9ac520fc5c2e448dfba7fd8cbca96efb4c6 data/eidolon_repraised/advancement/research_notes.json
-01edf2e0bcd47bd4dcb1910623ee3e9f1b7bcb3e data/eidolon_repraised/advancement/root.json
+9c5a15c3935fe53576bf7a2cbb264507de8f67e0 data/eidolon_repraised/advancement/root.json
 bec660e7a9d8c9c4fd7e5495e04b375ef35fb0d0 data/eidolon_repraised/advancement/sacred_path.json
 ab3958abafcc311324aa95f2dd85366a4b83da27 data/eidolon_repraised/advancement/sacrifice.json
 c0e1085ba1ffc8cc81d34f9edd9e37ab2600efbc data/eidolon_repraised/advancement/smite_undead.json

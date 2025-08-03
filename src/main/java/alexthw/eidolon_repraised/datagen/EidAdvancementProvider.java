@@ -44,8 +44,8 @@ public class EidAdvancementProvider extends AdvancementProvider {
         @Override
         public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<AdvancementHolder> con, @NotNull ExistingFileHelper existingFileHelper) {
             this.advCon = con;
-            AdvancementHolder root = builder(Eidolon.MODID).display(Registry.CODEX.get(), Component.translatable("eidolon.advancement.title.root"),
-                    Component.translatable("eidolon.advancement.desc.root"),
+            AdvancementHolder root = builder(Eidolon.MODID).display(Registry.CODEX.get(), Component.translatable("eidolon_repraised.advancement.title.root"),
+                    Component.translatable("eidolon_repraised.advancement.desc.root"),
                     ResourceLocation.tryParse("eidolon_repraised:textures/block/bone_pile.png"), AdvancementType.TASK, false, false, false).addCriterion("eidolon_repraised:ars_ecclesia",
                     InventoryChangeTrigger.TriggerInstance.hasItems(Registry.CODEX.get())).save(con, "eidolon_repraised:root");
             AdvancementHolder theurgy = saveBasicItem(Registry.STRAW_EFFIGY.get(), root);

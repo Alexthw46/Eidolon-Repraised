@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "eidolon_repraised:brazier",
+    "eidolon_repraised:polished_planks_fence_gate",
+    "eidolon_repraised:polished_planks_fence",
+    "eidolon_repraised:polished_planks_slab",
+    "eidolon_repraised:polished_planks_stairs",
+    "eidolon_repraised:polished_planks",
+    "eidolon_repraised:polished_button",
+    "eidolon_repraised:polished_pressure_plate",
+    "eidolon_repraised:polished_standing_sign",
+    "eidolon_repraised:polished_wall_sign",
+    "eidolon_repraised:polished_wood_pillar",
+    "eidolon_repraised:illwood_planks_fence_gate",
+    "eidolon_repraised:illwood_planks_fence",
+    "eidolon_repraised:illwood_planks_slab",
+    "eidolon_repraised:illwood_planks_stairs",
+    "eidolon_repraised:illwood_planks",
+    "eidolon_repraised:illwood_button",
+    "eidolon_repraised:illwood_pressure_plate",
+    "eidolon_repraised:illwood_standing_sign",
+    "eidolon_repraised:illwood_wall_sign",
+    "#eidolon_repraised:illwood_logs",
+    "eidolon_repraised:wooden_altar",
+    "eidolon_repraised:wooden_brewing_stand",
+    "eidolon_repraised:worktable",
+    "eidolon_repraised:research_table"
+  ]
+}

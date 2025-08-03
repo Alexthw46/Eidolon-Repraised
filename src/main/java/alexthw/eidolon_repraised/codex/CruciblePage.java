@@ -2,7 +2,6 @@ package alexthw.eidolon_repraised.codex;
 
 import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.recipe.CrucibleRecipe;
-import alexthw.eidolon_repraised.recipe.CrucibleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,11 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
 
     @Override
     public CrucibleRecipe getRecipe(ResourceLocation id) {
-        return CrucibleRegistry.find(id);
+        RecipeHolder<?> recipeHolder = Eidolon.proxy.getWorld().getRecipeManager().byKey(id).orElse(null);
+        if (recipeHolder == null || !(recipeHolder.value() instanceof CrucibleRecipe recipe)) {
+            return null;
+        }
+        return recipe;
     }
 
     public CruciblePage(ItemStack result, ResourceLocation id) {

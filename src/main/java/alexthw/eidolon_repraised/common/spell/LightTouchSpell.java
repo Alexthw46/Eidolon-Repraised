@@ -49,7 +49,7 @@ public class LightTouchSpell extends DarkTouchSpell {
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (reputation == null) return false;
         if (reputation.getReputation(Deities.LIGHT_DEITY.getId()) < 10.0) {
-            player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.not_enough_reputation"), true);
             return false;
         }
 

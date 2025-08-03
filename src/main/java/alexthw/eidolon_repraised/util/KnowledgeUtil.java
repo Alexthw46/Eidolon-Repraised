@@ -35,7 +35,7 @@ public class KnowledgeUtil {
 
         knowledge.addSign(sign);
         player.connection.send(new ClientboundSetActionBarTextPacket(
-                Component.translatable("eidolon.title.new_sign",
+                Component.translatable("eidolon_repraised.title.new_sign",
                         Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath()))
         ));
         AdvancementTriggers.triggerSign(sign, player);
@@ -50,7 +50,7 @@ public class KnowledgeUtil {
 
         knowledge.addFact(fact);
         player.connection.send(new ClientboundSetActionBarTextPacket(
-                Component.translatable("eidolon.title.new_fact")
+                Component.translatable("eidolon_repraised.title.new_fact")
         ));
         Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
         AdvancementTriggers.triggerResearch(fact, player);
@@ -65,7 +65,7 @@ public class KnowledgeUtil {
         knowledge.addResearch(research.getRegistryName());
         research.onLearned(player);
         player.connection.send(new ClientboundSetActionBarTextPacket(
-                Component.translatable("eidolon.title.new_research",
+                Component.translatable("eidolon_repraised.title.new_research",
                         ChatFormatting.GOLD + research.getName())
         ));
         Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);
@@ -92,7 +92,7 @@ public class KnowledgeUtil {
 
         knowledge.addRune(rune);
         player.connection.send(new ClientboundSetActionBarTextPacket(
-                Component.translatable("eidolon.title.new_rune",
+                Component.translatable("eidolon_repraised.title.new_rune",
                         Component.translatable(rune.getRegistryName().getNamespace() + ".rune." + rune.getRegistryName().getPath()))
         ));
         Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, true), player);

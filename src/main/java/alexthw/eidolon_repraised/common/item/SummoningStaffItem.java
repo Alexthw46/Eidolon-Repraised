@@ -196,7 +196,7 @@ public class SummoningStaffItem extends ItemBase {
                 String summonKey = "entity." + id.getNamespace() + "." + id.getPath();
                 player.setItemInHand(hand, stack);
                 if (!world.isClientSide) {
-                    ((ServerPlayer) player).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.tooltip.active_summon").append(
+                    ((ServerPlayer) player).connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon_repraised.tooltip.active_summon").append(
                             Component.translatable(summonKey).withStyle(ChatFormatting.LIGHT_PURPLE)
                     )));
                     player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5f, 1.0f);
@@ -222,7 +222,7 @@ public class SummoningStaffItem extends ItemBase {
             ResourceLocation id = ResourceLocation.parse(tag.getString("id"));
             summonKey = "entity." + id.getNamespace() + "." + id.getPath();
         }
-        tooltip.add(Component.translatable("eidolon.tooltip.active_summon").append(
+        tooltip.add(Component.translatable("eidolon_repraised.tooltip.active_summon").append(
                 Component.translatable(summonKey).withStyle(charge ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_PURPLE)
         ));
     }

@@ -108,9 +108,9 @@ public class CodexGui extends Screen {
         bgx += 36;
         boolean cancelHover = mouseX >= bgx && mouseY >= baseY - 4 && mouseX <= bgx + 32 && mouseY <= baseY + 28;
         blit(mStack, bgx, baseY - 4, 368, cancelHover ? 240 : 208, 32, 32, 512, 512);
-        if (chantHover) mStack.renderTooltip(font, Component.translatable("eidolon.codex.chant_hover"), mouseX, mouseY);
+        if (chantHover) mStack.renderTooltip(font, Component.translatable("eidolon_repraised.codex.chant_hover"), mouseX, mouseY);
         if (cancelHover)
-            mStack.renderTooltip(font, Component.translatable("eidolon.codex.cancel_hover"), mouseX, mouseY);
+            mStack.renderTooltip(font, Component.translatable("eidolon_repraised.codex.cancel_hover"), mouseX, mouseY);
 
         RenderSystem.enableBlend();
         RenderSystem.setShader(ClientRegistry::getGlowingSpriteShader);

@@ -1,0 +1,10 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:dark_villager_sacrifice",
+  "signs": [
+    "eidolon_repraised:blood",
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:blood",
+    "eidolon_repraised:soul"
+  ]
+}

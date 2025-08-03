@@ -136,12 +136,12 @@ public class ClientEvents {
 
         Integer necro = itemStack.get(EidolonDataComponents.NECROTIC);
         if (necro != null && necro > 0) {
-            event.getToolTip().add(Component.translatable("eidolon.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
+            event.getToolTip().add(Component.translatable("eidolon_repraised.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
         }
 
         Integer sacred = itemStack.get(EidolonDataComponents.CONSECRATED);
         if (sacred != null && sacred > 0) {
-            event.getToolTip().add(Component.translatable("eidolon.tooltip.sacred").withStyle(ChatFormatting.GOLD));
+            event.getToolTip().add(Component.translatable("eidolon_repraised.tooltip.sacred").withStyle(ChatFormatting.GOLD));
         }
     }
 }

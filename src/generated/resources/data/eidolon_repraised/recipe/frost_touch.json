@@ -1,0 +1,11 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:frost_touch",
+  "signs": [
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:winter",
+    "eidolon_repraised:blood",
+    "eidolon_repraised:winter",
+    "eidolon_repraised:wicked"
+  ]
+}

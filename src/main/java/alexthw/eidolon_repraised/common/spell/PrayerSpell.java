@@ -84,11 +84,11 @@ public class PrayerSpell extends StaticSpell {
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (reputation == null) return true;
         if (!reputation.canPray(this, world.getGameTime())) {
-            player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.prayer_cooldown"), true);
             return true;
         }
         if (reputation.getReputation(deity.getId()) < minDevotion) {
-            player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.not_enough_reputation"), true);
             return true;
         }
         return false;

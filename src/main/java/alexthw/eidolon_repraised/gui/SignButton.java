@@ -59,7 +59,7 @@ public class SignButton extends Button {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         if (infoHover) {
-            pGuiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), pMouseX, pMouseY);
+            pGuiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon_repraised.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), pMouseX, pMouseY);
         }
     }
 }

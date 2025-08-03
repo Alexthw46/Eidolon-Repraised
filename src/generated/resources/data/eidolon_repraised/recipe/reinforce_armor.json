@@ -1,0 +1,11 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:reinforce_armor",
+  "signs": [
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:warding",
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:warding",
+    "eidolon_repraised:sacred"
+  ]
+}

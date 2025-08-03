@@ -148,7 +148,7 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
 
         public static final MapCodec<WorktableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Ingredient.CODEC.listOf().fieldOf("core").forGetter(r -> r.core),
-                Ingredient.CODEC.listOf().fieldOf("extras").forGetter(r -> (r.extras)),
+                Ingredient.CODEC.listOf().fieldOf("reagents").forGetter(r -> (r.extras)),
                 ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
         ).apply(instance, WorktableRecipe::new));
 

@@ -89,6 +89,7 @@ public class ChantRecipe implements Recipe<RecipeInput> {
         JsonObject json = new JsonObject();
         //json.addProperty("chant", chantId.toString());
         json.addProperty("type", getType().toString());
+        json.addProperty("id", id.toString());
         JsonArray signsArray = new JsonArray();
         for (Sign sign : signs) {
             signsArray.add(sign.getRegistryName().toString());

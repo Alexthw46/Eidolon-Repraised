@@ -15,7 +15,7 @@
     "announce_to_chat": false,
     "background": "eidolon_repraised:textures/block/bone_pile.png",
     "description": {
-      "translate": "eidolon.advancement.desc.root"
+      "translate": "eidolon_repraised.advancement.desc.root"
     },
     "icon": {
       "count": 1,
@@ -23,7 +23,7 @@
     },
     "show_toast": false,
     "title": {
-      "translate": "eidolon.advancement.title.root"
+      "translate": "eidolon_repraised.advancement.title.root"
     }
   },
   "requirements": [

@@ -117,7 +117,7 @@ public class SignIndexPage extends Page {
                 guiGraphics.blit(BACKGROUND, xx + 38, yy + 38, infoHover ? 188 : 176, 48, 12, 14);
 
                 if (infoHover) {
-                    guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
+                    guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon_repraised.codex.sign_suffix", Component.translatable(sign.getRegistryName().getNamespace() + ".sign." + sign.getRegistryName().getPath())), mouseX, mouseY);
                 }
             }
         }

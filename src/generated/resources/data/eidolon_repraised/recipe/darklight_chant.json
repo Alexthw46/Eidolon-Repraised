@@ -1,0 +1,10 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:darklight_chant",
+  "signs": [
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:flame",
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:flame"
+  ]
+}

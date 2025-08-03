@@ -62,7 +62,7 @@ public class DarkTouchSpell extends StaticSpell {
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (reputation == null) return false;
         if (reputation.getReputation(Deities.DARK_DEITY.getId()) < 10.0) {
-            player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.not_enough_reputation"), true);
             return false;
         }
 

@@ -29,7 +29,7 @@ public class VillagerSacrificeSpell extends PrayerSpell {
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
         if (effigy == null || goblet == null || goblet.getEntityType() == null) {
-            player.displayClientMessage(Component.translatable("eidolon.message.no_effigy"), true);
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());

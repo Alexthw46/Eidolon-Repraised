@@ -1,0 +1,9 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:dark_animal_sacrifice",
+  "signs": [
+    "eidolon_repraised:wicked",
+    "eidolon_repraised:blood",
+    "eidolon_repraised:wicked"
+  ]
+}

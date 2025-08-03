@@ -56,7 +56,7 @@ public class ThrallSpell extends StaticSpell {
                     EntityUtil.enthrall(player, living);
                     KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ENTHRALL_UNDEAD);
                 } else
-                    sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
+                    sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon_repraised.title.no_mana")));
             }
         }
     }

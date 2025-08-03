@@ -50,7 +50,7 @@ public class CrucibleRecipe implements Recipe<CraftingInput> {
 
         public static final Codec<Step> STEP_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.INT.optionalFieldOf("stirs", 0).forGetter(s -> s.stirs),
-                Ingredient.CODEC.listOf().fieldOf("items").forGetter(s -> s.matches)
+                Ingredient.CODEC.listOf().optionalFieldOf("items", new ArrayList<>()).forGetter(s -> s.matches)
         ).apply(instance, Step::new));
 
         public static StreamCodec<RegistryFriendlyByteBuf, Step> STREAM_CODEC = StreamCodec.composite(

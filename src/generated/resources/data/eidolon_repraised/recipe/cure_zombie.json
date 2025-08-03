@@ -1,0 +1,12 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:cure_zombie",
+  "signs": [
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:soul",
+    "eidolon_repraised:mind",
+    "eidolon_repraised:harmony",
+    "eidolon_repraised:flame",
+    "eidolon_repraised:soul"
+  ]
+}

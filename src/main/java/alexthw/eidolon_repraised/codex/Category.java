@@ -74,6 +74,6 @@ public class Category {
 
         boolean hover = mouseX >= x && mouseY >= y && mouseX <= x + w && mouseY <= y + 19;
         if (hover)
-            mStack.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.category." + key), mouseX, mouseY);
+            mStack.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon_repraised.codex.category." + key), mouseX, mouseY);
     }
 }

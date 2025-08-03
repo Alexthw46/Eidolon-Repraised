@@ -78,7 +78,7 @@ public abstract class StaticSpell extends Spell {
             var mana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
             if (mana != null && mana.getMagic() < getCost()) {
                 if (player instanceof ServerPlayer serverPlayer)
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
+                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon_repraised.title.no_mana")));
                 return false;
             }
         }

@@ -1,0 +1,12 @@
+{
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:smite_chant",
+  "signs": [
+    "eidolon_repraised:flame",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:sacred",
+    "eidolon_repraised:death",
+    "eidolon_repraised:magic",
+    "eidolon_repraised:sacred"
+  ]
+}

@@ -30,7 +30,7 @@ public class LightDeity extends Deity {
         if (lock.equals(DeityLocks.BASIC_INCENSE_PRAYER)) {
             KnowledgeUtil.grantSign(player, Signs.SOUL_SIGN);
         } else if (lock.equals(DeityLocks.LIGHT_TOUCH) && player instanceof ServerPlayer sp) {
-            sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.new_fact")));
+            sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon_repraised.title.new_fact")));
         } else if (lock.equals(DeityLocks.HEAL_VILLAGER)) {
             KnowledgeUtil.grantSign(player, Signs.MIND_SIGN);
         } else if (lock.equals(DeityLocks.CURE_ZOMBIE)) {
