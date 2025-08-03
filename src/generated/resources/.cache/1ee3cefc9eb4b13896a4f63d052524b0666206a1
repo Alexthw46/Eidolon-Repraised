@@ -1,5 +1,5 @@
-// 1.20.1	2024-04-30T11:47:57.9110153	Eidolon Entity Type Tags
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_types/enthrall_blacklist.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_types/enthrall_whitelist.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_types/trackable.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_types/trackable_blacklist.json
+// 1.21.1	2025-08-03T15:40:25.1852933	Eidolon Entity Type Tags
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_type/enthrall_blacklist.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_type/enthrall_whitelist.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_type/trackable.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon/tags/entity_type/trackable_blacklist.json

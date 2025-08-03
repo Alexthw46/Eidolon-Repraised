@@ -6,6 +6,7 @@ import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.block.GhostLight;
 import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -21,8 +22,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class LightSpell extends StaticSpell {
 
     final Deity deity;
@@ -34,9 +33,8 @@ public class LightSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        AtomicReference<Boolean> favor = new AtomicReference<>(Boolean.FALSE);
-        world.getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, deity.getId()) >= 3));
-        return favor.get();
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        return reputation != null && reputation.getReputation(deity.getId()) >= 3;
     }
 
     @Override

@@ -1,13 +1,5 @@
 {
   "type": "eidolon:athame_foraging",
-  "block": [
-    {
-      "item": "minecraft:crimson_fungus"
-    },
-    {
-      "item": "minecraft:warped_fungus"
-    }
-  ],
   "output": {
     "item": "eidolon:mirecap"
   }

@@ -32,6 +32,7 @@ tasks.named('wrapper', Wrapper).configure {
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
+    validateAccessTransformers = true
 
     parchment {
         mappingsVersion = project.parchment_version
@@ -42,33 +43,23 @@ neoForge {
     runs {
         client {
             client()
+            gameDirectory = project.file('runs/client')
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
             data()
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // gameDirectory = project.file('run-data')
+            gameDirectory = project.file('runs/data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--mod', 'eidolon', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         // applies to all the run configs above
@@ -101,10 +92,6 @@ neoForge {
 configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
-
-//minecraft.accessTransformers.files(
-//       file('src/main/resources/META-INF/accesstransformer.cfg')
-//)
 
 sourceSets.main.resources { srcDir "src/generated/resources" }
 

@@ -3,6 +3,7 @@ package elucent.eidolon.registries;
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.capability.KnowledgeImpl;
 import elucent.eidolon.capability.PatronManaImpl.ManaData;
+import elucent.eidolon.capability.ReputationImpl;
 import elucent.eidolon.capability.SoulImpl;
 import elucent.eidolon.capability.WingsDataImpl;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -37,6 +38,12 @@ public class EidolonAttachments {
     public static final Supplier<AttachmentType<WingsDataImpl.WingsData>> WINGS_ATTACHMENT =
             ATTACHMENT_TYPES.register("wings",
                     () -> AttachmentType.serializable(WingsDataImpl.WingsData::new)
+                            .copyOnDeath()
+                            .build());
+
+    public static final Supplier<AttachmentType<ReputationImpl.ReputationData>> REPUTATION_ATTACHMENT =
+            ATTACHMENT_TYPES.register("reputation",
+                    () -> AttachmentType.serializable(ReputationImpl.ReputationData::new)
                             .copyOnDeath()
                             .build());
 

@@ -5,19 +5,19 @@ import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -113,9 +113,10 @@ public class IndexPage extends Page {
 
         @Override
         public boolean isUnlocked() {
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            if (server == null) return true;
-            return server.overworld().getCapability(IReputation.INSTANCE).resolve().map(iReputation -> iReputation.getReputation(Eidolon.proxy.getPlayer(), deity) >= reputation).orElse(true);
+            Player player = Eidolon.proxy.getPlayer();
+            if (player == null) return true;
+            IReputation reputationCap = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            return reputationCap == null || reputationCap.getReputation(deity) >= reputation;
         }
     }
 

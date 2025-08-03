@@ -45,8 +45,9 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY.getId()) < 10.0) {
+        IReputation reputation = player.getCapability(elucent.eidolon.registries.EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return false;
+        if (reputation.getReputation(Deities.LIGHT_DEITY.getId()) < 10.0) {
             player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
             return false;
         }

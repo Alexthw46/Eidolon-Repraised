@@ -1,6 +1,6 @@
 {
   "values": [
     "#minecraft:is_taiga",
-    "#forge:is_cold/overworld"
+    "#c:is_cold/overworld"
   ]
 }

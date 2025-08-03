@@ -81,14 +81,13 @@ public class PrayerSpell extends StaticSpell {
     }
 
     protected boolean reputationCheck(Level world, Player player, double minDevotion) {
-        LazyOptional<IReputation> iReputationLazyOptional = world.getCapability(IReputation.INSTANCE);
-        if (iReputationLazyOptional.resolve().isEmpty()) return true;
-        IReputation iReputation = iReputationLazyOptional.resolve().get();
-        if (!iReputation.canPray(player, this, world.getGameTime())) {
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return true;
+        if (!reputation.canPray(this, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return true;
         }
-        if (iReputation.getReputation(player.getUUID(), deity.getId()) < minDevotion) {
+        if (reputation.getReputation(deity.getId()) < minDevotion) {
             player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
             return true;
         }
@@ -97,14 +96,14 @@ public class PrayerSpell extends StaticSpell {
 
     @Nullable
     protected static GobletTileEntity getGoblet(Level world, BlockPos pos) {
-        List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        List<GobletTileEntity> goblets = Ritual.getTilesWithinAABB(GobletTileEntity.class, world, new AABB(pos.offset(-4, -4, -4).getBottomCenter(), pos.offset(5, 5, 5).getCenter()));
         if (goblets.isEmpty()) return null;
         return goblets.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
     }
 
     @Nullable
     protected static EffigyTileEntity getEffigy(Level world, BlockPos pos) {
-        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4), pos.offset(5, 5, 5)));
+        List<EffigyTileEntity> effigies = Ritual.getTilesWithinAABB(EffigyTileEntity.class, world, new AABB(pos.offset(-4, -4, -4).getBottomCenter(), pos.offset(5, 5, 5).getCenter()));
         if (effigies.isEmpty()) return null;
         return effigies.stream().min(Comparator.comparingDouble((e) -> e.getBlockPos().distSqr(pos))).get();
     }
@@ -116,11 +115,12 @@ public class PrayerSpell extends StaticSpell {
         if (!world.isClientSide) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, this, world.getGameTime());
-                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
-                updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+            IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            if (reputation != null) {
+                reputation.pray(this, world.getGameTime());
+                reputation.addReputation(deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
+                updateMagic(info, player, world, reputation.getReputation(deity.getId()));
+            }
         } else {
             playSuccessSound(world, player, effigy, deity);
         }

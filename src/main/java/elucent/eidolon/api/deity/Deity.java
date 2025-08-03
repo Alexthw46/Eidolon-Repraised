@@ -1,13 +1,14 @@
 package elucent.eidolon.api.deity;
 
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.research.Research;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -153,10 +154,10 @@ public abstract class Deity implements RGBProvider {
             if (current > s.rep) { // we have completed this stage
                 if (s.satisfiedBy(player)) { // current stage requirements are satisfied
                     Stage next = next(s.rep + 1); //next stage and clamp rep to next stage to avoid skipping
-                    rep.setReputation(player.getUUID(), Deity.this.getId(), Math.min(current, next.rep));
+                    rep.setReputation(Deity.this.getId(), Math.min(current, next.rep));
                     return next;
                 } else { // we have not satisfied the requirements yet, so cap the rep to the limit of the current stage
-                    rep.setReputation(player.getUUID(), Deity.this.getId(), s.rep);
+                    rep.setReputation(Deity.this.getId(), s.rep);
                 }
             }
             return s;
@@ -164,9 +165,9 @@ public abstract class Deity implements RGBProvider {
 
 
         public void regress(IReputation rep, Player player) {
-            double level = rep.getReputation(player, Deity.this.getId());
+            double level = rep.getReputation(Deity.this.getId());
             Stage s = prev(level);
-            rep.setReputation(player, Deity.this.getId(), Math.min(level, s.rep));
+            rep.setReputation(Deity.this.getId(), Math.min(level, s.rep));
         }
     }
 
@@ -176,14 +177,14 @@ public abstract class Deity implements RGBProvider {
         Stage currStage = progression.next(prev == 0 ? 1 : prev);
         //we maxed out
         if (nextStage == null) {
-            rep.setReputation(player.getUUID(), id, progression.max);
+            rep.setReputation(id, progression.max);
             return;
         }
         //we advanced a stage
         if (nextStage.rep > currStage.rep) {
             onReputationUnlock(player, currStage.id());
         }
-        double curr = rep.getReputation(player, getId()); //update after we may have changed it
+        double curr = rep.getReputation(getId()); //update after we may have changed it
 
         //we didn't advance a stage, if the cap was reached then we need to grant the next step
         if (curr == nextStage.rep() && updated != curr) {

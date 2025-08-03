@@ -131,7 +131,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableCo
 		mouseY = mouseY * (double) Minecraft.getInstance().getWindow().getGuiScaledHeight() / (double) Minecraft.getInstance().getWindow().getScreenHeight();
 
 		if (menu.slots.getFirst().getItem().getItem() == Registry.RESEARCH_NOTES.get()) {
-			ItemStack notes = menu.slots.get(0).getItem();
+            ItemStack notes = menu.slots.getFirst().getItem();
 			ResearchNotesItem.ResearchData researchData = notes.get(EidolonDataComponents.RESEARCH);
 			if (researchData == null) return;
 			Research r = Researches.find(researchData.research());

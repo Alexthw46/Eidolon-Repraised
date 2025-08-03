@@ -524,7 +524,7 @@ public class Registry {
             SCRIPTORIUM_CONTAINER = addContainer("scriptorium", ScriptoriumContainer::new);
 
     @SubscribeEvent // on the mod event bus only on the physical client
-    public static void registerScreens(RegisterMenuScreensEvent event) {
+    public void registerScreens(RegisterMenuScreensEvent event) {
         event.register(Registry.WORKTABLE_CONTAINER.get(), WorktableScreen::new);
         event.register(Registry.SOUL_ENCHANTER_CONTAINER.get(), SoulEnchanterScreen::new);
         event.register(Registry.WOODEN_STAND_CONTAINER.get(), WoodenBrewingStandScreen::new);
@@ -550,7 +550,8 @@ public class Registry {
         EidolonRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         ARG_TYPES.register(modEventBus);
         TABS.register(modEventBus);
-        AdvancementTriggers.init();
+        AdvancementTriggers.TRIGGERS.register(modEventBus);
+        //modEventBus.addListener(Registry::registerScreens);
     }
 
     @OnlyIn(Dist.CLIENT)

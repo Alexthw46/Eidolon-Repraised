@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:pewter_ingot",
+  "criteria": {
+    "has_brazier": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:brazier"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.brazier"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:brazier"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.brazier"
+    }
+  },
+  "requirements": [
+    [
+      "has_brazier"
+    ]
+  ]
+}

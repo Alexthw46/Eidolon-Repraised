@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:worktable",
+  "criteria": {
+    "has_reaper_scythe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:reaper_scythe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.reaper_scythe"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:reaper_scythe"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.reaper_scythe"
+    }
+  },
+  "requirements": [
+    [
+      "has_reaper_scythe"
+    ]
+  ]
+}

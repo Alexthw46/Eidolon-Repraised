@@ -11,6 +11,7 @@ import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.spell.PrayerSpell;
 import elucent.eidolon.common.tile.CenserTileEntity;
 import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.registries.Spells;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -36,9 +37,9 @@ public class PrayerIncense extends IncenseRitual {
         Level world = censer.getLevel();
         BlockPos pos = censer.getBlockPos();
         if (world == null || player == null) return false;
-        LazyOptional<IReputation> reputationLazyOptional = world.getCapability(IReputation.INSTANCE);
-        if (!reputationLazyOptional.isPresent() || reputationLazyOptional.resolve().isEmpty()) return false;
-        if (!reputationLazyOptional.resolve().get().canPray(player, Spells.CENSER, world.getGameTime())) {
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return false;
+        if (!reputation.canPray(Spells.CENSER, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
             return false;
         }
@@ -51,16 +52,14 @@ public class PrayerIncense extends IncenseRitual {
         if (effigy.ready()) {
             Deity deity = Deities.LIGHT_DEITY;
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                if (rep.getReputation(player, deity.getId()) < 3) {
-                    player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
-                    return;
-                }
-                KnowledgeUtil.grantResearchNoToast(player, DeityLocks.BASIC_INCENSE_PRAYER);
-                rep.pray(player, Spells.CENSER, world.getGameTime());
-                rep.addReputation(player, deity.getId(), 2.0 + 0.5 * info.getPower());
-                PrayerSpell.updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+            if (reputation.getReputation(deity.getId()) < 3) {
+                player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
+                return false;
+            }
+            KnowledgeUtil.grantResearchNoToast(player, DeityLocks.BASIC_INCENSE_PRAYER);
+            reputation.pray(Spells.CENSER, world.getGameTime());
+            reputation.addReputation(deity.getId(), 2.0 + 0.5 * info.getPower());
+            PrayerSpell.updateMagic(info, player, world, reputation.getReputation(deity.getId()));
             return true;
         }
         return false;

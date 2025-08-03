@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:worktable",
+  "criteria": {
+    "has_athame": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:athame"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.athame"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:athame"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.athame"
+    }
+  },
+  "requirements": [
+    [
+      "has_athame"
+    ]
+  ]
+}

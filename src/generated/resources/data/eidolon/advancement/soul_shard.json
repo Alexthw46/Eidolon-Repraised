@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:brazier",
+  "criteria": {
+    "has_soul_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:soul_shard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.soul_shard"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:soul_shard"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.soul_shard"
+    }
+  },
+  "requirements": [
+    [
+      "has_soul_shard"
+    ]
+  ]
+}

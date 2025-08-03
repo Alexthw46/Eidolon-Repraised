@@ -2,42 +2,34 @@ package elucent.eidolon.registries;
 
 import elucent.eidolon.api.spells.Sign;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.HashMap;
+import java.util.Optional;
 
-import static elucent.eidolon.Eidolon.prefix;
+import static elucent.eidolon.Eidolon.MODID;
 
 public class AdvancementTriggers {
+    public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, MODID);
 
     static final HashMap<ResourceLocation, CriterionTrigger<?>> triggers = new HashMap<>();
 
-    public static void init() {
-        WICKED = register(new PlayerTrigger(), prefix("wicked_path"));
-        SACRED = register(new PlayerTrigger(), prefix("sacred_path"));
-        SACRIFICE = register(new PlayerTrigger(), prefix("sacrifice"));
-        INCENSE = register(new PlayerTrigger(), prefix("incense"));
-        VSACRIFICE = register(new PlayerTrigger(), prefix("villager_sacrifice"));
-        LAY_ON_HANDS = register(new PlayerTrigger(), prefix("lay_on_hands"));
-        ZOMBIFY = register(new PlayerTrigger(), prefix("zombify"));
-        CURE_ZOMBIE = register(new PlayerTrigger(), prefix("cure_zombie"));
+    public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> WICKED = register("wicked_path"), SACRED = register("sacred_path"), SACRIFICE = register("sacrifice"), INCENSE = register("incense"), VSACRIFICE = register("villager_sacrifice"), LAY_ON_HANDS = register("lay_on_hands"), ZOMBIFY = register("zombify"), CURE_ZOMBIE = register("cure_zombie"), ENTHRALL = register("enthrall_undead"), SMITE = register("smite_undead");
+    public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> FLAME = register("flame_spell"), FROST = register("frost_spell");
 
-        ENTHRALL = register(new PlayerTrigger(), prefix("enthrall_undead"));
-        SMITE = register(new PlayerTrigger(), prefix("smite_undead"));
-
-        FLAME = register(new PlayerTrigger(), prefix("flame_spell"));
-        FROST = register(new PlayerTrigger(), prefix("frost_spell"));
-
+    public static Criterion<?> createCriterion(DeferredHolder<CriterionTrigger<?>, PlayerTrigger> holder) {
+        return holder.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty()));
     }
-
-    public static PlayerTrigger WICKED, SACRED, SACRIFICE, INCENSE, VSACRIFICE, LAY_ON_HANDS, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE;
-    public static PlayerTrigger FLAME, FROST;
 
     public static void rewardNearbyPlayers(PlayerTrigger criteria, ServerLevel level, BlockPos pos, int radius) {
         AABB aabb = new AABB(pos).inflate(radius);
@@ -46,6 +38,14 @@ public class AdvancementTriggers {
                 criteria.trigger(player);
             }
         }
+    }
+
+    public static <T extends CriterionTrigger<?>> DeferredHolder<CriterionTrigger<?>, PlayerTrigger> register(String pName) {
+        return register(pName, new PlayerTrigger());
+    }
+
+    public static <T extends CriterionTrigger<?>> DeferredHolder<CriterionTrigger<?>, T> register(String pName, T pTrigger) {
+        return TRIGGERS.register(pName, () -> pTrigger);
     }
 
     public static <T extends CriterionTrigger<?>> T register(T trigger, ResourceLocation id) {
@@ -57,8 +57,8 @@ public class AdvancementTriggers {
 
     public static void triggerSign(Sign sign, ServerPlayer player) {
         switch (sign.getRegistryName().toString()) {
-            case "eidolon:wicked" -> WICKED.trigger(player);
-            case "eidolon:sacred" -> SACRED.trigger(player);
+            case "eidolon:wicked" -> WICKED.get().trigger(player);
+            case "eidolon:sacred" -> SACRED.get().trigger(player);
         }
     }
 
@@ -67,16 +67,16 @@ public class AdvancementTriggers {
         if (trigger instanceof PlayerTrigger playerTrigger) {
             playerTrigger.trigger(player);
         } else switch (research.toString()) {
-            case "eidolon:frost" -> FROST.trigger(player);
-            case "eidolon:flames" -> FLAME.trigger(player);
-            case "eidolon:sacrifice_mob" -> SACRIFICE.trigger(player);
-            case "eidolon:basic_incense" -> INCENSE.trigger(player);
-            case "eidolon:sacrifice_villager" -> VSACRIFICE.trigger(player);
-            case "eidolon:heal_villager" -> LAY_ON_HANDS.trigger(player);
-            case "eidolon:zombify_villager" -> ZOMBIFY.trigger(player);
-            case "eidolon:cure_zombie" -> CURE_ZOMBIE.trigger(player);
-            case "eidolon:enthrall_undead" -> ENTHRALL.trigger(player);
-            case "eidolon:smite_undead" -> SMITE.trigger(player);
+            case "eidolon:frost" -> FROST.get().trigger(player);
+            case "eidolon:flames" -> FLAME.get().trigger(player);
+            case "eidolon:sacrifice_mob" -> SACRIFICE.get().trigger(player);
+            case "eidolon:basic_incense" -> INCENSE.get().trigger(player);
+            case "eidolon:sacrifice_villager" -> VSACRIFICE.get().trigger(player);
+            case "eidolon:heal_villager" -> LAY_ON_HANDS.get().trigger(player);
+            case "eidolon:zombify_villager" -> ZOMBIFY.get().trigger(player);
+            case "eidolon:cure_zombie" -> CURE_ZOMBIE.get().trigger(player);
+            case "eidolon:enthrall_undead" -> ENTHRALL.get().trigger(player);
+            case "eidolon:smite_undead" -> SMITE.get().trigger(player);
         }
     }
 

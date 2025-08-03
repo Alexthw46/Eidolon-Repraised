@@ -12,6 +12,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.common.deity.Deities;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -32,10 +33,13 @@ public class ReputationCommand {
                         .then(Commands.literal("get")
                                 .then(Commands.argument("deity", new DeityArgument())
                                         .executes(
-                                                ctx -> applyGet(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getLevel().getCapability(IReputation.INSTANCE).ifPresent((k) -> {
-                                                    var devotion = k.getReputation(player, DeityArgument.getDeity(ctx, "deity").getId());
-                                                    ctx.getSource().sendSuccess(() -> Component.literal(player.getName().getString() + " : " + devotion), false);
-                                                }))
+                                                ctx -> applyGet(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                                                    IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+                                                    if (reputation != null) {
+                                                        var devotion = reputation.getReputation(DeityArgument.getDeity(ctx, "deity").getId());
+                                                        ctx.getSource().sendSuccess(() -> Component.literal(player.getName().getString() + " : " + devotion), false);
+                                                    }
+                                                })
                                         )
                                 )
                         )
@@ -44,7 +48,12 @@ public class ReputationCommand {
                                 .then(Commands.argument("deity", new DeityArgument())
                                         .then(Commands.argument("qt", DoubleArgumentType.doubleArg(0, 100))
                                                 .executes(
-                                                        ctx -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getLevel().getCapability(IReputation.INSTANCE).ifPresent((k) -> k.setReputation(player, DeityArgument.getDeity(ctx, "deity").getId(), DoubleArgumentType.getDouble(ctx, "qt"))))
+                                                        ctx -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                                                            IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+                                                            if (reputation != null) {
+                                                                reputation.setReputation(DeityArgument.getDeity(ctx, "deity").getId(), DoubleArgumentType.getDouble(ctx, "qt"));
+                                                            }
+                                                        })
                                                 )
                                         )
                                 )

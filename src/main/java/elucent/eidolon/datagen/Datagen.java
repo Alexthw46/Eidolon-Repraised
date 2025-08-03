@@ -11,10 +11,9 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = Eidolon.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Eidolon.MODID)
 public class Datagen {
 
-    //use runData configuration to generate stuff, event.includeServer() for data, event.includeClient() for assets
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();

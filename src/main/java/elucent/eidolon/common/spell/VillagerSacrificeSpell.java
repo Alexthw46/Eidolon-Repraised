@@ -3,10 +3,10 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.api.altar.AltarInfo;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.common.tile.GobletTileEntity;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -47,12 +47,13 @@ public class VillagerSacrificeSpell extends PrayerSpell {
             effigy.pray();
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, this, world.getGameTime());
+            var rep = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            if (rep != null) {
+                rep.pray(this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_VILLAGER);
-                rep.addReputation(player, deity.getId(), 6.0 + getPowerMultiplier() * info.getPower());
-                updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+                rep.addReputation(deity.getId(), 6.0 + getPowerMultiplier() * info.getPower());
+                updateMagic(info, player, world, rep.getReputation(deity.getId()));
+            }
         } else {
             playSuccessSound(world, player, effigy, Signs.SOUL_SIGN);
         }

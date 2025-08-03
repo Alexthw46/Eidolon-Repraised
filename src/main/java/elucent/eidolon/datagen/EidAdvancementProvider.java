@@ -5,7 +5,6 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.registries.AdvancementTriggers;
 import elucent.eidolon.registries.Registry;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+
+import static elucent.eidolon.registries.AdvancementTriggers.createCriterion;
 
 public class EidAdvancementProvider extends AdvancementProvider {
 
@@ -86,8 +88,8 @@ public class EidAdvancementProvider extends AdvancementProvider {
 
         }
 
-        private AdvancementHolder saveWithTrigger(AdvancementHolder parent, @NotNull ItemLike display, PlayerTrigger playerTrigger) {
-            return builder(playerTrigger.getId().getPath()).display(display, AdvancementType.TASK).addCriterion(new PlayerTrigger.TriggerInstance(playerTrigger.getId(), ContextAwarePredicate.ANY)).parent(parent).save(advCon);
+        private AdvancementHolder saveWithTrigger(AdvancementHolder parent, @NotNull ItemLike display, DeferredHolder<CriterionTrigger<?>, PlayerTrigger> playerTrigger) {
+            return builder(playerTrigger.getId().getPath()).display(display, AdvancementType.TASK).addCriterion(createCriterion(playerTrigger)).parent(parent).save(advCon);
         }
 
         public AdvancementBuilder buildBasicItem(ItemLike item, AdvancementHolder parent) {

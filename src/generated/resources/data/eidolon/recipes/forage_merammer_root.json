@@ -1,16 +1,5 @@
 {
   "type": "eidolon:athame_foraging",
-  "block": [
-    {
-      "item": "minecraft:oxeye_daisy"
-    },
-    {
-      "item": "minecraft:lily_of_the_valley"
-    },
-    {
-      "item": "minecraft:white_tulip"
-    }
-  ],
   "output": {
     "item": "eidolon:merammer_root"
   }

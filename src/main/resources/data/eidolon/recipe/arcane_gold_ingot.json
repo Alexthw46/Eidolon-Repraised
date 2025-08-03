@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "eidolon",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:nuggets/arcane_gold"
+    }
+  },
+  "result": {
+    "item": "eidolon:arcane_gold_ingot"
+  }
+}

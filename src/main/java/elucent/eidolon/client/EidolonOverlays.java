@@ -11,8 +11,10 @@ import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonPotions;
 import net.minecraft.Util;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -21,14 +23,16 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
 public class EidolonOverlays {
     protected static final ResourceLocation ICONS_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/icons.png");
     protected static final ResourceLocation MANA_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/mana_bar.png");
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
-    public static class EidolonManaBar implements IGuiOverlay {
+    public static class EidolonManaBar implements LayeredDraw.Layer {
         int xPos() {
             String origin = ClientConfig.MANA_BAR_POSITION.get();
             if (origin.equals(ClientConfig.Positions.BOTTOM_LEFT)
@@ -63,13 +67,16 @@ public class EidolonOverlays {
         }
 
         @Override
-        public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
+        public void render(GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
             var mStack = guiGraphics.pose();
             if (player == null) return;
             int xp = xPos(), yp = yPos();
             boolean isHoriz = horiz();
+
+            var width = guiGraphics.guiWidth();
+            var height = guiGraphics.guiHeight();
 
             int w = isHoriz ? 120 : 28, h = isHoriz ? 28 : 120;
 
@@ -201,17 +208,17 @@ public class EidolonOverlays {
         }
     }
 
-    public static class EidolonHearts implements IGuiOverlay {
+    public static class EidolonHearts implements LayeredDraw.Layer {
         float lastEtherealHealth = 0;
         long healthBlinkTime = 0;
         long lastHealthTime = 0;
 
         @Override
-        public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
+        public void render(GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
             PoseStack mStack = guiGraphics.pose();
-            Minecraft mc = Minecraft.getInstance();
-            LocalPlayer player = mc.player;
-            if (!gui.shouldDrawSurvivalElements() || player == null) return;
+            LocalPlayer player = minecraft.player;
+
+            if (EidolonOverlays.minecraft.gameMode.canHurtPlayer() || player == null) return;
             mStack.pushPose();
             mStack.translate(0, 0, 0.01);
 
@@ -227,7 +234,7 @@ public class EidolonOverlays {
                 etherealMax = cap.getMaxEtherealHealth();
             }
 
-            int ticks = gui.getGuiTicks();
+            int ticks = (int) deltaTracker.getGameTimeDeltaTicks();
             boolean highlight = healthBlinkTime > (long) ticks && (healthBlinkTime - (long) ticks) / 3L % 2L == 1L;
 
             if (etherealHealth < this.lastEtherealHealth && player.invulnerableTime > 0) {
@@ -260,11 +267,11 @@ public class EidolonOverlays {
             int extraHealthRows = totalHealthRows - healthRows;
             int extraRowHeight = Mth.clamp(10 - (healthRows - 2), 3, 10);
 
-            int left = width / 2 - 91;
-            int top = height - ((ExtendedGui) Minecraft.getInstance().gui).leftHeight + healthRows * rowHeight;
+            int left = guiGraphics.guiWidth() / 2 - 91;
+            int top = guiGraphics.guiHeight() - minecraft.gui.leftHeight + healthRows * rowHeight;
             if (rowHeight != 10) top += 10 - rowHeight;
 
-            gui.leftHeight += extraHealthRows * extraRowHeight;
+            minecraft.gui.leftHeight += extraHealthRows * extraRowHeight;
 
             for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
                 int row = (i + 1) / 10;
@@ -306,16 +313,19 @@ public class EidolonOverlays {
         }
     }
 
-    public static class EidolonRavenCharge implements IGuiOverlay {
+    public static class EidolonRavenCharge implements LayeredDraw.Layer {
         protected static final ResourceLocation GUI_ICONS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
 
         @Override
-        public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+        public void render(GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
             PoseStack mStack = guiGraphics.pose();
-            Minecraft mc = gui.getMinecraft();
-            LocalPlayer player = mc.player;
+            LocalPlayer player = minecraft.player;
+            var font = minecraft.font;
 
-            if (!gui.shouldDrawSurvivalElements() || player == null || player.onGround()) return;
+            var screenWidth = guiGraphics.guiWidth();
+            var screenHeight = guiGraphics.guiHeight();
+
+            if (player == null || player.isCreative() || player.isSpectator() || player.onGround()) return;
             var wingsCap = player.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
             if (wingsCap != null) {
                 ItemStack wings = wingsCap.getWingsItem(player);
@@ -326,21 +336,20 @@ public class EidolonOverlays {
                 //TODO render an icon
                 //renders the number of remaining flaps
                 String s = "" + remainingFlaps;
-                int i1 = (screenWidth - gui.getFont().width(s)) / 2;
+                int i1 = (screenWidth - font.width(s)) / 2;
                 int j1 = screenHeight - 46;
-                guiGraphics.drawString(gui.getFont(), s, i1 + 1, j1, 0, false);
-                guiGraphics.drawString(gui.getFont(), s, i1 - 1, j1, 0, false);
-                guiGraphics.drawString(gui.getFont(), s, i1, j1 + 1, 0, false);
-                guiGraphics.drawString(gui.getFont(), s, i1, j1 - 1, 0, false);
-                guiGraphics.drawString(gui.getFont(), s, i1, j1, 6505166, false);
+                guiGraphics.drawString(font, s, i1 + 1, j1, 0, false);
+                guiGraphics.drawString(font, s, i1 - 1, j1, 0, false);
+                guiGraphics.drawString(font, s, i1, j1 + 1, 0, false);
+                guiGraphics.drawString(font, s, i1, j1 - 1, 0, false);
+                guiGraphics.drawString(font, s, i1, j1, 6505166, false);
 
                 if (ClientEvents.jumpTicks >= 5) {
-                    gui.setupOverlayRenderState(false, false);
+                    RenderSystem.enableBlend();
                     var x = screenWidth / 2 - 91;
                     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    //RenderSystem.disableBlend();
 
-                    mc.getProfiler().push("ravenJumpBar");
+                    minecraft.getProfiler().push("ravenJumpBar");
                     float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTimeNs()) / 15.0f;
                     int i = 182;
                     int j = (int) (f * 183.0F);
@@ -350,10 +359,10 @@ public class EidolonOverlays {
                         guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);
                     }
 
-                    mc.getProfiler().pop();
+                    minecraft.getProfiler().pop();
 
-                    RenderSystem.enableBlend();
-                    gui.getMinecraft().getProfiler().pop();
+                    RenderSystem.disableBlend();
+                    minecraft.getProfiler().pop();
                     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                 }
             }

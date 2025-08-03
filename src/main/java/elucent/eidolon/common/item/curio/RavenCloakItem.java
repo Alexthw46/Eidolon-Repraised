@@ -24,7 +24,7 @@ public class RavenCloakItem extends EidolonCurio implements IWingsItem {
 
     @SubscribeEvent
     public static void onFall(LivingFallEvent event) {
-        if (CuriosApi.getCuriosHelper().findFirstCurio(event.getEntity(), Registry.GRAVITY_BELT.get()).isPresent()) {
+        if (CuriosApi.getCuriosInventory(event.getEntity()).flatMap(i -> i.findFirstCurio(Registry.GRAVITY_BELT.get())).isPresent()) {
             event.setDistance(event.getDistance() / 4);
         }
     }

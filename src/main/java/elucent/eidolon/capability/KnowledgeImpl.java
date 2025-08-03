@@ -130,7 +130,6 @@ public class KnowledgeImpl implements IKnowledge {
         return knowledgeData.getKnownRunes();
     }
 
-    // Getter per la knowledgeData se serve altrove
     public KnowledgeData getKnowledgeData() {
         return knowledgeData;
     }

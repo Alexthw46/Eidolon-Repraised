@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon:research_notes",
+  "criteria": {
+    "frost_spell": {
+      "trigger": "eidolon:frost_spell"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.frost_spell"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:blue_ice"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.frost_spell"
+    }
+  },
+  "requirements": [
+    [
+      "frost_spell"
+    ]
+  ]
+}

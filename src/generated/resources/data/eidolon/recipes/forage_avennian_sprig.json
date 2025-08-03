@@ -1,13 +1,5 @@
 {
   "type": "eidolon:athame_foraging",
-  "block": [
-    {
-      "item": "minecraft:fern"
-    },
-    {
-      "item": "minecraft:large_fern"
-    }
-  ],
   "output": {
     "item": "eidolon:avennian_sprig"
   }

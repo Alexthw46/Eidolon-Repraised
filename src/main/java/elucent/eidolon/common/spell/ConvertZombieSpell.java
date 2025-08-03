@@ -7,6 +7,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -52,12 +53,13 @@ public class ConvertZombieSpell extends PrayerSpell {
         if (world instanceof ServerLevel) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, this, world.getGameTime());
+            IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            if (reputation != null) {
+                reputation.pray(this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.CURE_ZOMBIE);
-                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
-                updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+                reputation.addReputation(deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
+                updateMagic(info, player, world, reputation.getReputation(deity.getId()));
+            }
             villager.startConverting(player.getUUID(), 20);
             IMana.expendMana(player, getCost());
         } else {

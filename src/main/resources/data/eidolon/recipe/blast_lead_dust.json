@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:dusts/lead"
+  },
+  "result": "eidolon:lead_ingot",
+  "experience": 0.5,
+  "cookingtime": 100,
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:dusts/lead",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ]
+}

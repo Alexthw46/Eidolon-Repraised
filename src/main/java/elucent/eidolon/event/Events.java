@@ -122,7 +122,7 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onTick(EntityTickEvent event) {
+    public void onTick(EntityTickEvent.Pre event) {
         Level level = event.getEntity().level();
         if (!(event.getEntity() instanceof LivingEntity e)) return;
         if (e.hasEffect(EidolonPotions.UNDEATH_EFFECT) && level.isDay() && !level.isClientSide) {
@@ -377,7 +377,7 @@ public class Events {
         if (event.getSource().getEntity() instanceof LivingEntity source) {
             if (EntityUtil.isEnthralledBy(event.getEntity(), source)) {
                 if (source.getMainHandItem().getItem() instanceof SummoningStaffItem summoningStaffItem) {
-                    CompoundTag eTag = event.getEntity().serializeNBT();
+                    CompoundTag eTag = event.getEntity().serializeNBT(event.getEntity().registryAccess());
                     event.getEntity().remove(Entity.RemovalReason.KILLED);
                     summoningStaffItem.addCharge(source.getMainHandItem(), eTag);
                     event.setCanceled(true);

@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon:zombify",
+  "criteria": {
+    "enthrall_undead": {
+      "trigger": "eidolon:enthrall_undead"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.enthrall_undead"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:summoning_staff"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.enthrall_undead"
+    }
+  },
+  "requirements": [
+    [
+      "enthrall_undead"
+    ]
+  ]
+}

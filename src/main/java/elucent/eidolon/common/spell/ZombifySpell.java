@@ -59,12 +59,13 @@ public class ZombifySpell extends PrayerSpell {
         if (world instanceof ServerLevel level) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, this, world.getGameTime());
+            IReputation rep = player.getCapability(elucent.eidolon.registries.EidolonCapabilities.REPUTATION_CAPABILITY);
+            if (rep != null) {
+                rep.pray(this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ZOMBIFY_VILLAGER);
-                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
-                updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+                rep.addReputation(deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
+                updateMagic(info, player, world, rep.getReputation(deity.getId()));
+            }
             zombify(villager, level);
             IMana.expendMana(player, getCost());
         } else {

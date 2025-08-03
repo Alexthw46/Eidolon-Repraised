@@ -1,12 +1,13 @@
 package elucent.eidolon.common.spell;
 
 import elucent.eidolon.api.altar.AltarInfo;
+import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.api.deity.Deity;
 import elucent.eidolon.api.spells.Sign;
-import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
 import elucent.eidolon.common.tile.GobletTileEntity;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
@@ -44,12 +45,13 @@ public class AnimalSacrificeSpell extends PrayerSpell {
             effigy.pray();
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
-                rep.pray(player, this, world.getGameTime());
+            IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            if (reputation != null) {
+                reputation.pray(this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_MOB);
-                rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
-                updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
-            });
+                reputation.addReputation(deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
+                updateMagic(info, player, world, reputation.getReputation(deity.getId()));
+            }
         } else playSuccessSound(world, player, effigy, Signs.BLOOD_SIGN);
     }
 }

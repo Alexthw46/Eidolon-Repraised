@@ -3,6 +3,7 @@ package elucent.eidolon;
 import com.google.common.collect.ImmutableSet;
 import elucent.eidolon.client.ClientConfig;
 import elucent.eidolon.client.ClientRegistry;
+import elucent.eidolon.client.EidolonOverlays;
 import elucent.eidolon.common.item.AthameItem;
 import elucent.eidolon.common.tile.*;
 import elucent.eidolon.compat.CompatHandler;
@@ -34,6 +35,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -74,7 +77,6 @@ public class Eidolon {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.register(new Registry());
         Registry.init(modEventBus);
-        NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new Events());
 
         CompatHandler.initialize();
@@ -164,12 +166,12 @@ public class Eidolon {
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendToPlayerClient(new InitCodexPacket(), (ServerPlayer) e.getEntity()));
     }
 
-//    @OnlyIn(Dist.CLIENT)
-//    public static void registerOverlays(RegisterGuiOverlaysEvent evt) {
-//        evt.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "hearts", new EidolonOverlays.EidolonHearts());
-//        evt.registerBelow(VanillaGuiOverlay.CHAT_PANEL.id(), "mana_bar", new EidolonOverlays.EidolonManaBar());
-//        evt.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "raven_charge", new EidolonOverlays.EidolonRavenCharge());
-//    }
+    @OnlyIn(Dist.CLIENT)
+    public static void registerOverlays(RegisterGuiLayersEvent evt) {
+        evt.registerAbove(VanillaGuiLayers.PLAYER_HEALTH, prefix("hearts"), new EidolonOverlays.EidolonHearts());
+        evt.registerBelow(VanillaGuiLayers.CHAT, prefix("mana_bar"), new EidolonOverlays.EidolonManaBar());
+        evt.registerAbove(VanillaGuiLayers.EXPERIENCE_BAR, prefix("raven_charge"), new EidolonOverlays.EidolonRavenCharge());
+    }
 
     public void sendImc(InterModEnqueueEvent evt) {
         InterModComms.sendTo("consecration", "holy_material", () -> "silver");

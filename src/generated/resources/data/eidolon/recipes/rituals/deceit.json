@@ -1,0 +1,27 @@
+{
+  "type": "eidolon:ritual_brazier",
+  "focus_items": [],
+  "health_requirement": 0.0,
+  "invariant_items": [],
+  "pedestal_items": [
+    {
+      "tag": "c:gems/emerald"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    {
+      "tag": "c:mushrooms"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "eidolon:soul_shard"
+    }
+  ],
+  "reagent": {
+    "tag": "c:gems/emerald"
+  },
+  "ritual": "eidolon:deceit"
+}

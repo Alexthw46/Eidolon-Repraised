@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:root",
+  "criteria": {
+    "has_pewter_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:pewter_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.pewter_ingot"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:pewter_ingot"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.pewter_ingot"
+    }
+  },
+  "requirements": [
+    [
+      "has_pewter_ingot"
+    ]
+  ]
+}

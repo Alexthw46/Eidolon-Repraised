@@ -1,0 +1,17 @@
+{
+  "type": "eidolon:ritual_brazier_summoning",
+  "count": 3,
+  "focus_items": [],
+  "output": "eidolon:slimy_slug",
+  "pedestal_items": [
+    {
+      "item": "eidolon:soul_shard"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:pumpkin_seeds"
+  }
+}

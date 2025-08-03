@@ -5,6 +5,7 @@ import elucent.eidolon.client.particle.Particles;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonParticles;
 import elucent.eidolon.util.ColorUtil;
@@ -232,8 +233,11 @@ public class NecromancerEntity extends SpellcasterIllager {
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).isPresent() && e.getCommandSenderWorld().getCapability(IReputation.INSTANCE).resolve().get().getReputation((Player) e, Deities.DARK_DEITY.getId()) >= 50)).setUnseenMemoryTicks(300));
-        //this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (e) -> {
+            if (!(e instanceof Player player)) return false;
+            IReputation rep = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+            return rep != null && rep.getReputation(Deities.DARK_DEITY.getId()) >= 50;
+        })).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
     }

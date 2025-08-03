@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon:cure_zombie",
+  "criteria": {
+    "smite_undead": {
+      "trigger": "eidolon:smite_undead"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.smite_undead"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:golden_sword"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.smite_undead"
+    }
+  },
+  "requirements": [
+    [
+      "smite_undead"
+    ]
+  ]
+}

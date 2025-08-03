@@ -1,12 +1,12 @@
-// 1.20.1	2024-03-01T14:13:30.6277413	Tags for minecraft:item mod id eidolon
-899586c41b931b92762c1abc2471518c2eee8f75 data/eidolon/tags/items/patron_symbol.json
-8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/items/scribe_items.json
-799cf7210b55401b608bb40b894b086a1eafc4c8 data/minecraft/tags/items/bookshelf_books.json
-e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/items/candles.json
-aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/items/leaves.json
-799cf7210b55401b608bb40b894b086a1eafc4c8 data/minecraft/tags/items/lectern_books.json
-15994e7ba2e0c75652884601c7636ba69c1c0522 data/minecraft/tags/items/music_discs.json
-4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/items/saplings.json
-8d35948aeaa6d77dfae9bc470c017f9f72dcacc3 data/minecraft/tags/items/signs.json
-5fec2e225c411afa465b1a3b1229b6710ed83468 data/minecraft/tags/items/wooden_buttons.json
-22f01a78a380c216a6896080ae2dd581417eef0a data/minecraft/tags/items/wooden_pressure_plates.json
+// 1.21.1	2025-08-03T15:40:25.1817575	Tags for minecraft:item mod id eidolon
+15994e7ba2e0c75652884601c7636ba69c1c0522 data/c/tags/item/music_discs.json
+899586c41b931b92762c1abc2471518c2eee8f75 data/eidolon/tags/item/patron_symbol.json
+8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/item/scribe_items.json
+799cf7210b55401b608bb40b894b086a1eafc4c8 data/minecraft/tags/item/bookshelf_books.json
+e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/item/candles.json
+aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/item/leaves.json
+799cf7210b55401b608bb40b894b086a1eafc4c8 data/minecraft/tags/item/lectern_books.json
+4cbe40158a286f683a78423646774c85e04f9ab9 data/minecraft/tags/item/saplings.json
+8d35948aeaa6d77dfae9bc470c017f9f72dcacc3 data/minecraft/tags/item/signs.json
+5fec2e225c411afa465b1a3b1229b6710ed83468 data/minecraft/tags/item/wooden_buttons.json
+22f01a78a380c216a6896080ae2dd581417eef0a data/minecraft/tags/item/wooden_pressure_plates.json

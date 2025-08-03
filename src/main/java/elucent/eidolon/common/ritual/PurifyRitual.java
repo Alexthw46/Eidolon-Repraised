@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class PurifyRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/purify_ritual" );
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/purify_ritual");
 
     public PurifyRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 163, 252, 255));
@@ -34,11 +34,12 @@ public class PurifyRitual extends Ritual {
     }
 
     @Override
-    public RitualResult start(Level world, BlockPos pos) {
-        List<PathfinderMob> purifiable = world.getEntitiesOfClass(PathfinderMob.class, Ritual.getDefaultBounds(pos), (entity) -> entity instanceof ZombieVillager || entity instanceof ZombifiedPiglin || entity instanceof Zoglin);
+    public RitualResult start(Level level, BlockPos pos) {
+        List<PathfinderMob> purifiable = level.getEntitiesOfClass(PathfinderMob.class, Ritual.getDefaultBounds(pos), (entity) -> entity instanceof ZombieVillager || entity instanceof ZombifiedPiglin || entity instanceof Zoglin);
 
-        if (purifiable.size() > 0 && !world.isClientSide) world.playSound(null, pos, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundSource.PLAYERS, 1.0f, 1.0f);
-        if (!world.isClientSide) for (PathfinderMob entity : purifiable) {
+        if (!purifiable.isEmpty() && !level.isClientSide)
+            level.playSound(null, pos, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundSource.PLAYERS, 1.0f, 1.0f);
+        if (level instanceof ServerLevel world) for (PathfinderMob entity : purifiable) {
             if (entity instanceof ZombieVillager villager) {
                 villager.finishConversion((ServerLevel) world);
             }
@@ -46,14 +47,14 @@ public class PurifyRitual extends Ritual {
                 entity.remove(RemovalReason.KILLED);
                 Piglin piglin = new Piglin(EntityType.PIGLIN, world);
                 piglin.copyPosition(entity);
-                piglin.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
+                piglin.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
                 world.addFreshEntity(piglin);
             }
             if (entity instanceof Zoglin) {
                 entity.remove(RemovalReason.KILLED);
                 Hoglin hoglin = new Hoglin(EntityType.HOGLIN, world);
                 hoglin.copyPosition(entity);
-                hoglin.finalizeSpawn((ServerLevel) world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
+                hoglin.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
                 world.addFreshEntity(hoglin);
             }
         }

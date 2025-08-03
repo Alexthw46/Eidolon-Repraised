@@ -2,144 +2,187 @@ package elucent.eidolon.capability;
 
 import elucent.eidolon.api.capability.IReputation;
 import elucent.eidolon.common.spell.PrayerSpell;
-import elucent.eidolon.registries.Spells;
+import elucent.eidolon.registries.EidolonAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 
-public class ReputationImpl implements IReputation, INBTSerializable<CompoundTag> {
-    final Map<UUID, Map<ResourceLocation, ReputationEntry>> reputationMap = new HashMap<>();
-    final Map<UUID, Map<ResourceLocation, Long>> prayerTimes = new HashMap<>();
+public class ReputationImpl implements IReputation {
+    public static class ReputationData implements INBTSerializable<CompoundTag> {
+        private final Map<ResourceLocation, ReputationEntry> reputationMap = new HashMap<>();
+        private final Map<ResourceLocation, Long> prayerTimes = new HashMap<>();
 
-    @Override
-    public double getReputation(UUID player, ResourceLocation deity) {
-        return getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).reputation;
-    }
-
-    @Override
-    public void addReputation(UUID player, ResourceLocation deity, double amount) {
-        ReputationEntry entry = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry());
-        if (entry.lock == null) entry.reputation += amount;
-    }
-
-    @Override
-    public void subtractReputation(UUID player, ResourceLocation deity, double amount) {
-        ReputationEntry entry = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry());
-        entry.reputation = Math.max(0, entry.reputation - amount);
-    }
-
-    @Override
-    public void setReputation(UUID player, ResourceLocation deity, double amount) {
-        ReputationEntry entry = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry());
-        if (entry.lock == null || amount < 0) {
-            double prev = entry.reputation;
-            entry.reputation = amount;
+        public double getReputation(ResourceLocation deity) {
+            return reputationMap.computeIfAbsent(deity, k -> new ReputationEntry()).reputation;
         }
-    }
 
-    @Override
-    public boolean isLocked(UUID player, ResourceLocation deity) {
-        return getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).lock != null;
-    }
-
-    @Override
-    public boolean hasLock(UUID player, ResourceLocation deity, ResourceLocation lock) {
-        ResourceLocation l = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).lock;
-        return l != null && l.equals(lock);
-    }
-
-    @Override
-    public void lock(UUID player, ResourceLocation deity, ResourceLocation key) {
-        getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry()).lock = key;
-    }
-
-    @Override
-    public boolean unlock(UUID player, ResourceLocation deity, ResourceLocation key) {
-        ReputationEntry entry = getReputationMap(player).computeIfAbsent(deity, (k) -> new ReputationEntry());
-        if (entry.lock != null && entry.lock.equals(key)) {
-            entry.lock = null;
-            return true;
+        public void addReputation(ResourceLocation deity, double amount) {
+            ReputationEntry entry = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry());
+            if (entry.lock == null) entry.reputation += amount;
         }
-        return false;
-    }
 
-    @Override
-    public void pray(UUID player, PrayerSpell spell, long time) {
-        getPrayerTimes().computeIfAbsent(player, (p) -> new HashMap<>()).put(spell.getRegistryName(), time);
-    }
+        public void subtractReputation(ResourceLocation deity, double amount) {
+            ReputationEntry entry = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry());
+            entry.reputation = Math.max(0, entry.reputation - amount);
+        }
 
-    @Override
-    public boolean canPray(UUID player, PrayerSpell spell, long time) {
-        Map<ResourceLocation, Long> times = getPrayerTimes().computeIfAbsent(player, (p) -> new HashMap<>());
-        return !times.containsKey(spell.getRegistryName()) || times.get(spell.getRegistryName()) < time - spell.getCooldown();
-    }
+        public void setReputation(ResourceLocation deity, double amount) {
+            ReputationEntry entry = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry());
+            if (entry.lock == null || amount < 0) {
+                entry.reputation = amount;
+            }
+        }
 
-    @Override
-    public Map<UUID, Map<ResourceLocation, Long>> getPrayerTimes() {
-        return prayerTimes;
-    }
+        public boolean isLocked(ResourceLocation deity) {
+            return reputationMap.computeIfAbsent(deity, k -> new ReputationEntry()).lock != null;
+        }
 
-    @Override
-    public Map<UUID, Map<ResourceLocation, ReputationEntry>> getReputationMap() {
-        return reputationMap;
-    }
+        public boolean hasLock(ResourceLocation deity, ResourceLocation lock) {
+            ResourceLocation l = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry()).lock;
+            return l != null && l.equals(lock);
+        }
 
-    public CompoundTag serializeNBT() {
-        CompoundTag data = new CompoundTag();
-        CompoundTag reps = new CompoundTag();
-        for (Entry<UUID, Map<ResourceLocation, ReputationEntry>> e : getReputationMap().entrySet()) {
-            CompoundTag tag = new CompoundTag();
-            for (Entry<ResourceLocation, ReputationEntry> e2 : e.getValue().entrySet()) {
+        public void lock(ResourceLocation deity, ResourceLocation key) {
+            reputationMap.computeIfAbsent(deity, k -> new ReputationEntry()).lock = key;
+        }
+
+        public boolean unlock(ResourceLocation deity, ResourceLocation key) {
+            ReputationEntry entry = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry());
+            if (entry.lock != null && entry.lock.equals(key)) {
+                entry.lock = null;
+                return true;
+            }
+            return false;
+        }
+
+        public void pray(PrayerSpell spell, long time) {
+            prayerTimes.put(spell.getRegistryName(), time);
+        }
+
+        public boolean canPray(PrayerSpell spell, long time) {
+            return !prayerTimes.containsKey(spell.getRegistryName()) ||
+                    prayerTimes.get(spell.getRegistryName()) < time - spell.getCooldown();
+        }
+
+        public Map<ResourceLocation, ReputationEntry> getReputationMap() {
+            return reputationMap;
+        }
+
+        public Map<ResourceLocation, Long> getPrayerTimes() {
+            return prayerTimes;
+        }
+
+        @Override
+        public CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {
+            CompoundTag data = new CompoundTag();
+            CompoundTag reps = new CompoundTag();
+            for (Entry<ResourceLocation, ReputationEntry> e : reputationMap.entrySet()) {
                 CompoundTag entry = new CompoundTag();
-                entry.putDouble("rep", e2.getValue().reputation);
-                if (e2.getValue().lock != null) entry.putString("lock", e2.getValue().lock.toString());
-                tag.put(e2.getKey().toString(), entry);
+                entry.putDouble("rep", e.getValue().reputation);
+                if (e.getValue().lock != null) entry.putString("lock", e.getValue().lock.toString());
+                reps.put(e.getKey().toString(), entry);
             }
-            reps.put(e.getKey().toString(), tag);
+            CompoundTag times = new CompoundTag();
+            for (Entry<ResourceLocation, Long> e : prayerTimes.entrySet()) {
+                times.putLong(e.getKey().toString(), e.getValue());
+            }
+            data.put("reps", reps);
+            data.put("times", times);
+            return data;
         }
-        CompoundTag times = new CompoundTag();
-        for (Entry<UUID, Map<ResourceLocation, Long>> e : getPrayerTimes().entrySet()) {
-            CompoundTag nbt = new CompoundTag();
-            for (Entry<ResourceLocation, Long> e2 : e.getValue().entrySet())
-                nbt.putLong(e2.getKey().toString(), e2.getValue());
-            times.put(e.getKey().toString(), nbt);
-        }
-        data.put("reps", reps);
-        data.put("times", times);
-        return data;
-    }
 
-    public void deserializeNBT(CompoundTag nbt) {
-        getReputationMap().clear();
-        if (nbt.contains("reps")) {
-            CompoundTag reps = nbt.getCompound("reps");
-            for (String uuidString : reps.getAllKeys()) {
-                UUID uuid = UUID.fromString(uuidString);
-                CompoundTag tag = reps.getCompound(uuidString);
-                for (String deity : tag.getAllKeys()) {
-                    CompoundTag entry = tag.getCompound(deity);
-                    setReputation(uuid, ResourceLocation.parse(deity), entry.getDouble("rep"));
-                    if (entry.contains("lock"))
-                        lock(uuid, ResourceLocation.parse(deity), ResourceLocation.parse(entry.getString("lock")));
+        @Override
+        public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
+            reputationMap.clear();
+            prayerTimes.clear();
+            if (nbt.contains("reps")) {
+                CompoundTag reps = nbt.getCompound("reps");
+                for (String deity : reps.getAllKeys()) {
+                    CompoundTag entry = reps.getCompound(deity);
+                    double rep = entry.getDouble("rep");
+                    ResourceLocation lock = entry.contains("lock") ? ResourceLocation.parse(entry.getString("lock")) : null;
+                    reputationMap.put(ResourceLocation.parse(deity), new ReputationEntry(rep, lock));
                 }
             }
-        }
-        if (nbt.contains("times")) {
-            CompoundTag times = nbt.getCompound("times");
-            for (String uuidString : times.getAllKeys()) {
-                UUID uuid = UUID.fromString(uuidString);
-                CompoundTag spelltimes = times.getCompound(uuidString);
-                for (String rl : spelltimes.getAllKeys()) {
-                    if (Spells.find(ResourceLocation.parse(rl)) instanceof PrayerSpell prayerSpell)
-                        pray(uuid, prayerSpell, spelltimes.getLong(rl));
+            if (nbt.contains("times")) {
+                CompoundTag times = nbt.getCompound("times");
+                for (String rl : times.getAllKeys()) {
+                    prayerTimes.put(ResourceLocation.parse(rl), times.getLong(rl));
                 }
             }
         }
     }
 
+    ReputationData reputationData;
+    Player player;
+
+    public ReputationImpl(Player player) {
+        this.player = player;
+        this.reputationData = player.getData(EidolonAttachments.REPUTATION_ATTACHMENT);
+    }
+
+    @Override
+    public double getReputation(ResourceLocation deity) {
+        return reputationData.getReputation(deity);
+    }
+
+    @Override
+    public void addReputation(ResourceLocation deity, double amount) {
+        reputationData.addReputation(deity, amount);
+    }
+
+    @Override
+    public void subtractReputation(ResourceLocation deity, double amount) {
+        reputationData.subtractReputation(deity, amount);
+    }
+
+    @Override
+    public void setReputation(ResourceLocation deity, double amount) {
+        reputationData.setReputation(deity, amount);
+    }
+
+    @Override
+    public boolean isLocked(Player player, ResourceLocation deity) {
+        return reputationData.isLocked(deity);
+    }
+
+    @Override
+    public boolean hasLock(Player player, ResourceLocation deity, ResourceLocation lock) {
+        return reputationData.hasLock(deity, lock);
+    }
+
+    @Override
+    public void lock(Player player, ResourceLocation deity, ResourceLocation key) {
+        reputationData.lock(deity, key);
+    }
+
+    @Override
+    public boolean unlock(Player player, ResourceLocation deity, ResourceLocation key) {
+        return reputationData.unlock(deity, key);
+    }
+
+    @Override
+    public void pray(PrayerSpell spell, long time) {
+        reputationData.pray(spell, time);
+    }
+
+    @Override
+    public boolean canPray(PrayerSpell spell, long time) {
+        return reputationData.canPray(spell, time);
+    }
+
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        return reputationData.serializeNBT(provider);
+    }
+
+    public void deserializeNBT(CompoundTag nbt, HolderLookup.Provider provider) {
+        reputationData.deserializeNBT(provider, nbt);
+    }
 }

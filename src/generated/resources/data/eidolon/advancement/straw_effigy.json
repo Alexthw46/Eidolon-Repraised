@@ -1,0 +1,32 @@
+{
+  "parent": "eidolon:root",
+  "criteria": {
+    "has_straw_effigy": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon:straw_effigy"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.straw_effigy"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:straw_effigy"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.straw_effigy"
+    }
+  },
+  "requirements": [
+    [
+      "has_straw_effigy"
+    ]
+  ]
+}

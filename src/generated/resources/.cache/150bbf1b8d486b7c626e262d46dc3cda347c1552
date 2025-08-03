@@ -1,5 +1,4 @@
-// 1.20.1	2024-03-31T23:27:26.5838448	Tags for minecraft:worldgen/biome mod id eidolon
-ad32520b727eb95bf27a1366923340fc78a5a14e data/eidolon/tags/worldgen/biome/banana_slug.json
-e40a2297bfe0e8b0c140d5cf3eb8db8736e49e2c data/eidolon/tags/worldgen/biome/brown_slug.json
-b09d668631682b11f15f6a65565940c9200e2283 data/eidolon/tags/worldgen/biome/slimy_slug.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/forge/tags/worldgen/biome/no_default_monsters.json
+// 1.21.1	2025-08-03T15:40:25.190697	Tags for minecraft:worldgen/biome mod id eidolon
+d8c97e2fac4ed5d89cac35e5170210b440b63c16 data/eidolon/tags/worldgen/biome/banana_slug.json
+68ab38af84cd80de6a65f64b0913118f1b0b6883 data/eidolon/tags/worldgen/biome/brown_slug.json
+99605e4e48f08f4a5575b3e2010767280978af64 data/eidolon/tags/worldgen/biome/slimy_slug.json

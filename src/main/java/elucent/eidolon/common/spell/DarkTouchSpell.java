@@ -6,6 +6,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
+import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
@@ -58,8 +59,9 @@ public class DarkTouchSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY.getId()) < 10.0) {
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return false;
+        if (reputation.getReputation(Deities.DARK_DEITY.getId()) < 10.0) {
             player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
             return false;
         }

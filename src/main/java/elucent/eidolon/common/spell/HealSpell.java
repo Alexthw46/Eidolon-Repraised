@@ -44,9 +44,9 @@ public class HealSpell extends StaticSpell {
 
             float heal = getBaseHealing();
 
-            var cap = world.getCapability(IReputation.INSTANCE).resolve().isPresent() ? world.getCapability(IReputation.INSTANCE).resolve().get() : null;
+            IReputation cap = player.getCapability(elucent.eidolon.registries.EidolonCapabilities.REPUTATION_CAPABILITY);
             if (cap == null) return;
-            double devotion = cap.getReputation(player.getUUID(), Deities.LIGHT_DEITY.getId());
+            double devotion = cap.getReputation(Deities.LIGHT_DEITY.getId());
 
             heal += (float) (devotion * getDevotionToHeal());
 
@@ -68,7 +68,7 @@ public class HealSpell extends StaticSpell {
 
             if (other) {
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);
-                world.getCapability(IReputation.INSTANCE).ifPresent(rep -> rep.addReputation(player, Deities.LIGHT_DEITY.getId(), getRepFromHealOther()));
+                cap.addReputation(Deities.LIGHT_DEITY.getId(), getRepFromHealOther());
             }
             IMana.expendMana(player, getCost());
         }

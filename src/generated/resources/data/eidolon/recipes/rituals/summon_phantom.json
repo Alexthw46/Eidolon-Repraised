@@ -1,14 +1,12 @@
 {
   "type": "eidolon:ritual_brazier_summoning",
-  "focusItems": [
+  "focus_items": [
     {
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "output": {
-    "entity": "minecraft:phantom"
-  },
-  "pedestalItems": [
+  "output": "minecraft:phantom",
+  "pedestal_items": [
     {
       "item": "eidolon:soul_shard"
     },
@@ -16,9 +14,7 @@
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "reagent": [
-    {
-      "item": "minecraft:charcoal"
-    }
-  ]
+  "reagent": {
+    "item": "minecraft:charcoal"
+  }
 }

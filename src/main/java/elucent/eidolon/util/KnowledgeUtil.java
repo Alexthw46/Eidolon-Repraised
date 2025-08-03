@@ -9,13 +9,11 @@ import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.KnowledgeUpdatePacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.registries.AdvancementTriggers;
-import elucent.eidolon.registries.EidolonAttachments;
 import elucent.eidolon.registries.EidolonCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -180,11 +178,11 @@ public class KnowledgeUtil {
     }
 
     public static void tryFix(Player player) {
-        if (!(player instanceof ServerPlayer && player.level() instanceof ServerLevel server)) return;
-        IReputation devotion = server.getData(EidolonAttachments.REPUTATION);
+        if (!(player instanceof ServerPlayer)) return;
+        IReputation devotion = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (devotion != null) {
             Deities.getDeities().forEach(deity -> {
-                var rep = devotion.getReputation(player, deity.getId());
+                var rep = devotion.getReputation(deity.getId());
                 var curStage = deity.getProgression().last(rep);
                 double fakeRep = 1;
                 int counter = 0; // Prevent infinite loops, just in case, I don't trust this enough to leave it unchecked

@@ -1,0 +1,25 @@
+{
+  "parent": "eidolon:straw_effigy",
+  "criteria": {
+    "wicked_path": {
+      "trigger": "eidolon:wicked_path"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon.advancement.desc.wicked_path"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon:unholy_symbol"
+    },
+    "title": {
+      "translate": "eidolon.advancement.title.wicked_path"
+    }
+  },
+  "requirements": [
+    [
+      "wicked_path"
+    ]
+  ]
+}

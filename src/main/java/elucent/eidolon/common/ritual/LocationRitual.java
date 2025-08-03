@@ -6,6 +6,7 @@ import elucent.eidolon.network.CrystallizeEffectPacket;
 import elucent.eidolon.network.Networking;
 import elucent.eidolon.util.ColorUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -15,14 +16,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 public class LocationRitual extends Ritual {
 
     TagKey<Structure> structureTagKey;
 
-    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/summon_ritual" );
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/summon_ritual");
 
 
     public LocationRitual(TagKey<Structure> structureTagKey) {
@@ -48,8 +49,8 @@ public class LocationRitual extends Ritual {
             if (structure != null) {
                 ItemStack mapStack = MapItem.create(world, structure.getX(), structure.getZ(), (byte) 2, true, true);
                 MapItem.renderBiomePreviewMap(world, mapStack);
-                MapItemSavedData.addTargetDecoration(mapStack, structure, "+", MapDecoration.Type.RED_X);
-                mapStack.setHoverName(Component.literal("Magic Map"));
+                MapItemSavedData.addTargetDecoration(mapStack, structure, "+", MapDecorationTypes.RED_X);
+                mapStack.set(DataComponents.CUSTOM_NAME, Component.literal("Magic Map"));
                 world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, mapStack));
             }
         }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "eidolon:polished_planks"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "eidolon:polished_button"
+  }
+}
