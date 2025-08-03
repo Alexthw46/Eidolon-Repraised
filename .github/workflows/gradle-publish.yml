@@ -2,7 +2,7 @@ name: Publish action
 
 on:
   workflow_dispatch:
-    branches: [ "1.20.1-Neo" ]
+    branches: [ "1.21.1" ]
     inputs:
       version:
         description: 'Mod Version'
@@ -14,8 +14,8 @@ on:
         type: string
 
 env:
-  MINECRAFT_VERSION: 1.20.1
-  JAVA_VERSION: 17
+  MINECRAFT_VERSION: 1.21.1
+  JAVA_VERSION: 21
 
 jobs:
   build:
@@ -49,9 +49,8 @@ jobs:
             build/libs/*-@(dev|sources|javadoc).jar
           version-type: beta
           loaders: |
-            forge
             neoforge
-          name: Eidolon_Repraised:Repraised ${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
+          name: Eidolon_:Repraised ${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           version: eidolon_repraised-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           game-versions: ${{ env.MINECRAFT_VERSION }}
           changelog: ${{inputs.changelog}}
