@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SignIndexPage extends Page {
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_sign_index_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/codex_sign_index_page.png");
     final List<SignEntry> entries = new ArrayList<>();
 
     public static class SignEntry {
@@ -80,8 +80,11 @@ public class SignIndexPage extends Page {
         if (entity == null) {
             return;
         }
-        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY, null);
+        IKnowledge knowledge = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
         var mStack = guiGraphics.pose();
+        if (knowledge == null) {
+            return;
+        }
         for (int i = 0; i < entries.size(); i++) {
             int xx = x + 8 + (i % 2) * 56, yy = y + 4 + (i / 2) * 52;
             Sign sign = entries.get(i).sign;

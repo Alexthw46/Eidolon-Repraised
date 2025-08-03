@@ -9,7 +9,6 @@
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerMixin",
-    "PotionBrewingMixin",
     "ProjectileMixin",
     "compat.SpellArrowMixin"
   ],

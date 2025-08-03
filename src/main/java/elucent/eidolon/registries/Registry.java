@@ -539,6 +539,7 @@ public class Registry {
         EidolonDataComponents.DATA.register(modEventBus);
         EidolonMaterials.MATERIALS.register(modEventBus);
         EidolonEntities.ENTITIES.register(modEventBus);
+        EidolonAttachments.ATTACHMENT_TYPES.register(modEventBus);
         EidolonPotions.POTIONS.register(modEventBus);
         EidolonPotions.POTION_TYPES.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);

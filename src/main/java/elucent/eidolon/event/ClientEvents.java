@@ -10,8 +10,9 @@ import elucent.eidolon.registries.EidolonCapabilities;
 import elucent.eidolon.registries.EidolonDataComponents;
 import elucent.eidolon.util.ClientInfo;
 import elucent.eidolon.util.RenderUtil;
-import it.unimi.dsi.fastutil.objects.Object2ObjectSortedMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -40,19 +41,22 @@ public class ClientEvents {
     @OnlyIn(Dist.CLIENT)
     static MultiBufferSource.BufferSource DELAYED_RENDER = null;
 
+    static RenderType[] renderTypes = new RenderType[]{
+            RenderUtil.VAPOR_TRANSLUCENT,
+            RenderUtil.DELAYED_PARTICLE,
+            RenderUtil.GLOWING_PARTICLE,
+            RenderUtil.GLOWING_BLOCK_PARTICLE,
+            RenderUtil.GLOWING,
+            RenderUtil.GLOWING_SPRITE};
+
     @OnlyIn(Dist.CLIENT)
     public static MultiBufferSource.BufferSource getDelayedRender() {
         if (DELAYED_RENDER == null) {
-            SequencedMap<RenderType, ByteBufferBuilder> buffers = Object2ObjectSortedMaps.emptyMap();
-            for (RenderType type : new RenderType[]{
-                    RenderUtil.VAPOR_TRANSLUCENT,
-                    RenderUtil.DELAYED_PARTICLE,
-                    RenderUtil.GLOWING_PARTICLE,
-                    RenderUtil.GLOWING_BLOCK_PARTICLE,
-                    RenderUtil.GLOWING,
-                    RenderUtil.GLOWING_SPRITE}) {
-                buffers.put(type, new ByteBufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : type.bufferSize()));
-            }
+            SequencedMap<RenderType, ByteBufferBuilder> buffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), map -> {
+                for (RenderType type : renderTypes) {
+                    map.put(type, new ByteBufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : type.bufferSize()));
+                }
+            });
             DELAYED_RENDER = MultiBufferSource.immediateWithBuffers(buffers, new ByteBufferBuilder(ModList.get().isLoaded("rubidium") ? 262144 : 256));
         }
         return DELAYED_RENDER;

@@ -11,11 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class InitCodexPacket extends AbstractPacket {
     public static final Type<InitCodexPacket> TYPE = new Type<>(Eidolon.prefix("init_codex"));
-    public static final StreamCodec<? super RegistryFriendlyByteBuf, InitCodexPacket> CODEC = StreamCodec.unit(new InitCodexPacket()
+    public static final StreamCodec<? super RegistryFriendlyByteBuf, InitCodexPacket> CODEC = StreamCodec.of(
+            (i, p) -> {
+            },
+            InitCodexPacket::new
     );
 
-    public InitCodexPacket() {
-        // No data to initialize
+    public InitCodexPacket(RegistryFriendlyByteBuf buf) {
     }
 
     @Override

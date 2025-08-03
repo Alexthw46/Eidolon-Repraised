@@ -35,17 +35,17 @@ public class Networking {
         reg.playToClient(LifestealEffectPacket.TYPE, LifestealEffectPacket.CODEC, Networking::handle);
         reg.playToClient(MagicBurstEffectPacket.TYPE, MagicBurstEffectPacket.CODEC, Networking::handle);
         reg.playToClient(KnowledgeUpdatePacket.TYPE, KnowledgeUpdatePacket.CODEC, Networking::handle);
-        reg.playToClient(AttemptCastPacket.TYPE, AttemptCastPacket.CODEC, Networking::handle);
+        reg.playToServer(AttemptCastPacket.TYPE, AttemptCastPacket.CODEC, Networking::handle);
         reg.playToClient(SpellCastPacket.TYPE, SpellCastPacket.CODEC, Networking::handle);
         reg.playToClient(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
         reg.playToClient(DeathbringerSlashEffectPacket.TYPE, DeathbringerSlashEffectPacket.CODEC, Networking::handle);
         reg.playToClient(SoulUpdatePacket.TYPE, SoulUpdatePacket.CODEC, Networking::handle);
-        reg.playToClient(WingsFlapPacket.TYPE, WingsFlapPacket.CODEC, Networking::handle);
-        reg.playToClient(WingsDashPacket.TYPE, WingsDashPacket.CODEC, Networking::handle);
+        reg.playToServer(WingsFlapPacket.TYPE, WingsFlapPacket.CODEC, Networking::handle);
+        reg.playToServer(WingsDashPacket.TYPE, WingsDashPacket.CODEC, Networking::handle);
         reg.playToClient(WingsDataUpdatePacket.TYPE, WingsDataUpdatePacket.CODEC, Networking::handle);
         reg.playToClient(FeatherEffectPacket.TYPE, FeatherEffectPacket.CODEC, Networking::handle);
         reg.playToClient(OpenCodexPacket.TYPE, OpenCodexPacket.CODEC, Networking::handle);
-        reg.playToClient(InitCodexPacket.TYPE, InitCodexPacket.CODEC, Networking::handle);
+        reg.playBidirectional(InitCodexPacket.TYPE, InitCodexPacket.CODEC, Networking::handle);
         reg.playToClient(InscribePacket.TYPE, InscribePacket.CODEC, Networking::handle);
     }
 

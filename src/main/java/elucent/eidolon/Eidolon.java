@@ -77,6 +77,7 @@ public class Eidolon {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.register(new Registry());
         Registry.init(modEventBus);
+        modEventBus.addListener(Networking::register);
         NeoForge.EVENT_BUS.register(new Events());
 
         CompatHandler.initialize();
@@ -102,7 +103,6 @@ public class Eidolon {
             RitualRegistry.init();
             IncenseRegistry.init();
             EidolonRecipes.ritualRecipeTypes.addAll(List.of(EidolonRecipes.CRAFTING_RITUAL_TYPE.get(), EidolonRecipes.SUMMON_RITUAL_TYPE.get(), EidolonRecipes.COMMAND_RITUAL_TYPE.get(), EidolonRecipes.LOCATION_RITUAL_TYPE.get(), EidolonRecipes.RITUAL_TYPE.get()));
-            EidolonPotions.addBrewingRecipes();
             AltarEntries.init();
             Researches.init();
             Runes.init();
@@ -163,7 +163,7 @@ public class Eidolon {
                 e.setCancellationResult(result);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendToPlayerClient(new InitCodexPacket(), (ServerPlayer) e.getEntity()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendToPlayerClient(new InitCodexPacket(null), (ServerPlayer) e.getEntity()));
     }
 
     @OnlyIn(Dist.CLIENT)
