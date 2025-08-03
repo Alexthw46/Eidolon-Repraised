@@ -1,6 +1,7 @@
 package alexthw.eidolon_repraised.codex;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -24,7 +25,7 @@ public abstract class RecipePage<T extends Recipe<?>> extends Page {
         if (recipeId != null && cachedRecipe == null) {
             cachedRecipe = getRecipe(recipeId);
             if (cachedRecipe == null && !result.isEmpty()) {
-                mStack.drawString(gui.getMinecraft().font, "No matching recipe found for " + recipeId, x + 10, y + 10, 0x000000);
+                mStack.drawScrollingString(gui.getMinecraft().font, Component.literal("No matching recipe found for " + recipeId), x + 10, x + 120, y + 10, 0x000000);
             }
         }
         super.fullRender(gui, mStack, x, y, mouseX, mouseY);

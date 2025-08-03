@@ -8,16 +8,16 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     },
     "p": {
       "item": "eidolon_repraised:pewter_ingot"
     },
     "s": {
-      "tag": "forge:ingots/silver"
+      "tag": "c:ingots/silver"
     }
   },
   "result": {
-    "item": "eidolon_repraised:censer"
+    "id": "eidolon_repraised:censer"
   }
 }

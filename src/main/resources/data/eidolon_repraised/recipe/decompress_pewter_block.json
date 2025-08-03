@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/pewter"
+      "tag": "c:storage_blocks/pewter"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:pewter_ingot",
+    "id": "eidolon_repraised:pewter_ingot",
     "count": 9
   }
 }

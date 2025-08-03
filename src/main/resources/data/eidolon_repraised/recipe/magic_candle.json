@@ -7,14 +7,14 @@
   ],
   "key": {
     "s": {
-      "tag": "forge:string"
+      "tag": "c:string"
     },
     "t": {
       "item": "eidolon_repraised:magicians_wax"
     }
   },
   "result": {
-    "item": "eidolon_repraised:magic_candle",
+    "id": "eidolon_repraised:magic_candle",
     "count": 4
   }
 }

@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/lead"
+      "tag": "c:storage_blocks/lead"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:lead_ingot",
+    "id": "eidolon_repraised:lead_ingot",
     "count": 9
   }
 }

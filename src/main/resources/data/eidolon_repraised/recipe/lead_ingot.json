@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:nuggets/lead"
+      "tag": "c:nuggets/lead"
     }
   },
   "result": {
-    "item": "eidolon_repraised:lead_ingot"
+    "id": "eidolon_repraised:lead_ingot"
   }
 }

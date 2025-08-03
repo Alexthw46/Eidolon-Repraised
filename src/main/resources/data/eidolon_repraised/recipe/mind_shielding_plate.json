@@ -8,19 +8,19 @@
   "reagents": "b q ",
   "key": {
     "l": {
-      "tag": "forge:ingots/lead"
+      "tag": "c:ingots/lead"
     },
     "h": {
       "item": "minecraft:leather"
     },
     "b": {
-      "tag": "forge:storage_blocks/lapis"
+      "tag": "c:storage_blocks/lapis"
     },
     "q": {
-      "tag": "forge:gems/quartz"
+      "tag": "c:gems/quartz"
     }
   },
   "result": {
-    "item": "eidolon_repraised:mind_shielding_plate"
+    "id": "eidolon_repraised:mind_shielding_plate"
   }
 }

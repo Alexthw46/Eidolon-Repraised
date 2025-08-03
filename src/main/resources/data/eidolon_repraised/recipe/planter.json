@@ -11,7 +11,7 @@
       "item": "eidolon_repraised:pewter_inlay"
     },
     "y": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "z": {
       "tag": "minecraft:planks"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:planter"
+    "id": "eidolon_repraised:planter"
   }
 }

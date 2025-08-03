@@ -8,13 +8,13 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "y": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     }
   },
   "result": {
-    "item": "eidolon_repraised:wooden_brewing_stand"
+    "id": "eidolon_repraised:wooden_brewing_stand"
   }
 }

@@ -12,12 +12,12 @@
     {
       "stirs": 2,
       "items": [
-        { "tag": "forge:dusts/sulfur" }
+        { "tag": "c:dusts/sulfur" }
       ]
     }
   ],
   "result": {
-    "item": "minecraft:glowstone_dust",
+    "id": "minecraft:glowstone_dust",
     "count": 2
   }
 }

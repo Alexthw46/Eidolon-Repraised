@@ -11,7 +11,7 @@
       "item": "minecraft:stone"
     },
     "y": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "z": {
       "item": "minecraft:bone"
@@ -21,6 +21,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:necrotic_focus"
+    "id": "eidolon_repraised:necrotic_focus"
   }
 }

@@ -8,16 +8,16 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "y": {
-      "tag": "forge:storage_blocks/coal"
+      "tag": "c:storage_blocks/coal"
     },
     "z": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "eidolon_repraised:brazier"
+    "id": "eidolon_repraised:brazier"
   }
 }

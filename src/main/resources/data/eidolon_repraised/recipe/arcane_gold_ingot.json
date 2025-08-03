@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:nuggets/arcane_gold"
+      "tag": "c:nuggets/arcane_gold"
     }
   },
   "result": {
-    "item": "eidolon_repraised:arcane_gold_ingot"
+    "id": "eidolon_repraised:arcane_gold_ingot"
   }
 }

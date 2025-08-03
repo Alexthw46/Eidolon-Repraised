@@ -8,7 +8,7 @@
   "reagents": "sfsf",
   "key": {
     "r": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "b": {
       "item": "eidolon_repraised:basic_ring"
@@ -24,6 +24,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:enervating_ring"
+    "id": "eidolon_repraised:enervating_ring"
   }
 }

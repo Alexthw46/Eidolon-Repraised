@@ -7,14 +7,14 @@
   ],
   "key": {
     "s": {
-      "tag": "forge:string"
+      "tag": "c:string"
     },
     "t": {
-      "tag": "forge:tallow"
+      "tag": "c:tallow"
     }
   },
   "result": {
-    "item": "eidolon_repraised:candle",
+    "id": "eidolon_repraised:candle",
     "count": 4
   }
 }

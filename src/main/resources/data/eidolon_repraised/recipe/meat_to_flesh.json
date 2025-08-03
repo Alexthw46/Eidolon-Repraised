@@ -3,7 +3,7 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:mushrooms" },
+        { "tag": "c:mushrooms" },
         [
           {
             "item": "minecraft:porkchop"
@@ -25,6 +25,6 @@
     }
   ],
   "result": {
-    "item": "minecraft:rotten_flesh"
+    "id": "minecraft:rotten_flesh"
   }
 }

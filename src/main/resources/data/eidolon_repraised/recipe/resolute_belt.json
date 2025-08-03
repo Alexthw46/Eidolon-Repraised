@@ -11,13 +11,13 @@
       "item": "eidolon_repraised:gold_inlay"
     },
     "g": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     },
     "b": {
       "item": "eidolon_repraised:basic_belt"
     },
     "d": {
-      "tag": "forge:gems/diamond"
+      "tag": "c:gems/diamond"
     },
     "l": {
       "item": "minecraft:leather"
@@ -30,6 +30,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:resolute_belt"
+    "id": "eidolon_repraised:resolute_belt"
   }
 }

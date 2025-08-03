@@ -1,7 +1,7 @@
 {
   "type": "minecraft:blasting",
   "ingredient": {
-    "tag": "forge:dusts/lead"
+    "tag": "c:dusts/lead"
   },
   "result": "eidolon_repraised:lead_ingot",
   "experience": 0.5,
@@ -9,7 +9,7 @@
   "conditions": [
     {
       "value": {
-        "tag": "forge:dusts/lead",
+        "tag": "c:dusts/lead",
         "type": "forge:tag_empty"
       },
       "type": "forge:not"

@@ -8,7 +8,7 @@
   "reagents": "waua",
   "key": {
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "u": {
       "item": "eidolon_repraised:unholy_symbol"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:angels_sight"
+    "id": "eidolon_repraised:angels_sight"
   }
 }

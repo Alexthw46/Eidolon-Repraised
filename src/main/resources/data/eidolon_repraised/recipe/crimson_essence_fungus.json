@@ -10,12 +10,12 @@
     {
       "stirs": 1,
       "items": [
-        { "tag": "forge:dusts/sulfur" }
+        { "tag": "c:dusts/sulfur" }
       ]
     }
   ],
   "result": {
-    "item": "eidolon_repraised:crimson_essence",
+    "id": "eidolon_repraised:crimson_essence",
     "count": 4
   }
 }

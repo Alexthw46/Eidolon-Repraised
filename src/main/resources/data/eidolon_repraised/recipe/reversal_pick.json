@@ -14,13 +14,13 @@
       "item": "minecraft:crying_obsidian"
     },
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "i": {
       "item": "eidolon_repraised:pewter_inlay"
     },
     "e": {
-      "tag": "forge:ender_pearls"
+      "tag": "c:ender_pearls"
     },
     "s": {
       "item": "eidolon_repraised:soul_shard"
@@ -30,6 +30,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:reversal_pick"
+    "id": "eidolon_repraised:reversal_pick"
   }
 }

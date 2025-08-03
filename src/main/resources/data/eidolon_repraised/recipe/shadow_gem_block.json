@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:gems/shadow_gem"
+      "tag": "c:gems/shadow_gem"
     }
   },
   "result": {
-    "item": "eidolon_repraised:shadow_gem_block"
+    "id": "eidolon_repraised:shadow_gem_block"
   }
 }

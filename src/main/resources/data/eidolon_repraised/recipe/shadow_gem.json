@@ -23,11 +23,11 @@
     },
     {
       "items": [
-        { "tag": "forge:gems/diamond" }
+        { "tag": "c:gems/diamond" }
       ]
     }
   ],
   "result": {
-    "item": "eidolon_repraised:shadow_gem"
+    "id": "eidolon_repraised:shadow_gem"
   }
 }

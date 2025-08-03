@@ -3,7 +3,7 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:dusts/sulfur" },
+        { "tag": "c:dusts/sulfur" },
         { "item": "minecraft:bone_meal" }
       ]
     },
@@ -15,7 +15,7 @@
     }
   ],
   "result": {
-    "item": "minecraft:gunpowder",
+    "id": "minecraft:gunpowder",
     "count": 4
   }
 }

@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:dusts/silver",
+            "tag": "c:dusts/silver",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -14,7 +14,7 @@
       "recipe": {
         "type": "minecraft:smelting",
         "ingredient": {
-          "tag": "forge:dusts/silver"
+          "tag": "c:dusts/silver"
         },
         "result": "eidolon_repraised:silver_ingot",
         "experience": 0.5,

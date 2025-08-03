@@ -3,9 +3,11 @@ package alexthw.eidolon_repraised.datagen;
 import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.common.entity.SpellProjectileEntity;
 import alexthw.eidolon_repraised.common.spell.ThrallSpell;
+import alexthw.eidolon_repraised.registries.EidolonEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.EntityTypeTags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +26,8 @@ public class EidEntityTagProvider extends EntityTypeTagsProvider {
         tag(SpellProjectileEntity.TRACKABLE_BLACKLIST);
         tag(ThrallSpell.ENTHRALL_BLACKLIST);
         tag(ThrallSpell.ENTHRALL_WHITELIST);
+        tag(EntityTypeTags.UNDEAD).add(EidolonEntities.WRAITH.get(), EidolonEntities.ZOMBIE_BRUTE.get(), EidolonEntities.GIANT_SKEL.get(), EidolonEntities.NECROMANCER.get());
+
     }
 
     @Override

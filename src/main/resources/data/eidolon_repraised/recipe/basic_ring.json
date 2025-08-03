@@ -8,13 +8,13 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     },
     "y": {
       "item": "eidolon_repraised:soul_shard"
     }
   },
   "result": {
-    "item": "eidolon_repraised:basic_ring"
+    "id": "eidolon_repraised:basic_ring"
   }
 }

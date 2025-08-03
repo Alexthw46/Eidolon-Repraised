@@ -8,7 +8,7 @@
   "reagents": "u i ",
   "key": {
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "u": {
       "item": "eidolon_repraised:unholy_symbol"
@@ -17,10 +17,10 @@
       "item": "eidolon_repraised:pewter_inlay"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "eidolon_repraised:cleaving_axe"
+    "id": "eidolon_repraised:cleaving_axe"
   }
 }

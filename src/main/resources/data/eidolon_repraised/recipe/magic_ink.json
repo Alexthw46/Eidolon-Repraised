@@ -3,21 +3,21 @@
   "steps": [
     {
       "items": [
-      	{ "tag": "forge:dyes/black" },
-      	{ "tag": "forge:dyes/black" },
+      	{ "tag": "c:dyes/black" },
+      	{ "tag": "c:dyes/black" },
       	{ "item": "minecraft:glow_ink_sac" }
       ]
     },
     {
       "items": [
-      	{ "tag": "forge:dyes/blue" }
+      	{ "tag": "c:dyes/blue" }
       ],
       "stirs": 1
     },
     {
       "items": [
-      	{ "tag": "forge:nuggets/silver" },
-      	{ "tag": "forge:nuggets/silver" }
+      	{ "tag": "c:nuggets/silver" },
+      	{ "tag": "c:nuggets/silver" }
       ],
       "stirs": 1
     },
@@ -28,7 +28,7 @@
     }
   ],
   "result": {
-    "item": "eidolon_repraised:magic_ink",
+    "id": "eidolon_repraised:magic_ink",
     "count": 2
   }
 }

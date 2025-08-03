@@ -3,20 +3,20 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:dusts/redstone" },
-        { "tag": "forge:dusts/redstone" },
+        { "tag": "c:dusts/redstone" },
+        { "tag": "c:dusts/redstone" },
         { "item": "eidolon_repraised:soul_shard" }
       ]
     },
     {
       "items": [
-        { "tag": "forge:ingots/gold" },
-        { "tag": "forge:ingots/gold" }
+        { "tag": "c:ingots/gold" },
+        { "tag": "c:ingots/gold" }
       ]
     }
   ],
   "result": {
-    "item": "eidolon_repraised:arcane_gold_ingot",
+    "id": "eidolon_repraised:arcane_gold_ingot",
     "count": 2
   }
 }

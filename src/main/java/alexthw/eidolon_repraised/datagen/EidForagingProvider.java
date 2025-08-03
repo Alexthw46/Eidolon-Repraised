@@ -64,6 +64,6 @@ public class EidForagingProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path pathIn, String str) {
-        return pathIn.resolve("data/eidolon/recipes/" + str + ".json");
+        return pathIn.resolve("data/eidolon_repraised/recipe/" + str + ".json");
     }
 }

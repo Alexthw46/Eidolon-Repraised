@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:pewter_nugget",
+    "id": "eidolon_repraised:pewter_nugget",
     "count": 9
   }
 }

@@ -125,20 +125,6 @@ public class Eidolon {
         }
     }
 
-
-//    public void spawnPlacements(final SpawnPlacementRegisterEvent event) {
-//        event.register(EidolonEntities.ZOMBIE_BRUTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-//        event.register(EidolonEntities.WRAITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-//        event.register(EidolonEntities.GIANT_SKEL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                (pType, pLevel, pSpawnType, pPos, pRandom) -> (pLevel.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(pType, pLevel, pSpawnType, pPos, pRandom)), SpawnPlacementRegisterEvent.Operation.AND);
-//        event.register(EidolonEntities.RAVEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
-//        event.register(EidolonEntities.SLIMY_SLUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                (e, w, t, pos, rand) -> true, SpawnPlacementRegisterEvent.Operation.AND);
-//    }
-
     @OnlyIn(Dist.CLIENT)
     public static void clientSetup(final FMLClientSetupEvent event) {
         BlockEntityRenderers.register(Registry.HAND_TILE_ENTITY.get(), (trd) -> new HandTileRenderer());

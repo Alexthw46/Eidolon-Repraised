@@ -8,7 +8,7 @@
   "reagents": "s s ",
   "key": {
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "i": {
       "item": "eidolon_repraised:pewter_inlay"
@@ -24,6 +24,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:void_amulet"
+    "id": "eidolon_repraised:void_amulet"
   }
 }

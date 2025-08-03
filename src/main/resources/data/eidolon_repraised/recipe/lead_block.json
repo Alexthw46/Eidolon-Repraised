@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/lead"
+      "tag": "c:ingots/lead"
     }
   },
   "result": {
-    "item": "eidolon_repraised:lead_block"
+    "id": "eidolon_repraised:lead_block"
   }
 }

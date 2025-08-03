@@ -11,10 +11,10 @@
       "item": "eidolon_repraised:pewter_inlay"
     },
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "x": {
       "item": "eidolon_repraised:wraith_heart"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:bonechill_wand"
+    "id": "eidolon_repraised:bonechill_wand"
   }
 }

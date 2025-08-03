@@ -11,19 +11,19 @@
       "item": "minecraft:book"
     },
     "g": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     },
     "o": {
       "item": "minecraft:obsidian"
     },
     "d": {
-      "tag": "forge:gems/diamond"
+      "tag": "c:gems/diamond"
     },
     "i": {
       "item": "eidolon_repraised:gold_inlay"
     }
   },
   "result": {
-    "item": "eidolon_repraised:soul_enchanter"
+    "id": "eidolon_repraised:soul_enchanter"
   }
 }

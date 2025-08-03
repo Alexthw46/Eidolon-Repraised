@@ -3,8 +3,8 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:ingots/gold" },
-        { "tag": "forge:ingots/gold" }
+        { "tag": "c:ingots/gold" },
+        { "tag": "c:ingots/gold" }
       ]
     },
     {
@@ -20,6 +20,6 @@
     }
   ],
   "result": {
-    "item": "minecraft:golden_apple"
+    "id": "minecraft:golden_apple"
   }
 }

@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:arcane_gold_nugget",
+    "id": "eidolon_repraised:arcane_gold_nugget",
     "count": 9
   }
 }

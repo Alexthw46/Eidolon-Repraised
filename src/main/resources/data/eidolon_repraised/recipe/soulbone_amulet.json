@@ -11,7 +11,7 @@
       "item": "eidolon_repraised:death_essence"
     },
     "b": {
-      "tag": "forge:bones"
+      "tag": "c:bones"
     },
     "c": {
       "item": "eidolon_repraised:ender_calx"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:soulbone_amulet"
+    "id": "eidolon_repraised:soulbone_amulet"
   }
 }

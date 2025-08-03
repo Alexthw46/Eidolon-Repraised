@@ -11,10 +11,10 @@
       "item": "minecraft:string"
     },
     "y": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     }
   },
   "result": {
-    "item": "eidolon_repraised:basic_amulet"
+    "id": "eidolon_repraised:basic_amulet"
   }
 }

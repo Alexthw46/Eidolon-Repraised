@@ -8,7 +8,7 @@
   "reagents": "utct",
   "key": {
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "u": {
       "tag": "eidolon_repraised:patron_symbol"
@@ -20,10 +20,10 @@
       "item": "eidolon_repraised:soul_shard"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "eidolon_repraised:reaper_scythe"
+    "id": "eidolon_repraised:reaper_scythe"
   }
 }

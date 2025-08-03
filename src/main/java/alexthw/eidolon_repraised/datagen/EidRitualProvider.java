@@ -246,6 +246,6 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path pathIn, String str) {
-        return pathIn.resolve("data/eidolon/recipes/rituals/" + str + ".json");
+        return pathIn.resolve("data/eidolon_repraised/recipe/rituals/" + str + ".json");
     }
 }

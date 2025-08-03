@@ -3,14 +3,14 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:ingots/lead"
+      "tag": "c:ingots/lead"
     },
     {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:pewter_blend",
+    "id": "eidolon_repraised:pewter_blend",
     "count": 2
   }
 }

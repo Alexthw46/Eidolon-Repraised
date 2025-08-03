@@ -11,14 +11,14 @@
       "item": "minecraft:flint"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "r": {
       "item": "eidolon_repraised:raven_feather"
     }
   },
   "result": {
-    "item": "minecraft:arrow",
+    "id": "minecraft:arrow",
     "count": 4
   }
 }

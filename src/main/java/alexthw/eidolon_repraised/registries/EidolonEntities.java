@@ -3,17 +3,23 @@ package alexthw.eidolon_repraised.registries;
 import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.common.entity.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static alexthw.eidolon_repraised.registries.Registry.ITEMS;
+import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
+@EventBusSubscriber
 public class EidolonEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Eidolon.MODID);
 
@@ -57,4 +63,19 @@ public class EidolonEntities {
         ITEMS.register("spawn_" + name, () -> new DeferredSpawnEggItem(type, color1, color2, new Item.Properties()));
         return type;
     }
+
+    @SubscribeEvent
+    public static void spawnPlacements(final RegisterSpawnPlacementsEvent event) {
+        event.register(EidolonEntities.ZOMBIE_BRUTE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(EidolonEntities.WRAITH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(EidolonEntities.GIANT_SKEL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (pType, pLevel, pSpawnType, pPos, pRandom) -> (pLevel.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(pType, pLevel, pSpawnType, pPos, pRandom)), RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(EidolonEntities.RAVEN.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(EidolonEntities.SLIMY_SLUG.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (e, w, t, pos, rand) -> true, RegisterSpawnPlacementsEvent.Operation.AND);
+    }
+
 }

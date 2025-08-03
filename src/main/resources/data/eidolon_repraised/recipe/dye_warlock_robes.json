@@ -2,13 +2,13 @@
   "type": "eidolon_repraised:dye",
   "ingredients": [
     {
-      "tag": "forge:dyes"
+      "tag": "c:dyes"
     },
     {
       "item": "eidolon_repraised:warlock_cloak"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:warlock_cloak"
+    "id": "eidolon_repraised:warlock_cloak"
   }
 }

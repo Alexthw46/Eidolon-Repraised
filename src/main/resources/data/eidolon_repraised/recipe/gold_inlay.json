@@ -8,11 +8,11 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     }
   },
   "result": {
-    "item": "eidolon_repraised:gold_inlay",
+    "id": "eidolon_repraised:gold_inlay",
     "count": 2
   }
 }

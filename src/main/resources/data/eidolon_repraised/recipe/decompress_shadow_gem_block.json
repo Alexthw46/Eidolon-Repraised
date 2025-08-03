@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/shadow_gem"
+      "tag": "c:storage_blocks/shadow_gem"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:shadow_gem",
+    "id": "eidolon_repraised:shadow_gem",
     "count": 9
   }
 }

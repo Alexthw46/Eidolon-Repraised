@@ -8,7 +8,7 @@
     "reagents": "hsws",
     "key": {
       "d": {
-        "tag": "forge:storage_blocks/diamond"
+        "tag": "c:storage_blocks/diamond"
       },
       "a": {
         "item": "eidolon_repraised:basic_amulet"

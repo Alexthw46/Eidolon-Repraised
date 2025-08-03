@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:ingots/lead"
+      "tag": "c:ingots/lead"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:lead_nugget",
+    "id": "eidolon_repraised:lead_nugget",
     "count": 9
   }
 }

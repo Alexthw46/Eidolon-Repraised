@@ -7,10 +7,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/silver"
+      "tag": "c:ingots/silver"
     }
   },
   "result": {
-    "item": "eidolon_repraised:silver_boots"
+    "id": "eidolon_repraised:silver_boots"
   }
 }

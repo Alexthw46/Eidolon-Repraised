@@ -8,11 +8,11 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     }
   },
   "result": {
-    "item": "eidolon_repraised:pewter_inlay",
+    "id": "eidolon_repraised:pewter_inlay",
     "count": 2
   }
 }

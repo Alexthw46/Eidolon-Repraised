@@ -11,10 +11,10 @@
       "item": "eidolon_repraised:gold_inlay"
     },
     "g": {
-      "tag": "forge:ingots/arcane_gold"
+      "tag": "c:ingots/arcane_gold"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "x": {
       "item": "eidolon_repraised:shadow_gem"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:soulfire_wand"
+    "id": "eidolon_repraised:soulfire_wand"
   }
 }

@@ -9,13 +9,13 @@
       "item": "eidolon_repraised:magic_ink"
     },
     {
-      "tag": "forge:feathers"
+      "tag": "c:feathers"
     },
     {
-      "tag": "forge:nuggets/arcane_gold"
+      "tag": "c:nuggets/arcane_gold"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:notetaking_tools"
+    "id": "eidolon_repraised:notetaking_tools"
   }
 }

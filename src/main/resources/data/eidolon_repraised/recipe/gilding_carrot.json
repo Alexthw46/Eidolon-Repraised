@@ -3,8 +3,8 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:nuggets/gold" },
-        { "tag": "forge:nuggets/gold" }
+        { "tag": "c:nuggets/gold" },
+        { "tag": "c:nuggets/gold" }
       ]
     },
     {
@@ -20,6 +20,6 @@
     }
   ],
   "result": {
-    "item": "minecraft:golden_carrot"
+    "id": "minecraft:golden_carrot"
   }
 }

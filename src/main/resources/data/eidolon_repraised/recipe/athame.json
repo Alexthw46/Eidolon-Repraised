@@ -8,22 +8,22 @@
   "reagents": "n d ",
   "key": {
     "p": {
-      "tag": "forge:ingots/pewter"
+      "tag": "c:ingots/pewter"
     },
     "s": {
       "item": "eidolon_repraised:pewter_inlay"
     },
     "e": {
-      "tag": "forge:ender_pearls"
+      "tag": "c:ender_pearls"
     },
     "n": {
-      "tag": "forge:nuggets/gold"
+      "tag": "c:nuggets/gold"
     },
     "d": {
-      "tag": "forge:nuggets/silver"
+      "tag": "c:nuggets/silver"
     }
   },
   "result": {
-    "item": "eidolon_repraised:athame"
+    "id": "eidolon_repraised:athame"
   }
 }

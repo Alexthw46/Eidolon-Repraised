@@ -3,11 +3,11 @@
   "group": "eidolon_repraised",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/silver"
+      "tag": "c:storage_blocks/silver"
     }
   ],
   "result": {
-    "item": "eidolon_repraised:silver_ingot",
+    "id": "eidolon_repraised:silver_ingot",
     "count": 9
   }
 }

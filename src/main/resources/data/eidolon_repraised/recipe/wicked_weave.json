@@ -17,11 +17,11 @@
       "item": "eidolon_repraised:unholy_symbol"
     },
     "b": {
-      "tag": "forge:dyes/blue"
+      "tag": "c:dyes/blue"
     }
   },
   "result": {
-    "item": "eidolon_repraised:wicked_weave",
+    "id": "eidolon_repraised:wicked_weave",
     "count": 8
   }
 }

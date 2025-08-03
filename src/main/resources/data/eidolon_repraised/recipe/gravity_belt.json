@@ -8,10 +8,10 @@
   "reagents": "cici",
   "key": {
     "f": {
-      "tag": "forge:feathers"
+      "tag": "c:feathers"
     },
     "p": {
-      "tag": "forge:ender_pearls"
+      "tag": "c:ender_pearls"
     },
     "l": {
       "item": "eidolon_repraised:lesser_soul_gem"
@@ -27,6 +27,6 @@
     }
   },
   "result": {
-    "item": "eidolon_repraised:gravity_belt"
+    "id": "eidolon_repraised:gravity_belt"
   }
 }

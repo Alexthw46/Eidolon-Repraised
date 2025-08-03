@@ -3,8 +3,8 @@
   "steps": [
     {
       "items": [
-        { "tag": "forge:dusts/redstone" },
-        { "tag": "forge:dusts/redstone" },
+        { "tag": "c:dusts/redstone" },
+        { "tag": "c:dusts/redstone" },
         { "item": "minecraft:lapis_lazuli" },
         { "item": "minecraft:lapis_lazuli" }
       ]
@@ -20,11 +20,11 @@
     },
     {
       "items": [
-        { "tag": "forge:gems/quartz" }
+        { "tag": "c:gems/quartz" }
       ]
     }
   ],
   "result": {
-    "item": "eidolon_repraised:lesser_soul_gem"
+    "id": "eidolon_repraised:lesser_soul_gem"
   }
 }

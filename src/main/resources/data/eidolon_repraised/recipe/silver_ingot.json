@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:nuggets/silver"
+      "tag": "c:nuggets/silver"
     }
   },
   "result": {
-    "item": "eidolon_repraised:silver_ingot"
+    "id": "eidolon_repraised:silver_ingot"
   }
 }

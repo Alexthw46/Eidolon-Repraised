@@ -8,13 +8,13 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:ingots/silver"
+      "tag": "c:ingots/silver"
     },
     "y": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "eidolon_repraised:silver_pickaxe"
+    "id": "eidolon_repraised:silver_pickaxe"
   }
 }

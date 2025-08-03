@@ -8,10 +8,10 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:nuggets/pewter"
+      "tag": "c:nuggets/pewter"
     }
   },
   "result": {
-    "item": "eidolon_repraised:pewter_ingot"
+    "id": "eidolon_repraised:pewter_ingot"
   }
 }

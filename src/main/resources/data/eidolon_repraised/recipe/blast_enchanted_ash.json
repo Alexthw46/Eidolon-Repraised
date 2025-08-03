@@ -4,7 +4,7 @@
     "item": "minecraft:bone"
   },
   "result": {
-    "item": "eidolon_repraised:enchanted_ash",
+    "id": "eidolon_repraised:enchanted_ash",
     "count": 2
   },
   "experience": 0.1,

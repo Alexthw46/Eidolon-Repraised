@@ -11,7 +11,7 @@
     	"item": "eidolon_repraised:death_essence"
     },
     "b": {
-    	"tag": "forge:bones"
+    	"tag": "c:bones"
     },
     "r": {
     	"item": "eidolon_repraised:reaper_scythe"
@@ -28,6 +28,6 @@
     
   },
   "result": {
-    "item": "eidolon_repraised:deathbringer_scythe"
+    "id": "eidolon_repraised:deathbringer_scythe"
   }
 }
