@@ -280,4 +280,13 @@ public class KnowledgeImpl implements IKnowledge {
             }
         }
     }
+
+    public @NotNull CompoundTag serialize(HolderLookup.@NotNull Provider provider) {
+        return knowledgeData.serializeNBT(provider);
+    }
+
+    public void deserialize(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
+        knowledgeData.deserializeNBT(provider, nbt);
+        entity.setData(EidolonAttachments.KNOWLEDGE_ATTACHMENT.get(), knowledgeData);
+    }
 }

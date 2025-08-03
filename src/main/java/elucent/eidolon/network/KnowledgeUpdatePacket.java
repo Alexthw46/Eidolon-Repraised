@@ -1,6 +1,7 @@
 package elucent.eidolon.network;
 
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.capability.KnowledgeImpl;
 import elucent.eidolon.registries.EidolonCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
@@ -12,7 +13,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -42,8 +42,8 @@ public class KnowledgeUpdatePacket extends AbstractPacket {
 
     public KnowledgeUpdatePacket(Player entity, boolean playSound) {
         this.uuid = entity.getUUID();
-        var k = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
-        if (k != null) this.tag = ((INBTSerializable<CompoundTag>) k).serializeNBT(entity.registryAccess());
+        KnowledgeImpl k = entity.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+        if (k != null) this.tag = k.serialize(entity.registryAccess());
         this.playSound = playSound;
     }
 
@@ -61,9 +61,9 @@ public class KnowledgeUpdatePacket extends AbstractPacket {
     public void onClientReceived(Minecraft minecraft, Player player) {
         Level world = player.level();
         if (player.getUUID().equals(this.uuid)) {
-            var k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
-            {
-                //((INBTSerializable<CompoundTag>) k).deserializeNBT(this.tag);
+            KnowledgeImpl k = player.getCapability(EidolonCapabilities.KNOWLEDGE_CAPABILITY);
+            if (k != null) {
+                k.deserialize(player.registryAccess(), this.tag);
                 if (this.playSound) player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.5f);
             }
         }
