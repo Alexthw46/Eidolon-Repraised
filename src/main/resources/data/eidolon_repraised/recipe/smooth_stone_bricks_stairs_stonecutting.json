@@ -4,6 +4,8 @@
   "ingredient": {
     "item": "eidolon_repraised:smooth_stone_bricks"
   },
-  "result": "eidolon_repraised:smooth_stone_bricks_stairs",
-  "count": 1
+  "result": {
+    "id": "eidolon_repraised:smooth_stone_bricks_stairs"
+    "count": 1
+  }
 }

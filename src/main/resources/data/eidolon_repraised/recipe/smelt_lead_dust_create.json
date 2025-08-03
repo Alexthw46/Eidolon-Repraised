@@ -3,13 +3,15 @@
   "ingredient": {
     "item": "create:crushed_raw_lead"
   },
-  "result": "eidolon_repraised:lead_ingot",
+  "result": {
+    "id": "eidolon_repraised:lead_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 200,
   "conditions": [
     {
       "modid": "create",
-      "type": "forge:mod_loaded"
+      "type": "neoforge:mod_loaded"
     }
   ]
 }

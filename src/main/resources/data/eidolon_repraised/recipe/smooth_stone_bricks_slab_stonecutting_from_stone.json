@@ -4,6 +4,8 @@
   "ingredient": {
     "item": "minecraft:smooth_stone"
   },
-  "result": "eidolon_repraised:smooth_stone_bricks_slab",
-  "count": 2
+  "result": {
+    "id": "eidolon_repraised:smooth_stone_bricks_slab",
+    "count": 2
+  }
 }

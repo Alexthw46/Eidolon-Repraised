@@ -3,7 +3,9 @@
   "ingredient": {
     "item": "create:crushed_raw_silver"
   },
-  "result": "eidolon_repraised:silver_ingot",
+  "result": {
+    "id": "eidolon_repraised:silver_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 200,
   "conditions": [

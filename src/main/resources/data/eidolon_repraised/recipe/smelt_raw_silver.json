@@ -3,7 +3,9 @@
   "ingredient": {
     "tag": "c:raw_materials/silver"
   },
-  "result": "eidolon_repraised:silver_ingot",
+  "result": {
+    "id": "eidolon_repraised:silver_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 200
 }

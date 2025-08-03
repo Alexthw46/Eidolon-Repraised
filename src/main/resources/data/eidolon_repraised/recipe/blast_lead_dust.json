@@ -3,16 +3,18 @@
   "ingredient": {
     "tag": "c:dusts/lead"
   },
-  "result": "eidolon_repraised:lead_ingot",
+  "result": {
+    "id": "eidolon_repraised:lead_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 100,
   "conditions": [
     {
       "value": {
         "tag": "c:dusts/lead",
-        "type": "forge:tag_empty"
+        "type": "neoforge:tag_empty"
       },
-      "type": "forge:not"
+      "type": "neoforge:not"
     }
   ]
 }

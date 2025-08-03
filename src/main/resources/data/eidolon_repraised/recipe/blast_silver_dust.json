@@ -3,16 +3,18 @@
   "ingredient": {
     "tag": "c:dusts/silver"
   },
-  "result": "eidolon_repraised:silver_ingot",
+  "result": {
+    "id": "eidolon_repraised:silver_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 100,
   "conditions": [
     {
       "value": {
         "tag": "c:dusts/silver",
-        "type": "forge:tag_empty"
+        "type": "neoforge:tag_empty"
       },
-      "type": "forge:not"
+      "type": "neoforge:not"
     }
   ]
 }

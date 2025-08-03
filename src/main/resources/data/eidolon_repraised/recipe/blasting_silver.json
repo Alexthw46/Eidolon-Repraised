@@ -31,5 +31,7 @@
       "item": "eidolon_repraised:silver_hoe"
     }
   ],
-  "result": "eidolon_repraised:silver_nugget"
+  "result": {
+    "id": "eidolon_repraised:silver_nugget"
+  }
 }

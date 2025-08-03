@@ -3,7 +3,9 @@
   "ingredient": {
     "tag": "c:ores/lead"
   },
-  "result": "eidolon_repraised:lead_ingot",
+  "result": {
+    "id": "eidolon_repraised:lead_ingot"
+  },
   "experience": 0.5,
   "cookingtime": 200
 }
