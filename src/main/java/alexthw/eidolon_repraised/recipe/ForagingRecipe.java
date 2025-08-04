@@ -3,6 +3,7 @@ package alexthw.eidolon_repraised.recipe;
 import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import alexthw.eidolon_repraised.util.RegistryUtil;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
@@ -64,8 +65,7 @@ public class ForagingRecipe implements Recipe<CraftingInput> {
     public JsonObject toJson() {
         JsonObject jsonobject = new JsonObject();
         jsonobject.addProperty("type", "eidolon_repraised:athame_foraging");
-        //TODO: restore block serialization
-        //jsonobject.add("block", block.toJson());
+        jsonobject.add("block", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, this.block).getOrThrow());
         JsonObject resultObj = new JsonObject();
         resultObj.addProperty("item", RegistryUtil.getRegistryName(result.getItem()).toString());
         int count = result.getCount();

@@ -32,7 +32,7 @@ public class EidForagingProvider extends SimpleDataProvider {
         addRecipes();
         for (ForagingRecipe recipe : recipes) {
             Path path = getRecipePath(output, recipe.id.getPath());
-            //saveStable(pOutput, recipe.toJson(), path);
+            saveStable(pOutput, recipe.toJson(), path);
         }
     }
 

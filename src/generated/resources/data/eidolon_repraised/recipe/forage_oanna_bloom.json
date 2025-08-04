@@ -1,0 +1,9 @@
+{
+  "type": "eidolon_repraised:athame_foraging",
+  "block": {
+    "item": "minecraft:lily_pad"
+  },
+  "output": {
+    "item": "eidolon_repraised:oanna_bloom"
+  }
+}
