@@ -22,12 +22,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
-    static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"worktable" );
+    static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "worktable");
     private final IDrawable background, icon;
 
     public WorktableCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/jei_page_bg.png" ), 0, 0, 138, 172);
+        this.background = guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/jei_page_bg.png"), 0, 0, 138, 172);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registry.WORKTABLE.get()));
     }
 
@@ -57,20 +59,24 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull WorktableRecipe recipe, @NotNull IFocusGroup ingredients) {
-        Ingredient[] inputs = recipe.getCoreA();
-        Ingredient[] outers = recipe.getOuterA();
+        List<Ingredient> inputs = recipe.getCore();
+        List<Ingredient> outers = recipe.getOuter();
+
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int index = i * 3 + j;
-                if (index >= inputs.length) break;
-                layout.addSlot(RecipeIngredientRole.INPUT, 44 + j * 17, 37 + i * 17).addIngredients(inputs[index]);
+                if (index >= inputs.size()) break;
+                Ingredient input = inputs.get(index);
+                if (input == null) continue;
+                layout.addSlot(RecipeIngredientRole.INPUT, 44 + j * 17, 37 + i * 17).addIngredients(input);
             }
         }
-        layout.addSlot(RecipeIngredientRole.INPUT, 61, 15).addIngredients(outers[0]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 100, 54).addIngredients(outers[1]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 61, 93).addIngredients(outers[2]);
-        layout.addSlot(RecipeIngredientRole.INPUT, 22, 54).addIngredients(outers[3]);
+
+        layout.addSlot(RecipeIngredientRole.INPUT, 61, 15).addIngredients(outers.get(0));
+        layout.addSlot(RecipeIngredientRole.INPUT, 100, 54).addIngredients(outers.get(1));
+        layout.addSlot(RecipeIngredientRole.INPUT, 61, 93).addIngredients(outers.get(2));
+        layout.addSlot(RecipeIngredientRole.INPUT, 22, 54).addIngredients(outers.get(3));
 
         layout.addSlot(RecipeIngredientRole.OUTPUT, 61, 133).addItemStack(RecipeUtil.getResultItem(recipe));
     }
@@ -80,6 +86,6 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
         mStack.blit(BACKGROUND, 5, 4, 0, 0, 128, 160);
     }
 
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_worktable_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/codex_worktable_page.png");
 
 }

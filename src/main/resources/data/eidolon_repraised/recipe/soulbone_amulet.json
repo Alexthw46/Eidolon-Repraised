@@ -5,7 +5,7 @@
     "bhb",
     " g "
   ],
-  "reagents": "cece",
+  "reagents": ["cece"],
   "key": {
     "e": {
       "item": "eidolon_repraised:death_essence"

@@ -5,7 +5,9 @@
     " p ",
     " i "
   ],
-  "reagents": "esgs",
+  "reagents": [
+    "esgs"
+  ],
   "key": {
     "o": {
       "item": "minecraft:obsidian"

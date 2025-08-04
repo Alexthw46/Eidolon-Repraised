@@ -1,5 +1,5 @@
 {
-  "itemGroup.eidolon_repraised": "Eidolon Repraised",
+  "itemGroup.eidolon_repraised": "Eidolon:Repraised",
   "affix.eidolon_repraised:wand/tracking": "Seeking",
   "affix.eidolon_repraised:wand/tracking.suffix": "of the Seeking",
   "affix.eidolon_repraised:wand/tracking.desc": "Up to {0} projectiles will seek out the nearest enemy.",
@@ -439,7 +439,7 @@
   "eidolon_repraised.codex.page.plants.planter": "These rare plants will need specialized growing vessel to be homegrown. While unsuitable for mundane crops, the combination of ash and soul residue infused into its soil appears to create an environment uniquely attuned to their growth.",
   "eidolon_repraised.codex.page.plants.oanna": "Alongside lilypads, one may find this pink lotus with a delicate aura and a calming scent. Botanical tomes describe how these rare flowers were used in ritual fires as offerings or to ward off monsters, illness and corruption.",
   "eidolon_repraised.codex.page.plants.mirecap": "This dark purple toadstool hides among the nether fungi. Avoided by the gluttonous pigs that live in those infernal forests, but a delicacy for their undead cousins.  It reeks of decay and corruption, and some question whether it’s even alive. Perhaps alchemical refinement could bring out its entropic potential...",
-  "eidolon_repraised.codex.page.plants.sildran": "Easily mistaken for a cocoa bean hidden among jungle leaves, but it's not fit for cookies. The seed of the Sildran plant contains potent stimulant properties, though it is far from edible in its raw state. It does however smell good when roasted.",
+  "eidolon_repraised.codex.page.plants.sildrian": "Easily mistaken for a cocoa bean hidden among jungle leaves, but it's not fit for cookies. The seed of the Sildrian plant contains potent stimulant properties, though it is far from edible in its raw state. It does however smell good when roasted.",
   "eidolon_repraised.codex.page.plants.avenna": "Did you grab that fern, or did it grab you first? Avenna seems to possess a curious instinct to cling to anything that brushes past its sprigs.It might be a powerful binding reagent if used in the right way.",
   "eidolon_repraised.codex.page.plants.merammer": "A white flower like any other, hiding a precious resin in its roots. When the resin of the Merammer crystallizes, it may be blended with other reagents to craft incense capable of producing a wide range of subtle magical effects.",
   "eidolon_repraised.codex.chapter.researches": "Researching [WIP]",

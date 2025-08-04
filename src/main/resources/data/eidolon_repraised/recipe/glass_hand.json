@@ -5,7 +5,9 @@
       " a ",
       " g "
     ],
-    "reagents": "hsws",
+  "reagents": [
+    "hsws"
+  ],
     "key": {
       "d": {
         "tag": "c:storage_blocks/diamond"
@@ -27,6 +29,6 @@
       }
     },
     "result": {
-      "item": "eidolon_repraised:glass_hand"
+      "id": "eidolon_repraised:glass_hand"
     }
   }

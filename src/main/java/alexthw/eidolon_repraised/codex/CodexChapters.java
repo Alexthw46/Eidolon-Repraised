@@ -118,7 +118,7 @@ public class CodexChapters {
                     .worktablePage(Registry.PLANTER.get())
                     .titlePage("eidolon_repraised.codex.page.plants.oanna", new ItemStack(Registry.OANNA_BLOOM.get()))
                     .titlePage("eidolon_repraised.codex.page.plants.mirecap", new ItemStack(Registry.MIRECAP.get()))
-                    .titlePage("eidolon_repraised.codex.page.plants.sildran", new ItemStack(Registry.SILDRIAN_SEED.get()))
+                    .titlePage("eidolon_repraised.codex.page.plants.sildrian", new ItemStack(Registry.SILDRIAN_SEED.get()))
                     .titlePage("eidolon_repraised.codex.page.plants.avenna", new ItemStack(Registry.AVENNIAN_SPRIG.get()))
                     .titlePage("eidolon_repraised.codex.page.plants.merammer", new ItemStack(Registry.MERAMMER_ROOT.get()))
                     .craftingPage(Registry.MERAMMER_RESIN.get())

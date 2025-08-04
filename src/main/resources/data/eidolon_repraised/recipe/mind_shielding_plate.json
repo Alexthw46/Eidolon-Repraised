@@ -5,7 +5,9 @@
     "lll",
     "h h"
   ],
-  "reagents": "b q ",
+  "reagents": [
+    "b q "
+  ],
   "key": {
     "l": {
       "tag": "c:ingots/lead"

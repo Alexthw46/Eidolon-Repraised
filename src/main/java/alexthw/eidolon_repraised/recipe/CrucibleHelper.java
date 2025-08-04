@@ -1,35 +1,32 @@
 package alexthw.eidolon_repraised.recipe;
 
 import alexthw.eidolon_repraised.common.tile.CrucibleTileEntity.CrucibleStep;
-import net.minecraft.resources.ResourceLocation;
+import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class CrucibleRegistry {
-    static final Map<ResourceLocation, CrucibleRecipe> recipes = new HashMap<>();
+public class CrucibleHelper {
 
-    public static CrucibleRecipe register(CrucibleRecipe recipe) {
-        ResourceLocation loc = recipe.getRegistryName();
-        assert loc != null;
-        recipes.put(loc, recipe);
-        return recipe;
-    }
+    public static CrucibleRecipe find(Level level, List<CrucibleStep> steps) {
+        List<RecipeHolder<CrucibleRecipe>> recipeHolders = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get());
+        for (RecipeHolder<CrucibleRecipe> holder : recipeHolders) {
+            CrucibleRecipe recipe = holder.value();
+            // we have more steps currently than the testFor recipe, there's no way it matches.
+            if (steps.size() != recipe.getSteps().size()) continue;
+            if (doStepsMatch(steps, recipe.getSteps())) return recipe;
+        }
 
-    public static CrucibleRecipe find(ResourceLocation loc) {
-        return recipes.get(loc);
-    }
-
-    public static CrucibleRecipe find(List<CrucibleStep> steps) {
-        for (CrucibleRecipe recipe : recipes.values()) if (recipe.matches(steps)) return recipe;
         return null;
     }
 
-    public static boolean doStepsHaveSomeResult(List<CrucibleStep> steps) {
-        for (CrucibleRecipe recipe : recipes.values()) {
+    public static boolean doStepsHaveSomeResult(Level level, List<CrucibleStep> steps) {
+        List<RecipeHolder<CrucibleRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get());
+        for (RecipeHolder<CrucibleRecipe> holder : recipes) {
+            CrucibleRecipe recipe = holder.value();
             // we have more steps currently than the testFor recipe, there's no way it matches.
             if (steps.size() > recipe.getSteps().size()) continue;
             if (doStepsMatch(steps, recipe.getSteps())) return true;
@@ -66,7 +63,7 @@ public class CrucibleRegistry {
         return true;
     }
 
-    public static void init() {
+//    public static void init() {
 //        register(new CrucibleRecipe(new ItemStack(Registry.ARCANE_GOLD_INGOT.get(), 2)).setRegistryName(Eidolon.MODID, "arcane_gold")
 //            .addStep(Tags.Items.DUSTS_REDSTONE, Tags.Items.DUSTS_REDSTONE, Registry.SOUL_SHARD.get())
 //            .addStep(Tags.Items.INGOTS_GOLD, Tags.Items.INGOTS_GOLD));
@@ -142,5 +139,6 @@ public class CrucibleRegistry {
 //                ItemTags.PLANKS, ItemTags.PLANKS, ItemTags.PLANKS, ItemTags.PLANKS,
 //                ItemTags.PLANKS, ItemTags.PLANKS, ItemTags.PLANKS, ItemTags.PLANKS)
 //            .addStirringStep(1, Registry.SOUL_SHARD.get(), Registry.ENCHANTED_ASH.get()));
-    }
+//    }
+
 }

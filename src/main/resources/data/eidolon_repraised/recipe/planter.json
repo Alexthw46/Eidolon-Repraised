@@ -5,7 +5,9 @@
     "zxz",
     "z z"
   ],
-  "reagents": "a s ",
+  "reagents": [
+    "a s "
+  ],
   "key": {
     "x": {
       "item": "eidolon_repraised:pewter_inlay"

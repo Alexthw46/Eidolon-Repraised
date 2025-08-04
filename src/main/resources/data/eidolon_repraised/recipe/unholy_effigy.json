@@ -5,7 +5,7 @@
     "sss",
     " s "
   ],
-  "reagents": "u i ",
+  "reagents": ["u i "],
   "key": {
     "s": {
       "item": "minecraft:stone"

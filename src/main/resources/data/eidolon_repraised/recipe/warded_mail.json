@@ -5,7 +5,7 @@
     "aia",
     " a "
   ],
-  "reagents": "pppp",
+  "reagents": ["pppp"],
   "key": {
     "p": {
       "item": "eidolon_repraised:pewter_inlay"

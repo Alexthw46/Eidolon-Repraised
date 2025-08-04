@@ -1,27 +1,20 @@
 {
-  "type": "neoforge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "value": {
-            "tag": "c:dusts/silver",
-            "type": "neoforge:tag_empty"
-          },
-          "type": "neoforge:not"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:smelting",
-        "ingredient": {
-          "tag": "c:dusts/silver"
-        },
-        "result": {
-          "id": "eidolon_repraised:silver_ingot"
-        },
-        "experience": 0.5,
-        "cookingtime": 200
-      }
+      "value": {
+        "tag": "c:dusts/silver",
+        "type": "neoforge:tag_empty"
+      },
+      "type": "neoforge:not"
     }
-  ]
+  ],
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "tag": "c:dusts/silver"
+  },
+  "result": {
+    "id": "eidolon_repraised:silver_ingot"
+  },
+  "experience": 0.5,
+  "cookingtime": 200
 }

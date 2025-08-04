@@ -5,7 +5,9 @@
     "www",
     "tgt"
   ],
-  "reagents": "prpr",
+  "reagents": [
+    "prpr"
+  ],
   "key": {
     "p": {
       "item": "minecraft:phantom_membrane"

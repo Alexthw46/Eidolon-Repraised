@@ -5,7 +5,7 @@
     " sg",
     "i  "
   ],
-  "reagents": "lbbb",
+  "reagents": ["lbbb"],
   "key": {
     "i": {
       "item": "eidolon_repraised:gold_inlay"

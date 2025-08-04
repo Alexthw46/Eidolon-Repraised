@@ -5,7 +5,9 @@
     "s s",
     "s s"
   ],
-  "reagents": "hlal",
+  "reagents": [
+    "hlal"
+  ],
   "key": {
     "s": {
       "item": "eidolon_repraised:silver_ingot"

@@ -5,7 +5,9 @@
     "fbf",
     " l "
   ],
-  "reagents": "cici",
+  "reagents": [
+    "cici"
+  ],
   "key": {
     "f": {
       "tag": "c:feathers"

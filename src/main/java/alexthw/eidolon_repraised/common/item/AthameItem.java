@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.enchanting.GetEnchantmentLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,11 +50,15 @@ public class AthameItem extends SwordItem {
         NeoForge.EVENT_BUS.register(this);
     }
 
-//    @SubscribeEvent
-//    public void onLooting(LootingLevelEvent event) {
-//        if (event.getEntity().getMainHandItem().getItem() instanceof AthameItem)
-//            event.setLootingLevel(event.getLootingLevel() * 2 + 1);
-//    }
+    @SubscribeEvent
+    public void onLooting(GetEnchantmentLevelEvent event) {
+        if (event.getStack().getItem() instanceof AthameItem && event.isTargetting(Enchantments.LOOTING)) {
+            var mutable = event.getEnchantments();
+            event.getHolder(Enchantments.LOOTING).ifPresent(enchantment -> {
+                mutable.upgrade(enchantment, mutable.getLevel(enchantment) * 2 + 1);
+            });
+        }
+    }
 
     @SubscribeEvent
     public void onHurt(LivingDamageEvent.Pre event) {

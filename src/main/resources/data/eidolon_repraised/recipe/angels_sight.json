@@ -5,7 +5,9 @@
     "prp",
     " p "
   ],
-  "reagents": "waua",
+  "reagents": [
+    "waua"
+  ],
   "key": {
     "p": {
       "tag": "c:ingots/pewter"

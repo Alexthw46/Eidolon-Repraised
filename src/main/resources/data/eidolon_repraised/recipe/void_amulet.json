@@ -5,7 +5,7 @@
     "iai",
     " o "
   ],
-  "reagents": "s s ",
+  "reagents": ["s s "],
   "key": {
     "p": {
       "tag": "c:ingots/pewter"

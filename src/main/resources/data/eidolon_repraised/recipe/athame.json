@@ -5,7 +5,9 @@
     " s ",
     "e  "
   ],
-  "reagents": "n d ",
+  "reagents": [
+    "n d "
+  ],
   "key": {
     "p": {
       "tag": "c:ingots/pewter"

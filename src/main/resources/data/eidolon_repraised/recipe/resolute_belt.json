@@ -5,7 +5,9 @@
     "gbg",
     " d "
   ],
-  "reagents": "lsas",
+  "reagents": [
+    "lsas"
+  ],
   "key": {
     "i": {
       "item": "eidolon_repraised:gold_inlay"

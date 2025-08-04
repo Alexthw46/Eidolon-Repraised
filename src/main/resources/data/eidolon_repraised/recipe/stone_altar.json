@@ -5,7 +5,7 @@
     "SSS",
     "SiS"
   ],
-  "reagents": "u   ",
+  "reagents": ["u   "],
   "key": {
     "s": {
       "item": "minecraft:smooth_stone_slab"

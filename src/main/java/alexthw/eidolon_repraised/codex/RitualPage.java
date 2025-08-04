@@ -115,7 +115,7 @@ public class RitualPage extends RecipePage<RitualRecipe> {
 
     public RitualPage(Ritual ritual) {
         this(BACKGROUND, ritual instanceof CraftingRitual cr ?
-                        getRegistryName(cr.getResult().getItem()) : prefix("ritual_" + ritual.getRegistryName().getPath()),
+                        getRegistryName(cr.getResult().getItem()) : ritual.getRegistryName(),
                 ritual instanceof CraftingRitual sr ? sr.getResult() : ItemStack.EMPTY);
         this.ritual = ritual;
     }

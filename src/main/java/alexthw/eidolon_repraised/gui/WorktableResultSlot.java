@@ -1,7 +1,7 @@
 package alexthw.eidolon_repraised.gui;
 
 import alexthw.eidolon_repraised.recipe.WorktableRecipe;
-import alexthw.eidolon_repraised.recipe.WorktableRegistry;
+import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.EventHooks;
@@ -75,20 +76,23 @@ public class WorktableResultSlot extends Slot {
     public void onTake(@NotNull Player thePlayer, @NotNull ItemStack stack) {
         this.checkTakeAchievements(stack);
         CommonHooks.setCraftingPlayer(thePlayer);
-        WorktableRecipe recipe = WorktableRegistry.find(core, extras);
+        RecipeHolder<WorktableRecipe> recipeHolder = thePlayer.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get()).stream().filter(
+                holder -> holder.value().matches(core, extras)
+        ).findFirst().orElse(null);
+        WorktableRecipe recipe = recipeHolder != null ? recipeHolder.value() : null;
         NonNullList<ItemStack> items = null;
         if (recipe != null) {
             items = recipe.getRemainingItems(core, extras);
         } else {
             items = NonNullList.create();
             items.addAll(thePlayer.level().getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core.asCraftInput(), thePlayer.level()));
-            for (int i = 0; i < 4; i ++) items.add(extras.getItem(i));
+            for (int i = 0; i < 4; i++) items.add(extras.getItem(i));
         }
         setCraftingPlayer(null);
         assert items != null;
 
         int n = recipe == null ? Math.min(9, items.size()) : items.size();
-        for(int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             Container inv = i < 9 ? core : extras;
             int index = i < 9 ? i : i - 9;
             ItemStack item = inv.getItem(index);

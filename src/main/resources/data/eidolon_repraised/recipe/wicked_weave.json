@@ -5,7 +5,7 @@
     "wsw",
     "www"
   ],
-  "reagents": "u b ",
+  "reagents": ["u b "],
   "key": {
     "w": {
       "item": "minecraft:white_wool"

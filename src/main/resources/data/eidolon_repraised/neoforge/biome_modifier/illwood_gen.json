@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#forge:is_spooky",
+  "biomes": "#c:is_spooky",
   "features": "eidolon_repraised:illwood_placed",
   "step": "vegetal_decoration"
 }

@@ -5,7 +5,9 @@
     "bwb",
     "sbs"
   ],
-  "reagents": "htlt",
+  "reagents": [
+    "htlt"
+  ],
   "key": {
     "b": {
       "item": "eidolon_repraised:imbued_bones"

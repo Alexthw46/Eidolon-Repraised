@@ -5,7 +5,9 @@
     "rbr",
     " r "
   ],
-  "reagents": "sfsf",
+  "reagents": [
+    "sfsf"
+  ],
   "key": {
     "r": {
       "tag": "c:dusts/redstone"

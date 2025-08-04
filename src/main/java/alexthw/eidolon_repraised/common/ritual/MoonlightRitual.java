@@ -27,8 +27,8 @@ public class MoonlightRitual extends Ritual {
     @Override
     public RitualResult tick(Level world, BlockPos pos) {
         if (world.getDayTime() % 24000 < 13000 && world.getDayTime() % 24000 >= 0) {
-            if (!world.isClientSide) {
-                ((PrimaryLevelData) world.getLevelData()).setDayTime(world.getDayTime() + 100);
+            if (!world.isClientSide && world.getLevelData() instanceof PrimaryLevelData data) {
+                data.setDayTime(world.getDayTime() + 100);
                 for (ServerPlayer player : ((ServerLevel) world).players()) {
                     player.connection.send(new ClientboundSetTimePacket(world.getGameTime(), world.getDayTime(), world.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
                 }

@@ -99,7 +99,7 @@ public class Registry {
         return new Item.Properties();
     }
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("general", () -> CreativeModeTab.builder().icon(Registry.SHADOW_GEM.get()::getDefaultInstance).title(Component.translatable("itemGroup.eidolon"))
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("general", () -> CreativeModeTab.builder().icon(Registry.SHADOW_GEM.get()::getDefaultInstance).title(Component.translatable("itemGroup.eidolon_repraised"))
             .displayItems((params, output) -> {
                 for (var entry : ITEMS.getEntries()) {
                     output.accept(entry.get().getDefaultInstance());

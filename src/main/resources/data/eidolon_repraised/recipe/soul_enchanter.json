@@ -5,7 +5,7 @@
     "gog",
     "ooo"
   ],
-  "reagents": "didi",
+  "reagents": ["didi"],
   "key": {
     "b": {
       "item": "minecraft:book"

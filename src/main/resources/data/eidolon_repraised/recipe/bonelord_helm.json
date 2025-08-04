@@ -5,7 +5,9 @@
     "s s",
     "   "
   ],
-  "reagents": "ht t",
+  "reagents": [
+    "ht t"
+  ],
   "key": {
     "b": {
       "item": "eidolon_repraised:imbued_bones"

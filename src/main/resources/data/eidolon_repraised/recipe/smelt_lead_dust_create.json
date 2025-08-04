@@ -8,7 +8,7 @@
   },
   "experience": 0.5,
   "cookingtime": 200,
-  "conditions": [
+  "neoforge:conditions": [
     {
       "modid": "create",
       "type": "neoforge:mod_loaded"

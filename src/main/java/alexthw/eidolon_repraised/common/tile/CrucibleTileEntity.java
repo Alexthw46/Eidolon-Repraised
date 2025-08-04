@@ -5,8 +5,8 @@ import alexthw.eidolon_repraised.client.particle.Particles;
 import alexthw.eidolon_repraised.network.CrucibleFailPacket;
 import alexthw.eidolon_repraised.network.CrucibleSuccessPacket;
 import alexthw.eidolon_repraised.network.Networking;
+import alexthw.eidolon_repraised.recipe.CrucibleHelper;
 import alexthw.eidolon_repraised.recipe.CrucibleRecipe;
-import alexthw.eidolon_repraised.recipe.CrucibleRegistry;
 import alexthw.eidolon_repraised.registries.EidolonParticles;
 import alexthw.eidolon_repraised.registries.Registry;
 import net.minecraft.core.BlockPos;
@@ -277,8 +277,12 @@ public class CrucibleTileEntity extends TileEntityBase {
         // Reset stir state
         stirs = 0;
 
+        if (level == null || level.isClientSide) {
+            // If we're on the client, we don't do anything here, just wait for the server to send us the next step
+            return;
+        }
         // Current set of steps don't have any yield, so let's just forget this whole thing ever happened...
-        if (!CrucibleRegistry.doStepsHaveSomeResult(steps)) {
+        if (!CrucibleHelper.doStepsHaveSomeResult(level, steps)) {
             Networking.sendToNearbyClient(level, worldPosition, new CrucibleFailPacket(worldPosition));
             steps.clear();
             boiling = false;
@@ -288,7 +292,7 @@ public class CrucibleTileEntity extends TileEntityBase {
             steps.add(step);
         }
 
-        CrucibleRecipe recipe = CrucibleRegistry.find(steps);
+        CrucibleRecipe recipe = CrucibleHelper.find(level, steps);
         // Recipe has been completed, let's go!!
         if (recipe != null) {
             completeCraft(steamR, steamG, steamB, contents, recipe);
@@ -326,7 +330,7 @@ public class CrucibleTileEntity extends TileEntityBase {
             steps.add(step);
             stirs = 0;
 
-            CrucibleRecipe recipe = CrucibleRegistry.find(steps);
+            CrucibleRecipe recipe = CrucibleHelper.find(level, steps);
             if (recipe != null) { // if recipe found
                 completeCraft(steamR, steamG, steamB, contents, recipe);
             } else {

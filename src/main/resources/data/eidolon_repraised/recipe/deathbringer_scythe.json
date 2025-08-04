@@ -5,7 +5,9 @@
     "brb",
     "bsb"
   ],
-  "reagents": "gege",
+  "reagents": [
+    "gege"
+  ],
   "key": {
     "e": {
     	"item": "eidolon_repraised:death_essence"

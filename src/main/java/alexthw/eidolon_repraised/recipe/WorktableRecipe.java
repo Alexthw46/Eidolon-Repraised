@@ -1,100 +1,60 @@
 package alexthw.eidolon_repraised.recipe;
 
 import alexthw.eidolon_repraised.registries.EidolonRecipes;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.chars.CharArraySet;
+import it.unimi.dsi.fastutil.chars.CharSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class WorktableRecipe implements Recipe<CraftingInput> {
-    final List<Ingredient> core;
-    final List<Ingredient> extras;
+    public final ShapedRecipePattern pattern_core;
+    public final ShapedRecipePattern pattern_outer;
+
     final ItemStack result;
-    ResourceLocation registryName;
 
-    public WorktableRecipe(Ingredient[] core, Ingredient[] extras, ItemStack result) {
-        this.core = List.of(core);
-        this.extras = List.of(extras);
+    public WorktableRecipe(ShapedRecipePattern core, ShapedRecipePattern outer, ItemStack result) {
+        this.pattern_core = core;
+        this.pattern_outer = outer;
         this.result = result;
-    }
-
-    //for use in the codex
-    @Deprecated
-    public WorktableRecipe(ItemStack[] inputs, ItemStack result) {
-        Ingredient[] core = new Ingredient[9];
-        Ingredient[] extras = new Ingredient[4];
-        for (int i = 0; i < inputs.length; i++) {
-            if (i < 9) core[i] = Ingredient.of(inputs[i]);
-            else extras[i - 9] = Ingredient.of(inputs[i]);
-        }
-        this.core = List.of(core);
-        this.extras = List.of(extras);
-
-        this.result = result;
-    }
-
-    public WorktableRecipe(List<Ingredient> core, List<Ingredient> outer, ItemStack itemStack) {
-        this.core = core;
-        this.extras = outer;
-        this.result = itemStack;
-    }
-
-    public ResourceLocation getRegistryName() {
-        return registryName;
-    }
-
-    public WorktableRecipe setRegistryName(String domain, String path) {
-        this.registryName = ResourceLocation.fromNamespaceAndPath(domain, path);
-        return this;
-    }
-
-    public WorktableRecipe setRegistryName(ResourceLocation registryName) {
-        this.registryName = registryName;
-        return this;
     }
 
     public Ingredient[] getCoreA() {
-        return core.toArray(new Ingredient[9]);
+        return getCore().toArray(new Ingredient[9]);
     }
 
     public Ingredient[] getOuterA() {
-        return extras.toArray(new Ingredient[4]);
+        return getOuter().toArray(new Ingredient[4]);
     }
 
 
     public List<Ingredient> getCore() {
-        return core;
+        return pattern_core.ingredients();
     }
 
     public List<Ingredient> getOuter() {
-        return extras;
+        return pattern_outer.ingredients();
     }
 
-
-    public boolean matches(Container coreInv, Container extraInv) {
-        if (coreInv.getContainerSize() < 9 || extraInv.getContainerSize() < 4 || core == null) return false;
-        for (int i = 0; i < core.size(); i++) {
-            Ingredient ingredient = core.get(i);
-            if (ingredient == null) continue;
-            if (!ingredient.test(coreInv.getItem(i))) return false;
-        }
-        for (int i = 0; i < extras.size(); i++) {
-            Ingredient ingredient = extras.get(i);
-            if (ingredient == null) continue;
-            if (!ingredient.test(extraInv.getItem(i))) return false;
-        }
-        return true;
+    public boolean matches(CraftingContainer coreInv, CraftingContainer extraInv) {
+        if (coreInv.getContainerSize() < 9 || extraInv.getContainerSize() < 4 || pattern_core == null) return false;
+        return pattern_core.matches(coreInv.asCraftInput()) && pattern_outer.matches(extraInv.asCraftInput());
     }
 
     public NonNullList<ItemStack> getRemainingItems(Container coreInv, Container extraInv) {
@@ -114,8 +74,8 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
     @Override
     public @NotNull NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
-        ingredients.addAll(core);
-        ingredients.addAll(extras);
+        ingredients.addAll(getCore());
+        ingredients.addAll(getOuter());
         return ingredients;
     }
 
@@ -145,18 +105,58 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
 
 
     public static class Serializer implements RecipeSerializer<WorktableRecipe> {
+        static int maxWidth = 4;
+        static int maxHeight = 1;
+        public static final Codec<List<String>> R_PATTERN_CODEC = Codec.STRING.listOf().comapFlatMap(p_312085_ -> {
+            if (p_312085_.size() > maxHeight) {
+                return DataResult.error(() -> "Invalid pattern: too many rows, %s is maximum".formatted(maxHeight));
+            } else if (p_312085_.isEmpty()) {
+                return DataResult.error(() -> "Invalid pattern: empty pattern not allowed");
+            } else {
+                int i = p_312085_.getFirst().length();
+
+                for (String s : p_312085_) {
+                    if (s.length() > maxWidth) {
+                        return DataResult.error(() -> "Invalid pattern: too many columns, %s is maximum".formatted(maxWidth));
+                    }
+
+                    if (i != s.length()) {
+                        return DataResult.error(() -> "Invalid pattern: each row must be the same width");
+                    }
+                }
+
+                return DataResult.success(p_312085_);
+            }
+        }, Function.identity());
+
+        public static final MapCodec<ShapedRecipePattern.Data> REAGENT_MAP_CODEC = RecordCodecBuilder.mapCodec(
+                p_312573_ -> p_312573_.group(
+                                ExtraCodecs.strictUnboundedMap(ShapedRecipePattern.Data.SYMBOL_CODEC, Ingredient.CODEC_NONEMPTY).fieldOf("key").forGetter(ShapedRecipePattern.Data::key),
+                                R_PATTERN_CODEC.fieldOf("reagents").forGetter(ShapedRecipePattern.Data::pattern)
+                        )
+                        .apply(p_312573_, ShapedRecipePattern.Data::new)
+        );
+
+        public static final MapCodec<ShapedRecipePattern> PATTERN_CORE_CODEC = ShapedRecipePattern.Data.MAP_CODEC.flatXmap(
+                data -> unpack(data, false),
+                p_344423_ -> p_344423_.data.map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Cannot encode unpacked recipe"))
+        );
+        public static final MapCodec<ShapedRecipePattern> PATTERN_OUTER_CODEC = REAGENT_MAP_CODEC.flatXmap(
+                data -> unpack(data, true),
+                p_344423_ -> p_344423_.data.map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Cannot encode unpacked recipe"))
+        );
 
         public static final MapCodec<WorktableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.CODEC.listOf().fieldOf("core").forGetter(r -> r.core),
-                Ingredient.CODEC.listOf().fieldOf("reagents").forGetter(r -> (r.extras)),
+                Serializer.PATTERN_CORE_CODEC.forGetter(r -> r.pattern_core),
+                Serializer.PATTERN_OUTER_CODEC.forGetter(r -> r.pattern_outer),
                 ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
         ).apply(instance, WorktableRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, WorktableRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                WorktableRecipe::getCore,
-                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                WorktableRecipe::getOuter,
+                ShapedRecipePattern.STREAM_CODEC,
+                r -> r.pattern_core,
+                ShapedRecipePattern.STREAM_CODEC,
+                r -> r.pattern_outer,
                 ItemStack.STREAM_CODEC,
                 WorktableRecipe::getResult,
                 WorktableRecipe::new
@@ -171,6 +171,32 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
         public @NotNull StreamCodec<RegistryFriendlyByteBuf, WorktableRecipe> streamCodec() {
             return STREAM_CODEC;
         }
+
+        private static DataResult<ShapedRecipePattern> unpack(ShapedRecipePattern.Data data, boolean isOuter) {
+            String[] astring = ShapedRecipePattern.shrink(data.pattern());
+            int i = isOuter ? 4 : astring[0].length();
+            int j = astring.length;
+            NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i * j, Ingredient.EMPTY);
+            CharSet charset = new CharArraySet(data.key().keySet());
+
+            for (int k = 0; k < astring.length; k++) {
+                String s = astring[k];
+
+                for (int l = 0; l < s.length(); l++) {
+                    char c0 = s.charAt(l);
+                    Ingredient ingredient = c0 == ' ' ? Ingredient.EMPTY : data.key().get(c0);
+                    if (ingredient == null) {
+                        return DataResult.error(() -> "Pattern references symbol '" + c0 + "' but it's not defined in the key");
+                    }
+
+                    charset.remove(c0);
+                    nonnulllist.set(l + i * k, ingredient);
+                }
+            }
+
+            return DataResult.success(new ShapedRecipePattern(i, j, nonnulllist, Optional.of(data)));
+        }
+
     }
 
     @Override

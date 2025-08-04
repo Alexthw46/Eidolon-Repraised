@@ -13,7 +13,7 @@ public record Sign(ResourceLocation key, ResourceLocation sprite, int color) imp
 
     public static Codec<Sign> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("key").forGetter(Sign::getRegistryName)//,
+                    ResourceLocation.CODEC.fieldOf("sign").forGetter(Sign::getRegistryName)//,
 //                    ResourceLocation.CODEC.fieldOf("sprite").forGetter(Sign::sprite),
 //                    Codec.INT.fieldOf("color").forGetter(Sign::color)
             ).apply(instance, Signs::find)

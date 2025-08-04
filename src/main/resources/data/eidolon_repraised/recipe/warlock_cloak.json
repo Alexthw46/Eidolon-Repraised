@@ -5,7 +5,7 @@
     "www",
     "w w"
   ],
-  "reagents": "s s ",
+  "reagents": ["s s "],
   "key": {
     "w": {
       "item": "eidolon_repraised:wicked_weave"
