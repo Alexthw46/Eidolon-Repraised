@@ -34,8 +34,8 @@ public class ItemRitualRecipe extends RitualRecipe {
     public ResourceLocation symbol;
     public int color;
 
-    public ItemRitualRecipe(Ingredient reagent, List<Ingredient> stacks, List<Ingredient> foci, ItemStack output, boolean keepNbtOfReagent, float healthRequirement) {
-        super(reagent, stacks, foci, healthRequirement);
+    public ItemRitualRecipe(Ingredient reagent, List<Ingredient> pedestals, List<Ingredient> foci, ItemStack output, boolean keepNbtOfReagent, float healthRequirement) {
+        super(reagent, pedestals, foci, healthRequirement);
         this.result = output;
         this.keepNbtOfReagent = keepNbtOfReagent;
     }

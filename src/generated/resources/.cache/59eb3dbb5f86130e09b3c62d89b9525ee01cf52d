@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-03T16:49:22.5400504	Loot Tables
+// 1.21.1	2025-08-05T16:37:24.2169556	Loot Tables
 3ed91ee0990f490be96adb18a0f3765ca4e46bdc data/eidolon_repraised/loot_table/blocks/bone_pile.json
 6515e6e0469bc289db73937b5851c6a1ce251f8e data/eidolon_repraised/loot_table/blocks/bone_pile_slab.json
 f862820765cba5bca3d5e2cbec870a6c1181e367 data/eidolon_repraised/loot_table/blocks/bone_pile_stairs.json
@@ -33,3 +33,9 @@ cf1660c8d45785c27699fc82ea6b7c9be797adc3 data/eidolon_repraised/loot_table/block
 b63139b5b3b60beb30f5c8a9eb44a79e19473619 data/eidolon_repraised/loot_table/blocks/smooth_stone_masonry_stairs.json
 a72f7caa3d7ebfef6053af1bf988545eb7d3f86d data/eidolon_repraised/loot_table/blocks/stripped_illwood_bark.json
 3061f26fc871880ccc37236e40eacc326df626f7 data/eidolon_repraised/loot_table/blocks/stripped_illwood_log.json
+f418dd60cbc86d80743889766b2e4900c055be2e data/eidolon_repraised/loot_table/entities/giant_skeleton.json
+5e14f80ef96f12bb0cf0f3794d8b7361b07f7736 data/eidolon_repraised/loot_table/entities/necromancer.json
+48953472153d2912f489882cea156a44b88325e3 data/eidolon_repraised/loot_table/entities/raven.json
+d7b439e2c21758f867ec0c13aaedeeb8624cdc26 data/eidolon_repraised/loot_table/entities/slimy_slug.json
+0e61aa8d9e1a2f17892a1142043c5ae7bee3fcd7 data/eidolon_repraised/loot_table/entities/wraith.json
+daec192b9cad485f996ffce4932405b882e18f47 data/eidolon_repraised/loot_table/entities/zombie_brute.json

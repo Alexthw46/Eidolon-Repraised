@@ -37,7 +37,7 @@ public class Networking {
         reg.playToClient(KnowledgeUpdatePacket.TYPE, KnowledgeUpdatePacket.CODEC, Networking::handle);
         reg.playToServer(AttemptCastPacket.TYPE, AttemptCastPacket.CODEC, Networking::handle);
         reg.playToClient(SpellCastPacket.TYPE, SpellCastPacket.CODEC, Networking::handle);
-        reg.playToClient(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
+        reg.playToServer(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
         reg.playToClient(DeathbringerSlashEffectPacket.TYPE, DeathbringerSlashEffectPacket.CODEC, Networking::handle);
         reg.playToClient(SoulUpdatePacket.TYPE, SoulUpdatePacket.CODEC, Networking::handle);
         reg.playToServer(WingsFlapPacket.TYPE, WingsFlapPacket.CODEC, Networking::handle);

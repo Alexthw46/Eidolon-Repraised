@@ -10,6 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -66,13 +67,7 @@ public class ForagingRecipe implements Recipe<CraftingInput> {
         JsonObject jsonobject = new JsonObject();
         jsonobject.addProperty("type", "eidolon_repraised:athame_foraging");
         jsonobject.add("block", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, this.block).getOrThrow());
-        JsonObject resultObj = new JsonObject();
-        resultObj.addProperty("item", RegistryUtil.getRegistryName(result.getItem()).toString());
-        int count = result.getCount();
-        if (count > 1) {
-            resultObj.addProperty("count", count);
-        }
-        jsonobject.add("output", resultObj);
+        jsonobject.add("output", ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, this.result).getOrThrow());
         return jsonobject;
     }
 

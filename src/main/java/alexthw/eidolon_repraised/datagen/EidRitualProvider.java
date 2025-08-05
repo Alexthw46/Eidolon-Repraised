@@ -196,7 +196,7 @@ public class EidRitualProvider extends SimpleDataProvider {
     }
 
     public void crafting(ItemStack result, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new ItemRitualRecipe(reagent, foci, pedestal, result, true, healthCost));
+        rituals.add(new ItemRitualRecipe(reagent, pedestal, foci, result, true, healthCost));
     }
 
     public void location(TagKey<Structure> structureTagKey, ResourceLocation location, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {

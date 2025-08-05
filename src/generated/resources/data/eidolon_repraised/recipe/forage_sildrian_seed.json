@@ -4,6 +4,7 @@
     "item": "minecraft:jungle_leaves"
   },
   "output": {
-    "item": "eidolon_repraised:sildrian_seed"
+    "count": 1,
+    "id": "eidolon_repraised:sildrian_seed"
   }
 }

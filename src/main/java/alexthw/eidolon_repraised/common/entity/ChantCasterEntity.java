@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -35,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ChantCasterEntity extends Entity {
+public class ChantCasterEntity extends Entity implements IEntityWithComplexSpawn {
     public static final EntityDataAccessor<CompoundTag> RUNES = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
     public static final EntityDataAccessor<CompoundTag> SIGNS = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.COMPOUND_TAG);
     public static final EntityDataAccessor<Integer> INDEX = SynchedEntityData.defineId(ChantCasterEntity.class, EntityDataSerializers.INT);
@@ -236,20 +238,15 @@ public class ChantCasterEntity extends Entity {
         compound.putBoolean("succeeded", getEntityData().get(SUCCEEDED));
     }
 
-//    @Override
-//    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-//        return NetworkHooks.getEntitySpawningPacket(this);
-//    }
-//
-//    @Override
-//    public void writeSpawnData(FriendlyByteBuf buffer) {
-//        buffer.writeDouble(look.x);
-//        buffer.writeDouble(look.y);
-//        buffer.writeDouble(look.z);
-//    }
-//
-//    @Override
-//    public void readSpawnData(FriendlyByteBuf buf) {
-//        look = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
-//    }
+    @Override
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
+        buffer.writeDouble(look.x);
+        buffer.writeDouble(look.y);
+        buffer.writeDouble(look.z);
+    }
+
+    @Override
+    public void readSpawnData(RegistryFriendlyByteBuf buf) {
+        look = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
+    }
 }

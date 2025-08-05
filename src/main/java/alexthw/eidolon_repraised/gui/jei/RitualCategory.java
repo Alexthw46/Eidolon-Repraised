@@ -84,7 +84,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
 
         layout.addSlot(RecipeIngredientRole.INPUT, 60, 85).addIngredients(recipe.reagent);
 
-        for (IRequirement iRequirement : recipe.getRitual().getInvariants()) {
+        for (IRequirement iRequirement : recipe.getRitualWithRequirements().getInvariants()) {
             if (iRequirement instanceof FocusItemPresentRequirement focusItemPresentRequirement) {
                 layout.addSlot(RecipeIngredientRole.CATALYST, 91, 82).addIngredients(focusItemPresentRequirement.getMatch());
                 break;
