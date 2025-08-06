@@ -3,8 +3,6 @@ package alexthw.eidolon_repraised.common.tile;
 import alexthw.eidolon_repraised.api.ritual.IRitualItemFocus;
 import alexthw.eidolon_repraised.registries.Registry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -12,10 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
-public class NecroticFocusTileEntity extends TileEntityBase implements IRitualItemFocus {
-    ItemStack stack = ItemStack.EMPTY;
+public class NecroticFocusTileEntity extends ContainerTileBase implements IRitualItemFocus {
 
     public NecroticFocusTileEntity(BlockPos pos, BlockState state) {
         this(Registry.NECROTIC_FOCUS_TILE_ENTITY.get(), pos, state);
@@ -37,29 +33,18 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
             if (player.getItemInHand(hand).isEmpty() && !stack.isEmpty()) {
                 player.addItem(stack);
                 stack = ItemStack.EMPTY;
-                if (!level.isClientSide) sync(level.registryAccess());
+                if (!level.isClientSide) sync();
                 return ItemInteractionResult.SUCCESS;
             } else if (!player.getItemInHand(hand).isEmpty() && stack.isEmpty()) {
                 stack = player.getItemInHand(hand).copy();
                 stack.setCount(1);
                 player.getItemInHand(hand).shrink(1);
                 if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
-                if (!level.isClientSide) sync(level.registryAccess());
+                if (!level.isClientSide) sync();
                 return ItemInteractionResult.SUCCESS;
             }
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-    }
-
-    @Override
-    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
-        super.loadAdditional(tag, provider);
-        stack = ItemStack.parseOptional(provider, tag.getCompound("stack"));
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
-        tag.put("stack", stack.saveOptional(provider));
     }
 
     @Override
@@ -70,12 +55,12 @@ public class NecroticFocusTileEntity extends TileEntityBase implements IRitualIt
     @Override
     public void take() {
         stack = ItemStack.EMPTY;
-        if (!level.isClientSide) sync(level.registryAccess());
+        if (!level.isClientSide) sync();
     }
 
     @Override
     public void replace(ItemStack stack) {
         this.stack = stack;
-        if (!level.isClientSide) sync(level.registryAccess());
+        if (!level.isClientSide) sync();
     }
 }

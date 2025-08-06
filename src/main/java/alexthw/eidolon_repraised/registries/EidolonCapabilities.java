@@ -5,9 +5,15 @@ import alexthw.eidolon_repraised.capability.*;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+import static alexthw.eidolon_repraised.registries.Registry.*;
 
 @EventBusSubscriber(modid = Eidolon.MODID)
 public class EidolonCapabilities {
@@ -25,6 +31,16 @@ public class EidolonCapabilities {
         event.registerEntity(KNOWLEDGE_CAPABILITY, EntityType.PLAYER, (player, ctx) -> new KnowledgeImpl(player));
         event.registerEntity(REPUTATION_CAPABILITY, EntityType.PLAYER, (player, ctx) -> new ReputationImpl(player));
         event.registerEntity(WINGS_CAPABILITY, EntityType.PLAYER, (player, ctx) -> new WingsDataImpl(player));
+
+        var invWrappers = List.of(HAND_TILE_ENTITY.get(), CENSER_TILE_ENTITY.get(), NECROTIC_FOCUS_TILE_ENTITY.get(), BRAZIER_TILE_ENTITY.get());
+
+        for (var tileEntity : invWrappers) {
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, tileEntity, (blockEntity, ctx) -> new InvWrapper(blockEntity));
+        }
+
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CRUCIBLE_TILE_ENTITY.get(), (blockEntity, ctx) -> blockEntity.tank);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CRUCIBLE_TILE_ENTITY.get(), (blockEntity, ctx) -> new InvWrapper(blockEntity));
+
     }
 
 }

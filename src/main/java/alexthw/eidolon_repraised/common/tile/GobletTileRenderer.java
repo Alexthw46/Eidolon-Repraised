@@ -7,14 +7,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 public class GobletTileRenderer implements BlockEntityRenderer<GobletTileEntity> {
 
-    public GobletTileRenderer() {}
+    public GobletTileRenderer() {
+    }
 
     @Override
     public void render(GobletTileEntity tile, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
@@ -22,13 +24,13 @@ public class GobletTileRenderer implements BlockEntityRenderer<GobletTileEntity>
 
         if (tile.getEntityType() != null) {
             TextureAtlasSprite water = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(ResourceLocation.fromNamespaceAndPath("minecraft","block/water_still" ));
-            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
+                    .apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
+            VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentMovingBlock());
             Matrix4f mat = matrixStackIn.last().pose();
-            builder.addVertex(mat, 0.375f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(6), water.getV(6)).setLight(combinedLightIn).setNormal(0, 1, 0);
-            builder.addVertex(mat, 0.375f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(10), water.getV(6)).setLight(combinedLightIn).setNormal(0, 1, 0);
-            builder.addVertex(mat, 0.625f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(10), water.getV(10)).setLight(combinedLightIn).setNormal(0, 1, 0);
-            builder.addVertex(mat, 0.625f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(6), water.getV(10)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.375f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(0.375f), water.getV(0.375f)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.375f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(0.625f), water.getV(0.375f)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.625f, 0.46875f, 0.625f).setColor(192, 16, 32, 224).setUv(water.getU(0.625f), water.getV(0.625f)).setLight(combinedLightIn).setNormal(0, 1, 0);
+            builder.addVertex(mat, 0.625f, 0.46875f, 0.375f).setColor(192, 16, 32, 224).setUv(water.getU(0.375f), water.getV(0.625f)).setLight(combinedLightIn).setNormal(0, 1, 0);
         }
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -49,10 +50,22 @@ public class CrucibleBlock extends BlockBase implements EntityBlock, LiquidBlock
     public boolean placeLiquid(@NotNull LevelAccessor pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull FluidState pFluidState) {
         if (!pLevel.isClientSide() && pLevel.getBlockEntity(pPos) instanceof CrucibleTileEntity crucibleTileEntity && pFluidState.isSource() && pFluidState.is(Fluids.WATER)) {
             crucibleTileEntity.fill();
-            crucibleTileEntity.sync(pLevel.registryAccess());
+            crucibleTileEntity.sync();
             pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
+        if (!world.isClientSide() && world.getBlockEntity(pos) instanceof CrucibleTileEntity tile) {
+            if (world.hasNeighborSignal(pos) && tile.getStirTicks() == 0 && !tile.getSteps().isEmpty()) {
+                tile.stir(pos);
+            }
+            if (!world.isOutsideBuildHeight(pos))
+                world.sendBlockUpdated(pos, state, state, 3);
+        }
     }
 }

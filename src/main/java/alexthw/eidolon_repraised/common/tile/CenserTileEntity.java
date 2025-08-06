@@ -21,12 +21,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
 
-public class CenserTileEntity extends TileEntityBase implements IBurner {
+public class CenserTileEntity extends ContainerTileBase implements IBurner {
     public CenserTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
-
-    ItemStack incense = ItemStack.EMPTY;
 
     boolean isBurning;
     int burnCounter;
@@ -37,15 +35,15 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     public boolean canStartBurning() {
-        return !isBurning && !incense.isEmpty();
+        return !isBurning && !stack.isEmpty();
     }
 
     @Override
     public void onDestroyed(BlockState state, BlockPos pos) {
         super.onDestroyed(state, pos);
-        if (!isBurning && !incense.isEmpty() && level != null) {
+        if (!isBurning && !stack.isEmpty() && level != null) {
             // drop the incense item if the censer is destroyed
-            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), incense));
+            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
     }
 
@@ -54,11 +52,11 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
         if (!level.isClientSide && isBurning && incense() != null) {
             burnCounter++;
             this.incense().tick(burnCounter);
-            sync(level.registryAccess());
+            sync();
         }
         if (burnCounter == 80) {
-            incense = ItemStack.EMPTY;
-            sync(level.registryAccess());
+            stack = ItemStack.EMPTY;
+            sync();
         }
         if (level.isClientSide && isBurning && incense() != null) {
             incenseRitual.animateParticles(this, burnCounter);
@@ -69,18 +67,18 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     public ItemInteractionResult onActivated(BlockState state, BlockPos pos, Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && level instanceof ServerLevel && !isBurning) {
             ItemStack itemInHand = player.getItemInHand(hand);
-            if (itemInHand.isEmpty() && !incense.isEmpty()) {
-                ItemHandlerHelper.giveItemToPlayer(player, incense);
-                incense = ItemStack.EMPTY;
-                if (!level.isClientSide) sync(level.registryAccess());
+            if (itemInHand.isEmpty() && !stack.isEmpty()) {
+                ItemHandlerHelper.giveItemToPlayer(player, stack);
+                stack = ItemStack.EMPTY;
+                if (!level.isClientSide) sync();
                 return ItemInteractionResult.SUCCESS;
-            } else if (!itemInHand.isEmpty() && incense.isEmpty()) {
+            } else if (!itemInHand.isEmpty() && stack.isEmpty()) {
                 if (IncenseRegistry.getIncenseRitual(itemInHand.getItem()) != null) {
-                    incense = itemInHand.split(1);
-                    if (!level.isClientSide) sync(level.registryAccess());
+                    stack = itemInHand.split(1);
+                    if (!level.isClientSide) sync();
                     return ItemInteractionResult.SUCCESS;
                 }
-            } else if (!itemInHand.isEmpty() && !incense.isEmpty()) {
+            } else if (!itemInHand.isEmpty() && !stack.isEmpty()) {
                 if (itemInHand.getItem() instanceof FlintAndSteelItem) {
                     if (!level.isClientSide && canStartBurning()) this.startBurning(player, level, pos);
                 }
@@ -96,7 +94,7 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             isBurning = true;
             world.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
             burnCounter = 0;
-            sync(level.registryAccess());
+            sync();
         }
     }
 
@@ -104,9 +102,9 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     public void loadAdditional(@NotNull CompoundTag pTag, HolderLookup.@NotNull Provider provider) {
         super.loadAdditional(pTag, provider);
         if (pTag.contains("incense")) {
-            incense = ItemStack.parseOptional(provider, pTag.getCompound("incense"));
-        } else incense = ItemStack.EMPTY;
-        if (pTag.contains("incenseContext") && incense.isEmpty()) {
+            stack = ItemStack.parseOptional(provider, pTag.getCompound("incense"));
+        } else stack = ItemStack.EMPTY;
+        if (pTag.contains("incenseContext") && stack.isEmpty()) {
             incenseRitual = IncenseRitual.read(pTag);
             incenseRitual.start(null, this);
         }
@@ -115,10 +113,10 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag pTag, HolderLookup.@NotNull Provider provider) {
+    public void saveAdditional(@NotNull CompoundTag pTag, HolderLookup.@NotNull Provider provider) {
         super.saveAdditional(pTag, provider);
-        if (!incense.isEmpty()) {
-            pTag.put("incense", incense.saveOptional(provider));
+        if (!stack.isEmpty()) {
+            pTag.put("incense", stack.saveOptional(provider));
         }
         if (incenseRitual != null) {
             incenseRitual.write(pTag);
@@ -133,14 +131,14 @@ public class CenserTileEntity extends TileEntityBase implements IBurner {
             level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(LIT, isBurning));
             burnCounter = 0;
             incenseRitual = null;
-            sync(level.registryAccess());
+            sync();
         }
     }
 
     public IncenseRitual incense() {
         // if there is an incense item in the censer, get the ritual associated with it
-        if (incenseRitual == null && !incense.isEmpty()) {
-            incenseRitual = IncenseRegistry.getIncenseRitual(incense.getItem());
+        if (incenseRitual == null && !stack.isEmpty()) {
+            incenseRitual = IncenseRegistry.getIncenseRitual(stack.getItem());
         }
         return incenseRitual;
     }

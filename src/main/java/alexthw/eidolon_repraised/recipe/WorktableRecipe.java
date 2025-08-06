@@ -35,15 +35,6 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
         this.result = result;
     }
 
-    public Ingredient[] getCoreA() {
-        return getCore().toArray(new Ingredient[9]);
-    }
-
-    public Ingredient[] getOuterA() {
-        return getOuter().toArray(new Ingredient[4]);
-    }
-
-
     public List<Ingredient> getCore() {
         return pattern_core.ingredients();
     }
@@ -141,6 +132,7 @@ public class WorktableRecipe implements Recipe<CraftingInput> {
                 data -> unpack(data, false),
                 p_344423_ -> p_344423_.data.map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Cannot encode unpacked recipe"))
         );
+
         public static final MapCodec<ShapedRecipePattern> PATTERN_OUTER_CODEC = REAGENT_MAP_CODEC.flatXmap(
                 data -> unpack(data, true),
                 p_344423_ -> p_344423_.data.map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Cannot encode unpacked recipe"))

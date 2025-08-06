@@ -17,13 +17,13 @@ public class CenserRenderer implements BlockEntityRenderer<CenserTileEntity> {
     public void render(CenserTileEntity tileEntityIn, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer ir = mc.getItemRenderer();
-        if (!tileEntityIn.incense.isEmpty()) {
+        if (!tileEntityIn.stack.isEmpty()) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0.5, 0.25, 0.5);
             matrixStackIn.scale(0.75f, 2.5f, 0.75f);
             matrixStackIn.mulPose(Axis.XN.rotationDegrees(90));
 
-            ir.renderStatic(tileEntityIn.incense, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, tileEntityIn.getLevel(), 0);
+            ir.renderStatic(tileEntityIn.stack, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, tileEntityIn.getLevel(), 0);
             matrixStackIn.popPose();
         }
     }

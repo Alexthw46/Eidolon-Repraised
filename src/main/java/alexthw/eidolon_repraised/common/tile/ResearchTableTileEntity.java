@@ -117,12 +117,12 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
     public void tick() {
         if (progress < 0) {
             progress = 0;
-            sync(level.registryAccess());
+            sync();
         }
         if (progress > 0) {
             if (stacks.getFirst().isEmpty() || stacks.getFirst().getItem() != Registry.RESEARCH_NOTES.get()) {
                 progress = 0;
-                sync(level.registryAccess());
+                sync();
                 for (ContainerListener listener : listeners)
                     listener.dataChanged((AbstractContainerMenu) listener, 0, progress);
                 return;
@@ -135,7 +135,7 @@ public class ResearchTableTileEntity extends TileEntityBase implements WorldlyCo
                 for (ContainerListener listener : listeners)
                     listener.slotChanged((AbstractContainerMenu) listener, 0, stacks.getFirst());
             }
-            sync(level.registryAccess());
+            sync();
             for (ContainerListener listener : listeners)
                 listener.dataChanged((AbstractContainerMenu) listener, 0, progress);
         }

@@ -21,7 +21,7 @@ public class EffigyTileEntity extends TileEntityBase {
     public void pray() {
         if (!level.isClientSide) {
             previous = level.getGameTime();
-            sync(level.registryAccess());
+            sync();
         }
     }
 

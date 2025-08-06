@@ -37,7 +37,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     public @NotNull ItemStack removeItem(int pSlot, int pAmount) {
         ItemStack copyStack = stack.copy().split(pAmount);
         stack.shrink(pAmount);
-        sync(level.registryAccess());
+        sync();
         return copyStack;
     }
 
@@ -45,14 +45,14 @@ public class SingleItemTile extends TileEntityBase implements Container {
     public @NotNull ItemStack removeItemNoUpdate(int pSlot) {
         ItemStack stack = this.stack.copy();
         this.stack = ItemStack.EMPTY;
-        sync(level.registryAccess());
+        sync();
         return stack;
     }
 
     @Override
     public void setItem(int pSlot, @NotNull ItemStack pStack) {
         this.stack = pStack;
-        sync(level.registryAccess());
+        sync();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     @Override
     public void clearContent() {
         this.stack = ItemStack.EMPTY;
-        sync(level.registryAccess());
+        sync();
     }
 
     public ItemStack getStack() {
@@ -82,7 +82,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
 
     public void setStack(ItemStack otherStack) {
         this.stack = otherStack;
-        sync(level.registryAccess());
+        sync();
     }
 
 //    @NotNull
