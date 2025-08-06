@@ -23,14 +23,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static alexthw.eidolon_repraised.codex.CodexGui.CODEX_BACKGROUND;
 import static alexthw.eidolon_repraised.codex.CodexGui.blit;
 
 public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContainer> {
 
     public int FULL_WIDTH = 256;
     public int FULL_HEIGHT = 256;
-    public static ResourceLocation background = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/inscription_table.png" );
+    public static ResourceLocation background = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/inscription_table.png");
 
     public List<Sign> currentChant;
     public List<SignButton> signButtons = new ArrayList<>();
@@ -62,22 +61,21 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
         PoseStack matrixStack = graphics.pose();
         matrixStack.pushPose();
         drawScreenAfterScale(graphics, mouseX, mouseY, partialTicks);
         matrixStack.popPose();
-        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-
+    protected void renderBg(@NotNull GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
+        graphics.blit(background, bookLeft + 32, bookTop, 0, 0, 200, FULL_HEIGHT, FULL_WIDTH, FULL_HEIGHT);
+        graphics.blit(background, bookLeft - 2, bookTop + 72, 200, 92, 36, 56, FULL_WIDTH, FULL_HEIGHT);
     }
 
     public void drawBackgroundElements(GuiGraphics graphics) {
-        graphics.blit(background, 32, 0, 0, 0, 200, FULL_HEIGHT, FULL_WIDTH, FULL_HEIGHT);
-        graphics.blit(background, -2, 72, 200, 92, 36, 56, FULL_WIDTH, FULL_HEIGHT);
     }
 
     public void drawForegroundElements(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
@@ -86,7 +84,6 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
     }
 
     public void drawScreenAfterScale(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics, mouseX, mouseY, partialTicks);
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(bookLeft, bookTop, 0);
@@ -94,7 +91,6 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
         drawBackgroundElements(graphics);
         drawForegroundElements(graphics, mouseX, mouseY, partialTicks);
         poseStack.popPose();
-        super.render(graphics, mouseX, mouseY, partialTicks);
         renderTooltip(graphics, mouseX, mouseY);
     }
 
@@ -167,7 +163,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
 
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
-        RenderSystem.setShaderTexture(0, CODEX_BACKGROUND);
+        RenderSystem.setShaderTexture(0, background);
     }
 
     @Override

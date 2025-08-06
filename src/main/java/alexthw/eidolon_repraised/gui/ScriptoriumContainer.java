@@ -15,6 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static alexthw.eidolon_repraised.registries.Registry.CHANT_SCROLL;
+import static alexthw.eidolon_repraised.registries.Registry.PARCHMENT;
+
 public class ScriptoriumContainer extends AbstractContainerMenu {
 
     private final Container inventory = new SimpleContainer(2) {
@@ -36,8 +39,8 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
     public ScriptoriumContainer(int id, Inventory playerInventory, ContainerLevelAccess access) {
         super(Registry.SCRIPTORIUM_CONTAINER.get(), id);
         this.access = access;
-        this.addSlot(new NotesSlot(inventory, 0, -30, 33));
-        this.addSlot(new NotesSlot(inventory, 1, -30, 56));
+        this.addSlot(new InputSlot(inventory, 0, -30, 33));
+        this.addSlot(new OutputSlot(inventory, 1, -30, 56));
 
         for (int k = 0; k < 3; ++k) {
             for (int i1 = 0; i1 < 9; ++i1) {
@@ -114,7 +117,7 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
         super.removed(pPlayer);
         // drop the items in the slots
         for (Slot slot : this.slots) {
-            if (slot instanceof NotesSlot) {
+            if (slot instanceof OutputSlot) {
                 ItemStack stack = slot.getItem();
                 if (!stack.isEmpty()) {
                     pPlayer.drop(stack, false);
@@ -150,8 +153,20 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
         });
     }
 
-    static class NotesSlot extends Slot {
-        public NotesSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
+    static class InputSlot extends Slot {
+        public InputSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
+            super(iInventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return stack.is(CHANT_SCROLL.get()) || stack.is(PARCHMENT.get());
+        }
+
+    }
+
+    static class OutputSlot extends Slot {
+        public OutputSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
             super(iInventoryIn, index, xPosition, yPosition);
         }
 

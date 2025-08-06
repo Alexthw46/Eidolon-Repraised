@@ -8,8 +8,7 @@ import alexthw.eidolon_repraised.common.tile.*;
 import alexthw.eidolon_repraised.compat.CompatHandler;
 import alexthw.eidolon_repraised.event.Events;
 import alexthw.eidolon_repraised.mixin.BlockEntityTypeAccessor;
-import alexthw.eidolon_repraised.network.InitCodexPacket;
-import alexthw.eidolon_repraised.network.Networking;
+import alexthw.eidolon_repraised.network.*;
 import alexthw.eidolon_repraised.proxy.ClientProxy;
 import alexthw.eidolon_repraised.proxy.ISidedProxy;
 import alexthw.eidolon_repraised.proxy.ServerProxy;
@@ -149,7 +148,15 @@ public class Eidolon {
                 e.setCancellationResult(result);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendToPlayerClient(new InitCodexPacket(null), (ServerPlayer) e.getEntity()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) ->
+        {
+            if (!(e.getEntity() instanceof ServerPlayer player)) return;
+            // Send all the data to the player when they log in
+            Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
+            Networking.sendToPlayerClient(new SoulUpdatePacket(player), player);
+            Networking.sendToPlayerClient(new WingsDataUpdatePacket(player), player);
+            Networking.sendToPlayerClient(new InitCodexPacket(null), player);
+        });
     }
 
     @OnlyIn(Dist.CLIENT)

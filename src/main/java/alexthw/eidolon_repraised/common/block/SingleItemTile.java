@@ -103,7 +103,7 @@ public class SingleItemTile extends TileEntityBase implements Container {
     @Override
     protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         super.loadAdditional(tag, registries);
-        stack = ItemStack.parseOptional(registries,tag);
+        stack = ItemStack.parseOptional(registries,tag.getCompound("stack"));
     }
 
     @Override

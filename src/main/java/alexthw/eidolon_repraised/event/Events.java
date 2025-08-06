@@ -247,10 +247,6 @@ public class Events {
     @SubscribeEvent
     public void registerCustomAI(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {
-//            if (event.getEntity() instanceof Player player) {
-//                Networking.sendTo(player, new KnowledgeUpdatePacket(player, false));
-//                Networking.sendTo(player, new SoulUpdatePacket(player));
-//            }
             if (event.getEntity() instanceof Witch witch) {
                 witch.goalSelector.addGoal(1, new WitchBarterGoal(
                         witch,
