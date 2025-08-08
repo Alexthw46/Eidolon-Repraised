@@ -2,7 +2,8 @@ modLoader = "javafml" #mandatory
 loaderVersion = "[4,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license = "All rights reserved"
 issueTrackerURL = "https://github.com/Alexthw46/Eidolon-Repraised/issues" #optional
-[[mods]] #mandatory
+[[mods]]
+enumExtensions="META-INF/enumextensions.json"
 modId = "eidolon_repraised" #mandatory
 version = "${file.jarVersion}" #mandatory
 displayName = "Eidolon:Repraised" #mandatory

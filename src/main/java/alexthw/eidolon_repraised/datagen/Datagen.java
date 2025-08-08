@@ -25,6 +25,7 @@ public class Datagen {
         var blockGen = new EidBlockTagProvider(gen, provider, fileHelper);
         gen.addProvider(event.includeServer(), blockGen);
         gen.addProvider(event.includeServer(), new EidItemTagProvider(gen, provider, blockGen, fileHelper));
+        gen.addProvider(event.includeServer(), new EidDataMapProvider(output, provider));
         gen.addProvider(event.includeServer(), new ModLootTables(gen, lookupProvider));
         gen.addProvider(event.includeServer(), new EidRecipeProvider(gen, lookupProvider));
         gen.addProvider(event.includeServer(), new EidBiomeTagProvider(gen, provider, fileHelper));

@@ -58,14 +58,14 @@ public class ListPage extends Page {
             drawItem(mStack, icon, x + 2, y + 8 + i * 20, mouseX, mouseY);
             String text = "";
             try {
-                if (entry.getPower() > 0) {
-                    text += (int) entry.getPower() + " " + I18n.get("eidolon.codex.altar_power");
+                if (entry.power() > 0) {
+                    text += (int) entry.power() + " " + I18n.get("eidolon.codex.altar_power");
                 }
-                if (entry.getCapacity() > 0) {
+                if (entry.capacity() > 0) {
                     if (!text.isEmpty()) {
                         text += ", ";
                     }
-                    text += (int) entry.getCapacity() + " " + I18n.get("eidolon.codex.altar_capacity");
+                    text += (int) entry.capacity() + " " + I18n.get("eidolon.codex.altar_capacity");
                 }
             } catch (Exception e) {
                 text = "Invalid Entry. Likely mod conflict.";

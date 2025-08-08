@@ -1,0 +1,75 @@
+{
+  "values": {
+    "eidolon_repraised:candle": {
+      "key": "eidolon_repraised:light",
+      "power": 2.0
+    },
+    "eidolon_repraised:candlestick": {
+      "key": "eidolon_repraised:light",
+      "power": 2.0
+    },
+    "eidolon_repraised:censer": {
+      "capacity": 2.0,
+      "key": "eidolon_repraised:goblet"
+    },
+    "eidolon_repraised:goblet": {
+      "capacity": 2.0,
+      "key": "eidolon_repraised:goblet"
+    },
+    "eidolon_repraised:magic_candle": {
+      "key": "eidolon_repraised:light",
+      "power": 2.0
+    },
+    "eidolon_repraised:magic_candlestick": {
+      "key": "eidolon_repraised:light",
+      "power": 3.0
+    },
+    "minecraft:lantern": {
+      "capacity": 1.0,
+      "key": "eidolon_repraised:light",
+      "power": 1.0
+    },
+    "minecraft:potted_crimson_fungus": {
+      "key": "eidolon_repraised:plant",
+      "power": 2.0
+    },
+    "minecraft:potted_crimson_roots": {
+      "key": "eidolon_repraised:plant",
+      "power": 1.0
+    },
+    "minecraft:potted_warped_fungus": {
+      "key": "eidolon_repraised:plant",
+      "power": 2.0
+    },
+    "minecraft:potted_warped_roots": {
+      "key": "eidolon_repraised:plant",
+      "power": 1.0
+    },
+    "minecraft:potted_wither_rose": {
+      "key": "eidolon_repraised:plant",
+      "power": 3.0
+    },
+    "minecraft:skeleton_skull": {
+      "capacity": 2.0,
+      "key": "eidolon_repraised:skull"
+    },
+    "minecraft:soul_torch": {
+      "key": "eidolon_repraised:light",
+      "power": 1.0
+    },
+    "minecraft:torch": {
+      "key": "eidolon_repraised:light",
+      "power": 1.0
+    },
+    "minecraft:wither_skeleton_skull": {
+      "capacity": 3.0,
+      "key": "eidolon_repraised:skull",
+      "power": 1.0
+    },
+    "minecraft:zombie_head": {
+      "capacity": 1.0,
+      "key": "eidolon_repraised:skull",
+      "power": 1.0
+    }
+  }
+}

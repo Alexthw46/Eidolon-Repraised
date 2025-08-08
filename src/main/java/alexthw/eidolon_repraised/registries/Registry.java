@@ -57,7 +57,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.Tags;
@@ -298,7 +297,6 @@ public class Registry {
     public static final DeferredHolder<Item, Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_helm"), 10.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build())));
     public static final DeferredHolder<Item, Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_chest"), 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST).build())));
     public static final DeferredHolder<Item, Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_legs"), 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS).build())));
-    //TODO: Datagen Disc data
     static ResourceKey<JukeboxSong> PAROUSIA = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath("eidolon_repraised", "parousia"));
     public static final DeferredHolder<Item, Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new Item(itemProps().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(PAROUSIA))); // 3680
     public static final DeferredHolder<Item, Item> RAVEN_FEATHER = addItem("raven_feather");
@@ -553,6 +551,7 @@ public class Registry {
         TABS.register(modEventBus);
         AdvancementTriggers.TRIGGERS.register(modEventBus);
         //modEventBus.addListener(Registry::registerScreens);
+        modEventBus.addListener(EidolonDataMaps::onRegisterDataMaps);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -604,13 +603,6 @@ public class Registry {
             .effects(DamageEffects.FREEZING)
             .tag(Tags.DamageTypes.IS_MAGIC)
             .build();
-
-    public void registerCaps(RegisterCapabilitiesEvent event) {
-//        event.register(IReputation.class);
-//        event.register(IKnowledge.class);
-//        event.register(ISoul.class);
-//        event.register(IPlayerData.class);
-    }
 
     @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
