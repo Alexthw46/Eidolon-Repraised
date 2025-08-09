@@ -7,12 +7,10 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.asm.enumextension.EnumProxy;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -80,8 +78,4 @@ public class EidolonEntities {
                 (e, w, t, pos, rand) -> true, RegisterSpawnPlacementsEvent.Operation.AND);
     }
 
-    public static final EnumProxy<Raid.RaiderType> NECROMANCER_RAIDER = new EnumProxy<>(
-            Raid.RaiderType.class, -1,
-            "eidolon_repraised:necromancer"
-    );
 }

@@ -106,7 +106,7 @@ public class Eidolon {
             Researches.init();
             Runes.init();
             AthameItem.initHarvestables();
-            //Raid.RaiderType.create("eidolon_repraised:necromancer", EidolonEntities.NECROMANCER.get(), new int[]{0, 0, 0, 0, 0, 1, 0, 1});
+            //Raid.RaiderType.create("eidolon_repraised:necromancer", EidolonEntities.NECROMANCER.get(), );
             addBlocksToTile(BlockEntityType.SIGN, Registry.ILLWOOD_PLANKS.getStandingSign(), Registry.ILLWOOD_PLANKS.getWallSign(), Registry.POLISHED_PLANKS.getStandingSign(), Registry.POLISHED_PLANKS.getWallSign());
             addBlocksToTile(BlockEntityType.HANGING_SIGN, Registry.ILLWOOD_PLANKS.getHangingSign(), Registry.ILLWOOD_PLANKS.getHangingWallSign(), Registry.POLISHED_PLANKS.getHangingSign(), Registry.POLISHED_PLANKS.getHangingWallSign());
         });

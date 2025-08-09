@@ -1,3 +1,12 @@
 {
-  "entries": []
+  "entries": [{
+    "enum": "net/minecraft/world/entity/raid/Raid$RaiderType",
+    "name": "EIDOLON_REPRAISED_NECROMANCER",
+    "constructor": "(Ljava/util/function/Supplier;[I)V",
+    "parameters": {
+      "class": "alexthw/eidolon_repraised/registries/EidolonRaiderTypes",
+      "field": "NECROMANCER_RAIDER"
+    }
+  }
+  ]
 }
