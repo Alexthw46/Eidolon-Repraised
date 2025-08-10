@@ -10,7 +10,7 @@ import static alexthw.eidolon_repraised.registries.EidolonEntities.NECROMANCER;
 
 public class EidolonRaiderTypes {
 
-    public static final EnumProxy<Raid.RaiderType> ER_NECROMANCER_RAIDER = new EnumProxy<>(
+    public static final EnumProxy<Raid.RaiderType> NECROMANCER_RAIDER = new EnumProxy<>(
             Raid.RaiderType.class, getRaider(NECROMANCER.get()), new int[]{0, 0, 0, 0, 0, 1, 0, 1}
     );
 
