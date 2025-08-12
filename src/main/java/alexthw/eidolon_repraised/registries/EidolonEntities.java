@@ -19,7 +19,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import static alexthw.eidolon_repraised.registries.Registry.ITEMS;
 import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
-@EventBusSubscriber
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Eidolon.MODID)
 public class EidolonEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Eidolon.MODID);
 
