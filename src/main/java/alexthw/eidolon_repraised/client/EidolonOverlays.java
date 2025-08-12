@@ -314,7 +314,9 @@ public class EidolonOverlays {
     }
 
     public static class EidolonRavenCharge implements LayeredDraw.Layer {
-        protected static final ResourceLocation GUI_ICONS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
+
+        private static final ResourceLocation JUMP_BAR_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("hud/jump_bar_background");
+        private static final ResourceLocation JUMP_BAR_PROGRESS_SPRITE = ResourceLocation.withDefaultNamespace("hud/jump_bar_progress");
 
         @Override
         public void render(GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
@@ -354,10 +356,11 @@ public class EidolonOverlays {
                     int i = 182;
                     int j = (int) (f * 183.0F);
                     int k = guiGraphics.guiHeight() - 32 + 3;
-                    guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 84, 182, 5);
+                    guiGraphics.blitSprite(JUMP_BAR_BACKGROUND_SPRITE, x, k, 182, 5);
                     if (j > 0) {
-                        guiGraphics.blit(GUI_ICONS_LOCATION, x, k, 0, 89, j, 5);
+                        guiGraphics.blitSprite(JUMP_BAR_PROGRESS_SPRITE, 182, 5, 0, 0, x, k, j, 5);
                     }
+
 
                     minecraft.getProfiler().pop();
 

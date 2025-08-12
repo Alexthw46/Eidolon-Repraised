@@ -34,6 +34,6 @@ public class RavenCloakRenderer implements ICurioRenderer {
         ICurioRenderer.followBodyRotations(entity, model);
         ICurioRenderer.followHeadRotations(entity, model.getHead());
         model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        model.renderToBuffer(matrixStack, renderTypeBuffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(1, 1, 1, 1));
+        model.renderToBuffer(matrixStack, renderTypeBuffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(255, 255, 255, 255));
 	}
 }

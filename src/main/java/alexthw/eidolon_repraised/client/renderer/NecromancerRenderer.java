@@ -57,7 +57,7 @@ public class NecromancerRenderer extends MobRenderer<NecromancerEntity, Necroman
         public void render(@NotNull PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, @NotNull NecromancerEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.getRenderType());
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            model.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(1, 1, 1, 1));
+            model.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(255, 255, 255, 255));
         }
     }
 

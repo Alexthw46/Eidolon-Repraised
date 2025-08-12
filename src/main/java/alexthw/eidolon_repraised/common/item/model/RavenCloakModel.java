@@ -69,6 +69,7 @@ public class RavenCloakModel extends HumanoidModel<LivingEntity> {
         if (entity instanceof Player p) {
             float pticks = Minecraft.getInstance().getFrameTimeNs();
             var data = p.getCapability(EidolonCapabilities.WINGS_CAPABILITY);
+            if (data == null) return;
             float timeSinceFlying = Mth.clamp(p.level().getGameTime() - data.getFlightStartTime(p) + pticks, 0, 10);
             float timeSinceFlapping = Mth.clamp(p.level().getGameTime() - data.getLastFlapTime(p) + pticks, 0.01F, 20);
 
