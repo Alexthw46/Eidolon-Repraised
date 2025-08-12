@@ -15,7 +15,7 @@ import java.util.List;
 
 import static alexthw.eidolon_repraised.registries.Registry.*;
 
-@EventBusSubscriber(modid = Eidolon.MODID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Eidolon.MODID)
 public class EidolonCapabilities {
 
     public static final EntityCapability<PatronManaImpl, @Nullable Void> MANA_CAPABILITY = EntityCapability.createVoid(Eidolon.prefix("mana"), PatronManaImpl.class);
