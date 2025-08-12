@@ -1,7 +1,6 @@
 package alexthw.eidolon_repraised.network;
 
 import alexthw.eidolon_repraised.Eidolon;
-import alexthw.eidolon_repraised.codex.CodexGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,7 +26,7 @@ public class OpenCodexPacket extends AbstractPacket {
 
     @Override
     public void onClientReceived(Minecraft minecraft, Player player) {
-        minecraft.setScreen(CodexGui.getInstance());
+        Eidolon.proxy.openCodexGui(player);
     }
 
     public @NotNull Type<OpenCodexPacket> type() {
