@@ -3,7 +3,6 @@ package elucent.eidolon.datagen;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.Spell;
 import elucent.eidolon.recipe.ChantRecipe;
-import elucent.eidolon.recipe.CommandChantRecipe;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.registries.Spells;
 import net.minecraft.data.CachedOutput;
@@ -13,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static elucent.eidolon.Eidolon.prefix;
 
 public class EidChantProvider extends SimpleDataProvider {
 
@@ -59,7 +56,7 @@ public class EidChantProvider extends SimpleDataProvider {
         addChant(Spells.FIRE_CHANT, Signs.FLAME_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN);
         addChant(Spells.WATER_CHANT, Signs.WINTER_SIGN, Signs.WINTER_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN);
 
-        addChant(new CommandChantRecipe(prefix("test"), List.of(Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN), List.of("time set day"), 10));
+        //addChant(new CommandChantRecipe(prefix("test"), List.of(Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN), List.of("time set day"), 10));
     }
 
     private void addChant(ChantRecipe spell) {

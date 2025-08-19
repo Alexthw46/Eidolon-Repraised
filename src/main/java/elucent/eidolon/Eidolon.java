@@ -91,6 +91,8 @@ public class Eidolon {
         MinecraftForge.EVENT_BUS.register(new Events());
 
         CompatHandler.initialize();
+        MinecraftForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
+
     }
 
     public void setup(final FMLCommonSetupEvent event) {
@@ -166,7 +168,6 @@ public class Eidolon {
                 e.setCancellationResult(result);
             }
         });
-        MinecraftForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> Networking.sendTo(e.getEntity(), new Networking.initCodexPacket()));
     }
 
     @OnlyIn(Dist.CLIENT)
