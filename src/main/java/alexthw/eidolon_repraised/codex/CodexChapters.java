@@ -25,6 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -58,6 +59,9 @@ public class CodexChapters {
             categories.clear();
             itemToEntryMap.clear();
         }
+
+        NeoForge.EVENT_BUS.post(new CodexEvents.PreInit(categories, itemToEntryMap));
+
         //NATURE
         {
             MONSTERS = new CodexBuilder()
@@ -922,6 +926,7 @@ public class CodexChapters {
                     SPELLS_INDEX
             ));
         }
+        NeoForge.EVENT_BUS.post(new CodexEvents.PostInit(categories, itemToEntryMap));
     }
 
     private static float lexiconLookupTime = 0;
