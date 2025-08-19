@@ -8,6 +8,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class RecipePage<T extends Recipe<?>> extends Page {
+    int ingredientRotationTimer;
+
     public RecipePage(ResourceLocation background, ResourceLocation recipeId, ItemStack result) {
         super(background);
         this.recipeId = recipeId;
@@ -22,6 +24,7 @@ public abstract class RecipePage<T extends Recipe<?>> extends Page {
 
     @Override
     public void fullRender(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
+        ingredientRotationTimer++;
         if (recipeId != null && cachedRecipe == null) {
             cachedRecipe = getRecipe(recipeId);
             if (cachedRecipe == null && !result.isEmpty()) {

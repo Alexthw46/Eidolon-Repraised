@@ -93,7 +93,17 @@ public class Eidolon {
             proxy = new ServerProxy();
         }
         proxy.init(modEventBus);
+        NeoForge.EVENT_BUS.addListener(this::onPlayerJoin);
 
+    }
+
+    private void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
+        if (!(e.getEntity() instanceof ServerPlayer player)) return;
+        // Send all the data to the player when they log in
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
+        Networking.sendToPlayerClient(new SoulUpdatePacket(player), player);
+        Networking.sendToPlayerClient(new WingsDataUpdatePacket(player), player);
+        Networking.sendToPlayerClient(new InitCodexPacket(null), player);
     }
 
 
@@ -147,15 +157,6 @@ public class Eidolon {
                 e.setCanceled(true);
                 e.setCancellationResult(result);
             }
-        });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) ->
-        {
-            if (!(e.getEntity() instanceof ServerPlayer player)) return;
-            // Send all the data to the player when they log in
-            Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
-            Networking.sendToPlayerClient(new SoulUpdatePacket(player), player);
-            Networking.sendToPlayerClient(new WingsDataUpdatePacket(player), player);
-            Networking.sendToPlayerClient(new InitCodexPacket(null), player);
         });
     }
 

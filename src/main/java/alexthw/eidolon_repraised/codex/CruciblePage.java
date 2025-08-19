@@ -10,10 +10,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class CruciblePage extends RecipePage<CrucibleRecipe> {
     public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_crucible_page.png" );
@@ -83,9 +86,10 @@ public class CruciblePage extends RecipePage<CrucibleRecipe> {
         for (int i = 0; i < steps.size(); i++) {
             int tx = x, ty = y + yoff + i * 20;
             tx += 24;
-            for (int j = 0; j < steps.get(i).matches().size(); j++) {
-                if (!steps.get(i).matches().get(j).isEmpty()) {
-                    drawItems(mStack, steps.get(i).matches().get(j), tx, ty + 1, mouseX, mouseY);
+            List<Ingredient> matches = steps.get(i).matches();
+            for (Ingredient match : matches) {
+                if (!match.isEmpty()) {
+                    drawItems(mStack, match, tx, ty + 1, mouseX, mouseY);
                     tx += 17;
                 }
             }

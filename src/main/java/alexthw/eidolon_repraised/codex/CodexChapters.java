@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static alexthw.eidolon_repraised.Eidolon.prefix;
+import static alexthw.eidolon_repraised.registries.Registry.TATTERED_CLOTH;
 
 public class CodexChapters {
 
@@ -146,7 +147,7 @@ public class CodexChapters {
             NATURE_INDEX = new Index(
                     "eidolon_repraised.codex.chapter.nature_index",
                     new TitledIndexPage("eidolon_repraised.codex.page.nature_index.0",
-                            new IndexEntry(MONSTERS, new ItemStack(Registry.TATTERED_CLOTH.get())),
+                            new IndexEntry(MONSTERS, new ItemStack(TATTERED_CLOTH.get())),
                             new IndexEntry(CRITTERS, new ItemStack(Registry.RAVEN_FEATHER.get())),
                             new IndexEntry(ORES, new ItemStack(Registry.LEAD_ORE.get())),
                             new IndexEntry(PEWTER, new ItemStack(Registry.PEWTER_INGOT.get())),

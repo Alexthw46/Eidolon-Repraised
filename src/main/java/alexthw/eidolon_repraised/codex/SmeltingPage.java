@@ -29,7 +29,7 @@ public class SmeltingPage extends RecipePage<AbstractCookingRecipe> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderIngredients(CodexGui gui, GuiGraphics mStack, int x, int y, int mouseX, int mouseY) {
-        drawItems(mStack, cachedRecipe == null ? Ingredient.of(input) : cachedRecipe.getIngredients().get(0), x + 56, y + 34, mouseX, mouseY);
+        drawItems(mStack, cachedRecipe == null ? Ingredient.of(input) : cachedRecipe.getIngredients().get(ingredientRotationTimer % cachedRecipe.getIngredients().size()), x + 56, y + 34, mouseX, mouseY);
         drawItem(mStack, result, x + 56, y + 107, mouseX, mouseY);
     }
 
