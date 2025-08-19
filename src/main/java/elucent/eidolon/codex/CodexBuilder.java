@@ -3,11 +3,18 @@ package elucent.eidolon.codex;
 import elucent.eidolon.api.ritual.Ritual;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.Spell;
+import elucent.eidolon.recipe.CrucibleRecipe;
+import elucent.eidolon.recipe.WorktableRecipe;
+import elucent.eidolon.util.RegistryUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +24,48 @@ import static elucent.eidolon.codex.Page.wrapTextToLines;
 public class CodexBuilder {
     private String titleKey;
     private final List<Page> pages = new ArrayList<>();
+
+    private Level level;
+
+    public CodexBuilder(Level level) {
+        // Constructor for initializing the builder with a level context, if needed.
+        // This can be used to access resources or context-specific data.
+        this.level = level;
+    }
+
+    public CodexBuilder() {
+
+    }
+
+    public CodexBuilder addSupportedRecipePages(ItemLike item) {
+        // Add pages for all supported recipes
+        ResourceLocation key = RegistryUtil.getRegistryName(item);
+        if (key == null) {
+            return this; // Skip if item has no registry name
+        }
+        return addSupportedRecipePages(key);
+    }
+
+    public CodexBuilder addSupportedRecipePages(ResourceLocation recipeId) {
+        if (level == null) {
+            throw new IllegalStateException("Level is not initialized. Use the constructor with Level parameter.");
+        }
+        RecipeManager recipeManager = level.getRecipeManager();
+        // Add pages for all supported recipes
+        recipeManager.byKey(recipeId).ifPresent(recipe -> {
+            if (recipe instanceof CraftingRecipe) {
+                pages.add(new CraftingPage(recipe.getResultItem(level.registryAccess()), recipe.getId()));
+            } else if (recipe instanceof SmeltingRecipe smeltingRecipe) {
+                pages.add(new SmeltingPage(recipe.getResultItem(level.registryAccess()), smeltingRecipe.getIngredients().get(0).getItems()[0], recipe.getId()));
+            } else if (recipe instanceof WorktableRecipe) {
+                pages.add(new WorktablePage(recipe.getResultItem(level.registryAccess())));
+            } else if (recipe instanceof CrucibleRecipe crucibleRecipe) {
+                pages.add(new CruciblePage(recipe.getResultItem(level.registryAccess()), crucibleRecipe.getId()));
+            }
+        });
+
+        return this;
+    }
 
     public CodexBuilder title(String titleKey) {
         this.titleKey = titleKey;

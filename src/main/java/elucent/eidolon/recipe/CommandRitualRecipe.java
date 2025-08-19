@@ -149,7 +149,6 @@ public class CommandRitualRecipe extends RitualRecipe {
             buf.writeInt(recipe.color);
         }
 
-
     }
 
 }

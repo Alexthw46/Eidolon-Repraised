@@ -1,4 +1,4 @@
-// 1.20.1	2024-03-31T23:27:26.5798142	Eidolon Chants
+// 1.20.1	2025-08-19T12:02:44.7958517	Eidolon Chants
 4e375e3d6fcf0d1578778929e2b279f232221597 data/eidolon/recipes/create_water.json
 5fadf6ca54383041acf6de381afe8cbbe317ef82 data/eidolon/recipes/cure_zombie.json
 0bdd511b8b9dbb2ab76220b0f4aa70c01b936785 data/eidolon/recipes/darklight_chant.json
@@ -16,4 +16,5 @@ fd48b3a7ab407fbd437aaca8c81273c4749155f6 data/eidolon/recipes/light_chant.json
 c35ad14f60b9822dcaf0b4594d64ec81e8dcccc3 data/eidolon/recipes/reinforce_armor.json
 b1588482acdb70717eab67a6f0dd79c647dcd849 data/eidolon/recipes/smite_chant.json
 fef34144fccbd82604f3ff8b8093c383a4f19f5f data/eidolon/recipes/sunder_armor.json
+a832e100fac0ff4dd50c3f4b8bea3a2d3e65fd60 data/eidolon/recipes/test.json
 c8f2c22e530ea2e2bfcdfb6dd9f93d5448f97011 data/eidolon/recipes/zombify_villager.json

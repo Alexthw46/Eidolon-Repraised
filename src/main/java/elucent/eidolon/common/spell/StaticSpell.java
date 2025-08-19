@@ -35,8 +35,9 @@ public abstract class StaticSpell extends Spell {
     }
 
     @Override
-    public void setSigns(SignSequence signs) {
+    public Spell setSigns(SignSequence signs) {
         this.signs = signs;
+        return this;
     }
 
     public StaticSpell(ResourceLocation name, int cost, Sign... signs) {

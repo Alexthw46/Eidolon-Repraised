@@ -26,7 +26,7 @@ public abstract class Spell {
 
     public abstract void cast(Level world, BlockPos pos, Player player, SignSequence signs);
 
-    public abstract void setSigns(SignSequence signs);
+    public abstract Spell setSigns(SignSequence signs);
 
     public abstract int getCost();
 
@@ -39,7 +39,8 @@ public abstract class Spell {
 
     @Override
     public boolean equals(Object obj) {
-
-        return registryName.equals(((Spell) obj).registryName);
+        if (this == obj) return true;
+        if (!(obj instanceof Spell spell)) return false;
+        return registryName.equals(spell.registryName);
     }
 }
