@@ -25,6 +25,7 @@ public class EidolonRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ChantRecipe>> CHANT_SERIALIZER = RECIPE_SERIALIZERS.register("chant", ChantRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CommandChantRecipe>> COMMAND_CHANT_SERIALIZER = RECIPE_SERIALIZERS.register("command_chant", CommandChantRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ForagingRecipe>> FORAGING_RECIPE = RECIPE_SERIALIZERS.register("athame_foraging", ForagingRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ChantConversionRecipe>> CHANT_CONVERSION_SERIALIZER = RECIPE_SERIALIZERS.register("chant_conversion", ChantConversionRecipe.Serializer::new);
 
     static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, Eidolon.MODID);
 
@@ -93,6 +94,14 @@ public class EidolonRecipes {
             return "eidolon_repraised:command_chant";
         }
     });
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ChantConversionRecipe>> CHANT_CONVERSION_TYPE = RECIPE_TYPES.register("chant_conversion", () -> new RecipeType<>() {
+        @Override
+        public String toString() {
+            return "eidolon_repraised:chant_conversion";
+        }
+    });
+
     public static final DeferredHolder<RecipeType<?>, RecipeType<ForagingRecipe>> FORAGING_TYPE = RECIPE_TYPES.register("athame_foraging", () -> new RecipeType<>() {
         @Override
         public String toString() {

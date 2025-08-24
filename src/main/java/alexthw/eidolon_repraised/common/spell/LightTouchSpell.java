@@ -4,9 +4,10 @@ import alexthw.eidolon_repraised.api.capability.IMana;
 import alexthw.eidolon_repraised.api.capability.IReputation;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.common.deity.Deities;
+import alexthw.eidolon_repraised.recipe.ChantConversionRecipe;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.registries.EidolonDataComponents;
-import alexthw.eidolon_repraised.registries.Registry;
+import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,13 +16,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
@@ -56,29 +56,36 @@ public class LightTouchSpell extends DarkTouchSpell {
         Vec3 v = getVector(world, player);
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
-        ItemStack stack = items.get(0).getItem();
-        return stack.getCount() == 1 && canTouch(stack);
+        ItemStack stack = items.getFirst().getItem();
+        return stack.getCount() == 1 && canTouch(stack, world, player);
     }
 
-    boolean canTouch(ItemStack stack) {
-        return stack.getItem() == Registry.GOLD_INLAY.get()
-                || stack.getItem() == Items.BLACK_WOOL
-                || (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
-                || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+    boolean canTouch(ItemStack stack, Level world, Player player) {
+        if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
+        var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return false;
+        var lightRep = reputation.getReputation(Deities.LIGHT_DEITY_ID);
+        return conversions.stream().map(RecipeHolder::value).filter(
+                r -> r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity))
+        ).anyMatch(r -> lightRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        if (stack.getItem() == Registry.GOLD_INLAY.get())
-            return new ItemStack(Registry.HOLY_SYMBOL.get());
-        else if (stack.getItem() == Items.BLACK_WOOL)
-            return new ItemStack(Registry.TOP_HAT.get());
-        else if (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
-            return new ItemStack(Registry.PAROUSIA_DISC.get());
-        else {
-            IMana.expendMana(player, getCost());
-            stack.set(EidolonDataComponents.CONSECRATED, 50);
-            return stack;
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation != null) {
+            var lightRep = reputation.getReputation(Deities.LIGHT_DEITY_ID);
+            for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
+                var r = holder.value();
+                if (r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {
+                    IMana.expendMana(player, getCost());
+                    return r.getResultItem(player.level().registryAccess());
+                }
+            }
         }
-
+        IMana.expendMana(player, getCost());
+        stack.set(EidolonDataComponents.CONSECRATED, 50);
+        return stack;
     }
+
 }

@@ -1,0 +1,11 @@
+{
+  "type": "eidolon:chant_conversion",
+  "input": {
+    "item": "minecraft:black_wool"
+  },
+  "min_devotion": 0.0,
+  "output": {
+    "count": 1,
+    "id": "eidolon_repraised:top_hat"
+  }
+}

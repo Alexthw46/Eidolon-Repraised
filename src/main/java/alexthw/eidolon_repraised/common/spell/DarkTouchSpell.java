@@ -6,9 +6,10 @@ import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.common.deity.Deities;
 import alexthw.eidolon_repraised.network.MagicBurstEffectPacket;
 import alexthw.eidolon_repraised.network.Networking;
+import alexthw.eidolon_repraised.recipe.ChantConversionRecipe;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.registries.EidolonDataComponents;
-import alexthw.eidolon_repraised.registries.Registry;
+import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import alexthw.eidolon_repraised.registries.Signs;
 import alexthw.eidolon_repraised.util.DamageTypeData;
 import net.minecraft.core.BlockPos;
@@ -21,13 +22,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
@@ -70,28 +70,36 @@ public class DarkTouchSpell extends StaticSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.getFirst().getItem();
-        return stack.getCount() == 1 && canTouch(stack);
+        return stack.getCount() == 1 && canTouch(stack, world, player);
     }
 
-    boolean canTouch(ItemStack stack) {
-        return stack.getItem() == Registry.PEWTER_INLAY.get()
-                || stack.getItem() == Items.BLACK_WOOL
-                || (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
-                || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+    boolean canTouch(ItemStack stack, Level world, Player player) {
+        if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
+        var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation == null) return false;
+        var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
+        return conversions.stream().map(RecipeHolder::value).filter(
+                r -> r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity))
+        ).anyMatch(r -> darkRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        if (stack.getItem() == Registry.PEWTER_INLAY.get())
-            return new ItemStack(Registry.UNHOLY_SYMBOL.get());
-        else if (stack.getItem() == Items.BLACK_WOOL)
-            return new ItemStack(Registry.TOP_HAT.get());
-        else if (stack.is(Tags.Items.MUSIC_DISCS) && stack.getItem() != Registry.PAROUSIA_DISC.get())
-            return new ItemStack(Registry.PAROUSIA_DISC.get());
-        else {
-            IMana.expendMana(player, getCost());
-            stack.set(EidolonDataComponents.NECROTIC, 50);
-            return stack;
+        IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
+        if (reputation != null) {
+            var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
+            for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
+                var r = holder.value();
+                if (r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
+                    IMana.expendMana(player, getCost());
+                    return r.getResultItem(player.level().registryAccess());
+                }
+            }
         }
+
+        IMana.expendMana(player, getCost());
+        stack.set(EidolonDataComponents.NECROTIC, 50);
+        return stack;
 
     }
 
@@ -102,7 +110,7 @@ public class DarkTouchSpell extends StaticSpell {
         if (items.size() == 1) {
             if (!world.isClientSide) {
                 ItemStack stack = items.getFirst().getItem();
-                if (canTouch(stack)) {
+                if (canTouch(stack, world, player)) {
                     items.getFirst().setItem(touchResult(stack, player));
                     Vec3 p = items.getFirst().position();
                     items.getFirst().setDefaultPickUpDelay();

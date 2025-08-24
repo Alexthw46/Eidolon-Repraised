@@ -1,0 +1,12 @@
+{
+  "type": "eidolon:chant_conversion",
+  "deity": "eidolon_repraised:dark",
+  "input": {
+    "item": "eidolon_repraised:pewter_inlay"
+  },
+  "min_devotion": 10.0,
+  "output": {
+    "count": 1,
+    "id": "eidolon_repraised:unholy_symbol"
+  }
+}
