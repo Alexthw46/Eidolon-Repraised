@@ -7,7 +7,8 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.network.MagicBurstEffectPacket;
 import elucent.eidolon.network.Networking;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.recipe.ChantConversionRecipe;
+import elucent.eidolon.registries.EidolonRecipes;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.core.BlockPos;
@@ -20,8 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -74,28 +73,41 @@ public class DarkTouchSpell extends StaticSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.get(0).getItem();
-        return stack.getCount() == 1 && canTouch(stack);
+        return stack.getCount() == 1 && canTouch(stack, world, player);
     }
 
-    boolean canTouch(ItemStack stack) {
-        return stack.getItem() == Registry.PEWTER_INLAY.get()
-               || stack.getItem() == Items.BLACK_WOOL
-               || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-               || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+    boolean canTouch(ItemStack stack, Level world, Player player) {
+        if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
+        var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
+        var darkRep = world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
+        return conversions.stream().filter(
+                r -> r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity))
+        ).anyMatch(r -> darkRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        if (stack.getItem() == Registry.PEWTER_INLAY.get())
-            return new ItemStack(Registry.UNHOLY_SYMBOL.get());
-        else if (stack.getItem() == Items.BLACK_WOOL)
-            return new ItemStack(Registry.TOP_HAT.get());
-        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-            return new ItemStack(Registry.PAROUSIA_DISC.get());
-        else {
-            ISoul.expendMana(player, getCost());
-            stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
-            return stack;
+        var darkRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
+
+        for (ChantConversionRecipe r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
+            if (r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
+                ISoul.expendMana(player, getCost());
+                return r.getResultItem(player.level().registryAccess());
+            }
         }
+//
+//        if (stack.getItem() == Registry.PEWTER_INLAY.get())
+//            return new ItemStack(Registry.UNHOLY_SYMBOL.get());
+//        else if (stack.getItem() == Items.BLACK_WOOL)
+//            return new ItemStack(Registry.TOP_HAT.get());
+//        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
+//            return new ItemStack(Registry.PAROUSIA_DISC.get());
+//        else
+
+
+        // No recipe found; apply necrotic touch. Validated by canTouch beforehand.
+        ISoul.expendMana(player, getCost());
+        stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
+        return stack;
 
     }
 
@@ -106,7 +118,7 @@ public class DarkTouchSpell extends StaticSpell {
         if (items.size() == 1) {
             if (!world.isClientSide) {
                 ItemStack stack = items.get(0).getItem();
-                if (canTouch(stack)) {
+                if (canTouch(stack, world, player)) {
                     items.get(0).setItem(touchResult(stack, player));
                     Vec3 p = items.get(0).position();
                     items.get(0).setDefaultPickUpDelay();

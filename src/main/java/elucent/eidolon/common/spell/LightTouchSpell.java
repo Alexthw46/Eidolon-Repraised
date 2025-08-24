@@ -5,7 +5,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
-import elucent.eidolon.registries.Registry;
+import elucent.eidolon.registries.EidolonRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +15,6 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -59,24 +57,34 @@ public class LightTouchSpell extends DarkTouchSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.get(0).getItem();
-        return stack.getCount() == 1 && canTouch(stack);
+        return stack.getCount() == 1 && canTouch(stack, world, player);
     }
 
-    boolean canTouch(ItemStack stack) {
-        return stack.getItem() == Registry.GOLD_INLAY.get()
-               || stack.getItem() == Items.BLACK_WOOL
-               || (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-               || (stack.isDamageableItem() && stack.getMaxStackSize() == 1); // is a tool
+    boolean canTouch(ItemStack stack, Level world, Player player) {
+        if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
+        var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
+        var lightRep = world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
+        return conversions.stream().filter(
+                r -> r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity))
+        ).anyMatch(r -> lightRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        if (stack.getItem() == Registry.GOLD_INLAY.get())
-            return new ItemStack(Registry.HOLY_SYMBOL.get());
-        else if (stack.getItem() == Items.BLACK_WOOL)
-            return new ItemStack(Registry.TOP_HAT.get());
-        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
-            return new ItemStack(Registry.PAROUSIA_DISC.get());
-        else {
+        var lightRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
+
+        for (var r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
+            if (r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {
+                ISoul.expendMana(player, getCost());
+                return r.getResultItem(player.level().registryAccess());
+            }
+        }
+//        if (stack.getItem() == Registry.GOLD_INLAY.get())
+//            return new ItemStack(Registry.HOLY_SYMBOL.get());
+//        else if (stack.getItem() == Items.BLACK_WOOL)
+//            return new ItemStack(Registry.TOP_HAT.get());
+//        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
+//            return new ItemStack(Registry.PAROUSIA_DISC.get());
+        {
             ISoul.expendMana(player, getCost());
             stack.getOrCreateTag().putInt(SACRED_KEY, 50);
             return stack;
