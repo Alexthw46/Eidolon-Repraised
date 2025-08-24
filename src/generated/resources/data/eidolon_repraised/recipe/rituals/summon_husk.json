@@ -1,17 +1,18 @@
 {
   "type": "eidolon_repraised:ritual_brazier_summoning",
+  "count": 3,
   "focus_items": [
     {
-      "item": "minecraft:string"
+      "tag": "c:sands"
     }
   ],
-  "output": "minecraft:stray",
+  "output": "minecraft:husk",
   "pedestal_items": [
     {
       "item": "eidolon_repraised:soul_shard"
     },
     {
-      "item": "minecraft:bone"
+      "item": "minecraft:rotten_flesh"
     }
   ],
   "reagent": {

@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-24T15:17:56.6349278	Eidolon Rituals
+// 1.21.1	2025-08-24T15:20:26.4415119	Eidolon Rituals
 ab06431b439095a360ec9c5b3f10f56a7bf749ea data/eidolon_repraised/recipe/rituals/absorption.json
 5f65fb3c8032afbf96929a94a5aebf32ae540198 data/eidolon_repraised/recipe/rituals/allure.json
 69e5348f29cdd21b04a222ee86daf058d0fccad6 data/eidolon_repraised/recipe/rituals/brazier_craft_sanguine_amulet.json
@@ -14,11 +14,12 @@ f80a2a05a8b8aa47820bbe8a78f28352ddbe247e data/eidolon_repraised/recipe/rituals/r
 47a78c5f1269ae422cd2eac8f6e031f8d58ab836 data/eidolon_repraised/recipe/rituals/ritual_locate_catacombs.json
 10442b0116ff0ba41d7b5fc3aefe7d2254d4c588 data/eidolon_repraised/recipe/rituals/summon_creeper.json
 c21bc34d5b05d92752b5ada66eed81de2ecb16cd data/eidolon_repraised/recipe/rituals/summon_drowned.json
+976b7b8b14bdfe2081891217cc17c28f3a5147c5 data/eidolon_repraised/recipe/rituals/summon_husk.json
 b4ae2422128e8bee76b98a945f0c114bb7196947 data/eidolon_repraised/recipe/rituals/summon_phantom.json
 c6eff7fca35354d3b04f6295b8cc9691ace55a98 data/eidolon_repraised/recipe/rituals/summon_raven.json
 5a69339fe1f1f3ca65a0002f474495d3654fd99b data/eidolon_repraised/recipe/rituals/summon_skeleton.json
 2c3bb7656d50db24b4f213d93d8a1776be363732 data/eidolon_repraised/recipe/rituals/summon_slimy_slug.json
-54e2cec70c58009a348ea3950f49ace664441df8 data/eidolon_repraised/recipe/rituals/summon_stray.json
+67537d4a2835a27f40916752e3de3be1afde2283 data/eidolon_repraised/recipe/rituals/summon_stray.json
 40c635d15dbaebb9e62026312f2a1e21dba9d971 data/eidolon_repraised/recipe/rituals/summon_wither_skeleton.json
 820d13d0d8a63b8147a147d5fee5ccc73bb4c082 data/eidolon_repraised/recipe/rituals/summon_wraith.json
 0fcbb008ad188d7a177f25e2e765fb54d86b031a data/eidolon_repraised/recipe/rituals/summon_zombie.json

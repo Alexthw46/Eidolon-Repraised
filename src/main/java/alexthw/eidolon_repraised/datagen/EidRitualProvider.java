@@ -82,7 +82,7 @@ public class EidRitualProvider extends SimpleDataProvider {
                 List.of(Blocks.SOUL_SAND));
 
         makeSummon(prefix("summon_husk"),
-                EntityType.STRAY, 3,
+                EntityType.HUSK, 3,
                 Items.CHARCOAL,
                 ingredientsFromObjects(List.of(Registry.SOUL_SHARD.get(), Items.ROTTEN_FLESH)),
                 List.of(Ingredient.of(Tags.Items.SANDS)));
