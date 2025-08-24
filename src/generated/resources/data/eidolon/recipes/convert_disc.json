@@ -1,0 +1,10 @@
+{
+  "type": "eidolon:chant_conversion",
+  "input": {
+    "tag": "minecraft:music_discs"
+  },
+  "min_devotion": 0.0,
+  "output": {
+    "item": "eidolon:music_disc_parousia"
+  }
+}

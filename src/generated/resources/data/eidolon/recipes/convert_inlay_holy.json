@@ -1,0 +1,11 @@
+{
+  "type": "eidolon:chant_conversion",
+  "deity": "eidolon:light",
+  "input": {
+    "item": "eidolon:gold_inlay"
+  },
+  "min_devotion": 10.0,
+  "output": {
+    "item": "eidolon:holy_symbol"
+  }
+}
