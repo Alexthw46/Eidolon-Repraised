@@ -218,7 +218,7 @@ public class EidolonOverlays {
             PoseStack mStack = guiGraphics.pose();
             LocalPlayer player = minecraft.player;
 
-            if (EidolonOverlays.minecraft.gameMode.canHurtPlayer() || player == null) return;
+            if (!EidolonOverlays.minecraft.gameMode.canHurtPlayer() || player == null) return;
             mStack.pushPose();
             mStack.translate(0, 0, 0.01);
 
