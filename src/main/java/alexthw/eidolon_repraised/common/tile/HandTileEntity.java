@@ -54,7 +54,7 @@ public class HandTileEntity extends ContainerTileBase implements IRitualItemProv
                 return ItemInteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override

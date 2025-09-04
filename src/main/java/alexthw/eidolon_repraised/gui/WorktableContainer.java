@@ -8,8 +8,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -23,7 +29,17 @@ import java.util.Optional;
 
 public class WorktableContainer extends AbstractContainerMenu {
     final CraftingContainer core = new TransientCraftingContainer(this, 3, 3);
-    final CraftingContainer extras = new TransientCraftingContainer(this, 2, 2);
+    final CraftingContainer extras = new TransientCraftingContainer(this, 4, 1) {
+        @Override
+        public @NotNull CraftingInput asCraftInput() {
+            if (getWidth() != 0 && getHeight() != 0) {
+                return new CraftingInput.Positioned(new CraftingInput(getWidth(), getHeight(), getItems()), 0, 0).input();
+            } else{
+                return CraftingInput.Positioned.EMPTY.input();
+            }
+        }
+    };
+
     final ResultContainer result = new ResultContainer();
     final Player player;
     final ContainerLevelAccess callable;

@@ -2,8 +2,11 @@ package alexthw.eidolon_repraised.common.block;
 
 import alexthw.eidolon_repraised.common.tile.TileEntityBase;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -66,6 +69,17 @@ public class BlockBase extends Block {
                 tile.onDestroyed(state, pos);
             }
         }
+    }
+
+    @Override
+    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        if (this instanceof EntityBlock) {
+            BlockEntity te = level.getBlockEntity(pos);
+            if (te instanceof TileEntityBase tile) {
+                return tile.onActivated(state, pos, player, hand);
+            }
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
