@@ -29,7 +29,7 @@
           "condition": "minecraft:block_state_property",
           "block": "eidolon_repraised:sildrian_seed",
           "properties": {
-            "age": "2"
+            "age": "3"
           }
         }
       ]

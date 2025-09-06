@@ -29,7 +29,7 @@
           "condition": "minecraft:block_state_property",
           "block": "eidolon_repraised:oanna_bloom",
           "properties": {
-            "age": "2"
+            "age": "3"
           }
         }
       ]
