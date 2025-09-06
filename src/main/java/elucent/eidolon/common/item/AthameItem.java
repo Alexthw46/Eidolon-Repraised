@@ -25,7 +25,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.GrowingPlantBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
@@ -95,7 +99,7 @@ public class AthameItem extends SwordItem {
 
                     // special case for planter plants, only do something if they're fully grown
                     if (state.is(Registry.PLANTER_PLANTS)) {
-                        if (state.getValue(HerbBlockBase.AGE) == 2) {
+                        if (state.getValue(HerbBlockBase.AGE) >= 2) {
                             ctx.getLevel().setBlockAndUpdate(ctx.getClickedPos(), state.setValue(HerbBlockBase.AGE, 0));
                             ItemStack drop = getHarvestable(block, ctx.getLevel());
                             if (!drop.isEmpty() && !ctx.getLevel().isClientSide) {
