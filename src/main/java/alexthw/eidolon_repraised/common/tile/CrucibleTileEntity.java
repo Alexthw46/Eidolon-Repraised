@@ -327,6 +327,7 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
 
     private void handleTimedUpdate(float steamR, float steamG, float steamB) {
         List<ItemStack> contents = consumeFromInventory();
+        if (level == null || level.isClientSide) return;
         if (stirs == 0 && contents.isEmpty()) {
             Networking.sendToNearbyClient(level, worldPosition, new CrucibleFailPacket(worldPosition));
             steps.clear();
@@ -336,6 +337,7 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         } else {
             CrucibleStep step = new CrucibleStep(stirs, contents);
             steps.add(step);
+            level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
             stirs = 0;
 
             // try to find a finished recipe with the current steps
@@ -383,6 +385,8 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         List<ItemStack> consumed = consumeFromInventory();
         CrucibleStep finalStep = new CrucibleStep(stirs, consumed);
         steps.add(finalStep);
+        level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+
         stirs = 0;
 
         CrucibleRecipe recipe = CrucibleHelper.find(level, steps);
