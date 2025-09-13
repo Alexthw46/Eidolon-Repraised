@@ -3,6 +3,7 @@ package elucent.eidolon.common.spell;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.api.spells.SignSequence;
 import elucent.eidolon.api.spells.Spell;
+import elucent.eidolon.api.spells.SpellCastEvent;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.util.MathUtil;
 import net.minecraft.core.BlockPos;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,6 +78,8 @@ public abstract class StaticSpell extends Spell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player, SignSequence signs) {
+        if (MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Pre(this, world, pos, player, signs)))
+            return false;
         if (getCost() > 0 && !player.isCreative()) {
             LazyOptional<ISoul> capability = player.getCapability(ISoul.INSTANCE);
             if (capability.isPresent() && capability.resolve().isPresent()) {
@@ -95,6 +99,7 @@ public abstract class StaticSpell extends Spell {
     @Override
     public void cast(Level world, BlockPos pos, Player player, SignSequence signs) {
         cast(world, pos, player);
+        MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Post(this, world, pos, player, signs));
     }
 
     @Override

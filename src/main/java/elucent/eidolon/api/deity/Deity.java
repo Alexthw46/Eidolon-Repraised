@@ -8,6 +8,7 @@ import elucent.eidolon.util.RGBProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,6 +174,9 @@ public abstract class Deity implements RGBProvider {
 
     public void onReputationChange(Player player, IReputation rep, double prev, double updated) {
 
+        if (MinecraftForge.EVENT_BUS.post(new ReputationEvent.Change(this, player, prev, updated)))
+            return;
+
         Stage nextStage = progression.tryProgress(rep, player, prev, updated);
         Stage currStage = progression.next(prev == 0 ? 1 : prev);
         //we maxed out
@@ -180,16 +184,22 @@ public abstract class Deity implements RGBProvider {
             rep.setReputation(player.getUUID(), id, progression.max);
             return;
         }
+
         //we advanced a stage
         if (nextStage.rep > currStage.rep) {
+            if (MinecraftForge.EVENT_BUS.post(new ReputationEvent.Unlock(this, player, nextStage)))
+                return;
             onReputationUnlock(player, currStage.id());
         }
         double curr = rep.getReputation(player, getId()); //update after we may have changed it
 
         //we didn't advance a stage, if the cap was reached then we need to grant the next step
         if (curr == nextStage.rep() && updated != curr) {
+            if (MinecraftForge.EVENT_BUS.post(new ReputationEvent.Lock(this, player, currStage)))
+                return;
             onReputationLock(player, currStage.id());
         }
+
     }
 
     public abstract void onReputationUnlock(Player player, ResourceLocation lock);
