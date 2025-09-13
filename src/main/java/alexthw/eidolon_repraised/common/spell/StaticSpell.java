@@ -3,6 +3,7 @@ package alexthw.eidolon_repraised.common.spell;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.api.spells.SignSequence;
 import alexthw.eidolon_repraised.api.spells.Spell;
+import alexthw.eidolon_repraised.api.spells.SpellCastEvent;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.util.MathUtil;
 import net.minecraft.core.BlockPos;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,6 +76,7 @@ public abstract class StaticSpell extends Spell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player, SignSequence signs) {
+        if (NeoForge.EVENT_BUS.post(new SpellCastEvent.Pre(this, world, pos, player, signs)).isCanceled()) return false;
         if (getCost() > 0 && !player.isCreative()) {
             var mana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
             if (mana != null && mana.getMagic() < getCost()) {
@@ -90,6 +93,7 @@ public abstract class StaticSpell extends Spell {
     @Override
     public void cast(Level world, BlockPos pos, Player player, SignSequence signs) {
         cast(world, pos, player);
+        NeoForge.EVENT_BUS.post(new SpellCastEvent.Post(this, world, pos, player, signs));
     }
 
     @Override

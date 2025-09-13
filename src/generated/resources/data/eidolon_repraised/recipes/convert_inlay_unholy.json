@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:chant_conversion",
+  "type": "eidolon_repraised:chant_conversion",
   "deity": "eidolon_repraised:dark",
   "input": {
     "item": "eidolon_repraised:pewter_inlay"

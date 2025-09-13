@@ -1,5 +1,5 @@
 {
-  "type": "eidolon:chant_conversion",
+  "type": "eidolon_repraised:chant_conversion",
   "input": {
     "item": "minecraft:black_wool"
   },

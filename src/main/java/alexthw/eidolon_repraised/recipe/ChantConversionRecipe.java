@@ -12,7 +12,11 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +70,7 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
 
     public JsonObject toJson() {
         JsonObject jsonobject = new JsonObject();
-        jsonobject.addProperty("type", "eidolon:chant_conversion");
+        jsonobject.addProperty("type", "eidolon_repraised:chant_conversion");
         jsonobject.add("input", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, input).getOrThrow());
         jsonobject.addProperty("min_devotion", minDevotion);
         if (deity != null)
