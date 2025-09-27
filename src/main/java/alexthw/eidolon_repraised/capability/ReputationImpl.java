@@ -2,10 +2,13 @@ package alexthw.eidolon_repraised.capability;
 
 import alexthw.eidolon_repraised.api.capability.IReputation;
 import alexthw.eidolon_repraised.common.spell.PrayerSpell;
+import alexthw.eidolon_repraised.network.Networking;
+import alexthw.eidolon_repraised.network.ReputationUpdatePacket;
 import alexthw.eidolon_repraised.registries.EidolonAttachments;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
@@ -136,16 +139,22 @@ public class ReputationImpl implements IReputation {
     @Override
     public void addReputation(ResourceLocation deity, double amount) {
         reputationData.addReputation(deity, amount);
+        if (player instanceof ServerPlayer serverPlayer)
+            Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
 
     @Override
     public void subtractReputation(ResourceLocation deity, double amount) {
         reputationData.subtractReputation(deity, amount);
+        if (player instanceof ServerPlayer serverPlayer)
+            Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
 
     @Override
     public void setReputation(ResourceLocation deity, double amount) {
         reputationData.setReputation(deity, amount);
+        if (player instanceof ServerPlayer serverPlayer)
+            Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
 
     @Override
@@ -182,7 +191,8 @@ public class ReputationImpl implements IReputation {
         return reputationData.serializeNBT(provider);
     }
 
-    public void deserializeNBT(CompoundTag nbt, HolderLookup.Provider provider) {
+    public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
         reputationData.deserializeNBT(provider, nbt);
+        player.setData(EidolonAttachments.REPUTATION_ATTACHMENT.get(), reputationData);
     }
 }

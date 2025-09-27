@@ -29,7 +29,6 @@ public class KnowledgeImpl implements IKnowledge {
         this.knowledgeData = entity.getData(EidolonAttachments.KNOWLEDGE_ATTACHMENT.get());
     }
 
-
     @Override
     public boolean knowsSign(Sign sign) {
         return knowledgeData.getKnownSigns().contains(sign);

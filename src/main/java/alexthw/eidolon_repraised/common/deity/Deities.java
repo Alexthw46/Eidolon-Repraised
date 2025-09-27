@@ -22,8 +22,9 @@ public class Deities {
     }
 
     public static final ResourceLocation
-            DARK_DEITY_ID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"dark" ),
-            LIGHT_DEITY_ID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"light" );
+            DARK_DEITY_ID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "dark"),
+            LIGHT_DEITY_ID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "light"),
+            DUMMY_ID = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "dummy");
     public static final Deity
             DARK_DEITY = register(new DarkDeity(DARK_DEITY_ID, 154, 77, 255)),
             LIGHT_DEITY = register(new LightDeity(LIGHT_DEITY_ID, 255, 230, 117));

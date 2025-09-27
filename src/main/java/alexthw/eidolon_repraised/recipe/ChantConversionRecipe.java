@@ -1,5 +1,6 @@
 package alexthw.eidolon_repraised.recipe;
 
+import alexthw.eidolon_repraised.common.deity.Deities;
 import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
@@ -47,7 +48,6 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
         return result.copy();
     }
 
-
     @Override
     public boolean canCraftInDimensions(int i, int i1) {
         return false;
@@ -88,7 +88,7 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
                         Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
                         ItemStack.CODEC.fieldOf("output").forGetter(r -> r.result),
                         Codec.FLOAT.fieldOf("min_devotion").forGetter(r -> r.minDevotion),
-                        ResourceLocation.CODEC.optionalFieldOf("deity", null).forGetter(r -> r.deity)
+                        ResourceLocation.CODEC.optionalFieldOf("deity", Deities.DUMMY_ID).forGetter(r -> r.deity)
                 ).apply(c, ChantConversionRecipe::new)
         );
 

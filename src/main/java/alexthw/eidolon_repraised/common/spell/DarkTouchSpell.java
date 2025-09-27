@@ -80,7 +80,7 @@ public class DarkTouchSpell extends StaticSpell {
         if (reputation == null) return false;
         var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
         return conversions.stream().map(RecipeHolder::value).filter(
-                r -> r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity))
+                r -> r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.DARK_DEITY_ID.equals(r.deity))
         ).anyMatch(r -> darkRep >= r.minDevotion);
     }
 
@@ -90,7 +90,7 @@ public class DarkTouchSpell extends StaticSpell {
             var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
             for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
                 var r = holder.value();
-                if (r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
+                if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity)|| Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
                     IMana.expendMana(player, getCost());
                     return r.getResultItem(player.level().registryAccess());
                 }

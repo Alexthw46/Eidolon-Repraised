@@ -57,7 +57,7 @@ public class EidChantConversionProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path pathIn, String str) {
-        return pathIn.resolve("data/eidolon_repraised/recipes/" + str + ".json");
+        return pathIn.resolve("data/eidolon_repraised/recipe/" + str + ".json");
     }
 
     @Override

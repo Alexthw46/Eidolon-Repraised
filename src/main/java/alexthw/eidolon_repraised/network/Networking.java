@@ -35,6 +35,7 @@ public class Networking {
         reg.playToClient(LifestealEffectPacket.TYPE, LifestealEffectPacket.CODEC, Networking::handle);
         reg.playToClient(MagicBurstEffectPacket.TYPE, MagicBurstEffectPacket.CODEC, Networking::handle);
         reg.playToClient(KnowledgeUpdatePacket.TYPE, KnowledgeUpdatePacket.CODEC, Networking::handle);
+        reg.playToClient(ReputationUpdatePacket.TYPE, ReputationUpdatePacket.CODEC, Networking::handle);
         reg.playToServer(AttemptCastPacket.TYPE, AttemptCastPacket.CODEC, Networking::handle);
         reg.playToClient(SpellCastPacket.TYPE, SpellCastPacket.CODEC, Networking::handle);
         reg.playToServer(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
