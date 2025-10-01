@@ -7,7 +7,7 @@
   ],
   "key": {
     "s": {
-      "tag": "c:string"
+      "tag": "c:strings"
     },
     "t": {
       "item": "eidolon_repraised:magicians_wax"
