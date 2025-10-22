@@ -4,8 +4,13 @@ import alexthw.eidolon_repraised.Config;
 import alexthw.eidolon_repraised.datagen.EidEnchantmentTagProvider;
 import alexthw.eidolon_repraised.registries.Registry;
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.IdMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -26,17 +31,19 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static alexthw.eidolon_repraised.registries.EidolonDataComponents.SOUL_ENCHANT_USES;
 import static net.neoforged.neoforge.common.CommonHooks.onPlayerEnchantItem;
 
 public class SoulEnchanterContainer extends AbstractContainerMenu {
-    private static final String SOUL_ENCHANT_USES_TAG = "soul_enchant_uses";
 
     private final Container tableInventory = new SimpleContainer(2) {
         public void setChanged() {
@@ -146,24 +153,19 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return;
         }
-        // TODO: Re-enable this when we have item components
-//
-//        CompoundTag tag = enchantedItem.getOrCreateTag();
-//        tag.putInt(SOUL_ENCHANT_USES_TAG, tag.getInt(SOUL_ENCHANT_USES_TAG) + 1);
+
+        enchantedItem.set(SOUL_ENCHANT_USES, enchantedItem.getOrDefault(SOUL_ENCHANT_USES, 0) + 1);
     }
 
     private boolean canSoulEnchant(final ItemStack itemstack) {
         if (Config.SOUL_ENCHANTER_MAXIMUM_USES.get() < 0) {
             return true;
         }
-        // TODO: Re-enable this when we have item components
-//
-//        CompoundTag tag = itemstack.getTag();
-//
-//        if (tag != null) {
-//            int soulEnchantUses = tag.getInt(SOUL_ENCHANT_USES_TAG);
-//            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
-//        }
+
+        if (!itemstack.isComponentsPatchEmpty()) {
+            int soulEnchantUses = itemstack.getOrDefault(SOUL_ENCHANT_USES, 0);
+            return soulEnchantUses < Config.SOUL_ENCHANTER_MAXIMUM_USES.get();
+        }
 
         return true;
     }
@@ -222,7 +224,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         }
     }
 
-    private List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack,
+    private List<EnchantmentInstance> getEnchantmentListOld(RegistryAccess registryAccess, ItemStack stack,
                                                          int enchantSlot) {
         this.rand.setSeed(this.xpSeed.get() + enchantSlot);
 
@@ -232,19 +234,67 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         } else {
             var valid = Lists.newArrayList(optional.get());
             valid.removeIf(
-                    enchantment -> enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST)
+                    enchantment -> enchantment == null || enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST)
 
                     //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
                     //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
-                    //            }
+                    //  }
             );
-            List<EnchantmentInstance> list = EnchantmentHelper.selectEnchantment(this.rand, stack, 0, valid.stream());
+            List<EnchantmentInstance> list = EnchantmentHelper.selectEnchantment(this.rand, stack, 1 + this.rand.nextInt(30), valid.stream());
             if (stack.is(Items.BOOK) && list.size() > 1) {
                 list.remove(this.rand.nextInt(list.size()));
             }
 
             return list;
         }
+    }
+
+    private List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int enchantSlot) {
+        this.rand.setSeed(this.xpSeed.get() + enchantSlot);
+        ItemStack test = stack.getItem().getDefaultInstance();
+        if (test.getItem() == Items.ENCHANTED_BOOK) test = new ItemStack(Items.BOOK);
+        final ItemStack finalTest = test;
+
+        ItemEnchantments existing = stack.getAllEnchantments(registryAccess.registryOrThrow(Registries.ENCHANTMENT).asLookup());
+        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
+        if (optional.isEmpty()) {
+            return List.of();
+        }
+        var valid = Lists.newArrayList(optional.get());
+        valid.removeIf(
+                enchantment -> {
+                    boolean failFast = enchantment == null || enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST);
+                    if (failFast) return true;
+
+                    //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
+                    //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
+                    //  }
+                    boolean canApply = finalTest.supportsEnchantment(enchantment) || finalTest.getItem() == Items.BOOK;
+
+                    if (!canApply || enchantment.is(EnchantmentTags.CURSE)) {
+                        return true;
+                    }
+
+                    return enchantment.is(EnchantmentTags.TREASURE) || existing.getLevel(enchantment) > 0 && existing.getLevel(enchantment) >= enchantment.value().getMaxLevel();
+                }
+                //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
+                //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
+                //  }
+        );
+
+        for (Object2IntMap.Entry<Holder<Enchantment>> e : existing.entrySet()) {
+            valid.removeIf(next -> next == null || e.getKey().value().exclusiveSet().contains(next));
+        }
+
+        List<EnchantmentInstance> enchants = new ArrayList<>();
+        if (valid.isEmpty()) return enchants;
+        System.out.println(enchantSlot + ": " + valid.stream().reduce("", (a, b) -> a + ", " + b, (a, b) -> a + ", " + b));
+        for (int i = 0; i < enchantSlot; i++) rand.nextInt(valid.size());
+        Holder<Enchantment> enchant = valid.get(this.rand.nextInt(valid.size()));
+        int level = Math.max(0, stack.getEnchantmentLevel(enchant));
+        enchants.add(new EnchantmentInstance(enchant, level + 1));
+
+        return enchants;
     }
 
     @OnlyIn(Dist.CLIENT)

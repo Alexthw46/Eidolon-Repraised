@@ -44,4 +44,8 @@ public class EidolonDataComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Sign>> SIGN = DATA.register("sign",
             () -> DataComponentType.<Sign>builder().persistent(Sign.CODEC).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SOUL_ENCHANT_USES = DATA.register("soul_enchant_uses",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).build());
+
 }

@@ -46,19 +46,55 @@ public class EidItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
 
+        Item[] armors = new Item[]{
+                Registry.SILVER_HELMET.get(),
+                Registry.SILVER_CHESTPLATE.get(),
+                Registry.SILVER_LEGGINGS.get(),
+                Registry.SILVER_BOOTS.get(),
+                Registry.WARLOCK_HAT.get(),
+                Registry.WARLOCK_CLOAK.get(),
+                Registry.WARLOCK_BOOTS.get(),
+                Registry.BONELORD_HELM.get(),
+                Registry.BONELORD_CHESTPLATE.get(),
+                Registry.BONELORD_GREAVES.get()
+        };
+
+        tag(ItemTags.ARMOR_ENCHANTABLE).add(armors);
+        tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(armors);
+        tag(ItemTags.DURABILITY_ENCHANTABLE).add(armors);
+
         tag(ItemTags.HEAD_ARMOR).add(Registry.SILVER_HELMET.get(),
                 Registry.WARLOCK_HAT.get(),
                 Registry.BONELORD_HELM.get()
         );
+        tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(Registry.SILVER_HELMET.get(),
+                Registry.WARLOCK_HAT.get(),
+                Registry.BONELORD_HELM.get()
+        );
+
         tag(ItemTags.CHEST_ARMOR).add(Registry.SILVER_CHESTPLATE.get(),
                 Registry.WARLOCK_CLOAK.get(),
                 Registry.BONELORD_CHESTPLATE.get()
         );
+        tag(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(Registry.SILVER_CHESTPLATE.get(),
+                Registry.WARLOCK_CLOAK.get(),
+                Registry.BONELORD_CHESTPLATE.get()
+        );
+
         tag(ItemTags.LEG_ARMOR).add(Registry.SILVER_LEGGINGS.get(),
                 Registry.BONELORD_GREAVES.get()
         );
+        tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(Registry.SILVER_LEGGINGS.get(),
+                Registry.BONELORD_GREAVES.get()
+        );
+
+
         tag(ItemTags.FOOT_ARMOR).add(Registry.SILVER_BOOTS.get(),
                 Registry.WARLOCK_BOOTS.get()
         );
+        tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(Registry.SILVER_BOOTS.get(),
+                Registry.WARLOCK_BOOTS.get()
+        );
+
     }
 }

@@ -1,7 +1,6 @@
 package alexthw.eidolon_repraised.gui;
 
 import alexthw.eidolon_repraised.Eidolon;
-import alexthw.eidolon_repraised.util.ColorUtil;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -132,8 +131,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         float f5 = Mth.clamp(Mth.frac(f1 + 0.75F) * 1.6F - 0.3F, 0.0F, 1.0F);
         MODEL_BOOK.setupAnim(0.0F, f4, f5, f);
         VertexConsumer vertexconsumer = pGuiGraphics.bufferSource().getBuffer(MODEL_BOOK.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
-        MODEL_BOOK.renderToBuffer(pGuiGraphics.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, ColorUtil.packColor(
-                1, 1, 1, 1));
+        MODEL_BOOK.renderToBuffer(pGuiGraphics.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY);
         pGuiGraphics.flush();
         pGuiGraphics.pose().popPose();
         Lighting.setupFor3DItems();
