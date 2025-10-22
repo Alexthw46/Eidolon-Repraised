@@ -3,7 +3,11 @@ package alexthw.eidolon_repraised.common.item.model;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class SilverArmorModel extends ArmorModel {
     public SilverArmorModel(ModelPart part) {
@@ -38,7 +42,4 @@ public class SilverArmorModel extends ArmorModel {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
-        super.setRotationAngle(modelRenderer, x, y, z);
-    }
 }

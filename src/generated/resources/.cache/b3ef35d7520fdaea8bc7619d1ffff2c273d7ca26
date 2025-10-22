@@ -1,11 +1,15 @@
-// 1.21.1	2025-08-03T16:49:22.5327493	Tags for minecraft:item mod id eidolon_repraised
+// 1.21.1	2025-10-22T16:46:42.8936161	Tags for minecraft:item mod id eidolon_repraised
 f2ff98b9b431484dc7563ebf0f952928a2c252c3 data/c/tags/item/music_discs.json
 9826769f4e125289c79e3d5438deefc7d4353e0e data/eidolon_repraised/tags/item/patron_symbol.json
 2ab1a299e8c68dfb622595da904d577ac9a1c851 data/eidolon_repraised/tags/item/scribe_items.json
 eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/bookshelf_books.json
 110cc871e07c20892517547549bdbf65974eb817 data/minecraft/tags/item/candles.json
+f1e2b42c4ba5461adff9d99a59ba5590be1ec5dc data/minecraft/tags/item/chest_armor.json
+ff1192bc5e8d65cbf785d61f81a117b295e3bb9d data/minecraft/tags/item/foot_armor.json
+502823b46bba0e43fc5065832b2c84d9f3dd7f88 data/minecraft/tags/item/head_armor.json
 4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/item/leaves.json
 eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/lectern_books.json
+4db26547aff54e0105828f245f1979c13f4f01da data/minecraft/tags/item/leg_armor.json
 615cf69149f2473f5c75609451500f2bc3cd8332 data/minecraft/tags/item/saplings.json
 d966907c59e762094767253775b2fea68c9075c6 data/minecraft/tags/item/signs.json
 77200998ef23c825708b8884a08fcc652b5ac259 data/minecraft/tags/item/wooden_buttons.json

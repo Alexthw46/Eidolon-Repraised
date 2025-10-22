@@ -45,5 +45,20 @@ public class EidItemTagProvider extends ItemTagsProvider {
         //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
+
+        tag(ItemTags.HEAD_ARMOR).add(Registry.SILVER_HELMET.get(),
+                Registry.WARLOCK_HAT.get(),
+                Registry.BONELORD_HELM.get()
+        );
+        tag(ItemTags.CHEST_ARMOR).add(Registry.SILVER_CHESTPLATE.get(),
+                Registry.WARLOCK_CLOAK.get(),
+                Registry.BONELORD_CHESTPLATE.get()
+        );
+        tag(ItemTags.LEG_ARMOR).add(Registry.SILVER_LEGGINGS.get(),
+                Registry.BONELORD_GREAVES.get()
+        );
+        tag(ItemTags.FOOT_ARMOR).add(Registry.SILVER_BOOTS.get(),
+                Registry.WARLOCK_BOOTS.get()
+        );
     }
 }
