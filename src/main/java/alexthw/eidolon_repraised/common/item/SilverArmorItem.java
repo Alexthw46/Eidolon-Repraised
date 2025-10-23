@@ -24,7 +24,7 @@ public class SilverArmorItem extends ArmorItem {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
     public SilverArmorItem(Type slot, Properties builderIn) {
-        super(EidolonMaterials.SILVER_ARMOR, slot, builderIn.stacksTo(1));
+        super(EidolonMaterials.SILVER_ARMOR, slot, builderIn.durability(slot.getDurability(20)));
     }
 
     @OnlyIn(Dist.CLIENT)

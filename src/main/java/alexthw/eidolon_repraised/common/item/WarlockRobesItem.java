@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 public class WarlockRobesItem extends ArmorItem implements IDyeable {
 
     public WarlockRobesItem(Type slot, Properties builderIn) {
-        super(EidolonMaterials.WARLOCK_ROBES, slot, builderIn);
+        super(EidolonMaterials.WARLOCK_ROBES, slot, builderIn.stacksTo(1).durability(slot.getDurability(15)));
     }
 
     @Override
@@ -38,6 +38,25 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         if (getColor(pStack) == DyeColor.BLUE) return og;
         return Component.literal(og.getString() + " (" + Component.translatable(getColor(pStack).getName()).getString() + ")");
     }
+
+//
+//    @Override
+//    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity player, int slotId, boolean pIsSelected) {
+//        super.inventoryTick(stack, world, player, slotId, pIsSelected);
+//        if (slotId >= Inventory.INVENTORY_SIZE && slotId < Inventory.INVENTORY_SIZE + 4) {
+//            if (world.isClientSide())
+//                return;
+//            if (player instanceof Player entity) {
+//                if (entity.level.getGameTime() % 200 != 0 || stack.getDamageValue() <= 0)
+//                    return;
+//                var mana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
+//                if (mana != null && mana.getMagic() >= 20) {
+//                    IMana.expendMana(entity, 10);
+//                    stack.setDamageValue(stack.getDamageValue() - Math.min(stack.getDamageValue(), 10));
+//                }
+//            }
+//        }
+//    }
 
     @OnlyIn(Dist.CLIENT)
     @Override

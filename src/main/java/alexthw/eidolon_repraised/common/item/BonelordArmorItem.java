@@ -25,7 +25,7 @@ public class BonelordArmorItem extends ArmorItem implements IItemExtension {
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
     public BonelordArmorItem(Type slot, Properties builderIn) {
-        super(EidolonMaterials.BONELORD, slot, builderIn);
+        super(EidolonMaterials.BONELORD, slot, builderIn.durability(slot.getDurability(25)));
     }
 
     @OnlyIn(Dist.CLIENT)
