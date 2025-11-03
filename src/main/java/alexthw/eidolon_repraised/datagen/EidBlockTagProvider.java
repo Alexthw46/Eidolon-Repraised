@@ -38,7 +38,8 @@ public class EidBlockTagProvider extends BlockTagsProvider {
         tag(Registry.PLANTER_PLANTS).add(Registry.MERAMMER_ROOT.get(),
                 Registry.OANNA_BLOOM.get(),
                 Registry.AVENNIAN_SPRIG.get(),
-                Registry.SILDRIAN_SEED.get()
+                Registry.SILDRIAN_SEED.get(),
+                Registry.MIRECAP.get()
         );
     }
 

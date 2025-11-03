@@ -40,6 +40,7 @@ public class CrucibleHelper {
             CrucibleStep step = steps.get(i);
             CrucibleRecipe.Step otherStep = otherSteps.get(i);
             if (step.getStirs() != otherStep.stirs()) return false;
+            if (step.getContents().size() != otherStep.matches().size()) return false;
             if (!doContentsMatch(step, otherStep)) return false;
         }
 

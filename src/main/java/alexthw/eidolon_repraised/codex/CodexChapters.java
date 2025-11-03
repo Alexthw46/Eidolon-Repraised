@@ -1,7 +1,11 @@
 package alexthw.eidolon_repraised.codex;
 
 import alexthw.eidolon_repraised.capability.Facts;
-import alexthw.eidolon_repraised.codex.IndexPage.*;
+import alexthw.eidolon_repraised.codex.IndexPage.FactLockedEntry;
+import alexthw.eidolon_repraised.codex.IndexPage.IndexEntry;
+import alexthw.eidolon_repraised.codex.IndexPage.ReputationLockedEntry;
+import alexthw.eidolon_repraised.codex.IndexPage.ResearchLockedEntry;
+import alexthw.eidolon_repraised.codex.IndexPage.SignLockedEntry;
 import alexthw.eidolon_repraised.codex.ListPage.ListEntry;
 import alexthw.eidolon_repraised.codex.SignIndexPage.SignEntry;
 import alexthw.eidolon_repraised.common.deity.Deities;
@@ -11,7 +15,12 @@ import alexthw.eidolon_repraised.util.ClientInfo;
 import alexthw.eidolon_repraised.util.ColorUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -24,6 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.opengl.GL11;
@@ -51,7 +61,7 @@ public class CodexChapters {
             WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
             MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, WATER, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE, SUNDER_ARMOR, REINFORCE_ARMOR;
 
-    public static void init() {
+    public static void init(Level level) {
 
         // purge old categories
         if (!categories.isEmpty()) {
@@ -639,10 +649,27 @@ public class CodexChapters {
                     .craftingPage(Registry.GOBLET.get().asItem())
                     .build();
 
-            CENSER = new CodexBuilder()
+            CENSER = new CodexBuilder(level)
                     .title("eidolon_repraised.codex.chapter.censer")
                     .titlePage("eidolon_repraised.codex.page.censer")
                     .craftingPage(Registry.CENSER.get().asItem())
+                    .textPage("eidolon_repraised.codex.page.incense.1")
+                    .addSupportedRecipePages(Registry.RESTORATION_INCENSE.get())
+                    .addSupportedRecipePages(Registry.GLOOM_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.2")
+                    .addSupportedRecipePages(Registry.UNDEATH_INCENSE.get())
+                    .addSupportedRecipePages(Registry.DEATH_BANE_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.3")
+                    .addSupportedRecipePages(Registry.TOUGH_INCENSE.get())
+                    .addSupportedRecipePages(Registry.FRAIL_INCENSE.get())
+                    //.addSupportedRecipePages(Registry.WARDING_INCENSE.get())
+                    .addSupportedRecipePages(Registry.PURITY_INCENSE.get())
+                    .addSupportedRecipePages(Registry.QUICKEN_INCENSE.get())
+                    .addSupportedRecipePages(Registry.BLOODLUST_INCENSE.get())
+                    .addSupportedRecipePages(Registry.SOUL_HARVEST_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.4")
+                    .addSupportedRecipePages(Registry.FROSTBIND_INCENSE.get())
+                    .addSupportedRecipePages(Registry.TETHER_INCENSE.get())
                     .build();
 
             DARK_PRAYER = new CodexBuilder()

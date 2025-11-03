@@ -60,7 +60,7 @@ public class CodexBuilder {
                 case WorktableRecipe worktableRecipe ->
                         pages.add(new WorktablePage(recipe.getResultItem(level.registryAccess())));
                 case CrucibleRecipe crucibleRecipe ->
-                        pages.add(new CruciblePage(recipe.getResultItem(level.registryAccess()), crucibleRecipe.getId()));
+                        pages.add(new CruciblePage(recipe.getResultItem(level.registryAccess()), holder.id()));
                 default -> {
                 }
             }

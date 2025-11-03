@@ -27,6 +27,6 @@ public class InitCodexPacket extends AbstractPacket {
 
     @Override
     public void onClientReceived(Minecraft minecraft, Player player) {
-        CodexChapters.init();
+        CodexChapters.init(player.level());
     }
 }
