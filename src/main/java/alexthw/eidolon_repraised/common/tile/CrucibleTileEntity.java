@@ -316,9 +316,10 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
     private List<ItemStack> consumeFromInventory() {
         List<ItemStack> contents = new ArrayList<>();
         for (int i = 0; i < currentStepContents.size(); i++) {
-            ItemStack stack = currentStepContents.get(i);
+            ItemStack stack = currentStepContents.get(i).copy();
             if (!stack.isEmpty()) {
-                contents.add(stack.copy());
+                while (!stack.isEmpty())
+                    contents.add(stack.split(1));
                 currentStepContents.set(i, ItemStack.EMPTY);
             }
         }
