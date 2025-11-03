@@ -2,9 +2,17 @@ package elucent.eidolon.codex;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import elucent.eidolon.capability.Facts;
-import elucent.eidolon.codex.IndexPage.*;
+import elucent.eidolon.codex.IndexPage.FactLockedEntry;
+import elucent.eidolon.codex.IndexPage.IndexEntry;
+import elucent.eidolon.codex.IndexPage.ReputationLockedEntry;
+import elucent.eidolon.codex.IndexPage.ResearchLockedEntry;
+import elucent.eidolon.codex.IndexPage.SignLockedEntry;
 import elucent.eidolon.codex.ListPage.ListEntry;
 import elucent.eidolon.codex.SignIndexPage.SignEntry;
 import elucent.eidolon.common.deity.Deities;
@@ -648,6 +656,23 @@ public class CodexChapters {
                     .title("eidolon.codex.chapter.censer")
                     .titlePage("eidolon.codex.page.censer")
                     .craftingPage(Registry.CENSER.get().asItem())
+                    .textPage("eidolon_repraised.codex.page.incense.1")
+                    .addSupportedRecipePages(Registry.RESTORATION_INCENSE.get())
+                    .addSupportedRecipePages(Registry.GLOOM_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.2")
+                    .addSupportedRecipePages(Registry.UNDEATH_INCENSE.get())
+                    .addSupportedRecipePages(Registry.DEATH_BANE_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.3")
+                    .addSupportedRecipePages(Registry.TOUGH_INCENSE.get())
+                    .addSupportedRecipePages(Registry.FRAIL_INCENSE.get())
+                    //.addSupportedRecipePages(Registry.WARDING_INCENSE.get())
+                    .addSupportedRecipePages(Registry.PURITY_INCENSE.get())
+                    .addSupportedRecipePages(Registry.QUICKEN_INCENSE.get())
+                    .addSupportedRecipePages(Registry.BLOODLUST_INCENSE.get())
+                    .addSupportedRecipePages(Registry.SOUL_HARVEST_INCENSE.get())
+                    .textPage("eidolon_repraised.codex.page.incense.4")
+                    .addSupportedRecipePages(Registry.FROSTBIND_INCENSE.get())
+                    .addSupportedRecipePages(Registry.TETHER_INCENSE.get())
                     .build();
 
             DARK_PRAYER = new CodexBuilder(level)
