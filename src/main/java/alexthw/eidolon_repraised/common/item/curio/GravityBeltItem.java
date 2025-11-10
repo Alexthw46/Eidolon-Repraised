@@ -31,7 +31,7 @@ public class GravityBeltItem extends BasicBeltItem {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> map = super.getAttributeModifiers(slotContext, id, stack);
-        map.put(Attributes.GRAVITY, new AttributeModifier(id, -0.60f, AttributeModifier.Operation.ADD_VALUE));
+        map.put(Attributes.GRAVITY, new AttributeModifier(id, -0.60f, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return map;
     }
 
