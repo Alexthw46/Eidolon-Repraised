@@ -9,10 +9,7 @@ import alexthw.eidolon_repraised.compat.CompatHandler;
 import alexthw.eidolon_repraised.event.Events;
 import alexthw.eidolon_repraised.mixin.BlockEntityTypeAccessor;
 import alexthw.eidolon_repraised.network.InitCodexPacket;
-import alexthw.eidolon_repraised.network.KnowledgeUpdatePacket;
 import alexthw.eidolon_repraised.network.Networking;
-import alexthw.eidolon_repraised.network.ReputationUpdatePacket;
-import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.network.WingsDataUpdatePacket;
 import alexthw.eidolon_repraised.proxy.ClientProxy;
 import alexthw.eidolon_repraised.proxy.ISidedProxy;
@@ -105,9 +102,7 @@ public class Eidolon {
     private void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
         if (!(e.getEntity() instanceof ServerPlayer player)) return;
         // Send all the data to the player when they log in
-        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
-        Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), player);
-        Networking.sendToPlayerClient(new SoulUpdatePacket(player), player);
+        EidolonCapabilities.syncCaps(player);
         Networking.sendToPlayerClient(new WingsDataUpdatePacket(player), player);
         Networking.sendToPlayerClient(new InitCodexPacket(null), player);
     }

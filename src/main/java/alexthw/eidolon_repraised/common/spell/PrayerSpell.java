@@ -9,8 +9,8 @@ import alexthw.eidolon_repraised.client.particle.Particles;
 import alexthw.eidolon_repraised.common.block.HorizontalBlockBase;
 import alexthw.eidolon_repraised.common.tile.EffigyTileEntity;
 import alexthw.eidolon_repraised.common.tile.GobletTileEntity;
+import alexthw.eidolon_repraised.network.ManaUpdatePacket;
 import alexthw.eidolon_repraised.network.Networking;
-import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.util.RGBProvider;
 import net.minecraft.core.BlockPos;
@@ -76,7 +76,7 @@ public class PrayerSpell extends StaticSpell {
             patronMana.setMaxMagic((float) Math.max(patronMana.getMaxMagic(), 20 + reputation * (1 + capacity / 2)));
             patronMana.setMagic((float) Math.max(patronMana.getMagic(), patronMana.getMagic() + reputation + power * 2));
             if (player instanceof ServerPlayer serverPlayer)
-                Networking.sendToPlayerClient(new SoulUpdatePacket(player), serverPlayer);
+                Networking.sendToPlayerClient(new ManaUpdatePacket(player), serverPlayer);
         }
     }
 

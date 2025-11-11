@@ -55,6 +55,14 @@ public class PatronManaImpl implements IMana {
         this.manaData = entity.getData(EidolonAttachments.MANA_ATTACHMENT);
     }
 
+    public CompoundTag serializeNBT() {
+        return manaData.serializeNBT(entity.registryAccess());
+    }
+
+    public void deserializeNBT(CompoundTag nbt) {
+        manaData.deserializeNBT(entity.registryAccess(), nbt);
+        entity.setData(EidolonAttachments.MANA_ATTACHMENT, manaData);
+    }
 
     @Override
     public boolean hasMagic() {

@@ -41,6 +41,7 @@ public class Networking {
         reg.playToServer(ResearchActionPacket.TYPE, ResearchActionPacket.CODEC, Networking::handle);
         reg.playToClient(DeathbringerSlashEffectPacket.TYPE, DeathbringerSlashEffectPacket.CODEC, Networking::handle);
         reg.playToClient(SoulUpdatePacket.TYPE, SoulUpdatePacket.CODEC, Networking::handle);
+        reg.playToClient(ManaUpdatePacket.TYPE, ManaUpdatePacket.CODEC, Networking::handle);
         reg.playToServer(WingsFlapPacket.TYPE, WingsFlapPacket.CODEC, Networking::handle);
         reg.playToServer(WingsDashPacket.TYPE, WingsDashPacket.CODEC, Networking::handle);
         reg.playToClient(WingsDataUpdatePacket.TYPE, WingsDataUpdatePacket.CODEC, Networking::handle);

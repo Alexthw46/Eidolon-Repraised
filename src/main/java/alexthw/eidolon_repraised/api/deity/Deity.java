@@ -164,6 +164,16 @@ public abstract class Deity implements RGBProvider {
             return s;
         }
 
+        public Stage tryRegress(IReputation rep, Player player, double prev, double current) {
+            if (current <= 0) return null; // Can't regress past min.
+            Stage s = last(prev); //get the current stage
+            if (current < s.rep) { // we have dropped below this stage
+                Stage previous = prev(s.rep - 1);
+                rep.setReputation(Deity.this.getId(), Math.min(current, previous.rep));
+                return previous;
+            }
+            return s;
+        }
 
         public void regress(IReputation rep, Player player) {
             double level = rep.getReputation(Deity.this.getId());
@@ -185,6 +195,14 @@ public abstract class Deity implements RGBProvider {
 
         if (NeoForge.EVENT_BUS.post(new ReputationEvent.Change(this, player, prev, updated)).isCanceled())
             return false;
+
+        if (updated < prev) {
+            // Handle regression
+            Stage s = progression.tryRegress(rep, player, prev, updated);
+            Stage currStage = progression.last(prev);
+            // No stage change, simply allow the rep change
+            return s != null && currStage == s;
+        }
 
         // Fetch the next and current stages, if any
         Stage nextStage = progression.tryProgress(rep, player, prev, updated);
