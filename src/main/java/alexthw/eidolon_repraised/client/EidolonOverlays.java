@@ -346,15 +346,14 @@ public class EidolonOverlays {
                 guiGraphics.drawString(font, s, i1, j1 - 1, 0, false);
                 guiGraphics.drawString(font, s, i1, j1, 6505166, false);
 
-                if (ClientEvents.jumpTicks >= 5) {
+                if (ClientEvents.jumpTicks >= 1) {
                     RenderSystem.enableBlend();
                     var x = screenWidth / 2 - 91;
                     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
                     minecraft.getProfiler().push("ravenJumpBar");
-                    float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTimeNs()) / 15.0f;
-                    int i = 182;
-                    int j = (int) (f * 183.0F);
+                    float f = (ClientEvents.jumpTicks - 5 + Minecraft.getInstance().getFrameTimeNs() / 50_000_000.0f) / 15.0f;
+                    int j = Mth.clamp((int) (f * 183.0F), 0, 182);
                     int k = guiGraphics.guiHeight() - 32 + 3;
                     guiGraphics.blitSprite(JUMP_BAR_BACKGROUND_SPRITE, x, k, 182, 5);
                     if (j > 0) {

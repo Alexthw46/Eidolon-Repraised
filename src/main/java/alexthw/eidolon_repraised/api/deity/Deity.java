@@ -172,35 +172,50 @@ public abstract class Deity implements RGBProvider {
         }
     }
 
-    public void onReputationChange(Player player, IReputation rep, double prev, double updated) {
+    /**
+     * Called when a player's reputation with this deity changes, but before the change is applied.
+     *
+     * @param player  Player whose reputation is changing
+     * @param rep     The IReputation capability of the player
+     * @param prev    The previous reputation value
+     * @param updated The updated reputation value
+     * @return true to allow the change, false to cancel it (ex. if an event cancels it or the max is reached)
+     */
+    public boolean onReputationChange(Player player, IReputation rep, double prev, double updated) {
 
         if (NeoForge.EVENT_BUS.post(new ReputationEvent.Change(this, player, prev, updated)).isCanceled())
-            return;
+            return false;
 
+        // Fetch the next and current stages, if any
         Stage nextStage = progression.tryProgress(rep, player, prev, updated);
         Stage currStage = progression.next(prev == 0 ? 1 : prev);
-        //we maxed out
+        // We maxed out, just set to max and return
         if (nextStage == null) {
             rep.setReputation(id, progression.max);
-            return;
+            return false; // Reputation change handled internally
         }
 
-        //we advanced a stage
+        // We can let the player advance a stage
         if (nextStage.rep > currStage.rep) {
-            if (NeoForge.EVENT_BUS.post(new ReputationEvent.Unlock(this, player, nextStage)).isCanceled())
-                return;
+            if (NeoForge.EVENT_BUS.post(new ReputationEvent.Unlock(this, player, nextStage)).isCanceled()) {
+                rep.setReputation(id, currStage.rep); // Revert to current stage rep
+                return false;
+            }
+            // Grant the new stage
             onReputationUnlock(player, currStage.id());
+            // Update reputation, clamping to the next stage rep to avoid skipping stages
+            rep.setReputation(id, Math.min(updated, nextStage.rep));
         }
+
         double curr = rep.getReputation(getId()); //update after we may have changed it
 
-        //we didn't advance a stage, if the cap was reached then we need to grant the next step
+        // If the cap was reached then we need to lock the stage and grant the knowledge for the next stage
         if (curr == nextStage.rep() && updated != curr) {
-            if (NeoForge.EVENT_BUS.post(new ReputationEvent.Lock(this, player, currStage)).isCanceled())
-                return;
-            onReputationLock(player, currStage.id());
+            if (!NeoForge.EVENT_BUS.post(new ReputationEvent.Lock(this, player, currStage)).isCanceled())
+                onReputationLock(player, currStage.id());
         }
 
-
+        return true;
     }
 
     public abstract void onReputationUnlock(Player player, ResourceLocation lock);

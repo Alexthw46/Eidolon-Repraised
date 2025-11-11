@@ -149,7 +149,7 @@ public class SummoningStaffItem extends ItemBase {
         if (thrallData == null) {
             thrallData = new ThrallData(new ArrayList<>(), 0);
         }
-        List<CompoundTag> thralls = thrallData.thralls();
+        List<CompoundTag> thralls = new ArrayList<>(thrallData.thralls());
         while (thralls.size() + charges.size() > 100) charges.removeLast();
         for (int i = 0; i < charges.size(); i++) thralls.add(charges.getCompound(i));
         stack.set(EidolonDataComponents.THRALLS, new ThrallData(thralls, thrallData.selected()));
@@ -161,7 +161,7 @@ public class SummoningStaffItem extends ItemBase {
         if (thrallData == null) {
             thrallData = new ThrallData(new ArrayList<>(), 0);
         }
-        List<CompoundTag> thralls = thrallData.thralls();
+        List<CompoundTag> thralls = new ArrayList<>(thrallData.thralls());
         if (thralls.size() < 100) thralls.add(tag);
         stack.set(EidolonDataComponents.THRALLS, new ThrallData(thralls, thrallData.selected()));
     }

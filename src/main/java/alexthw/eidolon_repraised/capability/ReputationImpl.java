@@ -39,7 +39,7 @@ public class ReputationImpl implements IReputation {
         public void setReputation(ResourceLocation deity, double amount) {
             ReputationEntry entry = reputationMap.computeIfAbsent(deity, k -> new ReputationEntry());
             if (entry.lock == null || amount < 0) {
-                entry.reputation = amount;
+                entry.reputation = Math.max(0, amount);
             }
         }
 
@@ -138,7 +138,8 @@ public class ReputationImpl implements IReputation {
 
     @Override
     public void addReputation(ResourceLocation deity, double amount) {
-        reputationData.addReputation(deity, amount);
+        if (considerChange(player, deity, getReputation(deity) + amount))
+            reputationData.addReputation(deity, amount);
         if (player instanceof ServerPlayer serverPlayer)
             Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
