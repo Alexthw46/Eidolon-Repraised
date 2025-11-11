@@ -28,9 +28,13 @@ public interface IReputation {
 
     boolean canPray(PrayerSpell spell, long time);
 
-    default void considerChange(Player player, ResourceLocation deity, double prev) {
+    /**
+     * Called before changing reputation. Return true to allow the change, false to prevent it.
+     */
+    default boolean considerChange(Player player, ResourceLocation deity, double toUpdate) {
         double amount = getReputation(deity);
         Deity d = Deities.find(deity);
-        if (d != null) d.onReputationChange(player, this, prev, amount);
+        if (d != null) return d.onReputationChange(player, this, amount, toUpdate);
+        return false;
     }
 }
