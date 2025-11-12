@@ -9,10 +9,7 @@ import alexthw.eidolon_repraised.compat.CompatHandler;
 import alexthw.eidolon_repraised.event.Events;
 import alexthw.eidolon_repraised.mixin.BlockEntityTypeAccessor;
 import alexthw.eidolon_repraised.network.InitCodexPacket;
-import alexthw.eidolon_repraised.network.KnowledgeUpdatePacket;
 import alexthw.eidolon_repraised.network.Networking;
-import alexthw.eidolon_repraised.network.ReputationUpdatePacket;
-import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.network.WingsDataUpdatePacket;
 import alexthw.eidolon_repraised.proxy.ClientProxy;
 import alexthw.eidolon_repraised.proxy.ISidedProxy;
@@ -64,13 +61,14 @@ public class Eidolon {
         return ResourceLocation.fromNamespaceAndPath("eidolon_repraised", path);
     }
 
-    public static boolean trueMobType = false;
 
     public static boolean isValidUndead(LivingEntity e) {
-        trueMobType = true;
-        boolean type = e.getType().getTags().toList().contains(EntityTypeTags.UNDEAD);
-        trueMobType = false;
-        return type;
+        boolean original_type = e.getType().is(EntityTypeTags.UNDEAD);
+        if (original_type) {
+            return true;
+        }
+        var effectInstance = e.getEffect(EidolonPotions.UNDEATH_EFFECT);
+        return effectInstance != null && effectInstance.getAmplifier() >= 0;
     }
 
     public Eidolon(IEventBus modEventBus, ModContainer modContainer) {
@@ -105,9 +103,7 @@ public class Eidolon {
     private void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
         if (!(e.getEntity() instanceof ServerPlayer player)) return;
         // Send all the data to the player when they log in
-        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
-        Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), player);
-        Networking.sendToPlayerClient(new SoulUpdatePacket(player), player);
+        EidolonCapabilities.syncCaps(player);
         Networking.sendToPlayerClient(new WingsDataUpdatePacket(player), player);
         Networking.sendToPlayerClient(new InitCodexPacket(null), player);
     }

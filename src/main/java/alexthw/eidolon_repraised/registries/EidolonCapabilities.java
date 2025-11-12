@@ -1,13 +1,24 @@
 package alexthw.eidolon_repraised.registries;
 
 import alexthw.eidolon_repraised.Eidolon;
-import alexthw.eidolon_repraised.capability.*;
+import alexthw.eidolon_repraised.capability.KnowledgeImpl;
+import alexthw.eidolon_repraised.capability.PatronManaImpl;
+import alexthw.eidolon_repraised.capability.ReputationImpl;
+import alexthw.eidolon_repraised.capability.SoulImpl;
+import alexthw.eidolon_repraised.capability.WingsDataImpl;
+import alexthw.eidolon_repraised.network.KnowledgeUpdatePacket;
+import alexthw.eidolon_repraised.network.ManaUpdatePacket;
+import alexthw.eidolon_repraised.network.Networking;
+import alexthw.eidolon_repraised.network.ReputationUpdatePacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,4 +54,31 @@ public class EidolonCapabilities {
 
     }
 
+    @SubscribeEvent
+    public static void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            syncCaps(player);
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onPlayerStartTrackingEvent(PlayerEvent.StartTracking event) {
+        if (event.getTarget() instanceof Player && event.getEntity() instanceof ServerPlayer player) {
+            syncCaps(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDimChangedEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            syncCaps(player);
+        }
+    }
+
+    public static void syncCaps(ServerPlayer player) {
+        Networking.sendToPlayerClient(new KnowledgeUpdatePacket(player, false), player);
+        Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), player);
+        Networking.sendToPlayerClient(new ManaUpdatePacket(player), player);
+    }
 }

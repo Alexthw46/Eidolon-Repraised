@@ -1,5 +1,6 @@
 package alexthw.eidolon_repraised.common.spell;
 
+import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.api.capability.IMana;
 import alexthw.eidolon_repraised.api.capability.IReputation;
 import alexthw.eidolon_repraised.api.spells.Sign;
@@ -11,7 +12,6 @@ import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +35,7 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     @SubscribeEvent
     public static void onHurt(LivingDamageEvent.Pre event) {
-        if (event.getSource().getEntity() instanceof LivingEntity caster && event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
+        if (event.getSource().getEntity() instanceof LivingEntity caster && Eidolon.isValidUndead(event.getEntity())) {
             var tag = caster.getMainHandItem();
             if (tag.isEmpty() && tag.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 0) > 0) {
                 event.setNewDamage(event.getNewDamage() * 1.5f);

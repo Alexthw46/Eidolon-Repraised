@@ -5,7 +5,6 @@ import alexthw.eidolon_repraised.capability.KnowledgeCommand;
 import alexthw.eidolon_repraised.capability.ReputationCommand;
 import alexthw.eidolon_repraised.client.particle.*;
 import alexthw.eidolon_repraised.common.block.*;
-import alexthw.eidolon_repraised.common.block.CandleBlock;
 import alexthw.eidolon_repraised.common.item.*;
 import alexthw.eidolon_repraised.common.item.Tiers;
 import alexthw.eidolon_repraised.common.item.Tiers.SilverTier;
@@ -43,7 +42,12 @@ import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -67,7 +71,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 import static net.minecraft.world.level.block.state.properties.WoodType.register;
 
 @SuppressWarnings({"unused", "DataFlowIssue"})
@@ -235,10 +238,9 @@ public class Registry {
     public static final DeferredHolder<Item, Item> SILVER_LEGGINGS = addItem("silver_leggings", () -> new SilverArmorItem(Type.LEGGINGS, itemProps()));
     public static final DeferredHolder<Item, Item> SILVER_BOOTS = addItem("silver_boots", () -> new SilverArmorItem(Type.BOOTS, itemProps()));
     public static final DeferredHolder<Item, Item> SILVER_SWORD = addItem("silver_sword", () -> new SwordItem(SilverTier.INSTANCE, itemProps().attributes(SwordItem.createAttributes(SilverTier.INSTANCE, 3, -2.4f))) {
-
                 @Override
                 public boolean hurtEnemy(@NotNull ItemStack pStack, @NotNull LivingEntity pTarget, @NotNull LivingEntity pAttacker) {
-                    if (pTarget.getType().is(UNDEAD)) {
+                    if (Eidolon.isValidUndead(pTarget)) {
                         pTarget.setRemainingFireTicks(5 * 20);
                     }
                     return super.hurtEnemy(pStack, pTarget, pAttacker);

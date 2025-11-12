@@ -31,11 +31,6 @@ public class WraithEntity extends Monster {
     }
 
     @Override
-    public boolean isInvertedHealAndHarm() {
-        return true;
-    }
-
-    @Override
     public boolean doHurtTarget(@NotNull Entity entityIn) {
         boolean flag = super.doHurtTarget(entityIn);
         if (flag && entityIn instanceof LivingEntity) {

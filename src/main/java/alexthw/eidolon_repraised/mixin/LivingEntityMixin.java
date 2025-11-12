@@ -2,6 +2,7 @@ package alexthw.eidolon_repraised.mixin;
 
 import alexthw.eidolon_repraised.api.capability.IPlayerData;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
+import alexthw.eidolon_repraised.registries.EidolonPotions;
 import alexthw.eidolon_repraised.util.EntityUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -32,6 +33,14 @@ public class LivingEntityMixin {
                     if (lastHurt != pTarget && lastHurtBy != pTarget) cir.setReturnValue(false);
                 }
             }
+        }
+    }
+
+    @Inject(method = "isInvertedHealAndHarm()Z", at = @At("TAIL"), cancellable = true)
+    public void eidolonrepraised$isInvertedHealAndHarm(CallbackInfoReturnable<Boolean> cir) {
+        Entity self = (Entity) (Object) this;
+        if (self instanceof LivingEntity living) {
+            if (living.hasEffect(EidolonPotions.UNDEATH_EFFECT)) cir.setReturnValue(true);
         }
     }
 

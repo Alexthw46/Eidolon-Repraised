@@ -101,11 +101,6 @@ public class NecromancerEntity extends SpellcasterIllager {
         }
     }
 
-    @Override
-    public boolean isInvertedHealAndHarm() {
-        return true;
-    }
-
     class AttackSpellGoal extends SpellcasterIllager.SpellcasterUseSpellGoal {
         private AttackSpellGoal() {
         }

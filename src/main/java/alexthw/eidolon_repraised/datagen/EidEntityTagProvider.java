@@ -27,6 +27,7 @@ public class EidEntityTagProvider extends EntityTypeTagsProvider {
         tag(ThrallSpell.ENTHRALL_BLACKLIST);
         tag(ThrallSpell.ENTHRALL_WHITELIST);
         tag(EntityTypeTags.UNDEAD).add(EidolonEntities.WRAITH.get(), EidolonEntities.ZOMBIE_BRUTE.get(), EidolonEntities.GIANT_SKEL.get(), EidolonEntities.NECROMANCER.get());
+        tag(EntityTypeTags.INVERTED_HEALING_AND_HARM).add(EidolonEntities.WRAITH.get(), EidolonEntities.ZOMBIE_BRUTE.get(), EidolonEntities.GIANT_SKEL.get(), EidolonEntities.NECROMANCER.get());
 
     }
 

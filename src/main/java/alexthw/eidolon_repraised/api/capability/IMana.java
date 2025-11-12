@@ -1,7 +1,7 @@
 package alexthw.eidolon_repraised.api.capability;
 
+import alexthw.eidolon_repraised.network.ManaUpdatePacket;
 import alexthw.eidolon_repraised.network.Networking;
-import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ public interface IMana {
         if (mana.getMagic() >= amount) {
             mana.takeMagic(amount);
             if (player instanceof ServerPlayer serverPlayer)
-                Networking.sendToPlayerClient(new SoulUpdatePacket(player), serverPlayer);
+                Networking.sendToPlayerClient(new ManaUpdatePacket(player), serverPlayer);
         }
     }
 

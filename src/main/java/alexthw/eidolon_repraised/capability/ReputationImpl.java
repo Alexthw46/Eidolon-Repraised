@@ -146,7 +146,8 @@ public class ReputationImpl implements IReputation {
 
     @Override
     public void subtractReputation(ResourceLocation deity, double amount) {
-        reputationData.subtractReputation(deity, amount);
+        if (considerChange(player, deity, getReputation(deity) - amount))
+            reputationData.subtractReputation(deity, amount);
         if (player instanceof ServerPlayer serverPlayer)
             Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }

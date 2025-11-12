@@ -1,6 +1,5 @@
 package alexthw.eidolon_repraised.common.spell;
 
-import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.common.deity.DeityLocks;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
@@ -13,6 +12,7 @@ import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,8 +38,7 @@ public class ThrallSpell extends StaticSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE) + 3, 0, false);
         if (ray instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity living) {
-            var type = Eidolon.isValidUndead(living);
-            return (!living.getType().is(ENTHRALL_BLACKLIST) && type) || living.getType().is(ENTHRALL_WHITELIST);
+            return living.getType().is(ENTHRALL_WHITELIST) || living.getType().is(EntityTypeTags.UNDEAD) && !living.getType().is(ENTHRALL_BLACKLIST);
         }
         return false;
     }
