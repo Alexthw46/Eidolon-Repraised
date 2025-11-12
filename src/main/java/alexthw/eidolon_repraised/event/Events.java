@@ -10,14 +10,24 @@ import alexthw.eidolon_repraised.common.entity.ai.FollowOwnerGoal;
 import alexthw.eidolon_repraised.common.entity.ai.PriestBarterGoal;
 import alexthw.eidolon_repraised.common.entity.ai.ThrallTargetGoal;
 import alexthw.eidolon_repraised.common.entity.ai.WitchBarterGoal;
-import alexthw.eidolon_repraised.common.item.*;
+import alexthw.eidolon_repraised.common.item.BonelordArmorItem;
+import alexthw.eidolon_repraised.common.item.CleavingAxeItem;
+import alexthw.eidolon_repraised.common.item.CodexItem;
+import alexthw.eidolon_repraised.common.item.ReaperScytheItem;
+import alexthw.eidolon_repraised.common.item.SummoningStaffItem;
+import alexthw.eidolon_repraised.common.item.WarlockRobesItem;
 import alexthw.eidolon_repraised.common.spell.ThrallSpell;
 import alexthw.eidolon_repraised.common.tile.GobletTileEntity;
 import alexthw.eidolon_repraised.network.CrystallizeEffectPacket;
 import alexthw.eidolon_repraised.network.Networking;
 import alexthw.eidolon_repraised.network.OpenCodexPacket;
+import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.network.WingsDataUpdatePacket;
-import alexthw.eidolon_repraised.registries.*;
+import alexthw.eidolon_repraised.registries.EidolonAttributes;
+import alexthw.eidolon_repraised.registries.EidolonCapabilities;
+import alexthw.eidolon_repraised.registries.EidolonPotions;
+import alexthw.eidolon_repraised.registries.Registry;
+import alexthw.eidolon_repraised.registries.Signs;
 import alexthw.eidolon_repraised.util.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -26,6 +36,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -61,7 +72,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Added;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent.Applicable;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -195,7 +211,7 @@ public class Events {
             var lootingHolder = source.level().registryAccess().holder(Enchantments.LOOTING);
 
             if (!entity.level().isClientSide && (held.getItem() instanceof ReaperScytheItem || event.getSource().is(Registry.RITUAL_DAMAGE.key))
-                    && entity.isInvertedHealAndHarm()) {
+                    && Eidolon.isValidUndead(entity)) {
                 if (!(entity instanceof Player))
                     event.getDrops().removeIf(i -> !(i.getItem().getItem() instanceof ArmorItem));
                 int looting = lootingHolder.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, source)).orElse(0);
@@ -261,13 +277,15 @@ public class Events {
                         stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
             }
-            if (event.getEntity() instanceof PathfinderMob mob && ((Eidolon.isValidUndead(mob) && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) || mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
-                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED)));
-                try {
-                    mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));
-                    mob.targetSelector.addGoal(1, new ThrallTargetGoal(mob));
-                } catch (IllegalArgumentException ignored) {
+            if (event.getEntity() instanceof PathfinderMob mob && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
+                mob.goalSelector.addGoal(1, new AvoidEntityGoal<>(mob, LivingEntity.class, 6.0F, 1.0D, 1.2D, living -> Eidolon.isValidUndead(mob) && !EntityUtil.isEnthralled(mob) && living.hasEffect(EidolonPotions.LIGHT_BLESSED)));
+                if (mob.getType().is(ThrallSpell.ENTHRALL_WHITELIST) || mob.getType().is(EntityTypeTags.UNDEAD) && !mob.getType().is(ThrallSpell.ENTHRALL_BLACKLIST)) {
+                    try {
+                        mob.goalSelector.addGoal(2, new FollowOwnerGoal(mob, 1.5F, 3.0F, 1.2F));
+                        mob.targetSelector.addGoal(1, new ThrallTargetGoal(mob));
+                    } catch (IllegalArgumentException ignored) {
 
+                    }
                 }
             }
         }
@@ -301,19 +319,12 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onApplyPotion(MobEffectEvent.Applicable event) {
-        if (event.getEffectInstance().getEffect() == MobEffects.MOVEMENT_SLOWDOWN && event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
-            event.setResult(Applicable.Result.DO_NOT_APPLY);
+    public void onLivingUse(LivingEntityUseItemEvent.Start event) {
+        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT)) {
+            if (event.getItem().getFoodProperties(event.getEntity()) != null && !event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
+                event.setCanceled(true);
         }
     }
-
-//    @SubscribeEvent
-//    public void onLivingUse(LivingEntityUseItemEvent.Start event) {
-//        if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT)) {
-//            if (event.getItem().isEdible() && !event.getItem().is(Registry.ZOMBIE_FOOD_TAG))
-//                event.setResult(Event.Result.DENY);
-//        }
-//    }
 
     @SubscribeEvent
     @Deprecated
@@ -325,6 +336,9 @@ public class Events {
 
     @SubscribeEvent
     public void onPotionApplicable(Applicable event) {
+        if (event.getEffectInstance().getEffect() == MobEffects.MOVEMENT_SLOWDOWN && event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof WarlockRobesItem) {
+            event.setResult(Applicable.Result.DO_NOT_APPLY);
+        }
         if (event.getEntity().hasEffect(EidolonPotions.UNDEATH_EFFECT) && event.getEffectInstance().getEffect() == MobEffects.HUNGER) {
             event.setResult(Applicable.Result.DO_NOT_APPLY);
         }
@@ -363,7 +377,8 @@ public class Events {
             if (soul.hasEtherealHealth()) {
                 float reduced = soul.hurtEtherealHealth(event.getNewDamage(), ISoul.getPersistentHealth(event.getEntity()));
                 event.setNewDamage(reduced);
-                //Networking.sendToTracking(event.getEntity().level(), event.getEntity().getOnPos(), new SoulUpdatePacket((Player) event.getEntity()));
+                if (event.getEntity() instanceof ServerPlayer)
+                    Networking.sendToPlayerClient(new SoulUpdatePacket(event.getEntity()), (ServerPlayer) event.getEntity());
             }
         }
     }

@@ -61,13 +61,14 @@ public class Eidolon {
         return ResourceLocation.fromNamespaceAndPath("eidolon_repraised", path);
     }
 
-    public static boolean trueMobType = false;
 
     public static boolean isValidUndead(LivingEntity e) {
-        trueMobType = true;
-        boolean type = e.getType().getTags().toList().contains(EntityTypeTags.UNDEAD);
-        trueMobType = false;
-        return type;
+        boolean original_type = e.getType().is(EntityTypeTags.UNDEAD);
+        if (original_type) {
+            return true;
+        }
+        var effectInstance = e.getEffect(EidolonPotions.UNDEATH_EFFECT);
+        return effectInstance != null && effectInstance.getAmplifier() >= 0;
     }
 
     public Eidolon(IEventBus modEventBus, ModContainer modContainer) {

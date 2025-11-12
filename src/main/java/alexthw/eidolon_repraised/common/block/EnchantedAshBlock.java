@@ -1,5 +1,6 @@
 package alexthw.eidolon_repraised.common.block;
 
+import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.registries.Registry;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -47,7 +48,7 @@ public class EnchantedAshBlock extends BlockBase {
         this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, RedstoneSide.NONE).setValue(EAST, RedstoneSide.NONE).setValue(SOUTH, RedstoneSide.NONE).setValue(WEST, RedstoneSide.NONE));
         this.sideBaseState = this.defaultBlockState().setValue(NORTH, RedstoneSide.SIDE).setValue(EAST, RedstoneSide.SIDE).setValue(SOUTH, RedstoneSide.SIDE).setValue(WEST, RedstoneSide.SIDE);
 
-        for(BlockState blockstate : this.getStateDefinition().getPossibleStates()) {
+        for (BlockState blockstate : this.getStateDefinition().getPossibleStates()) {
             this.stateToShapeMap.put(blockstate, this.getShapeForState(blockstate));
         }
     }
@@ -55,7 +56,7 @@ public class EnchantedAshBlock extends BlockBase {
     private VoxelShape getShapeForState(BlockState state) {
         VoxelShape voxelshape = BASE_SHAPE;
 
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             RedstoneSide redstoneside = state.getValue(FACING_PROPERTY_MAP.get(direction));
             if (redstoneside == RedstoneSide.SIDE) {
                 voxelshape = Shapes.or(voxelshape, SIDE_TO_SHAPE.get(direction));
@@ -78,7 +79,7 @@ public class EnchantedAshBlock extends BlockBase {
     private BlockState recalculateFacingState(BlockGetter reader, BlockState state, BlockPos pos) {
         boolean flag = !reader.getBlockState(pos.above()).isRedstoneConductor(reader, pos);
 
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             if (!state.getValue(FACING_PROPERTY_MAP.get(direction)).isConnected()) {
                 RedstoneSide redstoneside = this.recalculateSide(reader, pos, direction, flag);
                 state = state.setValue(FACING_PROPERTY_MAP.get(direction), redstoneside);
@@ -136,7 +137,7 @@ public class EnchantedAshBlock extends BlockBase {
         BlockState blockstate = reader.getBlockState(blockpos);
         if (nonNormalCubeAbove) {
             boolean flag = this.canPlaceOnTopOf(reader, blockpos, blockstate);
-            if (flag && canConnectTo(reader.getBlockState(blockpos.above()), reader, blockpos.above(), null) ) {
+            if (flag && canConnectTo(reader.getBlockState(blockpos.above()), reader, blockpos.above(), null)) {
                 if (blockstate.isFaceSturdy(reader, blockpos, direction.getOpposite())) {
                     return RedstoneSide.UP;
                 }
@@ -204,23 +205,23 @@ public class EnchantedAshBlock extends BlockBase {
     }
 
     @Override
-    public boolean collisionExtendsVertically(BlockState state, BlockGetter world, BlockPos pos, Entity entity) {
-        return entity instanceof LivingEntity && ((LivingEntity)entity).isInvertedHealAndHarm();
+    public boolean collisionExtendsVertically(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull Entity entity) {
+        return entity instanceof LivingEntity livingEntity && Eidolon.isValidUndead(livingEntity);
     }
 
     boolean isBlocked(Entity entity) {
         if (entity == null) return false;
         if (entity instanceof LivingEntity living) {
-            if (living.isInvertedHealAndHarm()) return true;
+            if (Eidolon.isValidUndead(living)) return true;
         }
-        return entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity && ((LivingEntity) e).isInvertedHealAndHarm());
+        return entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity living && Eidolon.isValidUndead(living));
     }
 
     @Override
     public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return ctx instanceof EntityCollisionContext
-               && ((EntityCollisionContext) ctx).getEntity() != null
-               && isBlocked(((EntityCollisionContext) ctx).getEntity()) ? BARRIER_SHAPE : super.getCollisionShape(state, world, pos, ctx);
+                && ((EntityCollisionContext) ctx).getEntity() != null
+                && isBlocked(((EntityCollisionContext) ctx).getEntity()) ? BARRIER_SHAPE : super.getCollisionShape(state, world, pos, ctx);
     }
 
     @Override
@@ -246,7 +247,7 @@ public class EnchantedAshBlock extends BlockBase {
 
 
     private void updateChangedConnections(Level world, BlockPos pos, BlockState prevState, BlockState newState) {
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos blockpos = pos.relative(direction);
             if (prevState.getValue(FACING_PROPERTY_MAP.get(direction)).isConnected() != newState.getValue(FACING_PROPERTY_MAP.get(direction)).isConnected() && world.getBlockState(blockpos).isRedstoneConductor(world, blockpos)) {
                 world.updateNeighborsAtExceptFromFacing(blockpos, newState.getBlock(), direction.getOpposite());
@@ -259,18 +260,18 @@ public class EnchantedAshBlock extends BlockBase {
         if (worldIn.getBlockState(pos).is(this)) {
             worldIn.updateNeighborsAt(pos, this);
 
-            for(Direction direction : Direction.values()) {
+            for (Direction direction : Direction.values()) {
                 worldIn.updateNeighborsAt(pos.relative(direction), this);
             }
         }
     }
 
     private void updateNeighboursStateChange(Level world, BlockPos pos) {
-        for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             this.notifyWireNeighborsOfStateChange(world, pos.relative(direction));
         }
 
-        for(Direction direction1 : Direction.Plane.HORIZONTAL) {
+        for (Direction direction1 : Direction.Plane.HORIZONTAL) {
             BlockPos blockpos = pos.relative(direction1);
             if (world.getBlockState(blockpos).isRedstoneConductor(world, blockpos)) {
                 this.notifyWireNeighborsOfStateChange(world, blockpos.above());

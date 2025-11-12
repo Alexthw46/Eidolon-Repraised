@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.List;
 
 public class AbsorptionRitual extends Ritual {
-    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"particle/absorption_ritual" );
+    public static final ResourceLocation SYMBOL = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "particle/absorption_ritual");
 
     public AbsorptionRitual() {
         super(SYMBOL, ColorUtil.packColor(255, 123, 140, 70));
@@ -48,7 +49,7 @@ public class AbsorptionRitual extends Ritual {
             }
         }
 
-        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), (e) -> (Eidolon.isValidUndead(e) || e.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && !e.getType().is(ThrallSpell.ENTHRALL_BLACKLIST) && !(e instanceof Player) && !EntityUtil.isEnthralled(e) && e.getHealth() <= e.getMaxHealth() / 3);
+        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), (e) -> ((e.getType().is(EntityTypeTags.UNDEAD)) || e.getType().is(ThrallSpell.ENTHRALL_WHITELIST)) && !e.getType().is(ThrallSpell.ENTHRALL_BLACKLIST) && !(e instanceof Player) && !EntityUtil.isEnthralled(e) && e.getHealth() <= e.getMaxHealth() / 3);
         ListTag entityTags = new ListTag();
         for (LivingEntity e : entities) {
             e.setHealth(e.getMaxHealth());

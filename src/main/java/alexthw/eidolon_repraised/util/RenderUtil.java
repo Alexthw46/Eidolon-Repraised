@@ -18,10 +18,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.Random;
 
@@ -162,32 +160,25 @@ public class RenderUtil {
     public static void litBillboard(PoseStack mStack, MultiBufferSource buffer, double x, double y, double z, float r, float g, float b, TextureAtlasSprite sprite) {
         VertexConsumer builder = buffer.getBuffer(GLOWING_SPRITE);
         Camera renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
-        Vec3 vector3d = renderInfo.getPosition();
-        float partialTicks = Minecraft.getInstance().getFrameTimeNs();
         float f = (float) (x);
         float f1 = (float) (y);
         float f2 = (float) (z);
-        Quaternionf quaternion = renderInfo.rotation();
-
-        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-0.5f, -0.5f, 0.0f), new Vector3f(-0.5f, 0.5f, 0.0f), new Vector3f(0.5f, 0.5f, 0.0f), new Vector3f(0.5f, -0.5f, 0.0f)};
-        float f4 = 1.0f;
-
-        for (int i = 0; i < 4; ++i) {
-            Vector3f vector3f = avector3f[i];
-            vector3f.rotate(quaternion);
-            vector3f.mul(f4);
-            vector3f.add(f, f1, f2);
-        }
-
+        Quaternionf quaternion = renderInfo.rotation().rotateY(135, new Quaternionf());
         float f7 = sprite.getU0();
         float f8 = sprite.getU1();
         float f5 = sprite.getV0();
         float f6 = sprite.getV1();
+        mStack.pushPose();
+        mStack.translate(f, f1, f2);
+        mStack.mulPose(quaternion);
         Matrix4f mat = mStack.last().pose();
-        builder.addVertex(mat, avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).setUv(f8, f6).setColor(r, g, b, 1.0f);
-        builder.addVertex(mat, avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).setUv(f8, f5).setColor(r, g, b, 1.0f);
-        builder.addVertex(mat, avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).setUv(f7, f5).setColor(r, g, b, 1.0f);
-        builder.addVertex(mat, avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).setUv(f7, f6).setColor(r, g, b, 1.0f);
+        float x0 = -0.5f, x1 = 0.5f, y0 = -0.5f, y1 = 0.5f, z0 = 0.0f;
+        builder.addVertex(mat, x0, y0, z0).setUv(f8, f6).setColor(r, g, b, 1.0f);
+        builder.addVertex(mat, x0, y1, z0).setUv(f8, f5).setColor(r, g, b, 1.0f);
+        builder.addVertex(mat, x1, y1, z0).setUv(f7, f5).setColor(r, g, b, 1.0f);
+        builder.addVertex(mat, x1, y0, z0).setUv(f7, f6).setColor(r, g, b, 1.0f);
+        mStack.popPose();
+
     }
 
     public static void dragon(PoseStack mStack, MultiBufferSource buf, double x, double y, double z, float radius, float r, float g, float b) {
@@ -231,8 +222,6 @@ public class RenderUtil {
 
         mStack.popPose();
     }
-
-    // copied from EnderDragonRenderer
 
     private static final float ROOT_3 = (float)(Math.sqrt(3.0D) / 2.0D);
 

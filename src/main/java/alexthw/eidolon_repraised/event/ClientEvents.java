@@ -47,7 +47,8 @@ public class ClientEvents {
             RenderUtil.GLOWING_PARTICLE,
             RenderUtil.GLOWING_BLOCK_PARTICLE,
             RenderUtil.GLOWING,
-            RenderUtil.GLOWING_SPRITE};
+            RenderUtil.GLOWING_SPRITE
+    };
 
     @OnlyIn(Dist.CLIENT)
     public static MultiBufferSource.BufferSource getDelayedRender() {
@@ -79,11 +80,10 @@ public class ClientEvents {
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_PARTICLE);
             getDelayedRender().endBatch(RenderUtil.GLOWING_BLOCK_PARTICLE);
+            getDelayedRender().endBatch(RenderUtil.GLOWING);
+            getDelayedRender().endBatch(RenderUtil.GLOWING_SPRITE);
             viewStack.popMatrix();
             RenderSystem.applyModelViewMatrix();
-
-            getDelayedRender().endBatch(RenderUtil.GLOWING_SPRITE);
-            getDelayedRender().endBatch(RenderUtil.GLOWING);
         }
 
     }

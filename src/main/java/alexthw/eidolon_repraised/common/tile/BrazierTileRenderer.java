@@ -13,10 +13,18 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 public class BrazierTileRenderer implements BlockEntityRenderer<BrazierTileEntity> {
-    public BrazierTileRenderer() {}
+
+    public BrazierTileRenderer() {
+    }
+
+    @Override
+    public @NotNull AABB getRenderBoundingBox(BrazierTileEntity blockEntity) {
+        return blockEntity.getRenderBoundingBox();
+    }
 
     @Override
     public void render(BrazierTileEntity tileEntityIn, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {

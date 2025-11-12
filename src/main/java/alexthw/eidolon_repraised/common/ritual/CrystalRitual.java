@@ -31,11 +31,13 @@ public class CrystalRitual extends Ritual {
     @Override
     public RitualResult start(Level world, BlockPos pos) {
         if (!world.isClientSide) {
-            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), LivingEntity::isInvertedHealAndHarm);
+            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, getSearchBounds(pos), Eidolon::isValidUndead);
             for (LivingEntity e : entities) {
-                e.hurt(Registry.RITUAL_DAMAGE.source(world), e.getMaxHealth() * 1000);
-                Networking.sendToNearbyClient(world, e.blockPosition(), new CrystallizeEffectPacket(e.blockPosition()));
-                world.addFreshEntity(new ItemEntity(world, e.getX(), e.getY(), e.getZ(), new ItemStack(Registry.SOUL_SHARD.get(), 1 + world.random.nextInt(3))));
+                if (e.hurt(Registry.RITUAL_DAMAGE.source(world), e.getMaxHealth() * 1000)) {
+                    // only if damage was not cancelled
+                    Networking.sendToNearbyClient(world, e.blockPosition(), new CrystallizeEffectPacket(e.blockPosition()));
+                    world.addFreshEntity(new ItemEntity(world, e.getX(), e.getY(), e.getZ(), new ItemStack(Registry.SOUL_SHARD.get(), 1 + world.random.nextInt(3))));
+                }
             }
         }
         return RitualResult.TERMINATE;
