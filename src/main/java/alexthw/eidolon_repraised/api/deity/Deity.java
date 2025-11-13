@@ -220,6 +220,7 @@ public abstract class Deity implements RGBProvider {
                 return false;
             }
             // Grant the new stage
+            rep.unlock(player, id, nextStage.id());
             onReputationUnlock(player, currStage.id());
             // Update reputation, clamping to the next stage rep to avoid skipping stages
             rep.setReputation(id, Math.min(updated, nextStage.rep));
@@ -229,8 +230,10 @@ public abstract class Deity implements RGBProvider {
 
         // If the cap was reached then we need to lock the stage and grant the knowledge for the next stage
         if (curr == nextStage.rep() && updated != curr) {
-            if (!NeoForge.EVENT_BUS.post(new ReputationEvent.Lock(this, player, currStage)).isCanceled())
+            if (!NeoForge.EVENT_BUS.post(new ReputationEvent.Lock(this, player, currStage)).isCanceled()) {
+                rep.lock(player, id, currStage.id());
                 onReputationLock(player, currStage.id());
+            }
         }
 
         return true;

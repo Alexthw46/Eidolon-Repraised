@@ -186,6 +186,7 @@ public class ReputationImpl implements IReputation {
 
     @Override
     public boolean canPray(PrayerSpell spell, long time) {
+        if (this.player.isCreative()) return true;
         return reputationData.canPray(spell, time);
     }
 
