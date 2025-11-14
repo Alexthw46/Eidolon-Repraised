@@ -72,9 +72,9 @@ public class EidAdvancementProvider extends AdvancementProvider {
             AdvancementHolder artificeRoot = saveBasicItem(Registry.PEWTER_INGOT.get(), root);
 
             AdvancementHolder alchemy = saveBasicItem(Registry.CRUCIBLE.get(), artificeRoot);
-            AdvancementHolder researchs = saveBasicItem(Registry.RESEARCH_NOTES.get(), alchemy);
-            saveWithTrigger(researchs, Blocks.CAMPFIRE, AdvancementTriggers.FLAME);
-            saveWithTrigger(researchs, Blocks.BLUE_ICE, AdvancementTriggers.FROST);
+            AdvancementHolder researches = saveBasicItem(Registry.RESEARCH_NOTES.get(), alchemy);
+            saveWithTrigger(researches, Blocks.CAMPFIRE, AdvancementTriggers.FLAME);
+            saveWithTrigger(researches, Blocks.BLUE_ICE, AdvancementTriggers.FROST);
 
             AdvancementHolder apothecary = saveBasicItem(Registry.WOODEN_STAND.get(), alchemy);
 

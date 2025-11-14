@@ -4,6 +4,7 @@ import alexthw.eidolon_repraised.api.deity.Deity;
 import alexthw.eidolon_repraised.common.deity.Deities;
 import alexthw.eidolon_repraised.common.spell.PrayerSpell;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public interface IReputation {
@@ -31,7 +32,7 @@ public interface IReputation {
     /**
      * Called before changing reputation. Return true to allow the change, false to prevent it.
      */
-    default boolean considerChange(Player player, ResourceLocation deity, double toUpdate) {
+    default boolean considerChange(ServerPlayer player, ResourceLocation deity, double toUpdate) {
         double amount = getReputation(deity);
         Deity d = Deities.find(deity);
         if (d != null) return d.onReputationChange(player, this, amount, toUpdate);

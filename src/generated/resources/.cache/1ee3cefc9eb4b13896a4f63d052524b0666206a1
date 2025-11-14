@@ -1,6 +1,7 @@
-// 1.21.1	2025-08-03T22:52:06.2459934	Eidolon Entity Type Tags
+// 1.21.1	2025-11-14T12:05:21.0010669	Eidolon Entity Type Tags
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon_repraised/tags/entity_type/enthrall_blacklist.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon_repraised/tags/entity_type/enthrall_whitelist.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon_repraised/tags/entity_type/trackable.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/eidolon_repraised/tags/entity_type/trackable_blacklist.json
+52cc7340e8d60f50d30876614c7c32390fe2655f data/minecraft/tags/entity_type/inverted_healing_and_harm.json
 52cc7340e8d60f50d30876614c7c32390fe2655f data/minecraft/tags/entity_type/undead.json

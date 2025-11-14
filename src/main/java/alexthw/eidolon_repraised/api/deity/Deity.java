@@ -5,7 +5,10 @@ import alexthw.eidolon_repraised.api.research.Research;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.util.KnowledgeUtil;
 import alexthw.eidolon_repraised.util.RGBProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
@@ -191,7 +194,7 @@ public abstract class Deity implements RGBProvider {
      * @param updated The updated reputation value
      * @return true to allow the change, false to cancel it (ex. if an event cancels it or the max is reached)
      */
-    public boolean onReputationChange(Player player, IReputation rep, double prev, double updated) {
+    public boolean onReputationChange(ServerPlayer player, IReputation rep, double prev, double updated) {
 
         if (NeoForge.EVENT_BUS.post(new ReputationEvent.Change(this, player, prev, updated)).isCanceled())
             return false;
@@ -210,6 +213,7 @@ public abstract class Deity implements RGBProvider {
         // We maxed out, just set to max and return
         if (nextStage == null) {
             rep.setReputation(id, progression.max);
+            player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon_repraised.message.max_reputation")));
             return false; // Reputation change handled internally
         }
 
@@ -220,13 +224,18 @@ public abstract class Deity implements RGBProvider {
                 return false;
             }
             // Grant the new stage
-            rep.unlock(player, id, nextStage.id());
+            rep.unlock(player, id, currStage.id());
             onReputationUnlock(player, currStage.id());
             // Update reputation, clamping to the next stage rep to avoid skipping stages
             rep.setReputation(id, Math.min(updated, nextStage.rep));
         }
 
         double curr = rep.getReputation(getId()); //update after we may have changed it
+
+        if (rep.isLocked(player, id) && curr < updated) {
+            // If the lock prevented us from increasing rep, notify the user.
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.reputation_locked"), true);
+        }
 
         // If the cap was reached then we need to lock the stage and grant the knowledge for the next stage
         if (curr == nextStage.rep() && updated != curr) {

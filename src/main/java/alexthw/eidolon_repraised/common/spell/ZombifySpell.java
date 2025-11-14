@@ -7,6 +7,7 @@ import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.common.deity.Deities;
 import alexthw.eidolon_repraised.common.deity.DeityLocks;
 import alexthw.eidolon_repraised.common.tile.EffigyTileEntity;
+import alexthw.eidolon_repraised.registries.AdvancementTriggers;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.registries.Registry;
 import alexthw.eidolon_repraised.registries.Signs;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -57,12 +59,13 @@ public class ZombifySpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof Villager villager)) return;
 
-        if (world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel level && player instanceof ServerPlayer serverPlayer) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             IReputation rep = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
             if (rep != null) {
                 rep.pray(this, world.getGameTime());
+                AdvancementTriggers.ZOMBIFY.get().trigger(serverPlayer);
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ZOMBIFY_VILLAGER);
                 rep.addReputation(deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(deity.getId()));
