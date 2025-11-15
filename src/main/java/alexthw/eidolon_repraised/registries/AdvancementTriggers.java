@@ -73,8 +73,6 @@ public class AdvancementTriggers {
             case "eidolon_repraised:basic_incense" -> INCENSE.get().trigger(player);
             case "eidolon_repraised:sacrifice_villager" -> VSACRIFICE.get().trigger(player);
             case "eidolon_repraised:heal_villager" -> LAY_ON_HANDS.get().trigger(player);
-            case "eidolon_repraised:zombify_villager" -> ZOMBIFY.get().trigger(player);
-            case "eidolon_repraised:cure_zombie" -> CURE_ZOMBIE.get().trigger(player);
             case "eidolon_repraised:enthrall_undead" -> ENTHRALL.get().trigger(player);
             case "eidolon_repraised:smite_undead" -> SMITE.get().trigger(player);
         }

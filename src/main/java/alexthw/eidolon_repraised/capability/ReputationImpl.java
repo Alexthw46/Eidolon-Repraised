@@ -138,18 +138,18 @@ public class ReputationImpl implements IReputation {
 
     @Override
     public void addReputation(ResourceLocation deity, double amount) {
-        if (considerChange(player, deity, getReputation(deity) + amount))
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        if (considerChange(serverPlayer, deity, getReputation(deity) + amount))
             reputationData.addReputation(deity, amount);
-        if (player instanceof ServerPlayer serverPlayer)
-            Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
+        Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
 
     @Override
     public void subtractReputation(ResourceLocation deity, double amount) {
-        if (considerChange(player, deity, getReputation(deity) - amount))
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        if (considerChange(serverPlayer, deity, getReputation(deity) - amount))
             reputationData.subtractReputation(deity, amount);
-        if (player instanceof ServerPlayer serverPlayer)
-            Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
+        Networking.sendToPlayerClient(new ReputationUpdatePacket(player, false), serverPlayer);
     }
 
     @Override
@@ -186,6 +186,7 @@ public class ReputationImpl implements IReputation {
 
     @Override
     public boolean canPray(PrayerSpell spell, long time) {
+        if (this.player.isCreative()) return true;
         return reputationData.canPray(spell, time);
     }
 

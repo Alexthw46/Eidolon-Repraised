@@ -6,6 +6,7 @@ import alexthw.eidolon_repraised.api.spells.Spell;
 import alexthw.eidolon_repraised.common.deity.Deities;
 import alexthw.eidolon_repraised.common.spell.*;
 import alexthw.eidolon_repraised.recipe.ChantRecipe;
+import alexthw.eidolon_repraised.recipe.CommandChantRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
@@ -31,6 +32,15 @@ public class Spells {
     public static Spell find(SignSequence signs, Level world) {
         for (Spell spell : spells) if (spell.matches(signs)) return spell;
         for (RecipeHolder<ChantRecipe> chantRecipeH : world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_TYPE.get())) {
+            ChantRecipe chantRecipe = chantRecipeH.value();
+            if (chantRecipe.matches(signs)) {
+                Spell spell = chantRecipe.getChant();
+                spell.setSigns(signs);
+                spells.add(spell);
+                return spell;
+            }
+        }
+        for (RecipeHolder<CommandChantRecipe> chantRecipeH : world.getRecipeManager().getAllRecipesFor(EidolonRecipes.COMMAND_CHANT_TYPE.get())) {
             ChantRecipe chantRecipe = chantRecipeH.value();
             if (chantRecipe.matches(signs)) {
                 Spell spell = chantRecipe.getChant();

@@ -54,7 +54,7 @@ public class HealSpell extends StaticSpell {
             HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE), 0, false);
             LivingEntity toHeal;
             boolean other = false;
-            if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living && living.getType().is(EntityTypeTags.UNDEAD)) {
+            if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity living && !living.getType().is(EntityTypeTags.UNDEAD)) {
                 toHeal = living;
                 other = living.getHealth() < living.getMaxHealth();
             } else toHeal = player;

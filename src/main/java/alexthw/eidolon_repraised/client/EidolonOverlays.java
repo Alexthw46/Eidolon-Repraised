@@ -245,7 +245,7 @@ public class EidolonOverlays {
                 this.healthBlinkTime = ticks + 10;
             }
             if (Util.getMillis() - this.lastHealthTime > 1000L) {
-                lastEtherealHealth = health;
+                lastEtherealHealth = etherealHealth;
                 lastHealthTime = Util.getMillis();
             }
 
