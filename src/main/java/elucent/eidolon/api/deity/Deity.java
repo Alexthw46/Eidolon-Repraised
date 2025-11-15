@@ -5,6 +5,7 @@ import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IReputation;
 import elucent.eidolon.util.KnowledgeUtil;
 import elucent.eidolon.util.RGBProvider;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -159,6 +160,7 @@ public abstract class Deity implements RGBProvider {
                     return next;
                 } else { // we have not satisfied the requirements yet, so cap the rep to the limit of the current stage
                     rep.setReputation(player.getUUID(), Deity.this.getId(), s.rep);
+                    player.displayClientMessage(Component.translatable("eidolon.message.reputation_locked"), true);
                 }
             }
             return s;

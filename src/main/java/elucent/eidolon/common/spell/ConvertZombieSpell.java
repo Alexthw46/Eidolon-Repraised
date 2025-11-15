@@ -7,6 +7,7 @@ import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.deity.DeityLocks;
 import elucent.eidolon.common.tile.EffigyTileEntity;
+import elucent.eidolon.registries.AdvancementTriggers;
 import elucent.eidolon.registries.Registry;
 import elucent.eidolon.registries.Signs;
 import elucent.eidolon.util.KnowledgeUtil;
@@ -14,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -48,11 +50,12 @@ public class ConvertZombieSpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager villager)) return;
 
-        if (world instanceof ServerLevel) {
+        if (world instanceof ServerLevel && player instanceof ServerPlayer serverPlayer) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
             world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
+                AdvancementTriggers.CURE_ZOMBIE.trigger(serverPlayer);
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.CURE_ZOMBIE);
                 rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
