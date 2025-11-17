@@ -59,13 +59,13 @@ public class ListPage extends Page {
             String text = "";
             try {
                 if (entry.power() > 0) {
-                    text += (int) entry.power() + " " + I18n.get("eidolon.codex.altar_power");
+                    text += (int) entry.power() + " " + I18n.get("eidolon_repraised.codex.altar_power");
                 }
                 if (entry.capacity() > 0) {
                     if (!text.isEmpty()) {
                         text += ", ";
                     }
-                    text += (int) entry.capacity() + " " + I18n.get("eidolon.codex.altar_capacity");
+                    text += (int) entry.capacity() + " " + I18n.get("eidolon_repraised.codex.altar_capacity");
                 }
             } catch (Exception e) {
                 text = "Invalid Entry. Likely mod conflict.";
