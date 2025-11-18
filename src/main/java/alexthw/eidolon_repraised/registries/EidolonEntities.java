@@ -4,7 +4,11 @@ import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.common.entity.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
@@ -37,7 +41,7 @@ public class EidolonEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<NecromancerSpellEntity>>
             NECROMANCER_SPELL = addEntity("necromancer_spell", 0.4f, 0.4f, NecromancerSpellEntity::new, MobCategory.MISC);
     public static final DeferredHolder<EntityType<?>, EntityType<ChantCasterEntity>>
-            CHANT_CASTER = addEntity("chant_caster", 0.1f, 0.1f, ChantCasterEntity::new, MobCategory.MISC);
+            CHANT_CASTER = addEntity("chant_caster", 1.0f, 1.0f, ChantCasterEntity::new, MobCategory.MISC);
 
     public static final DeferredHolder<EntityType<?>, EntityType<NecromancerEntity>>
             NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 2.2f, NecromancerEntity::new, MobCategory.MONSTER);

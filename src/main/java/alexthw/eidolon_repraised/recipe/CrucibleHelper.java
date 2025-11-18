@@ -47,20 +47,22 @@ public class CrucibleHelper {
         return true;
     }
 
-    private static boolean doContentsMatch(CrucibleStep step, CrucibleRecipe.Step otherStep) {
-        for (ItemStack input : step.getContents()) {
-            boolean doesInputHaveMatch = false;
-            for (Ingredient ingredient : otherStep.matches()) {
-                if (ingredient.test(input)) {
-                    doesInputHaveMatch = true;
+    private static boolean doContentsMatch(CrucibleStep crucibleStep, CrucibleRecipe.Step recipeToMatch) {
+        List<Ingredient> ingredients = recipeToMatch.matches();
+        boolean[] used = new boolean[ingredients.size()];
+
+        for (ItemStack input : crucibleStep.getContents()) {
+            boolean matched = false;
+            for (int i = 0; i < ingredients.size(); i++) {
+                if (!used[i] && ingredients.get(i).test(input)) {
+                    used[i] = true;
+                    matched = true;
                     break;
                 }
             }
-            // This input doesn't match this recipe, no way it's compatible.
-            if (!doesInputHaveMatch) return false;
+            if (!matched) return false;
         }
 
-        // Everything in the current set of inputs matched this recipe's step
         return true;
     }
 

@@ -36,10 +36,11 @@ public class LightTouchSpell extends DarkTouchSpell {
     @SubscribeEvent
     public static void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity caster && Eidolon.isValidUndead(event.getEntity())) {
-            var tag = caster.getMainHandItem();
-            if (tag.isEmpty() && tag.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 0) > 0) {
+            ItemStack weapon = caster.getMainHandItem();
+            if (weapon.isEmpty()) return;
+            if (weapon.has(EidolonDataComponents.CONSECRATED.get()) && weapon.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 0) > 0) {
                 event.setNewDamage(event.getNewDamage() * 1.5f);
-                tag.set(EidolonDataComponents.CONSECRATED, tag.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 1) - 1);
+                weapon.set(EidolonDataComponents.CONSECRATED, weapon.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 1) - 1);
             }
         }
     }
@@ -57,9 +58,10 @@ public class LightTouchSpell extends DarkTouchSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.getFirst().getItem();
-        return stack.getCount() == 1 && canTouch(stack, world, player);
+        return canTouch(stack, world, player);
     }
 
+    @Override
     boolean canTouch(ItemStack stack, Level world, Player player) {
         if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
         var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
@@ -71,20 +73,30 @@ public class LightTouchSpell extends DarkTouchSpell {
         ).anyMatch(r -> lightRep >= r.minDevotion);
     }
 
+    @Override
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
-        if (reputation != null) {
+        IMana mana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
+        if (reputation != null && mana != null) {
             var lightRep = reputation.getReputation(Deities.LIGHT_DEITY_ID);
             for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
                 var r = holder.value();
                 if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {
-                    IMana.expendMana(player, getCost());
-                    return r.getResultItem(player.level().registryAccess());
+                    int maxConversionCount = (int) Math.min(stack.getCount(), mana.getMagic() / getCost());
+                    if (maxConversionCount <= 0) continue;
+                    IMana.expendMana(player, getCost() * maxConversionCount);
+                    ItemStack result = r.getResultItem(player.level().registryAccess());
+                    result.setCount(maxConversionCount);
+                    return result;
                 }
             }
         }
-        IMana.expendMana(player, getCost());
-        stack.set(EidolonDataComponents.CONSECRATED, 50);
+
+        // No recipe match, apply necrotic touch if compatible
+        if (stack.getMaxStackSize() == 1 && stack.isDamageableItem()) {
+            IMana.expendMana(player, getCost());
+            stack.set(EidolonDataComponents.CONSECRATED, 50);
+        }
         return stack;
     }
 
