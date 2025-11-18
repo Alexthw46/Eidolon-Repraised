@@ -44,7 +44,8 @@ public class DarkTouchSpell extends StaticSpell {
     public static void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().is(DamageTypes.WITHER)) {
             ItemStack itemStack = living.getMainHandItem();
-            if (itemStack.has(EidolonDataComponents.NECROTIC)) {
+            if (itemStack.isEmpty()) return;
+            if (itemStack.has(EidolonDataComponents.NECROTIC) && itemStack.getOrDefault(EidolonDataComponents.NECROTIC, 0) > 0) {
                 float amount = Math.min(1, event.getNewDamage());
                 event.setNewDamage(event.getNewDamage() - amount);
                 int prevHurtResist = event.getEntity().invulnerableTime;
@@ -70,15 +71,15 @@ public class DarkTouchSpell extends StaticSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.getFirst().getItem();
-        return stack.getCount() == 1 && canTouch(stack, world, player);
+        return canTouch(stack, world, player);
     }
 
     boolean canTouch(ItemStack stack, Level world, Player player) {
         if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
-        var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
+        List<RecipeHolder<ChantConversionRecipe>> conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
         if (reputation == null) return false;
-        var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
+        double darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
         return conversions.stream().map(RecipeHolder::value).filter(
                 r -> r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.DARK_DEITY_ID.equals(r.deity))
         ).anyMatch(r -> darkRep >= r.minDevotion);
@@ -86,19 +87,28 @@ public class DarkTouchSpell extends StaticSpell {
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         IReputation reputation = player.getCapability(EidolonCapabilities.REPUTATION_CAPABILITY);
-        if (reputation != null) {
-            var darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
+        IMana mana = player.getCapability(EidolonCapabilities.MANA_CAPABILITY);
+
+        if (reputation != null && mana != null) {
+            double darkRep = reputation.getReputation(Deities.DARK_DEITY_ID);
             for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
-                var r = holder.value();
-                if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity)|| Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
-                    IMana.expendMana(player, getCost());
-                    return r.getResultItem(player.level().registryAccess());
+                ChantConversionRecipe r = holder.value();
+                if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
+                    int maxConversionCount = (int) Math.min(stack.getCount(), mana.getMagic() / getCost());
+                    if (maxConversionCount <= 0) continue;
+                    IMana.expendMana(player, getCost() * maxConversionCount);
+                    ItemStack result = r.getResultItem(player.level().registryAccess());
+                    result.setCount(maxConversionCount);
+                    return result;
                 }
             }
         }
 
-        IMana.expendMana(player, getCost());
-        stack.set(EidolonDataComponents.NECROTIC, 50);
+        // No recipe match, apply necrotic touch if compatible
+        if (stack.getMaxStackSize() == 1 && stack.isDamageableItem()) {
+            IMana.expendMana(player, getCost());
+            stack.set(EidolonDataComponents.NECROTIC, 50);
+        }
         return stack;
 
     }
@@ -111,7 +121,17 @@ public class DarkTouchSpell extends StaticSpell {
             if (!world.isClientSide) {
                 ItemStack stack = items.getFirst().getItem();
                 if (canTouch(stack, world, player)) {
-                    items.getFirst().setItem(touchResult(stack, player));
+                    ItemStack result = touchResult(stack, player);
+                    if (result.getCount() == stack.getCount()) {
+                        items.getFirst().setItem(result);
+                    }else{
+                        // spawn new item entity
+                        ItemEntity newItem = new ItemEntity(world, items.getFirst().getX(), items.getFirst().getY(), items.getFirst().getZ(), result);
+                        world.addFreshEntity(newItem);
+                        // update old item entity
+                        stack.shrink(result.getCount());
+                        items.getFirst().setItem(stack);
+                    }
                     Vec3 p = items.getFirst().position();
                     items.getFirst().setDefaultPickUpDelay();
                     Networking.sendToNearbyClient(world, items.getFirst().blockPosition(), new MagicBurstEffectPacket(p.x, p.y, p.z, Signs.WICKED_SIGN.color(), Signs.BLOOD_SIGN.color()));
