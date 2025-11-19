@@ -29,13 +29,19 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
     public Ingredient input;
     ItemStack result;
     public float minDevotion;
+    public float conversionCost;
     public @Nullable ResourceLocation deity;
 
-    public ChantConversionRecipe(Ingredient input, ItemStack result, float minDevotion, @Nullable ResourceLocation Deity) {
+    public ChantConversionRecipe(Ingredient input, ItemStack result, float minDevotion, float conversionCost, @Nullable ResourceLocation Deity) {
         this.input = input;
         this.result = result;
         this.minDevotion = minDevotion;
+        this.conversionCost = conversionCost;
         this.deity = Deity;
+    }
+
+    public ChantConversionRecipe(Ingredient input, ItemStack result, float minDevotion, @Nullable ResourceLocation Deity) {
+        this(input, result, minDevotion, -1, Deity);
     }
 
     @Override
@@ -73,6 +79,8 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
         jsonobject.addProperty("type", "eidolon_repraised:chant_conversion");
         jsonobject.add("input", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, input).getOrThrow());
         jsonobject.addProperty("min_devotion", minDevotion);
+        if (conversionCost >= 0)
+            jsonobject.addProperty("conversion_cost", conversionCost);
         if (deity != null)
             jsonobject.addProperty("deity", deity.toString());
 
@@ -88,6 +96,7 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
                         Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
                         ItemStack.CODEC.fieldOf("output").forGetter(r -> r.result),
                         Codec.FLOAT.fieldOf("min_devotion").forGetter(r -> r.minDevotion),
+                        Codec.FLOAT.optionalFieldOf("conversion_cost", -1.0f).forGetter(r -> r.conversionCost),
                         ResourceLocation.CODEC.optionalFieldOf("deity", Deities.DUMMY_ID).forGetter(r -> r.deity)
                 ).apply(c, ChantConversionRecipe::new)
         );
@@ -99,9 +108,11 @@ public class ChantConversionRecipe implements Recipe<RecipeInput> {
                 r -> r.result,
                 ByteBufCodecs.FLOAT,
                 r -> r.minDevotion,
+                ByteBufCodecs.FLOAT,
+                r -> r.conversionCost,
                 ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs::optional),
                 r -> Optional.ofNullable(r.deity),
-                (input, result, minDevotion, deity) -> new ChantConversionRecipe(input, result, minDevotion, deity.orElse(null))
+                (input, result, minDevotion, conversionCost, deity) -> new ChantConversionRecipe(input, result, minDevotion, conversionCost, deity.orElse(null))
         );
 
         @Override

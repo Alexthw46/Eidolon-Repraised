@@ -82,9 +82,10 @@ public class LightTouchSpell extends DarkTouchSpell {
             for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
                 var r = holder.value();
                 if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {
-                    int maxConversionCount = (int) Math.min(stack.getCount(), mana.getMagic() / getCost());
+                    float conversionCost = r.conversionCost >= 0 ? r.conversionCost : getCost();
+                    int maxConversionCount = conversionCost != 0 ? (int) Math.min(stack.getCount(), mana.getMagic() / conversionCost) : stack.getCount();
                     if (maxConversionCount <= 0) continue;
-                    IMana.expendMana(player, getCost() * maxConversionCount);
+                    IMana.expendMana(player, (int) (conversionCost * maxConversionCount));
                     ItemStack result = r.getResultItem(player.level().registryAccess());
                     result.setCount(maxConversionCount);
                     return result;

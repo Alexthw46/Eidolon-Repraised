@@ -94,9 +94,10 @@ public class DarkTouchSpell extends StaticSpell {
             for (RecipeHolder<ChantConversionRecipe> holder : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
                 ChantConversionRecipe r = holder.value();
                 if (r.input.test(stack) && (Deities.DUMMY_ID.equals(r.deity) || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
-                    int maxConversionCount = (int) Math.min(stack.getCount(), mana.getMagic() / getCost());
+                    float conversionCost = r.conversionCost >= 0 ? r.conversionCost : getCost();
+                    int maxConversionCount = conversionCost != 0 ? (int) Math.min(stack.getCount(), mana.getMagic() / conversionCost) : stack.getCount();
                     if (maxConversionCount <= 0) continue;
-                    IMana.expendMana(player, getCost() * maxConversionCount);
+                    IMana.expendMana(player, (int) (conversionCost * maxConversionCount));
                     ItemStack result = r.getResultItem(player.level().registryAccess());
                     result.setCount(maxConversionCount);
                     return result;
@@ -124,7 +125,7 @@ public class DarkTouchSpell extends StaticSpell {
                     ItemStack result = touchResult(stack, player);
                     if (result.getCount() == stack.getCount()) {
                         items.getFirst().setItem(result);
-                    }else{
+                    } else {
                         // spawn new item entity
                         ItemEntity newItem = new ItemEntity(world, items.getFirst().getX(), items.getFirst().getY(), items.getFirst().getZ(), result);
                         world.addFreshEntity(newItem);

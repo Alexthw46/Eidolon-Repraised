@@ -18,6 +18,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+import static alexthw.eidolon_repraised.registries.Registry.ARCANE_GOLD_NUGGET;
+import static alexthw.eidolon_repraised.registries.Registry.LEAD_NUGGET;
+import static alexthw.eidolon_repraised.registries.Registry.PEWTER_NUGGET;
+import static alexthw.eidolon_repraised.registries.Registry.SILVER_NUGGET;
+
 public class EidItemTagProvider extends ItemTagsProvider {
     public EidItemTagProvider(DataGenerator pGenerator, CompletableFuture<HolderLookup.Provider> provider, BlockTagsProvider pBlockTagsProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator.getPackOutput(), provider, pBlockTagsProvider.contentsGetter(), Eidolon.MODID, existingFileHelper);
@@ -96,5 +101,6 @@ public class EidItemTagProvider extends ItemTagsProvider {
                 Registry.WARLOCK_BOOTS.get()
         );
 
+        tag(Tags.Items.NUGGETS).add(LEAD_NUGGET.get(), SILVER_NUGGET.get(), PEWTER_NUGGET.get(), ARCANE_GOLD_NUGGET.get());
     }
 }
