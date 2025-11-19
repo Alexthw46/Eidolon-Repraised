@@ -1,5 +1,6 @@
-// 1.21.1	2025-10-22T18:40:09.8679376	Tags for minecraft:item mod id eidolon_repraised
+// 1.21.1	2025-11-19T10:26:33.3798836	Tags for minecraft:item mod id eidolon_repraised
 f2ff98b9b431484dc7563ebf0f952928a2c252c3 data/c/tags/item/music_discs.json
+b280a762a9f4f48b7395a8ac804257360fc283ae data/c/tags/item/nuggets.json
 9826769f4e125289c79e3d5438deefc7d4353e0e data/eidolon_repraised/tags/item/patron_symbol.json
 2ab1a299e8c68dfb622595da904d577ac9a1c851 data/eidolon_repraised/tags/item/scribe_items.json
 eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/bookshelf_books.json
