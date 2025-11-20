@@ -1,7 +1,6 @@
 package alexthw.eidolon_repraised.common.block;
 
 import alexthw.eidolon_repraised.common.tile.ScriptoriumTile;
-import alexthw.eidolon_repraised.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -30,7 +29,7 @@ public class Scriptorium extends HorizontalBlockBase implements EntityBlock {
         if (worldIn.isClientSide) {
             return ItemInteractionResult.SUCCESS;
         } else {
-            if (worldIn.getBlockEntity(pos) instanceof ScriptoriumTile tile && player.getItemInHand(handIn).getItem() == Registry.PARCHMENT.get()) {
+            if (worldIn.getBlockEntity(pos) instanceof ScriptoriumTile tile) {
                 player.openMenu(new SimpleMenuProvider(tile, Component.translatable("eidolon_repraised.gui.scriptorium")), pos);
             }
             return ItemInteractionResult.CONSUME;

@@ -59,7 +59,7 @@ public class CodexChapters {
             WOODEN_STAND, TALLOW, CRUCIBLE, ARCANE_GOLD, REAGENTS, SOUL_GEMS, SHADOW_GEM, WARPED_SPROUTS, BASIC_ALCHEMY, INLAYS, BASIC_BAUBLES, MAGIC_WORKBENCH, VOID_AMULET, WARDED_MAIL, SOULFIRE_WAND, BONECHILL_WAND, REAPER_SCYTHE, CLEAVING_AXE, SOUL_ENCHANTER, REVERSAL_PICK, WARLOCK_ARMOR, GRAVITY_BELT, PRESTIGIOUS_PALM, MIND_SHIELDING_PLATE, RESOLUTE_BELT, GLASS_HAND, SOULBONE, RAVEN_CLOAK, ARROW_RING, NECROMANCER_STAFF,
             INTRO_SIGNS, EFFIGY, ALTARS, ALTAR_LIGHTS, ALTAR_SKULLS, ALTAR_HERBS, GOBLET, CENSER, DARK_PRAYER, ANIMAL_SACRIFICE, DARK_TOUCH, STONE_ALTAR, UNHOLY_EFFIGY, HOLY_EFFIGY, VILLAGER_SACRIFICE, LIGHT_PRAYER, INCENSE_BURN, HEAL, HOLY_TOUCH,
             WICKED_SIGN, SACRED_SIGN, BLOOD_SIGN, SOUL_SIGN, MIND_SIGN, FLAME_SIGN, WINTER_SIGN, HARMONY_SIGN, DEATH_SIGN, WARDING_SIGN, MAGIC_SIGN,
-            MANA, LIGHT, FIRE_TOUCH, CHILL_TOUCH, WATER, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE, SUNDER_ARMOR, REINFORCE_ARMOR;
+            MANA, SCRIPTORIUM ,LIGHT, FIRE_TOUCH, CHILL_TOUCH, WATER, ZOMBIFY, CURE_ZOMBIE, ENTHRALL, SMITE, SUNDER_ARMOR, REINFORCE_ARMOR;
 
     public static void init(Level level) {
 
@@ -887,6 +887,12 @@ public class CodexChapters {
                     .textPage("eidolon_repraised.codex.page.mana.1")
                     .build();
 
+            SCRIPTORIUM = new CodexBuilder(level)
+                    .title("eidolon_repraised.codex.chapter.scriptorium")
+                    .titlePage("eidolon_repraised.codex.page.scriptorium")
+                    .addSupportedRecipePages(Registry.SCRIPTORIUM.get().asItem())
+                    .build();
+
             LIGHT = new CodexBuilder()
                     .title("eidolon_repraised.codex.chapter.light")
                     .chantPage("eidolon_repraised.codex.page.light", Spells.LIGHT_CHANT)
@@ -934,6 +940,7 @@ public class CodexChapters {
                     new TitledIndexPage(
                             "eidolon_repraised.codex.page.spells",
                             new IndexEntry(MANA, new ItemStack(Registry.CODEX.get())),
+                            new IndexEntry(SCRIPTORIUM, new ItemStack(Registry.SCRIPTORIUM.get().asItem())),
                             new SignLockedEntry(LIGHT, new ItemStack(Items.LANTERN), Signs.FLAME_SIGN),
                             new ResearchLockedEntry(FIRE_TOUCH, new ItemStack(Items.FLINT_AND_STEEL), Researches.FIRE_SPELL),
                             new ResearchLockedEntry(CHILL_TOUCH, new ItemStack(Items.ICE), Researches.FROST_SPELL),
