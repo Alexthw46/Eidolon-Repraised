@@ -7,6 +7,7 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -41,6 +42,17 @@ public class EidRecipeProvider extends RecipeProvider {
         woodFromLogs(pFinishedRecipeConsumer, Registry.ILLWOOD_BARK.get(), Registry.ILLWOOD_LOG.get());
         planksFromLog(pFinishedRecipeConsumer, Registry.ILLWOOD_PLANKS.getBlock(), Registry.ILLWOOD_LOGS, 4);
         strippedLogToWood(pFinishedRecipeConsumer, Registry.STRIPPED_ILLWOOD_LOG.get(), Registry.STRIPPED_ILLWOOD_BARK.get());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, Registry.SCRIPTORIUM.get(), 1)
+                .pattern("FSI")
+                .pattern("SSS")
+                .pattern("P P")
+                .define('F', Items.FEATHER)
+                .define('I', Registry.MAGIC_INK.get())
+                .define('S', ItemTags.WOODEN_SLABS)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_parchment", InventoryChangeTrigger.TriggerInstance.hasItems(Registry.PARCHMENT.get()))
+                .save(pFinishedRecipeConsumer);
     }
 
     private void buildDecoPack(Consumer<FinishedRecipe> consumer, DecoBlockPack decoBlockPack, List<Block> extras) {

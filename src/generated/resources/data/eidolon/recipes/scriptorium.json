@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "I": {
+      "item": "eidolon:magic_ink"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "FSI",
+    "SSS",
+    "P P"
+  ],
+  "result": {
+    "item": "eidolon:scriptorium"
+  },
+  "show_notification": true
+}

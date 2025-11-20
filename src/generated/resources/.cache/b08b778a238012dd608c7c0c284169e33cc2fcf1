@@ -1,6 +1,7 @@
-// 1.20.1	2024-03-01T14:13:30.6277413	Tags for minecraft:item mod id eidolon
+// 1.20.1	2025-11-20T10:50:15.1933086	Tags for minecraft:item mod id eidolon
 899586c41b931b92762c1abc2471518c2eee8f75 data/eidolon/tags/items/patron_symbol.json
 8ce4d3e069d9c3c1a68fed0a2c547a435faa0992 data/eidolon/tags/items/scribe_items.json
+d667f292a84f672a030c191da5eef7c41eef19d3 data/forge/tags/items/nuggets.json
 799cf7210b55401b608bb40b894b086a1eafc4c8 data/minecraft/tags/items/bookshelf_books.json
 e3ac6fbfd80751a5c8c7f2b86a176b907c7b3709 data/minecraft/tags/items/candles.json
 aa28d331224065c7dadc424e131b4540d7818e4a data/minecraft/tags/items/leaves.json

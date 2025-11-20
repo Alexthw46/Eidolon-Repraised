@@ -57,7 +57,7 @@ public class LightTouchSpell extends DarkTouchSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.get(0).getItem();
-        return stack.getCount() == 1 && canTouch(stack, world, player);
+        return canTouch(stack, world, player);
     }
 
     boolean canTouch(ItemStack stack, Level world, Player player) {
@@ -71,11 +71,17 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         var lightRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
+        var mana = player.level().getCapability(ISoul.INSTANCE).resolve().get();
 
         for (var r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
             if (r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {
-                ISoul.expendMana(player, getCost());
-                return r.getResultItem(player.level().registryAccess());
+                float conversionCost = r.conversionCost >= 0 ? r.conversionCost : getCost();
+                int maxConversionCount = conversionCost != 0 ? (int) Math.min(stack.getCount(), mana.getMagic() / conversionCost) : stack.getCount();
+                if (maxConversionCount <= 0) continue;
+                ISoul.expendMana(player, (int) (conversionCost * maxConversionCount));
+                ItemStack result = r.getResultItem(player.level().registryAccess());
+                result.setCount(maxConversionCount);
+                return result;
             }
         }
 //        if (stack.getItem() == Registry.GOLD_INLAY.get())
@@ -84,11 +90,11 @@ public class LightTouchSpell extends DarkTouchSpell {
 //            return new ItemStack(Registry.TOP_HAT.get());
 //        else if (stack.getItem() instanceof RecordItem && stack.getItem() != Registry.PAROUSIA_DISC.get())
 //            return new ItemStack(Registry.PAROUSIA_DISC.get());
-        {
+        if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) {
             ISoul.expendMana(player, getCost());
             stack.getOrCreateTag().putInt(SACRED_KEY, 50);
-            return stack;
         }
+        return stack;
 
     }
 }

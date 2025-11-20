@@ -73,7 +73,7 @@ public class DarkTouchSpell extends StaticSpell {
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
         if (items.size() != 1) return false;
         ItemStack stack = items.get(0).getItem();
-        return stack.getCount() == 1 && canTouch(stack, world, player);
+        return canTouch(stack, world, player);
     }
 
     boolean canTouch(ItemStack stack, Level world, Player player) {
@@ -87,11 +87,17 @@ public class DarkTouchSpell extends StaticSpell {
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         var darkRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
+        var mana = player.level().getCapability(ISoul.INSTANCE).resolve().get();
 
         for (ChantConversionRecipe r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
             if (r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
-                ISoul.expendMana(player, getCost());
-                return r.getResultItem(player.level().registryAccess());
+                float conversionCost = r.conversionCost >= 0 ? r.conversionCost : getCost();
+                int maxConversionCount = conversionCost != 0 ? (int) Math.min(stack.getCount(), mana.getMagic() / conversionCost) : stack.getCount();
+                if (maxConversionCount <= 0) continue;
+                ISoul.expendMana(player, (int) (conversionCost * maxConversionCount));
+                ItemStack result = r.getResultItem(player.level().registryAccess());
+                result.setCount(maxConversionCount);
+                return result;
             }
         }
 //
@@ -104,11 +110,14 @@ public class DarkTouchSpell extends StaticSpell {
 //        else
 
 
-        // No recipe found; apply necrotic touch. Validated by canTouch beforehand.
-        ISoul.expendMana(player, getCost());
-        stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
-        return stack;
+        // No recipe found; apply necrotic touch.
 
+        if (stack.getMaxStackSize() == 1 && stack.isDamageableItem()) {
+            ISoul.expendMana(player, getCost());
+            stack.getOrCreateTag().putInt(NECROTIC_KEY, 50);
+        }
+
+        return stack;
     }
 
     @Override
@@ -119,7 +128,17 @@ public class DarkTouchSpell extends StaticSpell {
             if (!world.isClientSide) {
                 ItemStack stack = items.get(0).getItem();
                 if (canTouch(stack, world, player)) {
-                    items.get(0).setItem(touchResult(stack, player));
+                    ItemStack result = touchResult(stack, player);
+                    if (result.getCount() == stack.getCount()) {
+                        items.get(0).setItem(result);
+                    } else {
+                        // spawn new item entity
+                        ItemEntity newItem = new ItemEntity(world, items.get(0).getX(), items.get(0).getY(), items.get(0).getZ(), result);
+                        world.addFreshEntity(newItem);
+                        // update old item entity
+                        stack.shrink(result.getCount());
+                        items.get(0).setItem(stack);
+                    }
                     Vec3 p = items.get(0).position();
                     items.get(0).setDefaultPickUpDelay();
                     Networking.sendToTracking(world, items.get(0).blockPosition(), new MagicBurstEffectPacket(p.x, p.y, p.z, Signs.WICKED_SIGN.getColor(), Signs.BLOOD_SIGN.getColor()));

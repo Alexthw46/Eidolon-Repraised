@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -209,15 +210,15 @@ public class EnchantedAshBlock extends BlockBase {
 
     @Override
     public boolean collisionExtendsVertically(BlockState state, BlockGetter world, BlockPos pos, Entity entity) {
-        return entity instanceof LivingEntity && ((LivingEntity)entity).isInvertedHealAndHarm();
+        return entity instanceof LivingEntity living && (living.getMobType() == MobType.UNDEAD || living.isInvertedHealAndHarm());
     }
 
     boolean isBlocked(Entity entity) {
         if (entity == null) return false;
         if (entity instanceof LivingEntity living) {
-            if (living.isInvertedHealAndHarm()) return true;
+            if (living.getMobType() == MobType.UNDEAD || living.isInvertedHealAndHarm()) return true;
         }
-        return entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity && ((LivingEntity) e).isInvertedHealAndHarm());
+        return entity.getPassengers().stream().anyMatch((e) -> e instanceof LivingEntity living && (living.getMobType() == MobType.UNDEAD || living.isInvertedHealAndHarm()));
     }
 
     @Override

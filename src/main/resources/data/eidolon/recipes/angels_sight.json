@@ -11,7 +11,7 @@
       "tag": "forge:ingots/pewter"
     },
     "u": {
-      "item": "eidolon:unholy_symbol"
+      "tag": "eidolon:patron_symbol"
     },
     "r": {
       "item": "eidolon:basic_ring"

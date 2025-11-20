@@ -9,7 +9,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,14 +24,20 @@ public class ChantConversionRecipe implements Recipe<Container> {
     public Ingredient input;
     ItemStack result;
     public float minDevotion;
+    public float conversionCost;
     public @Nullable ResourceLocation deity;
 
     public ChantConversionRecipe(ResourceLocation id, Ingredient input, ItemStack result, float minDevotion, @Nullable ResourceLocation Deity) {
+        this(id, input, result, minDevotion, -1, Deity);
+    }
+
+    public ChantConversionRecipe(ResourceLocation id, Ingredient input, ItemStack result, float minDevotion, float conversionCost, @Nullable ResourceLocation Deity) {
         this.id = id;
         this.input = input;
         this.result = result;
         this.minDevotion = minDevotion;
         this.deity = Deity;
+        this.conversionCost = conversionCost;
     }
 
     @Override
@@ -72,7 +82,8 @@ public class ChantConversionRecipe implements Recipe<Container> {
         jsonobject.addProperty("min_devotion", minDevotion);
         if (deity != null)
             jsonobject.addProperty("deity", deity.toString());
-
+        if (conversionCost >= 0)
+            jsonobject.addProperty("conversion_cost", conversionCost);
         JsonObject resultObj = new JsonObject();
         resultObj.addProperty("item", RegistryUtil.getRegistryName(result.getItem()).toString());
         int count = result.getCount();
@@ -89,10 +100,11 @@ public class ChantConversionRecipe implements Recipe<Container> {
         @Override
         public @NotNull ChantConversionRecipe fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject pSerializedRecipe) {
             float minDevotion = GsonHelper.getAsFloat(pSerializedRecipe, "min_devotion", 0);
+            float conversionCost = GsonHelper.getAsFloat(pSerializedRecipe, "conversion_cost", -1);
             Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "input"));
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
             ResourceLocation deity = pSerializedRecipe.has("deity") ? new ResourceLocation(GsonHelper.getAsString(pSerializedRecipe, "deity")) : null;
-            return new ChantConversionRecipe(pRecipeId, input, output, minDevotion, deity);
+            return new ChantConversionRecipe(pRecipeId, input, output, minDevotion, conversionCost, deity);
         }
 
         @Override
@@ -100,8 +112,9 @@ public class ChantConversionRecipe implements Recipe<Container> {
             Ingredient input = Ingredient.fromNetwork(pBuffer);
             ItemStack output = pBuffer.readItem();
             float minDevotion = pBuffer.readFloat();
+            float conversionCost = pBuffer.readFloat();
             ResourceLocation deity = pBuffer.readBoolean() ? pBuffer.readResourceLocation() : null;
-            return new ChantConversionRecipe(pRecipeId, input, output, minDevotion, deity);
+            return new ChantConversionRecipe(pRecipeId, input, output, minDevotion, conversionCost, deity);
         }
 
         @Override
@@ -109,6 +122,7 @@ public class ChantConversionRecipe implements Recipe<Container> {
             pRecipe.input.toNetwork(pBuffer);
             pBuffer.writeItem(pRecipe.result);
             pBuffer.writeFloat(pRecipe.minDevotion);
+            pBuffer.writeFloat(pRecipe.conversionCost);
             pBuffer.writeBoolean(pRecipe.deity != null);
             if (pRecipe.deity != null)
                 pBuffer.writeResourceLocation(pRecipe.deity);

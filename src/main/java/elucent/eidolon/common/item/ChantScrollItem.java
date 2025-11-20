@@ -19,10 +19,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,21 +33,46 @@ import java.util.List;
 
 public class ChantScrollItem extends ItemBase {
     public ChantScrollItem(Properties properties) {
-        super(properties);
+        super(properties.durability(20));
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, @NotNull Player pPlayer, @NotNull InteractionHand pUsedHand) {
-        if (!pLevel.isClientSide() && hasSpell(pPlayer.getItemInHand(pUsedHand))) {
-
-            List<Sign> spell = getSpell(pPlayer.getItemInHand(pUsedHand));
-            if (!spell.isEmpty()) {
-                ChantCasterEntity.createChanter(pPlayer, pLevel, spell);
-            }
-
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
+        if (hasSpell(pPlayer.getItemInHand(pUsedHand))) {
+            pPlayer.startUsingItem(pUsedHand);
+            return InteractionResultHolder.consume(pPlayer.getItemInHand(pUsedHand));
         }
 
         return super.use(pLevel, pPlayer, pUsedHand);
+    }
+
+    @Override
+    public @NotNull ItemStack finishUsingItem(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull LivingEntity pLivingEntity) {
+        if (!pLevel.isClientSide() && hasSpell(pStack) && pLivingEntity instanceof Player pPlayer) {
+
+            List<Sign> spell = getSpell(pStack);
+            if (!spell.isEmpty()) {
+                ChantCasterEntity.createChanter(pPlayer, pLevel, spell);
+                // consume the scroll durability
+                pStack.hurtAndBreak(1, pPlayer, (player) -> player.broadcastBreakEvent(player.getUsedItemHand()));
+            }
+        }
+
+        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
+    }
+
+    /**
+     * How long it takes to use or consume an item
+     */
+    public int getUseDuration(@NotNull ItemStack pStack) {
+        return 16;
+    }
+
+    /**
+     * Returns the action that specifies what animation to play when the item is being used.
+     */
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack pStack) {
+        return UseAnim.BOW;
     }
 
     public boolean hasSpell(ItemStack stack) {

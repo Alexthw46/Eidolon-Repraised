@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-24T19:39:02.7506191	Recipes
+// 1.20.1	2025-11-20T11:28:16.7466306	Recipes
 429a1cbe95e66ddc6448af40883be1f1a657599b data/eidolon/advancements/recipes/building_blocks/bone_pile_stair.json
 8bc97e541818e508d4f5e402c2725fdfff6138b6 data/eidolon/advancements/recipes/building_blocks/bone_pile_stonecutter_0.json
 cccf337b1dac46011b356b94152b86b09b64994a data/eidolon/advancements/recipes/building_blocks/bone_pile_stonecutter_1.json
@@ -45,6 +45,7 @@ b18df553aad11a22f90e38ca3c01b882ed5aa703 data/eidolon/advancements/recipes/decor
 f0034444a1413d214cfa38c3ded1bb0c70d99a97 data/eidolon/advancements/recipes/decorations/polished_planks_hanging_sign.json
 8837e685aba3dd94e0b3a100f82e00660acbb34a data/eidolon/advancements/recipes/decorations/polished_planks_sign.json
 2d6b4f3c5c0c734e8abf8db2e57843deb7c43c36 data/eidolon/advancements/recipes/decorations/polished_planks_slab.json
+2806b2dc19eb8ab9ba113808f25995483bfd9892 data/eidolon/advancements/recipes/decorations/scriptorium.json
 15fc6ad29406bf80e30e1490ca0181e7c4758c82 data/eidolon/advancements/recipes/decorations/smooth_stone_masonry_slab.json
 03c4b6e97830b8215ac99d22986589be90a00b1f data/eidolon/advancements/recipes/redstone/illwood_planks_button.json
 c0bd3a2ae8e60a4e6e65b0a457205235facba87b data/eidolon/advancements/recipes/redstone/illwood_planks_pressure_plate.json
@@ -94,6 +95,7 @@ f53725fce99d70d387c6c790e75907470704d145 data/eidolon/recipes/polished_planks_si
 399b049dee2d7aa123d14b3e66246424c9f4c1b7 data/eidolon/recipes/polished_planks_stonecutter_1.json
 dcf7ab83a9c4139ff598e96f4e7b7b233bd9739d data/eidolon/recipes/polished_planks_stonecutter_2.json
 dcf7ab83a9c4139ff598e96f4e7b7b233bd9739d data/eidolon/recipes/polished_planks_stonecutter_3.json
+3822d5cd1e6cac420a3bbc4b13aa8ee1e918e16c data/eidolon/recipes/scriptorium.json
 4becc7c26be1b647f06db40076a68166c8adb9d5 data/eidolon/recipes/smooth_stone_arch_stonecutter_0.json
 3f86c87daf5a2a1c47089d9f00c6c3ec734c328c data/eidolon/recipes/smooth_stone_masonry_slab.json
 ab2e9643c67ff1561ec3926fa553b3ff6c7013d8 data/eidolon/recipes/smooth_stone_masonry_stair.json
