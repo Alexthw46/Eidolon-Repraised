@@ -11,6 +11,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -45,5 +46,10 @@ public class EidItemTagProvider extends ItemTagsProvider {
         //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
+        tag(Tags.Items.NUGGETS).add(Registry.SILVER_NUGGET.get(),
+                Registry.LEAD_NUGGET.get(),
+                Registry.PEWTER_NUGGET.get(),
+                Registry.ARCANE_GOLD_NUGGET.get()
+        );
     }
 }
