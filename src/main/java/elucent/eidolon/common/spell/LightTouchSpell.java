@@ -71,7 +71,8 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         var lightRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
-        var mana = player.level().getCapability(ISoul.INSTANCE).resolve().get();
+        var mana = player.getCapability(ISoul.INSTANCE).resolve().orElse(null);
+        if (mana == null) return stack;
 
         for (var r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
             if (r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity)) && lightRep >= r.minDevotion) {

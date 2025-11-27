@@ -87,7 +87,8 @@ public class DarkTouchSpell extends StaticSpell {
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
         var darkRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
-        var mana = player.level().getCapability(ISoul.INSTANCE).resolve().get();
+        var mana = player.getCapability(ISoul.INSTANCE).resolve().orElse(null);
+        if (mana == null) return stack;
 
         for (ChantConversionRecipe r : player.level().getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get())) {
             if (r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity)) && darkRep >= r.minDevotion) {
