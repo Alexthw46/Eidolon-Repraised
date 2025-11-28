@@ -1,24 +1,28 @@
-// 1.21.1	2025-11-19T10:26:33.3798836	Tags for minecraft:item mod id eidolon_repraised
+// 1.21.1	2025-11-28T11:34:10.1458592	Tags for minecraft:item mod id eidolon_repraised
 f2ff98b9b431484dc7563ebf0f952928a2c252c3 data/c/tags/item/music_discs.json
 b280a762a9f4f48b7395a8ac804257360fc283ae data/c/tags/item/nuggets.json
 9826769f4e125289c79e3d5438deefc7d4353e0e data/eidolon_repraised/tags/item/patron_symbol.json
 2ab1a299e8c68dfb622595da904d577ac9a1c851 data/eidolon_repraised/tags/item/scribe_items.json
+e63584c23f3ed115db9ebc0a3fe5df743d2fa4a7 data/minecraft/tags/item/axes.json
 eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/bookshelf_books.json
 110cc871e07c20892517547549bdbf65974eb817 data/minecraft/tags/item/candles.json
 f1e2b42c4ba5461adff9d99a59ba5590be1ec5dc data/minecraft/tags/item/chest_armor.json
 4c30af1d1eda03dba784810f539f4c291373d40e data/minecraft/tags/item/enchantable/armor.json
 f1e2b42c4ba5461adff9d99a59ba5590be1ec5dc data/minecraft/tags/item/enchantable/chest_armor.json
-4c30af1d1eda03dba784810f539f4c291373d40e data/minecraft/tags/item/enchantable/durability.json
 4c30af1d1eda03dba784810f539f4c291373d40e data/minecraft/tags/item/enchantable/equippable.json
 ff1192bc5e8d65cbf785d61f81a117b295e3bb9d data/minecraft/tags/item/enchantable/foot_armor.json
 502823b46bba0e43fc5065832b2c84d9f3dd7f88 data/minecraft/tags/item/enchantable/head_armor.json
 4db26547aff54e0105828f245f1979c13f4f01da data/minecraft/tags/item/enchantable/leg_armor.json
 ff1192bc5e8d65cbf785d61f81a117b295e3bb9d data/minecraft/tags/item/foot_armor.json
 502823b46bba0e43fc5065832b2c84d9f3dd7f88 data/minecraft/tags/item/head_armor.json
+bc2dcfa7dc5551b9f904ec64c1232df94c4ee16c data/minecraft/tags/item/hoes.json
 4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/item/leaves.json
 eab8714b4ddee4f397ba99c626b31b75a40bf381 data/minecraft/tags/item/lectern_books.json
 4db26547aff54e0105828f245f1979c13f4f01da data/minecraft/tags/item/leg_armor.json
+8af939060e4c1c2cd38b7c165069dd749a5b8940 data/minecraft/tags/item/pickaxes.json
 615cf69149f2473f5c75609451500f2bc3cd8332 data/minecraft/tags/item/saplings.json
+4e98dcbccd80fad2f34c14408c84fdb87940a85d data/minecraft/tags/item/shovels.json
 d966907c59e762094767253775b2fea68c9075c6 data/minecraft/tags/item/signs.json
+d1e08284d077d9504a2fc29e8f1c17c8bc248667 data/minecraft/tags/item/swords.json
 77200998ef23c825708b8884a08fcc652b5ac259 data/minecraft/tags/item/wooden_buttons.json
 2790b0ba2c560d2a56c48c29e7a4885a88bd9766 data/minecraft/tags/item/wooden_pressure_plates.json

@@ -283,7 +283,8 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         );
 
         for (Object2IntMap.Entry<Holder<Enchantment>> e : existing.entrySet()) {
-            valid.removeIf(next -> next == null || e.getKey().value().exclusiveSet().contains(next));
+            if (valid.isEmpty()) break;
+            valid.removeIf(next -> next == null || (e.getKey() != next && e.getKey().value().exclusiveSet().contains(next)));
         }
 
         List<EnchantmentInstance> enchants = new ArrayList<>();

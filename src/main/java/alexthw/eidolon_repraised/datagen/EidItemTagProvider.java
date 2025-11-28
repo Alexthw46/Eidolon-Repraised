@@ -18,11 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-import static alexthw.eidolon_repraised.registries.Registry.ARCANE_GOLD_NUGGET;
-import static alexthw.eidolon_repraised.registries.Registry.LEAD_NUGGET;
-import static alexthw.eidolon_repraised.registries.Registry.PEWTER_NUGGET;
-import static alexthw.eidolon_repraised.registries.Registry.SILVER_NUGGET;
-
 public class EidItemTagProvider extends ItemTagsProvider {
     public EidItemTagProvider(DataGenerator pGenerator, CompletableFuture<HolderLookup.Provider> provider, BlockTagsProvider pBlockTagsProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator.getPackOutput(), provider, pBlockTagsProvider.contentsGetter(), Eidolon.MODID, existingFileHelper);
@@ -51,6 +46,19 @@ public class EidItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
 
+        tag(ItemTags.SWORDS).add(
+                Registry.SILVER_SWORD.get(),
+                Registry.ATHAME.get(),
+                Registry.REAPER_SCYTHE.get(),
+                Registry.DEATHBRINGER_SCYTHE.get(),
+                Registry.SAPPING_SWORD.get()
+        );
+
+        tag(ItemTags.AXES).add(Registry.SILVER_AXE.get(),Registry.CLEAVING_AXE.get());
+        tag(ItemTags.PICKAXES).add(Registry.SILVER_PICKAXE.get(),Registry.REVERSAL_PICK.get());
+        tag(ItemTags.SHOVELS).add(Registry.SILVER_SHOVEL.get());
+        tag(ItemTags.HOES).add(Registry.SILVER_HOE.get());
+
         Item[] armors = new Item[]{
                 Registry.SILVER_HELMET.get(),
                 Registry.SILVER_CHESTPLATE.get(),
@@ -66,12 +74,12 @@ public class EidItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.ARMOR_ENCHANTABLE).add(armors);
         tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(armors);
-        tag(ItemTags.DURABILITY_ENCHANTABLE).add(armors);
 
         tag(ItemTags.HEAD_ARMOR).add(Registry.SILVER_HELMET.get(),
                 Registry.WARLOCK_HAT.get(),
                 Registry.BONELORD_HELM.get()
         );
+
         tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(Registry.SILVER_HELMET.get(),
                 Registry.WARLOCK_HAT.get(),
                 Registry.BONELORD_HELM.get()
@@ -101,6 +109,6 @@ public class EidItemTagProvider extends ItemTagsProvider {
                 Registry.WARLOCK_BOOTS.get()
         );
 
-        tag(Tags.Items.NUGGETS).add(LEAD_NUGGET.get(), SILVER_NUGGET.get(), PEWTER_NUGGET.get(), ARCANE_GOLD_NUGGET.get());
+        tag(Tags.Items.NUGGETS).add(Registry.LEAD_NUGGET.get(), Registry.SILVER_NUGGET.get(), Registry.PEWTER_NUGGET.get(), Registry.ARCANE_GOLD_NUGGET.get());
     }
 }
