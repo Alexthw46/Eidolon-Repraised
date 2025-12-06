@@ -303,14 +303,14 @@ public class CodexGui extends Screen {
         if (player == null) return false;
         if (scrollY < 0) {
             if (currentPage + 2 < currentChapter.size()) {
-                currentPage += 1;
+                currentPage += 2;
                 player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 resetPages();
                 return true;
             }
         } else if (scrollY > 0) {
-            if (currentPage > 0) {
-                currentPage -= 1;
+            if (currentPage >= 2) {
+                currentPage -= 2;
                 player.playNotifySound(SoundEvents.BOOK_PAGE_TURN, SoundSource.NEUTRAL, 1.0f, 1.0f);
                 resetPages();
                 return true;

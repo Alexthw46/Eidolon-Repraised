@@ -230,7 +230,7 @@ public class Registry {
             .setLore("lore.eidolon_repraised.cleaving_axe"));
     public static final DeferredHolder<Item, Item> SHADOW_GEM = addItem("shadow_gem");
     public static final DeferredHolder<Item, Item> WICKED_WEAVE = addItem("wicked_weave");
-    public static final DeferredHolder<Item, Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(Type.HELMET, itemProps().attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.MAGIC_POWER, new AttributeModifier(Eidolon.prefix("warlock_hat"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.HEAD).build())));
+    public static final DeferredHolder<Item, Item> WARLOCK_HAT = addItem("warlock_hat", () -> new WarlockRobesItem(Type.HELMET, itemProps()));
     public static final DeferredHolder<Item, Item> WARLOCK_CLOAK = addItem("warlock_cloak", () -> new WarlockRobesItem(Type.CHESTPLATE, itemProps()));
     public static final DeferredHolder<Item, Item> WARLOCK_BOOTS = addItem("warlock_boots", () -> new WarlockRobesItem(Type.BOOTS, itemProps()));
     public static final DeferredHolder<Item, Item> SILVER_HELMET = addItem("silver_helmet", () -> new SilverArmorItem(Type.HELMET, itemProps()));
@@ -296,9 +296,9 @@ public class Registry {
             .setLore("lore.eidolon_repraised.deathbringer_scythe"));
     public static final DeferredHolder<Item, Item> SOULBONE_AMULET = addItem("soulbone_amulet", () -> new SoulboneAmuletItem(itemProps()
             .rarity(Rarity.RARE).stacksTo(1)).setLore("lore.eidolon_repraised.soulbone_amulet"));
-    public static final DeferredHolder<Item, Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_helm"), 10.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build())));
-    public static final DeferredHolder<Item, Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_chest"), 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST).build())));
-    public static final DeferredHolder<Item, Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE).attributes(ItemAttributeModifiers.builder().add(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_legs"), 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS).build())));
+    public static final DeferredHolder<Item, Item> BONELORD_HELM = addItem("bonelord_helm", () -> new BonelordArmorItem(Type.HELMET, itemProps().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> BONELORD_CHESTPLATE = addItem("bonelord_chestplate", () -> new BonelordArmorItem(Type.CHESTPLATE, itemProps().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> BONELORD_GREAVES = addItem("bonelord_greaves", () -> new BonelordArmorItem(Type.LEGGINGS, itemProps().rarity(Rarity.RARE)));
     static ResourceKey<JukeboxSong> PAROUSIA = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath("eidolon_repraised", "parousia"));
     public static final DeferredHolder<Item, Item> PAROUSIA_DISC = addItem("music_disc_parousia", () -> new Item(itemProps().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(PAROUSIA))); // 3680
     public static final DeferredHolder<Item, Item> RAVEN_FEATHER = addItem("raven_feather");

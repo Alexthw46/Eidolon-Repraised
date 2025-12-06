@@ -4,6 +4,7 @@ import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.api.IDyeable;
 import alexthw.eidolon_repraised.client.ClientRegistry;
 import alexthw.eidolon_repraised.common.item.model.WarlockArmorModel;
+import alexthw.eidolon_repraised.registries.EidolonAttributes;
 import alexthw.eidolon_repraised.registries.EidolonMaterials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,11 +14,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -39,7 +43,16 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         return Component.literal(og.getString() + " (" + Component.translatable(getColor(pStack).getName()).getString() + ")");
     }
 
-//
+    @Override
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
+
+        var attributes = super.getDefaultAttributeModifiers(stack);
+        if (getEquipmentSlot() == EquipmentSlot.HEAD)
+            attributes.withModifierAdded(EidolonAttributes.MAGIC_POWER, new AttributeModifier(Eidolon.prefix("warlock_hat"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.HEAD);
+        return attributes;
+    }
+
+    //
 //    @Override
 //    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity player, int slotId, boolean pIsSelected) {
 //        super.inventoryTick(stack, world, player, slotId, pIsSelected);
