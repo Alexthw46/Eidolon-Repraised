@@ -36,9 +36,12 @@ public class WorktablePage extends RecipePage<WorktableRecipe> {
         List<Ingredient> core = cachedRecipe.getCore();
         List<Ingredient> outer = cachedRecipe.getOuter();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int index = i * 3 + j;
+        int rows = cachedRecipe.pattern_core.height();
+        int cols = cachedRecipe.pattern_core.width();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int index = i * cols + j;
                 if (index < core.size() && !core.get(index).isEmpty())
                     drawItems(mStack, core.get(index), x + 39 + j * 17, y + 33 + i * 17, mouseX, mouseY);
             }

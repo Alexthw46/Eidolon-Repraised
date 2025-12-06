@@ -61,11 +61,12 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
     public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull WorktableRecipe recipe, @NotNull IFocusGroup ingredients) {
         List<Ingredient> inputs = recipe.getCore();
         List<Ingredient> outers = recipe.getOuter();
+        int rows = recipe.pattern_core.height();
+        int cols = recipe.pattern_core.width();
 
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int index = i * 3 + j;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int index = i * cols + j;
                 if (index >= inputs.size()) break;
                 Ingredient input = inputs.get(index);
                 if (input == null) continue;
