@@ -43,9 +43,7 @@ public class BonelordArmorItem extends ArmorItem implements IItemExtension {
 
     @Override
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
-        var modifiers = super.getDefaultAttributeModifiers(stack);
-        modifiers.withModifierAdded(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_" + this.type.getName()), getSoulHeartBonusForSlot(this.type), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()));
-        return super.getDefaultAttributeModifiers(stack);
+        return super.getDefaultAttributeModifiers(stack).withModifierAdded(EidolonAttributes.PERSISTENT_SOUL_HEARTS, new AttributeModifier(Eidolon.prefix("bonelord_" + this.type.getName()), getSoulHeartBonusForSlot(this.type), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -347,14 +347,14 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (this.slots.get(0).hasItem() || !this.slots.get(0).mayPlace(itemstack1)) {
+                if (this.slots.getFirst().hasItem() || !this.slots.getFirst().mayPlace(itemstack1)) {
                     return ItemStack.EMPTY;
                 }
 
                 ItemStack itemstack2 = itemstack1.copy();
                 itemstack2.setCount(1);
                 itemstack1.shrink(1);
-                this.slots.get(0).set(itemstack2);
+                this.slots.getFirst().set(itemstack2);
             }
 
             if (itemstack1.isEmpty()) {

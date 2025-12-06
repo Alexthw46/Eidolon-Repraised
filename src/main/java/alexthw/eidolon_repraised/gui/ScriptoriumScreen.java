@@ -72,7 +72,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
         graphics.blit(background, bookLeft + 32, bookTop, 0, 0, 200, FULL_HEIGHT, FULL_WIDTH, FULL_HEIGHT);
-        graphics.blit(background, bookLeft - 2, bookTop + 72, 200, 92, 36, 56, FULL_WIDTH, FULL_HEIGHT);
+        graphics.blit(background, bookLeft - 20, bookTop + 72, 200, 92, 54, 56, FULL_WIDTH, FULL_HEIGHT);
     }
 
     public void drawBackgroundElements(GuiGraphics graphics) {

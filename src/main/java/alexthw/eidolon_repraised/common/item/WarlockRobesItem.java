@@ -43,12 +43,13 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
         return Component.literal(og.getString() + " (" + Component.translatable(getColor(pStack).getName()).getString() + ")");
     }
 
+
     @Override
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
 
         var attributes = super.getDefaultAttributeModifiers(stack);
-        if (getEquipmentSlot() == EquipmentSlot.HEAD)
-            attributes.withModifierAdded(EidolonAttributes.MAGIC_POWER, new AttributeModifier(Eidolon.prefix("warlock_hat"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.HEAD);
+        if (type == Type.HELMET)
+            attributes = attributes.withModifierAdded(EidolonAttributes.MAGIC_POWER, new AttributeModifier(Eidolon.prefix("warlock_hat"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.HEAD);
         return attributes;
     }
 

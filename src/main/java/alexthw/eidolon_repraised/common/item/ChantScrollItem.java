@@ -17,12 +17,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,35 +34,18 @@ public class ChantScrollItem extends ItemBase {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, @NotNull Player pPlayer, @NotNull InteractionHand pUsedHand) {
         if (!pLevel.isClientSide() && pPlayer.getItemInHand(pUsedHand).has(EidolonDataComponents.SPELL)) {
-            pPlayer.startUsingItem(pUsedHand);
-            return InteractionResultHolder.consume(pPlayer.getItemInHand(pUsedHand));
+
+            List<Sign> spell = pPlayer.getItemInHand(pUsedHand).getOrDefault(EidolonDataComponents.SPELL, List.of());
+            if (!spell.isEmpty()) {
+                ChantCasterEntity.createChanter(pPlayer, pLevel, spell);
+                pPlayer.getItemInHand(pUsedHand).hurtAndBreak(1, pPlayer, EquipmentSlot.MAINHAND);
+                pPlayer.getCooldowns().addCooldown(this, 20);
+                return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
+            }
+
         }
 
         return super.use(pLevel, pPlayer, pUsedHand);
-    }
-
-    @Override
-    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity entity) {
-        return 16;
-    }
-
-    @Override
-    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity, int timeCharged) {
-        if (!(livingEntity instanceof Player pPlayer)) return;
-
-        List<Sign> spell = stack.getOrDefault(EidolonDataComponents.SPELL, List.of());
-        if (!spell.isEmpty()) {
-            ChantCasterEntity.createChanter(pPlayer, level, spell);
-            stack.hurtAndBreak(1, pPlayer, EquipmentSlot.MAINHAND);
-            return;
-        }
-
-        super.releaseUsing(stack, level, livingEntity, timeCharged);
     }
 
     public static class ChantTooltipComponent implements ClientTooltipComponent {
