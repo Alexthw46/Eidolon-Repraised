@@ -1,4 +1,4 @@
-package alexthw.eidolon_repraised.gui.jei;
+package alexthw.eidolon_repraised.compat.jei;
 
 
 import alexthw.eidolon_repraised.Eidolon;
@@ -49,7 +49,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
      */
     @Override
     public @NotNull RecipeType<RitualRecipe> getRecipeType() {
-        return JEIRegistry.RITUAL_CATEGORY;
+        return JEIdolon.RITUAL_CATEGORY;
     }
 
     @Override

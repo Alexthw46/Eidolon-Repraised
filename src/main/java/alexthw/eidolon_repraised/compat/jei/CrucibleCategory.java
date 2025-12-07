@@ -1,4 +1,4 @@
-package alexthw.eidolon_repraised.gui.jei;
+package alexthw.eidolon_repraised.compat.jei;
 
 
 import alexthw.eidolon_repraised.Eidolon;
@@ -46,7 +46,7 @@ public class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
      */
     @Override
     public @NotNull RecipeType<CrucibleRecipe> getRecipeType() {
-        return JEIRegistry.CRUCIBLE_CATEGORY;
+        return JEIdolon.CRUCIBLE_CATEGORY;
     }
 
     @Override

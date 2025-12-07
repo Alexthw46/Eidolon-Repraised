@@ -49,6 +49,7 @@ public class Networking {
         reg.playToClient(OpenCodexPacket.TYPE, OpenCodexPacket.CODEC, Networking::handle);
         reg.playToClient(InitCodexPacket.TYPE, InitCodexPacket.CODEC, Networking::handle);
         reg.playToServer(InscribePacket.TYPE, InscribePacket.CODEC, Networking::handle);
+        reg.playToServer(WorktableTransferPacket.TYPE, WorktableTransferPacket.CODEC, Networking::handle);
     }
 
 

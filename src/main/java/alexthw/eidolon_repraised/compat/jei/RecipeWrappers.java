@@ -1,4 +1,4 @@
-package alexthw.eidolon_repraised.gui.jei;
+package alexthw.eidolon_repraised.compat.jei;
 
 import alexthw.eidolon_repraised.api.ritual.ItemSacrifice;
 import alexthw.eidolon_repraised.api.ritual.Ritual;

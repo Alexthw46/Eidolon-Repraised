@@ -40,10 +40,11 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
         checkContainerDataCount(p_i50096_4_, 2);
         this.tileBrewingStand = inventory;
         this.intArray = p_i50096_4_;
-        this.addSlot(new PotionSlot(inventory, 0, 56, 51));
-        this.addSlot(new PotionSlot(inventory, 1, 79, 58));
-        this.addSlot(new PotionSlot(inventory, 2, 102, 51));
-        this.slot = this.addSlot(new IngredientSlot(inventory, 3, 79, 17));
+        PotionBrewing potionbrewing = playerInventory.player.level().potionBrewing();
+        this.addSlot(new PotionSlot(potionbrewing, inventory, 0, 56, 51));
+        this.addSlot(new PotionSlot(potionbrewing, inventory, 1, 79, 58));
+        this.addSlot(new PotionSlot(potionbrewing, inventory, 2, 102, 51));
+        this.slot = this.addSlot(new IngredientSlot(potionbrewing, inventory, 3, 79, 17));
         this.addDataSlots(p_i50096_4_);
 
         for (int i = 0; i < 3; ++i) {
@@ -121,14 +122,21 @@ public class WoodenBrewingStandContainer extends AbstractContainerMenu {
         return this.intArray.get(0);
     }
 
-    static class IngredientSlot extends PotionSlot {
-        public IngredientSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
+    static class IngredientSlot extends Slot {
+        private final PotionBrewing potionBrewing;
+
+        public IngredientSlot(PotionBrewing potionBrewing, Container iInventoryIn, int index, int xPosition, int yPosition) {
             super(iInventoryIn, index, xPosition, yPosition);
+            this.potionBrewing = potionBrewing;
         }
 
         @Override
         public boolean mayPlace(@NotNull ItemStack stack) {
-            return super.mayPlace(stack) && !stack.is(Tags.Items.DUSTS_REDSTONE)
+            return mayPlaceItem(this.potionBrewing, stack);
+        }
+
+        public static boolean mayPlaceItem(PotionBrewing potionBrewing, ItemStack stack) {
+            return potionBrewing.isIngredient(stack) && !stack.is(Tags.Items.DUSTS_REDSTONE)
                     && !stack.is(Tags.Items.DUSTS_GLOWSTONE);
         }
 

@@ -1,4 +1,4 @@
-package alexthw.eidolon_repraised.gui.jei;
+package alexthw.eidolon_repraised.compat.jei;
 
 
 import alexthw.eidolon_repraised.Eidolon;
@@ -39,7 +39,7 @@ public class WorktableCategory implements IRecipeCategory<WorktableRecipe> {
      */
     @Override
     public @NotNull RecipeType<WorktableRecipe> getRecipeType() {
-        return JEIRegistry.WORKTABLE_CATEGORY;
+        return JEIdolon.WORKTABLE_CATEGORY;
     }
 
     @Override

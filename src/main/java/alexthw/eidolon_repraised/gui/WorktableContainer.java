@@ -34,7 +34,7 @@ public class WorktableContainer extends AbstractContainerMenu {
         public @NotNull CraftingInput asCraftInput() {
             if (getWidth() != 0 && getHeight() != 0) {
                 return new CraftingInput.Positioned(new CraftingInput(getWidth(), getHeight(), getItems()), 0, 0).input();
-            } else{
+            } else {
                 return CraftingInput.Positioned.EMPTY.input();
             }
         }
@@ -177,5 +177,10 @@ public class WorktableContainer extends AbstractContainerMenu {
 
     public int getOutputSlot() {
         return 0;
+    }
+
+    public void craftSlotsChanged() {
+        slotsChanged(core);
+        slotsChanged(extras);
     }
 }
