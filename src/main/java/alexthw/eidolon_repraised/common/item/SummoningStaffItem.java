@@ -213,7 +213,7 @@ public class SummoningStaffItem extends ItemBase {
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext tooltipContext, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         boolean charge = hasCharges(stack);
         int selected = getSelected(stack);
-        String summonKey = "eidolon.tooltip.no_selected_summon";
+        String summonKey = "eidolon_repraised.tooltip.no_selected_summon";
         if (charge) {
             ThrallData thrallData = stack.get(EidolonDataComponents.THRALLS);
             if (thrallData == null || thrallData.thralls().isEmpty()) return;
