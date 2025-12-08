@@ -94,8 +94,8 @@ public class CodexChapters {
                     .entityPage(EidolonEntities.RAVEN.get())
                     .titlePage("eidolon_repraised.codex.page.critters.slimy_slug")
                     .entityPage(EidolonEntities.SLIMY_SLUG.get())
-                    .titledRitualPage("eidolon_repraised.codex.page.summon_ritual_c.1", prefix("summon_ravens"))
-                    .titledRitualPage("eidolon_repraised.codex.page.summon_ritual_c.2", prefix("summon_slugs"))
+                    .titledRitualPage("eidolon_repraised.codex.page.summon_ritual_c.1", prefix("summon_raven"))
+                    .titledRitualPage("eidolon_repraised.codex.page.summon_ritual_c.2", prefix("summon_slimy_slug"))
                     .build();
 
             ORES = new CodexBuilder()
