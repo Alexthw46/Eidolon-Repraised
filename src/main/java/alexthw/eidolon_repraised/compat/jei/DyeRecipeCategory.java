@@ -19,14 +19,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DyeRecipeCategory implements ICraftingCategoryExtension<DyeRecipe> {
-    private final DyeRecipe recipe;
 
-    public DyeRecipeCategory(DyeRecipe recipe) {
-        this.recipe = recipe;
+    public DyeRecipeCategory() {
+
     }
 
     @Override
     public void setRecipe(@NotNull RecipeHolder holder, @NotNull IRecipeLayoutBuilder builder, @NotNull ICraftingGridHelper craftingGridHelper, @NotNull IFocusGroup focuses) {
+        if (!(holder.value() instanceof DyeRecipe recipe)) return;
         List<List<ItemStack>> inputs = recipe.getIngredients().stream()
                 .map(ingredient -> List.of(ingredient.getItems()))
                 .toList();

@@ -10,7 +10,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,14 +33,14 @@ public class DyeRecipe extends ShapelessRecipe {
             for (int i = 0; i < inv.size(); i++) { // For each slot in the crafting inventory,
                 final ItemStack ingredient = inv.getItem(i); // Get the ingredient in the slot
                 if (!ingredient.isEmpty() && ingredient.is(output.getItem())) {
-                    output.applyComponents(ingredient.getComponentsPatch());
+                    output.applyComponents(ingredient.getComponentsPatch()); // Carry over the components
                 }
             }
             for (int i = 0; i < inv.size(); i++) { // For each slot in the crafting inventory,
                 final ItemStack ingredient = inv.getItem(i); // Get the ingredient in the slot
                 DyeColor color = DyeColor.getColor(ingredient);
                 if (!ingredient.isEmpty() && color != null) {
-                    output.set(DataComponents.BASE_COLOR, color);
+                    output.set(DataComponents.BASE_COLOR, color); // Set the color component
                 }
             }
         }
@@ -46,11 +50,6 @@ public class DyeRecipe extends ShapelessRecipe {
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
         return EidolonRecipes.DYE_RECIPE.get();
-    }
-
-
-    public @NotNull RecipeType<?> getType() {
-        return EidolonRecipes.DYE_TYPE.get();
     }
 
     public static JsonElement asRecipe(Item item) {

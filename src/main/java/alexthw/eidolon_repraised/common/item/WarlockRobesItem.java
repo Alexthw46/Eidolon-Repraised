@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 public class WarlockRobesItem extends ArmorItem implements IDyeable {
 
     public WarlockRobesItem(Type slot, Properties builderIn) {
-        super(EidolonMaterials.WARLOCK_ROBES, slot, builderIn.stacksTo(1).durability(slot.getDurability(15)));
+        super(EidolonMaterials.WARLOCK_ROBES, slot, builderIn.stacksTo(1).durability(slot.getDurability(15)).component(DataComponents.BASE_COLOR, DyeColor.BLUE));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class WarlockRobesItem extends ArmorItem implements IDyeable {
     }
 
     private DyeColor getColor(ItemStack stack) {
-        return stack.has(DataComponents.BASE_COLOR) ? stack.get(DataComponents.BASE_COLOR) : DyeColor.BLUE;
+        return stack.getOrDefault(DataComponents.BASE_COLOR,DyeColor.BLUE);
     }
 
     @Override

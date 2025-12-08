@@ -66,7 +66,7 @@ public class JEIdolon implements IModPlugin {
 
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-        registration.getCraftingCategory().addExtension(DyeRecipe.class, new DyeRecipeCategory(null));
+        registration.getCraftingCategory().addExtension(DyeRecipe.class, new DyeRecipeCategory());
     }
 
     @Override
