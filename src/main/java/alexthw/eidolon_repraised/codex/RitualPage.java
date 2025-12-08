@@ -32,14 +32,14 @@ import static alexthw.eidolon_repraised.Eidolon.prefix;
 import static alexthw.eidolon_repraised.util.RegistryUtil.getRegistryName;
 
 public class RitualPage extends RecipePage<RitualRecipe> {
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID,"textures/gui/codex_ritual_page.png" );
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "textures/gui/codex_ritual_page.png");
     Ritual ritual;
     Ingredient center;
 
     RitualIngredient[] inputs;
 
-    public RitualPage(ResourceLocation background, ResourceLocation recipeName, ItemStack empty) {
-        super(background, (recipeName.getNamespace().equals("eidolon_repraised")) ? prefix("rituals/" + recipeName.getPath()) : recipeName, empty);
+    public RitualPage(ResourceLocation background, ResourceLocation recipeName, ItemStack optionalCraftResult) {
+        super(background, (recipeName.getNamespace().equals("eidolon_repraised")) ? prefix("rituals/" + (optionalCraftResult.isEmpty() ? "" : "brazier_craft_") + recipeName.getPath()) : recipeName, optionalCraftResult);
     }
 
     public static void renderRitualSymbol(@NotNull GuiGraphics guiGraphics, int x, int y, Ritual ritual) {
