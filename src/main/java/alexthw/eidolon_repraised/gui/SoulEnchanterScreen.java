@@ -15,8 +15,10 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -138,6 +140,8 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
     }
 
     public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        assert this.minecraft != null;
+        assert  this.minecraft.player != null;
         pPartialTick = this.minecraft.getFrameTimeNs();
         this.renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
@@ -146,9 +150,8 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         int soulShardAmount = this.menu.getSoulShardAmount();
 
         for (int j = 0; j < 3; ++j) {
-
             Optional<Holder.Reference<Enchantment>> enchantment = this.minecraft
-                    .level
+                    .player.level
                     .registryAccess()
                     .registryOrThrow(Registries.ENCHANTMENT)
                     .getHolder(this.menu.enchantClue[j]);
@@ -158,9 +161,25 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
             if (this.isHovering(60, 14 + 19 * j, 108, 17, pMouseX, pMouseY) && enchantmentLevel > 0) {
                 List<Component> list = Lists.newArrayList();
                 list.add(Component.translatable("container.enchant.clue", enchantment.isEmpty() ? "" : Enchantment.getFullname(enchantment.get(), enchantmentLevel)).withStyle(ChatFormatting.WHITE));
-                list.add(Component.literal(""));
-                list.add(Component.translatable("neoforge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
+                if (enchantment.isEmpty()) {
+                    list.add(Component.literal(""));
+                    list.add(Component.translatable("neoforge.container.enchant.limitedEnchantability").withStyle(ChatFormatting.RED));
+                } else if (!flag) {
+                    list.add(CommonComponents.EMPTY); // Blank line
+                    if (this.minecraft.player.experienceLevel < enchantmentLevel) {
+                        list.add(Component.translatable("container.enchant.level.requirement", enchantmentLevel).withStyle(ChatFormatting.RED));
+                    } else {
+                        list.add(Component.translatable("container.eidolon_repraised.enchant.shard.one", 1).withStyle(soulShardAmount > 0 ? ChatFormatting.GRAY : ChatFormatting.RED));
+                        MutableComponent mutableComponent;
+                        if (experienceLevelCost == 1) {
+                            mutableComponent = Component.translatable("container.enchant.level.one");
+                        } else {
+                            mutableComponent = Component.translatable("container.enchant.level.many", experienceLevelCost);
+                        }
 
+                        list.add(mutableComponent.withStyle(ChatFormatting.GRAY));
+                    }
+                }
                 pGuiGraphics.renderComponentTooltip(this.font, list, pMouseX, pMouseY);
                 break;
             }
