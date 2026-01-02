@@ -1,21 +1,21 @@
 {
-  "type": "eidolon_repraised:chant",
-  "id": "eidolon_repraised:sunder_armor",
-  "signs": [
-    {
-      "sign": "eidolon_repraised:flame"
-    },
-    {
-      "sign": "eidolon_repraised:magic"
-    },
-    {
-      "sign": "eidolon_repraised:wicked"
-    },
-    {
-      "sign": "eidolon_repraised:magic"
-    },
-    {
-      "sign": "eidolon_repraised:flame"
-    }
-  ]
+    "type": "eidolon_repraised:chant",
+    "id": "eidolon_repraised:sunder_armor",
+    "signs": [
+        {
+            "sign": "eidolon_repraised:flame"
+        },
+        {
+            "sign": "eidolon_repraised:magic"
+        },
+        {
+            "sign": "eidolon_repraised:wicked"
+        },
+        {
+            "sign": "eidolon_repraised:magic"
+        },
+        {
+            "sign": "eidolon_repraised:flame"
+        }
+    ]
 }

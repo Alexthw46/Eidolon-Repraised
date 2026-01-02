@@ -1,24 +1,24 @@
 {
-  "type": "eidolon_repraised:ritual_brazier",
-  "focus_items": [],
-  "health_requirement": 0.0,
-  "invariant_items": [],
-  "pedestal_items": [
-    {
-      "item": "minecraft:charcoal"
+    "type": "eidolon_repraised:ritual_brazier",
+    "focus_items": [],
+    "health_requirement": 0.0,
+    "invariant_items": [],
+    "pedestal_items": [
+        {
+            "item": "minecraft:charcoal"
+        },
+        {
+            "item": "minecraft:wheat_seeds"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:sunflower"
     },
-    {
-      "item": "minecraft:wheat_seeds"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:sunflower"
-  },
-  "ritual": "eidolon_repraised:daylight"
+    "ritual": "eidolon_repraised:daylight"
 }

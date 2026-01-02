@@ -1,31 +1,31 @@
 {
-  "type": "eidolon_repraised:ritual_brazier",
-  "focus_items": [],
-  "health_requirement": 0.0,
-  "invariant_items": [
-    {
-      "item": "eidolon_repraised:summoning_staff"
-    }
-  ],
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:tattered_cloth"
+    "type": "eidolon_repraised:ritual_brazier",
+    "focus_items": [],
+    "health_requirement": 0.0,
+    "invariant_items": [
+        {
+            "item": "eidolon_repraised:summoning_staff"
+        }
+    ],
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:tattered_cloth"
+        },
+        {
+            "item": "eidolon_repraised:tattered_cloth"
+        },
+        {
+            "item": "minecraft:bone"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        }
+    ],
+    "reagent": {
+        "item": "eidolon_repraised:death_essence"
     },
-    {
-      "item": "eidolon_repraised:tattered_cloth"
-    },
-    {
-      "item": "minecraft:bone"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    }
-  ],
-  "reagent": {
-    "item": "eidolon_repraised:death_essence"
-  },
-  "ritual": "eidolon_repraised:absorption"
+    "ritual": "eidolon_repraised:absorption"
 }

@@ -41,6 +41,9 @@ public class EidBlockTagProvider extends BlockTagsProvider {
                 Registry.SILDRIAN_SEED.get(),
                 Registry.MIRECAP.get()
         );
+        tag(Registry.ALTAR_BLOCKS).add(Registry.WOODEN_ALTAR.get())
+                .addTag(Registry.BETTER_ALTAR_BLOCKS);
+        tag(Registry.BETTER_ALTAR_BLOCKS).add(Registry.STONE_ALTAR.get());
     }
 
     void logsTag(Block... blocks) {

@@ -1,18 +1,18 @@
 {
-  "type": "eidolon_repraised:chant",
-  "id": "eidolon_repraised:create_water",
-  "signs": [
-    {
-      "sign": "eidolon_repraised:winter"
-    },
-    {
-      "sign": "eidolon_repraised:winter"
-    },
-    {
-      "sign": "eidolon_repraised:flame"
-    },
-    {
-      "sign": "eidolon_repraised:flame"
-    }
-  ]
+    "type": "eidolon_repraised:chant",
+    "id": "eidolon_repraised:create_water",
+    "signs": [
+        {
+            "sign": "eidolon_repraised:winter"
+        },
+        {
+            "sign": "eidolon_repraised:winter"
+        },
+        {
+            "sign": "eidolon_repraised:flame"
+        },
+        {
+            "sign": "eidolon_repraised:flame"
+        }
+    ]
 }

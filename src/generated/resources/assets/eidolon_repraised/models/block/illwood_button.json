@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/button",
-  "textures": {
-    "texture": "eidolon_repraised:block/illwood_planks"
-  }
+    "parent": "minecraft:block/button",
+    "textures": {
+        "texture": "eidolon_repraised:block/illwood_planks"
+    }
 }

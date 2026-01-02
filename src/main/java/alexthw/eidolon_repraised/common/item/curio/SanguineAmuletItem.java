@@ -1,6 +1,6 @@
 package alexthw.eidolon_repraised.common.item.curio;
 
-import alexthw.eidolon_repraised.common.item.ChantScrollItem;
+import alexthw.eidolon_repraised.Eidolon;
 import alexthw.eidolon_repraised.registries.EidolonDataComponents;
 import alexthw.eidolon_repraised.registries.Registry;
 import com.mojang.datafixers.util.Either;
@@ -17,17 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
+@EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT)
 public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
-//        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-//            NeoForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
-//            return null;
-//        });
     }
 
     static int getCharge(ItemStack stack) {
@@ -117,9 +115,9 @@ public class SanguineAmuletItem extends EidolonCurio {
             for (int i = 0; i < charge; i += 20) {
                 for (int j = 0; j < Mth.clamp(charge - i, 0, 20); j += 2) {
                     if (charge - (i + j) == 1) {
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 32, 32);
                     } else
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 32, 32);
                 }
             }
         }
@@ -131,8 +129,6 @@ public class SanguineAmuletItem extends EidolonCurio {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() == Registry.SANGUINE_AMULET.get()) {
             event.getTooltipElements().add(Either.right(new SanguineAmuletTooltipInfo(stack, event.getMaxWidth())));
-        } else if (stack.getItem() == Registry.CHANT_SCROLL.get()) {
-            event.getTooltipElements().add(Either.right(new ChantScrollItem.ChantTooltipInfo(stack, event.getMaxWidth())));
         }
     }
 }

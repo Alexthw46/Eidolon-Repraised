@@ -1,6 +1,6 @@
 {
-  "type": "minecraft:simple_random_selector",
-  "config": {
-    "features": "eidolon_repraised:illwood_checked"
-  }
+    "type": "minecraft:simple_random_selector",
+    "config": {
+        "features": "eidolon_repraised:illwood_checked"
+    }
 }

@@ -1,25 +1,25 @@
 {
-  "parent": "eidolon_repraised:zombify",
-  "criteria": {
-    "enthrall_undead": {
-      "trigger": "eidolon_repraised:enthrall_undead"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.enthrall_undead"
+    "parent": "eidolon_repraised:zombify",
+    "criteria": {
+        "enthrall_undead": {
+            "trigger": "eidolon_repraised:enthrall_undead"
+        }
     },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:summoning_staff"
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.enthrall_undead"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:summoning_staff"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.enthrall_undead"
+        }
     },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.enthrall_undead"
-    }
-  },
-  "requirements": [
-    [
-      "enthrall_undead"
+    "requirements": [
+        [
+            "enthrall_undead"
+        ]
     ]
-  ]
 }

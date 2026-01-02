@@ -1,44 +1,44 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_crafting",
-  "focus_items": [
-    {
-      "type": "neoforge:components",
-      "components": {
-        "minecraft:potion_contents": {
-          "potion": "minecraft:harming"
+    "type": "eidolon_repraised:ritual_brazier_crafting",
+    "focus_items": [
+        {
+            "type": "neoforge:components",
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:harming"
+                }
+            },
+            "items": "minecraft:potion",
+            "strict": true
         }
-      },
-      "items": "minecraft:potion",
-      "strict": true
+    ],
+    "health_requirement": 40.0,
+    "keep_nbt_of_reagent": true,
+    "pedestal_items": [
+        {
+            "tag": "c:gems/diamond"
+        },
+        {
+            "tag": "c:dusts/redstone"
+        },
+        {
+            "tag": "c:dusts/redstone"
+        },
+        {
+            "tag": "c:dusts/redstone"
+        },
+        {
+            "tag": "c:dusts/redstone"
+        },
+        {
+            "item": "eidolon_repraised:lesser_soul_gem"
+        }
+    ],
+    "reagent": {
+        "item": "eidolon_repraised:basic_amulet"
+    },
+    "result": {
+        "count": 1,
+        "id": "eidolon_repraised:sanguine_amulet"
     }
-  ],
-  "health_requirement": 40.0,
-  "keep_nbt_of_reagent": true,
-  "pedestal_items": [
-    {
-      "tag": "c:gems/diamond"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "item": "eidolon_repraised:lesser_soul_gem"
-    }
-  ],
-  "reagent": {
-    "item": "eidolon_repraised:basic_amulet"
-  },
-  "result": {
-    "count": 1,
-    "id": "eidolon_repraised:sanguine_amulet"
-  }
 }

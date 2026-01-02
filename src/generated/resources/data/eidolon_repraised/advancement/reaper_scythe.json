@@ -1,32 +1,32 @@
 {
-  "parent": "eidolon_repraised:worktable",
-  "criteria": {
-    "has_reaper_scythe": {
-      "conditions": {
-        "items": [
-          {
-            "items": "eidolon_repraised:reaper_scythe"
-          }
+    "parent": "eidolon_repraised:worktable",
+    "criteria": {
+        "has_reaper_scythe": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "eidolon_repraised:reaper_scythe"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.reaper_scythe"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:reaper_scythe"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.reaper_scythe"
+        }
+    },
+    "requirements": [
+        [
+            "has_reaper_scythe"
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.reaper_scythe"
-    },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:reaper_scythe"
-    },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.reaper_scythe"
-    }
-  },
-  "requirements": [
-    [
-      "has_reaper_scythe"
     ]
-  ]
 }

@@ -52,12 +52,12 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
         bookBottom = height / 2 + FULL_HEIGHT / 2;
         currentChant = new ArrayList<>(7);
         layoutSigns();
-        addRenderableWidget(new ChantButton(bookLeft, bookTop + 8, 32, 32, (b) -> {
+        addRenderableWidget(new ChantButton(bookLeft - 7, bookTop + 168, 18, 16, (b) -> {
             if (!currentChant.isEmpty()) {
                 Networking.sendToServer(new InscribePacket(this.menu.containerId, currentChant));
             }
         }));
-        addRenderableWidget(new CancelButton(bookLeft, bookTop + 8 + 32, 32, 32, (b) -> currentChant.clear()));
+        addRenderableWidget(new CancelButton(bookLeft - 6 + 18, bookTop + 168, 18, 16, (b) -> currentChant.clear()));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
         graphics.blit(background, bookLeft + 32, bookTop, 0, 0, 200, FULL_HEIGHT, FULL_WIDTH, FULL_HEIGHT);
-        graphics.blit(background, bookLeft - 20, bookTop + 72, 200, 92, 54, 56, FULL_WIDTH, FULL_HEIGHT);
+        graphics.blit(background, bookLeft - 22, bookTop, 200, 18, 56, 179, FULL_WIDTH, FULL_HEIGHT);
     }
 
     public void drawBackgroundElements(GuiGraphics graphics) {
@@ -101,9 +101,18 @@ public class ScriptoriumScreen extends AbstractContainerScreen<ScriptoriumContai
         List<Sign> signs = KnowledgeUtil.getKnownSigns(Eidolon.proxy.getPlayer());
         int startX = bookLeft + 24;
         int startY = bookTop - 15;
+        int perRow = 5;
+        int spacing = 38;
         for (int i = 0; i < signs.size(); i++) {
             Sign sign = signs.get(i);
-            SignButton button = new SignButton(startX + 8 + (i % 5) * 38, startY + 16 + (i / 5) * 40, 30, 30, sign, (b) -> {
+            int row = i / perRow;
+            int indexInRow = i % perRow;
+            int remaining = signs.size() - row * perRow;
+            int itemsInRow = Math.min(perRow, remaining);
+            int rowOffset = ((perRow - itemsInRow) * spacing) / 2;
+            int x = startX + 8 + rowOffset + indexInRow * spacing;
+            int y = startY + 16 + row * 40;
+            SignButton button = new SignButton(x, y, 30, 30, sign, (b) -> {
                 if (currentChant.size() < 7) currentChant.add(sign);
             });
             signButtons.add(button);

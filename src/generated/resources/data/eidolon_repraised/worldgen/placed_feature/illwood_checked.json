@@ -1,17 +1,17 @@
 {
-  "feature": "eidolon_repraised:illwood_tree",
-  "placement": [
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "eidolon_repraised:illwood_sapling",
-          "Properties": {
-            "stage": "0"
-          }
+    "feature": "eidolon_repraised:illwood_tree",
+    "placement": [
+        {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+                "type": "minecraft:would_survive",
+                "state": {
+                    "Name": "eidolon_repraised:illwood_sapling",
+                    "Properties": {
+                        "stage": "0"
+                    }
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

@@ -1,27 +1,27 @@
 {
-  "type": "eidolon_repraised:ritual_brazier",
-  "focus_items": [],
-  "health_requirement": 0.0,
-  "invariant_items": [],
-  "pedestal_items": [
-    {
-      "tag": "c:gems/emerald"
+    "type": "eidolon_repraised:ritual_brazier",
+    "focus_items": [],
+    "health_requirement": 0.0,
+    "invariant_items": [],
+    "pedestal_items": [
+        {
+            "tag": "c:gems/emerald"
+        },
+        {
+            "item": "minecraft:fermented_spider_eye"
+        },
+        {
+            "tag": "c:mushrooms"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "eidolon_repraised:soul_shard"
+        }
+    ],
+    "reagent": {
+        "tag": "c:gems/emerald"
     },
-    {
-      "item": "minecraft:fermented_spider_eye"
-    },
-    {
-      "tag": "c:mushrooms"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "eidolon_repraised:soul_shard"
-    }
-  ],
-  "reagent": {
-    "tag": "c:gems/emerald"
-  },
-  "ritual": "eidolon_repraised:deceit"
+    "ritual": "eidolon_repraised:deceit"
 }

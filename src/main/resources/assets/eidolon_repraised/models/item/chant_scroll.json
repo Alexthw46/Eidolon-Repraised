@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "eidolon_repraised:item/parchment"
+    "layer0": "eidolon_repraised:item/parchment",
+    "layer1": "eidolon_repraised:item/chant_scroll"
   }
 }

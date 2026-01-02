@@ -1,25 +1,25 @@
 {
-  "parent": "eidolon_repraised:unholy_symbol",
-  "criteria": {
-    "villager_sacrifice": {
-      "trigger": "eidolon_repraised:villager_sacrifice"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.villager_sacrifice"
+    "parent": "eidolon_repraised:unholy_symbol",
+    "criteria": {
+        "villager_sacrifice": {
+            "trigger": "eidolon_repraised:villager_sacrifice"
+        }
     },
-    "icon": {
-      "count": 1,
-      "id": "minecraft:iron_sword"
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.villager_sacrifice"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:iron_sword"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.villager_sacrifice"
+        }
     },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.villager_sacrifice"
-    }
-  },
-  "requirements": [
-    [
-      "villager_sacrifice"
+    "requirements": [
+        [
+            "villager_sacrifice"
+        ]
     ]
-  ]
 }

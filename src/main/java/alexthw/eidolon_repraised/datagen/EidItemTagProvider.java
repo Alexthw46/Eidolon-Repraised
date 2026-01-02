@@ -45,7 +45,7 @@ public class EidItemTagProvider extends ItemTagsProvider {
         //this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
         tag(ItemTags.SIGNS).add(Registry.ILLWOOD_PLANKS.getStandingSign().asItem(), Registry.POLISHED_PLANKS.getStandingSign().asItem());
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
-
+        tag(ItemTags.DURABILITY_ENCHANTABLE).add(Registry.BONECHILL_WAND.get(), Registry.SOULFIRE_WAND.get());
         tag(ItemTags.SWORDS).add(
                 Registry.SILVER_SWORD.get(),
                 Registry.ATHAME.get(),
@@ -100,7 +100,6 @@ public class EidItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(Registry.SILVER_LEGGINGS.get(),
                 Registry.BONELORD_GREAVES.get()
         );
-
 
         tag(ItemTags.FOOT_ARMOR).add(Registry.SILVER_BOOTS.get(),
                 Registry.WARLOCK_BOOTS.get()

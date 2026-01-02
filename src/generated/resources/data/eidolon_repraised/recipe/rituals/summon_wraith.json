@@ -1,20 +1,20 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_summoning",
-  "focus_items": [
-    {
-      "item": "eidolon_repraised:tattered_cloth"
+    "type": "eidolon_repraised:ritual_brazier_summoning",
+    "focus_items": [
+        {
+            "item": "eidolon_repraised:tattered_cloth"
+        }
+    ],
+    "output": "eidolon_repraised:wraith",
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "eidolon_repraised:tattered_cloth"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:charcoal"
     }
-  ],
-  "output": "eidolon_repraised:wraith",
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "eidolon_repraised:tattered_cloth"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
 }

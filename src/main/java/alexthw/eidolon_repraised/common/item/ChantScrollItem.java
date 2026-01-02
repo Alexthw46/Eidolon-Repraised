@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ChantScrollItem extends ItemBase {
     public ChantScrollItem(Properties properties) {
@@ -48,31 +49,36 @@ public class ChantScrollItem extends ItemBase {
         return super.use(pLevel, pPlayer, pUsedHand);
     }
 
+    @Override
+    public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack pStack) {
+        if (pStack.has(EidolonDataComponents.SPELL)) {
+            var spellPart = new ChantTooltipInfo(pStack);
+            return Optional.of(spellPart);
+        }
+        return Optional.empty();
+    }
+
     public static class ChantTooltipComponent implements ClientTooltipComponent {
 
         final ItemStack stack;
-        final int maxWidth;
-
+        List<Sign> spell;
         public ChantTooltipComponent(ChantTooltipInfo info) {
             this.stack = info.stack;
-            this.maxWidth = info.maxWidth;
+            spell = stack.getOrDefault(EidolonDataComponents.SPELL, List.of());
         }
 
         @Override
         public int getHeight() {
-            int charge = stack.getOrDefault(EidolonDataComponents.SPELL, List.of()).size();
-            int rows = (charge + 15) / 8;
-            return charge == 0 ? 0 : 12 * rows;
+            return 24 + (spell.size() / 10) * 16;
         }
 
         @Override
-        public int getWidth(@NotNull Font font) {
-            return maxWidth;
+        public int getWidth(@NotNull Font pFont) {
+            return 4 + Math.min(spell.size(), 10) * 16;
         }
 
         @Override
         public void renderImage(@NotNull Font pFont, int pX, int pY, @NotNull GuiGraphics pGuiGraphics) {
-            List<Sign> spell = stack.getOrDefault(EidolonDataComponents.SPELL, List.of());
             if (spell.isEmpty()) return;
             for (int i = 0, spellSize = spell.size(); i < spellSize; i++) {
                 Sign sign = spell.get(i);
@@ -97,7 +103,7 @@ public class ChantScrollItem extends ItemBase {
         }
     }
 
-    public record ChantTooltipInfo(ItemStack stack, int maxWidth) implements TooltipComponent {
+    public record ChantTooltipInfo(ItemStack stack) implements TooltipComponent {
     }
 
 }

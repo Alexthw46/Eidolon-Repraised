@@ -31,16 +31,13 @@ import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -87,6 +84,8 @@ public class Registry {
 
     public static TagKey<Block> CRUCIBLE_HOT_BLOCKS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "crucible_hot_blocks"));
     public static TagKey<Block> PLANTER_PLANTS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "planter_plants"));
+    public static TagKey<Block> ALTAR_BLOCKS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "altar_blocks"));
+    public static TagKey<Block> BETTER_ALTAR_BLOCKS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(Eidolon.MODID, "stone_altar_blocks"));
 
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Eidolon.MODID);
 

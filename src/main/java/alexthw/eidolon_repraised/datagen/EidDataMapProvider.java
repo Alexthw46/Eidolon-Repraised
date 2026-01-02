@@ -17,6 +17,7 @@ public class EidDataMapProvider extends DataMapProvider {
         super(packOutput, lookupProvider);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void gather(HolderLookup.@NotNull Provider provider) {
         this.builder(EidolonDataMaps.ALTAR_ENTRY_MAP)
