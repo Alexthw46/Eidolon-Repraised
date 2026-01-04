@@ -187,6 +187,8 @@ public class ClientEvents {
 
     public static int colorFromArmor(ItemStack stack) {
         DyeColor color = stack.getOrDefault(DataComponents.BASE_COLOR, DyeColor.BLUE);
+        if (color == DyeColor.BLUE) return FastColor.ABGR32.color(255, 100, 125, 250);
         return FastColor.ABGR32.opaque(color.getTextureDiffuseColor());
     }
+
 }
