@@ -155,7 +155,7 @@ public class Events {
                 break;
             }
         }
-        if (hasBoneArmor && e.getHealth() >= e.getMaxHealth() * 0.999 && event.getEntity().tickCount % 80 == 0) {
+        if (hasBoneArmor && e.getHealth() >= e.getMaxHealth() * 0.999 && event.getEntity().tickCount % 120 == 0) {
             var s = e.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
             if (s != null) {
                 if (s.getEtherealHealth() < ISoul.getPersistentHealth(e)) // update ethereal health if it's lower than the persistent health
