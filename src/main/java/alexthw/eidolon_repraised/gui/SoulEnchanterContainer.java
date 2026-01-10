@@ -2,7 +2,7 @@ package alexthw.eidolon_repraised.gui;
 
 import alexthw.eidolon_repraised.Config;
 import alexthw.eidolon_repraised.compat.CompatHandler;
-import alexthw.eidolon_repraised.compat.apotheosis.Apotheosis;
+import alexthw.eidolon_repraised.compat.apotheosis.ApotheosisCompat;
 import alexthw.eidolon_repraised.datagen.EidEnchantmentTagProvider;
 import alexthw.eidolon_repraised.registries.Registry;
 import com.google.common.collect.Lists;
@@ -245,7 +245,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     int maxLevel = enchantment.value().getMaxLevel();
 
                     if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                        maxLevel = Apotheosis.getMaxLevel(enchantment.value());
+                        maxLevel = ApotheosisCompat.getMaxLevel(enchantment.value());
                     }
 
                     boolean canApply = finalTest.supportsEnchantment(enchantment) || finalTest.getItem() == Items.BOOK;

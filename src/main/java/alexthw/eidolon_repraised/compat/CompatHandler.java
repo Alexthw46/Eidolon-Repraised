@@ -1,7 +1,7 @@
 package alexthw.eidolon_repraised.compat;
 
 import alexthw.eidolon_repraised.Eidolon;
-import alexthw.eidolon_repraised.compat.apotheosis.Apotheosis;
+import alexthw.eidolon_repraised.compat.apotheosis.ApotheosisCompat;
 import net.neoforged.fml.ModList;
 
 import java.util.Map;
@@ -9,8 +9,9 @@ import java.util.Map;
 public class CompatHandler {
     public final static String APOTHEOSIS = "apotheosis";
 
+
     private static final Map<String, ModData> MODS = Map.of(
-            APOTHEOSIS, new ModData(Apotheosis::initialize)
+            APOTHEOSIS, new ModData(ApotheosisCompat::initialize)
     );
 
     public static void initialize() {
