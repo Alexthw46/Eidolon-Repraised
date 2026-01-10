@@ -40,9 +40,9 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
     public ScriptoriumContainer(int id, Inventory playerInventory, ContainerLevelAccess access) {
         super(Registry.SCRIPTORIUM_CONTAINER.get(), id);
         this.access = access;
-        this.addSlot(new InputSlot(inventory, 0, -50, 33));
-        this.addSlot(new OutputSlot(inventory, 1, -40, 56));
-        this.addSlot(new InkSlot(inventory, 2, -30 + 2, 33));
+        this.addSlot(new InputSlot(inventory, 0, -37, 33));
+        this.addSlot(new OutputSlot(inventory, 1, -43, 96));
+        this.addSlot(new InkSlot(inventory, 2, -37, 3));
 
         for (int k = 0; k < 3; ++k) {
             for (int i1 = 0; i1 < 9; ++i1) {

@@ -211,7 +211,11 @@ public class EidolonOverlays {
     public static class EidolonHearts implements LayeredDraw.Layer {
         float lastEtherealHealth = 0;
         long healthBlinkTime = 0;
-        long lastHealthTime = 0;
+        static long lastHealthTime = 0;
+
+        public static void updatedSoul() {
+            lastHealthTime = Util.getMillis();
+        }
 
         @Override
         public void render(GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
@@ -225,7 +229,7 @@ public class EidolonOverlays {
             int health = Mth.ceil(player.getHealth());
             float absorb = Mth.ceil(player.getAbsorptionAmount());
             AttributeInstance attrMaxHealth = player.getAttribute(Attributes.MAX_HEALTH);
-            float healthMax = (float) attrMaxHealth.getValue();
+            float healthMax = attrMaxHealth != null ? (float) attrMaxHealth.getValue() : 0f;
 
             float etherealHealth = 0, etherealMax = 0;
             ISoul cap = player.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY);
@@ -235,7 +239,7 @@ public class EidolonOverlays {
             }
 
             int ticks = (int) deltaTracker.getGameTimeDeltaTicks();
-            boolean highlight = healthBlinkTime > (long) ticks && (healthBlinkTime - (long) ticks) / 3L % 2L == 1L;
+            boolean highlight = false; /*healthBlinkTime > (long) ticks && (healthBlinkTime - (long) ticks) / 3L % 2L == 1L;
 
             if (etherealHealth < this.lastEtherealHealth && player.invulnerableTime > 0) {
                 this.lastHealthTime = Util.getMillis();
@@ -244,12 +248,13 @@ public class EidolonOverlays {
                 this.lastHealthTime = Util.getMillis();
                 this.healthBlinkTime = ticks + 10;
             }
+
             if (Util.getMillis() - this.lastHealthTime > 1000L) {
                 lastEtherealHealth = etherealHealth;
                 lastHealthTime = Util.getMillis();
-            }
+            }*/
 
-            lastEtherealHealth = etherealHealth;
+            //lastEtherealHealth = etherealHealth;
 
             float f = Math.max((float) player.getAttributeValue(Attributes.MAX_HEALTH), (float) health);
             int regen = -1;
@@ -272,42 +277,46 @@ public class EidolonOverlays {
             if (rowHeight != 10) top += 10 - rowHeight;
 
             minecraft.gui.leftHeight += extraHealthRows * extraRowHeight;
+            int baseHeartCount = Mth.ceil((healthMax + absorb) / 2.0F);
 
-            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
-                int row = (i + 1) / 10;
-                int heart = (i + 1) % 10;
+            for (int idx = baseHeartCount; idx < baseHeartCount + ethHearts; idx++) {
+                int row = idx / 10;
+                int heart = idx % 10;
                 int x = left + heart * 8;
                 int y = top - extraRowHeight * Math.max(0, row - healthRows + 1) - rowHeight * Math.min(row, healthRows - 1);
-                guiGraphics.blit(ICONS_TEXTURE, x, y, highlight ? 9 : 0, 18, 9, 9);
+
+                // background/highlight (if present)
+                guiGraphics.blit(ICONS_TEXTURE, x, y, highlight ? 9 : 0, 18, 9, 9, 32,32);
+
+                int i2 = idx - baseHeartCount;
+
+                // draw ethereal: full/half using threshold checks
+                float fullThreshold = (i2 + 1) * 2; // es. 2,4,6...
+                float halfThreshold = i2 * 2 + 1;   // es. 1,3,5...
+                if (etherealHealth >= fullThreshold) {
+                    guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 9, 9, 9, 32,32);
+                } else if (etherealHealth >= halfThreshold) {
+                    guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 9, 9, 9, 32,32);
+                }
             }
-            for (int i = absorptionHearts + hearts + ethHearts; i > absorptionHearts + hearts; --i) {
-                int row = (i + 1) / 10;
-                int heart = (i + 1) % 10;
-                int x = left + heart * 8;
-                int y = top - extraRowHeight * Math.max(0, row - healthRows + 1) - rowHeight * Math.min(row, healthRows - 1);
-                int i2 = i - (Mth.ceil((healthMax + absorb) / 2.0f) - 1);
-                if (i2 * 2 + 1 < etherealHealth)
-                    guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 9, 9, 9);
-                else if (i2 * 2 + 1 == etherealHealth)
-                    guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 9, 9, 9);
-            }
-            for (int i = Mth.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; --i) {
-                int row = i / 10;
-                int heart = i % 10;
+
+            for (int idx = baseHeartCount - 1; idx >= 0; --idx) {
+                int row = idx / 10;
+                int heart = idx % 10;
                 int x = left + heart * 8;
                 int y = top - row * rowHeight;
 
                 if (health <= 4) y += rand.nextInt(2);
-                if (i == regen) y -= 2;
+                if (idx == regen) y -= 2;
 
-                RenderSystem.enableBlend();
-                if (player.hasEffect(EidolonPotions.CHILLED_EFFECT) && i <= Mth.ceil(healthMax / 2.0f) - 1) {
-                    if (i * 2 + 1 < health)
-                        guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 0, 9, 9);
-                    else if (i * 2 + 1 == health)
-                        guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 0, 9, 9);
+                if (player.hasEffect(EidolonPotions.CHILLED_EFFECT) && idx <= Mth.ceil(healthMax / 2.0f) - 1) {
+                    RenderSystem.enableBlend();
+                    if (idx * 2 + 1 < health)
+                        guiGraphics.blit(ICONS_TEXTURE, x, y, 0, 0, 9, 9, 32, 32);
+                    else if (idx * 2 + 1 == health)
+                        guiGraphics.blit(ICONS_TEXTURE, x, y, 9, 0, 9, 9, 32, 32);
+                    RenderSystem.disableBlend();
                 }
-                RenderSystem.disableBlend();
             }
             mStack.popPose();
         }

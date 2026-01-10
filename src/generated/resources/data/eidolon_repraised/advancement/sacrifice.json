@@ -1,25 +1,25 @@
 {
-  "parent": "eidolon_repraised:wicked_path",
-  "criteria": {
-    "sacrifice": {
-      "trigger": "eidolon_repraised:sacrifice"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.sacrifice"
+    "parent": "eidolon_repraised:wicked_path",
+    "criteria": {
+        "sacrifice": {
+            "trigger": "eidolon_repraised:sacrifice"
+        }
     },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:goblet"
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.sacrifice"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:goblet"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.sacrifice"
+        }
     },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.sacrifice"
-    }
-  },
-  "requirements": [
-    [
-      "sacrifice"
+    "requirements": [
+        [
+            "sacrifice"
+        ]
     ]
-  ]
 }

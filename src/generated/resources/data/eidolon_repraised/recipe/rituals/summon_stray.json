@@ -1,20 +1,20 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_summoning",
-  "focus_items": [
-    {
-      "item": "minecraft:string"
+    "type": "eidolon_repraised:ritual_brazier_summoning",
+    "focus_items": [
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "output": "minecraft:stray",
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "minecraft:bone"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:charcoal"
     }
-  ],
-  "output": "minecraft:stray",
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "minecraft:bone"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
 }

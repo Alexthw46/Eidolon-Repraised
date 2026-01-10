@@ -1,25 +1,25 @@
 {
-  "parent": "eidolon_repraised:straw_effigy",
-  "criteria": {
-    "sacred_path": {
-      "trigger": "eidolon_repraised:sacred_path"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.sacred_path"
+    "parent": "eidolon_repraised:straw_effigy",
+    "criteria": {
+        "sacred_path": {
+            "trigger": "eidolon_repraised:sacred_path"
+        }
     },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:holy_symbol"
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.sacred_path"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:holy_symbol"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.sacred_path"
+        }
     },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.sacred_path"
-    }
-  },
-  "requirements": [
-    [
-      "sacred_path"
+    "requirements": [
+        [
+            "sacred_path"
+        ]
     ]
-  ]
 }

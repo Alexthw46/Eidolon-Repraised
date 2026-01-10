@@ -1,6 +1,6 @@
 {
-  "values": [
-    "#minecraft:is_jungle",
-    "#c:is_lush"
-  ]
+    "values": [
+        "#minecraft:is_jungle",
+        "#c:is_lush"
+    ]
 }

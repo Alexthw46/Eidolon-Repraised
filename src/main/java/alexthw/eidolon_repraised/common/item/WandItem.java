@@ -30,13 +30,6 @@ public class WandItem extends ItemBase implements IRechargeableWand {
         return 20;
     }
 
-//    @Override
-//    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant) {
-//        return super.canApplyAtEnchantingTable(stack, enchant)
-//                || enchant == Enchantments.UNBREAKING
-//                || enchant == Enchantments.MENDING;
-//    }
-
     @Override
     public ItemStack recharge(ItemStack stack) {
         stack.setDamageValue(0);

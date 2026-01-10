@@ -77,9 +77,7 @@ public class SoulUpdatePacket extends AbstractPacket {
 
     @Override
     public void onClientReceived(Minecraft minecraft, Player player) {
-
         player.getCapability(EidolonCapabilities.SOUL_HEART_CAPABILITY).deserializeNBT(this.tag);
-
     }
 
     @Override

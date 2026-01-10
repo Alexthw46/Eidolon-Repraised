@@ -1,24 +1,24 @@
 {
-  "type": "eidolon_repraised:chant",
-  "id": "eidolon_repraised:zombify_villager",
-  "signs": [
-    {
-      "sign": "eidolon_repraised:death"
-    },
-    {
-      "sign": "eidolon_repraised:blood"
-    },
-    {
-      "sign": "eidolon_repraised:wicked"
-    },
-    {
-      "sign": "eidolon_repraised:death"
-    },
-    {
-      "sign": "eidolon_repraised:soul"
-    },
-    {
-      "sign": "eidolon_repraised:blood"
-    }
-  ]
+    "type": "eidolon_repraised:chant",
+    "id": "eidolon_repraised:zombify_villager",
+    "signs": [
+        {
+            "sign": "eidolon_repraised:death"
+        },
+        {
+            "sign": "eidolon_repraised:blood"
+        },
+        {
+            "sign": "eidolon_repraised:wicked"
+        },
+        {
+            "sign": "eidolon_repraised:death"
+        },
+        {
+            "sign": "eidolon_repraised:soul"
+        },
+        {
+            "sign": "eidolon_repraised:blood"
+        }
+    ]
 }

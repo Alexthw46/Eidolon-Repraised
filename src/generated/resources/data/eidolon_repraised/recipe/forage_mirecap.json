@@ -1,15 +1,15 @@
 {
-  "type": "eidolon_repraised:athame_foraging",
-  "block": [
-    {
-      "item": "minecraft:crimson_fungus"
-    },
-    {
-      "item": "minecraft:warped_fungus"
+    "type": "eidolon_repraised:athame_foraging",
+    "block": [
+        {
+            "item": "minecraft:crimson_fungus"
+        },
+        {
+            "item": "minecraft:warped_fungus"
+        }
+    ],
+    "output": {
+        "count": 1,
+        "id": "eidolon_repraised:mirecap"
     }
-  ],
-  "output": {
-    "count": 1,
-    "id": "eidolon_repraised:mirecap"
-  }
 }

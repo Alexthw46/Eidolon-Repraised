@@ -1,6 +1,7 @@
 package alexthw.eidolon_repraised.event;
 
 import alexthw.eidolon_repraised.Eidolon;
+import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.client.ClientConfig;
 import alexthw.eidolon_repraised.codex.CodexChapters;
 import alexthw.eidolon_repraised.common.item.IWingsItem;
@@ -16,8 +17,11 @@ import net.minecraft.Util;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -25,6 +29,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -33,7 +38,13 @@ import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.SequencedMap;
+
+import static alexthw.eidolon_repraised.registries.Registry.CHANT_SCROLL;
+import static alexthw.eidolon_repraised.registries.Registry.WARLOCK_BOOTS;
+import static alexthw.eidolon_repraised.registries.Registry.WARLOCK_CLOAK;
+import static alexthw.eidolon_repraised.registries.Registry.WARLOCK_HAT;
 
 @EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -144,4 +155,40 @@ public class ClientEvents {
             event.getToolTip().add(Component.translatable("eidolon_repraised.tooltip.sacred").withStyle(ChatFormatting.GOLD));
         }
     }
+
+    @SubscribeEvent
+    public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
+        event.register((stack, color) -> color > 0 ? -1 :
+                        colorFromArmor(stack),
+                WARLOCK_HAT.get());
+
+        event.register((stack, color) -> color > 0 ? -1 :
+                        colorFromArmor(stack),
+                WARLOCK_CLOAK.get());
+
+        event.register(
+                (stack, color) -> color > 0 ? -1 :
+                        colorFromArmor(stack),
+                WARLOCK_BOOTS.get()
+        );
+
+        event.register((stack, color) -> {
+                    if (color == 0 || !stack.has(EidolonDataComponents.SPELL)) return -1;
+                    List<Sign> spell = stack.getOrDefault(EidolonDataComponents.SPELL, List.of());
+                    if (!spell.isEmpty()) {
+                        // Randomly pick a color from the spell's colors based on system time
+                        int index = (int) ((ClientInfo.clientTicks / 80) % spell.size());
+                        return spell.get(index).color();
+                    }
+                    return -1;
+                },
+                CHANT_SCROLL.get());
+    }
+
+    public static int colorFromArmor(ItemStack stack) {
+        DyeColor color = stack.getOrDefault(DataComponents.BASE_COLOR, DyeColor.BLUE);
+        if (color == DyeColor.BLUE) return FastColor.ABGR32.color(255, 100, 125, 250);
+        return FastColor.ABGR32.opaque(color.getTextureDiffuseColor());
+    }
+
 }

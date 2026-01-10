@@ -1,20 +1,20 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_summoning",
-  "focus_items": [
-    {
-      "item": "minecraft:rotten_flesh"
+    "type": "eidolon_repraised:ritual_brazier_summoning",
+    "focus_items": [
+        {
+            "item": "minecraft:rotten_flesh"
+        }
+    ],
+    "output": "minecraft:zombie",
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "minecraft:rotten_flesh"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:charcoal"
     }
-  ],
-  "output": "minecraft:zombie",
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
 }

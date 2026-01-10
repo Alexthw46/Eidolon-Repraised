@@ -1,32 +1,32 @@
 {
-  "parent": "eidolon_repraised:pewter_ingot",
-  "criteria": {
-    "has_brazier": {
-      "conditions": {
-        "items": [
-          {
-            "items": "eidolon_repraised:brazier"
-          }
+    "parent": "eidolon_repraised:pewter_ingot",
+    "criteria": {
+        "has_brazier": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "eidolon_repraised:brazier"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.brazier"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:brazier"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.brazier"
+        }
+    },
+    "requirements": [
+        [
+            "has_brazier"
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.brazier"
-    },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:brazier"
-    },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.brazier"
-    }
-  },
-  "requirements": [
-    [
-      "has_brazier"
     ]
-  ]
 }

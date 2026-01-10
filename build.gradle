@@ -156,18 +156,14 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:embeddium-908741:4800420")
     //runtimeOnly fg.deobf("curse.maven:modernfix-790626:4792389")
 
-    compileOnly "curse.maven:placebo-283644:6751290"
-    compileOnly "curse.maven:apothic-attributes-898963:6751650"
-    compileOnly "curse.maven:apothic-enchanting-1063926:6751658"
-    compileOnly "curse.maven:apotheosis-313970:6545942"
-    compileOnly "curse.maven:apothic-spawners-986583:6751589"
+    implementation "curse.maven:placebo-283644:6926281"
+    implementation "curse.maven:apothic-attributes-898963:6751650"
+    implementation "curse.maven:apothic-enchanting-1063926:6926290"
+    implementation "curse.maven:apotheosis-313970:7180713"
+    implementation "curse.maven:apothic-spawners-986583:6751589"
 
-    //runtimeOnly fg.deobf("curse.maven:amendments-896746:5200593")
-    //runtimeOnly fg.deobf("curse.maven:selene-499980:5201144")
-    //runtimeOnly fg.deobf("curse.maven:spit-it-out-857141:4888754")
-
-    //runtimeOnly fg.deobf("team.lodestar.lodestone:lodestone:1.20.1-1.6.4.252")
-    //runtimeOnly fg.deobf("com.sammy.malum:malum:1.20.1-1.6.5.242") { transitive = false }
+    implementation "team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}"
+    implementation "com.sammy.malum:malum:${minecraft_version}-${malum_version}"
 
 }
 

@@ -1,25 +1,25 @@
 {
-  "parent": "eidolon_repraised:villager_sacrifice",
-  "criteria": {
-    "zombify": {
-      "trigger": "eidolon_repraised:zombify"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.zombify"
+    "parent": "eidolon_repraised:villager_sacrifice",
+    "criteria": {
+        "zombify": {
+            "trigger": "eidolon_repraised:zombify"
+        }
     },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:zombie_heart"
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.zombify"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:zombie_heart"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.zombify"
+        }
     },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.zombify"
-    }
-  },
-  "requirements": [
-    [
-      "zombify"
+    "requirements": [
+        [
+            "zombify"
+        ]
     ]
-  ]
 }

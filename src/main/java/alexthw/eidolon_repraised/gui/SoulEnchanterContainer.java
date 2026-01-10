@@ -1,6 +1,8 @@
 package alexthw.eidolon_repraised.gui;
 
 import alexthw.eidolon_repraised.Config;
+import alexthw.eidolon_repraised.compat.CompatHandler;
+import alexthw.eidolon_repraised.compat.apotheosis.Apotheosis;
 import alexthw.eidolon_repraised.datagen.EidEnchantmentTagProvider;
 import alexthw.eidolon_repraised.registries.Registry;
 import com.google.common.collect.Lists;
@@ -29,7 +31,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.api.distmarker.Dist;
@@ -224,31 +225,6 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
         }
     }
 
-    private List<EnchantmentInstance> getEnchantmentListOld(RegistryAccess registryAccess, ItemStack stack,
-                                                         int enchantSlot) {
-        this.rand.setSeed(this.xpSeed.get() + enchantSlot);
-
-        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
-        if (optional.isEmpty()) {
-            return List.of();
-        } else {
-            var valid = Lists.newArrayList(optional.get());
-            valid.removeIf(
-                    enchantment -> enchantment == null || enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST)
-
-                    //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                    //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
-                    //  }
-            );
-            List<EnchantmentInstance> list = EnchantmentHelper.selectEnchantment(this.rand, stack, 1 + this.rand.nextInt(30), valid.stream());
-            if (stack.is(Items.BOOK) && list.size() > 1) {
-                list.remove(this.rand.nextInt(list.size()));
-            }
-
-            return list;
-        }
-    }
-
     private List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int enchantSlot) {
         this.rand.setSeed(this.xpSeed.get() + enchantSlot);
         ItemStack test = stack.getItem().getDefaultInstance();
@@ -266,20 +242,20 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
                     boolean failFast = enchantment == null || enchantment.is(EidEnchantmentTagProvider.SOUL_ENCHANTER_BLACKLIST);
                     if (failFast) return true;
 
-                    //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                    //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
-                    //  }
+                    int maxLevel = enchantment.value().getMaxLevel();
+
+                    if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
+                        maxLevel = Apotheosis.getMaxLevel(enchantment.value());
+                    }
+
                     boolean canApply = finalTest.supportsEnchantment(enchantment) || finalTest.getItem() == Items.BOOK;
 
                     if (!canApply || enchantment.is(EnchantmentTags.CURSE)) {
                         return true;
                     }
 
-                    return enchantment.is(EnchantmentTags.TREASURE) || existing.getLevel(enchantment) > 0 && existing.getLevel(enchantment) >= enchantment.value().getMaxLevel();
+                    return enchantment.is(EnchantmentTags.TREASURE) || existing.getLevel(enchantment) > 0 && existing.getLevel(enchantment) >= maxLevel;
                 }
-                //if (CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS)) {
-                //                return Apotheosis.isTreasureOnly(enchantment) || existing.containsKey(enchantment) && existing.get(enchantment) >= Apotheosis.getMaxLevel(enchantment);
-                //  }
         );
 
         for (Object2IntMap.Entry<Holder<Enchantment>> e : existing.entrySet()) {
@@ -289,7 +265,7 @@ public class SoulEnchanterContainer extends AbstractContainerMenu {
 
         List<EnchantmentInstance> enchants = new ArrayList<>();
         if (valid.isEmpty()) return enchants;
-        System.out.println(enchantSlot + ": " + valid.stream().reduce("", (a, b) -> a + ", " + b, (a, b) -> a + ", " + b));
+        // System.out.println(enchantSlot + ": " + valid.stream().reduce("", (a, b) -> a + ", " + b, (a, b) -> a + ", " + b));
         for (int i = 0; i < enchantSlot; i++) rand.nextInt(valid.size());
         Holder<Enchantment> enchant = valid.get(this.rand.nextInt(valid.size()));
         int level = Math.max(0, stack.getEnchantmentLevel(enchant));

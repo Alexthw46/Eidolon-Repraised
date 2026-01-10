@@ -1,25 +1,25 @@
 {
-  "type": "eidolon_repraised:ritual_brazier",
-  "focus_items": [],
-  "health_requirement": 0.0,
-  "invariant_items": [
-    {
-      "item": "eidolon_repraised:soulfire_wand"
-    }
-  ],
-  "pedestal_items": [
-    {
-      "item": "minecraft:blaze_powder"
+    "type": "eidolon_repraised:ritual_brazier",
+    "focus_items": [],
+    "health_requirement": 0.0,
+    "invariant_items": [
+        {
+            "item": "eidolon_repraised:soulfire_wand"
+        }
+    ],
+    "pedestal_items": [
+        {
+            "item": "minecraft:blaze_powder"
+        },
+        {
+            "item": "minecraft:blaze_powder"
+        },
+        {
+            "tag": "c:dusts/redstone"
+        }
+    ],
+    "reagent": {
+        "item": "eidolon_repraised:lesser_soul_gem"
     },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    }
-  ],
-  "reagent": {
-    "item": "eidolon_repraised:lesser_soul_gem"
-  },
-  "ritual": "eidolon_repraised:recharging_soulfire"
+    "ritual": "eidolon_repraised:recharging_soulfire"
 }

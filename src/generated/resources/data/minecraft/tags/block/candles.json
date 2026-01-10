@@ -1,8 +1,8 @@
 {
-  "values": [
-    "eidolon_repraised:candle",
-    "eidolon_repraised:candlestick",
-    "eidolon_repraised:magic_candle",
-    "eidolon_repraised:magic_candlestick"
-  ]
+    "values": [
+        "eidolon_repraised:candle",
+        "eidolon_repraised:candlestick",
+        "eidolon_repraised:magic_candle",
+        "eidolon_repraised:magic_candlestick"
+    ]
 }

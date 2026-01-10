@@ -1,7 +1,7 @@
 package alexthw.eidolon_repraised.api.altar;
 
-import alexthw.eidolon_repraised.common.block.TableBlockBase;
 import alexthw.eidolon_repraised.registries.AltarEntries;
+import alexthw.eidolon_repraised.registries.Registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +10,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public class AltarInfo {
     static class AltarAttributes {
@@ -28,7 +33,7 @@ public class AltarInfo {
         Queue<BlockPos> visit = new ArrayDeque<>();
         BlockState below = world.getBlockState(pos.below());
         Block b = below.getBlock();
-        if (below.getBlock() instanceof TableBlockBase) visit.add(pos.below());
+        if (below.is(Registry.ALTAR_BLOCKS)) visit.add(pos.below());
         while (!visit.isEmpty()) {
             BlockPos visited = visit.remove();
             if (result.contains(visited)) continue;

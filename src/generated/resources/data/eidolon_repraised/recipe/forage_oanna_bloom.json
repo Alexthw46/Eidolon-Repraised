@@ -1,10 +1,10 @@
 {
-  "type": "eidolon_repraised:athame_foraging",
-  "block": {
-    "item": "minecraft:lily_pad"
-  },
-  "output": {
-    "count": 1,
-    "id": "eidolon_repraised:oanna_bloom"
-  }
+    "type": "eidolon_repraised:athame_foraging",
+    "block": {
+        "item": "minecraft:lily_pad"
+    },
+    "output": {
+        "count": 1,
+        "id": "eidolon_repraised:oanna_bloom"
+    }
 }

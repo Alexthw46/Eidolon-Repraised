@@ -1,21 +1,21 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_summoning",
-  "count": 3,
-  "focus_items": [
-    {
-      "tag": "c:gems/prismarine"
+    "type": "eidolon_repraised:ritual_brazier_summoning",
+    "count": 3,
+    "focus_items": [
+        {
+            "tag": "c:gems/prismarine"
+        }
+    ],
+    "output": "minecraft:drowned",
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "minecraft:rotten_flesh"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:charcoal"
     }
-  ],
-  "output": "minecraft:drowned",
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
 }

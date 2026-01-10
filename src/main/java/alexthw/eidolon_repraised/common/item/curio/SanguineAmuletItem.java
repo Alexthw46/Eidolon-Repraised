@@ -1,9 +1,6 @@
 package alexthw.eidolon_repraised.common.item.curio;
 
-import alexthw.eidolon_repraised.common.item.ChantScrollItem;
 import alexthw.eidolon_repraised.registries.EidolonDataComponents;
-import alexthw.eidolon_repraised.registries.Registry;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -14,20 +11,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
+
+import java.util.Optional;
 
 public class SanguineAmuletItem extends EidolonCurio {
     public SanguineAmuletItem(Properties properties) {
         super(properties);
-//        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-//            NeoForge.EVENT_BUS.addListener(SanguineAmuletItem::renderTooltip);
-//            return null;
-//        });
     }
 
     static int getCharge(ItemStack stack) {
@@ -87,28 +78,26 @@ public class SanguineAmuletItem extends EidolonCurio {
     }
 
 
-    public record SanguineAmuletTooltipInfo(ItemStack stack, int maxWidth) implements TooltipComponent {
+    public record SanguineAmuletTooltipInfo(ItemStack stack) implements TooltipComponent {
     }
 
     public static class SanguineAmuletTooltipComponent implements ClientTooltipComponent {
         final ItemStack stack;
-        final int maxWidth;
 
         public SanguineAmuletTooltipComponent(SanguineAmuletTooltipInfo info) {
             this.stack = info.stack;
-            this.maxWidth = info.maxWidth;
         }
 
         @Override
         public int getHeight() {
             int charge = getCharge(stack);
             int rows = (charge + 19) / 20;
-            return 8 + 12 * rows;
+            return 4 + 12 * rows;
         }
 
         @Override
         public int getWidth(@NotNull Font font) {
-            return maxWidth;
+            return 4 + 20 * 16;
         }
 
         @Override
@@ -117,22 +106,17 @@ public class SanguineAmuletItem extends EidolonCurio {
             for (int i = 0; i < charge; i += 20) {
                 for (int j = 0; j < Mth.clamp(charge - i, 0, 20); j += 2) {
                     if (charge - (i + j) == 1) {
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 61, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/half.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 0, 0, 9, 9, 9, 9);
                     } else
-                        pGuiGraphics.blit(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/icons.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 52, 0, 9, 9, 256, 256);
+                        pGuiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/full.png"), x - 1 + j / 2 * 8, y + (i / 20) * 9 + 2, 0, 0, 9, 9, 9, 9);
                 }
             }
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void renderTooltip(RenderTooltipEvent.GatherComponents event) {
-        ItemStack stack = event.getItemStack();
-        if (stack.getItem() == Registry.SANGUINE_AMULET.get()) {
-            event.getTooltipElements().add(Either.right(new SanguineAmuletTooltipInfo(stack, event.getMaxWidth())));
-        } else if (stack.getItem() == Registry.CHANT_SCROLL.get()) {
-            event.getTooltipElements().add(Either.right(new ChantScrollItem.ChantTooltipInfo(stack, event.getMaxWidth())));
-        }
+
+    @Override
+    public @NotNull Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
+        return Optional.of(new SanguineAmuletTooltipInfo(stack));
     }
 }

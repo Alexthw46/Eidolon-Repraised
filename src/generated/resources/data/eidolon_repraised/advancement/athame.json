@@ -1,32 +1,32 @@
 {
-  "parent": "eidolon_repraised:worktable",
-  "criteria": {
-    "has_athame": {
-      "conditions": {
-        "items": [
-          {
-            "items": "eidolon_repraised:athame"
-          }
+    "parent": "eidolon_repraised:worktable",
+    "criteria": {
+        "has_athame": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "eidolon_repraised:athame"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "eidolon_repraised.advancement.desc.athame"
+        },
+        "icon": {
+            "count": 1,
+            "id": "eidolon_repraised:athame"
+        },
+        "title": {
+            "translate": "eidolon_repraised.advancement.title.athame"
+        }
+    },
+    "requirements": [
+        [
+            "has_athame"
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "eidolon_repraised.advancement.desc.athame"
-    },
-    "icon": {
-      "count": 1,
-      "id": "eidolon_repraised:athame"
-    },
-    "title": {
-      "translate": "eidolon_repraised.advancement.title.athame"
-    }
-  },
-  "requirements": [
-    [
-      "has_athame"
     ]
-  ]
 }

@@ -1,21 +1,21 @@
 {
-  "type": "eidolon_repraised:ritual_brazier_summoning",
-  "count": 3,
-  "focus_items": [
-    {
-      "tag": "c:sands"
+    "type": "eidolon_repraised:ritual_brazier_summoning",
+    "count": 3,
+    "focus_items": [
+        {
+            "tag": "c:sands"
+        }
+    ],
+    "output": "minecraft:husk",
+    "pedestal_items": [
+        {
+            "item": "eidolon_repraised:soul_shard"
+        },
+        {
+            "item": "minecraft:rotten_flesh"
+        }
+    ],
+    "reagent": {
+        "item": "minecraft:charcoal"
     }
-  ],
-  "output": "minecraft:husk",
-  "pedestal_items": [
-    {
-      "item": "eidolon_repraised:soul_shard"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    }
-  ],
-  "reagent": {
-    "item": "minecraft:charcoal"
-  }
 }

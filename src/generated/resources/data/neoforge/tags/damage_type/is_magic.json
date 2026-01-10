@@ -1,8 +1,8 @@
 {
-  "values": [
-    {
-      "id": "eidolon_repraised:frost",
-      "required": false
-    }
-  ]
+    "values": [
+        {
+            "id": "eidolon_repraised:frost",
+            "required": false
+        }
+    ]
 }
