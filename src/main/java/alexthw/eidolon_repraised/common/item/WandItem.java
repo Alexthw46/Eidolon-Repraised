@@ -2,7 +2,7 @@ package alexthw.eidolon_repraised.common.item;
 
 import alexthw.eidolon_repraised.common.entity.SpellProjectileEntity;
 import alexthw.eidolon_repraised.compat.CompatHandler;
-import alexthw.eidolon_repraised.compat.apotheosis.Apotheosis;
+import alexthw.eidolon_repraised.compat.apotheosis.ApotheosisCompat;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -43,7 +43,7 @@ public class WandItem extends ItemBase implements IRechargeableWand {
             Vec3 pos = entity.position().add(entity.getLookAngle().scale(0.5)).add(0.5 * Math.sin(Math.toRadians(225 - entity.yHeadRot)), entity.getBbHeight() * 2 / 3, 0.5 * Math.cos(Math.toRadians(225 - entity.yHeadRot)));
             Vec3 vel = entity.getEyePosition(0).add(entity.getLookAngle().scale(40)).subtract(pos).scale(1.0 / 20);
 
-            Pair<Integer, Integer> affixData = CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS) ? Apotheosis.handleWandAffix(stack) : Pair.of(1, 0);
+            Pair<Integer, Integer> affixData = CompatHandler.isModLoaded(CompatHandler.APOTHEOSIS) ? ApotheosisCompat.handleWandAffix(stack) : Pair.of(1, 0);
             int projectileAmount = affixData.getFirst();
             int trackingAmount = affixData.getSecond();
 

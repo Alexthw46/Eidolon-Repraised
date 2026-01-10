@@ -1,0 +1,31 @@
+{
+  "type": "eidolon_repraised:hailing",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "categories": [
+    "apotheosis:eidolon_wand"
+  ],
+  "values": {
+    "apotheosis:rare": {
+      "min": 1,
+      "steps": 2,
+      "step": 1
+    },
+    "apotheosis:epic": {
+      "min": 1,
+      "steps": 3,
+      "step": 1
+    },
+    "apotheosis:mythic": {
+      "min": 2,
+      "steps": 3,
+      "step": 1
+    }
+  }
+}

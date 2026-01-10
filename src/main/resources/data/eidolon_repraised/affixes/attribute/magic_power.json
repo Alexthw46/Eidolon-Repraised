@@ -1,0 +1,47 @@
+{
+  "type": "apotheosis:attribute",
+  "attribute": "eidolon_repraised:magic_power",
+  "definition": {
+    "affix_type": "stat",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "categories": [
+    "apotheosis:eidolon_wand",
+    "apotheosis:helmet",
+    "apotheosis:chestplate",
+    "apotheosis:leggings",
+    "apotheosis:boots"
+  ],
+  "operation": "add_multiplied_base",
+  "values": {
+    "apotheosis:common": {
+      "min": 0.075,
+      "steps": 2,
+      "step": 0.025
+    },
+    "apotheosis:uncommon": {
+      "min": 0.125,
+      "steps": 3,
+      "step": 0.03
+    },
+    "apotheosis:rare": {
+      "min": 0.2,
+      "steps": 3,
+      "step": 0.04
+    },
+    "apotheosis:epic": {
+      "min": 0.3,
+      "steps": 4,
+      "step": 0.05
+    },
+    "apotheosis:mythic": {
+      "min": 0.45,
+      "steps": 5,
+      "step": 0.05
+    }
+  }
+}

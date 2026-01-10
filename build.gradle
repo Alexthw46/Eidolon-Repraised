@@ -147,20 +147,21 @@ dependencies {
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:${jei_version}"
     implementation "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
 
-    ///*implementation*/ runtimeOnly fg.deobf("joefoxe:hexerei:0.3.2.2")
-
     //runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
     implementation "com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}"
 
-    //runtimeOnly fg.deobf("curse.maven:embeddium-908741:4800420")
-    //runtimeOnly fg.deobf("curse.maven:modernfix-790626:4792389")
+    compileOnly "curse.maven:placebo-283644:6926281"
+    compileOnly "curse.maven:apothic-attributes-898963:6751650"
+    compileOnly "curse.maven:apothic-enchanting-1063926:6926290"
+    compileOnly "curse.maven:apotheosis-313970:7180713"
+    compileOnly "curse.maven:apothic-spawners-986583:6751589"
 
-    implementation "curse.maven:placebo-283644:6926281"
-    implementation "curse.maven:apothic-attributes-898963:6751650"
-    implementation "curse.maven:apothic-enchanting-1063926:6926290"
-    implementation "curse.maven:apotheosis-313970:7180713"
-    implementation "curse.maven:apothic-spawners-986583:6751589"
+    localRuntime "curse.maven:placebo-283644:6926281"
+    localRuntime "curse.maven:apothic-attributes-898963:6751650"
+    localRuntime "curse.maven:apothic-enchanting-1063926:6926290"
+    localRuntime "curse.maven:apotheosis-313970:7180713"
+    localRuntime "curse.maven:apothic-spawners-986583:6751589"
 
     implementation "team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}"
     implementation "com.sammy.malum:malum:${minecraft_version}-${malum_version}"
