@@ -50,6 +50,8 @@ public class ApotheosisCompat {
                 projectileAmount += (int) scalingAffix.affixToAmount(affixInstance.rarity().get(), affixInstance.level());
             } else if (affix.get() instanceof TrackingAffix scalingAffix) {
                 trackingAmount += (int) scalingAffix.affixToAmount(affixInstance.rarity().get(), affixInstance.level());
+                projectileAmount = (int) scalingAffix.affixToAmount(affixInstance.rarity().get(), affixInstance.level());
+                break; // Tracking affix overrides hailing affix
             }
         }
 
