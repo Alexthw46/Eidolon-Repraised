@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class ChantScrollItem extends ItemBase {
+public class ChantScrollItem extends ItemBase implements IManaRelatedItem {
     public ChantScrollItem(Properties properties) {
         super(properties.durability(20));
     }
