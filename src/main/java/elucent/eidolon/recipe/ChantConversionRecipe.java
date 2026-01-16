@@ -18,6 +18,9 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ Recipe for converting items via chanting, possibly requiring devotion to a specific deity.
+*/
 public class ChantConversionRecipe implements Recipe<Container> {
 
     ResourceLocation id;

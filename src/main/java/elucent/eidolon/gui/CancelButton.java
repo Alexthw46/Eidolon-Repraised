@@ -15,7 +15,7 @@ public class CancelButton extends Button {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        blit(pGuiGraphics, getX(), getY() - 4, 368, isHovered ? 240 : 208, 32, 32, 512, 512);
+        blit(pGuiGraphics, getX(), getY() - 4, 336 + 17, 65 + (isHovered ? 224 : 208), 17, 16, 512, 512);
         if (isHovered)
             pGuiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable("eidolon.codex.cancel_hover"), pMouseX, pMouseY);
 

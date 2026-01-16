@@ -4,21 +4,32 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import elucent.eidolon.Eidolon;
+import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.IPlayerData;
 import elucent.eidolon.capability.ISoul;
-import elucent.eidolon.client.model.*;
+import elucent.eidolon.client.model.BruteSkeletonModel;
+import elucent.eidolon.client.model.NecromancerModel;
+import elucent.eidolon.client.model.RavenModel;
+import elucent.eidolon.client.model.SlimySlugModel;
+import elucent.eidolon.client.model.WraithModel;
+import elucent.eidolon.client.model.ZombieBruteModel;
 import elucent.eidolon.client.renderer.*;
 import elucent.eidolon.common.item.ChantScrollItem;
 import elucent.eidolon.common.item.IManaRelatedItem;
 import elucent.eidolon.common.item.IWingsItem;
 import elucent.eidolon.common.item.curio.RavenCloakRenderer;
 import elucent.eidolon.common.item.curio.SanguineAmuletItem;
-import elucent.eidolon.common.item.model.*;
+import elucent.eidolon.common.item.model.BonelordArmorModel;
+import elucent.eidolon.common.item.model.RavenCloakModel;
+import elucent.eidolon.common.item.model.SilverArmorModel;
+import elucent.eidolon.common.item.model.TopHatModel;
+import elucent.eidolon.common.item.model.WarlockArmorModel;
 import elucent.eidolon.common.tile.CrucibleTileRenderer;
 import elucent.eidolon.event.ClientEvents;
 import elucent.eidolon.registries.EidolonEntities;
 import elucent.eidolon.registries.EidolonPotions;
 import elucent.eidolon.registries.Registry;
+import elucent.eidolon.util.ClientInfo;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -38,6 +49,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -46,6 +58,7 @@ import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Eidolon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -154,6 +167,18 @@ public class ClientRegistry {
 
     public static ShaderInstance getSpriteParticleShader() {
         return SPRITE_PARTICLE_SHADER;
+    }
+
+    @SubscribeEvent
+    public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
+        event.register((stack, color) -> {
+            if (color == 0) return -1;
+            List<Sign> spell = ChantScrollItem.getSpell(stack);
+            if (spell.isEmpty()) return -1;
+            int index = (int) ((ClientInfo.clientTicks / 80) % spell.size());
+            return spell.get(index).getColor();
+
+        }, Registry.CHANT_SCROLL.get());
     }
 
     @SubscribeEvent

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ScriptoriumContainer extends AbstractContainerMenu {
 
-    private final Container inventory = new SimpleContainer(2) {
+    private final Container inventory = new SimpleContainer(3) {
         @Override
         public void setChanged() {
             super.setChanged();
@@ -36,8 +36,9 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
     public ScriptoriumContainer(int id, Inventory playerInventory, ContainerLevelAccess access) {
         super(Registry.SCRIPTORIUM_CONTAINER.get(), id);
         this.access = access;
-        this.addSlot(new InputSlot(inventory, 0, -30, 33));
-        this.addSlot(new OutputSlot(inventory, 1, -30, 56));
+        this.addSlot(new InputSlot(inventory, 0, -37, 33));
+        this.addSlot(new OutputSlot(inventory, 1, -43, 96));
+        this.addSlot(new InkSlot(inventory, 2, -37, 3));
 
         for (int k = 0; k < 3; ++k) {
             for (int i1 = 0; i1 < 9; ++i1) {
@@ -65,9 +66,13 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
+                } else if (this.slots.get(2).mayPlace(itemstack1)) {
+                    if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
+                        return ItemStack.EMPTY;
+                    }
                 } else
                     // main inventory
-                    if (index >= 2 && index < 29) {
+                    if (index > 2 && index < 29) {
                         if (!this.moveItemStackTo(itemstack1, 29, 38, false)) {
                             return ItemStack.EMPTY;
                         }
@@ -113,13 +118,12 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
     public void removed(@NotNull Player pPlayer) {
         super.removed(pPlayer);
         // drop the items in the slots
-        for (Slot slot : this.slots) {
-            if (slot instanceof OutputSlot) {
-                ItemStack stack = slot.getItem();
-                if (!stack.isEmpty()) {
-                    pPlayer.drop(stack, false);
-                    slot.set(ItemStack.EMPTY);
-                }
+        for (int i = 0; i < 3; i++) {
+            Slot slot = this.slots.get(i);
+            ItemStack stack = slot.getItem();
+            if (!stack.isEmpty()) {
+                pPlayer.drop(stack, false);
+                slot.set(ItemStack.EMPTY);
             }
         }
     }
@@ -127,14 +131,15 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
     public void setChant(List<Sign> currentChant) {
         // takes the itemstack from the first slot and sets it to the chant,
         // then move the itemstack to the second slot
-        if (currentChant.isEmpty()) {
+        if (currentChant.isEmpty() || this.slots.get(0).getItem().isEmpty() || this.slots.get(2).getItem().isEmpty()) {
             return;
         }
         this.access.execute((p_217003_6_, p_217003_7_) -> {
             ItemStack stack2 = this.slots.get(1).getItem().copy();
             // check if the itemstack is empty or if it is the same as the current chant
             if (stack2.isEmpty() || (stack2.getCount() < stack2.getMaxStackSize() && ChantScrollItem.getSpell(stack2).equals(currentChant))) {
-                this.slots.get(0).remove(1);
+                this.slots.get(0).remove(1); // consume one parchment
+                this.slots.get(2).remove(1); // consume one ink
                 ItemStack stack = Registry.CHANT_SCROLL.get().getDefaultInstance();
                 if (stack2.isEmpty()) {
                     ChantScrollItem.setSpell(stack, currentChant);
@@ -170,6 +175,18 @@ public class ScriptoriumContainer extends AbstractContainerMenu {
         @Override
         public boolean mayPlace(ItemStack stack) {
             return stack.is(Registry.CHANT_SCROLL.get());
+        }
+
+    }
+
+    static class InkSlot extends Slot {
+        public InkSlot(Container iInventoryIn, int index, int xPosition, int yPosition) {
+            super(iInventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return stack.is(Registry.MAGIC_INK.get());
         }
 
     }

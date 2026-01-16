@@ -57,6 +57,7 @@ public class EidChantProvider extends SimpleDataProvider {
         addChant(Spells.WATER_CHANT, Signs.WINTER_SIGN, Signs.WINTER_SIGN, Signs.FLAME_SIGN, Signs.FLAME_SIGN);
 
         //addChant(new CommandChantRecipe(prefix("test"), List.of(Signs.SACRED_SIGN, Signs.FLAME_SIGN, Signs.SACRED_SIGN), List.of("time set day"), 10));
+        //addChant(new BaseConversionChantRecipe(prefix("conversion_test"), List.of(Signs.MAGIC_SIGN, Signs.WARDING_SIGN, Signs.MAGIC_SIGN), 10));
     }
 
     private void addChant(ChantRecipe spell) {

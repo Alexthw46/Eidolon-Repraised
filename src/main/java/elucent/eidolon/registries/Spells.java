@@ -8,6 +8,7 @@ import elucent.eidolon.common.deity.Deities;
 import elucent.eidolon.common.spell.*;
 import elucent.eidolon.recipe.ChantRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -23,6 +24,7 @@ public class Spells {
     // local cache for faster lookup
     static final List<Spell> spells = new CopyOnWriteArrayList<>();
     static final Map<ResourceLocation, Spell> spellMap = new ConcurrentHashMap<>();
+    public static final List<RecipeType<? extends ChantRecipe>> chantTypes = new CopyOnWriteArrayList<>();
 
     public static Spell find(ResourceLocation loc) {
         return spellMap.getOrDefault(loc, null);
@@ -30,18 +32,13 @@ public class Spells {
 
     public static Spell find(SignSequence signs, Level world) {
         for (Spell spell : spells) if (spell.matches(signs)) return spell;
-        for (ChantRecipe chantRecipe : world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_TYPE.get()))
-            if (chantRecipe.matches(signs)) {
-                Spell spell = chantRecipe.getChant().setSigns(signs);
-                spells.add(spell);
-                return spell;
-            }
-        for (ChantRecipe chantRecipe : world.getRecipeManager().getAllRecipesFor(EidolonRecipes.COMMAND_CHANT_TYPE.get()))
-            if (chantRecipe.matches(signs)) {
-                Spell spell = chantRecipe.getChant().setSigns(signs);
-                spells.add(spell);
-                return spell;
-            }
+        for (var chantType : chantTypes)
+            for (ChantRecipe chantRecipe : world.getRecipeManager().getAllRecipesFor(chantType))
+                if (chantRecipe.matches(signs)) {
+                    Spell spell = chantRecipe.getChant().setSigns(signs);
+                    spells.add(spell);
+                    return spell;
+                }
         return null;
     }
 
@@ -77,6 +74,10 @@ public class Spells {
     public static PrayerSpell CENSER;
 
     public static void init() {
+        chantTypes.add(EidolonRecipes.CHANT_TYPE.get());
+        chantTypes.add(EidolonRecipes.COMMAND_CHANT_TYPE.get());
+        chantTypes.add(EidolonRecipes.CONVERSION_CHANT_TYPE.get());
+
         DARK_PRAYER = register(new PrayerSpell(
                 new ResourceLocation(Eidolon.MODID, "dark_prayer"),
                 Deities.DARK_DEITY,
