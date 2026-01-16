@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChantScrollItem extends ItemBase {
+public class ChantScrollItem extends ItemBase implements IManaRelatedItem {
     public ChantScrollItem(Properties properties) {
         super(properties.durability(20));
     }
