@@ -2,7 +2,7 @@
   "type": "eidolon_repraised:tracking",
   "definition": {
     "affix_type": "ability",
-    "exclusive_set": [],
+    "exclusive_set": ["eidolon_repraised:hailing"],
     "weights": {
       "quality": 0.1,
       "weight": 25
@@ -14,12 +14,12 @@
   "values": {
     "apotheosis:epic": {
       "min": 1,
-      "steps": 3,
+      "steps": 2,
       "step": 1
     },
     "apotheosis:mythic": {
       "min": 2,
-      "steps": 3,
+      "steps": 2,
       "step": 1
     }
   }
