@@ -2,12 +2,20 @@ name: Publish action
 
 on:
   workflow_dispatch:
-    branches: [ "1.21.1" ]
     inputs:
       version:
         description: 'Mod Version'
         required: true
         type: string
+      version_type:
+        description: 'Version Type'
+        required: true
+        type: choice
+        default: release
+        options:
+        - alpha
+        - beta
+        - release
       changelog:
         description: 'Changes'
         required: true
@@ -16,29 +24,43 @@ on:
 env:
   MINECRAFT_VERSION: 1.21.1
   JAVA_VERSION: 21
+  MC_MIN_VER: '1.21'
+  MC_MAX_VER: '1.21.1'
 
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v3
-      - name: validate gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v3
-        with:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+     - name: Set up JDK ${{ env.JAVA_VERSION }}
+       uses: actions/setup-java@v4
+       with:
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: 'temurin'
-      - name: make gradle wrapper executable
-        if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build
-      - name: Publish Minecraft Mods Forge
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
+          distribution: "temurin"
+          cache: gradle
+          cache-dependency-path: |
+            *.gradle
+            gradle.*
+            gradle/wrapper/gradle-wrapper.properties
+     - name: Setup Gradle
+       uses: gradle/actions/setup-gradle@v4
+     - name: Build with Gradle
+       run: ./gradlew build
+     - uses: actions/upload-artifact@v4
+       with:
+          name: all-jar
+          path: build/libs/*-all.jar
+     - uses: actions/upload-artifact@v4
+       with:
+          name: sources-jar
+          path: build/libs/*-sources.jar
+     - uses: Kir-Antipov/mc-publish@v3.3
+       with:
           curseforge-id: 870250
           modrinth-id: eWX2m1eM
           modrinth-featured: true
@@ -47,10 +69,11 @@ jobs:
           files: |
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(dev|sources|javadoc).jar
-          version-type: beta
+          version-type: ${{ inputs.version_type }}
           loaders: |
             neoforge
           name: Eidolon_:Repraised ${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
-          version: eidolon_repraised-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
-          game-versions: ${{ env.MINECRAFT_VERSION }}
+          version: ${{ inputs.version }}
+          game-versions: |
+            >=${{ env.MC_MIN_VER }} <=${{ env.MC_MAX_VER }}
           changelog: ${{inputs.changelog}}
