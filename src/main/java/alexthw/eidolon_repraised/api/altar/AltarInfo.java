@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -85,10 +86,12 @@ public class AltarInfo {
         return sum;
     }
 
+    @Nullable
     public Block getIcon() {
         return icon;
     }
 
+    @Nullable
     public Block getAltar() {
         return altar;
     }

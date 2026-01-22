@@ -24,8 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-import static alexthw.eidolon_repraised.registries.Registry.BETTER_ALTAR_BLOCKS;
-
 public class ConvertZombieSpell extends PrayerSpell {
     public ConvertZombieSpell(ResourceLocation resourceLocation, int baseRep, double powerMult, Sign... signs) {
         super(resourceLocation, Deities.LIGHT_DEITY, 20, baseRep, powerMult, signs);
@@ -41,7 +39,7 @@ public class ConvertZombieSpell extends PrayerSpell {
             return false;
         }
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-        if (!info.getAltar().defaultBlockState().is(BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
+        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
             return false;
         return flag && super.canCast(world, pos, player);
     }

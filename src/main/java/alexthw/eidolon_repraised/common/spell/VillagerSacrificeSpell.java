@@ -18,8 +18,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import static alexthw.eidolon_repraised.registries.Registry.BETTER_ALTAR_BLOCKS;
-
 public class VillagerSacrificeSpell extends PrayerSpell {
     public VillagerSacrificeSpell(ResourceLocation name, Deity deity, int baseRep, double powerMult, Sign... signs) {
         super(name, deity, baseRep, powerMult, signs);
@@ -35,7 +33,7 @@ public class VillagerSacrificeSpell extends PrayerSpell {
             return false;
         }
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-        if (!info.getAltar().defaultBlockState().is(BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
+        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
             return false;
         return (goblet.getEntityType() == EntityType.PLAYER || goblet.getEntityType().create(world) instanceof AbstractVillager) && effigy.ready();
     }
