@@ -49,6 +49,9 @@ jobs:
             gradle/wrapper/gradle-wrapper.properties
      - name: Setup Gradle
        uses: gradle/actions/setup-gradle@v4
+     - name: make gradle wrapper executable
+       if: ${{ runner.os != 'Windows' }}
+       run: chmod +x ./gradlew
      - name: Build with Gradle
        run: ./gradlew build
      - uses: actions/upload-artifact@v4
