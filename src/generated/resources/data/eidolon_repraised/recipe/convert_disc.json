@@ -1,11 +1,11 @@
 {
-    "type": "eidolon_repraised:chant_conversion",
-    "input": {
-        "tag": "c:music_discs"
-    },
-    "min_devotion": 0.0,
-    "output": {
-        "count": 1,
-        "id": "eidolon_repraised:music_disc_parousia"
-    }
+  "type": "eidolon_repraised:chant_conversion",
+  "input": {
+    "tag": "c:music_discs"
+  },
+  "min_devotion": 0.0,
+  "output": {
+    "count": 1,
+    "id": "eidolon_repraised:music_disc_parousia"
+  }
 }

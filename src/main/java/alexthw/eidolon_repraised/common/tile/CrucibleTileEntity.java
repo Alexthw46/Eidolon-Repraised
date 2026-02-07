@@ -194,7 +194,7 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         for (Tag step : steps) this.steps.add(new CrucibleStep((CompoundTag) step, provider));
         boiling = tag.getBoolean("boiling");
         tank.readFromNBT(provider, tag);
-        hasWater = tank.getFluidAmount() == 1000;
+        hasWater = tag.getBoolean("hasWater") || tank.getFluidAmount() >= 1000;
         stirs = tag.getInt("stirs");
         stirTicks = tag.getInt("stirTicks");
         seed = steps.stream().map(Object::hashCode).reduce(0, (a, b) -> a ^ b);
@@ -218,9 +218,10 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         tag.putBoolean("boiling", boiling);
         tag.putInt("stirs", stirs);
         tag.putInt("stirTicks", stirTicks);
-        if (!tank.isEmpty()) {
+        if (tank != null) {
             tank.writeToNBT(provider, tag);
         }
+        tag.putBoolean("hasWater", hasWater);
         var currentContents = new ListTag();
         for (ItemStack stack : currentStepContents) {
             if (!stack.isEmpty()) {

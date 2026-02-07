@@ -1,27 +1,27 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "category": "misc",
-    "key": {
-        "F": {
-            "item": "minecraft:feather"
-        },
-        "I": {
-            "item": "eidolon_repraised:magic_ink"
-        },
-        "P": {
-            "tag": "minecraft:planks"
-        },
-        "S": {
-            "tag": "minecraft:wooden_slabs"
-        }
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "minecraft:feather"
     },
-    "pattern": [
-        "FSI",
-        "SSS",
-        "P P"
-    ],
-    "result": {
-        "count": 1,
-        "id": "eidolon_repraised:scriptorium"
+    "I": {
+      "item": "eidolon_repraised:magic_ink"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
     }
+  },
+  "pattern": [
+    "FSI",
+    "SSS",
+    "P P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "eidolon_repraised:scriptorium"
+  }
 }

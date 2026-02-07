@@ -1,25 +1,25 @@
 {
-    "parent": "eidolon_repraised:straw_effigy",
-    "criteria": {
-        "wicked_path": {
-            "trigger": "eidolon_repraised:wicked_path"
-        }
+  "parent": "eidolon_repraised:straw_effigy",
+  "criteria": {
+    "wicked_path": {
+      "trigger": "eidolon_repraised:wicked_path"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.wicked_path"
     },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.wicked_path"
-        },
-        "icon": {
-            "count": 1,
-            "id": "eidolon_repraised:unholy_symbol"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.wicked_path"
-        }
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:unholy_symbol"
     },
-    "requirements": [
-        [
-            "wicked_path"
-        ]
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.wicked_path"
+    }
+  },
+  "requirements": [
+    [
+      "wicked_path"
     ]
+  ]
 }

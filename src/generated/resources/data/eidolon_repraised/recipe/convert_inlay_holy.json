@@ -1,12 +1,12 @@
 {
-    "type": "eidolon_repraised:chant_conversion",
-    "deity": "eidolon_repraised:light",
-    "input": {
-        "item": "eidolon_repraised:gold_inlay"
-    },
-    "min_devotion": 10.0,
-    "output": {
-        "count": 1,
-        "id": "eidolon_repraised:holy_symbol"
-    }
+  "type": "eidolon_repraised:chant_conversion",
+  "deity": "eidolon_repraised:light",
+  "input": {
+    "item": "eidolon_repraised:gold_inlay"
+  },
+  "min_devotion": 10.0,
+  "output": {
+    "count": 1,
+    "id": "eidolon_repraised:holy_symbol"
+  }
 }

@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "eidolon_repraised:block/illwood_standing_sign"
-        }
+  "variants": {
+    "": {
+      "model": "eidolon_repraised:block/illwood_standing_sign"
     }
+  }
 }

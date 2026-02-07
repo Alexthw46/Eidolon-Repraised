@@ -1,25 +1,25 @@
 {
-    "type": "eidolon_repraised:ritual_brazier",
-    "focus_items": [],
-    "health_requirement": 0.0,
-    "invariant_items": [
-        {
-            "item": "eidolon_repraised:bonechill_wand"
-        }
-    ],
-    "pedestal_items": [
-        {
-            "item": "minecraft:snowball"
-        },
-        {
-            "item": "minecraft:snowball"
-        },
-        {
-            "tag": "c:dusts/redstone"
-        }
-    ],
-    "reagent": {
-        "item": "eidolon_repraised:lesser_soul_gem"
+  "type": "eidolon_repraised:ritual_brazier",
+  "focus_items": [],
+  "health_requirement": 0.0,
+  "invariant_items": [
+    {
+      "item": "eidolon_repraised:bonechill_wand"
+    }
+  ],
+  "pedestal_items": [
+    {
+      "item": "minecraft:snowball"
     },
-    "ritual": "eidolon_repraised:recharging_chill"
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "reagent": {
+    "item": "eidolon_repraised:lesser_soul_gem"
+  },
+  "ritual": "eidolon_repraised:recharging_chill"
 }

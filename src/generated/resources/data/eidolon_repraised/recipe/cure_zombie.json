@@ -1,24 +1,24 @@
 {
-    "type": "eidolon_repraised:chant",
-    "id": "eidolon_repraised:cure_zombie",
-    "signs": [
-        {
-            "sign": "eidolon_repraised:sacred"
-        },
-        {
-            "sign": "eidolon_repraised:soul"
-        },
-        {
-            "sign": "eidolon_repraised:mind"
-        },
-        {
-            "sign": "eidolon_repraised:harmony"
-        },
-        {
-            "sign": "eidolon_repraised:flame"
-        },
-        {
-            "sign": "eidolon_repraised:soul"
-        }
-    ]
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:cure_zombie",
+  "signs": [
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:mind"
+    },
+    {
+      "sign": "eidolon_repraised:harmony"
+    },
+    {
+      "sign": "eidolon_repraised:flame"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    }
+  ]
 }

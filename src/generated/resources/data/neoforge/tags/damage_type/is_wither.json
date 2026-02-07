@@ -1,8 +1,8 @@
 {
-    "values": [
-        {
-            "id": "eidolon_repraised:sap",
-            "required": false
-        }
-    ]
+  "values": [
+    {
+      "id": "eidolon_repraised:sap",
+      "required": false
+    }
+  ]
 }

@@ -1,27 +1,27 @@
 {
-    "type": "eidolon_repraised:ritual_brazier",
-    "focus_items": [],
-    "health_requirement": 0.0,
-    "invariant_items": [],
-    "pedestal_items": [
-        {
-            "item": "minecraft:golden_apple"
-        },
-        {
-            "item": "minecraft:red_dye"
-        },
-        {
-            "item": "minecraft:red_dye"
-        },
-        {
-            "item": "eidolon_repraised:soul_shard"
-        },
-        {
-            "item": "eidolon_repraised:soul_shard"
-        }
-    ],
-    "reagent": {
-        "item": "minecraft:rose_bush"
+  "type": "eidolon_repraised:ritual_brazier",
+  "focus_items": [],
+  "health_requirement": 0.0,
+  "invariant_items": [],
+  "pedestal_items": [
+    {
+      "item": "minecraft:golden_apple"
     },
-    "ritual": "eidolon_repraised:allure"
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "eidolon_repraised:soul_shard"
+    },
+    {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:rose_bush"
+  },
+  "ritual": "eidolon_repraised:allure"
 }

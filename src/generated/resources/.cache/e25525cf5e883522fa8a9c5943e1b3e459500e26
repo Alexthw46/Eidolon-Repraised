@@ -1,11 +1,13 @@
-// 1.21.1	2025-12-10T18:04:58.6404121	Eidolon Block Tags
-678ea936f4974ebb2ae35da35af3b0a78e7b0649 data/eidolon_repraised/tags/block/crucible_hot_blocks.json
-8defface4c8b23e7aaa73ae62cc3703511be6be4 data/eidolon_repraised/tags/block/planter_plants.json
-3e1be00f55df9bbf29ea5c591261a245ca981b8d data/minecraft/tags/block/candles.json
-cf2fdf915c3cbd4fa507b73e0e71017145c2c238 data/minecraft/tags/block/leaves.json
-cf2fdf915c3cbd4fa507b73e0e71017145c2c238 data/minecraft/tags/block/mineable/hoe.json
-4a7f5363f5c2ed401d496561c6a51665ee7d797b data/minecraft/tags/block/saplings.json
-6b037390d7e0ced8ccbabf3bfef3e668a5f5967d data/minecraft/tags/block/standing_signs.json
-8f07ed28748cb6a13ef6fca5ac48874c56da3374 data/minecraft/tags/block/wall_signs.json
-fce89e999d9e6bdfa61c799f4b00ff7f87220557 data/minecraft/tags/block/wooden_buttons.json
-2fa40c8be6a69cd9cd681d084d0532bda3802227 data/minecraft/tags/block/wooden_pressure_plates.json
+// 1.21.1	2026-02-07T11:09:31.2626961	Eidolon Block Tags
+da3afb01f74868613e07fdc0b499e3a08899ae24 data/eidolon_repraised/tags/block/altar_blocks.json
+f1334275f873c9074739aeb3e8c48b14ce3746b5 data/eidolon_repraised/tags/block/crucible_hot_blocks.json
+89f235e8299c475cca48e5a6289cbb26c05cb4ba data/eidolon_repraised/tags/block/planter_plants.json
+77db7b1d9de3db7d8c4511b3738e6a160699b747 data/eidolon_repraised/tags/block/stone_altar_blocks.json
+110cc871e07c20892517547549bdbf65974eb817 data/minecraft/tags/block/candles.json
+4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/block/leaves.json
+4f9a61a58d64db9ec581a9a3d59f450f220c8aa9 data/minecraft/tags/block/mineable/hoe.json
+615cf69149f2473f5c75609451500f2bc3cd8332 data/minecraft/tags/block/saplings.json
+4cf01c504cd95634274e1444eec50afa8a82d03f data/minecraft/tags/block/standing_signs.json
+29d68fb983818cce064ba0bd931763daaa791cde data/minecraft/tags/block/wall_signs.json
+77200998ef23c825708b8884a08fcc652b5ac259 data/minecraft/tags/block/wooden_buttons.json
+2790b0ba2c560d2a56c48c29e7a4885a88bd9766 data/minecraft/tags/block/wooden_pressure_plates.json

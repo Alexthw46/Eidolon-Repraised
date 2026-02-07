@@ -1,24 +1,24 @@
 {
-    "type": "eidolon_repraised:chant",
-    "id": "eidolon_repraised:smite_chant",
-    "signs": [
-        {
-            "sign": "eidolon_repraised:flame"
-        },
-        {
-            "sign": "eidolon_repraised:magic"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        },
-        {
-            "sign": "eidolon_repraised:death"
-        },
-        {
-            "sign": "eidolon_repraised:magic"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        }
-    ]
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:smite_chant",
+  "signs": [
+    {
+      "sign": "eidolon_repraised:flame"
+    },
+    {
+      "sign": "eidolon_repraised:magic"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:death"
+    },
+    {
+      "sign": "eidolon_repraised:magic"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    }
+  ]
 }

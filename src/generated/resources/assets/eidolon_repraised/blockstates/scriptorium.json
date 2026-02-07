@@ -1,19 +1,19 @@
 {
-    "variants": {
-        "facing=east": {
-            "model": "eidolon_repraised:item/scriptorium",
-            "y": 90
-        },
-        "facing=north": {
-            "model": "eidolon_repraised:item/scriptorium"
-        },
-        "facing=south": {
-            "model": "eidolon_repraised:item/scriptorium",
-            "y": 180
-        },
-        "facing=west": {
-            "model": "eidolon_repraised:item/scriptorium",
-            "y": 270
-        }
+  "variants": {
+    "facing=east": {
+      "model": "eidolon_repraised:item/scriptorium",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "eidolon_repraised:item/scriptorium"
+    },
+    "facing=south": {
+      "model": "eidolon_repraised:item/scriptorium",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "eidolon_repraised:item/scriptorium",
+      "y": 270
     }
+  }
 }

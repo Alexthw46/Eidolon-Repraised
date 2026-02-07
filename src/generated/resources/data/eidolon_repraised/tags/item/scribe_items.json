@@ -1,10 +1,10 @@
 {
-    "values": [
-        "minecraft:charcoal",
-        "minecraft:feather",
-        "minecraft:book",
-        "eidolon_repraised:candle",
-        "eidolon_repraised:parchment",
-        "eidolon_repraised:magic_ink"
-    ]
+  "values": [
+    "minecraft:charcoal",
+    "minecraft:feather",
+    "minecraft:book",
+    "eidolon_repraised:candle",
+    "eidolon_repraised:parchment",
+    "eidolon_repraised:magic_ink"
+  ]
 }

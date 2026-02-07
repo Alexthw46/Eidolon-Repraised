@@ -1,25 +1,25 @@
 {
-    "parent": "eidolon_repraised:holy_symbol",
-    "criteria": {
-        "lay_on_hands": {
-            "trigger": "eidolon_repraised:lay_on_hands"
-        }
+  "parent": "eidolon_repraised:holy_symbol",
+  "criteria": {
+    "lay_on_hands": {
+      "trigger": "eidolon_repraised:lay_on_hands"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.lay_on_hands"
     },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.lay_on_hands"
-        },
-        "icon": {
-            "count": 1,
-            "id": "minecraft:glistering_melon_slice"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.lay_on_hands"
-        }
+    "icon": {
+      "count": 1,
+      "id": "minecraft:glistering_melon_slice"
     },
-    "requirements": [
-        [
-            "lay_on_hands"
-        ]
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.lay_on_hands"
+    }
+  },
+  "requirements": [
+    [
+      "lay_on_hands"
     ]
+  ]
 }

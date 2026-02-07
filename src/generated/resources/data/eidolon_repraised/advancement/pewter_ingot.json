@@ -1,32 +1,32 @@
 {
-    "parent": "eidolon_repraised:root",
-    "criteria": {
-        "has_pewter_ingot": {
-            "conditions": {
-                "items": [
-                    {
-                        "items": "eidolon_repraised:pewter_ingot"
-                    }
-                ]
-            },
-            "trigger": "minecraft:inventory_changed"
-        }
-    },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.pewter_ingot"
-        },
-        "icon": {
-            "count": 1,
-            "id": "eidolon_repraised:pewter_ingot"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.pewter_ingot"
-        }
-    },
-    "requirements": [
-        [
-            "has_pewter_ingot"
+  "parent": "eidolon_repraised:root",
+  "criteria": {
+    "has_pewter_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon_repraised:pewter_ingot"
+          }
         ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.pewter_ingot"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:pewter_ingot"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.pewter_ingot"
+    }
+  },
+  "requirements": [
+    [
+      "has_pewter_ingot"
     ]
+  ]
 }

@@ -1,21 +1,21 @@
 {
-    "type": "eidolon_repraised:chant",
-    "id": "eidolon_repraised:reinforce_armor",
-    "signs": [
-        {
-            "sign": "eidolon_repraised:sacred"
-        },
-        {
-            "sign": "eidolon_repraised:warding"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        },
-        {
-            "sign": "eidolon_repraised:warding"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        }
-    ]
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:reinforce_armor",
+  "signs": [
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:warding"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:warding"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    }
+  ]
 }

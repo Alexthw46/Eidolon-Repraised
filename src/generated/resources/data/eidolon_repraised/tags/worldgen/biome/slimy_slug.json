@@ -1,6 +1,6 @@
 {
-    "values": [
-        "#minecraft:is_forest",
-        "#c:is_wet/overworld"
-    ]
+  "values": [
+    "#minecraft:is_forest",
+    "#c:is_wet/overworld"
+  ]
 }

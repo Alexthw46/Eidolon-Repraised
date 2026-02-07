@@ -1,27 +1,27 @@
 {
-    "type": "eidolon_repraised:ritual_brazier",
-    "focus_items": [],
-    "health_requirement": 0.0,
-    "invariant_items": [],
-    "pedestal_items": [
-        {
-            "tag": "c:ingots/iron"
-        },
-        {
-            "item": "minecraft:leather"
-        },
-        {
-            "tag": "c:gems/quartz"
-        },
-        {
-            "item": "eidolon_repraised:soul_shard"
-        },
-        {
-            "item": "eidolon_repraised:soul_shard"
-        }
-    ],
-    "reagent": {
-        "item": "minecraft:nautilus_shell"
+  "type": "eidolon_repraised:ritual_brazier",
+  "focus_items": [],
+  "health_requirement": 0.0,
+  "invariant_items": [],
+  "pedestal_items": [
+    {
+      "tag": "c:ingots/iron"
     },
-    "ritual": "eidolon_repraised:repelling"
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "tag": "c:gems/quartz"
+    },
+    {
+      "item": "eidolon_repraised:soul_shard"
+    },
+    {
+      "item": "eidolon_repraised:soul_shard"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:nautilus_shell"
+  },
+  "ritual": "eidolon_repraised:repelling"
 }

@@ -1,21 +1,21 @@
 {
-    "type": "eidolon_repraised:chant",
-    "id": "eidolon_repraised:lay_on_hands",
-    "signs": [
-        {
-            "sign": "eidolon_repraised:flame"
-        },
-        {
-            "sign": "eidolon_repraised:soul"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        },
-        {
-            "sign": "eidolon_repraised:soul"
-        },
-        {
-            "sign": "eidolon_repraised:sacred"
-        }
-    ]
+  "type": "eidolon_repraised:chant",
+  "id": "eidolon_repraised:lay_on_hands",
+  "signs": [
+    {
+      "sign": "eidolon_repraised:flame"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    },
+    {
+      "sign": "eidolon_repraised:soul"
+    },
+    {
+      "sign": "eidolon_repraised:sacred"
+    }
+  ]
 }

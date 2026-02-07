@@ -1,25 +1,25 @@
 {
-    "parent": "eidolon_repraised:cure_zombie",
-    "criteria": {
-        "smite_undead": {
-            "trigger": "eidolon_repraised:smite_undead"
-        }
+  "parent": "eidolon_repraised:cure_zombie",
+  "criteria": {
+    "smite_undead": {
+      "trigger": "eidolon_repraised:smite_undead"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.smite_undead"
     },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.smite_undead"
-        },
-        "icon": {
-            "count": 1,
-            "id": "minecraft:golden_sword"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.smite_undead"
-        }
+    "icon": {
+      "count": 1,
+      "id": "minecraft:golden_sword"
     },
-    "requirements": [
-        [
-            "smite_undead"
-        ]
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.smite_undead"
+    }
+  },
+  "requirements": [
+    [
+      "smite_undead"
     ]
+  ]
 }

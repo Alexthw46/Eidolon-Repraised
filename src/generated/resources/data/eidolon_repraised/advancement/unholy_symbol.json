@@ -1,32 +1,32 @@
 {
-    "parent": "eidolon_repraised:sacrifice",
-    "criteria": {
-        "has_unholy_symbol": {
-            "conditions": {
-                "items": [
-                    {
-                        "items": "eidolon_repraised:unholy_symbol"
-                    }
-                ]
-            },
-            "trigger": "minecraft:inventory_changed"
-        }
-    },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.unholy_symbol"
-        },
-        "icon": {
-            "count": 1,
-            "id": "eidolon_repraised:unholy_symbol"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.unholy_symbol"
-        }
-    },
-    "requirements": [
-        [
-            "has_unholy_symbol"
+  "parent": "eidolon_repraised:sacrifice",
+  "criteria": {
+    "has_unholy_symbol": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon_repraised:unholy_symbol"
+          }
         ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.unholy_symbol"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:unholy_symbol"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.unholy_symbol"
+    }
+  },
+  "requirements": [
+    [
+      "has_unholy_symbol"
     ]
+  ]
 }

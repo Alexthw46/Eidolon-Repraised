@@ -1,18 +1,18 @@
 {
-    "type": "eidolon_repraised:ritual_brazier",
-    "focus_items": [],
-    "health_requirement": 0.0,
-    "invariant_items": [],
-    "pedestal_items": [
-        {
-            "tag": "c:dusts/redstone"
-        },
-        {
-            "tag": "c:dusts/redstone"
-        }
-    ],
-    "reagent": {
-        "item": "minecraft:bone_meal"
+  "type": "eidolon_repraised:ritual_brazier",
+  "focus_items": [],
+  "health_requirement": 0.0,
+  "invariant_items": [],
+  "pedestal_items": [
+    {
+      "tag": "c:dusts/redstone"
     },
-    "ritual": "eidolon_repraised:crystal"
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:bone_meal"
+  },
+  "ritual": "eidolon_repraised:crystal"
 }

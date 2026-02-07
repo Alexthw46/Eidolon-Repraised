@@ -1,17 +1,17 @@
 {
-    "type": "eidolon_repraised:ritual_brazier_summoning",
-    "count": 3,
-    "focus_items": [],
-    "output": "eidolon_repraised:slimy_slug",
-    "pedestal_items": [
-        {
-            "item": "eidolon_repraised:soul_shard"
-        },
-        {
-            "item": "minecraft:slime_ball"
-        }
-    ],
-    "reagent": {
-        "item": "minecraft:pumpkin_seeds"
+  "type": "eidolon_repraised:ritual_brazier_summoning",
+  "count": 3,
+  "focus_items": [],
+  "output": "eidolon_repraised:slimy_slug",
+  "pedestal_items": [
+    {
+      "item": "eidolon_repraised:soul_shard"
+    },
+    {
+      "item": "minecraft:slime_ball"
     }
+  ],
+  "reagent": {
+    "item": "minecraft:pumpkin_seeds"
+  }
 }

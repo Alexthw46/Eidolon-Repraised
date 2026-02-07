@@ -156,13 +156,13 @@ dependencies {
     compileOnly "curse.maven:apothic-enchanting-1063926:6926290"
     compileOnly "curse.maven:apotheosis-313970:7180713"
     compileOnly "curse.maven:apothic-spawners-986583:6751589"
-
+/*
     localRuntime "curse.maven:placebo-283644:6926281"
     localRuntime "curse.maven:apothic-attributes-898963:6751650"
     localRuntime "curse.maven:apothic-enchanting-1063926:6926290"
     localRuntime "curse.maven:apotheosis-313970:7180713"
     localRuntime "curse.maven:apothic-spawners-986583:6751589"
-
+*/
     implementation "team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}"
     implementation "com.sammy.malum:malum:${minecraft_version}-${malum_version}"
 

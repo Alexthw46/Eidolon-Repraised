@@ -1,8 +1,8 @@
 {
-    "values": [
-        {
-            "id": "eidolon_repraised:ritual",
-            "required": false
-        }
-    ]
+  "values": [
+    {
+      "id": "eidolon_repraised:ritual",
+      "required": false
+    }
+  ]
 }

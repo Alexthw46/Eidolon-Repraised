@@ -1,32 +1,32 @@
 {
-    "parent": "eidolon_repraised:crucible",
-    "criteria": {
-        "has_wooden_brewing_stand": {
-            "conditions": {
-                "items": [
-                    {
-                        "items": "eidolon_repraised:wooden_brewing_stand"
-                    }
-                ]
-            },
-            "trigger": "minecraft:inventory_changed"
-        }
-    },
-    "display": {
-        "description": {
-            "translate": "eidolon_repraised.advancement.desc.wooden_brewing_stand"
-        },
-        "icon": {
-            "count": 1,
-            "id": "eidolon_repraised:wooden_brewing_stand"
-        },
-        "title": {
-            "translate": "eidolon_repraised.advancement.title.wooden_brewing_stand"
-        }
-    },
-    "requirements": [
-        [
-            "has_wooden_brewing_stand"
+  "parent": "eidolon_repraised:crucible",
+  "criteria": {
+    "has_wooden_brewing_stand": {
+      "conditions": {
+        "items": [
+          {
+            "items": "eidolon_repraised:wooden_brewing_stand"
+          }
         ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "eidolon_repraised.advancement.desc.wooden_brewing_stand"
+    },
+    "icon": {
+      "count": 1,
+      "id": "eidolon_repraised:wooden_brewing_stand"
+    },
+    "title": {
+      "translate": "eidolon_repraised.advancement.title.wooden_brewing_stand"
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden_brewing_stand"
     ]
+  ]
 }
