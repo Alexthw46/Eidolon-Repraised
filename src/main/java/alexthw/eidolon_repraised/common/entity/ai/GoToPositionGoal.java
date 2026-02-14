@@ -4,10 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
-import java.util.Random;
-
 public class GoToPositionGoal extends Goal {
-    Random random = new Random();
     final BlockPos dest;
     final PathfinderMob creature;
     final double speed;
@@ -21,10 +18,22 @@ public class GoToPositionGoal extends Goal {
     }
 
     @Override
+    public void start() {
+        super.start();
+        creature.getNavigation().moveTo(dest.getX(), dest.getY(), dest.getZ(), speed);
+    }
+
+    @Override
     public void tick() {
-        if (running) {
-            creature.getNavigation().moveTo(dest.getX(), dest.getY(), dest.getZ(), speed);
-            if (creature.distanceToSqr(dest.getX(), dest.getY(), dest.getZ()) < 8 * 8) running = false;
+        if (running && creature.level().getGameTime() % 20 == 0) {
+            if (creature.getTarget() != null) {
+                creature.setTarget(null);
+            }
+            if (creature.distanceToSqr(dest.getX(), dest.getY(), dest.getZ()) < 8 * 8) {
+                running = false;
+            } else if (creature.getNavigation().isDone()) {
+                creature.getNavigation().moveTo(dest.getX(), dest.getY(), dest.getZ(), speed);
+            }
         }
     }
 
