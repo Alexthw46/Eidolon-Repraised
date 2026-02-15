@@ -51,7 +51,7 @@ public class DarkTouchSpell extends StaticSpell {
                 event.getEntity().invulnerableTime = 0;
                 if (event.getEntity().hurt(DamageTypeData.source(living.level, DamageTypes.WITHER, living, null), amount)) {
 
-                    tag.putInt(NECROTIC_KEY, -1);
+                    tag.putInt(NECROTIC_KEY, tag.getInt(NECROTIC_KEY) - 1);
                     if (tag.getInt(NECROTIC_KEY) <= 0) tag.remove(NECROTIC_KEY);
 
                     if (living.getHealth() <= 0) event.setCanceled(true);
