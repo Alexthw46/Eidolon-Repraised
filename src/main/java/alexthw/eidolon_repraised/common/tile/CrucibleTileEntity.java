@@ -339,7 +339,8 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         } else {
             CrucibleStep step = new CrucibleStep(stirs, contents);
             steps.add(step);
-            level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+            // update observer
+            getBlockState().updateNeighbourShapes(level, worldPosition, 3);
             stirs = 0;
 
             // try to find a finished recipe with the current steps
@@ -387,7 +388,8 @@ public class CrucibleTileEntity extends TileEntityBase implements Container {
         List<ItemStack> consumed = consumeFromInventory();
         CrucibleStep finalStep = new CrucibleStep(stirs, consumed);
         steps.add(finalStep);
-        level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+        // update observer
+        getBlockState().updateNeighbourShapes(level, worldPosition, 3);
 
         stirs = 0;
 
