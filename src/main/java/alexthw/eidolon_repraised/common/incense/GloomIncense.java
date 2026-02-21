@@ -50,7 +50,7 @@ public class GloomIncense extends IncenseRitual {
             BlockPos pos = censer.getBlockPos();
             assert level != null;
             for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range()))) {
-                if (entity.getType().is(EntityTypeTags.UNDEAD)) {
+                if (!entity.getType().is(EntityTypeTags.UNDEAD)) {
                     entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 1));
                 } else {
                     entity.heal(1);
