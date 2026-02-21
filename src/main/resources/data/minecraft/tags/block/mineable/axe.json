@@ -11,6 +11,8 @@
     "eidolon_repraised:polished_pressure_plate",
     "eidolon_repraised:polished_standing_sign",
     "eidolon_repraised:polished_wall_sign",
+    "eidolon_repraised:polished_hanging_sign",
+    "eidolon_repraised:polished_hanging_wall_sign",
     "eidolon_repraised:polished_wood_pillar",
     "eidolon_repraised:illwood_planks_fence_gate",
     "eidolon_repraised:illwood_planks_fence",
@@ -21,10 +23,13 @@
     "eidolon_repraised:illwood_pressure_plate",
     "eidolon_repraised:illwood_standing_sign",
     "eidolon_repraised:illwood_wall_sign",
+    "eidolon_repraised:illwood_hanging_sign",
+    "eidolon_repraised:illwood_hanging_wall_sign",
     "#eidolon_repraised:illwood_logs",
     "eidolon_repraised:wooden_altar",
     "eidolon_repraised:wooden_brewing_stand",
     "eidolon_repraised:worktable",
-    "eidolon_repraised:research_table"
+    "eidolon_repraised:research_table",
+    "eidolon_repraised:scriptorium"
   ]
 }
