@@ -5,6 +5,7 @@ import alexthw.eidolon_repraised.client.particle.Particles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -52,7 +53,11 @@ public class PurityIncense extends IncenseRitual {
             BlockPos pos = censer.getBlockPos();
             assert level != null;
             for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range()))) {
-                entity.getActiveEffects().removeIf(effect -> !effect.getEffect().value().isBeneficial() && !effect.getCures().isEmpty());
+                entity.getActiveEffects().stream()
+                        .filter(effect -> !effect.getEffect().value().isBeneficial() && !effect.getCures().isEmpty())
+                        .map(MobEffectInstance::getEffect)
+                        .toList()
+                        .forEach(entity::removeEffect);
             }
         }
     }

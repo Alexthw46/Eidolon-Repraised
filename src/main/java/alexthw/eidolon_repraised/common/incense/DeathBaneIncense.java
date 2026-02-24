@@ -20,7 +20,7 @@ public class DeathBaneIncense extends GenericPotionIncense {
 
     @Override
     public MobEffectInstance getEffect(Level level, BlockPos blockPos, LivingEntity livingEntity) {
-        return livingEntity.getType().is(EntityTypeTags.UNDEAD) ?
+        return !livingEntity.getType().is(EntityTypeTags.UNDEAD) ?
                 new MobEffectInstance(EidolonPotions.LIGHT_BLESSED, 20 * 60 * 10) :
                 new MobEffectInstance(MobEffects.CONFUSION, 20 * 60 * 2);
     }
