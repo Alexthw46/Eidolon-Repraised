@@ -84,8 +84,16 @@ public class WorktableResultSlot extends Slot {
         if (recipe != null) {
             items = recipe.getRemainingItems(core, extras);
         } else {
+            // Get remaining items for normal crafting recipes. Some recipes return a list
+            // shorter than 9 (e.g. smaller shaped recipes). Ensure we pad to 9 so we
+            // process all core slots (3x3) and then append extras.
+            NonNullList<ItemStack> remaining = thePlayer.level().getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core.asCraftInput(), thePlayer.level());
+            NonNullList<ItemStack> padded = NonNullList.withSize(9, ItemStack.EMPTY);
+            for (int i = 0; i < remaining.size() && i < 9; i++) {
+                padded.set(i, remaining.get(i));
+            }
             items = NonNullList.create();
-            items.addAll(thePlayer.level().getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, core.asCraftInput(), thePlayer.level()));
+            items.addAll(padded);
             for (int i = 0; i < 4; i++) items.add(extras.getItem(i));
         }
         setCraftingPlayer(null);

@@ -46,7 +46,7 @@ public class DarkTouchSpell extends StaticSpell {
             ItemStack itemStack = living.getMainHandItem();
             if (itemStack.isEmpty()) return;
             if (itemStack.has(EidolonDataComponents.NECROTIC) && itemStack.getOrDefault(EidolonDataComponents.NECROTIC, 0) > 0) {
-                float amount = Math.min(1, event.getNewDamage());
+                float amount = Math.clamp(event.getNewDamage() / 2, 1, event.getNewDamage());
                 event.setNewDamage(event.getNewDamage() - amount);
                 int prevHurtResist = event.getEntity().invulnerableTime;
                 event.getEntity().invulnerableTime = 0;
