@@ -10,13 +10,16 @@ import alexthw.eidolon_repraised.registries.EidolonCapabilities;
 import alexthw.eidolon_repraised.registries.EidolonDataComponents;
 import alexthw.eidolon_repraised.registries.EidolonRecipes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +44,24 @@ public class LightTouchSpell extends DarkTouchSpell {
             if (weapon.has(EidolonDataComponents.CONSECRATED.get()) && weapon.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 0) > 0) {
                 event.setNewDamage(event.getNewDamage() * 1.5f);
                 weapon.set(EidolonDataComponents.CONSECRATED, weapon.getOrDefault(EidolonDataComponents.CONSECRATED.get(), 1) - 1);
+            }
+            // If we're in this branch, it can only be because of Undeath potion
+            if (!event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
+                var reg = caster.registryAccess().asGetterLookup();
+                try {
+                    var enchant = reg.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.SMITE);
+                    enchant.ifPresent(
+                            enchantment -> {
+                                int smite = weapon.getEnchantmentLevel(enchantment);
+                                if (smite > 0) {
+                                    // Force apply the smite enchantment bonus
+                                    event.setNewDamage(event.getNewDamage() + smite * 2.5f);
+                                }
+                            }
+                    );
+                } catch (Exception e) {
+                    // shouldn't happen, but just in case
+                }
             }
         }
     }
