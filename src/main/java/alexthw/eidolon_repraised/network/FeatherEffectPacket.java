@@ -17,32 +17,32 @@ public class FeatherEffectPacket extends AbstractPacket {
 
     public static final Type<FeatherEffectPacket> TYPE = new Type<>(Eidolon.prefix("feather_effect"));
     public static final StreamCodec<FriendlyByteBuf, FeatherEffectPacket> CODEC = StreamCodec.composite(
-            ByteBufCodecs.FLOAT, p -> p.x,
-            ByteBufCodecs.FLOAT, p -> p.y,
-            ByteBufCodecs.FLOAT, p -> p.z,
+            ByteBufCodecs.DOUBLE, p -> p.x,
+            ByteBufCodecs.DOUBLE, p -> p.y,
+            ByteBufCodecs.DOUBLE, p -> p.z,
             FeatherEffectPacket::new
     );
 
-    final float x;
-    final float y;
-    final float z;
+    final double x;
+    final double y;
+    final double z;
 
     public FeatherEffectPacket(BlockPos pos) {
         this(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 
     public FeatherEffectPacket(double x, double y, double z) {
-        this.x = (float) x;
-        this.y = (float) y;
-        this.z = (float) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public static void encode(FeatherEffectPacket object, FriendlyByteBuf buffer) {
-        buffer.writeFloat(object.x).writeFloat(object.y).writeFloat(object.z);
+        buffer.writeDouble(object.x).writeDouble(object.y).writeDouble(object.z);
     }
 
     public static FeatherEffectPacket decode(FriendlyByteBuf buffer) {
-        return new FeatherEffectPacket(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+        return new FeatherEffectPacket(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
     }
 
     @Override
