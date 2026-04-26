@@ -80,8 +80,8 @@ public class NecromancerEntity extends SpellcasterIllager {
         if (level().isClientSide && this.isCastingSpell()) {
             IllagerSpell spelltype = getCurrentSpell();
             float f = this.yBodyRot * ((float) Math.PI / 180F) + Mth.cos((float) this.tickCount * 0.6662F) * 0.25F;
-            float f1 = Mth.cos(f);
-            float f2 = Mth.sin(f);
+            double f1 = Mth.cos(f);
+            double f2 = Mth.sin(f);
             if (spelltype == IllagerSpell.FANGS) {
                 Particles.create(EidolonParticles.SPARKLE_PARTICLE.get())
                         .setColor(1, 0.3125f, 0.375f, 0.75f, 0.375f, 1)
