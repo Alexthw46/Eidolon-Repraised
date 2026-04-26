@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 
 public class WitchBarterGoal extends GenericBarterGoal<Witch> {
     public WitchBarterGoal(Witch entity, Predicate<ItemStack> valid, Function<ItemStack, ItemStack> result) {
-        super(entity, valid, result);
+        super(entity, valid, result, 1.0f);
     }
-
 }

@@ -25,6 +25,7 @@ import alexthw.eidolon_repraised.network.SoulUpdatePacket;
 import alexthw.eidolon_repraised.network.WingsDataUpdatePacket;
 import alexthw.eidolon_repraised.registries.EidolonAttributes;
 import alexthw.eidolon_repraised.registries.EidolonCapabilities;
+import alexthw.eidolon_repraised.registries.EidolonDataComponents;
 import alexthw.eidolon_repraised.registries.EidolonPotions;
 import alexthw.eidolon_repraised.registries.Registry;
 import alexthw.eidolon_repraised.registries.Signs;
@@ -265,16 +266,16 @@ public class Events {
         if (event.getEntity() instanceof LivingEntity && !event.getLevel().isClientSide) {
             if (event.getEntity() instanceof Witch witch) {
                 witch.goalSelector.addGoal(1, new WitchBarterGoal(
-                        witch,
-                        stack -> stack.getItem() == Registry.CODEX.get(),
-                        stack -> CodexItem.withSign(stack, Signs.WICKED_SIGN)
+                    witch,
+                    stack -> stack.getItem() == Registry.CODEX.get() && !stack.has(EidolonDataComponents.SIGN),
+                    stack -> CodexItem.withSign(stack, Signs.WICKED_SIGN)
                 ));
             }
             if (event.getEntity() instanceof Villager villager) {
                 villager.goalSelector.addGoal(1, new PriestBarterGoal(
-                        villager,
-                        stack -> stack.getItem() == Registry.CODEX.get(),
-                        stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
+                    villager,
+                    stack -> stack.getItem() == Registry.CODEX.get() && !stack.has(EidolonDataComponents.SIGN),
+                    stack -> CodexItem.withSign(stack, Signs.SACRED_SIGN)
                 ));
             }
             if (event.getEntity() instanceof PathfinderMob mob && (mob.getNavigation() instanceof GroundPathNavigation || mob.getNavigation() instanceof FlyingPathNavigation)) {
