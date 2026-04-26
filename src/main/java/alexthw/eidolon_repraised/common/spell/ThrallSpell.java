@@ -38,8 +38,12 @@ public class ThrallSpell extends StaticSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE) + 3, 0, false);
         if (ray instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity living) {
-            return living.getType().is(ENTHRALL_WHITELIST) || living.getType().is(EntityTypeTags.UNDEAD) && !living.getType().is(ENTHRALL_BLACKLIST);
+            var entityType = living.getType();
+            if (entityType.is(ENTHRALL_WHITELIST) || entityType.is(EntityTypeTags.UNDEAD) && !entityType.is(ENTHRALL_BLACKLIST)) {
+                return true;
+            }
         }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
         return false;
     }
 

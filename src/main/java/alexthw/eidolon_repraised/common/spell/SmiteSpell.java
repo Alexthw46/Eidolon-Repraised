@@ -4,6 +4,7 @@ import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.common.deity.DeityLocks;
 import alexthw.eidolon_repraised.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
@@ -29,7 +30,7 @@ public class SmiteSpell extends StaticSpell {
         if (ray instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
             return livingEntity.getType().is(EntityTypeTags.UNDEAD);
         }
-
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
         return false;
     }
 

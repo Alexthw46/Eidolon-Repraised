@@ -69,9 +69,14 @@ public class DarkTouchSpell extends StaticSpell {
 
         Vec3 v = getVector(world, player);
         List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new AABB(v.x - 1.5, v.y - 1.5, v.z - 1.5, v.x + 1.5, v.y + 1.5, v.z + 1.5));
-        if (items.size() != 1) return false;
-        ItemStack stack = items.getFirst().getItem();
-        return canTouch(stack, world, player);
+        if (items.size() == 1) {
+            ItemStack stack = items.getFirst().getItem();
+            if (canTouch(stack, world, player)) {
+                return true;
+            }
+        }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+        return false;
     }
 
     boolean canTouch(ItemStack stack, Level world, Player player) {

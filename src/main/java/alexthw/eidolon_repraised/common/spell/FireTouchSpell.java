@@ -8,6 +8,7 @@ import alexthw.eidolon_repraised.network.Networking;
 import alexthw.eidolon_repraised.registries.Researches;
 import alexthw.eidolon_repraised.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -41,11 +42,15 @@ public class FireTouchSpell extends StaticSpell {
             BlockState hitState = world.getBlockState(rayTraceResult.getBlockPos());
             if (hitState.getBlock() instanceof CandleBlock && CandleBlock.canLight(hitState) || hitState.getBlock() instanceof CampfireBlock && CampfireBlock.canLight(hitState)) {
                 return true;
-            } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof IBurner brazier) {
-                return brazier.canStartBurning();
+            } else if (world.getBlockEntity(rayTraceResult.getBlockPos()) instanceof IBurner brazier && brazier.canStartBurning()) {
+                return true;
             }
         }
-        return ray instanceof EntityHitResult;
+        if (ray instanceof EntityHitResult) {
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+        return false;
     }
 
     @Override

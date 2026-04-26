@@ -6,6 +6,7 @@ import alexthw.eidolon_repraised.registries.EidolonPotions;
 import alexthw.eidolon_repraised.registries.Researches;
 import alexthw.eidolon_repraised.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,7 +37,11 @@ public class FrostSpell extends StaticSpell {
                 return true;
             }
         }
-        return ray instanceof EntityHitResult;
+        if (ray instanceof EntityHitResult) {
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+        return false;
     }
 
     @Override
