@@ -2,6 +2,7 @@ package alexthw.eidolon_repraised.common.spell;
 
 import alexthw.eidolon_repraised.api.spells.Sign;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,11 @@ public class UndeadLureSpell extends StaticSpell {
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
         HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
-        return ray instanceof BlockHitResult;
+        if (ray instanceof BlockHitResult) {
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+        return false;
     }
 
     @Override

@@ -31,17 +31,23 @@ public class ConvertZombieSpell extends PrayerSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
-        boolean flag = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) {
             player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
         AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
+        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get()) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.inadequate_altar"), true);
             return false;
-        return flag && super.canCast(world, pos, player);
+        }
+        HitResult ray = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
+        boolean validTarget = ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager;
+        if (!validTarget) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+            return false;
+        }
+        return super.canCast(world, pos, player);
     }
 
     @Override

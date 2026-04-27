@@ -28,14 +28,30 @@ public class VillagerSacrificeSpell extends PrayerSpell {
         if (reputationCheck(world, player, 15)) return false;
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
-        if (effigy == null || goblet == null || goblet.getEntityType() == null) {
+        if (effigy == null) {
             player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
-        AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get())
+        if (goblet == null) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_goblet"), true);
             return false;
-        return (goblet.getEntityType() == EntityType.PLAYER || goblet.getEntityType().create(world) instanceof AbstractVillager) && effigy.ready();
+        }
+
+        AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
+        if (info.getAltar() == null || !info.getAltar().defaultBlockState().is(Registry.BETTER_ALTAR_BLOCKS) || info.getIcon() != Registry.ELDER_EFFIGY.get()) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.inadequate_altar"), true);
+            return false;
+        }
+
+        boolean validSacrifice = goblet.getEntityType() != null && (
+            goblet.getEntityType() == EntityType.PLAYER ||
+            goblet.getEntityType().create(world) instanceof AbstractVillager
+        );
+        if (!validSacrifice) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.inadequate_sacrifice"), true);
+            return false;
+        }
+        return effigy.ready();
     }
 
     @Override

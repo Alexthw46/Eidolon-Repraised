@@ -3,6 +3,7 @@ package alexthw.eidolon_repraised.common.spell;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,7 +19,12 @@ public abstract class ApplyPotionSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        return rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true) instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity;
+        HitResult raytrace = rayTrace(player, player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 0, true);
+        if (raytrace instanceof EntityHitResult result && result.getEntity() instanceof LivingEntity) {
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_target"), true);
+        return false;
     }
 
     @Override

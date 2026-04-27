@@ -65,7 +65,11 @@ public class PrayerSpell extends StaticSpell {
     public boolean canCast(Level world, BlockPos pos, Player player) {
         if (reputationCheck(world, player, 0)) return false;
         EffigyTileEntity effigy = getEffigy(world, pos);
-        return effigy != null && effigy.ready();
+        if (effigy == null) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
+            return false;
+        }
+        return effigy.ready();
     }
 
     public static void updateMagic(AltarInfo altarInfo, Player player, Level world, double reputation) {

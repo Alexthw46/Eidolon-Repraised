@@ -28,12 +28,20 @@ public class AnimalSacrificeSpell extends PrayerSpell {
         if (reputationCheck(world, player, 3.0)) return false;
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
-        if (effigy == null || goblet == null || goblet.getEntityType() == null) {
+        if (effigy == null) {
             player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_effigy"), true);
             return false;
         }
-        Entity test = goblet.getEntityType().create(world);
-        return test instanceof Animal && effigy.ready();
+        if (goblet == null) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.no_goblet"), true);
+            return false;
+        }
+        boolean validSacrifice = goblet.getEntityType() != null && goblet.getEntityType().create(world) instanceof Animal;
+        if (!validSacrifice) {
+            player.displayClientMessage(Component.translatable("eidolon_repraised.message.inadequate_sacrifice"), true);
+            return false;
+        }
+        return effigy.ready();
     }
 
     @Override
