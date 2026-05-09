@@ -18,11 +18,11 @@ public class MagicBurstEffectPacket extends AbstractPacket {
     public static final Type<MagicBurstEffectPacket> TYPE = new Type<>(Eidolon.prefix("magic_burst_effect"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MagicBurstEffectPacket> CODEC = StreamCodec.composite(
-            ByteBufCodecs.FLOAT,
+            ByteBufCodecs.DOUBLE,
             pkt -> pkt.x,
-            ByteBufCodecs.FLOAT,
+            ByteBufCodecs.DOUBLE,
             pkt -> pkt.y,
-            ByteBufCodecs.FLOAT,
+            ByteBufCodecs.DOUBLE,
             pkt -> pkt.z,
             ByteBufCodecs.INT,
             pkt -> pkt.c1,
@@ -31,9 +31,9 @@ public class MagicBurstEffectPacket extends AbstractPacket {
             MagicBurstEffectPacket::new
     );
 
-    final float x;
-    final float y;
-    final float z;
+    final double x;
+    final double y;
+    final double z;
     final int c1;
     final int c2;
 
@@ -42,20 +42,20 @@ public class MagicBurstEffectPacket extends AbstractPacket {
     }
 
     public MagicBurstEffectPacket(double x, double y, double z, int color1, int color2) {
-        this.x = (float) x;
-        this.y = (float) y;
-        this.z = (float) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
         this.c1 = color1;
         this.c2 = color2;
     }
 
     public static void encode(MagicBurstEffectPacket object, FriendlyByteBuf buffer) {
-        buffer.writeFloat(object.x).writeFloat(object.y).writeFloat(object.z);
+        buffer.writeDouble(object.x).writeDouble(object.y).writeDouble(object.z);
         buffer.writeInt(object.c1).writeInt(object.c2);
     }
 
     public static MagicBurstEffectPacket decode(FriendlyByteBuf buffer) {
-        return new MagicBurstEffectPacket(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt(), buffer.readInt());
+        return new MagicBurstEffectPacket(buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readInt(), buffer.readInt());
     }
 
     @Override

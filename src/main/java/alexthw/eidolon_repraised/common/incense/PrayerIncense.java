@@ -67,7 +67,7 @@ public class PrayerIncense extends IncenseRitual {
 
     @Override
     public void animateParticles(int burnCounter, BlockPos blockPos, Level level) {
-        float x = blockPos.getX() + 0.5f, y = blockPos.getY() + 0.45f, z = blockPos.getZ() + 0.5f;
+        double x = blockPos.getX() + 0.5, y = blockPos.getY() + 0.45, z = blockPos.getZ() + 0.5;
         float r = getRed();
         float g = getGreen();
         float b = getBlue();

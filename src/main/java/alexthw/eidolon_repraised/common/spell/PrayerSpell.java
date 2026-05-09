@@ -136,23 +136,23 @@ public class PrayerSpell extends StaticSpell {
         BlockState state = world.getBlockState(effigy.getBlockPos());
         Direction dir = state.getValue(HorizontalBlockBase.HORIZONTAL_FACING);
         Direction tangent = dir.getClockWise();
-        float x = effigy.getBlockPos().getX() + 0.5f + dir.getStepX() * 0.21875f;
-        float y = effigy.getBlockPos().getY() + 0.8125f;
-        float z = effigy.getBlockPos().getZ() + 0.5f + dir.getStepZ() * 0.21875f;
+        double x = effigy.getBlockPos().getX() + 0.5 + dir.getStepX() * 0.21875;
+        double y = effigy.getBlockPos().getY() + 0.8125;
+        double z = effigy.getBlockPos().getZ() + 0.5 + dir.getStepZ() * 0.21875;
         Particles.create(FLAME_PARTICLE.get())
                 .setColor(color.getRed(), color.getGreen(), color.getBlue())
                 .setAlpha(0.5f, 0)
                 .setScale(0.125f, 0.0625f)
                 .randomOffset(0.01f)
                 .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
-                .repeat(world, x + 0.09375f * tangent.getStepX(), y, z + 0.09375f * tangent.getStepZ(), 8);
+                .repeat(world, x + 0.09375 * tangent.getStepX(), y, z + 0.09375 * tangent.getStepZ(), 8);
         Particles.create(FLAME_PARTICLE.get())
                 .setColor(color.getRed(), color.getGreen(), color.getBlue())
                 .setAlpha(0.5f, 0)
                 .setScale(0.1875f, 0.125f)
                 .randomOffset(0.01f)
                 .randomVelocity(0.0025f).addVelocity(0, 0.005f, 0)
-                .repeat(world, x - 0.09375f * tangent.getStepX(), y, z - 0.09375f * tangent.getStepZ(), 8);
+                .repeat(world, x - 0.09375 * tangent.getStepX(), y, z - 0.09375 * tangent.getStepZ(), 8);
     }
 
     @Override

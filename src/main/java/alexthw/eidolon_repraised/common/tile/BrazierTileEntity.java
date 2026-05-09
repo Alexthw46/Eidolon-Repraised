@@ -187,9 +187,9 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner, Recipe
                 float angle = progress * (float) Math.PI / 4 + i * (float) Math.PI / 4;
                 float radius = 0.625f * Mth.sin(4 * angle);
                 angle += (float) Math.PI / 4;
-                float x = getBlockPos().getX() + 0.5f + Mth.sin(angle) * radius;
-                float y = getBlockPos().getY() + 0.875f;
-                float z = getBlockPos().getZ() + 0.5f + Mth.cos(angle) * radius;
+                double x = getBlockPos().getX() + 0.5 + Mth.sin(angle) * radius;
+                double y = getBlockPos().getY() + 0.875;
+                double z = getBlockPos().getZ() + 0.5 + Mth.cos(angle) * radius;
                 Particles.create(EidolonParticles.WISP_PARTICLE.get())
                         .setAlpha(0.25f * progress, 0).setScale(0.125f, 0.0625f).setLifetime(20)
                         .setColor(1.0f, 0.5f, 0.25f, 1.0f, 0.25f, 0.375f)
@@ -228,7 +228,7 @@ public class BrazierTileEntity extends SingleItemTile implements IBurner, Recipe
             if (ritual.tick(level, worldPosition) == RitualResult.TERMINATE) complete();
         }
         if (level.isClientSide && burning) {
-            float x = getBlockPos().getX() + 0.5f, y = getBlockPos().getY() + 1, z = getBlockPos().getZ() + 0.5f;
+            double x = getBlockPos().getX() + 0.5, y = getBlockPos().getY() + 1.0, z = getBlockPos().getZ() + 0.5;
             float r = ritual == null ? 1.0f : ritual.getRed();
             float g = ritual == null ? 0.5f : ritual.getGreen();
             float b = ritual == null ? 0.25f : ritual.getBlue();

@@ -23,18 +23,18 @@ public class DeathbringerSlashEffectPacket extends AbstractPacket {
             DeathbringerSlashEffectPacket::decode
     );
 
-    final float x1;
-    final float y1;
-    final float z1;
-    final float x2;
-    final float y2;
-    final float z2;
+    final double x1;
+    final double y1;
+    final double z1;
+    final double x2;
+    final double y2;
+    final double z2;
     final int c1;
     final int c2;
     final int c3;
     final int c4;
 
-    public DeathbringerSlashEffectPacket(float x1, float y1, float z1, float x2, float y2, float z2, int color1, int color2, int color3, int color4) {
+    public DeathbringerSlashEffectPacket(double x1, double y1, double z1, double x2, double y2, double z2, int color1, int color2, int color3, int color4) {
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;
@@ -48,13 +48,15 @@ public class DeathbringerSlashEffectPacket extends AbstractPacket {
     }
 
     public static void encode(DeathbringerSlashEffectPacket object, FriendlyByteBuf buffer) {
-        buffer.writeFloat(object.x1).writeFloat(object.y1).writeFloat(object.z1);
-        buffer.writeFloat(object.x2).writeFloat(object.y2).writeFloat(object.z2);
+        buffer.writeDouble(object.x1).writeDouble(object.y1).writeDouble(object.z1);
+        buffer.writeDouble(object.x2).writeDouble(object.y2).writeDouble(object.z2);
         buffer.writeInt(object.c1).writeInt(object.c2).writeInt(object.c3).writeInt(object.c4);
     }
 
     public static DeathbringerSlashEffectPacket decode(FriendlyByteBuf buffer) {
-        return new DeathbringerSlashEffectPacket(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
+        return new DeathbringerSlashEffectPacket(
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
     }
 
