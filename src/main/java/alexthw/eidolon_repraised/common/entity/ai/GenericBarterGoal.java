@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 
 public class GenericBarterGoal<E extends PathfinderMob> extends Goal {
     static final Random rand = new Random();
-    static final int WAIT_TIME = 50; // Roughly 5 seconds
+    static final int WAIT_TIME = 50; // Roughly 2,5 seconds
 
     final Predicate<ItemStack> valid;
     final Function<ItemStack, ItemStack> result;
@@ -57,7 +57,7 @@ public class GenericBarterGoal<E extends PathfinderMob> extends Goal {
             (item) -> valid.test(item.getItem())
         );
         if (items.isEmpty()) return false;
-        targetItem = items.get(0);
+        targetItem = items.getFirst();
         return targetItem != null && targetItem.isAlive();
     }
 
