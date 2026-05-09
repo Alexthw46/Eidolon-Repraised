@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 public class PriestBarterGoal extends GenericBarterGoal<Villager> {
     public PriestBarterGoal(Villager entity, Predicate<ItemStack> valid, Function<ItemStack, ItemStack> result) {
-        super(entity, valid, result);
+        super(entity, valid, result, 0.5f);
     }
 
     @Override
