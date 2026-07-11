@@ -4,6 +4,7 @@ import alexthw.eidolon_repraised.api.ritual.Ritual;
 import alexthw.eidolon_repraised.common.ritual.CraftingRitual;
 import alexthw.eidolon_repraised.common.tile.BrazierTileEntity;
 import alexthw.eidolon_repraised.registries.EidolonRecipes;
+import alexthw.eidolon_repraised.util.ColorUtil;
 import alexthw.eidolon_repraised.util.RegistryUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class ItemRitualRecipe extends RitualRecipe {
 
-    public ItemStack result; // Result item
+    public ItemStack result = ItemStack.EMPTY; // Result item
 
     public boolean keepsComponent() {
         return keepNbtOfReagent;
@@ -38,6 +39,16 @@ public class ItemRitualRecipe extends RitualRecipe {
         super(reagent, pedestals, foci, healthRequirement);
         this.result = output;
         this.keepNbtOfReagent = keepNbtOfReagent;
+        this.symbol = CraftingRitual.SanguineRitual.SYMBOL;
+        this.color = ColorUtil.packColor(255, 255, 51, 85);
+    }
+
+    public ItemRitualRecipe(Ingredient reagent, List<Ingredient> pedestals, List<Ingredient> foci, ItemStack output, ResourceLocation symbol, int color, boolean keepNbtOfReagent, float healthRequirement) {
+        super(reagent, pedestals, foci, healthRequirement);
+        this.result = output;
+        this.keepNbtOfReagent = keepNbtOfReagent;
+        this.symbol = symbol;
+        this.color = color;
     }
 
     @Override
@@ -47,7 +58,7 @@ public class ItemRitualRecipe extends RitualRecipe {
             result.applyComponents(inv.getStack().getComponentsPatch());
             result.setDamageValue(0);
         }
-        return result.copy();
+        return result;
     }
 
     @Override
@@ -59,16 +70,22 @@ public class ItemRitualRecipe extends RitualRecipe {
         return result;
     }
 
+    public @NotNull ResourceLocation getSymbol() {
+        return symbol;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
     @Override
     public Ritual getRitual() {
-        return (symbol != null && color != 0 ? new CraftingRitual(symbol, color, result, keepNbtOfReagent) : new CraftingRitual.SanguineRitual(result)).setRegistryName(getId());
+        return new CraftingRitual(symbol, color, result, keepNbtOfReagent).setRegistryName(getId());
     }
 
     @Override
     public @NotNull ResourceLocation getId() {
         ResourceLocation itemId = RegistryUtil.getRegistryName(result.getItem());
-        if (symbol != null && color != 0)
-            return ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "sanguine_" + itemId.getPath());
         return ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "brazier_craft_" + itemId.getPath());
     }
 
@@ -90,26 +107,36 @@ public class ItemRitualRecipe extends RitualRecipe {
                         Ingredient.CODEC.listOf().fieldOf("pedestal_items").forGetter(ItemRitualRecipe::getPedestalItems),
                         Ingredient.CODEC.listOf().fieldOf("focus_items").forGetter(ItemRitualRecipe::getFocusItems),
                         ItemStack.CODEC.fieldOf("result").forGetter(ItemRitualRecipe::getResult),
+                        ResourceLocation.CODEC.optionalFieldOf("symbol", CraftingRitual.SanguineRitual.SYMBOL).forGetter(ItemRitualRecipe::getSymbol),
+                        Codec.INT.optionalFieldOf("color", ColorUtil.packColor(255, 255, 51, 85)).forGetter(ItemRitualRecipe::getColor),
                         Codec.BOOL.optionalFieldOf("keep_nbt_of_reagent", false).forGetter(ItemRitualRecipe::keepsComponent),
                         Codec.FLOAT.optionalFieldOf("health_requirement", 0f).forGetter(ItemRitualRecipe::getHealthRequirement)
                 ).apply(instance, ItemRitualRecipe::new)
         );
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, ItemRitualRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC,
-                ItemRitualRecipe::getReagent,
-                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                ItemRitualRecipe::getPedestalItems,
-                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                ItemRitualRecipe::getFocusItems,
-                ItemStack.STREAM_CODEC,
-                ItemRitualRecipe::getResult,
-                ByteBufCodecs.BOOL,
-                ItemRitualRecipe::keepsComponent,
-                ByteBufCodecs.FLOAT,
-                ItemRitualRecipe::getHealthRequirement,
-                ItemRitualRecipe::new
-        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, ItemRitualRecipe> STREAM_CODEC =
+                StreamCodec.of(
+                        (buf, recipe) -> {
+                            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getReagent());
+                            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getPedestalItems());
+                            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getFocusItems());
+                            ItemStack.STREAM_CODEC.encode(buf, recipe.getResult());
+                            ResourceLocation.STREAM_CODEC.encode(buf, recipe.getSymbol());
+                            ByteBufCodecs.INT.encode(buf, recipe.getColor());
+                            ByteBufCodecs.BOOL.encode(buf, recipe.keepsComponent());
+                            ByteBufCodecs.FLOAT.encode(buf, recipe.getHealthRequirement());
+                        },
+                        buf -> new ItemRitualRecipe(
+                                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
+                                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
+                                ItemStack.STREAM_CODEC.decode(buf),
+                                ResourceLocation.STREAM_CODEC.decode(buf),
+                                ByteBufCodecs.INT.decode(buf),
+                                ByteBufCodecs.BOOL.decode(buf),
+                                ByteBufCodecs.FLOAT.decode(buf)
+                        )
+                );
 
         @Override
         public @NotNull MapCodec<ItemRitualRecipe> codec() {
