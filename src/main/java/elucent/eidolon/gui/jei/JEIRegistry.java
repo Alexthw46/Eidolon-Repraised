@@ -3,6 +3,7 @@ package elucent.eidolon.gui.jei;
 
 import elucent.eidolon.Eidolon;
 import elucent.eidolon.common.tile.BrazierTileEntity;
+import elucent.eidolon.gui.WorktableContainer;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.DyeRecipe;
 import elucent.eidolon.recipe.RitualRecipe;
@@ -15,6 +16,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -56,6 +58,19 @@ public class JEIRegistry implements IModPlugin {
         registry.addRecipes(CRUCIBLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.CRUCIBLE_TYPE.get()));
         registry.addRecipes(WORKTABLE_CATEGORY, manager.getAllRecipesFor(EidolonRecipes.WORKTABLE_TYPE.get()));
         registry.addRecipes(RITUAL_CATEGORY, BrazierTileEntity.getRitualRecipes(Eidolon.proxy.getWorld()));
+    }
+
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(
+                WorktableContainer.class,
+                Registry.WORKTABLE_CONTAINER.get(),
+                JEIRegistry.WORKTABLE_CATEGORY,
+                1,
+                13,
+                14,
+                36
+        );
     }
 
     @Override
