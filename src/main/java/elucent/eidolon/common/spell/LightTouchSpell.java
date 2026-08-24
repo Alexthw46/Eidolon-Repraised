@@ -9,6 +9,7 @@ import elucent.eidolon.registries.EidolonRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobType;
@@ -47,8 +48,10 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY.getId()) < 10.0) {
+        if (world.getServer() == null) return false;
+        ServerLevel overworld = world.getServer().overworld();
+        if (!overworld.getCapability(IReputation.INSTANCE).isPresent()) return false;
+        if (overworld.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY.getId()) < 10.0) {
             player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
             return false;
         }
@@ -62,15 +65,17 @@ public class LightTouchSpell extends DarkTouchSpell {
 
     boolean canTouch(ItemStack stack, Level world, Player player) {
         if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
+        if (world.getServer() == null) return false;
         var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
-        var lightRep = world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
+        var lightRep = world.getServer().overworld().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
         return conversions.stream().filter(
                 r -> r.input.test(stack) && (r.deity == null || Deities.LIGHT_DEITY_ID.equals(r.deity))
         ).anyMatch(r -> lightRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        var lightRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
+        if (player.getServer() == null) return stack;
+        var lightRep = player.getServer().overworld().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.LIGHT_DEITY_ID);
         var mana = player.getCapability(ISoul.INSTANCE).resolve().orElse(null);
         if (mana == null) return stack;
 

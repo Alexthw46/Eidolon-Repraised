@@ -40,11 +40,11 @@ public class AnimalSacrificeSpell extends PrayerSpell {
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
         if (effigy == null || goblet == null) return;
-        if (!world.isClientSide) {
+        if (!world.isClientSide && player.getServer() != null) {
             effigy.pray();
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            player.getServer().overworld().getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_MOB);
                 rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());

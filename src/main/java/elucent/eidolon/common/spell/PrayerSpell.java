@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -79,7 +80,8 @@ public class PrayerSpell extends StaticSpell {
     }
 
     protected boolean reputationCheck(Level world, Player player, double minDevotion) {
-        LazyOptional<IReputation> iReputationLazyOptional = world.getCapability(IReputation.INSTANCE);
+        if (world.getServer() == null) return false;
+        LazyOptional<IReputation> iReputationLazyOptional = world.getServer().overworld().getCapability(IReputation.INSTANCE);
         if (iReputationLazyOptional.resolve().isEmpty()) return true;
         IReputation iReputation = iReputationLazyOptional.resolve().get();
         if (!iReputation.canPray(player, this, world.getGameTime())) {
@@ -111,10 +113,10 @@ public class PrayerSpell extends StaticSpell {
     public void cast(Level world, BlockPos pos, Player player) {
         EffigyTileEntity effigy = getEffigy(world, pos);
         if (effigy == null) return;
-        if (!world.isClientSide) {
+        if (!world.isClientSide && world.getServer() != null) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            world.getServer().overworld().getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 rep.addReputation(player, deity.getId(), getBaseRep() + getPowerMultiplier() * info.getPower());
                 updateMagic(info, player, world, rep.getReputation(player, deity.getId()));
@@ -124,7 +126,7 @@ public class PrayerSpell extends StaticSpell {
         }
     }
 
-    protected void playSuccessSound(Level world, Player player, EffigyTileEntity effigy, RGBProvider color) {
+    protected void playSuccessSound(Level world, @NotNull Player player, EffigyTileEntity effigy, RGBProvider color) {
         world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.NEUTRAL, 10000.0F, 0.6F + world.random.nextFloat() * 0.2F);
         world.playSound(player, effigy.getBlockPos(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.NEUTRAL, 2.0F, 0.5F + world.random.nextFloat() * 0.2F);
         BlockState state = world.getBlockState(effigy.getBlockPos());

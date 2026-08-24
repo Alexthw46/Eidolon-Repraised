@@ -43,11 +43,11 @@ public class VillagerSacrificeSpell extends PrayerSpell {
         EffigyTileEntity effigy = getEffigy(world, pos);
         GobletTileEntity goblet = getGoblet(world, pos);
         if (effigy == null || goblet == null || goblet.getEntityType() == null) return;
-        if (!world.isClientSide) {
+        if (!world.isClientSide && world.getServer() != null) {
             effigy.pray();
             goblet.setEntityType(null);
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            world.getServer().overworld().getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.SACRIFICE_VILLAGER);
                 rep.addReputation(player, deity.getId(), 6.0 + getPowerMultiplier() * info.getPower());

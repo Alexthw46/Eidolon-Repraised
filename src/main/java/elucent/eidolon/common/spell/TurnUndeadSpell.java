@@ -17,8 +17,9 @@ public class TurnUndeadSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
+        if (world.getServer() == null) return false;
         AtomicReference<Double> favor = new AtomicReference<>((double) 0);
-        world.getCapability(IReputation.INSTANCE).ifPresent(
+        world.getServer().overworld().getCapability(IReputation.INSTANCE).ifPresent(
                 (reputation) -> favor.set(reputation.getReputation(player, Deities.LIGHT_DEITY.getId()))
         );
         return favor.get() > 30;

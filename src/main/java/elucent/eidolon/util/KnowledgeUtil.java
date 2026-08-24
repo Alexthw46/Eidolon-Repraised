@@ -187,8 +187,8 @@ public class KnowledgeUtil {
     }
 
     public static void tryFix(Player player) {
-        if (!(player instanceof ServerPlayer && player.level() instanceof ServerLevel server)) return;
-        LazyOptional<IReputation> devotion = server.getCapability(IReputation.INSTANCE);
+        if (!(player instanceof ServerPlayer sp && player.level() instanceof ServerLevel)) return;
+        LazyOptional<IReputation> devotion = sp.server.overworld().getCapability(IReputation.INSTANCE);
         if (devotion.isPresent()) {
             IReputation d = devotion.resolve().get();
             Deities.getDeities().forEach((deity) -> {

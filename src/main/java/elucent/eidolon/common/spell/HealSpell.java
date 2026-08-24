@@ -38,11 +38,11 @@ public class HealSpell extends StaticSpell {
     @Override
     public void cast(Level world, BlockPos pos, Player player) {
 
-        if (!world.isClientSide) {
+        if (!world.isClientSide && world.getServer() != null) {
 
             float heal = getBaseHealing();
 
-            var cap = world.getCapability(IReputation.INSTANCE).resolve().isPresent() ? world.getCapability(IReputation.INSTANCE).resolve().get() : null;
+            var cap = world.getServer().overworld().getCapability(IReputation.INSTANCE).resolve().isPresent() ? world.getCapability(IReputation.INSTANCE).resolve().get() : null;
             if (cap == null) return;
             double devotion = cap.getReputation(player.getUUID(), Deities.LIGHT_DEITY.getId());
 
@@ -66,7 +66,7 @@ public class HealSpell extends StaticSpell {
 
             if (other) {
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.HEAL_VILLAGER);
-                world.getCapability(IReputation.INSTANCE).ifPresent(rep -> rep.addReputation(player, Deities.LIGHT_DEITY.getId(), getRepFromHealOther()));
+                cap.addReputation(player, Deities.LIGHT_DEITY.getId(), getRepFromHealOther());
             }
             ISoul.expendMana(player, getCost());
         }

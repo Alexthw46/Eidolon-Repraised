@@ -18,8 +18,11 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
@@ -31,7 +34,7 @@ public class ReputationCommand {
                         .then(Commands.literal("get")
                                 .then(Commands.argument("deity", new DeityArgument())
                                         .executes(
-                                                ctx -> applyGet(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getLevel().getCapability(IReputation.INSTANCE).ifPresent((k) -> {
+                                                ctx -> applyGet(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getServer().overworld().getCapability(IReputation.INSTANCE).ifPresent((k) -> {
                                                     var devotion = k.getReputation(player, DeityArgument.getDeity(ctx, "deity").getId());
                                                     ctx.getSource().sendSuccess(() -> Component.literal(player.getName().getString() + " : " + devotion), false);
                                                 }))
@@ -43,16 +46,47 @@ public class ReputationCommand {
                                 .then(Commands.argument("deity", new DeityArgument())
                                         .then(Commands.argument("qt", DoubleArgumentType.doubleArg(0, 100))
                                                 .executes(
-                                                        ctx -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getLevel().getCapability(IReputation.INSTANCE).ifPresent((k) -> k.setReputation(player, DeityArgument.getDeity(ctx, "deity").getId(), DoubleArgumentType.getDouble(ctx, "qt"))))
+                                                        ctx -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> sources.getServer().overworld().getCapability(IReputation.INSTANCE).ifPresent((k) -> k.setReputation(player, DeityArgument.getDeity(ctx, "deity").getId(), DoubleArgumentType.getDouble(ctx, "qt"))))
                                                 )
                                         )
                                 )
                         )
                         .then(Commands.literal("tryfix")
-                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.tryFix(player))))
+                                .executes((ctx) -> apply(ctx.getSource(), EntityArgument.getPlayers(ctx, "targets"), (player, sources) -> {
+                                    trySyncReputation(player, sources);
+                                    // now that values are fixed, try to fix knowledge as well
+                                    player.getCapability(IKnowledge.INSTANCE).ifPresent((k) -> KnowledgeUtil.tryFix(player));
+                                }))
                         )
                 )
         );
+    }
+
+    private static void trySyncReputation(Player player, CommandSourceStack sources) {
+        Map<ResourceLocation, Double> max = new HashMap<>();
+        // initialize max with the overworld values
+        for (Deity deity : Deities.getDeities()) {
+            max.put(deity.getId(), sources.getServer().overworld().getCapability(IReputation.INSTANCE).map((k) -> k.getReputation(player, deity.getId())).orElse(0.0));
+        }
+        // check all dimensions for higher values
+        for (Level dimensions : sources.getServer().getAllLevels()) {
+            if (dimensions.dimension() == sources.getServer().overworld().dimension())
+                continue;
+            for (Deity deity : Deities.getDeities()) {
+                dimensions.getCapability(IReputation.INSTANCE).ifPresent((k) -> {
+                    double x = k.getReputation(player, deity.getId());
+                    // zero it out so it can't be exploited after the first sync
+                    k.setReputation(player, deity.getId(), 0);
+                    if (x > max.get(deity.getId())) {
+                        max.put(deity.getId(), x);
+                    }
+                });
+            }
+        }
+        // set the overworld values to the max
+        for (Deity deity : Deities.getDeities()) {
+            sources.getServer().overworld().getCapability(IReputation.INSTANCE).ifPresent((k) -> k.addReputation(player, deity.getId(), max.get(deity.getId())));
+        }
     }
 
     private static int apply(CommandSourceStack sources, Collection<? extends Player> players, BiConsumer<Player, CommandSourceStack> action) {

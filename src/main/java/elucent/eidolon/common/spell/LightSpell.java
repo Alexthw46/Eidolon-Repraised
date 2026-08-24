@@ -33,8 +33,9 @@ public class LightSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
+        if (world.getServer() == null) return false;
         AtomicReference<Boolean> favor = new AtomicReference<>(Boolean.FALSE);
-        world.getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, deity.getId()) >= 3));
+        world.getServer().overworld().getCapability(IReputation.INSTANCE).ifPresent(reputation -> favor.set(reputation.getReputation(player, deity.getId()) >= 3));
         return favor.get();
     }
 

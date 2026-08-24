@@ -36,8 +36,8 @@ public class PrayerIncense extends IncenseRitual {
         super.start(player, censer);
         Level world = censer.getLevel();
         BlockPos pos = censer.getBlockPos();
-        if (world == null || player == null) return false;
-        LazyOptional<IReputation> reputationLazyOptional = world.getCapability(IReputation.INSTANCE);
+        if (world == null || player == null || player.getServer() == null) return false;
+        LazyOptional<IReputation> reputationLazyOptional = player.getServer().overworld().getCapability(IReputation.INSTANCE);
         if (!reputationLazyOptional.isPresent() || reputationLazyOptional.resolve().isEmpty()) return false;
         if (!reputationLazyOptional.resolve().get().canPray(player, Spells.CENSER, world.getGameTime())) {
             player.displayClientMessage(Component.translatable("eidolon.message.prayer_cooldown"), true);
@@ -52,7 +52,7 @@ public class PrayerIncense extends IncenseRitual {
         if (effigy.ready()) {
             Deity deity = Deities.LIGHT_DEITY;
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            reputationLazyOptional.ifPresent((rep) -> {
                 if (rep.getReputation(player, deity.getId()) < 3) {
                     player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
                     return;
@@ -103,6 +103,5 @@ public class PrayerIncense extends IncenseRitual {
                 .addVelocity(0, -0.0125f, 0)
                 .setColor(0.95F, 0.95F, 0.95F, 0.005f, 0.005f, 0.005f)
                 .repeat(level, x, y + .75, z, 2);
-        ;
     }
 }

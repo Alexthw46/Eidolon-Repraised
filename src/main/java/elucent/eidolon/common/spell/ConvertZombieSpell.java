@@ -50,10 +50,10 @@ public class ConvertZombieSpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof ZombieVillager villager)) return;
 
-        if (world instanceof ServerLevel && player instanceof ServerPlayer serverPlayer) {
+        if (player.getServer() != null && player.level() instanceof ServerLevel level && player instanceof ServerPlayer serverPlayer) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            player.getServer().overworld().getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 AdvancementTriggers.CURE_ZOMBIE.trigger(serverPlayer);
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.CURE_ZOMBIE);

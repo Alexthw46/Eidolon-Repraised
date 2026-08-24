@@ -14,6 +14,7 @@ import elucent.eidolon.util.DamageTypeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -63,8 +64,10 @@ public class DarkTouchSpell extends StaticSpell {
 
     @Override
     public boolean canCast(Level world, BlockPos pos, Player player) {
-        if (!world.getCapability(IReputation.INSTANCE).isPresent()) return false;
-        if (world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY.getId()) < 10.0) {
+        MinecraftServer server = world.getServer();
+        if (server == null) return false;
+        if (!server.overworld().getCapability(IReputation.INSTANCE).isPresent()) return false;
+        if (server.overworld().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY.getId()) < 10.0) {
             player.displayClientMessage(Component.translatable("eidolon.message.not_enough_reputation"), true);
             return false;
         }
@@ -79,14 +82,16 @@ public class DarkTouchSpell extends StaticSpell {
     boolean canTouch(ItemStack stack, Level world, Player player) {
         if (stack.isDamageableItem() && stack.getMaxStackSize() == 1) return true;
         var conversions = world.getRecipeManager().getAllRecipesFor(EidolonRecipes.CHANT_CONVERSION_TYPE.get());
-        var darkRep = world.getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
+        if (player.getServer() == null) return false;
+        var darkRep = player.getServer().overworld().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
         return conversions.stream().filter(
                 r -> r.input.test(stack) && (r.deity == null || Deities.DARK_DEITY_ID.equals(r.deity))
         ).anyMatch(r -> darkRep >= r.minDevotion);
     }
 
     protected ItemStack touchResult(ItemStack stack, Player player) { // assumes canTouch is true
-        var darkRep = player.level().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
+        if (player.getServer() == null) return stack;
+        var darkRep = player.getServer().overworld().getCapability(IReputation.INSTANCE).resolve().get().getReputation(player, Deities.DARK_DEITY_ID);
         var mana = player.getCapability(ISoul.INSTANCE).resolve().orElse(null);
         if (mana == null) return stack;
 

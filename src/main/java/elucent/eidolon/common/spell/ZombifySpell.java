@@ -57,10 +57,10 @@ public class ZombifySpell extends PrayerSpell {
         HitResult ray = rayTrace(player, player.getBlockReach(), 0, true);
         if (!(ray instanceof EntityHitResult result && result.getEntity() instanceof Villager villager)) return;
 
-        if (world instanceof ServerLevel level && player instanceof ServerPlayer serverPlayer) {
+        if (player.getServer() != null && player.level() instanceof ServerLevel level && player instanceof ServerPlayer serverPlayer) {
             effigy.pray();
             AltarInfo info = AltarInfo.getAltarInfo(world, effigy.getBlockPos());
-            world.getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
+            player.getServer().overworld().getCapability(IReputation.INSTANCE, null).ifPresent((rep) -> {
                 rep.pray(player, this, world.getGameTime());
                 AdvancementTriggers.ZOMBIFY.trigger(serverPlayer);
                 KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ZOMBIFY_VILLAGER);
