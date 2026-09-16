@@ -4,6 +4,8 @@ import elucent.eidolon.Eidolon;
 import elucent.eidolon.api.spells.Sign;
 import elucent.eidolon.capability.ISoul;
 import elucent.eidolon.common.deity.DeityLocks;
+import elucent.eidolon.network.Networking;
+import elucent.eidolon.network.SoulUpdatePacket;
 import elucent.eidolon.util.EntityUtil;
 import elucent.eidolon.util.KnowledgeUtil;
 import net.minecraft.core.BlockPos;
@@ -55,6 +57,8 @@ public class ThrallSpell extends StaticSpell {
                         soul.takeMagic(actualCost);
                         EntityUtil.enthrall(player, living);
                         KnowledgeUtil.grantResearchNoToast(player, DeityLocks.ENTHRALL_UNDEAD);
+                        if (!player.level.isClientSide)
+                            Networking.sendToTracking(player.level, player.getOnPos(), new SoulUpdatePacket(player));
                     } else
                         sp.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("eidolon.title.no_mana")));
                 });

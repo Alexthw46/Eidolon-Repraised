@@ -9,7 +9,7 @@ displayName = "Eidolon:Repraised" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
 # displayURL="http://example.com/" #optional
 logoFile = "logo.png" #optional
-credits = "elucent as the original creator and maker of most of the assets" #optional
+credits = "elucent as the original creator and maker of most of the assets, special tanks to Sammy; for few artworks" #optional
 authors = "elucent up to 0.3.0, currently maintained by Alexthw" #optional
 description = '''
 A spooky magic mod about necromancy. Now with a touch of opposing light!
