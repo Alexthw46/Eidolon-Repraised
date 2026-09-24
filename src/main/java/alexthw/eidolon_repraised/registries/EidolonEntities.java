@@ -35,13 +35,13 @@ public class EidolonEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<WraithEntity>>
             WRAITH = addEntity("wraith", 0x706e6b, 0xadacbd, 0.6f, 1.9f, WraithEntity::new, MobCategory.MONSTER);
     public static final DeferredHolder<EntityType<?>, EntityType<SoulfireProjectileEntity>>
-            SOULFIRE_PROJECTILE = addEntity("soulfire_projectile", 0.4f, 0.4f, SoulfireProjectileEntity::new, MobCategory.MISC);
+            SOULFIRE_PROJECTILE = addTempEntity("soulfire_projectile", 0.4f, 0.4f, SoulfireProjectileEntity::new, MobCategory.MISC);
     public static final DeferredHolder<EntityType<?>, EntityType<BonechillProjectileEntity>>
-            BONECHILL_PROJECTILE = addEntity("bonechill_projectile", 0.4f, 0.4f, BonechillProjectileEntity::new, MobCategory.MISC);
+            BONECHILL_PROJECTILE = addTempEntity("bonechill_projectile", 0.4f, 0.4f, BonechillProjectileEntity::new, MobCategory.MISC);
     public static final DeferredHolder<EntityType<?>, EntityType<NecromancerSpellEntity>>
-            NECROMANCER_SPELL = addEntity("necromancer_spell", 0.4f, 0.4f, NecromancerSpellEntity::new, MobCategory.MISC);
+            NECROMANCER_SPELL = addTempEntity("necromancer_spell", 0.4f, 0.4f, NecromancerSpellEntity::new, MobCategory.MISC);
     public static final DeferredHolder<EntityType<?>, EntityType<ChantCasterEntity>>
-            CHANT_CASTER = addEntity("chant_caster", 1.0f, 1.0f, ChantCasterEntity::new, MobCategory.MISC);
+            CHANT_CASTER = addTempEntity("chant_caster", 1.0f, 1.0f, ChantCasterEntity::new, MobCategory.MISC);
 
     public static final DeferredHolder<EntityType<?>, EntityType<NecromancerEntity>>
             NECROMANCER = addEntity("necromancer", 0x69255e, 0x9ce8ff, 0.6f, 2.2f, NecromancerEntity::new, MobCategory.MONSTER);
@@ -55,6 +55,16 @@ public class EidolonEntities {
                 .setTrackingRange(64)
                 .setUpdateInterval(1)
                 .sized(width, height)
+                .noSave()
+                .build(Eidolon.MODID + ":" + name));
+    }
+
+    static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> addTempEntity(String name, float width, float height, EntityType.EntityFactory<T> factory, MobCategory kind) {
+        return ENTITIES.register(name, () -> EntityType.Builder.of(factory, kind)
+                .setTrackingRange(64)
+                .setUpdateInterval(1)
+                .sized(width, height)
+                .noSave()
                 .build(Eidolon.MODID + ":" + name));
     }
 
