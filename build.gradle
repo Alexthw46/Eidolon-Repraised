@@ -138,6 +138,8 @@ repositories {
         name = "OctoStudios"
         url = uri("https://maven.octo-studios.com/releases")
     }
+    maven { url = "https://api.modrinth.com/maven" }
+
     maven { url 'https://jitpack.io' }
 
 }
@@ -163,6 +165,12 @@ dependencies {
     localRuntime "curse.maven:apotheosis-313970:7180713"
     localRuntime "curse.maven:apothic-spawners-986583:6751589"
 */
+    dependencies {
+        // jade_version example: 15.10.0+neoforge
+        // Visit https://modrinth.com/mod/jade/versions?l=neoforge to get the latest version
+        implementation "maven.modrinth:jade:15.10.6+neoforge"
+    }
+
     implementation "team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}"
     implementation "com.sammy.malum:malum:${minecraft_version}-${malum_version}"
 

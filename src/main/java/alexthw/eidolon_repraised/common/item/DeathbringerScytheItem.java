@@ -14,8 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,12 +37,6 @@ public class DeathbringerScytheItem extends SwordItem {
             tooltipComponents.add(Component.literal(""));
             tooltipComponents.add(Component.literal(String.valueOf(ChatFormatting.DARK_PURPLE) + ChatFormatting.ITALIC + I18n.get(this.loreTag)));
         }
-    }
-
-    @Override
-    public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility action) {
-        if (action == ItemAbilities.SWORD_SWEEP) return false;
-        return super.canPerformAction(stack, action);
     }
 
     @Override

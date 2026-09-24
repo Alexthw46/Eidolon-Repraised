@@ -9,9 +9,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EntityUtil {
@@ -67,5 +69,10 @@ public class EntityUtil {
             Vec3 newmotion = entity.getDeltaMovement().add(diff.normalize()).scale(0.75);
             entity.setDeltaMovement(newmotion);
         }
+    }
+
+    public static @Nullable UUID getMasterUUID(LivingEntity entity) {
+        if (!isEnthralled(entity)) return null;
+        return entity.getPersistentData().getUUID(THRALL_KEY);
     }
 }
