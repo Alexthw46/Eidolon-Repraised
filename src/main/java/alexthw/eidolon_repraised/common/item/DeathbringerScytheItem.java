@@ -41,7 +41,7 @@ public class DeathbringerScytheItem extends SwordItem {
 
     @Override
     public boolean hurtEnemy(@NotNull ItemStack stack, LivingEntity target, @NotNull LivingEntity attacker) {
-        if (target.getType().is(EntityTypeTags.UNDEAD)) {
+        if (!target.getType().is(EntityTypeTags.UNDEAD)) {
             target.addEffect(new MobEffectInstance(EidolonPotions.UNDEATH_EFFECT, 900));
         }
         if (!attacker.level().isClientSide)
