@@ -25,14 +25,19 @@ public class LocationRitualRecipe extends RitualRecipe {
         return structureTagKey;
     }
 
-    ResourceLocation structureTagKey;
-
+    ResourceLocation structureTagKey, id;
 
     public LocationRitualRecipe(ResourceLocation structure, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
         super(reagent, pedestalItems, focusItems, healthRequirement);
         this.structureTagKey = structure;
+        this.id = ResourceLocation.fromNamespaceAndPath(structureTagKey.getNamespace(), "ritual_locate_" + structureTagKey.getPath());
     }
 
+    public LocationRitualRecipe(ResourceLocation structure, ResourceLocation id, Ingredient reagent, List<Ingredient> pedestalItems, List<Ingredient> focusItems, float healthRequirement) {
+        super(reagent, pedestalItems, focusItems, healthRequirement);
+        this.structureTagKey = structure;
+        this.id = id;
+    }
 
     @Override
     public Ritual getRitual() {
@@ -41,7 +46,7 @@ public class LocationRitualRecipe extends RitualRecipe {
 
     @Override
     public @NotNull ResourceLocation getId() {
-        return ResourceLocation.fromNamespaceAndPath(structureTagKey.getNamespace(), "ritual_locate_" + structureTagKey.getPath());
+        return id;
     }
 
     @Override
@@ -59,6 +64,7 @@ public class LocationRitualRecipe extends RitualRecipe {
 
         public static final MapCodec<LocationRitualRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ResourceLocation.CODEC.fieldOf("structure").forGetter(recipe -> recipe.structureTagKey),
+                ResourceLocation.CODEC.fieldOf("id").forGetter(LocationRitualRecipe::getId),
                 Ingredient.CODEC.fieldOf("reagent").forGetter(LocationRitualRecipe::getReagent),
                 Ingredient.CODEC.listOf().fieldOf("pedestal_items").forGetter(LocationRitualRecipe::getPedestalItems),
                 Ingredient.CODEC.listOf().fieldOf("focus_items").forGetter(LocationRitualRecipe::getFocusItems),
@@ -68,6 +74,8 @@ public class LocationRitualRecipe extends RitualRecipe {
         public static final StreamCodec<RegistryFriendlyByteBuf, LocationRitualRecipe> STREAM_CODEC = StreamCodec.composite(
                 ResourceLocation.STREAM_CODEC,
                 LocationRitualRecipe::getStructureTagKey,
+                ResourceLocation.STREAM_CODEC,
+                LocationRitualRecipe::getId,
                 Ingredient.CONTENTS_STREAM_CODEC,
                 LocationRitualRecipe::getReagent,
                 Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),

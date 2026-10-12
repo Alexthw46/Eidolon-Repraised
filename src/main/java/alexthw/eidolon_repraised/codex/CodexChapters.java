@@ -273,7 +273,7 @@ public class CodexChapters {
 
             LOCATE_RITUAL = new CodexBuilder()
                     .title("eidolon_repraised.codex.chapter.locate_ritual")
-                    .titledRitualPage("eidolon_repraised.codex.page.locate_ritual", prefix("ritual_catacomb_locator"))
+                    .titledRitualPage("eidolon_repraised.codex.page.locate_ritual", prefix("ritual_locate_catacombs"))
                     .textPage("eidolon_repraised.codex.page.locate_ritual")
                     .build();
 

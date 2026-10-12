@@ -2,6 +2,7 @@
   "type": "eidolon_repraised:ritual_brazier_location",
   "focus_items": [],
   "health_requirement": 0.0,
+  "id": "eidolon_repraised:ritual_locate_catacombs",
   "pedestal_items": [
     {
       "item": "minecraft:compass"

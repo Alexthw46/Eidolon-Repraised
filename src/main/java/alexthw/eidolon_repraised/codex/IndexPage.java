@@ -40,8 +40,13 @@ public class IndexPage extends Page {
             if (RegistryUtil.getRegistryName(icon.getItem()).getNamespace().equals(Eidolon.MODID))
                 CodexChapters.itemToEntryMap.put(icon.getItem(), this);
             for (Page p : chapter.pages) {
-                if (p instanceof TitlePage t && !t.reference.isEmpty()) {
-                    CodexChapters.itemToEntryMap.put(t.reference.getItem(), this);
+                switch (p) {
+                    case TitlePage t when !t.reference.isEmpty() ->
+                            CodexChapters.itemToEntryMap.put(t.reference.getItem(), this);
+                    case TitledRitualPage t when !t.result.isEmpty() ->
+                            CodexChapters.itemToEntryMap.put(t.result.getItem(), this);
+                    case null, default -> {
+                    }
                 }
             }
         }

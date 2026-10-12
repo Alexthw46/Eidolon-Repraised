@@ -1,9 +1,17 @@
 package alexthw.eidolon_repraised.datagen;
 
 import alexthw.eidolon_repraised.Eidolon;
-import alexthw.eidolon_repraised.api.ritual.*;
+import alexthw.eidolon_repraised.api.ritual.FocusItemPresentRequirement;
+import alexthw.eidolon_repraised.api.ritual.HealthRequirement;
+import alexthw.eidolon_repraised.api.ritual.ItemRequirement;
+import alexthw.eidolon_repraised.api.ritual.ItemSacrifice;
+import alexthw.eidolon_repraised.api.ritual.Ritual;
 import alexthw.eidolon_repraised.common.ritual.*;
-import alexthw.eidolon_repraised.recipe.*;
+import alexthw.eidolon_repraised.recipe.GenericRitualRecipe;
+import alexthw.eidolon_repraised.recipe.ItemRitualRecipe;
+import alexthw.eidolon_repraised.recipe.LocationRitualRecipe;
+import alexthw.eidolon_repraised.recipe.RitualRecipe;
+import alexthw.eidolon_repraised.recipe.SummonRitualRecipe;
 import alexthw.eidolon_repraised.registries.EidolonEntities;
 import alexthw.eidolon_repraised.registries.Registry;
 import alexthw.eidolon_repraised.registries.Worldgen;
@@ -189,7 +197,7 @@ public class EidRitualProvider extends SimpleDataProvider {
                 .addInvariant(new FocusItemPresentRequirement(Registry.BONECHILL_WAND.get()))
         );
 
-        location(Worldgen.CATACOMBS, prefix("ritual_catacomb_locator"), Ingredient.of(Items.MAP), ingredientsFromObjects(List.of(Items.COMPASS, Registry.MAGIC_INK.get(), Registry.RAVEN_FEATHER.get())), List.of(), 0);
+        location(Worldgen.CATACOMBS, prefix("ritual_locate_catacombs"), Ingredient.of(Items.MAP), ingredientsFromObjects(List.of(Items.COMPASS, Registry.MAGIC_INK.get(), Registry.RAVEN_FEATHER.get())), List.of(), 0);
 
         // tester for command ritual
         // rituals.add(new CommandRitualRecipe(prefix("ritual_command"), "/kill @e", Ingredient.of(Items.COMMAND_BLOCK), List.of(), List.of(), 0));
@@ -199,10 +207,9 @@ public class EidRitualProvider extends SimpleDataProvider {
         rituals.add(new ItemRitualRecipe(reagent, pedestal, foci, result, true, healthCost));
     }
 
-    public void location(TagKey<Structure> structureTagKey, ResourceLocation location, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
-        rituals.add(new LocationRitualRecipe(structureTagKey.location(), reagent, pedestal, foci, healthCost));
+    public void location(TagKey<Structure> structureTagKey, ResourceLocation id, Ingredient reagent, List<Ingredient> pedestal, List<Ingredient> foci, int healthCost) {
+        rituals.add(new LocationRitualRecipe(structureTagKey.location(), id, reagent, pedestal, foci, healthCost));
     }
-
 
     public void makeSummon(EntityType<?> type, ItemLike item, List<Ingredient> pedestal, List<Ingredient> foci) {
         rituals.add(new SummonRitualRecipe(getRegistryName(type), Ingredient.of(item), pedestal, foci));
