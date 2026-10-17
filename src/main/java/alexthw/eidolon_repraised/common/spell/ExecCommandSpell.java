@@ -1,5 +1,6 @@
 package alexthw.eidolon_repraised.common.spell;
 
+import alexthw.eidolon_repraised.api.capability.IMana;
 import alexthw.eidolon_repraised.api.spells.Sign;
 import alexthw.eidolon_repraised.util.EidolonFakePlayer;
 import net.minecraft.CrashReport;
@@ -33,24 +34,27 @@ public class ExecCommandSpell extends StaticSpell {
     public void cast(Level world, BlockPos pos, Player player) {
         if (world instanceof ServerLevel serverWorld) {
             var server = world.getServer();
-            for (var command : commands)
-                if (server.isCommandBlockEnabled() && !StringUtil.isNullOrEmpty(command)) {
-                    try {
-                        if (player == null) {
-                            EidolonFakePlayer fakePlayer = EidolonFakePlayer.getPlayer(serverWorld);
-                            fakePlayer.setPos(pos.getCenter());
-                            player = fakePlayer;
+            if (server.isCommandBlockEnabled()) {
+                for (var command : commands) {
+                    if (!StringUtil.isNullOrEmpty(command)) {
+                        try {
+                            if (player == null) {
+                                EidolonFakePlayer fakePlayer = EidolonFakePlayer.getPlayer(serverWorld);
+                                fakePlayer.setPos(pos.getCenter());
+                                player = fakePlayer;
+                            }
+                            CommandSourceStack commandSource = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
+                            server.getCommands().performPrefixedCommand(commandSource, command);
+                        } catch (Throwable throwable) {
+                            CrashReport crashreport = CrashReport.forThrowable(throwable, "Executing command ritual");
+                            CrashReportCategory crashreportcategory = crashreport.addCategory("Command to be executed");
+                            crashreportcategory.setDetail("Command", command);
+                            throw new ReportedException(crashreport);
                         }
-                        CommandSourceStack commandSource = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
-                        server.getCommands().performPrefixedCommand(commandSource, command);
-                    } catch (Throwable throwable) {
-                        CrashReport crashreport = CrashReport.forThrowable(throwable, "Executing command ritual");
-                        CrashReportCategory crashreportcategory = crashreport.addCategory("Command to be executed");
-                        crashreportcategory.setDetail("Command", command);
-                        throw new ReportedException(crashreport);
                     }
                 }
-
+                IMana.expendMana(player, getCost());
+            }
         }
     }
 }
