@@ -10,6 +10,7 @@ import alexthw.eidolon_repraised.codex.RitualPage;
 import alexthw.eidolon_repraised.codex.RitualPage.RitualIngredient;
 import alexthw.eidolon_repraised.recipe.ItemRitualRecipe;
 import alexthw.eidolon_repraised.recipe.RitualRecipe;
+import alexthw.eidolon_repraised.recipe.SummonRitualRecipe;
 import alexthw.eidolon_repraised.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -24,9 +25,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -69,6 +72,15 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull RitualRecipe recipe, @NotNull IFocusGroup ingredients) {
+
+        if (recipe instanceof SummonRitualRecipe summon){
+            var entityRL = summon.getEntityRL();
+            var entityType = BuiltInRegistries.ENTITY_TYPE.get(entityRL); //NOTE: Defaults to pig if not found
+            var eggItem = SpawnEggItem.byId(entityType);
+            if (eggItem != null) {
+                layout.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemLike(eggItem);
+            }
+        }
 
         List<RitualIngredient> inputs = new ArrayList<>();
         RitualPage.rearrangeIngredients(recipe, inputs);
