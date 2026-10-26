@@ -72,6 +72,10 @@ public class SummonRitualRecipe extends RitualRecipe {
         return new SummonRitual(ForgeRegistries.ENTITY_TYPES.getValue(entity), count).setRegistryName(id);
     }
 
+    public ResourceLocation getEntityRL() {
+        return entity;
+    }
+
     public static class Serializer extends RitualRecipe.Serializer<SummonRitualRecipe> {
 
         @Override

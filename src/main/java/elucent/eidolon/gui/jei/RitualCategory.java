@@ -10,6 +10,7 @@ import elucent.eidolon.codex.RitualPage;
 import elucent.eidolon.codex.RitualPage.RitualIngredient;
 import elucent.eidolon.recipe.ItemRitualRecipe;
 import elucent.eidolon.recipe.RitualRecipe;
+import elucent.eidolon.recipe.SummonRitualRecipe;
 import elucent.eidolon.registries.Registry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -27,8 +28,11 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +72,7 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder layout, @NotNull RitualRecipe recipe, @NotNull IFocusGroup ingredients) {
+    public void setRecipe(@Nonnull @NotNull IRecipeLayoutBuilder layout, @Nonnull @NotNull RitualRecipe recipe, @Nonnull @NotNull IFocusGroup ingredients) {
 
         List<RitualIngredient> inputs = new ArrayList<>();
         RitualPage.rearrangeIngredients(recipe, inputs);
@@ -91,12 +95,18 @@ public class RitualCategory implements IRecipeCategory<RitualRecipe> {
             }
         }
 
-        if (recipe instanceof ItemRitualRecipe resultRitual)
+        if (recipe instanceof SummonRitualRecipe summon) {
+            var entityRL = summon.getEntityRL();
+            var entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityRL); //NOTE: Defaults to pig if not found
+            var eggItem = ForgeSpawnEggItem.fromEntityType(entityType);
+            if (eggItem != null)
+                layout.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(eggItem.getDefaultInstance());
+        } else if (recipe instanceof ItemRitualRecipe resultRitual)
             layout.addSlot(RecipeIngredientRole.OUTPUT, 62, 45).addItemStack(resultRitual.getResultItem(RegistryAccess.EMPTY));
     }
 
     @Override
-    public void draw(@NotNull RitualRecipe recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(@Nonnull @NotNull RitualRecipe recipe, @Nonnull @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         var bg = RitualPage.BACKGROUND;
         int x = 5, y = 4;
         guiGraphics.blit(bg, x, y, 0, 0, 128, 160);
