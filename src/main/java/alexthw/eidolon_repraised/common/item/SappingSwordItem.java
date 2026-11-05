@@ -2,12 +2,11 @@ package alexthw.eidolon_repraised.common.item;
 
 import alexthw.eidolon_repraised.network.LifestealEffectPacket;
 import alexthw.eidolon_repraised.network.Networking;
-import alexthw.eidolon_repraised.util.DamageTypeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -15,6 +14,8 @@ import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static alexthw.eidolon_repraised.registries.Registry.SAPPING;
 
 public class SappingSwordItem extends SwordItem {
     public SappingSwordItem(Properties builderIn) {
@@ -37,16 +38,16 @@ public class SappingSwordItem extends SwordItem {
     }
 
     @Override
-    public boolean hurtEnemy(@NotNull ItemStack stack, LivingEntity target, @NotNull LivingEntity attacker) {
-        if (target.invulnerableTime > 0) {
+    public boolean hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
+        if (attacker instanceof Player p && p.getAttackStrengthScale(0.5F) >= 0.7) {
             target.invulnerableTime = 0;
             float before = target.getHealth();
-            target.hurt(DamageTypeData.source(target.level(), DamageTypes.WITHER, attacker, null), 2.0f);
+            target.hurt(SAPPING.source(target.level(), attacker), 2.0f);
             float healing = before - target.getHealth();
             if (healing > 0) {
                 attacker.heal(healing);
                 if (!attacker.level().isClientSide)
-                    Networking.sendToNearbyClient(attacker.level(), attacker.blockPosition(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
+                    Networking.sendToNearbyClient(attacker.level(), attacker.blockPosition().above(), new LifestealEffectPacket(target.blockPosition(), attacker.blockPosition(), 1.0f, 0.125f, 0.1875f));
             }
         }
         return super.hurtEnemy(stack, target, attacker);
