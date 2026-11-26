@@ -147,7 +147,7 @@ public class ClientEvents {
 
         Integer necro = itemStack.get(EidolonDataComponents.NECROTIC);
         if (necro != null && necro > 0) {
-            event.getToolTip().add(Component.translatable("eidolon_repraised.tooltip.necrotic").withStyle(ChatFormatting.DARK_BLUE));
+            event.getToolTip().add(Component.translatable("eidolon_repraised.tooltip.necrotic").withStyle(ChatFormatting.DARK_PURPLE));
         }
 
         Integer sacred = itemStack.get(EidolonDataComponents.CONSECRATED);

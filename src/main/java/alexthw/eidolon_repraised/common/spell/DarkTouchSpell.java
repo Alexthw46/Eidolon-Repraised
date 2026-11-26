@@ -28,6 +28,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
@@ -44,15 +45,15 @@ public class DarkTouchSpell extends StaticSpell {
     public static void onHurt(LivingDamageEvent.Pre event) {
         if (event.getSource().getEntity() instanceof LivingEntity living && !event.getSource().is(DamageTypes.WITHER)) {
             ItemStack itemStack = living.getMainHandItem();
-            if (itemStack.isEmpty()) return;
+            if (itemStack.isEmpty() || event.getNewDamage() <= 1) return;
             if (itemStack.has(EidolonDataComponents.NECROTIC) && itemStack.getOrDefault(EidolonDataComponents.NECROTIC, 0) > 0) {
-                float amount = Math.clamp(event.getNewDamage() / 2, 1, event.getNewDamage());
+                float amount = Math.max(event.getNewDamage() / 2, 1);
                 event.setNewDamage(event.getNewDamage() - amount);
-                int prevHurtResist = event.getEntity().invulnerableTime;
-                event.getEntity().invulnerableTime = 0;
+                // Only reset iframes if the original attack was not shielded by them
+                if (event.getContainer().getReduction(DamageContainer.Reduction.INVULNERABILITY) == 0)
+                    event.getEntity().invulnerableTime = 0;
                 if (event.getEntity().hurt(DamageTypeData.source(living.level(), DamageTypes.WITHER, living, null), amount)) {
                     itemStack.set(EidolonDataComponents.NECROTIC, itemStack.getOrDefault(EidolonDataComponents.NECROTIC, 1) - 1);
-                    living.invulnerableTime = prevHurtResist;
                 }
             }
         }
